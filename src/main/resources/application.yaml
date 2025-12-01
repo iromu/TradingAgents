@@ -1,0 +1,19 @@
+embabel:
+  agent:
+    platform:
+      scanning:
+        bean: false
+  models:
+    default-llm: phi4-mini:3.8b
+    default-embedding-model: nomic-embed-text:latest
+    llms:
+      best: llama3.1:8b
+      cheapest: phi4-mini:3.8b
+    embedding-services:
+      best: nomic-embed-text:latest
+      cheapest: nomic-embed-text:latest
+  agent-platform:
+    ranking:
+      llm: phi4-mini:3.8b
+
+spring.profiles.active: base,observability,local

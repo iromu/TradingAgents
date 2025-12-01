@@ -1,0 +1,23 @@
+# Observability configuration for Spring AI with tracing and logging
+spring:
+  ai:
+    chat:
+      observations:
+        log-prompt: true # Include prompt content in tracing (disabled by default for privacy)
+        log-completion: true # Include completion content in tracing (disabled by default)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  tracing:
+    sampling:
+      probability: 1.0 # Sample 100% of requests for full tracing (adjust in production as needed)
+    enabled: true
+  observations:
+    annotations:
+      enabled: true # Enable @Observed (if you use observation annotations in code)
+  otlp:
+    tracing:
+      endpoint: https://langfuse.iromu.org/api/public/otel/v1/traces
+      transport: http
