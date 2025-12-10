@@ -2,18 +2,7 @@
 
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
-ENV_SCRIPT="$SCRIPT_DIR/check_env.sh"
 
-# Call the environment check script
-if [ -f "$ENV_SCRIPT" ]; then
-    source "$ENV_SCRIPT"
-    if [ $? -ne 0 ]; then
-        echo "Environment check failed. Exiting..."
-        exit 1
-    fi
-else
-    echo "Warning: Environment check script not found at $ENV_SCRIPT"
-fi
 
 # Check if AGENT_APPLICATION environment variable is set
 if [ -z "$AGENT_APPLICATION" ]; then

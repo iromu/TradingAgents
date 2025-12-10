@@ -4,16 +4,20 @@ embabel:
       scanning:
         bean: false
   models:
-    default-llm: phi4-mini:3.8b
+    default-llm: qwen3:14b
     default-embedding-model: nomic-embed-text:latest
     llms:
-      best: llama3.1:8b
-      cheapest: phi4-mini:3.8b
+      best: qwen3:14b
+      cheapest: qwen3:14b
     embedding-services:
       best: nomic-embed-text:latest
       cheapest: nomic-embed-text:latest
   agent-platform:
     ranking:
-      llm: phi4-mini:3.8b
+      llm: qwen3:14b
 
 spring.profiles.active: base,observability,local
+logging:
+  level:
+    com.embabel: INFO
+    com.embabel.agent.api.annotation.support.AgentMetadataReader: INFO
