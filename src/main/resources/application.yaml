@@ -1,3 +1,7 @@
+spring:
+  application:
+    name: TradingAgents
+
 embabel:
   agent:
     platform:
@@ -19,5 +23,5 @@ embabel:
 spring.profiles.active: base,observability,local
 logging:
   level:
-    com.embabel: INFO
-    com.embabel.agent.api.annotation.support.AgentMetadataReader: INFO
+    com.embabel: WARN
+    com.embabel.agent.api.annotation.support.AgentMetadataReader: WARN
