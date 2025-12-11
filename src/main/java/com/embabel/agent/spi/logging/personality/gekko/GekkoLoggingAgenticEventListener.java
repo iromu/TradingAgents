@@ -2,6 +2,7 @@ package com.embabel.agent.spi.logging.personality.gekko;
 
 import com.embabel.agent.event.*;
 import com.embabel.agent.event.logging.LoggingAgenticEventListener;
+import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
@@ -170,6 +171,12 @@ public class GekkoLoggingAgenticEventListener extends LoggingAgenticEventListene
                 e.getValue().toString() : e.getValue().getClass().getSimpleName();
         return String.format("[%s] Asset secured: %s:%s. Keep it close, maximize gains.",
                 e.getProcessId(), e.getName(), value);
+    }
+
+    @NotNull
+    @Override
+    protected String getToolCallSuccessResponseEventMessage(@NotNull ToolCallResponseEvent e, @NotNull String resultToShow) {
+        return super.getToolCallSuccessResponseEventMessage(e, "");
     }
 
     private static String indentLines(String text, int level, boolean skipFirstLine) {

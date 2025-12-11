@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Slf4j
-public class FundamentalTools {
+public class FundamentalDataTools {
 
     private final VendorRouter vendorRouter;
 
-    public FundamentalTools(VendorRouter vendorRouter) {
+    public FundamentalDataTools(VendorRouter vendorRouter) {
         this.vendorRouter = vendorRouter;
     }
 

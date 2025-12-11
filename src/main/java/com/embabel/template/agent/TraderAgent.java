@@ -3,7 +3,6 @@ package com.embabel.template.agent;
 import com.embabel.agent.api.annotation.AchievesGoal;
 import com.embabel.agent.api.annotation.Action;
 import com.embabel.agent.api.annotation.Agent;
-import com.embabel.agent.api.annotation.WaitFor;
 import com.embabel.agent.api.common.ActionContext;
 import com.embabel.agent.api.common.Ai;
 import com.embabel.agent.api.common.OperationContext;
@@ -11,14 +10,14 @@ import com.embabel.agent.api.common.workflow.loop.Feedback;
 import com.embabel.agent.api.common.workflow.loop.RepeatUntilAcceptableBuilder;
 import com.embabel.agent.domain.io.UserInput;
 import com.embabel.template.tools.FileCache;
-import com.embabel.template.tools.FundamentalTools;
+import com.embabel.template.tools.FundamentalDataTools;
+import com.embabel.template.tools.NewsDataTools;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
-import java.util.List;
 import java.util.Map;
 
 @Agent(description = "Trading Agent")
@@ -26,7 +25,8 @@ import java.util.Map;
 public class TraderAgent {
     @Value("classpath:prompts/analysts/FundamentalsAnalyst.txt")
     private Resource promptFundamentalsAnalyst;
-    private final FundamentalTools fundamentalTools;
+    private final FundamentalDataTools fundamentalDataTools;
+    private final NewsDataTools newsDataTools;
 
     @Value("classpath:prompts/analysts/MarketAnalyst.txt")
     private Resource promptMarketAnalyst;
@@ -38,11 +38,6 @@ public class TraderAgent {
     private Resource promptSocialMediaAnalyst;
 
     private final FileCache cache = new FileCache("data/llm/cache");
-
-    public record Topics(
-            List<String> topics
-    ) {
-    }
 
     public interface Report {
         String content();
@@ -83,19 +78,7 @@ public class TraderAgent {
         }
     }
 
-    public record Ticker(
-            String content
-    ) {
-        public Ticker() {
-            this("SPY");
-        }
-    }
-
-    @Action(cost = 100.0)
-    Ticker askForTicker(OperationContext context) {
-        return WaitFor.formSubmission(
-                "Enter the ticker symbol to analyze.",
-                Ticker.class);
+    public record Ticker(String content) {
     }
 
     @Action
@@ -110,12 +93,13 @@ public class TraderAgent {
     }
 
     @Action
-    public FundamentalsReport generateFundamentalsReport(Ticker ticker, OperationContext context) throws IOException {
+    public FundamentalsReport generateFundamentalsReport(Ticker ticker, OperationContext context) {
 
         String key = ticker.content() + "_fundamentals";
         return cache.getOrCompute(key, FundamentalsReport.class, () -> {
             try {
-                return context.ai().withAutoLlm().withId("generateFundamentalsReport").withToolObject(fundamentalTools)
+                return context.ai().withAutoLlm().withId("generateFundamentalsReport")
+                        .withToolObject(fundamentalDataTools)
                         .withTemplate("analysts/_BaseAnalyst").createObject(FundamentalsReport.class, Map.of(
                                 "tool_names", "get_fundamentals,get_balance_sheet,get_cashflow,get_income_statement",
                                 "system_message", promptFundamentalsAnalyst.getContentAsString(Charset.defaultCharset()),
@@ -128,13 +112,13 @@ public class TraderAgent {
     }
 
     @Action
-    public MarketReport generateMarketReport(Ticker ticker, OperationContext context) throws IOException {
+    public MarketReport generateMarketReport(Ticker ticker, OperationContext context) {
         String key = ticker.content() + "_market";
         return cache.getOrCompute(key, MarketReport.class, () -> {
             try {
                 return context.ai().withAutoLlm().withId("generateMarketReport")
                         .withTemplate("analysts/_BaseAnalyst").createObject(MarketReport.class, Map.of(
-                                "tool_names", "get_stock_data,get_indicators",
+                                //"tool_names", "get_stock_data,get_indicators",
                                 "system_message", promptMarketAnalyst.getContentAsString(Charset.defaultCharset()),
                                 "ticker", ticker.content().toUpperCase()
                         ));
@@ -145,16 +129,17 @@ public class TraderAgent {
     }
 
     @Action
-    public NewsReport generateNewsReport(Ticker ticker, OperationContext context) throws IOException {
+    public NewsReport generateNewsReport(Ticker ticker, OperationContext context) {
         String key = ticker.content() + "_news";
         return cache.getOrCompute(key, NewsReport.class, () -> {
             try {
-                return context.ai().withAutoLlm().withId("generateNewsReport")
-                        .withTemplate("analysts/_BaseAnalyst").createObject(NewsReport.class, Map.of(
+                return new NewsReport(context.ai().withAutoLlm().withId("generateNewsReport")
+                        .withToolObject(newsDataTools)
+                        .withTemplate("analysts/_BaseAnalyst").createObject(String.class, Map.of(
                                 "tool_names", "get_news,get_global_news",
                                 "system_message", promptNewsAnalyst.getContentAsString(Charset.defaultCharset()),
                                 "ticker", ticker.content().toUpperCase()
-                        ));
+                        )));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -162,16 +147,17 @@ public class TraderAgent {
     }
 
     @Action
-    public SocialMediaReport generateSocialMediaReport(Ticker ticker, OperationContext context) throws IOException {
+    public SocialMediaReport generateSocialMediaReport(Ticker ticker, OperationContext context) {
         String key = ticker.content() + "_social_media";
         return cache.getOrCompute(key, SocialMediaReport.class, () -> {
             try {
-                return context.ai().withAutoLlm().withId("generateSocialMediaReport")
-                        .withTemplate("analysts/_BaseAnalyst").createObject(SocialMediaReport.class, Map.of(
+                return new SocialMediaReport(context.ai().withAutoLlm().withId("generateSocialMediaReport")
+                        .withToolObject(newsDataTools)
+                        .withTemplate("analysts/_BaseAnalyst").createObject(String.class, Map.of(
                                 "tool_names", "get_news",
                                 "system_message", promptSocialMediaAnalyst.getContentAsString(Charset.defaultCharset()),
                                 "ticker", ticker.content().toUpperCase()
-                        ));
+                        )));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -196,7 +182,7 @@ public class TraderAgent {
 
         return RepeatUntilAcceptableBuilder
                 .returning(InvestmentDebateState.class)
-                .withMaxIterations(2)
+                .withMaxIterations(1)
                 .withScoreThreshold(0.9)
                 .withFeedbackClass(InvestmentDebateFeedback.class)
                 .repeating(context -> {
@@ -246,22 +232,5 @@ public class TraderAgent {
                 .build()
                 .asSubProcess(actionContext, InvestmentDebateState.class);
 
-    }
-
-    @Action
-    public SocialMediaReport researchManager(Ticker ticker, InvestmentDebateState investmentDebateState, OperationContext context) throws IOException {
-        String key = ticker.content() + "_social_media";
-        return cache.getOrCompute(key, SocialMediaReport.class, () -> {
-            try {
-                return context.ai().withAutoLlm().withId("generateSocialMediaReport")
-                        .withTemplate("analysts/_BaseAnalyst").createObject(SocialMediaReport.class, Map.of(
-                                "tool_names", "get_news",
-                                "system_message", promptSocialMediaAnalyst.getContentAsString(Charset.defaultCharset()),
-                                "ticker", ticker.content().toUpperCase()
-                        ));
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        });
     }
 }
