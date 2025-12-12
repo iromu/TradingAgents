@@ -16,20 +16,21 @@
     <properties>
         <java.version>25</java.version>
         <embabel-agent.version>0.3.1-SNAPSHOT</embabel-agent.version>
-        <spring-ai.version>1.1.2</spring-ai.version>
+        <!--        <spring-ai.version>1.1.2</spring-ai.version>-->
     </properties>
+    ticker
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.springframework.ai</groupId>
-                <artifactId>spring-ai-bom</artifactId>
-                <version>${spring-ai.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
+    <!--    <dependencyManagement>-->
+    <!--        <dependencies>-->
+    <!--            <dependency>-->
+    <!--                <groupId>org.springframework.ai</groupId>-->
+    <!--                <artifactId>spring-ai-bom</artifactId>-->
+    <!--                <version>${spring-ai.version}</version>-->
+    <!--                <type>pom</type>-->
+    <!--                <scope>import</scope>-->
+    <!--            </dependency>-->
+    <!--        </dependencies>-->
+    <!--    </dependencyManagement>-->
 
     <dependencies>
 

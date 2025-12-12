@@ -1,7 +1,11 @@
 spring:
   application:
     name: Gekko
-
+  ai:
+    ollama:
+      nodes:
+        - name: ollama-local
+          base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
 embabel:
   agent:
     platform:
