@@ -1,0 +1,1912 @@
+{
+  "items": "50",
+  "sentiment_score_definition": "x <= -0.35: Bearish; -0.35 < x <= -0.15: Somewhat-Bearish; -0.15 < x < 0.15: Neutral; 0.15 <= x < 0.35: Somewhat_Bullish; x >= 0.35: Bullish",
+  "relevance_score_definition": "0 < x <= 1, with a higher score indicating higher relevance.",
+  "feed": [
+    {
+      "title": "Is Domino's Pizza Stock Underperforming the Nasdaq?",
+      "url": "https://www.barchart.com/story/news/36586846/is-domino-s-pizza-stock-underperforming-the-nasdaq",
+      "time_published": "20251212T065550",
+      "authors": [
+        "Aanchal Sugandh"
+      ],
+      "summary": " Domino's Pizza stock (DPZ) has significantly underperformed the Nasdaq Composite, trading well below its 50-day and 200-day moving averages and showing modest gains over the past year compared to the Nasdaq's strong performance. Despite operational improvements in Q3 fiscal 2025 like revenue growth and new store additions, the stock's long-term figures reflect softness. Analysts, however, maintain a \"Moderate Buy\" rating with a potential 15.4% upside.",
+      "banner_image": " https://media.barchart.com/contributors-admin/common-images/images/S%26P%20500%20Companies/Consumer%20Cyclical%20(names%20A%20-%20H)/Dominos%20Pizza%20Inc%20storefront%20by-KathyDewar%20via%20iStock.jpg",
+      "source": "Barchart.com",
+      "category_within_source": "General",
+      "source_domain": "Barchart.com",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.923570"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.929517"
+        },
+        {
+          "topic": "retail_wholesale",
+          "relevance_score": "0.833813"
+        }
+      ],
+      "overall_sentiment_score": 0.127283,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "DPZ",
+          "relevance_score": "0.974566",
+          "ticker_sentiment_score": "0.125192",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Citizens downgrades Forge Global stock to Market Perform following Schwab deal",
+      "url": "https://www.investing.com/news/analyst-ratings/citizens-downgrades-forge-global-stock-to-market-perform-following-schwab-deal-93CH-4404990",
+      "time_published": "20251212T065418",
+      "authors": [
+        "Investing.com"
+      ],
+      "summary": "Citizens has downgraded Forge Global (NYSE: FRGE) to Market Perform following the announcement of its acquisition by Charles Schwab (NYSE: SCHW) for $45 per share, valuing the deal at approximately $660 million. The acquisition, anticipated to close in the first half of 2026, is seen as a strategic \"win-win\" combining Schwab's extensive client base with Forge's private market expertise. This move comes despite Forge Global's impressive 218.35% year-to-date return and recent revenue growth in Q2 2025, which was overshadowed by a significant EPS miss.",
+      "banner_image": "https://i-invdn-com.investing.com/news/news_six_pile_69x52._800x533_L_1419494215.jpg",
+      "source": "Investing.com",
+      "category_within_source": "General",
+      "source_domain": "Investing.com",
+      "topics": [
+        {
+          "topic": "mergers_and_acquisitions",
+          "relevance_score": "0.941239"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.848888"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.745047"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.638759"
+        }
+      ],
+      "overall_sentiment_score": 0.094247,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "SCHW",
+          "relevance_score": "0.983912",
+          "ticker_sentiment_score": "0.424633",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "MS",
+          "relevance_score": "0.622125",
+          "ticker_sentiment_score": "0.332615",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "ORCL",
+          "relevance_score": "0.566633",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "LULU",
+          "relevance_score": "0.587130",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Jefferies initiates Moderna stock with Hold rating, $30 price target",
+      "url": "https://www.investing.com/news/analyst-ratings/jefferies-initiates-moderna-stock-with-hold-rating-30-price-target-93CH-4404999",
+      "time_published": "20251212T065409",
+      "authors": [
+        "Investing.com"
+      ],
+      "summary": " Jefferies has initiated coverage on Moderna (NASDAQ: MRNA) with a Hold rating and a $30.00 price target, noting the stock appears slightly undervalued according to Fair Value estimates. The firm forecasts Moderna achieving cash breakeven in 2030, later than management's 2028 guidance, due to significant cash burn and the need for pipeline advancement in flu and COVID-19/flu combination vaccines. Despite expectations for non-U.S. COVID-19 and RSV sales growth and reduced operating expenses in 2026, Jefferies believes significant catalysts for the company are more likely to emerge in 2027.",
+      "banner_image": " https://i-invdn-com.investing.com/news/Moderna_800x533_L_1597823733.jpg",
+      "source": "Investing.com",
+      "category_within_source": "General",
+      "source_domain": "Investing.com",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.904057"
+        },
+        {
+          "topic": "life_sciences",
+          "relevance_score": "0.827667"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "MRNA",
+          "relevance_score": "0.980931",
+          "ticker_sentiment_score": "0.030287",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "ORCL",
+          "relevance_score": "0.643214",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Devon Energy stock rating upgraded by UBS on cost reduction strategy",
+      "url": "https://www.investing.com/news/analyst-ratings/devon-energy-stock-rating-upgraded-by-ubs-on-cost-reduction-strategy-93CH-4404991",
+      "time_published": "20251212T064650",
+      "authors": [
+        "Investing.com"
+      ],
+      "summary": " UBS has upgraded Devon Energy (NYSE:DVN) from Neutral to Buy, increasing its price target to $46.00 due to an improving oil market and an anticipated $1 billion debt reduction by mid-2026. The firm expects Devon's $1 billion cost reduction strategy to build confidence by year-end 2026, leading to capital expenditures $200 million below Street estimates for 2027. This upgrade follows strong Q3 2025 results and several positive analyst actions.",
+      "banner_image": " https://i-invdn-com.investing.com/news/oil_2_800x533_L_1412692774.jpg",
+      "source": "Investing.com",
+      "category_within_source": "General",
+      "source_domain": "Investing.com",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.945859"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.915512"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.835249"
+        }
+      ],
+      "overall_sentiment_score": 0.069467,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "DVN",
+          "relevance_score": "0.982337",
+          "ticker_sentiment_score": "0.453135",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "ORCL",
+          "relevance_score": "0.642256",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Lamb Weston (LW) Projected to Post Quarterly Earnings on Friday",
+      "url": "https://www.marketbeat.com/instant-alerts/lamb-weston-lw-projected-to-post-quarterly-earnings-on-friday-2025-12-12/",
+      "time_published": "20251212T062206",
+      "authors": [
+        "MarketBeat"
+      ],
+      "summary": " Lamb Weston (NYSE:LW) is set to announce its Q2 2026 earnings before market open on Friday, December 19th, with analysts anticipating $0.68 EPS and $1.591 billion in revenue. The company previously reported $0.64 EPS on $1.15 billion in revenue for the prior quarter. Analysts project a $3 EPS for the current fiscal year and $4 EPS for the next fiscal year, with the stock currently holding a consensus \"Hold\" rating and a price target of $65.70.",
+      "banner_image": " https://www.marketbeat.com/images/master/MarketBeat-logo-r-white.svg?v=2019",
+      "source": "MarketBeat",
+      "category_within_source": "General",
+      "source_domain": "MarketBeat",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.914864"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.815543"
+        },
+        {
+          "topic": "retail_wholesale",
+          "relevance_score": "0.738105"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.648544"
+        }
+      ],
+      "overall_sentiment_score": 0.038989,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "LW",
+          "relevance_score": "0.325450",
+          "ticker_sentiment_score": "0.032285",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Top Performing Leveraged/Inverse ETFs: 03/17/2024",
+      "url": "https://www.etftrends.com/leveraged-inverse-content-hub/top-performing-leveraged-inverse-etfs-03-17-2024/",
+      "time_published": "20251212T060938",
+      "authors": [
+        "Sneha Shah"
+      ],
+      "summary": "This article lists the top-performing leveraged and inverse ETFs for the week ending March 17, 2024. The best performers include MSOX, NRGU, and WTIU, driven by factors such as cannabis stock surges, rising oil prices, and overall energy sector gains. The article briefly explains the reasons behind each ETF's performance.",
+      "banner_image": "https://www.etftrends.com/wp-content/uploads/2025/09/Leveraged_Inverse_Direxion_masthead_overlay_1600x121@2x.png",
+      "source": "ETF Trends",
+      "category_within_source": "General",
+      "source_domain": "ETF Trends",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.972720"
+        },
+        {
+          "topic": "economy_monetary",
+          "relevance_score": "0.845661"
+        },
+        {
+          "topic": "life_sciences",
+          "relevance_score": "0.724715"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.719927"
+        },
+        {
+          "topic": "real_estate",
+          "relevance_score": "0.611797"
+        }
+      ],
+      "overall_sentiment_score": 0.30347,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "DRV",
+          "relevance_score": "0.980139",
+          "ticker_sentiment_score": "0.342575",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Bank of Montreal (BMO:CA) CIBC Raises Valuation on Outlook",
+      "url": "https://www.theglobeandmail.com/investing/markets/stocks/BMO/pressreleases/36586394/bank-of-montreal-bmoca-cibc-raises-valuation-on-outlook/",
+      "time_published": "20251212T060937",
+      "authors": [
+        "NULL"
+      ],
+      "summary": " CIBC World Markets has raised its 12-month target price for Bank of Montreal (BMO:CA) to $199.00 from $192.00, while maintaining an Outperform rating. This increase reflects stronger confidence in BMO's earnings trajectory, resilient credit performance, and strategic growth drivers like the Bank of the West acquisition. Analysts anticipate above-average earnings growth due to moderating funding pressures, re-accelerating loan growth, and a strong capital position supporting shareholder returns.",
+      "banner_image": " https://www.stocktargetadvisor.com/blog/wp-content/uploads/2025/12/BMO-bank.jpg",
+      "source": "The Globe and Mail",
+      "category_within_source": "General",
+      "source_domain": "The Globe and Mail",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.945273"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.828350"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.709514"
+        },
+        {
+          "topic": "economy_monetary",
+          "relevance_score": "0.643945"
+        }
+      ],
+      "overall_sentiment_score": 0.046242,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "BULZ",
+          "relevance_score": "0.347974",
+          "ticker_sentiment_score": "0.039159",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Abbott Presses Congress for Shield Over Preemie Baby Formula Litigation That Could It Billions",
+      "url": "https://www.claimsjournal.com/news/national/2025/12/12/334535.htm",
+      "time_published": "20251212T060835",
+      "authors": [
+        "Anna Edney"
+      ],
+      "summary": "Abbott Laboratories is lobbying Congress for protection from lawsuits related to its premature baby formula, threatening to withdraw the product if a shield isn't granted. The company faces billions in potential legal costs over allegations that its formula increases the risk of necrotizing enterocolitis (NEC) in preemies, a claim Abbott disputes. This move comes amidst recent scandals and shortages in the baby formula market, with critics calling Abbott's actions a \"power play.\"",
+      "banner_image": "https://www.claimsjournal.com/app/uploads/2025/12/Abbott-Laboratories-in-Michigan-Bloomberg-580x414.jpg",
+      "source": "Claims Journal",
+      "category_within_source": "General",
+      "source_domain": "Claims Journal",
+      "topics": [
+        {
+          "topic": "life_sciences",
+          "relevance_score": "0.915389"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.717507"
+        }
+      ],
+      "overall_sentiment_score": 0.031458,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "ABT",
+          "relevance_score": "0.301609",
+          "ticker_sentiment_score": "0.039905",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "How Investors Are Reacting To Honeywell International (HON) Adding Indra Nooyi To Its Board",
+      "url": "https://simplywall.st/stocks/us/capital-goods/nasdaq-hon/honeywell-international/news/how-investors-are-reacting-to-honeywell-international-hon-ad",
+      "time_published": "20251212T054421",
+      "authors": [
+        "Simply Wall St"
+      ],
+      "summary": " Honeywell International announced the addition of Indra Nooyi, former PepsiCo CEO and current Amazon audit committee chair, to its Board as an Independent Director effective January 1, 2026. This move is expected to strengthen governance around capital allocation and portfolio management, especially with Nooyi's global leadership and financial expertise. While her appointment is unlikely to alter near-term execution risks, it signals a more financially disciplined boardroom at Honeywell as it navigates separation costs and market pressures.",
+      "banner_image": " NULL",
+      "source": "Simply Wall Street",
+      "category_within_source": "General",
+      "source_domain": "Simply Wall Street",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.935133"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.802247"
+        },
+        {
+          "topic": "manufacturing",
+          "relevance_score": "0.719874"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.633791"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.619334"
+        }
+      ],
+      "overall_sentiment_score": 0.224954,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "HON",
+          "relevance_score": "0.986030",
+          "ticker_sentiment_score": "0.205161",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Federal Realty’s Village Pointe Deal and Redevelopment Push Might Change The Case For Investing In FRT",
+      "url": "https://simplywall.st/stocks/us/real-estate/nyse-frt/federal-realty-investment-trust/news/federal-realtys-village-pointe-deal-and-redevelopment-push-m",
+      "time_published": "20251212T054417",
+      "authors": [
+        "Sasha Jovanovic"
+      ],
+      "summary": " Federal Realty Investment Trust (FRT) recently announced a mixed third-quarter, the acquisition of Village Pointe in Omaha, and ongoing redevelopments. These actions signal Federal Realty's strategy to expand into high-traffic retail locations and new markets while managing redevelopment costs. This article explores how these developments, particularly the Village Pointe acquisition, could significantly impact the investment outlook for FRT.",
+      "banner_image": " NULL",
+      "source": "Simply Wall Street",
+      "category_within_source": "General",
+      "source_domain": "Simply Wall Street",
+      "topics": [
+        {
+          "topic": "real_estate",
+          "relevance_score": "0.937758"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.810320"
+        },
+        {
+          "topic": "retail_wholesale",
+          "relevance_score": "0.728098"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.601619"
+        }
+      ],
+      "overall_sentiment_score": 0.100569,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "FRT",
+          "relevance_score": "0.984045",
+          "ticker_sentiment_score": "0.138994",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Goldman Sachs Lowers Price Target for Equinor to 210 Norwegian Kroner, Reiterates Sell",
+      "url": "https://www.marketscreener.com/news/goldman-sachs-lowers-price-target-for-equinor-to-210-norwegian-kroner-reiterates-sell-ce7d50dbdf8ff425",
+      "time_published": "20251212T052327",
+      "authors": [
+        "NULL"
+      ],
+      "summary": " Goldman Sachs has decreased its price target for Equinor (EQNR) to 210 Norwegian kroner from the previous 220 Norwegian kroner. Despite the reduction in the price target, the firm has maintained its \"sell\" recommendation for the integrated oil and gas company. This adjustment reflects a revised outlook without changing the overall negative sentiment towards the stock.",
+      "banner_image": " NULL",
+      "source": "marketscreener.com",
+      "category_within_source": "General",
+      "source_domain": "marketscreener.com",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.927436"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.802536"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "EQNR",
+          "relevance_score": "0.971318",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Oxford Industries (OXM) Is Down 19.9% After Johnny Was Impairment Spurs Guidance Cut And Q3 Loss",
+      "url": "https://uk.finance.yahoo.com/news/oxford-industries-oxm-down-19-051533443.html",
+      "time_published": "20251212T051643",
+      "authors": [
+        "NULL"
+      ],
+      "summary": " This article reports that Oxford Industries (OXM) stock dropped 19.9% following an impairment charge related to its Johnny Was brand, which resulted in a guidance cut and a third-quarter loss. The news indicates financial challenges for the company stemming from the performance of the Johnny Was segment.",
+      "banner_image": " NULL",
+      "source": "Yahoo Finance UK",
+      "category_within_source": "General",
+      "source_domain": "Yahoo Finance UK",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.974793"
+        },
+        {
+          "topic": "retail_wholesale",
+          "relevance_score": "0.809154"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "OXM",
+          "relevance_score": "0.981300",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Conagra Brands Faces Mounting Analyst Skepticism",
+      "url": "https://www.ad-hoc-news.de/boerse/news/ueberblick/conagra-brands-faces-mounting-analyst-skepticism/68418004",
+      "time_published": "20251212T051500",
+      "authors": [],
+      "summary": "Conagra Brands is under pressure from Wall Street analysts due to declining volumes and increased competition from private labels. Despite beating EPS estimates, first-quarter revenue fell by 5.81%, leading to several analyst target reductions and a \"Reduce\" consensus rating. The company's upcoming quarterly report on December 19, 2025, will be crucial in determining if increased marketing spend can stabilize market share and improve volume trends.",
+      "banner_image": "https://mdb.ad-hoc-news.de/img/icons/uhr_realtime.jpg",
+      "source": "Ad-hoc-news.de",
+      "category_within_source": "General",
+      "source_domain": "Ad-hoc-news.de",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.936711"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.809601"
+        },
+        {
+          "topic": "retail_wholesale",
+          "relevance_score": "0.722476"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "CAG",
+          "relevance_score": "0.974817",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Cosan SA (CSAN) gets upgraded to hold from reduce by HSBC",
+      "url": "https://www.msn.com/en-us/money/topstocks/cosan-sa-csan-gets-upgraded-to-hold-from-reduce-by-hsbc/ar-AA1Sc3bn?ocid=finance-verthp-feeds",
+      "time_published": "20251212T051323",
+      "authors": [],
+      "summary": "HSBC has upgraded its rating for Cosan SA (CSAN) from \"reduce\" to \"hold\". This indicates a more neutral outlook for the company's stock from the financial institution.",
+      "banner_image": null,
+      "source": "MSN",
+      "category_within_source": "General",
+      "source_domain": "MSN",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.801142"
+        }
+      ],
+      "overall_sentiment_score": 0.336264,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "CSAN",
+          "relevance_score": "0.981066",
+          "ticker_sentiment_score": "0.340025",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "News | The factory that moves faster | Collins Aerospace",
+      "url": "https://www.rtx.com/collinsaerospace/news/stories/2025/05/wheels-in-a-week",
+      "time_published": "20251212T051143",
+      "authors": [],
+      "summary": "Collins Aerospace's Troy, Ohio facility is undergoing a manufacturing revolution, aiming to reduce aircraft wheel production time from 45 days to seven, an initiative known as \"Wheels in a Week.\" This transformation involves implementing advanced automated machinery and lean manufacturing practices, replacing outdated equipment, and improving overall efficiency and safety. The goal is to enhance flexibility for customers, increase production volume, and allow for new product development.",
+      "banner_image": "https://prd-sc102-cdn.rtx.com/collinsaerospace/-/media/ca/news/2025/05/graphics/nextgen-cell-2_250528_collins_troy-1600x900.jpg?h=900&iar=0&w=1600&rev=faf9927392d643eaabf7be332d2fade5&sc_lang=en&rid=7e4407dbb72d4644a9ebd89d5c4b9275&hash=D18495946C1378E561A2D16DCE617E4B",
+      "source": "RTX",
+      "category_within_source": "General",
+      "source_domain": "RTX",
+      "topics": [
+        {
+          "topic": "manufacturing",
+          "relevance_score": "0.916247"
+        }
+      ],
+      "overall_sentiment_score": 0.407746,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "RTX",
+          "relevance_score": "0.971458",
+          "ticker_sentiment_score": "0.416541",
+          "ticker_sentiment_label": "Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Key facts: HDFC Bank rises 1.02% after losses; Agrawal recalls early investment",
+      "url": "https://www.tradingview.com/news/tradingview:fecf5aa56163f:0-key-facts-hdfc-bank-rises-1-02-after-losses-agrawal-recalls-early-investment/",
+      "time_published": "20251212T051009",
+      "authors": [],
+      "summary": "HDFC Bank (HDFCBANK) saw a 1.02% increase after three days of losses, attributed to a market rebound and banking sector gains following a US Federal Reserve rate cut. This news article also highlights Raamdeo Agrawal's early investment in HDFC Bank in 1995, emphasizing the importance of strong investment beliefs for future profits.",
+      "banner_image": null,
+      "source": "TradingView",
+      "category_within_source": "General",
+      "source_domain": "TradingView",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.911063"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.826716"
+        },
+        {
+          "topic": "economy_monetary",
+          "relevance_score": "0.603292"
+        }
+      ],
+      "overall_sentiment_score": 0.53395,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "HDB",
+          "relevance_score": "0.973828",
+          "ticker_sentiment_score": "0.546673",
+          "ticker_sentiment_label": "Bullish"
+        }
+      ]
+    },
+    {
+      "title": "HDFC Bank Elevates Anil Bhavnani, Ravi SSN, Sameer Ratolikar As Group Heads",
+      "url": "https://www.ndtvprofit.com/business/hdfc-bank-elevates-anil-bhavnani-ravi-ssn-sameer-ratolikar-as-group-heads",
+      "time_published": "20251212T051009",
+      "authors": [
+        "Soumil Kamat"
+      ],
+      "summary": "HDFC Bank has announced the elevation of Anil Bhavnani, Ravi SSN, and Sameer Ratolikar to Group Head positions, effective December 1. These appointments strengthen the bank's leadership across key areas including Transportation and Infrastructure Finance, Large Local Corporates and PSUs, and Chief Information Security. The promotions are based on recommendations from the nomination and remuneration committee, highlighting the bank's commitment to internal talent development.",
+      "banner_image": "https://media.assettype.com/bloombergquint%2F2025-12-12%2F1k0ixgfh%2FHDFC-Bank-Ltd.s-Worli-seaface-branc.jpg?auto=format%2Ccompress&fmt=avif&mode=crop&ar=16%3A9&q=60&w=1200",
+      "source": "NDTV Profit",
+      "category_within_source": "General",
+      "source_domain": "NDTV Profit",
+      "topics": [
+        {
+          "topic": "finance",
+          "relevance_score": "0.944398"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.714008"
+        }
+      ],
+      "overall_sentiment_score": 0.294069,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "HDB",
+          "relevance_score": "0.999000",
+          "ticker_sentiment_score": "0.283062",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "HDFC Bank Sees Heavy Put Option Activity Ahead of December Expiry",
+      "url": "https://www.marketsmojo.com/news/stocks-in-action/hdfc-bank-sees-heavy-put-option-activity-ahead-of-december-expiry-3757226",
+      "time_published": "20251212T051009",
+      "authors": [],
+      "summary": "HDFC Bank is experiencing significant put option activity, particularly at the ₹1000 strike price for the December 2025 expiry, indicating investor caution despite the stock trading near its 52-week high. This surge in put options suggests strategies for hedging against potential downside or speculating on a near-term price correction. The derivatives market's signals of caution are critical for investors to monitor alongside the stock's robust fundamentals and technical indicators.",
+      "banner_image": null,
+      "source": "Markets Mojo",
+      "category_within_source": "General",
+      "source_domain": "Markets Mojo",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.983444"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.809794"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "HDB",
+          "relevance_score": "0.970504",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Is a wide moat better than a well-managed company? Here’s what the data says",
+      "url": "https://www.morningstar.com.au/stocks/is-a-wide-moat-better-than-a-well-managed-company-heres-what-the-data-says",
+      "time_published": "20251212T050941",
+      "authors": [
+        "Adam Fleck",
+        "CFA"
+      ],
+      "summary": " This article compares the impact of economic moats versus management quality on stock performance, concluding that a strong economic moat generally outweighs exceptional management teams. The author supports this by analyzing recent stock performance data and the mixed track record of mergers and acquisitions. It also cautions investors about dual share classes and their implications for shareholder influence and valuation.",
+      "banner_image": " https://author-service-images-prod-us-east-1.publishing.aws.arc.pub/morningstar/35091ad9-8fe9-4231-9701-578ec44b5def.jpg",
+      "source": "Morningstar",
+      "category_within_source": "General",
+      "source_domain": "Morningstar",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.916108"
+        },
+        {
+          "topic": "mergers_and_acquisitions",
+          "relevance_score": "0.802063"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.734968"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "HEI-A",
+          "relevance_score": "0.307679",
+          "ticker_sentiment_score": "0.040884",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "META",
+          "relevance_score": "0.943870",
+          "ticker_sentiment_score": "0.142879",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "SJM",
+          "relevance_score": "0.949468",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "IShares Russell 2000 ETF Options Spot-On: On December 11th, 1.96 Million Contracts Were Traded, With 12.32 Million Open Interest",
+      "url": "https://news.futunn.com/en/post/66097494/ishares-russell-2000-etf-options-spot-on-on-december-11th",
+      "time_published": "20251212T050941",
+      "authors": [
+        "Futu News"
+      ],
+      "summary": " On December 11th, the iShares Russell 2000 ETF (IWM.US) saw robust options trading with a total volume of 1.96 million contracts; put options slightly edged out call options in transactions. The ETF's open interest reached 12.32 million contracts, significantly higher than its 30-day average. A notable trade involved 24,000 put options with a strike price of $246.00 expiring on January 16th, 2026.",
+      "banner_image": " https://record.futunn.com/news-editor-imgs/20251212/public/17655162293739878134480.png",
+      "source": "富途牛牛",
+      "category_within_source": "General",
+      "source_domain": "富途牛牛",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.947741"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.735116"
+        }
+      ],
+      "overall_sentiment_score": 0.095407,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "IWM",
+          "relevance_score": "0.987943",
+          "ticker_sentiment_score": "0.083450",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "|California Public Employees Retirement System Cuts Holdings in Curtiss-Wright Corporation $CW",
+      "url": "https://www.marketbeat.com/instant-alerts/filing-california-public-employees-retirement-system-cuts-holdings-in-curtiss-wright-corporation-cw-2025-12-11/",
+      "time_published": "20251212T050922",
+      "authors": [
+        "|MarketBeat"
+      ],
+      "summary": " |The California Public Employees Retirement System significantly reduced its stake in Curtiss-Wright Corporation (NYSE:CW) by 37.4% during the second quarter, selling over 40,000 shares. Despite this reduction, Curtiss-Wright reported strong quarterly earnings, beating EPS estimates and showing an 8.8% year-over-year revenue increase. Analyst sentiment remains largely positive, with a \"Moderate Buy\" consensus and an average price target of $562.83.",
+      "banner_image": " |https://www.marketbeat.com/logos/curtiss-wright-co-logo-1200x675.jpg?v=20221110160156",
+      "source": "MarketBeat",
+      "category_within_source": "General",
+      "source_domain": "MarketBeat",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.913662"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.833363"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.646148"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.744049"
+        },
+        {
+          "topic": "manufacturing",
+          "relevance_score": "0.623488"
+        }
+      ],
+      "overall_sentiment_score": 0.31968,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "CW",
+          "relevance_score": "0.983730",
+          "ticker_sentiment_score": "0.332006",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Form 424B2 BARCLAYS BANK PLC",
+      "url": "https://www.streetinsider.com/SEC+Filings/Form+424B2+BARCLAYS+BANK+PLC/25729278.html",
+      "time_published": "20251212T050913",
+      "authors": [
+        "NULL"
+      ],
+      "summary": " This document, a Form 424B2 filing by Barclays Bank PLC, details the offering of Leveraged Basket-Linked Global Medium-Term Notes, Series A. These notes do not bear interest and their payment at maturity is linked to the performance of an unequally weighted basket of five international indices: EURO STOXX 50®, TOPIX®, FTSE® 100, Swiss Market Index, and S&P/ASX 200. Investors could lose their entire investment, and payments are subject to Barclays Bank PLC's creditworthiness and the potential exercise of a U.K. Bail-in Power.",
+      "banner_image": " NULL",
+      "source": "StreetInsider",
+      "category_within_source": "General",
+      "source_domain": "StreetInsider",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.944878"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.733663"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.646520"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "JJE",
+          "relevance_score": "0.313275",
+          "ticker_sentiment_score": "0.035844",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "GS",
+          "relevance_score": "0.608751",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Should Extreme Networks’ Shift to Platform ONE and Recurring Cloud Revenue Require Action From EXTR Investors?",
+      "url": "https://simplywall.st/stocks/us/tech/nasdaq-extr/extreme-networks/news/should-extreme-networks-shift-to-platform-one-and-recurring",
+      "time_published": "20251212T050901",
+      "authors": [
+        "Sasha Jovanovic"
+      ],
+      "summary": "Extreme Networks (EXTR) is transitioning from a hardware-centric model to a cloud-driven, subscription-based Platform ONE, aiming to expand recurring revenue and improve earnings quality. Analysts are optimistic about this shift, citing growing cloud adoption and network upgrade cycles, which Extreme Networks hopes will deepen customer relationships and stabilize revenue. While Q1 2026 results show early financial traction, investors should remain aware of execution risks in scaling new models and competition from larger networking vendors.",
+      "banner_image": null,
+      "source": "Simply Wall Street",
+      "category_within_source": "General",
+      "source_domain": "Simply Wall Street",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "0.927548"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.839285"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.708640"
+        }
+      ],
+      "overall_sentiment_score": 0.245843,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "EXTR",
+          "relevance_score": "0.977723",
+          "ticker_sentiment_score": "0.331313",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "ANET",
+          "relevance_score": "0.626920",
+          "ticker_sentiment_score": "0.117638",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "FFIV",
+          "relevance_score": "0.638370",
+          "ticker_sentiment_score": "0.123806",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "ORCL",
+          "relevance_score": "0.635505",
+          "ticker_sentiment_score": "0.283948",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.617502",
+          "ticker_sentiment_score": "0.286326",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Halliburton, VoltaGrid to deliver 400 MW power systems for data centers",
+      "url": "https://in.investing.com/news/company-news/halliburton-voltagrid-to-deliver-400-mw-power-systems-for-data-centers-93CH-5150171",
+      "time_published": "20251212T050832",
+      "authors": [
+        "Investing.com"
+      ],
+      "summary": " Halliburton and VoltaGrid have announced a strategic collaboration to provide 400 megawatts of modular natural gas power systems for data center development across the Eastern Hemisphere, with delivery expected in 2028. This partnership combines Halliburton's operational expertise with VoltaGrid's distributed power platform to support hyperscale data centers for AI, cloud computing, and digital transformation. The companies emphasize that these natural gas power systems offer a lower emissions profile compared to conventional diesel generation, addressing the growing power demands of digital infrastructure.",
+      "banner_image": " https://i-invdn-com.investing.com/news/international_newspapers_69x52._800x533_L_1419494241.jpg",
+      "source": "Investing.com India",
+      "category_within_source": "General",
+      "source_domain": "Investing.com India",
+      "topics": [
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.923874"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.803737"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.723980"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.617853"
+        }
+      ],
+      "overall_sentiment_score": 0.49288,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "HAL",
+          "relevance_score": "0.974350",
+          "ticker_sentiment_score": "0.473460",
+          "ticker_sentiment_label": "Bullish"
+        }
+      ]
+    },
+    {
+      "title": "When winter weather strikes, Dominion Energy there to turn lights back on",
+      "url": "https://www.wavy.com/news/local-news/when-winter-weather-strikes-dominion-energy-there-to-turn-lights-back-on/",
+      "time_published": "20251212T050807",
+      "authors": [
+        "Walter Hildebrand"
+      ],
+      "summary": " Dominion Energy lineman Anthony Wood explains that crews are prepared to restore power during winter weather events, emphasizing that light, fluffy snow poses less risk than heavy snow and ice. Wood highlights innovations like fiberglass crossarms for quicker repairs and advises residents to charge devices, prepare blankets, and service generators for winter storms.",
+      "banner_image": " https://i0.wp.com/www.wavy.com/wp-content/uploads/sites/3/2025/12/thumbnail_IMG_8837.jpg?w=2000&ssl=1",
+      "source": "WAVY.com",
+      "category_within_source": "General",
+      "source_domain": "WAVY.com",
+      "topics": [
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.932397"
+        }
+      ],
+      "overall_sentiment_score": 0.305481,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "D",
+          "relevance_score": "0.979939",
+          "ticker_sentiment_score": "0.338858",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "CenterPoint Energy Declares Regular Common Stock Dividend of $0.2300",
+      "url": "https://www.barchart.com/story/news/36586113/centerpoint-energy-declares-regular-common-stock-dividend-of-0-2300",
+      "time_published": "20251212T050804",
+      "authors": [
+        "NULL"
+      ],
+      "summary": " CenterPoint Energy, Inc. (NYSE: CNP) has declared a regular quarterly cash dividend of $0.2300 per share. This dividend is payable on March 12, 2026, to shareholders of record as of February 19, 2026. CenterPoint Energy is a multi-state electric and natural gas delivery company based in Houston, serving approximately 7 million metered customers.",
+      "banner_image": " https://barchart-news-media-prod.aws.barchart.com/BIZWIRE_WWW/6df4d3e536c523010d836bf3f4c952ef/ct%3Fid%3Dbwnews%26amp%3Bsty%3D20251211288091r1%26amp%3Bsid%3Dchbar%26amp%3Bdistro%3Dftp",
+      "source": "Barchart.com",
+      "category_within_source": "General",
+      "source_domain": "Barchart.com",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.926060"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.813962"
+        }
+      ],
+      "overall_sentiment_score": 0.401458,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "CNP",
+          "relevance_score": "0.987942",
+          "ticker_sentiment_score": "0.413865",
+          "ticker_sentiment_label": "Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Truist Financial Upgrades Ball Corp(BALL.US) to Buy Rating",
+      "url": "https://news.futunn.com/en/post/66085352/truist-financial-upgrades-ball-corp-ballus-to-buy-rating",
+      "time_published": "20251212T050757",
+      "authors": [
+        "NULL"
+      ],
+      "summary": " Truist Financial has upgraded Ball Corp (BALL.US) to a buy rating. Analyst Jamie Cook, who has a 66.5% success rate and 13.3% average return over the past year, provided the upgrade. This information is based on TipRanks data and is intended for informational purposes only, not as investment advice.",
+      "banner_image": " https://newsfile.futunn.com/AutoNewsCover/StockRecentRatings.jpg?imageMogr2/thumbnail/76x76!/ignore-error/1/format/webp",
+      "source": "富途牛牛",
+      "category_within_source": "General",
+      "source_domain": "富途牛牛",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.905636"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.705585"
+        }
+      ],
+      "overall_sentiment_score": 0.416305,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "BALL",
+          "relevance_score": "0.970254",
+          "ticker_sentiment_score": "0.531915",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "TFC",
+          "relevance_score": "0.714140",
+          "ticker_sentiment_score": "0.317588",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "KeyCorp Stock Rockets 13% With 7-Day Winning Streak",
+      "url": "https://www.trefis.com/data/companies/KEY/no-login-required/Xeion0KS/KeyCorp-Stock-Rockets-13-With-7-Day-Winning-Streak",
+      "time_published": "20251212T045738",
+      "authors": [],
+      "summary": "KeyCorp stock has experienced a significant surge, rocketing 13% and achieving a 7-day winning streak. This article highlights the impressive recent performance of KeyCorp's shares.",
+      "banner_image": null,
+      "source": "Trefis",
+      "category_within_source": "General",
+      "source_domain": "Trefis",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.930365"
+        }
+      ],
+      "overall_sentiment_score": 0.514734,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "KEY",
+          "relevance_score": "0.973235",
+          "ticker_sentiment_score": "0.537962",
+          "ticker_sentiment_label": "Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Corning Stock On Fire: Up 15% With 6-Day Winning Streak",
+      "url": "https://www.trefis.com/data/companies/GLW/no-login-required/aTzxomVM/Corning-Stock-On-Fire-Up-15-With-6-Day-Winning-Streak",
+      "time_published": "20251212T045731",
+      "authors": [],
+      "summary": "Corning stock has seen a significant surge, rising 15% and experiencing a 6-day winning streak. This article highlights the company's strong recent performance in the stock market.",
+      "banner_image": null,
+      "source": "Trefis",
+      "category_within_source": "General",
+      "source_domain": "Trefis",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.935574"
+        }
+      ],
+      "overall_sentiment_score": 0.035545,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "GLW",
+          "relevance_score": "0.319886",
+          "ticker_sentiment_score": "0.042844",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Everus Construction Group (ECG): Gauging Valuation After a Year of Steady Insider Buying",
+      "url": "https://simplywall.st/stocks/us/capital-goods/nyse-ecg/everus-construction-group/news/everus-construction-group-ecg-gauging-valuation-after-a-year",
+      "time_published": "20251212T045350",
+      "authors": [
+        "Simply Wall St"
+      ],
+      "summary": "Everus Construction Group (ECG) has seen consistent insider buying, signaling positive sentiment, yet its valuation on a Price-to-Earnings basis appears stretched when compared to its estimated fair value. While the stock has delivered strong returns over the past year, a Discounted Cash Flow (DCF) model suggests it may be heavily overvalued. Investors should consider potential risks like slowdowns in infrastructure spending and compare the P/E ratio with both industry averages and fair value estimates.",
+      "banner_image": null,
+      "source": "Simply Wall Street",
+      "category_within_source": "General",
+      "source_domain": "Simply Wall Street",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.933135"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.907327"
+        },
+        {
+          "topic": "real_estate",
+          "relevance_score": "0.807284"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "ECG",
+          "relevance_score": "0.977582",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "PWR",
+          "relevance_score": "0.618501",
+          "ticker_sentiment_score": "0.114377",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "CenterPoint Energy (NYSE: CNP) declares $0.2300 dividend payable March 12, 2026",
+      "url": "https://www.stocktitan.net/news/CNP/center-point-energy-declares-regular-common-stock-dividend-of-0-aor08la6vlg9.html",
+      "time_published": "20251212T045119",
+      "authors": [
+        "NULL"
+      ],
+      "summary": " CenterPoint Energy, Inc. announced that its Board of Directors has declared a regular quarterly cash dividend of $0.2300 per share. This dividend is payable on March 12, 2026, to shareholders of record at the close of business on February 19, 2026. CenterPoint Energy is a multi-state electric and natural gas delivery company based in Houston, serving approximately 7 million metered customers.",
+      "banner_image": " NULL",
+      "source": "Stock Titan",
+      "category_within_source": "General",
+      "source_domain": "Stock Titan",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.935138"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.833079"
+        }
+      ],
+      "overall_sentiment_score": 0.295623,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "CNP",
+          "relevance_score": "0.975074",
+          "ticker_sentiment_score": "0.290231",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "What Has ExxonMobil (XOM) Stock Done For Investors?",
+      "url": "https://finviz.com/news/252476/what-has-exxonmobil-xom-stock-done-for-investors",
+      "time_published": "20251212T044606",
+      "authors": [
+        "Matt DiLallo"
+      ],
+      "summary": "ExxonMobil's strategic transformation over the past five years has led to market-crushing total returns, despite underperforming in shorter periods. The company's focus on advantaged resources, structural cost savings, and disciplined capital allocation has significantly increased its profitability. This strategy, including consistent dividend increases and share repurchases, positions ExxonMobil for continued strong performance.",
+      "banner_image": "https://g.foolcdn.com/image/?url=https%3A%2F%2Fg.foolcdn.com%2Feditorial%2Fimages%2F844214%2Fxom.jpg&w=700",
+      "source": "Finviz",
+      "category_within_source": "General",
+      "source_domain": "Finviz",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.944311"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.847227"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.942708"
+        }
+      ],
+      "overall_sentiment_score": 0.609853,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "XOM",
+          "relevance_score": "0.981486",
+          "ticker_sentiment_score": "0.614785",
+          "ticker_sentiment_label": "Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Keysight and KT SAT Achieve Industry-First Multi-Orbit NTN Handover Between GEO Satellite and Emulated LEO Link",
+      "url": "https://cxotoday.com/press-release/keysight-and-kt-sat-achieve-industry-first-multi-orbit-ntn-handover-between-geo-satellite-and-emulated-leo-link/",
+      "time_published": "20251212T043738",
+      "authors": [
+        "CXOtoday News Desk"
+      ],
+      "summary": " Keysight Technologies and KT SAT have achieved the industry's first multi-orbit non-terrestrial network (NTN) handover between a commercial geostationary Earth orbit (GEO) satellite and an emulated low Earth orbit (LEO) link. This demonstration, conducted at KT SAT’s Kumsan Satellite Network Operation Center in Korea, validates a core 6G capability by showing session continuity during a handover. The successful trial, utilizing Keysight's Network Emulator Solutions and UeSIM RAN Testing Toolset over a live Ku-band GEO connection, marks a significant milestone for integrating satellite and terrestrial networks and accelerating the development of resilient, always-on coverage.",
+      "banner_image": " https://cxotoday.com/wp-content/uploads/2021/06/Keysight.png",
+      "source": "CXOToday.com",
+      "category_within_source": "General",
+      "source_domain": "CXOToday.com",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "0.927401"
+        }
+      ],
+      "overall_sentiment_score": 0.470413,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "KEYS",
+          "relevance_score": "0.973906",
+          "ticker_sentiment_score": "0.492457",
+          "ticker_sentiment_label": "Bullish"
+        }
+      ]
+    },
+    {
+      "title": "About Abbott",
+      "url": "https://www.abbott.com/en-us/about-abbott",
+      "time_published": "20251212T042308",
+      "authors": [
+        "NULL"
+      ],
+      "summary": " Abbott, a global health technology leader for over 135 years, is dedicated to helping people live healthier lives through innovative products and solutions in areas like diabetes management, cardiovascular care, and diagnostics. Founded in 1888 by Dr. Wallace C. Abbott, the company has a rich history of breakthroughs, including the first licensed HIV test and the revolutionary FreeStyle Libre system. Abbott emphasizes responsibility and sustainability, aiming for long-term impact on global health through its products, science, and partnerships.",
+      "banner_image": " NULL",
+      "source": "Abbott",
+      "category_within_source": "General",
+      "source_domain": "Abbott",
+      "topics": [
+        {
+          "topic": "life_sciences",
+          "relevance_score": "0.948556"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.707519"
+        }
+      ],
+      "overall_sentiment_score": 0.81517,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "ABT",
+          "relevance_score": "0.987314",
+          "ticker_sentiment_score": "0.847401",
+          "ticker_sentiment_label": "Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Does GEO Group’s (GEO) Legal Leadership Transition Reveal Its Long‑Term Regulatory Strategy?",
+      "url": "https://simplywall.st/stocks/us/commercial-services/nyse-geo/geo-group/news/does-geo-groups-geo-legal-leadership-transition-reveal-its-l",
+      "time_published": "20251212T040943",
+      "authors": [
+        "Simply Wall St"
+      ],
+      "summary": " The GEO Group Inc. announced the retirement of its Senior Vice President, Legal Services, General Counsel, and Corporate Secretary Joe Negron, effective December 31, 2025. Negron will remain as a consultant for two years, leveraging his expertise in legal, regulatory, and compliance matters. This transition is seen as a strategic move to maintain institutional knowledge as investor focus shifts towards GEO's electronic monitoring and immigration-related services, indicating the company's long-term regulatory strategy.",
+      "banner_image": " NULL",
+      "source": "Simply Wall Street",
+      "category_within_source": "General",
+      "source_domain": "Simply Wall Street",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.936186"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.820734"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.733124"
+        },
+        {
+          "topic": "economy_fiscal",
+          "relevance_score": "0.649092"
+        }
+      ],
+      "overall_sentiment_score": 0.320496,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "GEO",
+          "relevance_score": "0.982726",
+          "ticker_sentiment_score": "0.277338",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "ORCL",
+          "relevance_score": "0.593673",
+          "ticker_sentiment_score": "0.304044",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Structure Therapeutics Announces Closing of Upsized $747.5 Million Public Offering of ADSs and Pre-Funded Warrants and Full Exercise of the Underwriters’ Option to Purchase Additional ADSs",
+      "url": "https://finance.yahoo.com/news/structure-therapeutics-announces-closing-upsized-210100107.html",
+      "time_published": "20251212T040929",
+      "authors": [
+        "NULL"
+      ],
+      "summary": " Structure Therapeutics Inc. announced the closing of an upsized public offering, raising approximately $747.5 million from the sale of American depositary shares (ADSs) and pre-funded warrants. The offering included the full exercise of the underwriters' option to purchase additional ADSs. This significant capital infusion will support the company's work in developing novel oral small molecule therapeutics.",
+      "banner_image": " https://s.yimg.com/ny/api/res/1.2/rj0Ta3GGeVAy26gXI.Thag--/YXBwaWQ9aGlnaGxhbmRlcjt3PTIyNDtoPTQ4O2NmPXdlYnA-/https://s.yimg.com/os/creatr-uploaded-images/2025-08/b2b7bbc0-8385-11f0-977e-d9d7d4cd04d2",
+      "source": "Yahoo Finance",
+      "category_within_source": "General",
+      "source_domain": "Yahoo Finance",
+      "topics": [
+        {
+          "topic": "ipo",
+          "relevance_score": "0.979383"
+        },
+        {
+          "topic": "life_sciences",
+          "relevance_score": "0.910899"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.830646"
+        }
+      ],
+      "overall_sentiment_score": 0.039028,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "GPCR",
+          "relevance_score": "0.330709",
+          "ticker_sentiment_score": "0.033500",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "ICICI Prudential AMC IPO: How to increase chances of allotment through ICICI Bank shareholders quota",
+      "url": "https://m.economictimes.com/markets/ipos/fpos/icici-prudential-amc-ipo-how-to-increase-chances-of-allotment-through-icici-bank-shareholders-quota/articleshow/125925299.cms",
+      "time_published": "20251212T040913",
+      "authors": [
+        "Akash Podishetti"
+      ],
+      "summary": " ICICI Prudential AMC's Rs 10,602 crore IPO is now open, offering a special quota for ICICI Bank shareholders, reserving up to 5% of the total issue. Eligible shareholders, who held ICICI Bank shares by December 5, can apply for up to 90 shares in this category and also place a separate retail bid, effectively doubling their chances of allotment. This strategy, especially when combined with bids from multiple demat accounts where the primary holder is an eligible shareholder, significantly increases the probability of receiving shares in this highly anticipated IPO.",
+      "banner_image": " https://img.etimg.com/thumb/msid-125925290,width-210,height-158,imgsize-56316,resizemode-75/icici-prudential-amc-ipo-how-to-increase-chances-of-allotment-through-icici-bank-shareholders-quota.jpg",
+      "source": "The Economic Times",
+      "category_within_source": "General",
+      "source_domain": "The Economic Times",
+      "topics": [
+        {
+          "topic": "ipo",
+          "relevance_score": "0.974526"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.807342"
+        }
+      ],
+      "overall_sentiment_score": 0.321477,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "IBN",
+          "relevance_score": "0.934579",
+          "ticker_sentiment_score": "0.343056",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "PRU",
+          "relevance_score": "0.715309",
+          "ticker_sentiment_score": "0.310551",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Exact Sciences, the NSABP Foundation, and the German Breast Group Present Results for the Oncodetect® MRD Test in Early Triple-Negative Breast Cancer at SABCS",
+      "url": "https://www.businesswire.com/news/home/20251211912129/en/Exact-Sciences-the-NSABP-Foundation-and-the-German-Breast-Group-Present-Results-for-the-Oncodetect-MRD-Test-in-Early-Triple-Negative-Breast-Cancer-at-SABCS",
+      "time_published": "20251212T040909",
+      "authors": [],
+      "summary": "Exact Sciences, in collaboration with the NSABP Foundation and the German Breast Group, announced positive clinical study results for its Oncodetect® molecular residual disease (MRD) test in early triple-negative breast cancer (TNBC). The study, presented at SABCS, showed that the Oncodetect test powerfully predicts distant recurrence after surgery in TNBC patients. The data highlights the test's potential to guide post-surgical treatment decisions and identify high-risk patients.",
+      "banner_image": null,
+      "source": "Business Wire",
+      "category_within_source": "General",
+      "source_domain": "Business Wire",
+      "topics": [
+        {
+          "topic": "life_sciences",
+          "relevance_score": "0.988641"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.849882"
+        }
+      ],
+      "overall_sentiment_score": 0.473042,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "EXAS",
+          "relevance_score": "0.984940",
+          "ticker_sentiment_score": "0.468693",
+          "ticker_sentiment_label": "Bullish"
+        }
+      ]
+    },
+    {
+      "title": "JD.com pledges $3.12 billion housing support for couriers By Reuters",
+      "url": "https://www.investing.com/news/stock-market-news/jdcom-pledges-312-billion-housing-support-for-couriers-4404914",
+      "time_published": "20251212T040909",
+      "authors": [
+        "Reuters"
+      ],
+      "summary": " JD.com has announced a 22 billion yuan ($3.12 billion) housing support program for its couriers, intensifying competition in China's instant retail market. This move follows a similar initiative by Meituan, as major e-commerce firms like JD.com, Meituan, and Alibaba battle for market share. The fierce rivalry has led to substantial consumer subsidies and increased regulatory scrutiny, while highlighting the challenging conditions faced by delivery workers.",
+      "banner_image": " https://i-invdn-com.investing.com/trkd-images/LYNXMPELBB04E_L.jpg",
+      "source": "Investing.com",
+      "category_within_source": "General",
+      "source_domain": "Investing.com",
+      "topics": [
+        {
+          "topic": "retail_wholesale",
+          "relevance_score": "0.949759"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.828829"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.718291"
+        }
+      ],
+      "overall_sentiment_score": 0.295528,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "JD",
+          "relevance_score": "0.987462",
+          "ticker_sentiment_score": "0.270801",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Datavault AI Inc. (NASDAQ: DVLT) Announces a Distribution",
+      "url": "https://www.globenewswire.com/news-release/2025/12/11/3204302/0/en/Datavault-AI-Inc-NASDAQ-DVLT-Announces-a-Distribution-Date-of-Dec-24-2025-for-the-Dream-Bowl-Meme-Coin-Tokens-to-All-Eligible-Record-Equity-Holders-of-Datavault-AI-and-Holders-of-C.html",
+      "time_published": "20251212T040856",
+      "authors": [
+        "NULL"
+      ],
+      "summary": " Datavault AI Inc. has announced December 24, 2025, as the distribution date for its Dream Bowl 2026 Meme Coin tokens to eligible record equity holders and Scilex Holding Company common stock holders. This initiative includes instructions for wallet setup and token access, with trading expected to commence around January 11, 2026, on Datavault AI’s proprietary Information Data Exchange. The Meme Coin is a digital collectible for personal, non-commercial use related to the Dream Bowl XIV event, not intended as an investment or financial product.",
+      "banner_image": " https://ml.globenewswire.com/Resource/Download/12e53b1e-96b6-498a-bd26-0cd0cc0c1d4c?size=3",
+      "source": "GlobeNewswire",
+      "category_within_source": "General",
+      "source_domain": "GlobeNewswire",
+      "topics": [
+        {
+          "topic": "blockchain",
+          "relevance_score": "0.922270"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.803077"
+        }
+      ],
+      "overall_sentiment_score": 0.292991,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "DVLT",
+          "relevance_score": "0.981031",
+          "ticker_sentiment_score": "0.293289",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "NLRB Judge Tosses Case Against 'Memphis 7' Starbucks",
+      "url": "https://www.law360.com/articles/2421252/nlrb-judge-tosses-case-against-memphis-7-starbucks",
+      "time_published": "20251212T040854",
+      "authors": [
+        "Hailey Konnath"
+      ],
+      "summary": "An administrative law judge has ruled that Starbucks did not violate the National Labor Relations Act in a case involving union activities at one of its stores. The ruling states that Starbucks did not illegally surveil employees' union activities, strictly enforce its punctuality policy, or discipline a union employee, in a case stemming from the 2022 firing of seven activists. Law360 subscribers can access detailed legal news and analysis on this and other fast-moving legal issues.",
+      "banner_image": null,
+      "source": "Law360",
+      "category_within_source": "General",
+      "source_domain": "Law360",
+      "topics": [
+        {
+          "topic": "retail_wholesale",
+          "relevance_score": "0.848444"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.717120"
+        }
+      ],
+      "overall_sentiment_score": 0.328531,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "SBUX",
+          "relevance_score": "0.970270",
+          "ticker_sentiment_score": "0.307813",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Alexandria Real Estate Equities, Inc. (ARE) Shareholders Who Lost Money Have Opportunity to Lead Securities Fraud Lawsuit",
+      "url": "https://www.kxan.com/business/press-releases/cision/20251211PH45228/alexandria-real-estate-equities-inc-are-shareholders-who-lost-money-have-opportunity-to-lead-securities-fraud-lawsuit",
+      "time_published": "20251212T040812",
+      "authors": [
+        "NULL"
+      ],
+      "summary": " The Law Offices of Howard G. Smith announced a securities fraud class action lawsuit against Alexandria Real Estate Equities, Inc. (NASDAQ: ARE) for investors who suffered losses. The lawsuit alleges that Alexandria made materially false and misleading statements about its LIC value and growth as a life-science destination between January 27, 2025, and October 27, 2025. Investors are encouraged to contact the firm before the lead plaintiff deadline of January 26, 2026.",
+      "banner_image": " NULL",
+      "source": "KXAN Austin",
+      "category_within_source": "General",
+      "source_domain": "KXAN Austin",
+      "topics": [
+        {
+          "topic": "real_estate",
+          "relevance_score": "0.988145"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.903024"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "ARE",
+          "relevance_score": "0.981593",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Invesco Global Core Equity Fund Q3 2025 Commentary (Mutual Fund:AWSAX)",
+      "url": "https://seekingalpha.com/article/4852782-invesco-global-core-equity-fund-q3-2025-commentary",
+      "time_published": "20251212T032205",
+      "authors": [
+        "Invesco US"
+      ],
+      "summary": "Global equities saw positive returns in Q3 2025, largely driven by AI-related enthusiasm, central bank rate cuts, and strong corporate earnings. The Invesco Global Core Equity Fund underperformed its benchmark due to holdings in information technology and financials, despite focusing on competitively advantaged businesses. The fund added new positions in Coca-Cola Europacific Partners, Contemporary Amperex Technology, and WEC Energy.",
+      "banner_image": "https://static.seekingalpha.com/cdn/s3/uploads/getty_images/2149260996/image_2149260996.jpg?io=getty-c-w630",
+      "source": "Seeking Alpha",
+      "category_within_source": "General",
+      "source_domain": "Seeking Alpha",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.941272"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.815392"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.700822"
+        },
+        {
+          "topic": "economy_monetary",
+          "relevance_score": "0.633721"
+        }
+      ],
+      "overall_sentiment_score": 0.217136,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "IVZ",
+          "relevance_score": "0.982137",
+          "ticker_sentiment_score": "0.145077",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "WEC",
+          "relevance_score": "0.716710",
+          "ticker_sentiment_score": "0.264369",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "MSFT",
+          "relevance_score": "0.638933",
+          "ticker_sentiment_score": "0.249137",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "National Beverage misses Q2 estimates as consumer spending slows By Investing.com",
+      "url": "https://ng.investing.com/news/earnings/national-beverage-misses-q2-estimates-as-consumer-spending-slows-93CH-2251303",
+      "time_published": "20251212T031029",
+      "authors": [
+        "Investing.com"
+      ],
+      "summary": "National Beverage Corp (NASDAQ:FIZZ) reported Q2 earnings and revenue that missed analyst estimates, attributed to dampened consumer spending due to inflation and other economic factors. Despite a slight decline in revenue, the company saw an increase in operating income and basic earnings per share, and plans to introduce a new LaCroix flavor in early 2026. Shares fell 0.8% in after-hours trading.",
+      "banner_image": "https://i-invdn-com.investing.com/news/World_News_9_800x533_L_1420026261.jpg",
+      "source": "Investing.com Nigeria",
+      "category_within_source": "General",
+      "source_domain": "Investing.com Nigeria",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.925685"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.823751"
+        },
+        {
+          "topic": "retail_wholesale",
+          "relevance_score": "0.737975"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "FIZZ",
+          "relevance_score": "0.980673",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Rivian to Launch Hands-Free Semi-Autonomous Driving Subscription, AI Assistant",
+      "url": "https://www.cars.com/articles/rivian-to-launch-hands-free-semi-autonomous-driving-subscription-ai-assistant-519604/",
+      "time_published": "20251212T031019",
+      "authors": [
+        "Lawrence Hodge"
+      ],
+      "summary": " Rivian is introducing \"Autonomy+\", a new hands-free semi-autonomous driving subscription service available for $50 monthly or a $2,500 one-time fee, expanding its self-driving tech to over 3.5 million miles of North American roads. Additionally, the EV automaker will release an AI assistant called Rivian Assistant, featuring voice command capabilities and offline functionality in the upcoming R2 model. These new technologies will leverage a sophisticated lidar/radar suite for enhanced driving assistance.",
+      "banner_image": " https://images.cars.com/cldstatic/wp-content/uploads/rivian-r1t-quad-motor-2025-01-exterior-front-angle-scaled.jpg",
+      "source": "Cars.com",
+      "category_within_source": "General",
+      "source_domain": "Cars.com",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "0.913801"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.939657"
+        }
+      ],
+      "overall_sentiment_score": 0.212556,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "CARS",
+          "relevance_score": "0.319417",
+          "ticker_sentiment_score": "0.039564",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "F",
+          "relevance_score": "0.731068",
+          "ticker_sentiment_score": "0.291708",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "GM",
+          "relevance_score": "0.715318",
+          "ticker_sentiment_score": "0.250376",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.736642",
+          "ticker_sentiment_score": "0.311895",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "p Vital Farms (VITL) Is Up 7.9% After Broad S&P Index Inclusion Boosts Investor Visibility",
+      "url": "https://finance.yahoo.com/news/vital-farms-vitl-7-9-231502054.html",
+      "time_published": "20251212T031013",
+      "authors": [
+        "p Simply Wall St"
+      ],
+      "summary": "p Vital Farms (VITL) saw its stock rise by 7.9% following its inclusion in several S&P indices, including the S&P SmallCap 600. This move is expected to increase the company's visibility among institutional investors and enhance liquidity. The article emphasizes that while the inclusion is positive for short-term sentiment, the company's core investment narrative still hinges on its ability to manage capital expenditure and meet demand for its premium pasture-raised products.",
+      "banner_image": "p NULL",
+      "source": "Yahoo Finance",
+      "category_within_source": "General",
+      "source_domain": "Yahoo Finance",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.907909"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.820405"
+        },
+        {
+          "topic": "retail_wholesale",
+          "relevance_score": "0.612919"
+        }
+      ],
+      "overall_sentiment_score": 0.32795,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "VITL",
+          "relevance_score": "0.974850",
+          "ticker_sentiment_score": "0.340382",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Why DigitalOcean (DOCN) Shares Are Falling Today",
+      "url": "https://finviz.com/news/252009/why-digitalocean-docn-shares-are-falling-today",
+      "time_published": "20251212T031013",
+      "authors": [
+        "Radek Strnad"
+      ],
+      "summary": " DigitalOcean (DOCN) shares dropped 4.8% after Oracle's disappointing earnings report sparked fears about high AI spending and an \"AI bubble,\" leading to a broader tech sector sell-off. This decline was not due to company-specific news but a wider market reaction to concerns about the massive costs and uncertain revenue generation from AI investments. Despite today's fall, DigitalOcean has been highly volatile, previously gaining on renewed AI enthusiasm, and is up 41.1% year-to-date, trading near its 52-week high.",
+      "banner_image": " https://news-assets.stockstory.org/cover-images/_1400x700_crop_center-center_none/Bl4l3_2021-10-21-094724_galj.jpeg",
+      "source": "Finviz",
+      "category_within_source": "General",
+      "source_domain": "Finviz",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.934020"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.837604"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.737670"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.634181"
+        },
+        {
+          "topic": "economy_monetary",
+          "relevance_score": "0.602486"
+        }
+      ],
+      "overall_sentiment_score": 0.037283,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "DOCN",
+          "relevance_score": "0.326408",
+          "ticker_sentiment_score": "0.031032",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Lovesac (LOVE) Q3 2026 Loss Undercuts Margin-Expansion Bull Case and Rich 25x P/E Narrative",
+      "url": "https://simplywall.st/stocks/us/consumer-durables/nasdaq-love/lovesac/news/lovesac-love-q3-2026-loss-undercuts-margin-expansion-bull-ca/amp",
+      "time_published": "20251212T031009",
+      "authors": [
+        "Simply Wall St"
+      ],
+      "summary": " Lovesac (LOVE) recently posted Q3 2026 results with a net loss of $0.72 EPS, highlighting that profitability remains inconsistent despite revenue growth. The company's slim 1.1% net profit margin and premium 25.5x P/E ratio, significantly higher than industry averages, raise concerns for investors if margin expansion fails to materialize as projected. While bulls anticipate substantial earnings growth from improved margins and operational efficiency, bears point to the history of quarterly losses and thin margins as reasons for caution.",
+      "banner_image": " NULL",
+      "source": "Simply Wall Street",
+      "category_within_source": "General",
+      "source_domain": "Simply Wall Street",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.910299"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.848205"
+        },
+        {
+          "topic": "retail_wholesale",
+          "relevance_score": "0.715028"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.634236"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.649293"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "LOVE",
+          "relevance_score": "0.975910",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "APi Group To Acquire CertaSite And Reaffirms 2025 Outlook",
+      "url": "https://pulse2.com/api-group-certasite/",
+      "time_published": "20251212T030906",
+      "authors": [
+        "Amit Chowdhry"
+      ],
+      "summary": "APi Group Corporation announced its agreement to acquire CertaSite, a Midwest-based fire and life safety services provider, to expand its recurring inspection, service, and monitoring revenue. The acquisition, expected to close in Q1 2026, aims to increase APi's inspection and service-related business to 60% and is projected to add $90 million in revenue for 2025. APi also reaffirmed its 2025 fiscal year outlook, expecting net revenue and adjusted EBITDA to be at or above the midpoint of its previously issued guidance.",
+      "banner_image": null,
+      "source": "Pulse 2.0",
+      "category_within_source": "General",
+      "source_domain": "Pulse 2.0",
+      "topics": [
+        {
+          "topic": "mergers_and_acquisitions",
+          "relevance_score": "0.973712"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.934785"
+        }
+      ],
+      "overall_sentiment_score": 0.048995,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "APG",
+          "relevance_score": "0.304722",
+          "ticker_sentiment_score": "0.049871",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Fidelis Insurance (NYSE:FIHL) Valuation Check After Q3 Earnings, Analyst Revisions and Institutional Investor Exit",
+      "url": "https://simplywall.st/stocks/us/insurance/nyse-fihl/fidelis-insurance-holdings/news/fidelis-insurance-nysefihl-valuation-check-after-q3-earnings/amp",
+      "time_published": "20251212T030902",
+      "authors": [
+        "Simply Wall St"
+      ],
+      "summary": " Fidelis Insurance Holdings (FIHL) is experiencing shifting investor sentiment after its Q3 update, with mixed analyst targets and an institutional exit. Despite trading below analyst targets and at a discount to intrinsic value, the company's valuation is seen as modestly underpriced, with a fair value near $20.67 according to a popular narrative based on strong fundamentals and sector advancements. However, persistent pricing pressure and outsized catastrophe losses pose risks to this positive outlook.",
+      "banner_image": " NULL",
+      "source": "Simply Wall Street",
+      "category_within_source": "General",
+      "source_domain": "Simply Wall Street",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.930605"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.840331"
+        }
+      ],
+      "overall_sentiment_score": 0.260769,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "FIHL",
+          "relevance_score": "0.982339",
+          "ticker_sentiment_score": "0.278943",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    }
+  ]
+}

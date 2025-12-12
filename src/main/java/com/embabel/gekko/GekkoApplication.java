@@ -1,5 +1,5 @@
 
-package com.embabel.template;
+package com.embabel.gekko;
 
 import com.embabel.agent.config.annotation.EnableAgents;
 import org.springframework.boot.SpringApplication;
@@ -8,8 +8,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
 @EnableAgents(loggingTheme = "gekko")
-class ProjectNameApplication {
+class GekkoApplication {
     static void main(String[] args) {
-        SpringApplication.run(ProjectNameApplication.class, args);
+        SpringApplication.run(GekkoApplication.class, args);
     }
 }

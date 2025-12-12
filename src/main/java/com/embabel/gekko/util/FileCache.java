@@ -1,7 +1,7 @@
-package com.embabel.template.tools;
+package com.embabel.gekko.util;
 
 
-import com.embabel.template.agent.TraderAgent;
+import com.embabel.gekko.agent.TraderAgent;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

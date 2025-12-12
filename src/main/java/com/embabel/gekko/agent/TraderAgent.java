@@ -1,4 +1,4 @@
-package com.embabel.template.agent;
+package com.embabel.gekko.agent;
 
 import com.embabel.agent.api.annotation.AchievesGoal;
 import com.embabel.agent.api.annotation.Action;
@@ -9,9 +9,9 @@ import com.embabel.agent.api.common.OperationContext;
 import com.embabel.agent.api.common.workflow.loop.Feedback;
 import com.embabel.agent.api.common.workflow.loop.RepeatUntilAcceptableBuilder;
 import com.embabel.agent.domain.io.UserInput;
-import com.embabel.template.tools.FileCache;
-import com.embabel.template.tools.FundamentalDataTools;
-import com.embabel.template.tools.NewsDataTools;
+import com.embabel.gekko.tools.FundamentalDataTools;
+import com.embabel.gekko.tools.NewsDataTools;
+import com.embabel.gekko.util.FileCache;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;

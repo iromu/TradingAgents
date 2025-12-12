@@ -1,11 +1,11 @@
-package com.embabel.template;
+package com.embabel.gekko;
 
 
 import com.embabel.agent.api.common.autonomy.AgentInvocation;
 import com.embabel.agent.core.AgentPlatform;
 import com.embabel.agent.core.ProcessOptions;
 import com.embabel.agent.domain.io.UserInput;
-import com.embabel.template.agent.TraderAgent;
+import com.embabel.gekko.agent.TraderAgent;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.opentelemetry.api.GlobalOpenTelemetry;

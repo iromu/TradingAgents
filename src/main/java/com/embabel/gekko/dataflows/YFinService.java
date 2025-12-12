@@ -1,8 +1,8 @@
-package com.embabel.template.dataflows;
+package com.embabel.gekko.dataflows;
 
 
-import com.embabel.template.util.DateUtils;
-import com.embabel.template.util.IndicatorMapper;
+import com.embabel.gekko.util.DateUtils;
+import com.embabel.gekko.util.IndicatorMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.ta4j.core.BarSeries;
@@ -26,7 +26,7 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import static com.embabel.template.util.DateUtils.toCalendar;
+import static com.embabel.gekko.util.DateUtils.toCalendar;
 
 @Service
 @RequiredArgsConstructor

@@ -1,7 +1,7 @@
-package com.embabel.template.util;
+package com.embabel.gekko.util;
 
-import com.embabel.template.indicators.SubtractIndicator;
-import com.embabel.template.indicators.VWAPIndicator;
+import com.embabel.gekko.indicators.SubtractIndicator;
+import com.embabel.gekko.indicators.VWAPIndicator;
 import org.ta4j.core.BarSeries;
 import org.ta4j.core.Indicator;
 import org.ta4j.core.indicators.ATRIndicator;

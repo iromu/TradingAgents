@@ -1,7 +1,7 @@
-package com.embabel.template.tools;
+package com.embabel.gekko.tools;
 
 
-import com.embabel.template.dataflows.VendorRouter;
+import com.embabel.gekko.dataflows.VendorRouter;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
 import org.springframework.stereotype.Component;

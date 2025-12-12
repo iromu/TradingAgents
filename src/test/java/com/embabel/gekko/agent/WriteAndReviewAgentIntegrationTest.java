@@ -1,4 +1,4 @@
-package com.embabel.template.agent;
+package com.embabel.gekko.agent;
 
 import com.embabel.agent.api.common.autonomy.AgentInvocation;
 import com.embabel.agent.domain.io.UserInput;
@@ -6,7 +6,8 @@ import com.embabel.agent.testing.integration.EmbabelMockitoIntegrationTest;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 /**
  * Use framework superclass to test the complete workflow of writing and reviewing a story.

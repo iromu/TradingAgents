@@ -1,4 +1,4 @@
-package com.embabel.template.agent;
+package com.embabel.gekko.agent;
 
 import com.embabel.agent.domain.io.UserInput;
 import com.embabel.agent.testing.unit.FakeOperationContext;

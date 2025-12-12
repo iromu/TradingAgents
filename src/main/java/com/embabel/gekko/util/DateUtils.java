@@ -1,5 +1,7 @@
-package com.embabel.template.util;
+package com.embabel.gekko.util;
 
+
+import lombok.experimental.UtilityClass;
 
 import java.time.LocalDate;
 import java.time.ZoneId;
@@ -9,6 +11,7 @@ import java.time.format.DateTimeParseException;
 import java.util.Calendar;
 import java.util.Date;
 
+@UtilityClass
 public class DateUtils {
     private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 

@@ -1,4 +1,4 @@
-package com.embabel.template.agent;
+package com.embabel.gekko.agent;
 
 import com.embabel.common.ai.prompt.PromptContributor;
 import org.jetbrains.annotations.NotNull;

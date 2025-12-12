@@ -1,4 +1,4 @@
-package com.embabel.template.dataflows;
+package com.embabel.gekko.dataflows;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
