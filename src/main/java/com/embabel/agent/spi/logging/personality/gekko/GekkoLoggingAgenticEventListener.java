@@ -1,7 +1,8 @@
 package com.embabel.agent.spi.logging.personality.gekko;
 
-import com.embabel.agent.event.*;
-import com.embabel.agent.event.logging.LoggingAgenticEventListener;
+
+import com.embabel.agent.api.event.*;
+import com.embabel.agent.spi.logging.LoggingAgenticEventListener;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

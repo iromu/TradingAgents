@@ -1,9 +1,8 @@
 package com.embabel.gekko;
 
 
-import com.embabel.agent.api.common.autonomy.AgentInvocation;
+import com.embabel.agent.api.invocation.AgentInvocation;
 import com.embabel.agent.core.AgentPlatform;
-import com.embabel.agent.core.ProcessOptions;
 import com.embabel.agent.domain.io.UserInput;
 import com.embabel.gekko.agent.TraderAgent;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -39,7 +38,6 @@ public class TickerShellCommands {
         try (Scope ignored = span.makeCurrent()) {
             var output = AgentInvocation
                     .builder(agentPlatform)
-                    .options(ProcessOptions.builder().verbosity(v -> v.showPrompts(true)).build())
                     .build(TraderAgent.InvestmentDebateState.class)
                     .invoke(new UserInput(ticker));
             return format(output);

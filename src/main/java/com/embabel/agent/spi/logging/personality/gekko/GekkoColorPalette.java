@@ -1,6 +1,7 @@
 package com.embabel.agent.spi.logging.personality.gekko;
 
-import com.embabel.agent.event.logging.personality.ColorPalette;
+
+import com.embabel.agent.spi.logging.ColorPalette;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 

@@ -10,16 +10,26 @@
         <relativePath/> <!-- Lookup parent from repository -->
     </parent>
     <groupId>com.embabel.template</groupId>
-    <artifactId>Gekko</artifactId>
+    <artifactId>gekko</artifactId>
     <version>0.1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
-    <name>My first agent</name>
-    <description>Generated agent project</description>
-
+    <name>Gekko</name>
     <properties>
         <java.version>25</java.version>
-        <embabel-agent.version>0.3.0</embabel-agent.version>
+        <embabel-agent.version>0.3.1-SNAPSHOT</embabel-agent.version>
+        <spring-ai.version>1.1.2</spring-ai.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.ai</groupId>
+                <artifactId>spring-ai-bom</artifactId>
+                <version>${spring-ai.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
     <dependencies>
 
@@ -79,13 +89,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <scope>provided</scope>
             <optional>true</optional>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.yahoofinance-api</groupId>
@@ -102,8 +106,39 @@
     <build>
         <plugins>
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </path>
+                    </annotationProcessorPaths>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <excludes>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
+                    </excludes>
+                    <image>
+                        <builder>paketobuildpacks/builder-jammy-buildpackless-tiny</builder>
+                        <buildpacks>
+                            <buildpack>paketobuildpacks/oracle</buildpack>
+                            <buildpack>paketobuildpacks/java-native-image</buildpack>
+                        </buildpacks>
+                    </image>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.graalvm.buildtools</groupId>
+                <artifactId>native-maven-plugin</artifactId>
             </plugin>
         </plugins>
     </build>
@@ -135,7 +170,7 @@
                 <dependency>
                     <groupId>com.embabel.agent</groupId>
                     <artifactId>embabel-agent-starter-anthropic</artifactId>
-                     <version>${embabel-agent.version}</version>
+                    <version>${embabel-agent.version}</version>
                 </dependency>
             </dependencies>
         </profile>
