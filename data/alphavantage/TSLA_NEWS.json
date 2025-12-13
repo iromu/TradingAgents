@@ -1,0 +1,2537 @@
+{
+  "items": "50",
+  "sentiment_score_definition": "x <= -0.35: Bearish; -0.35 < x <= -0.15: Somewhat-Bearish; -0.15 < x < 0.15: Neutral; 0.15 <= x < 0.35: Somewhat_Bullish; x >= 0.35: Bullish",
+  "relevance_score_definition": "0 < x <= 1, with a higher score indicating higher relevance.",
+  "feed": [
+    {
+      "title": "Lucid (LCID) Valuation Check After Prolonged Share Price Weakness and Robotaxi Growth Hopes",
+      "url": "https://simplywall.st/stocks/us/automobiles/nasdaq-lcid/lucid-group/news/lucid-lcid-valuation-check-after-prolonged-share-price-weakn",
+      "time_published": "20251210T230927",
+      "authors": [
+        "Simply Wall St"
+      ],
+      "summary": "Lucid Group (LCID) has experienced significant share price weakness despite growing revenue, with its stock down over the past month and year. While a newly announced partnership with Uber and Nuro for robotaxi deployment suggests substantial future growth and a narrative fair value of $18.43 (undervalued), the company faces challenges with persistent negative margins and a high price-to-sales ratio compared to its industry peers. Investors are left to weigh the potential for a growth story against execution risks and ambitious valuation assumptions.",
+      "banner_image": null,
+      "source": "Simply Wall Street",
+      "category_within_source": "General",
+      "source_domain": "Simply Wall Street",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.911566"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.944179"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.910465"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.810448"
+        }
+      ],
+      "overall_sentiment_score": 0.208305,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "LCID",
+          "relevance_score": "0.984856",
+          "ticker_sentiment_score": "0.273842",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "UBER",
+          "relevance_score": "0.617786",
+          "ticker_sentiment_score": "0.206361",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.630315",
+          "ticker_sentiment_score": "0.136647",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Gogo stock gains after announcing 300 Galileo antennas by 2025",
+      "url": "https://www.investing.com/news/stock-market-news/gogo-stock-gains-after-announcing-300-galileo-antennas-by-2025-93CH-4401890",
+      "time_published": "20251210T220937",
+      "authors": [
+        "Investing.com"
+      ],
+      "summary": " Gogo Inc. (NASDAQ:GOGO) shares rose 8% after the company announced its projection to ship approximately 300 Galileo HDX and FDX antennas by the close of 2025, with its 5G network slated for customer launch in January 2026. The in-flight connectivity provider also confirmed its contract with NetJets remains fully in place, highlighting fleet operators as a significant future business opportunity. Gogo continues to secure new business in a competitive landscape, with NetJets supporting its Galileo products and 5G technology.",
+      "banner_image": " https://i-invdn-com.investing.com/news/LYNXNPEB6J0AJ_L.jpg",
+      "source": "Investing.com",
+      "category_within_source": "General",
+      "source_domain": "Investing.com",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.901184"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.810750"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.718892"
+        }
+      ],
+      "overall_sentiment_score": 0.1097,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "GOGO",
+          "relevance_score": "0.980063",
+          "ticker_sentiment_score": "0.448375",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.600333",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.607397",
+          "ticker_sentiment_score": "0.054362",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "GOOGL",
+          "relevance_score": "0.630003",
+          "ticker_sentiment_score": "0.096185",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NFLX",
+          "relevance_score": "0.644931",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Elon Musk Bought Boxabl's $50,000 Tiny House, Now Tesla Turns To The Firm For Supercharger Buildings",
+      "url": "https://www.benzinga.com/m-a/25/12/49317680/elon-musk-bought-boxabl-50000-tiny-house-now-tesla-turns-to-the-firm-for-supercharger-buildings",
+      "time_published": "20251210T201013",
+      "authors": [
+        "Chris Katje"
+      ],
+      "summary": " Elon Musk, a long-time fan and customer of Boxabl, is now having Tesla work with the innovative housing solutions company. Tesla (NASDAQ: TSLA) has issued a purchase order to Boxabl for a \"Micromenity\" building to be designed and built for a Supercharger location, aiming to provide restrooms, vending machines, and rest areas for users. This initial deal could lead to further collaborations, potentially expanding Boxabl's presence at Supercharger sites globally and offering significant marketing opportunities.",
+      "banner_image": " https://www.benzinga.com/files/images/story/2025/12/10/Musk-Joins-Saudi-Talks.jpeg?quality=85&auto=webp&width=850",
+      "source": "Benzinga",
+      "category_within_source": "General",
+      "source_domain": "Benzinga",
+      "topics": [
+        {
+          "topic": "real_estate",
+          "relevance_score": "0.704901"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.816216"
+        },
+        {
+          "topic": "mergers_and_acquisitions",
+          "relevance_score": "0.644180"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.640172"
+        }
+      ],
+      "overall_sentiment_score": 0.334469,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "FGMC",
+          "relevance_score": "0.926721",
+          "ticker_sentiment_score": "0.342085",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.852216",
+          "ticker_sentiment_score": "0.339610",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "DHI",
+          "relevance_score": "0.643022",
+          "ticker_sentiment_score": "0.336971",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "What's Going On With The Uptick In Tesla Stock Today?",
+      "url": "https://www.benzinga.com/trading-ideas/movers/25/12/49291463/whats-going-on-with-the-uptick-in-tesla-stock-today",
+      "time_published": "20251210T200840",
+      "authors": [
+        "Evette Mitkov"
+      ],
+      "summary": " Tesla (NASDAQ: TSLA) shares are gaining strength after Piper Sandler analyst Alexander Potter shared an update on the company’s Full Self-Driving technology progress, reaffirming an Overweight rating and $500 price target. This uptick follows a recent downgrade by Morgan Stanley. The report highlights significant improvements in FSD v14.1.x, with a strong rebound in \"miles to critical disengagement,\" despite a recent downgrade by Morgan Stanley due to concerns about an \"EV Winter.\"",
+      "banner_image": " https://www.benzinga.com/files/images/story/2025/12/09/The-Tesla-Trade.jpeg?quality=85&auto=webp&width=850",
+      "source": "Benzinga",
+      "category_within_source": "General",
+      "source_domain": "Benzinga",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.920599"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.846223"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.702303"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.704023"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.602627"
+        }
+      ],
+      "overall_sentiment_score": 0.221405,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.986443",
+          "ticker_sentiment_score": "0.235923",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Lucid (LCID) is ‘on a good track’ to build 18,000 EVs this year as Gravity output ramps up",
+      "url": "https://electrek.co/2025/12/10/lucid-lcid-on-good-track-to-build-18000-evs-this-year/",
+      "time_published": "20251210T190927",
+      "authors": [
+        "Peter Johnson"
+      ],
+      "summary": "Lucid Motors is on track to meet its revised goal of building 18,000 EVs in 2025, despite cutting its initial year-end production target due to a changing market and external factors. Interim CEO Marc Winterhoff confirmed the company is \"on a good track\" to hit the lower end of its goal, with the new Gravity SUV set to significantly contribute to Q4 production. While demand has slowed following the expiration of the $7,500 EV tax credit, Lucid's CFO reported \"constant and very pleasing improvement in terms of market share\" and encouraging signs for Q4.",
+      "banner_image": "https://electrek.co/wp-content/uploads/sites/3/2025/12/Lucid-18000-EVs-1.jpeg?quality=82&strip=all&w=1400",
+      "source": "Electrek",
+      "category_within_source": "General",
+      "source_domain": "Electrek",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.945095"
+        },
+        {
+          "topic": "manufacturing",
+          "relevance_score": "0.810735"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.730914"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.643724"
+        }
+      ],
+      "overall_sentiment_score": 0.111071,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "LCID",
+          "relevance_score": "0.987150",
+          "ticker_sentiment_score": "0.149464",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.608808",
+          "ticker_sentiment_score": "0.107040",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Trump administration seeks to roll back vehicle efficiency standards",
+      "url": "https://www.spglobal.com/market-intelligence/en/news-insights/articles/2025/12/trump-administration-seeks-to-roll-back-vehicle-efficiency-standards-95816659",
+      "time_published": "20251210T190428",
+      "authors": [
+        "Karin Rives and Zack Hale"
+      ],
+      "summary": " The Trump administration is proposing to weaken vehicle fuel efficiency standards, aiming for 34.5 miles per gallon fleetwide for 2022-2031 light-duty vehicles, down from the Biden administration's 50.4 mpg target for 2027-2031. This move, intended to reduce new car prices and offer more consumer choice, is expected to benefit US oil producers and refineries but could lead to higher costs for drivers and increased CO2 emissions. The decision comes amidst declining electric vehicle sales and is likely to face legal challenges.",
+      "banner_image": " https://www.capitaliq.spglobal.com/Articles/430465860.jpg",
+      "source": "S&P Global",
+      "category_within_source": "General",
+      "source_domain": "S&P Global",
+      "topics": [
+        {
+          "topic": "economy_fiscal",
+          "relevance_score": "0.907149"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.902324"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.716374"
+        },
+        {
+          "topic": "manufacturing",
+          "relevance_score": "0.631505"
+        }
+      ],
+      "overall_sentiment_score": 0.032204,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "SPGI",
+          "relevance_score": "0.810127",
+          "ticker_sentiment_score": "0.031537",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "F",
+          "relevance_score": "0.914312",
+          "ticker_sentiment_score": "0.231139",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "GM",
+          "relevance_score": "0.825182",
+          "ticker_sentiment_score": "0.224674",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.617711",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Tesla class action claims Powerwall 2 battery systems are defective",
+      "url": "https://topclassactions.com/lawsuit-settlements/lawsuit-news/tesla-class-action-claims-powerwall-2-battery-systems-are-defective/",
+      "time_published": "20251210T175915",
+      "authors": [
+        "Top Class Actions"
+      ],
+      "summary": " A new nationwide class action lawsuit has been filed against Tesla Inc., alleging that the company knowingly sold defective Powerwall 2 battery systems. The lawsuit claims these systems have a defect that can cause them to overheat, emit smoke, or catch fire, and that Tesla's subsequent recall of the units was inadequate, leaving consumers without the full functionality they paid for. The plaintiff is seeking declaratory and injunctive relief, as well as compensatory, statutory, and punitive damages for a class of affected consumers.",
+      "banner_image": " https://topclassactions.com/wp-content/uploads/2025/12/shutterstock_2171382067-1024x576.jpg",
+      "source": "Class Action Lawsuits",
+      "category_within_source": "General",
+      "source_domain": "Class Action Lawsuits",
+      "topics": [
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.907009"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.827844"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.978696",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Shoe Carnival and Williams-Sonoma Stocks Trade Up, What You Need To Know",
+      "url": "https://markets.financialcontent.com/wral/article/stockstory-2025-12-10-shoe-carnival-and-williams-sonoma-stocks-trade-up-what-you-need-to-know",
+      "time_published": "20251210T170500",
+      "authors": [
+        "StockStory"
+      ],
+      "summary": " Shoe Carnival (NASDAQ: SCVL) and Williams-Sonoma (NYSE: WSM) stocks jumped after the Federal Reserve cut interest rates, signaling a dovish monetary policy with a 25 basis point reduction. This move, combined with the Fed's plan to expand its balance sheet and focus on supporting economic growth, led to a bullish market reaction. Investors anticipate further rate cuts, boosting corporate valuations and creating momentum for equity markets.",
+      "banner_image": " https://news-assets.stockstory.org/cover-images/_1400x700_crop_center-center_none/shoe-carnival-cover-image-a32cbb6ba78d_2023-08-01-061754_pupj.jpeg",
+      "source": "Markets Financial Content",
+      "category_within_source": "General",
+      "source_domain": "Markets Financial Content",
+      "topics": [
+        {
+          "topic": "economy_monetary",
+          "relevance_score": "0.937909"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.938885"
+        },
+        {
+          "topic": "retail_wholesale",
+          "relevance_score": "0.813958"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.734455"
+        }
+      ],
+      "overall_sentiment_score": 0.298769,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "WSM",
+          "relevance_score": "0.905230",
+          "ticker_sentiment_score": "0.399461",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "GEV",
+          "relevance_score": "0.560164",
+          "ticker_sentiment_score": "0.294147",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.592967",
+          "ticker_sentiment_score": "0.268341",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Elon Musk doubles down on fully driverless Tesla robotaxis in Austin by 2026",
+      "url": "https://www.statesman.com/business/technology/article/tesla-safety-monitors-removed-elon-musk-robotaxi-21234679.php",
+      "time_published": "20251210T163427",
+      "authors": [
+        "Karoline Leonard"
+      ],
+      "summary": " Elon Musk has reiterated his claim that Tesla robotaxis in Austin will be fully driverless within three weeks, by the end of 2025. This announcement came during an event for his artificial intelligence company xAI, where he stated that fully autonomous driving is \"pretty much solved.\" While Tesla plans to double its Austin-area robotaxi fleet this month, concerns remain regarding road safety and the company's camera-reliant technology, especially given a number of recent crashes.",
+      "banner_image": " https://cdn-channels-pixel.ex.co/events/0012000001fxZm9AAE?integrationType=DEFAULT&template=design%2Farticle%2Fplatypus_two_column.tpl",
+      "source": "Austin American-Statesman",
+      "category_within_source": "General",
+      "source_domain": "Austin American-Statesman",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "0.982250"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.909718"
+        }
+      ],
+      "overall_sentiment_score": 0.192613,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.971973",
+          "ticker_sentiment_score": "0.214327",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "UBER",
+          "relevance_score": "0.639259",
+          "ticker_sentiment_score": "0.109449",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Uber pulls back on Electric vehicles, cutting bonuses",
+      "url": "https://rollingout.com/2025/12/10/uber-pulls-back-on-electric-vehicles/",
+      "time_published": "20251210T160928",
+      "authors": [
+        "Tega Egwabor"
+      ],
+      "summary": " Uber is scaling back its incentives and commitment to electric vehicles despite previous pledges and record profits, leaving many drivers who invested in EVs feeling stranded. The company has cut EV bonuses and pushed back against regulatory requirements, stating a shift in strategy towards leveraging consumer demand for EVs rather than subsidizing the transition. This reversal has raised questions about Uber's environmental goals and its impact on drivers.",
+      "banner_image": " https://rollingout.com/wp-content/uploads/2025/12/shutterstock_2604743821-768x512.jpg",
+      "source": "Rolling Out",
+      "category_within_source": "General",
+      "source_domain": "Rolling Out",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.935932"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.909571"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.818534"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "UBER",
+          "relevance_score": "0.976500",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.740941",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "F",
+          "relevance_score": "0.568488",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Investor Warning: 2 Worst-Performing ETFs Right Now",
+      "url": "https://www.theglobeandmail.com/investing/markets/markets-news/Motley%20Fool/36552470/investor-warning-2-worst-performing-etfs-right-now/",
+      "time_published": "20251210T150917",
+      "authors": [
+        "Motley Fool"
+      ],
+      "summary": " Cathie Wood's Ark Next Generation Internet ETF (ARKW) and Ark Space & Defense Innovation ETF (ARKX) were the two worst-performing ETFs in November 2025. This underperformance is attributed to holdings in stocks like Tesla, Advanced Micro Devices, and Bitcoin, many of which have seen recent declines. Despite short-term struggles, both ETFs have demonstrated strong long-term performance, suggesting potential for future gains.",
+      "banner_image": " https://barchart-news-media-prod.aws.barchart.com/FC/9f19a45aa6c17f0a83dfeddfd1faa611/%3Furl%3Dhttps%253a%252f%252fg.foolcdn.com%252feditorial%252fimages%252f842999%252ftwo-huge-red-arrows-going-down-on-a-stock-chart.jpg%26amp%3Bw%3D700",
+      "source": "The Globe and Mail",
+      "category_within_source": "General",
+      "source_domain": "The Globe and Mail",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.980819"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.810906"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.725774"
+        },
+        {
+          "topic": "blockchain",
+          "relevance_score": "0.647492"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "ARKW",
+          "relevance_score": "0.986337",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.621479",
+          "ticker_sentiment_score": "0.147785",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.638505",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "LHX",
+          "relevance_score": "0.594420",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "TransUnion sees auto delinquencies leveling at 1.54% by end of 2026",
+      "url": "https://news.dealershipguy.com/p/transunion-sees-auto-delinquencies-leveling-at-1-54-by-end-of-2026-2025-12-10",
+      "time_published": "20251210T150827",
+      "authors": [
+        "Anna del Villar",
+        "Zachary Visconti"
+      ],
+      "summary": " TransUnion projects auto loan delinquencies to reach 1.51% by year-end and stabilize at 1.54% by the end of 2026, marking a fifth consecutive year of growth but with smaller increases. Lenders are extending loan terms, leading to effective terms averaging 90.57 months or 7.5 years, which keeps inventory moving but pressures new vehicle sales as consumers hold cars longer. Credit unions are dominating refinancing, offering significant rate reductions to borrowers.",
+      "banner_image": " NULL",
+      "source": "Car Dealership Guy News",
+      "category_within_source": "General",
+      "source_domain": "Car Dealership Guy News",
+      "topics": [
+        {
+          "topic": "finance",
+          "relevance_score": "0.832189"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.749920"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.623158"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "TRU",
+          "relevance_score": "0.316890",
+          "ticker_sentiment_score": "0.041200",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.637505",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Holley Jean K buys natural gas services (NGS) shares worth $70,167",
+      "url": "https://www.investing.com/news/insider-trading-news/holley-jean-k-buys-natural-gas-services-ngs-shares-worth-70167-93CH-4401133",
+      "time_published": "20251210T145517",
+      "authors": [
+        "Investing.com"
+      ],
+      "summary": " Director Holley Jean K. recently purchased 2,190 shares of Natural Gas Services Group Inc (NYSE:NGS) for $70,167, bringing her total direct ownership to 14,390 shares. This insider transaction occurs as NGS trades near its 52-week high and has seen a 32.4% price gain over the past six months. Analysts predict further upside, with price targets ranging from $34 to $45, following a strong Q3 2025 earnings report that surpassed expectations.",
+      "banner_image": " https://i-invdn-com.investing.com/news/news_six_pile_69x52._800x533_L_1419494215.jpg",
+      "source": "Investing.com",
+      "category_within_source": "General",
+      "source_domain": "Investing.com",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.903288"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.831287"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.712930"
+        }
+      ],
+      "overall_sentiment_score": 0.117101,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "NGS",
+          "relevance_score": "0.988233",
+          "ticker_sentiment_score": "0.475604",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "AVGO",
+          "relevance_score": "0.607921",
+          "ticker_sentiment_score": "0.041009",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "GOOGL",
+          "relevance_score": "0.565212",
+          "ticker_sentiment_score": "0.036464",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "PLTR",
+          "relevance_score": "0.598548",
+          "ticker_sentiment_score": "0.044983",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.571091",
+          "ticker_sentiment_score": "0.039424",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "WINTON GROUP Ltd Takes Position in Modine Manufacturing Company $MOD",
+      "url": "https://www.marketbeat.com/instant-alerts/filing-winton-group-ltd-takes-position-in-modine-manufacturing-company-mod-2025-12-10/",
+      "time_published": "20251210T141006",
+      "authors": [
+        "MarketBeat"
+      ],
+      "summary": " WINTON GROUP Ltd has acquired a new position in Modine Manufacturing (NYSE:MOD), purchasing 15,625 shares valued at approximately $1.539 million. This comes as CEO Neil David Brinker recently sold 31,871 shares, reducing his stake by 11.8%. Modine Manufacturing, an auto parts company, reported an EPS beat and 12.3% revenue growth last quarter, with a \"Moderate Buy\" consensus rating from analysts and an average target price of $182.",
+      "banner_image": " https://www.marketbeat.com/logos/modine-manufacturing-logo-1200x675.png?v=20240507142136",
+      "source": "MarketBeat",
+      "category_within_source": "General",
+      "source_domain": "MarketBeat",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.920930"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.834950"
+        },
+        {
+          "topic": "manufacturing",
+          "relevance_score": "0.739094"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "MOD",
+          "relevance_score": "0.987100",
+          "ticker_sentiment_score": "0.380588",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "IBM",
+          "relevance_score": "0.561342",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.552574",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMZN",
+          "relevance_score": "0.560546",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.553421",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Wolfe Research upgrades Bruker stock rating to Outperform with $60 target",
+      "url": "https://www.investing.com/news/analyst-ratings/wolfe-research-upgrades-bruker-stock-rating-to-outperform-with-60-target-93CH-4400557",
+      "time_published": "20251210T121209",
+      "authors": [
+        "NULL"
+      ],
+      "summary": " Wolfe Research upgraded Bruker (NASDAQ:BRKR) stock to Outperform from Peerperform, setting a $60 price target due to expectations of low single-digit revenue growth and over 200 basis points of operating margin expansion in 2026. This outlook projects low- to mid-teens earnings per share growth, suggesting Bruker's stock should trade in line with its large-cap peers. The company recently reported strong Q3 2025 EPS and expanded its diagnostics portfolio with the acquisition of AST Revolution.",
+      "banner_image": " https://i-invdn-com.investing.com/news/World_News_10_800x533_L_1420026292.jpg",
+      "source": "Investing.com",
+      "category_within_source": "General",
+      "source_domain": "Investing.com",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.940735"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.804428"
+        },
+        {
+          "topic": "life_sciences",
+          "relevance_score": "0.729771"
+        }
+      ],
+      "overall_sentiment_score": 0.1904,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "BRKR",
+          "relevance_score": "0.975207",
+          "ticker_sentiment_score": "0.488396",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "GEV",
+          "relevance_score": "0.561461",
+          "ticker_sentiment_score": "0.135815",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.561891",
+          "ticker_sentiment_score": "0.101697",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.577038",
+          "ticker_sentiment_score": "0.112351",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "PLTR",
+          "relevance_score": "0.578664",
+          "ticker_sentiment_score": "0.106928",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Jump Financial LLC Sells 220,634 Shares of PayPal Holdings, Inc. $PYPL",
+      "url": "https://www.marketbeat.com/instant-alerts/filing-jump-financial-llc-sells-220634-shares-of-paypal-holdings-inc-pypl-2025-12-10/",
+      "time_published": "20251210T114353",
+      "authors": [
+        "MarketBeat"
+      ],
+      "summary": " Jump Financial LLC significantly reduced its stake in PayPal Holdings, Inc. (NASDAQ:PYPL) by 77.7% in the second quarter, selling 220,634 shares and retaining 63,451 shares valued at $4.716 million. Meanwhile, other institutional investors have adjusted their holdings, with AQR Capital Management LLC increasing its stake by 15.8% and Clearline Capital LP growing its holdings by 179.8%. PayPal reported strong Q2 earnings, beating estimates with an EPS of $1.34 and revenue of $8.42 billion, and announced a quarterly dividend of $0.14 per share.",
+      "banner_image": " https://www.marketbeat.com/logos/paypal-holdings-inc-logo-1200x675.png?v=20231214083652",
+      "source": "MarketBeat",
+      "category_within_source": "General",
+      "source_domain": "MarketBeat",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.943239"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.823043"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.711869"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "PYPL",
+          "relevance_score": "0.970267",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.610521",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.601514",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "The Upside Story Behind Concentra Group Holdings Parent, Inc. (CON)",
+      "url": "https://www.insidermonkey.com/blog/the-upside-story-behind-concentra-group-holdings-parent-inc-con-1657142/?amp=1",
+      "time_published": "20251210T103200",
+      "authors": [
+        "Rameen Kasana"
+      ],
+      "summary": " Concentra Group Holdings Parent, Inc. (NYSE: CON) is highlighted as a cheap healthcare stock with significant upside potential, based on analyst ratings and recent financial performance. The company reported strong third-quarter results with increased revenue, net income, and adjusted EBITDA, driven by visit and rate growth. Analysts have reaffirmed \"Buy\" ratings with a median price target of $29, suggesting a nearly 49% upside.",
+      "banner_image": " NULL",
+      "source": "Insider Monkey",
+      "category_within_source": "General",
+      "source_domain": "Insider Monkey",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.823891"
+        },
+        {
+          "topic": "life_sciences",
+          "relevance_score": "0.717724"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.708822"
+        }
+      ],
+      "overall_sentiment_score": 0.199587,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "CON",
+          "relevance_score": "0.968798",
+          "ticker_sentiment_score": "0.480622",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "MSFT",
+          "relevance_score": "0.646458",
+          "ticker_sentiment_score": "0.104979",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.635096",
+          "ticker_sentiment_score": "0.130457",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMZN",
+          "relevance_score": "0.612174",
+          "ticker_sentiment_score": "0.144277",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.629208",
+          "ticker_sentiment_score": "0.106222",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Lucid CEO Sees Definite EV Demand Slowdown in US and Europe",
+      "url": "https://finance.yahoo.com/news/lucid-ceo-sees-definite-ev-093510859.html",
+      "time_published": "20251210T090930",
+      "authors": [
+        "Craig Trudell"
+      ],
+      "summary": "Lucid Group Inc.'s interim CEO, Marc Winterhoff, acknowledges a clear deceleration in electric vehicle demand across the US and Europe, attributing it to the expiration of federal tax credits impacting Q3 purchases. Despite this slowdown, Lucid expects to produce around 18,000 EVs this year, meeting the lower end of its forecast. This comes as analysts downgrade Lucid, Rivian, and Tesla shares, anticipating an \"EV winter\" to continue through next year.",
+      "banner_image": "https://s.yimg.com/ny/api/res/1.2/NKZLdgjcvEw1r3CdaUP6vA--/YXBwaWQ9aGlnaGxhbmRlcjt3PTIzMDtoPTQ4O2NmPXdlYnA-/https://s.yimg.com/os/creatr-uploaded-images/2024-12/f47ae180-c22f-11ef-bb6b-8c68a34cf959",
+      "source": "Yahoo Finance",
+      "category_within_source": "General",
+      "source_domain": "Yahoo Finance",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.927670"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.805706"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.983319"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.832277"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "LCID",
+          "relevance_score": "0.967822",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.703029",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "‘The Dream Keeps Expanding,’ Says Top Investor About Tesla Stock",
+      "url": "https://www.tipranks.com/news/the-dream-keeps-expanding-says-top-investor-about-tesla-stock",
+      "time_published": "20251210T084559",
+      "authors": [
+        "Gabe Ross"
+      ],
+      "summary": " A top investor, James Foord, expresses skepticism about Tesla's latest AI chip ambitions, believing the company is spreading itself too thin. While CEO Elon Musk announced plans for high-volume AI chip production, Foord argues that Tesla lacks the necessary infrastructure and financial capacity compared to industry leaders like Nvidia. He suggests Tesla needs to focus on a clearer strategy, choosing between being an EV maker or an AI/robotics platform, rather than pursuing all aggressively.",
+      "banner_image": " https://blog.tipranks.com/wp-content/uploads/2025/12/shutterstock_2678813601-750x406.jpg",
+      "source": "TipRanks",
+      "category_within_source": "General",
+      "source_domain": "TipRanks",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.987669"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.915598"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.988287",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "'Uber Is Cooked,' Says Ross Gerber As Waymo Hits 450K Weekly Rides — Touts $200 Million Annual Revenue For Tesla Rival",
+      "url": "https://www.benzinga.com/markets/tech/25/12/49297066/uber-is-cooked-says-ross-gerber-as-waymo-hits-450k-weekly-rides-touts-200-million-annual-revenue-for-tesla-rival",
+      "time_published": "20251210T070855",
+      "authors": [
+        "Badar Shaikh"
+      ],
+      "summary": "Investor Ross Gerber believes that Alphabet Inc.'s Waymo autonomous cab service poses a significant challenge to Uber Technologies Inc. Gerber highlighted Waymo's impressive growth, reporting 450,000 weekly rides and an estimated annual revenue exceeding $200 million. This comes as Tesla CEO Elon Musk also anticipates his company's Robotaxi operations in Austin to go driverless by year-end, with a broader European expansion planned for Tesla's Full Self-Driving (FSD) technology.",
+      "banner_image": "https://cdn.benzinga.com/files/images/story/2025/07/24/article-header-background-image.png?quality=85&auto=webp&width=1300",
+      "source": "Benzinga",
+      "category_within_source": "General",
+      "source_domain": "Benzinga",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "0.916610"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.830383"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.726260"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.647331"
+        }
+      ],
+      "overall_sentiment_score": 0.059756,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "UBER",
+          "relevance_score": "0.975592",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "GOOGL",
+          "relevance_score": "0.860841",
+          "ticker_sentiment_score": "0.291052",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "GOOG",
+          "relevance_score": "0.897725",
+          "ticker_sentiment_score": "0.267493",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.749635",
+          "ticker_sentiment_score": "0.121940",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Baldwin Insurance group executive Roche sells $376k in stock By Investing.com",
+      "url": "https://ca.investing.com/news/insider-trading-news/baldwin-insurance-group-executive-roche-sells-376k-in-stock-93CH-4357146",
+      "time_published": "20251210T060840",
+      "authors": [
+        "Investing.com"
+      ],
+      "summary": "James Morgan Roche, President and CEO of Underwriting at Baldwin Insurance Group, sold 15,000 shares of Class A Common Stock for approximately $376,200. This sale comes as the company's shares have significantly declined, yet InvestingPro analysis suggests the stock is undervalued despite current market performance and recent strategic appointments within the company. Baldwin also reported exceeding analyst expectations in its Q3 2025 earnings.",
+      "banner_image": "https://i-invdn-com.investing.com/news/international_newspapers_69x52._800x533_L_1419494241.jpg",
+      "source": "Investing.com Canada",
+      "category_within_source": "General",
+      "source_domain": "Investing.com Canada",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.848977"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.709749"
+        }
+      ],
+      "overall_sentiment_score": 0.124733,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "BWIN",
+          "relevance_score": "0.986306",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AVGO",
+          "relevance_score": "0.555581",
+          "ticker_sentiment_score": "0.206072",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AAPL",
+          "relevance_score": "0.574693",
+          "ticker_sentiment_score": "0.206919",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.578098",
+          "ticker_sentiment_score": "0.229857",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Morgan Stanley Upgrades GM To Overweight Rating And Adjusts Target Price",
+      "url": "https://gmauthority.com/blog/2025/12/morgan-stanley-upgrades-gm-to-overweight-rating-and-adjusts-target-price/",
+      "time_published": "20251210T021047",
+      "authors": [
+        "Jonathan Lopez"
+      ],
+      "summary": " Morgan Stanley has upgraded General Motors (GM) stock from \"equal weight\" to \"overweight\" and increased its price target to $90 per share from $54, citing stronger business operations and favorable conditions expected in 2026. The upgrade is driven by factors such as inventory discipline, a focus on high-margin trucks and SUVs, stabilizing policy uncertainty, and anticipated interest rate cuts. GM has also raised its full-year 2025 guidance, projecting adjusted EBIT between $12 billion and $13 billion.",
+      "banner_image": " https://gmauthority.com/blog/wp-content/uploads/2025/10/General-Motors-Hudsons-Detroit-Global-Headquarters-Press-Photos-Exterior-003-Facade-Front-End-GM-Logo-850x567.jpg",
+      "source": "GM Authority",
+      "category_within_source": "General",
+      "source_domain": "GM Authority",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.909374"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.903678"
+        },
+        {
+          "topic": "economy_monetary",
+          "relevance_score": "0.608783"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.732389"
+        }
+      ],
+      "overall_sentiment_score": 0.15965,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "MS",
+          "relevance_score": "0.844211",
+          "ticker_sentiment_score": "0.327730",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "GM",
+          "relevance_score": "0.984818",
+          "ticker_sentiment_score": "0.454945",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.611395",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Nio’s December Challenge: A High-Stakes Finish to the Year",
+      "url": "https://primaryignition.com/2025/12/09/nios-december-challenge-a-high-stakes-finish-to-the-year/",
+      "time_published": "20251209T201017",
+      "authors": [
+        "Sarah Mitchell"
+      ],
+      "summary": "Despite a robust 76% year-over-year surge in November deliveries, Nio's stock has fallen over 25% in the last 30 days, creating a high-stakes scenario for December. To meet its Q4 guidance, Nio must deliver at least 43,328 vehicles this month, a significant challenge given recent delivery trends. The outcome of December's sales will largely dictate investor confidence and the near-term trajectory of Nio's stock.",
+      "banner_image": "https://primaryignition.com/wp-content/uploads/ai-imgs/US62914V1061-2025-12-09-19-42-06.png",
+      "source": "Primary Ignition",
+      "category_within_source": "General",
+      "source_domain": "Primary Ignition",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.907748"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.809552"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.623167"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.929795"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "NIO",
+          "relevance_score": "0.984733",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.596930",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Tesla Stock Drops After Morgan Stanley Downgrade",
+      "url": "https://www.wsj.com/livecoverage/stock-market-today-dow-sp-500-nasdaq-12-08-2025/card/tesla-stock-drops-after-morgan-stanley-downgrade-WxppMI7rcROv8t8uIbvl?gaa_at=eafs&gaa_n=AWEtsqc6Q-KKctGq_OEt4LIk3sICNE4U_K4un9KfWkimyYQXytEPyWnboMBU&gaa_ts=693b27b4&gaa_sig=PH3gSDU7GG9vEbojoDcUhLvFmDHld1XaWOj1Jc7Q2CThovY3P1IP19B_MleYydm4OGyNMl18V2SF1IBRuhjJpg%3D%3D",
+      "time_published": "20251209T200823",
+      "authors": [
+        "Katy Barnato"
+      ],
+      "summary": "Tesla shares declined after Morgan Stanley downgraded its rating for the stock, along with Rivian and Lucid, citing slower EV adoption and a challenging trading outlook. Despite the downgrade, Morgan Stanley increased Tesla's price target to $425. This dip follows a significant recovery for Tesla shares since Elon Musk refocused on the automaker.",
+      "banner_image": null,
+      "source": "The Wall Street Journal",
+      "category_within_source": "General",
+      "source_domain": "The Wall Street Journal",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.917038"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.709718"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "MS",
+          "relevance_score": "0.901749",
+          "ticker_sentiment_score": "0.187625",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.981864",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Morgan Stanley cuts Tesla's stock rating from 'buy' for the first time in 2 years on valuation concerns",
+      "url": "https://www.businessinsider.com/tesla-stock-price-downgrade-morgan-stanley-fsd-optimus-evs-tsla-2025-12",
+      "time_published": "20251209T200823",
+      "authors": [
+        "Samuel O'Brient"
+      ],
+      "summary": " Morgan Stanley analyst Andrew Percoco downgraded Tesla's stock from \"Overweight/Buy\" to \"Equal Weight/Hold,\" citing valuation concerns and a more cautious outlook on EV adoption and competition. While the price target was raised to $425, it still implies a slight downside. The firm acknowledges Tesla's progress in FSD and robotics but advises investors to await a better entry point due to high valuation and potential near-term struggles in its auto business.",
+      "banner_image": " https://i.insider.com/69322e4a04d0f0a114f17562?width=700",
+      "source": "Business Insider",
+      "category_within_source": "General",
+      "source_domain": "Business Insider",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.925467"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.818187"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.710916"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "MS",
+          "relevance_score": "0.868462",
+          "ticker_sentiment_score": "0.112499",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.980428",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Mixed options sentiment in Sandisk Corporation with shares down 4.33%",
+      "url": "https://www.tipranks.com/news/the-fly/mixed-options-sentiment-in-sandisk-corporation-with-shares-down-4-33-thefly",
+      "time_published": "20251209T190915",
+      "authors": [
+        "TheFly"
+      ],
+      "summary": "Shares of SanDisk Corporation (SNDK) are down 4.33%, trading near $215.70, with relatively light options volume. The put/call ratio is 0.81, indicating calls are leading puts, which suggests a modestly bullish sentiment despite the stock's decline. Implied volatility remains above its 52-week median, anticipating a daily move of approximately $12.96.",
+      "banner_image": null,
+      "source": "TipRanks",
+      "category_within_source": "General",
+      "source_domain": "TipRanks",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.943303"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.740811"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "SNDKV",
+          "relevance_score": "0.331867",
+          "ticker_sentiment_score": "0.048141",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "UAL",
+          "relevance_score": "0.642863",
+          "ticker_sentiment_score": "0.102970",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NFLX",
+          "relevance_score": "0.628385",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.613837",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Old Second Bancorp director Ladowicz sells $250k in shares",
+      "url": "https://www.investing.com/news/insider-trading-news/old-second-bancorp-director-ladowicz-sells-250k-in-shares-93CH-4399140",
+      "time_published": "20251209T180942",
+      "authors": [
+        "Investing.com"
+      ],
+      "summary": " John Ladowicz, a director at Old Second Bancorp (NASDAQ:OSBC), sold 12,500 shares of company stock for a total of $250,000. This comes as the company recently reported mixed Q3 2025 earnings, with EPS missing expectations but revenue exceeding forecasts, and Raymond James reiterated a Strong Buy rating with a $21.00 price target. Ladowicz now directly owns 36,121 shares and indirectly 149,654 shares.",
+      "banner_image": " https://i-invdn-com.investing.com/news/news_headline_rolled_69x52._800x533_L_1419494221.jpg",
+      "source": "Investing.com",
+      "category_within_source": "General",
+      "source_domain": "Investing.com",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.911999"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.839311"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.719292"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "OSBC",
+          "relevance_score": "0.998134",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "JPM",
+          "relevance_score": "0.593538",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "MSFT",
+          "relevance_score": "0.597162",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.577752",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.584402",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Flowco Holdings EVP Roberts sells $362k in stock",
+      "url": "https://www.investing.com/news/insider-trading-news/flowco-holdings-evp-roberts-sells-362k-in-stock-93CH-4399130",
+      "time_published": "20251209T180854",
+      "authors": [
+        "Investing.com"
+      ],
+      "summary": " Chad Roberts, EVP of Production Solutions at Flowco Holdings Inc (NASDAQ:FLOC), sold 19,457 shares of Class A Common Stock for $362,334 on December 4, 2025, under a Rule 10b5-1 trading plan. Despite recent earnings falling short of expectations, Piper Sandler maintained an Overweight rating on Flowco Holdings with a $28.00 price target due to encouraging leadership meetings.",
+      "banner_image": " https://i-invdn-com.investing.com/news/news_pile_69x52._800x533_L_1419494209.jpg",
+      "source": "Investing.com",
+      "category_within_source": "General",
+      "source_domain": "Investing.com",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.903525"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.811346"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.748855"
+        }
+      ],
+      "overall_sentiment_score": 0.06894,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "FLOC",
+          "relevance_score": "0.978093",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AVGO",
+          "relevance_score": "0.518108",
+          "ticker_sentiment_score": "0.324913",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.545019",
+          "ticker_sentiment_score": "0.305730",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "JPM",
+          "relevance_score": "0.554064",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NFLX",
+          "relevance_score": "0.531733",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Baidu Trading at a Discount at 20.4x P/E: Buy, Sell or Hold the Stock?",
+      "url": "https://finviz.com/news/249824/baidu-trading-at-a-discount-at-204x-pe-buy-sell-or-hold-the-stock",
+      "time_published": "20251209T175700",
+      "authors": [
+        "Kashvi Chandgothia"
+      ],
+      "summary": " Baidu (BIDU) presents an intriguing investment case, trading at a significant discount with a forward P/E of 20.37x compared to industry averages. While its Apollo Go and AI infrastructure show strong growth, the core advertising business faces structural headwinds and declining revenue. Investors face a decision between holding current positions or awaiting a clearer entry point due to mixed earnings estimates and uncertain monetization timelines.",
+      "banner_image": " NULL",
+      "source": "Finviz",
+      "category_within_source": "General",
+      "source_domain": "Finviz",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.927824"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.827655"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.731563"
+        }
+      ],
+      "overall_sentiment_score": 0.055057,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "BIDU",
+          "relevance_score": "0.951688",
+          "ticker_sentiment_score": "0.093591",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.702156",
+          "ticker_sentiment_score": "0.041809",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "10 Consumer Discretionary Stocks With Whale Alerts In Today's Session",
+      "url": "https://www.benzinga.com/insights/options/25/12/49286672/10-consumer-discretionary-stocks-with-whale-alerts-in-todays-session",
+      "time_published": "20251209T173846",
+      "authors": [
+        "Benzinga Insights",
+        "Benzinga Staff Writer"
+      ],
+      "summary": " This article details significant options activity, dubbed \"whale alerts,\" in ten consumer discretionary stocks. These alerts identify large-sum transactions that can signal future price movements, with comprehensive data provided for call and put options including sentiment, expiration dates, strike prices, total trade prices, open interest, and volume. The stocks highlighted include major companies like Tesla, Amazon, and Nike, among others.",
+      "banner_image": " https://cdn.benzinga.com/files/images/story/2025/07/24/article-header-background-image.png?quality=85&auto=webp&width=1300",
+      "source": "Benzinga",
+      "category_within_source": "General",
+      "source_domain": "Benzinga",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.940946"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "AMZN",
+          "relevance_score": "0.988118",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.959819",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NKE",
+          "relevance_score": "0.816864",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Baidu Trading at a Discount at 20.4x P/E: Buy, Sell or Hold the Stock?",
+      "url": "https://www.tradingview.com/news/zacks:1ab3c3587094b:0-baidu-trading-at-a-discount-at-20-4x-p-e-buy-sell-or-hold-the-stock/",
+      "time_published": "20251209T170942",
+      "authors": [
+        "NULL"
+      ],
+      "summary": " Baidu (BIDU) is currently trading at a significant discount compared to its industry and sector peers, with a forward P/E ratio of 20.37x. While the company's autonomous driving unit, Apollo Go, and its AI infrastructure are showing strong growth, its core advertising business faces structural headwinds. Investors are advised to hold current positions due to mixed trends in share price and earnings estimates, with new investors encouraged to wait for a clearer entry point.",
+      "banner_image": " NULL",
+      "source": "TradingView",
+      "category_within_source": "General",
+      "source_domain": "TradingView",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.934635"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.815404"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.705867"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.627184"
+        }
+      ],
+      "overall_sentiment_score": 0.137827,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "BIDU",
+          "relevance_score": "0.975126",
+          "ticker_sentiment_score": "0.111529",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.712705",
+          "ticker_sentiment_score": "0.100983",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Lucid Group Stock Extends Losses Tuesday Following 'EV Winter' Downgrade",
+      "url": "https://www.benzinga.com/trading-ideas/movers/25/12/49283831/lucid-group-stock-extends-losses-tuesday-following-ev-winter-downgrade",
+      "time_published": "20251209T160930",
+      "authors": [
+        "Henry Khederian"
+      ],
+      "summary": " Lucid Group (NASDAQ: LCID) shares continued to fall on Tuesday after Morgan Stanley downgraded the stock to Underweight, citing an \"EV winter\" and concerns about Lucid's path to profitability. Analyst Andrew Percoco slashed his price target to $10 from $30, projecting the company won't reach gross profit breakeven until 2028 and may require a significant equity raise. This bearish outlook, compounded by high short interest and a recent executive departure, has pushed LCID near its 52-week low.",
+      "banner_image": " https://cdn.benzinga.com/files/images/story/2025/07/24/article-header-background-image.png?quality=85&auto=webp&width=1300",
+      "source": "Benzinga",
+      "category_within_source": "General",
+      "source_domain": "Benzinga",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.919332"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.812529"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.714873"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "LCID",
+          "relevance_score": "0.979142",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.642471",
+          "ticker_sentiment_score": "0.105362",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "T-Mobile US stock hits 52-week low at $199.26",
+      "url": "https://www.investing.com/news/company-news/tmobile-us-stock-hits-52week-low-at-19926-93CH-4398999",
+      "time_published": "20251209T160842",
+      "authors": [
+        "Investing.com"
+      ],
+      "summary": "T-Mobile US Inc.'s stock has reached a new 52-week low of $199.26, a significant drop from its 52-week high of $276.49 and a 14.39% decline over the past year. Despite this, InvestingPro analysis suggests the stock is undervalued, exhibiting fundamental strength with revenue growth and a modest dividend yield. The company recently declared a quarterly dividend and announced a new COO, while analysts have offered mixed but largely positive ratings.",
+      "banner_image": "https://i-invdn-com.investing.com/news/T-Mobile_800x533_L_1629564485.jpg",
+      "source": "Investing.com",
+      "category_within_source": "General",
+      "source_domain": "Investing.com",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.939582"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.838477"
+        }
+      ],
+      "overall_sentiment_score": 0.041308,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "TMUS",
+          "relevance_score": "0.950491",
+          "ticker_sentiment_score": "0.070625",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "GOOGL",
+          "relevance_score": "0.572896",
+          "ticker_sentiment_score": "0.104112",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.572790",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NFLX",
+          "relevance_score": "0.577416",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.559969",
+          "ticker_sentiment_score": "0.185588",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Aflac EVP beaver sells $377k in stock after option exercise",
+      "url": "https://ca.investing.com/news/insider-trading-news/aflac-evp-beaver-sells-377k-in-stock-after-option-exercise-93CH-4356289",
+      "time_published": "20251209T160812",
+      "authors": [
+        "Investing.com"
+      ],
+      "summary": "Aflac Executive Vice President and CFO of Aflac Japan, Steven Kent Beaver, sold 3,452 shares of common stock for $377,165 after exercising options to acquire the same number of shares. Following the transaction, Beaver directly owns 43,860 shares of Aflac. This news comes as Aflac reported strong Q3 2025 earnings, exceeding analyst expectations, and announced a dividend increase.",
+      "banner_image": "https://i-invdn-com.investing.com/news/World_News_8_800x533_L_1420026210.jpg",
+      "source": "Investing.com Canada",
+      "category_within_source": "General",
+      "source_domain": "Investing.com Canada",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.917577"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.813396"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.747782"
+        }
+      ],
+      "overall_sentiment_score": 0.220085,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "AFL",
+          "relevance_score": "0.970996",
+          "ticker_sentiment_score": "0.324060",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AVGO",
+          "relevance_score": "0.619591",
+          "ticker_sentiment_score": "0.129387",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AAPL",
+          "relevance_score": "0.642439",
+          "ticker_sentiment_score": "0.116169",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.604708",
+          "ticker_sentiment_score": "0.209617",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Wolfspeed to supply silicon carbide MOSFETs for Toyota’s electric vehicles",
+      "url": "https://www.investing.com/news/company-news/wolfspeed-to-supply-silicon-carbide-mosfets-for-toyotas-electric-vehicles-93CH-4398801",
+      "time_published": "20251209T140947",
+      "authors": [
+        "Investing.com"
+      ],
+      "summary": " Wolfspeed Inc. (NYSE:WOLF) announced it will provide silicon carbide automotive MOSFETs for onboard charger systems in Toyota’s battery electric vehicles, expanding its presence in the automotive electrification market. This partnership aims to enhance Toyota's EV efficiency with benefits like shorter charging times and increased driving range. Wolfspeed highlighted its U.S.-based manufacturing for supply chain stability.",
+      "banner_image": " https://i-invdn-com.investing.com/news/World_News_8_800x533_L_1420026210.jpg",
+      "source": "Investing.com",
+      "category_within_source": "General",
+      "source_domain": "Investing.com",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "0.934412"
+        },
+        {
+          "topic": "manufacturing",
+          "relevance_score": "0.847942"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.728551"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.643745"
+        }
+      ],
+      "overall_sentiment_score": 0.438924,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "WOLF",
+          "relevance_score": "0.986797",
+          "ticker_sentiment_score": "0.619690",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.621513",
+          "ticker_sentiment_score": "0.221961",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Tesla Stock (TSLA) Today: Morgan Stanley Downgrade, China Sales Twist and 2026 AI Bet – December 9, 2025",
+      "url": "https://ts2.tech/en/tesla-stock-tsla-today-morgan-stanley-downgrade-china-sales-twist-and-2026-ai-bet-december-9-2025/",
+      "time_published": "20251209T140846",
+      "authors": [
+        "Khadija Saeed"
+      ],
+      "summary": "Tesla (NASDAQ: TSLA) shares are under scrutiny after Morgan Stanley downgraded the stock to \"Equal Weight\" despite raising its price target to $425, citing that the AI and robotaxi upside is largely priced in. The company faces mixed results in China, with November shipments up but year-to-date retail sales down, while Q3 2025 saw record revenue and free cash flow but compressed margins. Wall Street analysts maintain a cautious outlook, with price targets averaging around $385–$400, though some bullish firms still foresee significant upside driven by Tesla's long-term AI, robotics, and energy ambitions.",
+      "banner_image": null,
+      "source": "ts2.tech",
+      "category_within_source": "General",
+      "source_domain": "ts2.tech",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.924056"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.924102"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.813867"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.834664"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.645488"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.984346",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Tesla’s Europe Prospects Take a Beating",
+      "url": "https://247wallst.com/investing/2025/12/09/teslas-europe-prospects-take-a-beating/",
+      "time_published": "20251209T140843",
+      "authors": [
+        "Douglas A. McIntyre"
+      ],
+      "summary": " Tesla Inc. faces significant challenges in the European market, both in its self-driving technology and its plans for affordable electric vehicles. European sales have seen double-digit declines, and new competition from Stellantis’s self-driving initiatives and a Renault/Ford partnership for cheaper EVs further pressure Tesla's market position. Shareholders increasingly view Tesla as falling behind in the industry.",
+      "banner_image": " https://247wallst.com/wp-content/uploads/2022/10/imageForEntry3-PQQ.jpg",
+      "source": "24/7 Wall St.",
+      "category_within_source": "General",
+      "source_domain": "24/7 Wall St.",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.913927"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.845745"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.718735"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.989405",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "F",
+          "relevance_score": "0.634381",
+          "ticker_sentiment_score": "0.133038",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "CPB",
+          "relevance_score": "0.579488",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AZO",
+          "relevance_score": "0.599235",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "iSAM Funds UK Ltd Buys New Shares in PayPal Holdings, Inc. $PYPL",
+      "url": "https://www.marketbeat.com/instant-alerts/filing-isam-funds-uk-ltd-buys-new-shares-in-paypal-holdings-inc-pypl-2025-12-09/",
+      "time_published": "20251209T134655",
+      "authors": [
+        "MarketBeat"
+      ],
+      "summary": " iSAM Funds UK Ltd recently acquired 23,049 shares of PayPal Holdings, Inc. for approximately $1.71 million, joining other major institutional investors like Norges Bank and Nuveen who also increased their stakes. Analysts generally hold a \"Hold\" rating for PYPL with a consensus target price of $81.39. PayPal recently surpassed EPS estimates and announced a quarterly dividend.",
+      "banner_image": " https://www.marketbeat.com/logos/paypal-holdings-inc-logo-1200x675.png?v=20231214083652",
+      "source": "MarketBeat",
+      "category_within_source": "General",
+      "source_domain": "MarketBeat",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.903242"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.807356"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "PYPL",
+          "relevance_score": "0.975974",
+          "ticker_sentiment_score": "0.257198",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.621406",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.600723",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "London & Capital Asset Management Ltd Sells 140,085 Shares of PayPal Holdings, Inc. $PYPL",
+      "url": "https://www.marketbeat.com/instant-alerts/filing-london-capital-asset-management-ltd-sells-140085-shares-of-paypal-holdings-inc-pypl-2025-12-09/",
+      "time_published": "20251209T131756",
+      "authors": [
+        "MarketBeat"
+      ],
+      "summary": " London & Capital Asset Management Ltd significantly reduced its stake in PayPal Holdings, Inc. by selling 140,085 shares, cutting its holdings by 58.1% in the second quarter. Despite this, other hedge funds like Norges Bank and Artisan Partners Limited Partnership increased their positions in PayPal. The article also provides a financial overview of PayPal, including recent earnings, dividend announcements, and updated analyst ratings.",
+      "banner_image": " https://www.marketbeat.com/logos/paypal-holdings-inc-logo-1200x675.png?v=20231214083652",
+      "source": "MarketBeat",
+      "category_within_source": "General",
+      "source_domain": "MarketBeat",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.937851"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.819848"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.704672"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.607968"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "PYPL",
+          "relevance_score": "0.981272",
+          "ticker_sentiment_score": "0.039477",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.684833",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.615502",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "MSFT",
+          "relevance_score": "0.534495",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "After VW, Now the Ford Motor Company Bands With Renault in Europe to Sell EVs and LCVs",
+      "url": "https://www.autoevolution.com/news/after-vw-now-the-ford-motor-company-bands-with-renault-in-europe-to-sell-evs-and-lcvs-262390.html",
+      "time_published": "20251209T131326",
+      "authors": [
+        "Aurel Niculescu"
+      ],
+      "summary": " Ford Motor Company's European branch and Renault Group have formed a strategic partnership to expand Ford's electric vehicle offerings in Europe, utilizing Renault's Ampere platform and production capacity. This collaboration follows Ford's previous partnership with Volkswagen for other EV and LCV models. The agreement will lead to new electric passenger cars by early 2028 and a joint development of light commercial vehicles.",
+      "banner_image": " https://s1.cdn.autoevolution.com/images/news/after-volkswagen-now-fomoco-bands-together-with-renault-in-europe-to-sell-evs-and-lcvs-262390-7.jpg",
+      "source": "autoevolution",
+      "category_within_source": "General",
+      "source_domain": "autoevolution",
+      "topics": [
+        {
+          "topic": "mergers_and_acquisitions",
+          "relevance_score": "0.915473"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.814615"
+        },
+        {
+          "topic": "manufacturing",
+          "relevance_score": "0.603063"
+        }
+      ],
+      "overall_sentiment_score": 0.311999,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "F",
+          "relevance_score": "0.966884",
+          "ticker_sentiment_score": "0.712285",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "GM",
+          "relevance_score": "0.617416",
+          "ticker_sentiment_score": "0.126691",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.556480",
+          "ticker_sentiment_score": "0.041168",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Alpaca Holds 94% Market Share in Tokenized US Stocks and ETFs",
+      "url": "https://www.morningstar.com/news/business-wire/20251208268741/alpaca-holds-94-market-share-in-tokenized-us-stocks-and-etfs",
+      "time_published": "20251209T130854",
+      "authors": [
+        "NULL"
+      ],
+      "summary": " Alpaca, a leader in brokerage infrastructure APIs, announced it holds a 94% market share in tokenized US stocks and ETFs, with $480 million in tokenized assets under custody. The company also leads in tokenized large and mega-cap US stocks, with its top five tokenized assets being TSLA, SPY, QQQ, NVDA, and IVV, totaling over $150 million. These milestones establish Alpaca as a significant infrastructure standard for on-chain markets.",
+      "banner_image": " https://mms.businesswire.com/media/20251208268741/en/2663985/4/Tokenization_Market_Share_Cover.jpg",
+      "source": "Morningstar",
+      "category_within_source": "General",
+      "source_domain": "Morningstar",
+      "topics": [
+        {
+          "topic": "blockchain",
+          "relevance_score": "0.929696"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.804381"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.727208"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.622444"
+        }
+      ],
+      "overall_sentiment_score": 0.224237,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "MORN",
+          "relevance_score": "0.309674",
+          "ticker_sentiment_score": "0.031644",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.824919",
+          "ticker_sentiment_score": "0.337917",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.800033",
+          "ticker_sentiment_score": "0.346469",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "2027 Toyota Century Coupe Abandons the Coupe-SUV Allure of the Concept in Unofficial CGIs",
+      "url": "https://www.autoevolution.com/news/2027-toyota-century-coupe-abandons-the-coupe-suv-allure-of-the-concept-in-unofficial-cgis-262388.html",
+      "time_published": "20251209T120400",
+      "authors": [
+        "Aurel Niculescu"
+      ],
+      "summary": " Toyota is expanding its ultra-luxury Century nameplate beyond its traditional sedan and recent SUV offerings with a future coupe-SUV. Digital artist \"kelsonik\" has rendered a potential 2027 Toyota Century Coupe, reimagining it as a non-SUV production model with more feasible manufacturing cues. This concept aims to compete with high-end luxury brands like Rolls-Royce, Bentley, and Maybach, positioning Century as a standalone brand above Lexus.",
+      "banner_image": " https://s1.cdn.autoevolution.com/images/news/2027-toyota-century-coupe-abandons-the-coupe-suv-allure-of-the-concept-in-unofficial-cgis-262388-7.jpg",
+      "source": "autoevolution",
+      "category_within_source": "General",
+      "source_domain": "autoevolution",
+      "topics": [
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.934010"
+        }
+      ],
+      "overall_sentiment_score": 0.100028,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "TM",
+          "relevance_score": "0.976238",
+          "ticker_sentiment_score": "0.263222",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "F",
+          "relevance_score": "0.729669",
+          "ticker_sentiment_score": "0.056267",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "GM",
+          "relevance_score": "0.611146",
+          "ticker_sentiment_score": "0.051608",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.560445",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Jefferies Reaffirms Buy on VAALCO (EGY) Despite Q3 Revenue Miss",
+      "url": "https://www.insidermonkey.com/blog/jefferies-reaffirms-buy-on-vaalco-egy-despite-q3-revenue-miss-1656862/?amp=1",
+      "time_published": "20251209T114900",
+      "authors": [
+        "Abdul Rahman"
+      ],
+      "summary": " Jefferies has reaffirmed its Buy rating on VAALCO Energy, Inc. (NYSE:EGY) and maintained its price target, even as the company missed Q3 2025 revenue and adjusted EPS estimates. The revenue miss was attributed to lower realized pricing and sales volume due to a planned maintenance shutdown. Despite the setbacks, VAALCO declared a quarterly cash dividend and increased its credit facility commitments, signaling confidence in future growth.",
+      "banner_image": " NULL",
+      "source": "Insider Monkey",
+      "category_within_source": "General",
+      "source_domain": "Insider Monkey",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.900653"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.734464"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.622555"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.828047"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.613181"
+        }
+      ],
+      "overall_sentiment_score": 0.2746,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "EGY",
+          "relevance_score": "0.958590",
+          "ticker_sentiment_score": "0.281772",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "MSFT",
+          "relevance_score": "0.615371",
+          "ticker_sentiment_score": "0.323095",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AMZN",
+          "relevance_score": "0.633611",
+          "ticker_sentiment_score": "0.317672",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.551432",
+          "ticker_sentiment_score": "0.236354",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.638875",
+          "ticker_sentiment_score": "0.323317",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Aurora Mobile launches AI-driven customer service platform LiveDesk",
+      "url": "https://www.investing.com/news/company-news/aurora-mobile-launches-aidriven-customer-service-platform-livedesk-93CH-4395721",
+      "time_published": "20251209T110949",
+      "authors": [
+        "Investing.com"
+      ],
+      "summary": " Aurora Mobile (NASDAQ:JG) has launched LiveDesk, an AI-driven customer service platform through its EngageLab subsidiary. This new platform aims to help enterprises manage multi-channel customer communications by combining AI and human agents, potentially handling up to 90% of common inquiries and reducing operational costs by 70%. LiveDesk offers intelligent routing, smart ticketing, and data tracking across various communication channels and is applicable across industries like e-commerce, gaming, and lifestyle services.",
+      "banner_image": " https://i-invdn-com.investing.com/news/World_News_8_800x533_L_1420026210.jpg",
+      "source": "Investing.com",
+      "category_within_source": "General",
+      "source_domain": "Investing.com",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "0.824387"
+        }
+      ],
+      "overall_sentiment_score": 0.071955,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "JG",
+          "relevance_score": "0.976254",
+          "ticker_sentiment_score": "0.400898",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.547704",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.536837",
+          "ticker_sentiment_score": "0.251160",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AAPL",
+          "relevance_score": "0.513171",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Is Norwegian Cruise Line Holdings Ltd. (NCLH) the Lowest P/E Ratio Stock of the S&P 500 in 2025?",
+      "url": "https://www.insidermonkey.com/blog/is-norwegian-cruise-line-holdings-ltd-nclh-the-lowest-p-e-ratio-stock-of-the-sp-500-in-2025-1656683/?amp=1",
+      "time_published": "20251209T110829",
+      "authors": [
+        "Ashar Jawad"
+      ],
+      "summary": " Norwegian Cruise Line Holdings Ltd. (NCLH) is highlighted as one of the S&P 500 stocks with the lowest P/E ratios in 2025, despite recent price target reductions by Truist Securities and Wells Fargo due to concerns about supply exceeding demand in the cruise industry. Analysts maintain a generally positive outlook with a 47% upside potential, but the article suggests that certain AI stocks offer greater promise for higher and quicker returns, promoting a paid report on such opportunities.",
+      "banner_image": " NULL",
+      "source": "Insider Monkey",
+      "category_within_source": "General",
+      "source_domain": "Insider Monkey",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.900787"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.833143"
+        }
+      ],
+      "overall_sentiment_score": 0.173675,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "NCLH",
+          "relevance_score": "0.972165",
+          "ticker_sentiment_score": "0.284268",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "MSFT",
+          "relevance_score": "0.633902",
+          "ticker_sentiment_score": "0.105510",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMZN",
+          "relevance_score": "0.610710",
+          "ticker_sentiment_score": "0.145307",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.614976",
+          "ticker_sentiment_score": "0.105883",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.612071",
+          "ticker_sentiment_score": "0.148144",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Bull of the Day: General Motors (GM)",
+      "url": "https://finviz.com/news/249098/bull-of-the-day-general-motors-gm",
+      "time_published": "20251209T101614",
+      "authors": [
+        "Shaun Pruitt"
+      ],
+      "summary": " General Motors (GM) is highlighted as a strong value stock, trading near a 52-week high but still at a low valuation of 7X forward earnings and less than 1X forward sales. The company's success is attributed to robust financial results, aggressive share buybacks, and successful restructuring in China, alongside significant investments and progress in the EV market. GM has become the second-leading EV seller in the domestic market, further bolstered by its joint venture in lithium production and consistently positive EPS revisions and a rising dividend.",
+      "banner_image": " NULL",
+      "source": "Finviz",
+      "category_within_source": "General",
+      "source_domain": "Finviz",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.946121"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.800405"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.948059"
+        },
+        {
+          "topic": "manufacturing",
+          "relevance_score": "0.745058"
+        }
+      ],
+      "overall_sentiment_score": 0.406657,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "GM",
+          "relevance_score": "0.980224",
+          "ticker_sentiment_score": "0.720642",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.620506",
+          "ticker_sentiment_score": "0.125940",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Ies Holdings stock hits all-time high at 444.98 USD",
+      "url": "https://www.investing.com/news/company-news/ies-holdings-stock-hits-alltime-high-at-44498-usd-93CH-4396522",
+      "time_published": "20251209T090939",
+      "authors": [
+        "Investing.com"
+      ],
+      "summary": " IES Holdings Inc. (IESC) reached an all-time high of $444.98, reflecting a significant 73.98% increase over the past year and an impressive 113.29% year-to-date return. The company reported strong fourth-quarter fiscal 2025 results, with adjusted earnings of $3.77 per share and revenue of $898 million, driven by robust demand in the data center market. InvestingPro data indicates a \"GREAT\" financial health score and highlights that the stock \"trades at a low P/E ratio relative to near-term earnings growth.\"",
+      "banner_image": " https://i-invdn-com.investing.com/news/World_News_8_800x533_L_1420026210.jpg",
+      "source": "Investing.com",
+      "category_within_source": "General",
+      "source_domain": "Investing.com",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.912870"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.840585"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.730474"
+        }
+      ],
+      "overall_sentiment_score": 0.149445,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "IESC",
+          "relevance_score": "0.978821",
+          "ticker_sentiment_score": "0.883906",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.631528",
+          "ticker_sentiment_score": "0.090965",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.586487",
+          "ticker_sentiment_score": "0.064658",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "JPM",
+          "relevance_score": "0.565004",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Baker Avenue Asset Management LP Cuts Stock Position in PayPal Holdings, Inc. $PYPL",
+      "url": "https://www.marketbeat.com/instant-alerts/filing-baker-avenue-asset-management-lp-cuts-stock-position-in-paypal-holdings-inc-pypl-2025-12-09/",
+      "time_published": "20251209T090836",
+      "authors": [
+        "MarketBeat"
+      ],
+      "summary": " Baker Avenue Asset Management LP significantly reduced its holdings in PayPal Holdings, Inc. (NASDAQ:PYPL) by 85.6% in the second quarter, selling 72,095 shares and retaining 12,141 shares valued at $902,000. Despite a mixed Wall Street consensus rating of \"Hold\" with an average price target of $81.39, influenced by recent price target cuts, the company has announced a quarterly dividend of $0.14, representing a 0.9% yield. Insider selling has also been noted, with executives offloading shares worth approximately $2.43 million in the past three months.",
+      "banner_image": " https://www.marketbeat.com/logos/paypal-holdings-inc-logo-1200x675.png?v=20231214083652",
+      "source": "MarketBeat",
+      "category_within_source": "General",
+      "source_domain": "MarketBeat",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.931778"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.804838"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.701205"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.649879"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "PYPL",
+          "relevance_score": "0.978906",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.627288",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.631254",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Tesla Stock Lifts 2025 Gains to 20% as Traders Eye Santa Rally",
+      "url": "https://www.tradingview.com/chart/TSLA/2rIhQUMr-Tesla-Stock-Lifts-2025-Gains-to-20-as-Traders-Eye-Santa-Rally/",
+      "time_published": "20251209T080842",
+      "authors": [
+        "TradingView"
+      ],
+      "summary": " Tesla stock has risen 20% in 2025, positioning it for a potential Santa Rally in December, a month that has historically favored the stock. While December can be volatile, expectations for Q4 2025 deliveries and full-year growth targets could provide the catalyst for a strong finish to the year. Despite its past volatility, the company's performance in 2025, coupled with historical seasonality and analyst optimism, suggests a possible boost.",
+      "banner_image": " https://s3.tradingview.com/2/2rIhQUMr_mid.webp",
+      "source": "TradingView",
+      "category_within_source": "General",
+      "source_domain": "TradingView",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.927885"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.837973"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.737719"
+        }
+      ],
+      "overall_sentiment_score": 0.282318,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.983237",
+          "ticker_sentiment_score": "0.293999",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Cathie Wood’s ARK Sells Tesla Stock, Adds to Baidu and GeneDx Holdings",
+      "url": "https://www.investing.com/news/company-news/cathie-woods-ark-sells-tesla-stock-adds-to-baidu-and-genedx-holdings-93CH-4397458",
+      "time_published": "20251209T010913",
+      "authors": [
+        "Investing.com"
+      ],
+      "summary": " Cathie Wood's ARK ETFs made several strategic trades on Monday, December 8th, 2025, including a significant purchase of Baidu Inc. shares and increased holdings in GeneDx Holdings Corp. Conversely, ARK reduced its position in Tesla Inc. and sold shares of Adaptive Biotechnologies Corp., reflecting a portfolio rebalancing across various sectors.",
+      "banner_image": " https://i-invdn-com.investing.com/news/news_six_pile_69x52._800x533_L_1419494215.jpg",
+      "source": "Investing.com",
+      "category_within_source": "General",
+      "source_domain": "Investing.com",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.925150"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.830778"
+        },
+        {
+          "topic": "life_sciences",
+          "relevance_score": "0.713394"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.616855"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.639278"
+        }
+      ],
+      "overall_sentiment_score": 0.001,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.917511",
+          "ticker_sentiment_score": "0.001000",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    }
+  ]
+}
