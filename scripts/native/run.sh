@@ -2,4 +2,5 @@
 # Get the directory where this script is located
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
-"$SCRIPT_DIR/../target/gekko"
+cd $SCRIPT_DIR/../..
+target/gekko

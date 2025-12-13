@@ -22,10 +22,10 @@ fi
 sdk install java 25-graalce
 sdk use java 25-graalce
 
-"$SCRIPT_DIR/../mvnw" --version
+"$SCRIPT_DIR/../../mvnw" --version
 native-image --version
 java -version
 
 GRAALVM_HOME=$HOME/.sdkman/candidates/java/current
 
-"$SCRIPT_DIR/../mvnw" -f ../pom.xml native:compile -Pnative -DskipTests=true
+"$SCRIPT_DIR/../../mvnw" -f ../../pom.xml native:compile -Pnative -DskipTests=true
