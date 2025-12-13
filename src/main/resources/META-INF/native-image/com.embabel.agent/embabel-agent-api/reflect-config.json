@@ -21,5 +21,17 @@
     "name": "com.embabel.agent.rag.tools.RagServiceTools",
     "allDeclaredMethods": true,
     "allPublicMethods": true
+  },
+  {
+    "name": "com.embabel.agent.spi.support.LlmDataBindingProperties",
+    "allDeclaredConstructors": true,
+    "allDeclaredFields": true,
+    "allDeclaredMethods": true
+  },
+  {
+    "name": "kotlin.jvm.internal.DefaultConstructorMarker",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
   }
 ]
