@@ -28,4 +28,4 @@ java -version
 
 GRAALVM_HOME=$HOME/.sdkman/candidates/java/current
 
-"$SCRIPT_DIR/../mvnw" -f ../pom.xml package -Pnative -DskipTests=true
+"$SCRIPT_DIR/../mvnw" -f ../pom.xml native:compile -Pnative -DskipTests=true

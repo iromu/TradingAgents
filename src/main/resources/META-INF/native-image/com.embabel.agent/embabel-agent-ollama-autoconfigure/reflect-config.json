@@ -1,0 +1,21 @@
+[
+  {
+    "name": "com.embabel.agent.config.models.ollama.OllamaModelsConfig$ModelResponse",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.embabel.agent.config.models.ollama.OllamaModelsConfig$ModelDetails",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  },
+  {
+    "name": "com.embabel.agent.config.models.ollama.OllamaModelsConfig$Model",
+    "allDeclaredConstructors": true,
+    "allDeclaredMethods": true,
+    "allDeclaredFields": true
+  }
+]
+

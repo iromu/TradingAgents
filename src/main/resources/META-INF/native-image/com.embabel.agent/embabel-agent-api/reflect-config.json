@@ -1,0 +1,25 @@
+[
+  {
+    "name": "com.embabel.agent.domain.io.UserInput",
+    "allPublicConstructors": true,
+    "allDeclaredFields": true,
+    "allPublicMethods": true
+  },
+  {
+    "name": "com.embabel.agent.spi.support.RankedChoiceResponse",
+    "allPublicConstructors": true,
+    "allDeclaredFields": true,
+    "allPublicMethods": true
+  },
+  {
+    "name": "com.embabel.agent.spi.support.RankingsResponse",
+    "allPublicConstructors": true,
+    "allDeclaredFields": true,
+    "allPublicMethods": true
+  },
+  {
+    "name": "com.embabel.agent.rag.tools.RagServiceTools",
+    "allDeclaredMethods": true,
+    "allPublicMethods": true
+  }
+]
