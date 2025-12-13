@@ -39,7 +39,7 @@ public class AlphaVantageService {
     /**
      * API key for Alpha Vantage; injected from application configuration.
      */
-    @Value("${alphavantage.apiKey}")
+    @Value("${alphavantage.apiKey:dummy_key}")
     private String apiKey;
 
     /**
