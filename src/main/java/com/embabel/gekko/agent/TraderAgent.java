@@ -74,6 +74,13 @@ public class TraderAgent {
         }
     }
 
+    public record InvestmentPlan(String judgeDecision, InvestmentDebateState investmentDebateState) implements Report {
+        @Override
+        public String content() {
+            return judgeDecision;
+        }
+    }
+
     public record InvestmentDebateFeedback(String history, String bullHistory, String bearHistory,
                                            String currentResponse,
                                            int count) implements Feedback, Report {
@@ -174,7 +181,6 @@ public class TraderAgent {
         });
     }
 
-    @AchievesGoal(description = "We have a debate")
     @Action
     public InvestmentDebateState debateInvestment(
             Ticker ticker,
@@ -192,7 +198,7 @@ public class TraderAgent {
 
         return RepeatUntilAcceptableBuilder
                 .returning(InvestmentDebateState.class)
-                .withMaxIterations(1)
+                .withMaxIterations(2)
                 .withScoreThreshold(0.9)
                 .withFeedbackClass(InvestmentDebateFeedback.class)
                 .repeating(context -> {
@@ -241,6 +247,18 @@ public class TraderAgent {
                 )
                 .build()
                 .asSubProcess(actionContext, InvestmentDebateState.class);
+
+    }
+
+    @AchievesGoal(description = "We have a result")
+    @Action
+    public InvestmentPlan researchManager(Ticker ticker, InvestmentDebateState investmentDebateState, OperationContext context) {
+        String key = ticker.content() + "_research_manager";
+        return cache.getOrCompute(key, InvestmentPlan.class, () -> new InvestmentPlan(context.ai().withAutoLlm().withId("researchManager")
+                .withTemplate("managers/ResearchManager").createObject(String.class, Map.of(
+                        "past_memory_str", "past_memory_str",
+                        "history", investmentDebateState.history()
+                )), investmentDebateState));
 
     }
 }
