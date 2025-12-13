@@ -38,7 +38,7 @@ public class TickerShellCommands {
         try (Scope ignored = span.makeCurrent()) {
             var output = AgentInvocation
                     .builder(agentPlatform)
-                    .build(TraderAgent.InvestmentDebateState.class)
+                    .build(TraderAgent.InvestmentPlan.class)
                     .invoke(new UserInput(ticker));
             return format(output);
         } finally {
