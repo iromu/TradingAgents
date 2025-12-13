@@ -13,6 +13,7 @@ import com.embabel.gekko.tools.FundamentalDataTools;
 import com.embabel.gekko.tools.NewsDataTools;
 import com.embabel.gekko.util.FileCache;
 import lombok.RequiredArgsConstructor;
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 
@@ -21,6 +22,15 @@ import java.nio.charset.Charset;
 import java.util.Map;
 
 @Agent(description = "Trading Agent")
+@RegisterReflectionForBinding({
+        com.embabel.gekko.agent.TraderAgent.FundamentalsReport.class,
+        com.embabel.gekko.agent.TraderAgent.MarketReport.class,
+        com.embabel.gekko.agent.TraderAgent.NewsReport.class,
+        com.embabel.gekko.agent.TraderAgent.SocialMediaReport.class,
+        com.embabel.gekko.agent.TraderAgent.InvestmentDebateState.class,
+        com.embabel.gekko.agent.TraderAgent.InvestmentDebateFeedback.class,
+        com.embabel.gekko.agent.TraderAgent.Ticker.class
+})
 @RequiredArgsConstructor
 public class TraderAgent {
     @Value("classpath:prompts/analysts/FundamentalsAnalyst.txt")
