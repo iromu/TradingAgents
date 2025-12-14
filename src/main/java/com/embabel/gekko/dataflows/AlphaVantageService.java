@@ -39,14 +39,14 @@ public class AlphaVantageService {
     /**
      * API key for Alpha Vantage; injected from application configuration.
      */
-    @Value("${alphavantage.apiKey:dummy_key}")
+    @Value("${app.alphavantage.api-key:dummy_key}")
     private String apiKey;
 
     /**
      * Directory used to persist cached API responses. Default: {@code data/alphavantage}.
-     * Configurable via {@code alphavantage.cacheDir} property.
+     * Configurable via {@code app.alphavantage.output-directory} property.
      */
-    @Value("${alphavantage.cacheDir:data/alphavantage}")
+    @Value("${app.alphavantage.output-directory:data/alphavantage}")
     private String cacheDir;  // configurable cache directory
 
     private static final String BASE_URL = "https://www.alphavantage.co/query";
