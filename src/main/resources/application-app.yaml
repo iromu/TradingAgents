@@ -1,0 +1,8 @@
+app:
+  alphavantage:
+    output-directory: ./data/alphavantage
+  llm-options:
+    max-concurrency: 8
+    ticker-llm:
+      model: OllamaModels.QWEN2_7B
+    output-directory: ./data
