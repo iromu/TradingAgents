@@ -19,7 +19,12 @@ import org.springframework.core.io.Resource;
 
 import java.io.IOException;
 import java.nio.charset.Charset;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+
+import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
+import static com.embabel.common.ai.model.ModelProvider.CHEAPEST_ROLE;
 
 @Agent(description = "Trading Agent")
 @RegisterReflectionForBinding({
@@ -33,6 +38,7 @@ import java.util.Map;
 })
 @RequiredArgsConstructor
 public class TraderAgent {
+    public static final String NO_PAST_MEMORIES_FOUND = "No past memories found.";
     @Value("classpath:prompts/analysts/FundamentalsAnalyst.txt")
     private Resource promptFundamentalsAnalyst;
     private final FundamentalDataTools fundamentalDataTools;
@@ -48,6 +54,8 @@ public class TraderAgent {
     private Resource promptSocialMediaAnalyst;
 
     private final FileCache cache = new FileCache("data/llm/cache");
+
+    private final TraderAgentConfig config;
 
     public interface Report {
         String content();
@@ -66,7 +74,8 @@ public class TraderAgent {
     public record SocialMediaReport(String content) implements Report {
     }
 
-    public record InvestmentDebateState(String history, String bullHistory, String bearHistory, String currentResponse,
+    public record InvestmentDebateState(List<String> history, List<String> bullHistory, List<String> bearHistory,
+                                        String currentResponse,
                                         int count) implements Report {
         @Override
         public String content() {
@@ -81,7 +90,7 @@ public class TraderAgent {
         }
     }
 
-    public record InvestmentDebateFeedback(String history, String bullHistory, String bearHistory,
+    public record InvestmentDebateFeedback(List<String> history, List<String> bullHistory, List<String> bearHistory,
                                            String currentResponse,
                                            int count) implements Feedback, Report {
         @Override
@@ -101,7 +110,9 @@ public class TraderAgent {
     @Action
     public Ticker extractTicker(UserInput userInput, Ai ai) {
         String key = userInput.getContent() + "_ticker";
-        return cache.getOrCompute(key, Ticker.class, () -> ai.withAutoLlm().withId("extractTicker")
+        return cache.getOrCompute(key, Ticker.class, () -> ai
+                .withLlmByRole(CHEAPEST_ROLE)
+                .withId("extractTicker")
                 .creating(Ticker.class)
                 .fromPrompt("""
                         Extract ticker from this user input:
@@ -115,7 +126,9 @@ public class TraderAgent {
         String key = ticker.content() + "_fundamentals";
         return cache.getOrCompute(key, FundamentalsReport.class, () -> {
             try {
-                return context.ai().withAutoLlm().withId("generateFundamentalsReport")
+                return context.ai()
+                        .withLlmByRole(BEST_ROLE)
+                        .withId("generateFundamentalsReport")
                         .withToolObject(fundamentalDataTools)
                         .withTemplate("analysts/_BaseAnalyst").createObject(FundamentalsReport.class, Map.of(
                                 "tool_names", "get_fundamentals,get_balance_sheet,get_cashflow,get_income_statement",
@@ -133,7 +146,9 @@ public class TraderAgent {
         String key = ticker.content() + "_market";
         return cache.getOrCompute(key, MarketReport.class, () -> {
             try {
-                return context.ai().withAutoLlm().withId("generateMarketReport")
+                return context.ai()
+                        .withLlmByRole(BEST_ROLE)
+                        .withId("generateMarketReport")
                         .withTemplate("analysts/_BaseAnalyst").createObject(MarketReport.class, Map.of(
                                 //"tool_names", "get_stock_data,get_indicators",
                                 "system_message", promptMarketAnalyst.getContentAsString(Charset.defaultCharset()),
@@ -150,7 +165,9 @@ public class TraderAgent {
         String key = ticker.content() + "_news";
         return cache.getOrCompute(key, NewsReport.class, () -> {
             try {
-                return new NewsReport(context.ai().withAutoLlm().withId("generateNewsReport")
+                return new NewsReport(context.ai()
+                        .withLlmByRole(BEST_ROLE)
+                        .withId("generateNewsReport")
                         .withToolObject(newsDataTools)
                         .withTemplate("analysts/_BaseAnalyst").createObject(String.class, Map.of(
                                 "tool_names", "get_news,get_global_news",
@@ -168,7 +185,9 @@ public class TraderAgent {
         String key = ticker.content() + "_social_media";
         return cache.getOrCompute(key, SocialMediaReport.class, () -> {
             try {
-                return new SocialMediaReport(context.ai().withAutoLlm().withId("generateSocialMediaReport")
+                return new SocialMediaReport(context.ai()
+                        .withLlmByRole(BEST_ROLE)
+                        .withId("generateSocialMediaReport")
                         .withToolObject(newsDataTools)
                         .withTemplate("analysts/_BaseAnalyst").createObject(String.class, Map.of(
                                 "tool_names", "get_news",
@@ -190,11 +209,14 @@ public class TraderAgent {
             SocialMediaReport socialMediaReport,
             ActionContext actionContext) {
 
-        var bearResearcherPromptRunner = actionContext.ai().withAutoLlm().withId("bearResearcher")
+        var bearResearcherPromptRunner = actionContext.ai()
+                .withLlmByRole(CHEAPEST_ROLE)
+                .withId("bearResearcher")
                 .withTemplate("researchers/BearResearcher.jinja");
-        var bullResearcherPromptRunner = actionContext.ai().withAutoLlm().withId("bullResearcher")
+        var bullResearcherPromptRunner = actionContext.ai()
+                .withLlmByRole(CHEAPEST_ROLE)
+                .withId("bullResearcher")
                 .withTemplate("researchers/BullResearcher.jinja");
-
 
         return RepeatUntilAcceptableBuilder
                 .returning(InvestmentDebateState.class)
@@ -206,42 +228,46 @@ public class TraderAgent {
                     int count = lastAttempt != null ? lastAttempt.getFeedback().count + 1 : 0;
 
                     return cache.getOrCompute(ticker.content() + "_debate_" + count + "_bear", InvestmentDebateState.class, () -> {
-                        var feedback = lastAttempt != null ? "Bull Analyst: " + lastAttempt.getFeedback().currentResponse : "";
-                        var history = lastAttempt != null ? lastAttempt.getFeedback().history : "";
-                        var bullHistory = lastAttempt != null ? lastAttempt.getFeedback().bullHistory : "";
-                        var bearHistory = lastAttempt != null ? lastAttempt.getFeedback().bearHistory : "";
-                        String argument = "Bear Analyst: " + bearResearcherPromptRunner.createObject(String.class, Map.of(
+                        var feedback = lastAttempt != null ? lastAttempt.getFeedback().currentResponse : "";
+                        var history = lastAttempt != null ? lastAttempt.getFeedback().history : new ArrayList<String>();
+                        var bullHistory = lastAttempt != null ? lastAttempt.getFeedback().bullHistory : new ArrayList<String>();
+                        var bearHistory = lastAttempt != null ? lastAttempt.getFeedback().bearHistory : new ArrayList<String>();
+                        String currentResponse = "#Bear Analyst\n" + bearResearcherPromptRunner.createObject(String.class, Map.of(
                                 "market_research_report", marketReport.content(),
                                 "sentiment_report", socialMediaReport.content(),
                                 "news_report", newsReport.content(),
                                 "fundamentals_report", fundamentalsReport.content(),
-                                "history", history,
-                                // Last bull argument
+                                "history", String.join("\n", history),
+                                // Last bull currentResponse
                                 "current_response", feedback,
-                                "past_memory_str", "past_memory_str"
+                                "past_memory_str", NO_PAST_MEMORIES_FOUND
                         ));
-                        return new InvestmentDebateState(history + "\n" + argument, bullHistory, bearHistory + "\n" + argument, argument, count);
+                        history.add(currentResponse);
+                        bearHistory.add(currentResponse);
+                        return new InvestmentDebateState(history, bullHistory, bearHistory, currentResponse, count);
                     });
                 })
                 .withEvaluator(context -> {
                             InvestmentDebateState resultToEvaluate = context.getResultToEvaluate();
                             int count = resultToEvaluate.count + 1;
                             return cache.getOrCompute(ticker.content() + "_debate_" + count + "_bull", InvestmentDebateFeedback.class, () -> {
-                                String lastBearArgument = resultToEvaluate.currentResponse;
-                                String history = resultToEvaluate.history;
-                                String bullHistory = resultToEvaluate.bullHistory;
-                                String bearHistory = resultToEvaluate.bearHistory;
-                                String argument = "Bull Analyst: " + bullResearcherPromptRunner.createObject(String.class, Map.of(
+                                var lastBearArgument = resultToEvaluate.currentResponse;
+                                var history = resultToEvaluate.history;
+                                var bullHistory = resultToEvaluate.bullHistory;
+                                var bearHistory = resultToEvaluate.bearHistory;
+                                String currentResponse = "#Bull Analyst\n" + bullResearcherPromptRunner.createObject(String.class, Map.of(
                                         "market_research_report", marketReport.content(),
                                         "sentiment_report", socialMediaReport.content(),
                                         "news_report", newsReport.content(),
                                         "fundamentals_report", fundamentalsReport.content(),
-                                        "history", history,
-                                        // Last bear argument
+                                        "history", String.join("\n", history),
+                                        // Last bear currentResponse
                                         "current_response", lastBearArgument,
-                                        "past_memory_str", "past_memory_str"
+                                        "past_memory_str", NO_PAST_MEMORIES_FOUND
                                 ));
-                                return new InvestmentDebateFeedback(history + "\n" + argument, bullHistory + "\n" + argument, bearHistory, argument, count);
+                                history.add(currentResponse);
+                                bullHistory.add(currentResponse);
+                                return new InvestmentDebateFeedback(history, bullHistory, bearHistory, currentResponse, count);
                             });
                         }
                 )
@@ -254,10 +280,12 @@ public class TraderAgent {
     @Action
     public InvestmentPlan researchManager(Ticker ticker, InvestmentDebateState investmentDebateState, OperationContext context) {
         String key = ticker.content() + "_research_manager";
-        return cache.getOrCompute(key, InvestmentPlan.class, () -> new InvestmentPlan(context.ai().withAutoLlm().withId("researchManager")
+        return cache.getOrCompute(key, InvestmentPlan.class, () -> new InvestmentPlan(context.ai()
+                .withLlmByRole(CHEAPEST_ROLE)
+                .withId("researchManager")
                 .withTemplate("managers/ResearchManager").createObject(String.class, Map.of(
-                        "past_memory_str", "past_memory_str",
-                        "history", investmentDebateState.history()
+                        "past_memory_str", NO_PAST_MEMORIES_FOUND,
+                        "history", String.join("\n", investmentDebateState.history())
                 )), investmentDebateState));
 
     }
