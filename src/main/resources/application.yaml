@@ -10,20 +10,21 @@ embabel:
     platform:
       scanning:
         bean: false
+
   models:
-    default-llm: qwen3:14b
+    default-llm: deepseek-r1:8b
     default-embedding-model: nomic-embed-text:latest
     llms:
-      best: qwen3:14b
-      cheapest: qwen3:14b
+      best: qwen3:8b
+      cheapest: deepseek-r1:8b
     embedding-services:
       best: nomic-embed-text:latest
       cheapest: nomic-embed-text:latest
   agent-platform:
     ranking:
-      llm: qwen3:14b
+      llm: deepseek-r1:8b
 
-spring.profiles.active: base,observability,local
+spring.profiles.active: base,app,observability,local
 logging:
   level:
     com.embabel: WARN
