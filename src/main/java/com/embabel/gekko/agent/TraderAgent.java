@@ -9,6 +9,7 @@ import com.embabel.agent.api.common.OperationContext;
 import com.embabel.agent.api.common.workflow.loop.Feedback;
 import com.embabel.agent.api.common.workflow.loop.RepeatUntilAcceptableBuilder;
 import com.embabel.agent.domain.io.UserInput;
+import com.embabel.gekko.config.TraderAgentConfig;
 import com.embabel.gekko.tools.FundamentalDataTools;
 import com.embabel.gekko.tools.NewsDataTools;
 import com.embabel.gekko.util.FileCache;
@@ -126,15 +127,16 @@ public class TraderAgent {
         String key = ticker.content() + "_fundamentals";
         return cache.getOrCompute(key, FundamentalsReport.class, () -> {
             try {
-                return context.ai()
+                return new FundamentalsReport(context.ai()
                         .withLlmByRole(BEST_ROLE)
                         .withId("generateFundamentalsReport")
                         .withToolObject(fundamentalDataTools)
-                        .withTemplate("analysts/_BaseAnalyst").createObject(FundamentalsReport.class, Map.of(
+                        .withTemplate("analysts/_BaseAnalyst")
+                        .createObject(String.class, Map.of(
                                 "tool_names", "get_fundamentals,get_balance_sheet,get_cashflow,get_income_statement",
                                 "system_message", promptFundamentalsAnalyst.getContentAsString(Charset.defaultCharset()),
                                 "ticker", ticker.content().toUpperCase()
-                        ));
+                        )));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -146,14 +148,14 @@ public class TraderAgent {
         String key = ticker.content() + "_market";
         return cache.getOrCompute(key, MarketReport.class, () -> {
             try {
-                return context.ai()
+                return new MarketReport(context.ai()
                         .withLlmByRole(BEST_ROLE)
                         .withId("generateMarketReport")
-                        .withTemplate("analysts/_BaseAnalyst").createObject(MarketReport.class, Map.of(
+                        .withTemplate("analysts/_BaseAnalyst").createObject(String.class, Map.of(
                                 //"tool_names", "get_stock_data,get_indicators",
                                 "system_message", promptMarketAnalyst.getContentAsString(Charset.defaultCharset()),
                                 "ticker", ticker.content().toUpperCase()
-                        ));
+                        )));
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -212,11 +214,11 @@ public class TraderAgent {
         var bearResearcherPromptRunner = actionContext.ai()
                 .withLlmByRole(CHEAPEST_ROLE)
                 .withId("bearResearcher")
-                .withTemplate("researchers/BearResearcher.jinja");
+                .withTemplate("researchers/BearResearcher");
         var bullResearcherPromptRunner = actionContext.ai()
                 .withLlmByRole(CHEAPEST_ROLE)
                 .withId("bullResearcher")
-                .withTemplate("researchers/BullResearcher.jinja");
+                .withTemplate("researchers/BullResearcher");
 
         return RepeatUntilAcceptableBuilder
                 .returning(InvestmentDebateState.class)
@@ -228,16 +230,16 @@ public class TraderAgent {
                     int count = lastAttempt != null ? lastAttempt.getFeedback().count + 1 : 0;
 
                     return cache.getOrCompute(ticker.content() + "_debate_" + count + "_bear", InvestmentDebateState.class, () -> {
-                        var feedback = lastAttempt != null ? lastAttempt.getFeedback().currentResponse : "";
+                        var feedback = lastAttempt != null ? lastAttempt.getFeedback().currentResponse : "No Bull Argument Yet.";
                         var history = lastAttempt != null ? lastAttempt.getFeedback().history : new ArrayList<String>();
                         var bullHistory = lastAttempt != null ? lastAttempt.getFeedback().bullHistory : new ArrayList<String>();
                         var bearHistory = lastAttempt != null ? lastAttempt.getFeedback().bearHistory : new ArrayList<String>();
-                        String currentResponse = "#Bear Analyst\n" + bearResearcherPromptRunner.createObject(String.class, Map.of(
+                        String currentResponse = "# Bear Analyst\n" + bearResearcherPromptRunner.createObject(String.class, Map.of(
                                 "market_research_report", marketReport.content(),
                                 "sentiment_report", socialMediaReport.content(),
                                 "news_report", newsReport.content(),
                                 "fundamentals_report", fundamentalsReport.content(),
-                                "history", String.join("\n", history),
+                                "history", history.isEmpty() ? "No history yet." : String.join("\n", history),
                                 // Last bull currentResponse
                                 "current_response", feedback,
                                 "past_memory_str", NO_PAST_MEMORIES_FOUND
@@ -255,7 +257,7 @@ public class TraderAgent {
                                 var history = resultToEvaluate.history;
                                 var bullHistory = resultToEvaluate.bullHistory;
                                 var bearHistory = resultToEvaluate.bearHistory;
-                                String currentResponse = "#Bull Analyst\n" + bullResearcherPromptRunner.createObject(String.class, Map.of(
+                                String currentResponse = "# Bull Analyst\n" + bullResearcherPromptRunner.createObject(String.class, Map.of(
                                         "market_research_report", marketReport.content(),
                                         "sentiment_report", socialMediaReport.content(),
                                         "news_report", newsReport.content(),
