@@ -32,18 +32,23 @@ public class TickerShellCommands {
             @ShellOption(help = "Enter the ticker symbol to analyse", value = "ticker", defaultValue = "SPY") String ticker) {
 
         Span span = tracer.spanBuilder("user-interaction")
-//                .setAttribute("langfuse.user.id", userId)
+                .setAttribute("langfuse.user.id", "Gekko")
                 .setAttribute("langfuse.session.id", UUID.randomUUID().toString())
                 .startSpan();
         try (Scope ignored = span.makeCurrent()) {
-            var output = AgentInvocation
-                    .builder(agentPlatform)
-                    .build(TraderAgent.InvestmentPlan.class)
-                    .invoke(new UserInput(ticker));
+            var output = performAiOperation(ticker);
             return format(output);
         } finally {
             span.end();
         }
+    }
+
+    private TraderAgent.InvestmentPlan performAiOperation(String ticker) {
+        var output = AgentInvocation
+                .builder(agentPlatform)
+                .build(TraderAgent.InvestmentPlan.class)
+                .invoke(new UserInput(ticker));
+        return output;
     }
 
     // Use JSON pretty printer to format the result
