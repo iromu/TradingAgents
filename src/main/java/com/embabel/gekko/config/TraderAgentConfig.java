@@ -1,4 +1,4 @@
-package com.embabel.gekko.agent;
+package com.embabel.gekko.config;
 
 import com.embabel.agent.prompt.persona.RoleGoalBackstory;
 import com.embabel.common.ai.model.LlmOptions;
