@@ -1,0 +1,19 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{common/layout :: layout(~{::title}, ~{::section}, ~{common/fragments/empty :: empty})}">
+<head>
+    <title>Embabel Trading Agent</title>
+</head>
+<body>
+<section>
+    <h2>Embabel Trading Agent</h2>
+    <form action="/plan" method="post" th:object="${ticker}">
+        <div class="form-group">
+            <label for="content">Ticker</label>
+            <textarea id="content" name="content" rows="3" cols="40" th:field="*{content}" required></textarea>
+        </div>
+        <button class="submit-btn" type="submit" style="margin-top: 20px;">Execute Agent Plan</button>
+    </form>
+
+</section>
+</body>
+</html>

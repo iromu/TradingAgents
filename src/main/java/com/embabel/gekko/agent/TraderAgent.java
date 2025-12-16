@@ -13,6 +13,7 @@ import com.embabel.gekko.config.TraderAgentConfig;
 import com.embabel.gekko.tools.FundamentalDataTools;
 import com.embabel.gekko.tools.NewsDataTools;
 import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.web.TradingHtmxController;
 import lombok.RequiredArgsConstructor;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.beans.factory.annotation.Value;
@@ -108,8 +109,8 @@ public class TraderAgent {
     public record Ticker(String content) {
     }
 
-    @Action
-    public Ticker extractTicker(UserInput userInput, Ai ai) {
+    @Action(description = "Convert user input to Ticker object")
+    public Ticker tickerFromUserInput(UserInput userInput, Ai ai) {
         String key = userInput.getContent() + "_ticker";
         return cache.getOrCompute(key, Ticker.class, () -> ai
                 .withLlmByRole(CHEAPEST_ROLE)
@@ -121,7 +122,12 @@ public class TraderAgent {
                         """.formatted(userInput.getContent())));
     }
 
-    @Action
+    @Action(description = "Convert form input to Ticker object")
+    public Ticker tickerFromForm(TradingHtmxController.TickerForm tickerForm) {
+        return new Ticker(tickerForm.getContent());
+    }
+
+    @Action(description = "Generate Fundamentals Report")
     public FundamentalsReport generateFundamentalsReport(Ticker ticker, OperationContext context) {
 
         String key = ticker.content() + "_fundamentals";
@@ -143,7 +149,7 @@ public class TraderAgent {
         });
     }
 
-    @Action
+    @Action(description = "Generate Market Report")
     public MarketReport generateMarketReport(Ticker ticker, OperationContext context) {
         String key = ticker.content() + "_market";
         return cache.getOrCompute(key, MarketReport.class, () -> {
@@ -162,7 +168,7 @@ public class TraderAgent {
         });
     }
 
-    @Action
+    @Action(description = "Generate News Report")
     public NewsReport generateNewsReport(Ticker ticker, OperationContext context) {
         String key = ticker.content() + "_news";
         return cache.getOrCompute(key, NewsReport.class, () -> {
@@ -182,7 +188,7 @@ public class TraderAgent {
         });
     }
 
-    @Action
+    @Action(description = "Generate Social Media Report")
     public SocialMediaReport generateSocialMediaReport(Ticker ticker, OperationContext context) {
         String key = ticker.content() + "_social_media";
         return cache.getOrCompute(key, SocialMediaReport.class, () -> {
@@ -202,7 +208,7 @@ public class TraderAgent {
         });
     }
 
-    @Action
+    @Action(description = "Debate Investment")
     public InvestmentDebateState debateInvestment(
             Ticker ticker,
             FundamentalsReport fundamentalsReport,
@@ -279,7 +285,7 @@ public class TraderAgent {
     }
 
     @AchievesGoal(description = "We have a result")
-    @Action
+    @Action(description = "Research Manager to make final investment plan")
     public InvestmentPlan researchManager(Ticker ticker, InvestmentDebateState investmentDebateState, OperationContext context) {
         String key = ticker.content() + "_research_manager";
         return cache.getOrCompute(key, InvestmentPlan.class, () -> new InvestmentPlan(context.ai()

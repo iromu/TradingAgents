@@ -18,17 +18,17 @@ embabel:
         bean: false
 
   models:
-    default-llm: deepseek-r1:8b
+    default-llm: ministral-3:14b
     default-embedding-model: nomic-embed-text:latest
     llms:
-      best: qwen3:8b
-      cheapest: deepseek-r1:8b
+      best: ministral-3:14b
+      cheapest: ministral-3:3b
     embedding-services:
       best: nomic-embed-text:latest
       cheapest: nomic-embed-text:latest
   agent-platform:
     ranking:
-      llm: deepseek-r1:8b
+      llm: ministral-3:3b
 
 spring.profiles.active: base,app,observability,local
 logging:
