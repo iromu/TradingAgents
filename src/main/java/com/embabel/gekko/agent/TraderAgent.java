@@ -7,6 +7,7 @@ import com.embabel.agent.api.common.ActionContext;
 import com.embabel.agent.api.common.Ai;
 import com.embabel.agent.api.common.OperationContext;
 import com.embabel.agent.api.common.workflow.loop.Feedback;
+import com.embabel.agent.api.common.workflow.loop.RepeatUntilBuilder;
 import com.embabel.agent.domain.io.UserInput;
 import com.embabel.gekko.config.TraderAgentConfig;
 import com.embabel.gekko.tools.FundamentalDataTools;
@@ -210,99 +211,88 @@ public class TraderAgent {
     @Action(description = "Debate Investment")
     public InvestmentDebateState debateInvestment(
             Ticker ticker,
-            FundamentalsReport fundamentalsReport,
-            MarketReport marketReport,
-            NewsReport newsReport,
-            SocialMediaReport socialMediaReport,
+            FundamentalsReport fundamentals,
+            MarketReport market,
+            NewsReport news,
+            SocialMediaReport social,
             ActionContext actionContext) {
 
-        var bullResearcher = actionContext.ai()
-                .withLlmByRole(CHEAPEST_ROLE)
-                .withId("bullResearcher")
-                .withTemplate("researchers/BullResearcher");
+        return RepeatUntilBuilder
+                .returning(InvestmentDebateState.class)
+                .withMaxIterations(2) // 2 rounds of Bull→Bear
+                .repeating(context -> {
 
-        var bearResearcher = actionContext.ai()
-                .withLlmByRole(CHEAPEST_ROLE)
-                .withId("bearResearcher")
-                .withTemplate("researchers/BearResearcher");
+                    InvestmentDebateState last = context.lastAttempt() != null ? context.lastAttempt() : null;
 
-        List<String> history = new ArrayList<>();
-        List<String> bullHistory = new ArrayList<>();
-        List<String> bearHistory = new ArrayList<>();
+                    List<String> history = last != null ? last.history() : new ArrayList<>();
+                    List<String> bullHistory = last != null ? last.bullHistory() : new ArrayList<>();
+                    List<String> bearHistory = last != null ? last.bearHistory() : new ArrayList<>();
+                    String currentResponse = last != null ? last.currentResponse() : "No argument yet.";
+                    int count = last != null ? last.count() : 0;
 
-        String currentResponse = "No argument yet.";
-        int count = 0;
+                    // ======================
+                    // 🟢 BULL TURN
+                    // ======================
+                    int bullCount = count++;
+                    String bullKey = ticker.content() + "_debate_" + bullCount + "_bull";
 
-        int maxRounds = 2; // Bull → Bear repeated twice
-
-        for (int round = 0; round < maxRounds; round++) {
-
-            // ======================
-            // 🟢 BULL TURN
-            // ======================
-            int bullCount = count++;
-            String bullKey = ticker.content() + "_debate_" + bullCount + "_bull";
-
-            String finalCurrentResponse1 = currentResponse;
-            String bullResponse = cache.getOrCompute(
-                    bullKey,
-                    String.class,
-                    () -> "# Bull Analyst\n" + bullResearcher.createObject(
+                    String finalCurrentResponse = currentResponse;
+                    String bullResponse = cache.getOrCompute(
+                            bullKey,
                             String.class,
-                            Map.of(
-                                    "market_research_report", marketReport.content(),
-                                    "sentiment_report", socialMediaReport.content(),
-                                    "news_report", newsReport.content(),
-                                    "fundamentals_report", fundamentalsReport.content(),
-                                    "history", history.isEmpty()
-                                            ? "No history yet."
-                                            : String.join("\n", history),
-                                    "current_response", finalCurrentResponse1,
-                                    "past_memory_str", NO_PAST_MEMORIES_FOUND
-                            )
-                    )
-            );
+                            () -> "# Bull Analyst\n" + actionContext.ai()
+                                    .withLlmByRole(CHEAPEST_ROLE)
+                                    .withId("bullResearcher")
+                                    .withTemplate("researchers/BullResearcher")
+                                    .createObject(String.class, Map.of(
+                                            "market_research_report", market.content(),
+                                            "sentiment_report", social.content(),
+                                            "news_report", news.content(),
+                                            "fundamentals_report", fundamentals.content(),
+                                            "history", history.isEmpty() ? "No history yet." : String.join("\n", history),
+                                            "current_response", finalCurrentResponse,
+                                            "past_memory_str", TraderAgent.NO_PAST_MEMORIES_FOUND
+                                    ))
+                    );
 
-            history.add(bullResponse);
-            bullHistory.add(bullResponse);
-            currentResponse = bullResponse;
+                    history.add(bullResponse);
+                    bullHistory.add(bullResponse);
+                    currentResponse = bullResponse;
 
-            // ======================
-            // 🔴 BEAR TURN
-            // ======================
-            int bearCount = count++;
-            String bearKey = ticker.content() + "_debate_" + bearCount + "_bear";
+                    // ======================
+                    // 🔴 BEAR TURN
+                    // ======================
+                    int bearCount = count++;
+                    String bearKey = ticker.content() + "_debate_" + bearCount + "_bear";
 
-            String finalCurrentResponse = currentResponse;
-            String bearResponse = cache.getOrCompute(
-                    bearKey,
-                    String.class,
-                    () -> "# Bear Analyst\n" + bearResearcher.createObject(
+                    String finalCurrentResponse1 = currentResponse;
+                    String bearResponse = cache.getOrCompute(
+                            bearKey,
                             String.class,
-                            Map.of(
-                                    "market_research_report", marketReport.content(),
-                                    "sentiment_report", socialMediaReport.content(),
-                                    "news_report", newsReport.content(),
-                                    "fundamentals_report", fundamentalsReport.content(),
-                                    "history", String.join("\n", history),
-                                    "current_response", finalCurrentResponse,
-                                    "past_memory_str", NO_PAST_MEMORIES_FOUND
-                            )
-                    )
-            );
+                            () -> "# Bear Analyst\n" + actionContext.ai()
+                                    .withLlmByRole(CHEAPEST_ROLE)
+                                    .withId("bearResearcher")
+                                    .withTemplate("researchers/BearResearcher")
+                                    .createObject(String.class, Map.of(
+                                            "market_research_report", market.content(),
+                                            "sentiment_report", social.content(),
+                                            "news_report", news.content(),
+                                            "fundamentals_report", fundamentals.content(),
+                                            "history", String.join("\n", history),
+                                            "current_response", finalCurrentResponse1,
+                                            "past_memory_str", TraderAgent.NO_PAST_MEMORIES_FOUND
+                                    ))
+                    );
 
-            history.add(bearResponse);
-            bearHistory.add(bearResponse);
-            currentResponse = bearResponse;
-        }
+                    history.add(bearResponse);
+                    bearHistory.add(bearResponse);
+                    currentResponse = bearResponse;
 
-        return new InvestmentDebateState(
-                history,
-                bullHistory,
-                bearHistory,
-                currentResponse,
-                count
-        );
+                    // Return updated debate state for next iteration
+                    return new InvestmentDebateState(history, bullHistory, bearHistory, currentResponse, count);
+                }).until((_) -> false)
+                .build()
+                .asSubProcess(actionContext, InvestmentDebateState.class);
     }
 
 
