@@ -36,10 +36,10 @@ import static com.embabel.common.ai.model.ModelProvider.CHEAPEST_ROLE;
 
 @Agent(description = "Trading Agent")
 @RegisterReflectionForBinding({
-        com.embabel.gekko.agent.TraderAgent.FundamentalsReport.class,
-        com.embabel.gekko.agent.TraderAgent.MarketReport.class,
-        com.embabel.gekko.agent.TraderAgent.NewsReport.class,
-        com.embabel.gekko.agent.TraderAgent.SocialMediaReport.class,
+        com.embabel.gekko.domain.Analysts.FundamentalsReport.class,
+        com.embabel.gekko.domain.Analysts.MarketReport.class,
+        com.embabel.gekko.domain.Analysts.NewsReport.class,
+        com.embabel.gekko.domain.Analysts.SocialMediaReport.class,
         com.embabel.gekko.agent.TraderAgent.InvestmentDebateState.class,
         com.embabel.gekko.agent.TraderAgent.InvestmentDebateFeedback.class,
         com.embabel.gekko.agent.TraderAgent.Ticker.class
