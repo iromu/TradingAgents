@@ -82,8 +82,7 @@ public class IndicatorMapper {
                 return new ATRIndicator(series, 14);
 
             case "boll":
-                SMAIndicator sma20 = new SMAIndicator(close, 20);
-                return sma20; // middle line; upper/lower bands can be built elsewhere
+                return new SMAIndicator(close, 20); // middle line; upper/lower bands can be built elsewhere
 
             // Add other indicators here...
 

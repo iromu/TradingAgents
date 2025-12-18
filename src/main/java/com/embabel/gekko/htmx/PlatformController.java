@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/platform")
 public class PlatformController {
 
+    @SuppressWarnings("SameReturnValue")
     @GetMapping
     public String home() {
         return "common/platform";

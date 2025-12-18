@@ -251,7 +251,9 @@ public class AlphaVantageService {
             String url = builder.toUriString();
             String response = restTemplate.getForObject(url, String.class);
 
-            Files.writeString(cacheFile.toPath(), response);
+            if (response != null) {
+                Files.writeString(cacheFile.toPath(), response);
+            }
 
             return response;
 

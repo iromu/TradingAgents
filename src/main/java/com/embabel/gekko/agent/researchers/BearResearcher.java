@@ -2,6 +2,10 @@ package com.embabel.gekko.agent.researchers;
 
 import com.embabel.agent.api.common.ActionContext;
 import com.embabel.gekko.agent.TraderAgent;
+import com.embabel.gekko.domain.Analysts.FundamentalsReport;
+import com.embabel.gekko.domain.Analysts.MarketReport;
+import com.embabel.gekko.domain.Analysts.NewsReport;
+import com.embabel.gekko.domain.Analysts.SocialMediaReport;
 import com.embabel.gekko.util.FileCache;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -18,14 +22,14 @@ public class BearResearcher {
     private final FileCache cache;
 
     public String argue(
-            TraderAgent.FundamentalsReport fundamentals,
-            TraderAgent.MarketReport market,
-            TraderAgent.NewsReport news,
-            TraderAgent.SocialMediaReport social,
+            FundamentalsReport fundamentals,
+            MarketReport market,
+            NewsReport news,
+            SocialMediaReport social,
             List<String> history,
             ActionContext actionContext
     ) {
-        String previousResponse = history.isEmpty() ? "No argument yet." : history.get(history.size() - 1);
+        String previousResponse = history.isEmpty() ? "No argument yet." : history.getLast();
 
         return "# Bear Analyst\n" + actionContext.ai()
                 .withLlmByRole(CHEAPEST_ROLE)

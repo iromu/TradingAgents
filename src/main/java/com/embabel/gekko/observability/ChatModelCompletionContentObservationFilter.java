@@ -78,19 +78,6 @@ public class ChatModelCompletionContentObservationFilter implements ObservationF
         });
 
         // Agent Name (disabled)
-//        chatModelObservationContext.addHighCardinalityKeyValue(new KeyValue() {
-//            @Override
-//            public String getKey() {
-//                return "gen_ai.agent_name";
-//            }
-//
-//            @Override
-//            public String getValue() {
-//                return chatModelObservationContext.getRequest() != null
-//                        ? chatModelObservationContext.getRequest().getInstructions().toString()
-//                        : "unknown";
-//            }
-//        });
         return chatModelObservationContext;
     }
 

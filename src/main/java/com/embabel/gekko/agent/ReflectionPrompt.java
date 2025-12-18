@@ -8,7 +8,7 @@ public class ReflectionPrompt implements PromptContributor {
     @Override
     public String contribution() {
         return """
-                You are an expert financial analyst tasked with reviewing trading decisions/analysis and providing a comprehensive, step-by-step analysis. 
+                You are an expert financial analyst tasked with reviewing trading decisions/analysis and providing a comprehensive, step-by-step analysis.
                 Your goal is to deliver detailed insights into investment decisions and highlight opportunities for improvement, adhering strictly to the following guidelines:
                 
                 1. Reasoning:
@@ -18,7 +18,7 @@ public class ReflectionPrompt implements PromptContributor {
                      - Technical indicators.
                      - Technical signals.
                      - Price movement analysis.
-                     - Overall market data analysis 
+                     - Overall market data analysis
                      - News analysis.
                      - Social media and sentiment analysis.
                      - Fundamental data analysis.

@@ -12,6 +12,10 @@ import com.embabel.agent.domain.io.UserInput;
 import com.embabel.gekko.agent.researchers.BearResearcher;
 import com.embabel.gekko.agent.researchers.BullResearcher;
 import com.embabel.gekko.config.TraderAgentConfig;
+import com.embabel.gekko.domain.Analysts.FundamentalsReport;
+import com.embabel.gekko.domain.Analysts.MarketReport;
+import com.embabel.gekko.domain.Analysts.NewsReport;
+import com.embabel.gekko.domain.Analysts.SocialMediaReport;
 import com.embabel.gekko.tools.FundamentalDataTools;
 import com.embabel.gekko.tools.NewsDataTools;
 import com.embabel.gekko.util.FileCache;
@@ -67,18 +71,7 @@ public class TraderAgent {
         String content();
     }
 
-    public record FundamentalsReport(String content) implements Report {
-    }
 
-    public record MarketReport(String content) implements Report {
-    }
-
-
-    public record NewsReport(String content) implements Report {
-    }
-
-    public record SocialMediaReport(String content) implements Report {
-    }
 
     public record InvestmentDebateState(List<String> history, List<String> bullHistory, List<String> bearHistory,
                                         String currentResponse,
@@ -215,10 +208,10 @@ public class TraderAgent {
     @Action(description = "Debate Investment using Bull and Bear subagents")
     public TraderAgent.InvestmentDebateState debateInvestment(
             TraderAgent.Ticker ticker,
-            TraderAgent.FundamentalsReport fundamentals,
-            TraderAgent.MarketReport market,
-            TraderAgent.NewsReport news,
-            TraderAgent.SocialMediaReport social,
+            FundamentalsReport fundamentals,
+            MarketReport market,
+            NewsReport news,
+            SocialMediaReport social,
             ActionContext actionContext
     ) {
 
