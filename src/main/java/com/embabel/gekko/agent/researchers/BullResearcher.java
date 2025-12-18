@@ -18,33 +18,27 @@ public class BullResearcher {
     private final FileCache cache;
 
     public String argue(
-            TraderAgent.Ticker ticker,
             TraderAgent.FundamentalsReport fundamentals,
             TraderAgent.MarketReport market,
             TraderAgent.NewsReport news,
             TraderAgent.SocialMediaReport social,
             List<String> history,
-            ActionContext actionContext,
-            int round
+            ActionContext actionContext
     ) {
-        String key = "%s_debate_%d_bull".formatted(ticker.content(), round);
-
         String previousResponse = history.isEmpty() ? "No argument yet." : history.get(history.size() - 1);
 
-        return cache.getOrCompute(key, String.class, () ->
-                "# Bull Analyst\n" + actionContext.ai()
-                        .withLlmByRole(CHEAPEST_ROLE)
-                        .withId("bullResearcher")
-                        .withTemplate("researchers/BullResearcher")
-                        .createObject(String.class, Map.of(
-                                "market_research_report", market.content(),
-                                "sentiment_report", social.content(),
-                                "news_report", news.content(),
-                                "fundamentals_report", fundamentals.content(),
-                                "history", history.isEmpty() ? "No history yet." : String.join("\n", history),
-                                "current_response", previousResponse,
-                                "past_memory_str", TraderAgent.NO_PAST_MEMORIES_FOUND
-                        ))
-        );
+        return "# Bull Analyst\n" + actionContext.ai()
+                .withLlmByRole(CHEAPEST_ROLE)
+                .withId("bullResearcher")
+                .withTemplate("researchers/BullResearcher")
+                .createObject(String.class, Map.of(
+                        "market_research_report", market.content(),
+                        "sentiment_report", social.content(),
+                        "news_report", news.content(),
+                        "fundamentals_report", fundamentals.content(),
+                        "history", history.isEmpty() ? "No history yet." : String.join("\n", history),
+                        "current_response", previousResponse,
+                        "past_memory_str", TraderAgent.NO_PAST_MEMORIES_FOUND
+                ));
     }
 }

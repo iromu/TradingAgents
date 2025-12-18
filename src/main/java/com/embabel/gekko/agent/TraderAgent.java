@@ -234,12 +234,20 @@ public class TraderAgent {
                     int count = last != null ? last.count() : 0;
 
                     // Bull turn
-                    String bullResponse = bullAgent.argue(ticker, fundamentals, market, news, social, history, actionContext, count++);
+                    String bullResponse = cache.getOrCompute(
+                            "%s_debate_%d_%s".formatted(ticker.content(), count++, "bull"),
+                            String.class,
+                            () -> bullAgent.argue(fundamentals, market, news, social, history, actionContext)
+                    );
                     history.add(bullResponse);
                     bullHistory.add(bullResponse);
 
                     // Bear turn
-                    String bearResponse = bearAgent.argue(ticker, fundamentals, market, news, social, history, actionContext, count++);
+                    String bearResponse = cache.getOrCompute(
+                            "%s_debate_%d_%s".formatted(ticker.content(), count++, "bear"),
+                            String.class,
+                            () -> bearAgent.argue(fundamentals, market, news, social, history, actionContext)
+                    );
                     history.add(bearResponse);
                     bearHistory.add(bearResponse);
 
