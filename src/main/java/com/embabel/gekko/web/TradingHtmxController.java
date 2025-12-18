@@ -5,7 +5,7 @@ import com.embabel.agent.core.Budget;
 import com.embabel.agent.core.ProcessOptions;
 import com.embabel.agent.core.Verbosity;
 import com.embabel.gekko.htmx.GenericProcessingValues;
-import lombok.Getter;
+import lombok.Data;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -27,16 +27,16 @@ public class TradingHtmxController {
        Form DTOs
        ======================= */
 
-    @Getter
+    @Data
     public static class TickerForm {
-        private final String content = "NVDA";
+        private final String content;
 
     }
 
     @SuppressWarnings("SameReturnValue")
     @GetMapping
     public String showPlanForm(Model model) {
-        model.addAttribute("ticker", new TickerForm());
+        model.addAttribute("ticker", new TickerForm("NVDA"));
         return "form";
     }
 
