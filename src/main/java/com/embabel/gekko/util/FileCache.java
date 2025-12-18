@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -16,13 +17,14 @@ import java.util.Optional;
 import java.util.function.Supplier;
 
 @Slf4j
+@Component
 public class FileCache {
 
     private final File baseDir;
     private final ObjectMapper mapper;
 
-    public FileCache(String dir) {
-        this.baseDir = new File(dir);
+    public FileCache() {
+        this.baseDir = new File("data/llm/cache");
         if (!baseDir.exists()) baseDir.mkdirs();
 
         this.mapper = new ObjectMapper()
@@ -75,28 +77,17 @@ public class FileCache {
 
     public void save(String key, Object value) {
         try {
-            mapper.writeValue(fileForKey(key), value);
-
             // Also write Markdown if the object is a Report
             if (value instanceof TraderAgent.Report report) {
-                saveMarkdown(key, report);
-            }
-            if (value instanceof String string) {
+                mapper.writeValue(fileForKey(key), value);
+                saveMarkdown(key, report.content());
+            } else if (value instanceof String string) {
                 saveMarkdown(key, string);
-            }
+            } else
+                mapper.writeValue(fileForKey(key), value);
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException(e);
-        }
-    }
-
-    private void saveMarkdown(String key, TraderAgent.Report report) throws IOException {
-        File mdFile = fileForMarkdown(key);
-
-        String markdown = reportToMarkdown(report);
-
-        try (FileWriter fw = new FileWriter(mdFile, StandardCharsets.UTF_8)) {
-            fw.write(markdown);
         }
     }
 
@@ -106,10 +97,6 @@ public class FileCache {
         try (FileWriter fw = new FileWriter(mdFile, StandardCharsets.UTF_8)) {
             fw.write(markdown);
         }
-    }
-
-    private String reportToMarkdown(TraderAgent.Report report) {
-        return report.content();
     }
 
 }
