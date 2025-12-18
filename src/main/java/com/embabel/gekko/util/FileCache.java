@@ -1,6 +1,5 @@
 package com.embabel.gekko.util;
 
-
 import com.embabel.gekko.agent.TraderAgent;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,6 +11,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
 import java.security.MessageDigest;
 import java.util.Optional;
 import java.util.function.Supplier;
@@ -45,26 +45,26 @@ public class FileCache {
         }
     }
 
-    private File fileForKey(String key) {
-//        return new File(baseDir, hashKey(key) + ".json");
-        return new File(baseDir, key.toUpperCase() + ".json");
-    }
-
-    private File fileForMarkdown(String key) {
-//        return new File(baseDir, hashKey(key) + ".md");
-        return new File(baseDir, key.toUpperCase() + ".md");
+    private File fileForKey(String key, String extension) {
+        return new File(baseDir, key.toUpperCase() + extension);
     }
 
     public <T> Optional<T> get(String key, Class<T> clazz) {
-        File f = fileForKey(key);
-        if (!f.exists()) return Optional.empty();
+        File jsonFile = fileForKey(key, ".json");
+        File mdFile = fileForKey(key, ".md");
 
         try {
-            return Optional.of(mapper.readValue(f, clazz));
+            if (jsonFile.exists()) {
+                return Optional.of(mapper.readValue(jsonFile, clazz));
+            } else if (mdFile.exists()) {
+                String content = Files.readString(mdFile.toPath(), StandardCharsets.UTF_8);
+                return Optional.of(clazz.cast(content));
+            }
         } catch (IOException ex) {
-            log.error(ex.getMessage(), ex);
-            return Optional.empty();
+            log.error("Failed to read cache for key {}: {}", key, ex.getMessage(), ex);
         }
+
+        return Optional.empty();
     }
 
     public <T> T getOrCompute(String key, Class<T> clazz, Supplier<T> supplier) {
@@ -77,26 +77,24 @@ public class FileCache {
 
     public void save(String key, Object value) {
         try {
-            // Also write Markdown if the object is a Report
             if (value instanceof TraderAgent.Report report) {
-                mapper.writeValue(fileForKey(key), value);
+                mapper.writeValue(fileForKey(key, ".json"), value);
                 saveMarkdown(key, report.content());
             } else if (value instanceof String string) {
                 saveMarkdown(key, string);
-            } else
-                mapper.writeValue(fileForKey(key), value);
+            } else {
+                mapper.writeValue(fileForKey(key, ".json"), value);
+            }
         } catch (IOException e) {
-            log.error(e.getMessage(), e);
+            log.error("Failed to save cache for key {}: {}", key, e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }
 
     private void saveMarkdown(String key, String markdown) throws IOException {
-        File mdFile = fileForMarkdown(key);
-
+        File mdFile = fileForKey(key, ".md");
         try (FileWriter fw = new FileWriter(mdFile, StandardCharsets.UTF_8)) {
             fw.write(markdown);
         }
     }
-
 }
