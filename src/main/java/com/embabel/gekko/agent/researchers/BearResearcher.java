@@ -1,0 +1,50 @@
+package com.embabel.gekko.agent.researchers;
+
+import com.embabel.agent.api.common.ActionContext;
+import com.embabel.gekko.agent.TraderAgent;
+import com.embabel.gekko.util.FileCache;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
+
+import static com.embabel.common.ai.model.ModelProvider.CHEAPEST_ROLE;
+
+@Component
+@RequiredArgsConstructor
+public class BearResearcher {
+
+    private final FileCache cache;
+
+    public String argue(
+            TraderAgent.Ticker ticker,
+            TraderAgent.FundamentalsReport fundamentals,
+            TraderAgent.MarketReport market,
+            TraderAgent.NewsReport news,
+            TraderAgent.SocialMediaReport social,
+            List<String> history,
+            ActionContext actionContext,
+            int round
+    ) {
+        String key = "%s_debate_%d_bear".formatted(ticker.content(), round);
+
+        String previousResponse = history.isEmpty() ? "No argument yet." : history.get(history.size() - 1);
+
+        return cache.getOrCompute(key, String.class, () ->
+                "# Bear Analyst\n" + actionContext.ai()
+                        .withLlmByRole(CHEAPEST_ROLE)
+                        .withId("bearResearcher")
+                        .withTemplate("researchers/BearResearcher")
+                        .createObject(String.class, Map.of(
+                                "market_research_report", market.content(),
+                                "sentiment_report", social.content(),
+                                "news_report", news.content(),
+                                "fundamentals_report", fundamentals.content(),
+                                "history", history.isEmpty() ? "No history yet." : String.join("\n", history),
+                                "current_response", previousResponse,
+                                "past_memory_str", TraderAgent.NO_PAST_MEMORIES_FOUND
+                        ))
+        );
+    }
+}
