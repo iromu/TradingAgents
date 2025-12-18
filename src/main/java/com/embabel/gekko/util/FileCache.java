@@ -81,6 +81,9 @@ public class FileCache {
             if (value instanceof TraderAgent.Report report) {
                 saveMarkdown(key, report);
             }
+            if (value instanceof String string) {
+                saveMarkdown(key, string);
+            }
         } catch (IOException e) {
             log.error(e.getMessage(), e);
             throw new RuntimeException(e);
@@ -91,6 +94,14 @@ public class FileCache {
         File mdFile = fileForMarkdown(key);
 
         String markdown = reportToMarkdown(report);
+
+        try (FileWriter fw = new FileWriter(mdFile, StandardCharsets.UTF_8)) {
+            fw.write(markdown);
+        }
+    }
+
+    private void saveMarkdown(String key, String markdown) throws IOException {
+        File mdFile = fileForMarkdown(key);
 
         try (FileWriter fw = new FileWriter(mdFile, StandardCharsets.UTF_8)) {
             fw.write(markdown);
