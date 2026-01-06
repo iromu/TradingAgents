@@ -1,16 +1,17 @@
 <component name="ProjectRunConfigurationManager">
-    <configuration default="false" name="GekkoApplication" type="SpringBootApplicationConfigurationType"
-                   factoryName="Spring Boot" nameIsGenerated="true">
-        <module name="Gekko"/>
-        <option name="SPRING_BOOT_MAIN_CLASS" value="com.embabel.gekko.GekkoApplication"/>
-        <extension name="coverage">
-            <pattern>
-                <option name="PATTERN" value="com.embabel.gekko.*"/>
-                <option name="ENABLED" value="true"/>
-            </pattern>
-        </extension>
-        <method v="2">
-            <option name="Make" enabled="true"/>
-        </method>
-    </configuration>
+  <configuration default="false" name="GekkoApplication" type="SpringBootApplicationConfigurationType"
+                 factoryName="Spring Boot" nameIsGenerated="true">
+    <option name="ALTERNATIVE_JRE_PATH" value="25"/>
+    <module name="gekko"/>
+    <option name="SPRING_BOOT_MAIN_CLASS" value="com.embabel.gekko.GekkoApplication"/>
+    <extension name="coverage">
+      <pattern>
+        <option name="PATTERN" value="com.embabel.gekko.*"/>
+        <option name="ENABLED" value="true"/>
+      </pattern>
+    </extension>
+    <method v="2">
+      <option name="Make" enabled="true"/>
+    </method>
+  </configuration>
 </component>
