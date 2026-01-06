@@ -1,0 +1,484 @@
+{
+  "items": "13",
+  "sentiment_score_definition": "x <= -0.35: Bearish; -0.35 < x <= -0.15: Somewhat-Bearish; -0.15 < x < 0.15: Neutral; 0.15 <= x < 0.35: Somewhat_Bullish; x >= 0.35: Bullish",
+  "relevance_score_definition": "0 < x <= 1, with a higher score indicating higher relevance.",
+  "feed": [
+    {
+      "title": "DZ BANK AG Deutsche Zentral Genossenschafts Bank Frankfurt am Main Purchases 794,674 Shares of Deutsche Bank Aktiengesellschaft $DB",
+      "url": "https://www.marketbeat.com/instant-alerts/filing-dz-bank-ag-deutsche-zentral-genossenschafts-bank-frankfurt-am-main-purchases-794674-shares-of-deutsche-bank-aktiengesellschaft-db-2025-12-12/",
+      "time_published": "20251212T050912",
+      "authors": [
+        "MarketBeat"
+      ],
+      "summary": "DZ BANK AG Deutsche Zentral Genossenschafts Bank Frankfurt am Main increased its stake in Deutsche Bank Aktiengesellschaft during the second quarter by purchasing 794,674 shares, bringing its total holdings to over 13.2 million shares valued at approximately $390 million. This move comes as Deutsche Bank reported stronger-than-expected quarterly earnings, with EPS of $0.97 and revenue of $9.44 billion, surpassing analyst estimates. Despite mixed analyst ratings, the stock is trading near its 52-week high, and other institutional investors have also adjusted their positions in the company.",
+      "banner_image": "https://www.marketbeat.com/logos/deutsche-bank-aktiengesellschaft-logo-1200x675.png?v=20221103141859",
+      "source": "MarketBeat",
+      "category_within_source": "General",
+      "source_domain": "MarketBeat",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.922687"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.814743"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.803968"
+        }
+      ],
+      "overall_sentiment_score": 0.315721,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "DB",
+          "relevance_score": "0.972078",
+          "ticker_sentiment_score": "0.327122",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Key facts: Deutsche Bank aids €2B NorthC Datacenters sale; reports Greencore transactions",
+      "url": "https://www.tradingview.com/news/tradingview:187c5377402b0:0-key-facts-deutsche-bank-aids-2b-northc-datacenters-sale-reports-greencore-transactions/",
+      "time_published": "20251212T020947",
+      "authors": [
+        "NULL"
+      ],
+      "summary": "Deutsche Bank facilitated the sale of NorthC Datacenters to Antin Infrastructure Partners for up to €2 billion. Additionally, Deutsche Bank AG reported various transactions involving Greencore Group PLC on December 11, 2025, though specific details were not disclosed.",
+      "banner_image": "NULL",
+      "source": "TradingView",
+      "category_within_source": "General",
+      "source_domain": "TradingView",
+      "topics": [
+        {
+          "topic": "mergers_and_acquisitions",
+          "relevance_score": "0.906888"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.831759"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.723751"
+        }
+      ],
+      "overall_sentiment_score": 0.036814,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "DB",
+          "relevance_score": "0.338544",
+          "ticker_sentiment_score": "0.044784",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "The Digital Euro: A New Era for the European Monetary System",
+      "url": "https://www.db.com/news/detail/20251211-the-digital-euro-a-new-era-for-the-european-monetary-system?language_id=1",
+      "time_published": "20251211T120947",
+      "authors": [
+        "James von Moltke",
+        "Katharina Paust-Bokrezion",
+        "Manuel Klein"
+      ],
+      "summary": "The digital euro is a strategic response to shifts in the global payments landscape, aiming to complement cash, offer a secure payment method, and reinforce trust in the euro. This op-ed explores the digital euro's role in global monetary competition, the rise of stablecoins, and the imperative for public-private collaboration, providing key recommendations for policymakers and industry leaders.",
+      "banner_image": "NULL",
+      "source": "Deutsche Bank AG",
+      "category_within_source": "General",
+      "source_domain": "Deutsche Bank AG",
+      "topics": [
+        {
+          "topic": "finance",
+          "relevance_score": "0.946068"
+        },
+        {
+          "topic": "economy_monetary",
+          "relevance_score": "0.837229"
+        },
+        {
+          "topic": "blockchain",
+          "relevance_score": "0.734679"
+        }
+      ],
+      "overall_sentiment_score": 0.035778,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "DB",
+          "relevance_score": "0.314032",
+          "ticker_sentiment_score": "0.040395",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Key facts: Deutsche Bank discloses exempt trader deals; Hill & Smith acquires shares; Bank backs defense initiative",
+      "url": "https://www.tradingview.com/news/tradingview:bae7a50bd5843:0-key-facts-deutsche-bank-discloses-exempt-trader-deals-hill-smith-acquires-shares-bank-backs-defense-initiative/",
+      "time_published": "20251211T020841",
+      "authors": [],
+      "summary": "Deutsche Bank AG disclosed exempt principal trader transactions on December 10, 2025. Hill & Smith PLC purchased 12,000 shares from Deutsche Bank on December 9, 2025, as part of a buyback program. Additionally, Deutsche Bank supports the Defence State Reconstruction Bank initiative despite Germany's recent rejection of the proposal.",
+      "banner_image": null,
+      "source": "TradingView",
+      "category_within_source": "General",
+      "source_domain": "TradingView",
+      "topics": [
+        {
+          "topic": "finance",
+          "relevance_score": "0.916426"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.808171"
+        },
+        {
+          "topic": "mergers_and_acquisitions",
+          "relevance_score": "0.738631"
+        }
+      ],
+      "overall_sentiment_score": 0.032451,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "DB",
+          "relevance_score": "0.308997",
+          "ticker_sentiment_score": "0.042217",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Deutsche Bank (NYSE: DB) trims New York prime rate from 7.00% to 6.75%",
+      "url": "https://www.stocktitan.net/news/DB/deutsche-bank-decreases-prime-lending-rate-to-6-q059jm6akttv.html",
+      "time_published": "20251210T230841",
+      "authors": [
+        "NULL"
+      ],
+      "summary": "Deutsche Bank announced that its New York Branch and its affiliate Deutsche Bank Trust Company Americas (DBTCA) have decreased their prime lending rate from 7.00% to 6.75%. This change is effective December 11, 2025. The announcement includes information about Deutsche Bank's global operations and standard cautionary statements regarding forward-looking information.",
+      "banner_image": "NULL",
+      "source": "Stock Titan",
+      "category_within_source": "General",
+      "source_domain": "Stock Titan",
+      "topics": [
+        {
+          "topic": "economy_monetary",
+          "relevance_score": "0.804566"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.942477"
+        }
+      ],
+      "overall_sentiment_score": 0.13239,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "DB",
+          "relevance_score": "0.986461",
+          "ticker_sentiment_score": "0.124020",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "flow magazine",
+      "url": "https://flow.db.com/publications/flow-magazine/index",
+      "time_published": "20251210T060841",
+      "authors": [
+        "NULL"
+      ],
+      "summary": "Flow magazine, a publication by Deutsche Bank Corporate Bank, provides insights into treasury management, global trade financing, securities services, and navigating risks like regulation, ESG, and technology. The magazine and its accompanying app have received multiple industry awards for content and mobile use. Readers can access past issues and subscribe to a newsletter for updates.",
+      "banner_image": "https://flow.db.com/contentAsset/raw-data/77503c14-d2ab-4b23-a2ac-c44ab4dd6626/fileAsset?language_id=1",
+      "source": "flow – Deutsche Bank",
+      "category_within_source": "General",
+      "source_domain": "flow – Deutsche Bank",
+      "topics": [
+        {
+          "topic": "finance",
+          "relevance_score": "0.945856"
+        }
+      ],
+      "overall_sentiment_score": 0.342838,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "DB",
+          "relevance_score": "0.970716",
+          "ticker_sentiment_score": "0.339270",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Key facts: Deutsche Bank predicts steady Fed rates; reports transactions",
+      "url": "https://www.tradingview.com/news/tradingview:7a28c822ce78e:0-key-facts-deutsche-bank-predicts-steady-fed-rates-reports-transactions/",
+      "time_published": "20251210T020937",
+      "authors": [
+        "NULL"
+      ],
+      "summary": "Deutsche Bank predicts the Federal Reserve will maintain steady interest rates into early 2026, with a possible easing in September under new leadership. The bank also reported recent securities transactions, including an exempt trader's dealings and Hill & Smith PLC's share purchases from Deutsche Bank as part of a buyback program.",
+      "banner_image": "NULL",
+      "source": "TradingView",
+      "category_within_source": "General",
+      "source_domain": "TradingView",
+      "topics": [
+        {
+          "topic": "economy_monetary",
+          "relevance_score": "0.821049"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.728044"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.607629"
+        }
+      ],
+      "overall_sentiment_score": 0.045584,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "DB",
+          "relevance_score": "0.324803",
+          "ticker_sentiment_score": "0.049167",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Trust and Securities Services",
+      "url": "https://flow.db.com/Topics/trust-and-securities-services",
+      "time_published": "20251210T010937",
+      "authors": [
+        "NULL"
+      ],
+      "summary": "This article focuses on Deutsche Bank's Trust and Securities Services, highlighting topics like rethinking investment and post-trade in Asia amidst shifting global economic landscapes. It also discusses the performance of Collateralized Loan Obligations (CLOs) and insights from Deutsche Bank Research regarding their role as a potential safe haven. The content is presented through articles and analyses from their \"flow\" publication.",
+      "banner_image": "https://flow.db.com/contentAsset/image/af4c7ac7-4fba-4ab4-bea9-054fdb51430b/fileAsset/filter/Resize,Jpeg/resize_w/1280/21f9ba2c-d3ce-4b6e-8b90-4584e92cd225.jpg",
+      "source": "flow – Deutsche Bank",
+      "category_within_source": "General",
+      "source_domain": "flow – Deutsche Bank",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.927050"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.844340"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.634677"
+        }
+      ],
+      "overall_sentiment_score": 0.032681,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "DB",
+          "relevance_score": "0.331819",
+          "ticker_sentiment_score": "0.047695",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Canada's Economic Surprises Fail To Impress Deutsche Bank",
+      "url": "https://finimize.com/content/canadas-economic-surprises-fail-to-impress-deutsche-bank",
+      "time_published": "20251209T190937",
+      "authors": [
+        "NULL"
+      ],
+      "summary": "Despite Canada's strong economic reports, including job growth and better-than-expected GDP, Deutsche Bank (DB) remains cautious about the Bank of Canada's (BoC) approach to interest rates. Deutsche Bank expects the BoC to keep rates steady, influenced by the US Federal Reserve, and is not convinced by the Canadian dollar's outlook due to soft exports and reliance on foreign investment. Markets have shifted from expecting rate cuts to pricing in rate hikes, but DB warns the Canadian dollar could weaken if future data disappoints.",
+      "banner_image": "https://finimize.com/_next/image?url=https%3A%2F%2Ffinimize-img.imgix.net%2Fhttps%253A%252F%252Fchivas-assets.s3-eu-west-1.amazonaws.com%252Fstatic%252Fimages%252FM3520474_xml.jpeg%3Fixlib%3Dpython-3.1.2%26s%3D8edde7a1612a5943ffb677e9e480003c&w=3840&q=75",
+      "source": "Finimize",
+      "category_within_source": "General",
+      "source_domain": "Finimize",
+      "topics": [
+        {
+          "topic": "economy_monetary",
+          "relevance_score": "0.910613"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.810400"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.729716"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.607867"
+        }
+      ],
+      "overall_sentiment_score": 0.047534,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "DB",
+          "relevance_score": "0.344434",
+          "ticker_sentiment_score": "0.043965",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Hall of Fame 2024",
+      "url": "https://flow.db.com/Topics/hall-of-fame",
+      "time_published": "20251209T190937",
+      "authors": [
+        "NULL"
+      ],
+      "summary": "Deutsche Bank's flow publication presents its \"Hall of Fame 2024,\" featuring a curated list of their top 15 essential experiences from the past year. These selections are based on website downloads, social media engagement, editorial picks, and reader feedback, highlighting key insights on topics from digital trade finance and sustainable finance to geopolitics and treasury landscapes. The article encourages readers to revisit these highlights and utilize the flow app for continued access to their content.",
+      "banner_image": "https://flow.db.com/contentAsset/image/42fe29af-9e45-4e20-aca6-55cfae17ad4c/fileAsset/filter/Resize,Jpeg/resize_w/1280/bec9a7cf-6a85-441b-8a3b-cab14d769cad.jpg",
+      "source": "flow – Deutsche Bank",
+      "category_within_source": "General",
+      "source_domain": "flow – Deutsche Bank",
+      "topics": [
+        {
+          "topic": "finance",
+          "relevance_score": "0.831826"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.745810"
+        },
+        {
+          "topic": "blockchain",
+          "relevance_score": "0.645974"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.646539"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.627378"
+        }
+      ],
+      "overall_sentiment_score": 0.143793,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "DB",
+          "relevance_score": "0.971697",
+          "ticker_sentiment_score": "0.143538",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Ossiam Acquires 217,371 Shares of Deutsche Bank Aktiengesellschaft $DB",
+      "url": "https://www.marketbeat.com/instant-alerts/filing-ossiam-acquires-217371-shares-of-deutsche-bank-aktiengesellschaft-db-2025-12-09/",
+      "time_published": "20251209T130937",
+      "authors": [
+        "MarketBeat"
+      ],
+      "summary": "Ossiam significantly increased its stake in Deutsche Bank Aktiengesellschaft ($DB) during the second quarter of 2025, adding 217,371 shares to its portfolio, bringing its total to 227,843 shares valued at approximately $6.73 million. This comes as Deutsche Bank reported stronger-than-expected earnings last quarter. Analyst ratings for Deutsche Bank are mixed, with a consensus \"Hold\" rating.",
+      "banner_image": "https://www.marketbeat.com/logos/deutsche-bank-aktiengesellschaft-logo-1200x675.png?v=20221103141859",
+      "source": "MarketBeat",
+      "category_within_source": "General",
+      "source_domain": "MarketBeat",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.903473"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.835294"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.719464"
+        }
+      ],
+      "overall_sentiment_score": 0.337434,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "DB",
+          "relevance_score": "0.970339",
+          "ticker_sentiment_score": "0.341423",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Key facts: Deutsche Bank AG discloses exempt trader transactions; no stabilization for Chinese securities",
+      "url": "https://www.tradingview.com/news/tradingview:912de5612260b:0-key-facts-deutsche-bank-ag-discloses-exempt-trader-transactions-no-stabilization-for-chinese-securities/",
+      "time_published": "20251209T021000",
+      "authors": [],
+      "summary": "Deutsche Bank AG disclosed transactions by an exempt trader on December 8, 2025, involving purchases, sales, and derivatives related to its securities and International Personal Finance division. Additionally, the bank announced that no stabilization was performed by the Stabilization Manager(s) for the Chinese Ministry of Finance's securities offer.",
+      "banner_image": null,
+      "source": "TradingView",
+      "category_within_source": "General",
+      "source_domain": "TradingView",
+      "topics": [
+        {
+          "topic": "finance",
+          "relevance_score": "0.817559"
+        }
+      ],
+      "overall_sentiment_score": 0.039046,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "DB",
+          "relevance_score": "0.323985",
+          "ticker_sentiment_score": "0.043685",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Marshall Wace LLP Sells 1,258,477 Shares of Deutsche Bank Aktiengesellschaft $DB",
+      "url": "https://www.marketbeat.com/instant-alerts/filing-marshall-wace-llp-sells-1258477-shares-of-deutsche-bank-aktiengesellschaft-db-2025-12-08/",
+      "time_published": "20251208T111001",
+      "authors": [
+        "MarketBeat"
+      ],
+      "summary": "Marshall Wace LLP significantly reduced its stake in Deutsche Bank Aktiengesellschaft, selling 1,258,477 shares in Q2, though still retaining 1,256,048 shares valued at approximately $37.11 million. This sale represents a 50.0% cut in their holdings. Despite the divestment, Deutsche Bank demonstrated strong quarterly performance, surpassing EPS and revenue expectations.",
+      "banner_image": "https://www.marketbeat.com/logos/deutsche-bank-aktiengesellschaft-logo-1200x675.png?v=20221103141859",
+      "source": "MarketBeat",
+      "category_within_source": "General",
+      "source_domain": "MarketBeat",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.936427"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.817756"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.743956"
+        }
+      ],
+      "overall_sentiment_score": 0.17606,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "DB",
+          "relevance_score": "0.976428",
+          "ticker_sentiment_score": "0.100105",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "MPWR",
+          "relevance_score": "0.561321",
+          "ticker_sentiment_score": "0.277001",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    }
+  ]
+}

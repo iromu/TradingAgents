@@ -1,0 +1,2653 @@
+{
+  "items": "50",
+  "sentiment_score_definition": "x <= -0.35: Bearish; -0.35 < x <= -0.15: Somewhat-Bearish; -0.15 < x < 0.15: Neutral; 0.15 <= x < 0.35: Somewhat_Bullish; x >= 0.35: Bullish",
+  "relevance_score_definition": "0 < x <= 1, with a higher score indicating higher relevance.",
+  "feed": [
+    {
+      "title": "AMD stock jumps 4% to start 2026 as traders brace for Lisa Su’s CES keynote",
+      "url": "https://ts2.tech/en/amd-stock-jumps-4-to-start-2026-as-traders-brace-for-lisa-sus-ces-keynote/",
+      "time_published": "20260104T232031",
+      "authors": [
+        "Khadija Saeed"
+      ],
+      "summary": "AMD stock rose 4.3% on Friday, kicking off 2026 with a strong performance as chip stocks rebounded. Traders are now keenly awaiting CEO Lisa Su's CES keynote on Monday night for signals on AMD's AI and computing priorities. Upcoming catalysts include the U.S. jobs report and an unconfirmed earnings date, which will provide further insight for investors.",
+      "banner_image": "https://ts2.tech/wp-content/uploads/2026/01/amd-stock-jumps-4-to-start-2026-as-traders-brace-for-lisa-sus-ces-keynote-featured.jpg",
+      "source": "ts2.tech",
+      "category_within_source": "General",
+      "source_domain": "ts2.tech",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.835109"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.801088"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.913048"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.634219"
+        }
+      ],
+      "overall_sentiment_score": 0.297779,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "AMD",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.481107",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.717448",
+          "ticker_sentiment_score": "0.326196",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "INTC",
+          "relevance_score": "0.610039",
+          "ticker_sentiment_score": "0.311419",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "SCHW",
+          "relevance_score": "0.590638",
+          "ticker_sentiment_score": "0.108410",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "News Corp Updates Market on US$2 Billion Share Repurchase Programs",
+      "url": "https://www.tipranks.com/news/company-announcements/news-corp-updates-market-on-us2-billion-share-repurchase-programs-2",
+      "time_published": "20260104T230834",
+      "authors": [
+        "TipRanks Australian Auto-Generated Newsdesk"
+      ],
+      "summary": "News Corp has informed the market about its existing share repurchase arrangements, totaling US$2 billion, for its Nasdaq-listed Class A and Class B common stock. These programs, consisting of a 2021 and a 2025 Repurchase Program, aim to support earnings per share and capital management objectives for shareholders of its U.S.-listed stock. The company clarified that ASX-listed CDIs will not be included in these buy-back initiatives.",
+      "banner_image": "https://blog.tipranks.com/wp-content/uploads/2023/06/Communication-Services-6-750x406.jpg",
+      "source": "TipRanks",
+      "category_within_source": "General",
+      "source_domain": "TipRanks",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.936230"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.834153"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.716218"
+        }
+      ],
+      "overall_sentiment_score": 0.23431,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "NWSA",
+          "relevance_score": "0.988229",
+          "ticker_sentiment_score": "0.250072",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "NWS",
+          "relevance_score": "0.867042",
+          "ticker_sentiment_score": "0.294342",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "C",
+          "relevance_score": "0.636178",
+          "ticker_sentiment_score": "0.121577",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.592979",
+          "ticker_sentiment_score": "0.189408",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "The Truth About NXP Semiconductors NV: Is NXPI the Next Silent Tech Money Printer?",
+      "url": "https://www.ad-hoc-news.de/boerse/ueberblick/the-truth-about-nxp-semiconductors-nv-is-nxpi-the-next-silent-tech-money/68459108",
+      "time_published": "20260104T230834",
+      "authors": [
+        "NULL"
+      ],
+      "summary": "NXP Semiconductors NV (NXPI) is a quiet chip giant powering essential technologies in cars, payment systems, and industrial IoT, making it a potentially valuable, though not flashy, investment. While it lacks mainstream viral hype, it gains significant traction in engineering and finance circles due to its strong, diversified fundamentals in embedded and auto chip markets. Investors looking for stable growth over quick gains might find NXPI a compelling candidate for deeper research, especially given its robust market presence and real-world applications.",
+      "banner_image": "NULL",
+      "source": "AD HOC NEWS",
+      "category_within_source": "General",
+      "source_domain": "AD HOC NEWS",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "0.935152"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.811727"
+        },
+        {
+          "topic": "manufacturing",
+          "relevance_score": "0.730150"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.611182"
+        }
+      ],
+      "overall_sentiment_score": 0.296927,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "NXPI",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.597664",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "TXN",
+          "relevance_score": "0.749206",
+          "ticker_sentiment_score": "0.123332",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.608583",
+          "ticker_sentiment_score": "0.339676",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.594794",
+          "ticker_sentiment_score": "0.230631",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "How Himax’s CES 2026 WiseEye And AR Wearables Push At Himax Technologies (HIMX) Has Changed Its Investment Story",
+      "url": "https://simplywall.st/stocks/us/semiconductors/nasdaq-himx/himax-technologies/news/how-himaxs-ces-2026-wiseeye-and-ar-wearables-push-at-himax-t",
+      "time_published": "20260104T210832",
+      "authors": [
+        "Sasha Jovanovic"
+      ],
+      "summary": "Himax Technologies is showcasing its WiseEye AI and AR wearable technologies at CES 2026, including Front-lit LCoS microdisplays for AR glasses. This strategic push into endpoint AI and AR wearables could diversify Himax's revenue streams, reducing reliance on cyclical automotive and consumer display orders. While the CES spotlight reinforces Himax's long-term potential, investors should monitor execution on these emerging technologies and be aware of potential risks like rising operating expenses and pricing pressures.",
+      "banner_image": "NULL",
+      "source": "Simply Wall Street",
+      "category_within_source": "General",
+      "source_domain": "Simply Wall Street",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "0.946200"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.810088"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.748381"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.638338"
+        }
+      ],
+      "overall_sentiment_score": 0.263879,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "HIMX",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.223820",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.607088",
+          "ticker_sentiment_score": "0.285122",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.598512",
+          "ticker_sentiment_score": "0.238997",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Do Analyst Optimism And Insider Selling Reveal A Turning Point In Analog Devices' (ADI) Strategy?",
+      "url": "https://simplywall.st/stocks/us/semiconductors/nasdaq-adi/analog-devices/news/do-analyst-optimism-and-insider-selling-reveal-a-turning-poi",
+      "time_published": "20260104T205402",
+      "authors": [
+        "Sasha Jovanovic"
+      ],
+      "summary": "Analog Devices (ADI) is currently experiencing increased analyst attention, with Truist Securities reiterating a \"Hold\" rating and raising its valuation outlook, despite a recent insider sale by a Senior Vice President. The company recently reported strong Q4 fiscal 2025 results with revenue of US$3,076.12 million and margin expansion, and Q1 fiscal 2026 guidance points to continued earnings growth. ADI's investment narrative is tied to sustained demand for high-value analog and mixed-signal chips in industrial, automotive, and AI applications, with a forecast of $14.3 billion revenue and $4.9 billion earnings by 2028.",
+      "banner_image": "NULL",
+      "source": "Simply Wall Street",
+      "category_within_source": "General",
+      "source_domain": "Simply Wall Street",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.912397"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.832825"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.701387"
+        }
+      ],
+      "overall_sentiment_score": 0.176582,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "ADI",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.245313",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AVGO",
+          "relevance_score": "0.618864",
+          "ticker_sentiment_score": "0.122639",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.640097",
+          "ticker_sentiment_score": "0.128959",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Wave Life Sciences (WVE) stock slides 6% — what traders are watching next",
+      "url": "https://ts2.tech/en/wave-life-sciences-wve-stock-slides-6-what-traders-are-watching-next/",
+      "time_published": "20260104T181015",
+      "authors": [
+        "Shan Ahmed Khan"
+      ],
+      "summary": "Wave Life Sciences (WVE) stock dropped 6.2% on Friday to $15.95, driven by its high-beta status in the obesity treatment sector. Investors are now focused on incoming Phase 1 INLIGHT obesity-trial data expected in the first quarter of 2026. The company recently secured approximately $402.5 million in gross proceeds from an upsized equity raise, which is projected to fund operations into Q3 2028.",
+      "banner_image": "https://ts2.tech/wp-content/uploads/2025/12/wave-life-sciences-wve-stock-slides-6-what-traders-are-watching-next-featured.jpg",
+      "source": "ts2.tech",
+      "category_within_source": "General",
+      "source_domain": "ts2.tech",
+      "topics": [
+        {
+          "topic": "life_sciences",
+          "relevance_score": "0.940712"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.827086"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.726164"
+        }
+      ],
+      "overall_sentiment_score": 0.026791,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "WVE",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "-0.387279",
+          "ticker_sentiment_label": "Bearish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.564657",
+          "ticker_sentiment_score": "0.280405",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.564428",
+          "ticker_sentiment_score": "0.254402",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "INTC",
+          "relevance_score": "0.573012",
+          "ticker_sentiment_score": "0.265317",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.575991",
+          "ticker_sentiment_score": "-0.267492",
+          "ticker_sentiment_label": "Somewhat-Bearish"
+        }
+      ]
+    },
+    {
+      "title": "Microchip Technology Is Quietly Eating Tech – Is MCHP the Next Sleeper Stock Star?",
+      "url": "https://www.ad-hoc-news.de/boerse/news/ueberblick/microchip-technology-is-quietly-eating-tech-is-mchp-the-next-sleeper/68458350",
+      "time_published": "20260104T165819",
+      "authors": [],
+      "summary": "Microchip Technology (MCHP) is a less visible but crucial player in the semiconductor industry, specializing in microcontrollers, analog, and power chips used in automotive, industrial, and smart devices. Unlike flashy AI stocks, MCHP is a \"slow burn\" investment focused on long-term infrastructure, making it attractive for investors seeking steady growth rather than quick gains. While it lacks social media \"hype,\" its foundational role in critical technologies positions it as a strong candidate for a balanced tech portfolio.",
+      "banner_image": null,
+      "source": "AD HOC NEWS",
+      "category_within_source": "General",
+      "source_domain": "AD HOC NEWS",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "0.909736"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.835381"
+        }
+      ],
+      "overall_sentiment_score": 0.208981,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "MCHP",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.487478",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "TXN",
+          "relevance_score": "0.706588",
+          "ticker_sentiment_score": "0.139912",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NXPI",
+          "relevance_score": "0.646726",
+          "ticker_sentiment_score": "0.114296",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.562699",
+          "ticker_sentiment_score": "0.089073",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "The Truth About SiTime Corp: Tiny Chips, Huge Drama – Is SITM the Next Sleeper Tech Rocket?",
+      "url": "https://www.ad-hoc-news.de/boerse/ueberblick/the-truth-about-sitime-corp-tiny-chips-huge-drama-is-sitm-the-next/68458118",
+      "time_published": "20260104T150857",
+      "authors": [],
+      "summary": "SiTime Corp (SITM) manufactures essential, unglamorous timing chips used in 5G, data centers, and automotive systems, making it a critical \"picks-and-shovels\" play for the digital economy. While not a mainstream tech giant, it's gaining attention from tech investors for its innovative silicon timing technology, which offers advantages over traditional quartz. Despite its niche market and stock volatility, SiTime is seen as a high-potential, high-risk opportunity for those willing to research and handle market swings.",
+      "banner_image": null,
+      "source": "AD HOC NEWS",
+      "category_within_source": "General",
+      "source_domain": "AD HOC NEWS",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "1.000000"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.912288"
+        }
+      ],
+      "overall_sentiment_score": 0.212681,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "SITM",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.383425",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "MCHP",
+          "relevance_score": "0.602558",
+          "ticker_sentiment_score": "0.130117",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.634788",
+          "ticker_sentiment_score": "0.114324",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.619795",
+          "ticker_sentiment_score": "0.138095",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "HBK Sorce Advisory LLC Has $38.39 Million Stake in NVIDIA Corporation $NVDA",
+      "url": "https://www.marketbeat.com/instant-alerts/filing-hbk-sorce-advisory-llc-has-3839-million-stake-in-nvidia-corporation-nvda-2026-01-04/",
+      "time_published": "20260104T100836",
+      "authors": [
+        "MarketBeat"
+      ],
+      "summary": "HBK Sorce Advisory LLC reduced its stake in NVIDIA Corporation by 1.5% in the third quarter, now owning 213,494 shares valued at $38.39 million, making it their 12th largest position. Despite insiders being net sellers, NVIDIA reported strong Q3 results, beating revenue and EPS estimates, while institutional ownership remains high at 65.27%. The company faces risks related to margin sustainability and increasing competition, but positive sentiment from strategic moves and software expansion contributes to a consensus \"Buy\" rating from analysts with an average price target of $262.14.",
+      "banner_image": "https://www.marketbeat.com/logos/nvidia-co-logo-1200x675.jpg?v=20221020142916",
+      "source": "MarketBeat",
+      "category_within_source": "General",
+      "source_domain": "MarketBeat",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.913247"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.946878"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.935103"
+        }
+      ],
+      "overall_sentiment_score": 0.181892,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "NVDA",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.261780",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.601023",
+          "ticker_sentiment_score": "0.100012",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "NVIDIA Corporation $NVDA Shares Acquired by Avanza Fonder AB",
+      "url": "https://www.marketbeat.com/instant-alerts/filing-nvidia-corporation-nvda-shares-acquired-by-avanza-fonder-ab-2026-01-04/",
+      "time_published": "20260104T090829",
+      "authors": [
+        "MarketBeat"
+      ],
+      "summary": "Avanza Fonder AB increased its stake in NVIDIA Corporation by 8.8% to 2,358,202 shares, now representing 11.5% of its portfolio and making it the largest holding. This comes as NVIDIA reported strong earnings, beating expectations with impressive revenue growth and net margins. However, insiders sold approximately 1.94 million shares during the quarter, and while analysts largely maintain a \"Buy\" rating, concerns about margin sustainability and competition persist despite positive AI-driven demand.",
+      "banner_image": "https://www.marketbeat.com/logos/nvidia-co-logo-1200x675.jpg?v=20221020142916",
+      "source": "MarketBeat",
+      "category_within_source": "General",
+      "source_domain": "MarketBeat",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.906249"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.947912"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.824470"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.741311"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.609420"
+        }
+      ],
+      "overall_sentiment_score": 0.278563,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "NVDA",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.456064",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.614114",
+          "ticker_sentiment_score": "0.289116",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "GOOG",
+          "relevance_score": "0.569009",
+          "ticker_sentiment_score": "0.140510",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AVGO",
+          "relevance_score": "0.560167",
+          "ticker_sentiment_score": "0.292384",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Intel’s Fab 52 vs. TSMC’s Arizona Fabs: The Silicon Desert’s Capacity Boom Meets a Water Reality",
+      "url": "https://www.intelligentliving.co/intels-fab-52-vs-tsmc-arizona-fabs-water/",
+      "time_published": "20260104T090818",
+      "authors": [
+        "Gary Davis"
+      ],
+      "summary": "This article compares Intel's Fab 52 and TSMC's Arizona fabs, highlighting their significant investments and technological ambitions in turning Arizona into a \"Silicon Desert.\" It explores the critical environmental challenge of balancing advanced manufacturing with resource sustainability, particularly water usage, in an arid region. The piece delves into each company's capacity, technology, and sustainability strategies, emphasizing the broader implications for the U.S. economy, AI hardware, and environmental accountability.",
+      "banner_image": "https://www.intelligentliving.co/wp-content/uploads/2026/01/xKey-Semiconductor-Statistics-Intel-and-TSMC-Arizona-Quick-Facts.jpg.pagespeed.ic.Zgo90AAMfb.webp",
+      "source": "Intelligent Living",
+      "category_within_source": "General",
+      "source_domain": "Intelligent Living",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "1.000000"
+        },
+        {
+          "topic": "manufacturing",
+          "relevance_score": "0.931532"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.637267"
+        }
+      ],
+      "overall_sentiment_score": 0.163467,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "INTC",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.261680",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.725704",
+          "ticker_sentiment_score": "0.133718",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMAT",
+          "relevance_score": "0.643530",
+          "ticker_sentiment_score": "0.133070",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "MSFT",
+          "relevance_score": "0.583884",
+          "ticker_sentiment_score": "0.223967",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "AMD stock jumps 4% to start 2026 as chip rally returns — CES keynote now the next test",
+      "url": "https://ts2.tech/en/amd-stock-jumps-4-to-start-2026-as-chip-rally-returns-ces-keynote-now-the-next-test/",
+      "time_published": "20260103T152752",
+      "authors": [
+        "Khadija Saeed"
+      ],
+      "summary": "AMD shares rose 4.35% on the first trading day of 2026, leading a broad rally in semiconductor stocks. Investors are now focused on CEO Lisa Su's upcoming CES keynote for updates on AMD's AI vision, as well as the upcoming U.S. jobs report and the stock's technical performance. The company's ability to translate AI demand into revenue and margins, particularly in its data-center segment, remains a key concern for Wall Street.",
+      "banner_image": "https://ts2.tech/wp-content/uploads/2026/01/amd-stock-jumps-4-to-start-2026-as-chip-rally-returns-ces-keynote-now-the-next-test-featured.jpg",
+      "source": "ts2.tech",
+      "category_within_source": "General",
+      "source_domain": "ts2.tech",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.932078"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.820077"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.624393"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.741834"
+        }
+      ],
+      "overall_sentiment_score": 0.245362,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "AMD",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.508247",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "INTC",
+          "relevance_score": "0.601768",
+          "ticker_sentiment_score": "0.143411",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.574393",
+          "ticker_sentiment_score": "0.104620",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Here’s Why Taiwan Semiconductor Manufacturing Holds the Keys to AI’s Explosive Growth",
+      "url": "https://247wallst.com/investing/2026/01/03/heres-why-taiwan-semiconductor-manufacturing-holds-the-keys-to-ais-explosive-growth/",
+      "time_published": "20260103T150842",
+      "authors": [
+        "Rich Duprey"
+      ],
+      "summary": "Taiwan Semiconductor Manufacturing (TSM) is crucial to the AI industry's growth due to its control over advanced CoWoS packaging capacity. This constraint has forced companies like Google to reduce AI chip production targets, with Nvidia securing over half of TSM's capacity through 2027. While TSM expands its capacity, this bottleneck creates opportunities for competitors like Intel and Samsung to gain market share in providing alternative advanced packaging solutions.",
+      "banner_image": "https://247wallst.com/wp-content/themes/247wallst-theme-2025/assets/images/logo.svg",
+      "source": "24/7 Wall St.",
+      "category_within_source": "General",
+      "source_domain": "24/7 Wall St.",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "1.000000"
+        },
+        {
+          "topic": "manufacturing",
+          "relevance_score": "0.901384"
+        }
+      ],
+      "overall_sentiment_score": 0.240831,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "TSM",
+          "relevance_score": "0.952336",
+          "ticker_sentiment_score": "0.324362",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.887240",
+          "ticker_sentiment_score": "0.348401",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "GOOGL",
+          "relevance_score": "0.712614",
+          "ticker_sentiment_score": "0.146541",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "INTC",
+          "relevance_score": "0.672470",
+          "ticker_sentiment_score": "0.230127",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.590408",
+          "ticker_sentiment_score": "0.121374",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "VanEck Semiconductor ETF Options Spot-On: On January 2nd, 133.29K Contracts Were Traded, With 959.83K Open Interest",
+      "url": "https://news.futunn.com/en/post/66881104/vaneck-semiconductor-etf-options-spot-on-on-january-2nd-133",
+      "time_published": "20260103T130913",
+      "authors": [
+        "Futu News"
+      ],
+      "summary": "On January 2nd, the VanEck Semiconductor ETF (SMH.US) saw significant options trading, with a total volume of 133.29K contracts. Put options constituted 50.19% of transactions, while call options made up 49.81%. The ETF's open interest reached 959.83K contracts, suggesting continued market interest.",
+      "banner_image": "https://record.futunn.com/news-editor-imgs/20260104/public/17675322354913583002993.png",
+      "source": "富途牛牛",
+      "category_within_source": "General",
+      "source_domain": "富途牛牛",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "1.000000"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.820914"
+        }
+      ],
+      "overall_sentiment_score": 0.130443,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "SMH",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.123890",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMAT",
+          "relevance_score": "0.629036",
+          "ticker_sentiment_score": "0.128363",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.618227",
+          "ticker_sentiment_score": "0.115310",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AVGO",
+          "relevance_score": "0.605662",
+          "ticker_sentiment_score": "0.125490",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "INTC",
+          "relevance_score": "0.638485",
+          "ticker_sentiment_score": "0.140874",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "ASE Technology Holding: Quiet Rally Or Calm Before The Storm?",
+      "url": "https://www.ad-hoc-news.de/boerse/ueberblick/ase-technology-holding-quiet-rally-or-calm-before-the-storm/68454817",
+      "time_published": "20260103T120919",
+      "authors": [
+        "NULL"
+      ],
+      "summary": "ASE Technology Holding (ASX) has shown a quiet rally recently, outperforming much of the semiconductor supply chain despite muted trading volumes and divergent Wall Street opinions. The stock's steady ascent, driven by strong multi-month recovery and institutional re-rating, raises questions about whether this signals a stealth accumulation phase or consolidation before a tougher period. Upcoming performance will depend on the strength of AI-related demand, recovery in consumer electronics, and the company's execution on capital expenditure and cost discipline.",
+      "banner_image": "NULL",
+      "source": "AD HOC NEWS",
+      "category_within_source": "General",
+      "source_domain": "AD HOC NEWS",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "0.888567"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.780250"
+        },
+        {
+          "topic": "manufacturing",
+          "relevance_score": "0.647711"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.610616"
+        }
+      ],
+      "overall_sentiment_score": 0.223527,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "ASX",
+          "relevance_score": "0.984864",
+          "ticker_sentiment_score": "0.344748",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.603395",
+          "ticker_sentiment_score": "0.223899",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.551990",
+          "ticker_sentiment_score": "0.159909",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Salarius Pharmaceuticals Appeals Nasdaq Delisting After Bid Deficiency",
+      "url": "https://www.tipranks.com/news/company-announcements/salarius-pharmaceuticals-appeals-nasdaq-delisting-after-bid-deficiency",
+      "time_published": "20260103T080934",
+      "authors": [
+        "NULL"
+      ],
+      "summary": "Salarius Pharmaceuticals (SLRX) received a delisting notice from Nasdaq as its shares traded below the $1 minimum bid price for 30 consecutive business days. Due to a recent reverse stock split and ongoing Mandatory Panel Monitor status, the company is ineligible for the usual grace period. Salarius plans to appeal this determination, a move that will temporarily halt the delisting process but offers no guarantee of retaining its Nasdaq listing.",
+      "banner_image": "https://blog.tipranks.com/wp-content/uploads/2022/09/shutterstock_1917115745-750x406.jpg",
+      "source": "TipRanks",
+      "category_within_source": "General",
+      "source_domain": "TipRanks",
+      "topics": [
+        {
+          "topic": "life_sciences",
+          "relevance_score": "0.923035"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.833801"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.746178"
+        }
+      ],
+      "overall_sentiment_score": 0.043476,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "SLRX",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "-0.425426",
+          "ticker_sentiment_label": "Bearish"
+        },
+        {
+          "ticker": "NFLX",
+          "relevance_score": "0.555154",
+          "ticker_sentiment_score": "0.103017",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "WBD",
+          "relevance_score": "0.584715",
+          "ticker_sentiment_score": "0.127365",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.561797",
+          "ticker_sentiment_score": "0.282639",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Vale S.A. $VALE Shares Sold by Allspring Global Investments Holdings LLC",
+      "url": "https://www.marketbeat.com/instant-alerts/filing-vale-sa-vale-shares-sold-by-allspring-global-investments-holdings-llc-2026-01-03/",
+      "time_published": "20260103T080914",
+      "authors": [
+        "MarketBeat"
+      ],
+      "summary": "Allspring Global Investments Holdings LLC significantly reduced its stake in Vale S.A. (NYSE:VALE) by selling 343,963 shares in Q3, now holding 2,777,449 shares valued at $30.5 million. This comes as Vale reported strong Q3 earnings, exceeding EPS estimates, and announced a special dividend. Institutional interest in Vale remains high, with other major firms like Invesco and Fisher Asset Management substantially increasing their positions, contributing to a \"Moderate Buy\" consensus among analysts.",
+      "banner_image": "https://www.marketbeat.com/logos/vale-sa-logo-1200x675.png",
+      "source": "MarketBeat",
+      "category_within_source": "General",
+      "source_domain": "MarketBeat",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "1.000000"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.942772"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.849032"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.609356"
+        }
+      ],
+      "overall_sentiment_score": 0.317327,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "VALE",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.210776",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.634997",
+          "ticker_sentiment_score": "0.344164",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "DUK",
+          "relevance_score": "0.609687",
+          "ticker_sentiment_score": "0.307571",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "NFLX",
+          "relevance_score": "0.617290",
+          "ticker_sentiment_score": "0.304375",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "PLTR",
+          "relevance_score": "0.640881",
+          "ticker_sentiment_score": "0.325937",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Trump Blocks $2.9 Million HieFo-Emcore Chip Deal Over China-Linked National Security Concerns",
+      "url": "https://www.benzinga.com/m-a/26/01/49679742/trump-blocks-2-9-million-hiefo-emcore-chip-deal-over-china-linked-national-security-concerns",
+      "time_published": "20260103T050858",
+      "authors": [
+        "Mohd Haider"
+      ],
+      "summary": "President Donald Trump has blocked a $2.9 million semiconductor deal between HieFo Corp. and Emcore Corp., citing national security concerns due to HieFo's control by a Chinese citizen. The executive order mandates HieFo to divest all interests in Emcore's assets within 180 days, with the Committee on Foreign Investment in the United States (CFIUS) overseeing enforcement. This action is part of a broader U.S. strategy to curb China's access to advanced semiconductor technologies and maintain American technological superiority.",
+      "banner_image": "https://cdn.benzinga.com/files/images/story/2026/01/03/Concept-Of-Technology-Ai-artificial-Inte.jpeg?quality=85&auto=webp&width=850",
+      "source": "Benzinga",
+      "category_within_source": "General",
+      "source_domain": "Benzinga",
+      "topics": [
+        {
+          "topic": "mergers_and_acquisitions",
+          "relevance_score": "0.904842"
+        },
+        {
+          "topic": "economy_fiscal",
+          "relevance_score": "0.824926"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.740414"
+        }
+      ],
+      "overall_sentiment_score": 0.148793,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "LSCC",
+          "relevance_score": "0.927577",
+          "ticker_sentiment_score": "0.120123",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.724650",
+          "ticker_sentiment_score": "0.113205",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.621804",
+          "ticker_sentiment_score": "0.148053",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Rambus Inc. Gains Momentum Amid Promising Market Developments",
+      "url": "https://stockstotrade.com/news/rambusinc-rmbs-news-2026_01_02-2/",
+      "time_published": "20260103T030919",
+      "authors": [
+        "Tim Bohen",
+        "Ben Sturgill",
+        "Ellis Hobbs"
+      ],
+      "summary": "Rambus Inc. (RMBS) is experiencing significant stock price growth, up 9.9%, driven by positive technological advancements and investor confidence. The company boasts robust financial health with strong margins, high liquidity, and strategic ventures into emerging markets, positioning it for sustained future gains. Technical analysis suggests a bullish trend, recommending buying on dips towards support levels.",
+      "banner_image": "https://content.stockstotrade.com/wp-content/uploads/2026/01/dynamic-stock-market-growth-trends-16.png",
+      "source": "StocksToTrade",
+      "category_within_source": "General",
+      "source_domain": "StocksToTrade",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.835409"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.932246"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.825118"
+        }
+      ],
+      "overall_sentiment_score": 0.533467,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "RMBS",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.638204",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.620754",
+          "ticker_sentiment_score": "0.542767",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "QCOM",
+          "relevance_score": "0.616604",
+          "ticker_sentiment_score": "0.505874",
+          "ticker_sentiment_label": "Bullish"
+        }
+      ]
+    },
+    {
+      "title": "XTI Aerospace Renews Executive Contracts and Equity Incentives",
+      "url": "https://www.tipranks.com/news/company-announcements/xti-aerospace-renews-executive-contracts-and-equity-incentives",
+      "time_published": "20260102T231156",
+      "authors": [
+        "TipRanks Auto-Generated Newsdesk"
+      ],
+      "summary": "XTI Aerospace (XTIA) has renewed and enhanced the employment contracts for its CEO and CFO, including significant compensation packages and equity incentives, effective December 30, 2025. This move aligns leadership interests with long-term company performance and potential M&A activity. Additionally, shareholders approved key financing flexibility, automatically converting Series 10 preferred stock into common shares and simplifying the capital structure.",
+      "banner_image": "https://blog.tipranks.com/wp-content/uploads/2024/01/cropped-Newsdesk-2.png",
+      "source": "TipRanks",
+      "category_within_source": "General",
+      "source_domain": "TipRanks",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.833160"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.901424"
+        }
+      ],
+      "overall_sentiment_score": 0.171604,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "INPX",
+          "relevance_score": "0.342185",
+          "ticker_sentiment_score": "0.011836",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.563905",
+          "ticker_sentiment_score": "0.300124",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Intelligent Bio Solutions Completes Strategic $10 Million Financing",
+      "url": "https://www.tipranks.com/news/company-announcements/intelligent-bio-solutions-completes-strategic-10-million-financing",
+      "time_published": "20260102T230907",
+      "authors": [
+        "TipsRanks Auto-Generated Newsdesk"
+      ],
+      "summary": "Intelligent Bio Solutions (INBS) has successfully completed a private placement, raising approximately $10 million through the issuance of common stock and warrants to healthcare-focused institutional investors. The transaction, which closed on January 2, 2026, aims to strengthen the company's liquidity and fund growth initiatives in the non-invasive drug testing market. Despite challenges such as persistent losses and bearish technicals, the company plans to use the proceeds for working capital and general corporate purposes.",
+      "banner_image": "https://blog.tipranks.com/wp-content/uploads/2022/09/shutterstock_296599349-750x406.jpg",
+      "source": "TipRanks",
+      "category_within_source": "General",
+      "source_domain": "TipRanks",
+      "topics": [
+        {
+          "topic": "finance",
+          "relevance_score": "0.910164"
+        },
+        {
+          "topic": "life_sciences",
+          "relevance_score": "0.804459"
+        }
+      ],
+      "overall_sentiment_score": 0.117246,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "INBS",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "-0.057486",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.628364",
+          "ticker_sentiment_score": "0.281560",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "NFLX",
+          "relevance_score": "0.638370",
+          "ticker_sentiment_score": "0.112730",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "QuinStreet Secures New Credit Facility and Completes HomeBuddy Acquisition",
+      "url": "https://www.tipranks.com/news/company-announcements/quinstreet-secures-new-credit-facility-and-completes-homebuddy-acquisition",
+      "time_published": "20260102T220938",
+      "authors": [
+        "TipRanks Auto-Generated Newsdesk"
+      ],
+      "summary": "QuinStreet (QNST) has established a new $150 million revolving credit facility and completed the acquisition of HomeBuddy, paying $115 million upfront and $75 million in deferred payments. The credit facility will support the acquisition and general corporate needs, while HomeBuddy's integration aims to enhance QuinStreet's presence in the home services lead-generation market. Analysts currently rate QNST as a Hold with a $15.50 price target, and TipRanks' AI Analyst Spark views it as Neutral, citing strong financial performance tempered by high valuation.",
+      "banner_image": "https://blog.tipranks.com/wp-content/uploads/2023/06/Communication-Services-2-750x406.jpg",
+      "source": "TipRanks",
+      "category_within_source": "General",
+      "source_domain": "TipRanks",
+      "topics": [
+        {
+          "topic": "mergers_and_acquisitions",
+          "relevance_score": "0.921673"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.839720"
+        }
+      ],
+      "overall_sentiment_score": 0.20029,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "QNST",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.394527",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "NFLX",
+          "relevance_score": "0.518803",
+          "ticker_sentiment_score": "-0.140424",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.520778",
+          "ticker_sentiment_score": "0.255699",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Westport Fuel Systems Reshapes Board Leadership With New Chair and Director",
+      "url": "https://www.tipranks.com/news/company-announcements/westport-fuel-systems-reshapes-board-leadership-with-new-chair-and-director",
+      "time_published": "20260102T220838",
+      "authors": [
+        "|NULL"
+      ],
+      "summary": "Westport Fuel Systems recently announced significant changes to its board leadership. Longtime board chair Dan Hancock retired, effective December 31, 2025, with existing director Tony Guglielmin stepping into the role. Additionally, Brad Kotush joined the board on January 1, 2026, bringing extensive experience in finance and capital markets to support the company's strategic goals in the clean transportation sector.",
+      "banner_image": "https://blog.tipranks.com/wp-content/uploads/2023/06/Consumer-Cylical-7-750x406.jpg",
+      "source": "TipRanks",
+      "category_within_source": "General",
+      "source_domain": "TipRanks",
+      "topics": [
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.841329"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.715575"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.649813"
+        }
+      ],
+      "overall_sentiment_score": 0.208474,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "WPRT",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "-0.088201",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NFLX",
+          "relevance_score": "0.576604",
+          "ticker_sentiment_score": "0.343088",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.560333",
+          "ticker_sentiment_score": "0.335456",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Stock Market News Review: SPY, QQQ Whipsaw to Start 2026 as Manufacturing Growth Softens",
+      "url": "https://www.tipranks.com/news/stock-market-news-review-spy-qqq-whipsaw-to-start-2026-as-manufacturing-growth-softens",
+      "time_published": "20260102T211106",
+      "authors": [
+        "Eddie Pan"
+      ],
+      "summary": "The first trading day of 2026 saw volatility for SPY and QQQ, with semiconductor stocks performing well despite overall market whipsaw. Analysts offered mixed outlooks, with some noting historically good returns for midterm election years in a president's second term, while others warned of elevated S&P 500 valuations. Manufacturing growth softened in December, indicating a potential disconnect between production and declining orders.",
+      "banner_image": "https://blog.tipranks.com/wp-content/uploads/2026/01/shutterstock_2713314579-750x406.jpg",
+      "source": "TipRanks",
+      "category_within_source": "General",
+      "source_domain": "TipRanks",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.912378"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.809390"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.717414"
+        },
+        {
+          "topic": "manufacturing",
+          "relevance_score": "0.719833"
+        },
+        {
+          "topic": "economy_fiscal",
+          "relevance_score": "0.621266"
+        }
+      ],
+      "overall_sentiment_score": 0.289637,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "QQQ",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "-0.177987",
+          "ticker_sentiment_label": "Somewhat-Bearish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.717070",
+          "ticker_sentiment_score": "0.420554",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "INTC",
+          "relevance_score": "0.706363",
+          "ticker_sentiment_score": "0.401644",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "MU",
+          "relevance_score": "0.727094",
+          "ticker_sentiment_score": "0.416827",
+          "ticker_sentiment_label": "Bullish"
+        }
+      ]
+    },
+    {
+      "title": "CES 2026: Nvidia, AMD, Intel, & more to make announcements",
+      "url": "https://finance.yahoo.com/video/ces-2026-nvidia-amd-intel-210224074.html",
+      "time_published": "20260102T210815",
+      "authors": [
+        "NULL"
+      ],
+      "summary": "The 2026 Consumer Electronics Show (CES) in Las Vegas is expected to feature major announcements from tech giants like Nvidia, AMD, and Intel, focusing heavily on AI innovations, new chips, and smart devices. Nvidia CEO Jensen Wong is anticipated to unveil new products, including an AI chip for desktop computers, while AMD and Intel will also host press events detailing their chip-related advancements. The event will also showcase AI-powered wearables and advancements in automotive technology, with companies like Hyundai, Sony, and Honda exhibiting their latest vehicles.",
+      "banner_image": "https://s.yimg.com/ny/api/res/1.2/nt5dGx4HiuaxJyO1G5ipxw--/YXBwaWQ9aGlnaGxhbmRlcjt3PTIzMjtoPTQ4/https://s.yimg.com/os/creatr-uploaded-images/2020-12/02246f50-3412-11eb-bfdd-de89f8b3b8b8",
+      "source": "Yahoo Finance",
+      "category_within_source": "General",
+      "source_domain": "Yahoo Finance",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "1.000000"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.822620"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.623030"
+        }
+      ],
+      "overall_sentiment_score": 0.220327,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "INTC",
+          "relevance_score": "0.857088",
+          "ticker_sentiment_score": "0.263861",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.961384",
+          "ticker_sentiment_score": "0.346063",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.934866",
+          "ticker_sentiment_score": "0.287778",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "QCOM",
+          "relevance_score": "0.737640",
+          "ticker_sentiment_score": "0.201923",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.635062",
+          "ticker_sentiment_score": "0.091181",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Key facts: AMD shares rise 5.3%; Helios server racks to launch in 2026",
+      "url": "https://www.tradingview.com/news/tradingview:93283ef1e7983:0-key-facts-amd-shares-rise-5-3-helios-server-racks-to-launch-in-2026/",
+      "time_published": "20260102T200817",
+      "authors": [
+        "NULL"
+      ],
+      "summary": "AMD shares saw a 5.3% increase due to positive analyst predictions for 2026 and strong demand for AI-focused high-performance computing, anticipating a potential 32% value rise. The company is set to launch its Helios server racks, supporting 72 MI450 Series GPUs, in late 2026, with Oracle and OpenAI confirmed as customers and Meta Platforms as a potential client.",
+      "banner_image": "NULL",
+      "source": "TradingView — Track All Markets",
+      "category_within_source": "General",
+      "source_domain": "TradingView — Track All Markets",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.906404"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.843989"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.719007"
+        }
+      ],
+      "overall_sentiment_score": 0.270708,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "AMD",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.442834",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "ORCL",
+          "relevance_score": "0.643503",
+          "ticker_sentiment_score": "0.131159",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "US Stocks Tread Water As AI And Chip Rally Clashes With Consumer Weakness: Tesla, Amazon, Micron, Nvidia Among Top Movers",
+      "url": "https://stocktwits.com/news-articles/markets/equity/us-stocks-tread-water-as-ai-and-chip-rally-clashes-with-consumer-weakness-tesla-amazon-micron-nvidia-among-top-movers/cmxV9SAR4G7",
+      "time_published": "20260102T191045",
+      "authors": [
+        "Deepti Sri"
+      ],
+      "summary": "US stock indexes remained relatively flat as strong performance in technology, especially AI and chip-related stocks, counteracted weakness in consumer discretionary sectors. Gains from companies like Advanced Micro Devices, Nvidia, and Micron were offset by declines in Amazon and Tesla, reflecting a mixed market ahead of CES and new year market signals. Tariff delays for furniture and home furnishings also impacted certain stock movements.",
+      "banner_image": "https://news.stocktwits-cdn.com/large_new_york_stock_exchange_jpg_e1f85c0d8c.webp",
+      "source": "Stocktwits",
+      "category_within_source": "General",
+      "source_domain": "Stocktwits",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.901293"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.828750"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.735302"
+        },
+        {
+          "topic": "retail_wholesale",
+          "relevance_score": "0.629897"
+        }
+      ],
+      "overall_sentiment_score": 0.237513,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.895605",
+          "ticker_sentiment_score": "0.411589",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "MU",
+          "relevance_score": "0.757938",
+          "ticker_sentiment_score": "0.486845",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.715798",
+          "ticker_sentiment_score": "0.334089",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "MSFT",
+          "relevance_score": "0.600552",
+          "ticker_sentiment_score": "0.341720",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.609255",
+          "ticker_sentiment_score": "-0.327824",
+          "ticker_sentiment_label": "Somewhat-Bearish"
+        }
+      ]
+    },
+    {
+      "title": "Camtek stock jumps 8% today as chip-equipment rally lifts CAMT; traders eye Fed, jobs data",
+      "url": "https://ts2.tech/en/camtek-stock-jumps-8-today-as-chip-equipment-rally-lifts-camt-traders-eye-fed-jobs-data/",
+      "time_published": "20260102T190845",
+      "authors": [
+        "Shan Ahmed Khan"
+      ],
+      "summary": "Camtek shares rose 8.1% to $115 in afternoon trading, driven by a broader rally in chip stocks and investor interest in technology. The company, which specializes in semiconductor inspection equipment, is benefiting from expectations of continued spending in the chip sector due to AI demand. Traders are also closely watching upcoming U.S. labor data for clues on Federal Reserve rate decisions.",
+      "banner_image": "https://ts2.tech/wp-content/uploads/2026/01/camtek-stock-jumps-8-today-as-chip-equipment-rally-lifts-camt-traders-eye-fed-jobs-data-featured.jpg",
+      "source": "ts2.tech",
+      "category_within_source": "General",
+      "source_domain": "ts2.tech",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.937642"
+        },
+        {
+          "topic": "economy_monetary",
+          "relevance_score": "0.841606"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.820358"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.727825"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.637888"
+        }
+      ],
+      "overall_sentiment_score": 0.291946,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "CAMT",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.407715",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "KLAC",
+          "relevance_score": "0.701148",
+          "ticker_sentiment_score": "0.331255",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.627104",
+          "ticker_sentiment_score": "0.206904",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.640849",
+          "ticker_sentiment_score": "0.249607",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Ambarella Edge AI Stock: Options Strategy for Contrarian Traders - News and Statistics",
+      "url": "https://www.indexbox.io/blog/ambarella-stock-options-opportunity-in-edge-ai-market-pause/",
+      "time_published": "20260102T180827",
+      "authors": [
+        "NULL"
+      ],
+      "summary": "Ambarella, a company specializing in edge AI semiconductor designs, integrates HD video, image, and audio processing directly into devices, reducing latency and power usage. Despite consistently beating earnings, AMBA stock has underperformed, presenting a potential opportunity for contrarian options traders. An in-depth analysis of the global memories market, including trends, production, and trade, is also provided, valuable for manufacturers and investors looking to diversify or expand their businesses.",
+      "banner_image": "NULL",
+      "source": "IndexBox",
+      "category_within_source": "General",
+      "source_domain": "IndexBox",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.832275"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.910629"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.901942"
+        }
+      ],
+      "overall_sentiment_score": 0.168468,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "AMBA",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.268259",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.608388",
+          "ticker_sentiment_score": "0.129482",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "INTC",
+          "relevance_score": "0.636921",
+          "ticker_sentiment_score": "0.143552",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.623507",
+          "ticker_sentiment_score": "0.141658",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Why Are AMD (AMD) Shares Soaring Today",
+      "url": "https://finviz.com/news/266138/why-are-amd-amd-shares-soaring-today",
+      "time_published": "20260102T162710",
+      "authors": [
+        "Anthony Lee"
+      ],
+      "summary": "Shares of Advanced Micro Devices (AMD) jumped 5.3% due to optimistic analyst predictions for 2026, including a potential 32% stock value increase tied to its role in the AI sector. The excitement was further fueled by rumors of new product announcements at CES 2026 and a broader rally in tech stocks. Despite initial volatility, the market views the news as meaningful, and the stock benefited from a cooling CPI report allowing for future rate cuts.",
+      "banner_image": "https://news-assets.stockstory.org/cover-images/_1400x700_crop_center-center_none/advanced-micro-devices-cover-image-79f4aae41cf7_2022-02-02-065648_hzzk.jpeg",
+      "source": "Finviz",
+      "category_within_source": "General",
+      "source_domain": "Finviz",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.915686"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.844791"
+        },
+        {
+          "topic": "economy_monetary",
+          "relevance_score": "0.620825"
+        }
+      ],
+      "overall_sentiment_score": 0.406686,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "AMD",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.641744",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.615713",
+          "ticker_sentiment_score": "0.331421",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AVGO",
+          "relevance_score": "0.617649",
+          "ticker_sentiment_score": "0.306366",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "MRVL's Custom Silicon Business Scales Up: What's Coming Next?",
+      "url": "https://www.theglobeandmail.com/investing/markets/stocks/AMD/pressreleases/36861149/mrvls-custom-silicon-business-scales-up-whats-coming-next/",
+      "time_published": "20260102T161118",
+      "authors": [
+        "Zacks Investment Research"
+      ],
+      "summary": "Marvell Technology's custom silicon business, particularly its AI XPU offerings, is experiencing significant growth, contributing substantially to its data center revenues. The company has secured numerous design wins and developed advanced ASIC designs, positioning it strongly against competitors like Broadcom and AMD. Marvell's shares have seen a 13.1% gain over the past six months, and analysts predict substantial earnings growth for fiscal years 2026 and 2027.",
+      "banner_image": "https://staticx-tuner.zacks.com/images/articles/main/cb/577.jpg",
+      "source": "The Globe and Mail",
+      "category_within_source": "General",
+      "source_domain": "The Globe and Mail",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "0.934918"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.826114"
+        }
+      ],
+      "overall_sentiment_score": 0.232332,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "MRVL",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.472166",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "AVGO",
+          "relevance_score": "0.741723",
+          "ticker_sentiment_score": "0.109099",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.722327",
+          "ticker_sentiment_score": "0.052437",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.645147",
+          "ticker_sentiment_score": "0.308082",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "AMD stock jumps to start 2026 as MI450 AI chips and Helios racks draw fresh attention",
+      "url": "https://ts2.tech/en/amd-stock-jumps-to-start-2026-as-mi450-ai-chips-and-helios-racks-draw-fresh-attention/",
+      "time_published": "20260102T160710",
+      "authors": [
+        "Shan Ahmed Khan"
+      ],
+      "summary": "Advanced Micro Devices (AMD) shares rose about 5% in early Friday trading, driven by renewed optimism for its 2026 data-center AI accelerator roadmap, specifically the MI450 AI chips and Helios rack-scale platform. Analysts see AMD as a compelling AI trade for 2026, positioning it as a competitor in the Nvidia-dominated AI infrastructure market. The company expects Helios systems with MI450 GPUs to deliver rack-scale performance by Q3 2026, aiming for significant annual revenue growth.",
+      "banner_image": "https://ts2.tech/wp-content/uploads/2025/11/amd-stock-jumps-to-start-2026-as-mi450-ai-chips-and-helios-racks-draw-fresh-attention-featured.jpg",
+      "source": "ts2.tech",
+      "category_within_source": "General",
+      "source_domain": "ts2.tech",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.924772"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.901575"
+        }
+      ],
+      "overall_sentiment_score": 0.115045,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "AMD",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.522894",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.607287",
+          "ticker_sentiment_score": "-0.323481",
+          "ticker_sentiment_label": "Somewhat-Bearish"
+        }
+      ]
+    },
+    {
+      "title": "Why Is Advanced Micro Devices (AMD) Stock Up Today?",
+      "url": "https://tokenist.com/why-is-advanced-micro-devices-amd-stock-up-today/",
+      "time_published": "20260102T153028",
+      "authors": [
+        "Tim Fries"
+      ],
+      "summary": "Advanced Micro Devices (AMD) stock jumped over 5% today after TD Cowen reaffirmed its Buy rating and a $290 price target, citing strong AI accelerator demand as a key growth driver for 2026. The semiconductor giant's stock has shown impressive momentum with an 88.21% one-year return, driven by increasing analyst optimism for its AI-related earnings power and strategic product launches. TD Cowen highlighted AMD as one of its \"Best Ideas for 2026\" due to its positioning in the artificial intelligence computing industry at an attractive entry point for investors.",
+      "banner_image": "https://tokenist.com/wp-content/uploads/2026/01/116398942_m-1-646x360.jpg",
+      "source": "Tokenist",
+      "category_within_source": "General",
+      "source_domain": "Tokenist",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.944481"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.817622"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.830381"
+        }
+      ],
+      "overall_sentiment_score": 0.469872,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "AMD",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.458964",
+          "ticker_sentiment_label": "Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Altria: A Turnaround Stock For 2026 (Rating Upgrade) (NYSE:MO)",
+      "url": "https://seekingalpha.com/article/4856868-altria-a-turnaround-stock-for-2026-rating-upgrade",
+      "time_published": "20260102T152900",
+      "authors": [
+        "The Asian Investor"
+      ],
+      "summary": "Altria presents a compelling turnaround opportunity for 2026, driven by leadership transition, regulatory wins, and an expanded $2.0B stock buyback program. The company is poised to pay out approximately 76% of its adjusted EPS in 2026 and is expanding into smoke-free products. With a valuation of just 10.5X forward earnings, Altria offers a ~10% earnings yield and a 7.2% forward dividend yield, positioning it for potential recovery to pre-Q3 price levels.",
+      "banner_image": "https://static.seekingalpha.com/cdn/s3/uploads/getty_images/2164432213/image_2164432213.jpg?io=getty-c-w630",
+      "source": "Seeking Alpha",
+      "category_within_source": "General",
+      "source_domain": "Seeking Alpha",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.947740"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.809874"
+        },
+        {
+          "topic": "finance",
+          "relevance_score": "0.737062"
+        }
+      ],
+      "overall_sentiment_score": 0.179028,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "MO",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.443271",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "GOOG",
+          "relevance_score": "0.583867",
+          "ticker_sentiment_score": "0.122253",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.595750",
+          "ticker_sentiment_score": "0.129983",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.603402",
+          "ticker_sentiment_score": "0.114819",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "TSLA",
+          "relevance_score": "0.583230",
+          "ticker_sentiment_score": "0.100004",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Nvidia, AMD, Broadcom Stocks Rise. How the 2026 AI Chips Battle Will Play Out.",
+      "url": "https://www.barrons.com/articles/nvidia-stock-price-broadcom-amd-intel-ai-chips-e314ad43?gaa_at=eafs&gaa_n=AWEtsqfR9gQOwA4CrrKGxDjY_ems0fP1hc5qbBiM7eDa2blxF4RFkDubqjcW&gaa_ts=6957f051&gaa_sig=ZvPk3HK5maj4tilwcD2J8Fvw8ewKRyPsQpO1iGyV4Au7oZULCHh5NhX1QHEwzbd0VREWvdjFj23jL2WwC78W8g%3D%3D",
+      "time_published": "20260102T150728",
+      "authors": [
+        "Adam Clark"
+      ],
+      "summary": "The article discusses the surging interest in artificial intelligence as an investing trend, with semiconductor companies that power AI technology being particularly lucrative. Nvidia, AMD, and Broadcom are highlighted as key players in the evolving AI chips market. The piece anticipates how their competition will unfold leading up to and during 2026.",
+      "banner_image": "https://images.barrons.com/im-66474472?width=639&height=426",
+      "source": "Barron's",
+      "category_within_source": "General",
+      "source_domain": "Barron's",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "0.902054"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.731798"
+        }
+      ],
+      "overall_sentiment_score": 0.0297,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.312522",
+          "ticker_sentiment_score": "0.015631",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Astera Labs Surge: Analyzing the Boost",
+      "url": "https://stockstotrade.com/news/astera-labs-inc-alab-news-2026_01_02/",
+      "time_published": "20260102T150200",
+      "authors": [
+        "Tim Bohen",
+        "Ben Sturgill",
+        "Ellis Hobbs"
+      ],
+      "summary": "Astera Labs Inc. (NASDAQ: ALAB) has seen its stock price surge by 8.9%, driven by promising partnership announcements and positive sentiment from the AWS re:Invent keynote. The company exhibits strong financial health with high profit and gross margins, a robust balance sheet, and effective cash management. Analysts are optimistic about Astera Labs' future growth due to its technological advancements and strategic collaborations within the semiconductor industry.",
+      "banner_image": "https://content.stockstotrade.com/wp-content/uploads/2026/01/dynamic-tech-stock-market-trends.png",
+      "source": "StocksToTrade",
+      "category_within_source": "General",
+      "source_domain": "StocksToTrade",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.926304"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.839765"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.720738"
+        }
+      ],
+      "overall_sentiment_score": 0.407407,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "ALAB",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.472093",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.613857",
+          "ticker_sentiment_score": "0.307798",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Intel: Time To Get Out Before 2026 (NASDAQ:INTC)",
+      "url": "https://seekingalpha.com/article/4856640-intel-stock-comeback-not-happening",
+      "time_published": "20260102T144644",
+      "authors": [
+        "Bears of Wall Street"
+      ],
+      "summary": "Despite recent stock gains and government investments, Intel (INTC) remains a \"Sell\" due to persistent competitive pressures and execution risks from AMD in client CPUs and ongoing underperformance in data centers. The company's foundry business is unproven compared to TSMC, and a valuation model suggests an intrinsic value of $21.55 per share, indicating the stock is currently overvalued. While potential upside risks exist, a near-term turnaround is not anticipated.",
+      "banner_image": "https://static.seekingalpha.com/cdn/s3/uploads/getty_images/2160010090/image_2160010090.jpg?io=getty-c-w630",
+      "source": "Seeking Alpha",
+      "category_within_source": "General",
+      "source_domain": "Seeking Alpha",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.933607"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.817243"
+        }
+      ],
+      "overall_sentiment_score": -0.278768,
+      "overall_sentiment_label": "Somewhat-Bearish",
+      "ticker_sentiment": [
+        {
+          "ticker": "INTC",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "-0.642346",
+          "ticker_sentiment_label": "Bearish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.739466",
+          "ticker_sentiment_score": "-0.237390",
+          "ticker_sentiment_label": "Somewhat-Bearish"
+        },
+        {
+          "ticker": "AAPL",
+          "relevance_score": "0.610981",
+          "ticker_sentiment_score": "0.101250",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Why Vicor (VICR) stock is up today: chip rally, court calendar and earnings date in focus",
+      "url": "https://ts2.tech/en/why-vicor-vicr-stock-is-up-today-chip-rally-court-calendar-and-earnings-date-in-focus/",
+      "time_published": "20260102T134100",
+      "authors": [
+        "Shan Ahmed Khan"
+      ],
+      "summary": "Vicor Corp (VICR) shares surged 7.5% to $117.85 on Friday, driven by a broader semiconductor rally and its position near its 52-week high. Investors are keenly focused on the company's upcoming earnings report on February 19 and a significant patent-related court hearing on January 8, which could impact stock sentiment. With shares trading above analyst targets, the focus is on strong follow-through in demand and margins.",
+      "banner_image": "https://ts2.tech/wp-content/uploads/2026/01/why-vicor-vicr-stock-is-up-today-chip-rally-court-calendar-and-earnings-date-in-focus-featured.jpg",
+      "source": "ts2.tech",
+      "category_within_source": "General",
+      "source_domain": "ts2.tech",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.901219"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.823417"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.748250"
+        },
+        {
+          "topic": "economy_monetary",
+          "relevance_score": "0.613611"
+        }
+      ],
+      "overall_sentiment_score": 0.339166,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "VICR",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.411307",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.632977",
+          "ticker_sentiment_score": "0.349287",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "MU",
+          "relevance_score": "0.607437",
+          "ticker_sentiment_score": "0.319534",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "Eye on the Market Outlook 2026: Smothering Heights",
+      "url": "https://privatebank.jpmorgan.com/nam/en/insights/latest-and-featured/eotm/outlook",
+      "time_published": "20260102T120812",
+      "authors": [
+        "Michael Cembalest"
+      ],
+      "summary": "J.P. Morgan's 2026 \"Eye on the Market\" Outlook, titled \"Smothering Heights,\" examines the sustainability of the \"giant moat\" supporting global equity markets, primarily the large hyperscalers and semiconductor companies. Authored by Michael Cembalest, the report identifies four key medium-term risks: a \"Metaverse moment\" for hyperscalers leading to a confidence loss in earnings, U.S. power generation constraints, China's independent scaling of semiconductor technology, and geopolitical risks concerning Taiwan. The article also provides an overview of AI's impact on corporate profits, investment trends, and global equity market performance.",
+      "banner_image": "NULL",
+      "source": "J.P. Morgan Private Bank",
+      "category_within_source": "General",
+      "source_domain": "J.P. Morgan Private Bank",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "0.921645"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.808357"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.725684"
+        },
+        {
+          "topic": "energy_transportation",
+          "relevance_score": "0.700483"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.635292"
+        }
+      ],
+      "overall_sentiment_score": 0.074309,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "JPM",
+          "relevance_score": "0.615793",
+          "ticker_sentiment_score": "-0.147803",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.949511",
+          "ticker_sentiment_score": "0.244672",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.745982",
+          "ticker_sentiment_score": "0.145427",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "GOOGL",
+          "relevance_score": "0.718118",
+          "ticker_sentiment_score": "0.020916",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Micron, Intel, AMD lead chip stocks higher to kick off 2026 (MU:NASDAQ)",
+      "url": "https://seekingalpha.com/news/4536342-micron-intel-amd-lead-chip-stocks-higher-to-kick-off-2026",
+      "time_published": "20260102T120600",
+      "authors": [
+        "Chris Ciaccia"
+      ],
+      "summary": "Semiconductor stocks, led by Micron Technology (MU), experienced a strong start to the 2026 trading year with significant gains. Micron saw an increase of nearly 8% in late morning trading, reflecting renewed enthusiasm among traders in the sector. Other major chip companies like Intel and AMD also contributed to the positive market movement.",
+      "banner_image": "https://static.seekingalpha.com/cdn/s3/uploads/getty_images/2188459063/image_2188459063.jpg?io=getty-c-w630",
+      "source": "Seeking Alpha",
+      "category_within_source": "General",
+      "source_domain": "Seeking Alpha",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.924106"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.806860"
+        }
+      ],
+      "overall_sentiment_score": 0.289979,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "MU",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.434443",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "INTC",
+          "relevance_score": "0.832884",
+          "ticker_sentiment_score": "0.315536",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.837287",
+          "ticker_sentiment_score": "0.303369",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AMAT",
+          "relevance_score": "0.614040",
+          "ticker_sentiment_score": "0.248913",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.631783",
+          "ticker_sentiment_score": "0.234884",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "KLA Corporation Stock Is Quietly Going Off – Are You Sleeping On This Chip Power Play?",
+      "url": "https://www.ad-hoc-news.de/boerse/ueberblick/kla-corporation-stock-is-quietly-going-off-are-you-sleeping-on-this/68451398",
+      "time_published": "20260102T110738",
+      "authors": [],
+      "summary": "KLA Corporation (KLAC) is presented as an under-the-radar semiconductor stock that profits from the increasing complexity of chips by providing essential inspection and process control tools. While not a flashy AI stock, its deep integration into the chip supply chain and consistent demand make it a \"smart money\" play for long-term investors, despite its premium valuation and market volatility.",
+      "banner_image": null,
+      "source": "AD HOC NEWS",
+      "category_within_source": "General",
+      "source_domain": "AD HOC NEWS",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "0.918529"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.811896"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.726657"
+        },
+        {
+          "topic": "manufacturing",
+          "relevance_score": "0.646513"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.624892"
+        }
+      ],
+      "overall_sentiment_score": 0.422976,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "KLAC",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.614610",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "AMAT",
+          "relevance_score": "0.601078",
+          "ticker_sentiment_score": "0.448171",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.579526",
+          "ticker_sentiment_score": "0.322106",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.585473",
+          "ticker_sentiment_score": "0.277247",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "KLA Corporation Stock Is Quietly Going Off – Are You Sleeping On This Chip Power Play?",
+      "url": "https://www.ad-hoc-news.de/boerse/news/ueberblick/kla-corporation-stock-is-quietly-going-off-are-you-sleeping-on-this/68451398",
+      "time_published": "20260102T105112",
+      "authors": [],
+      "summary": "KLA Corporation (KLAC) is presented as an under-the-radar yet crucial player in the semiconductor industry, specializing in inspection and process control tools that ensure chip quality. While it lacks the \"meme stock\" hype of other AI-related companies, its essential role in advanced chip manufacturing for AI and data centers positions it as a \"smart money\" long-term investment despite its premium valuation. The article advises that it's a \"cop\" for research-driven investors focused on real-world infrastructure and long-term semiconductor growth but warns against chasing short-term gains due to volatility.",
+      "banner_image": "https://www.ad-hoc-news.de/img/logos/logo_264x69.jpg",
+      "source": "AD HOC NEWS",
+      "category_within_source": "General",
+      "source_domain": "AD HOC NEWS",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "0.935545"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.839788"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.704619"
+        },
+        {
+          "topic": "manufacturing",
+          "relevance_score": "0.645185"
+        }
+      ],
+      "overall_sentiment_score": 0.211936,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "KLAC",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.462648",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "AMAT",
+          "relevance_score": "0.617272",
+          "ticker_sentiment_score": "0.115573",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.573249",
+          "ticker_sentiment_score": "0.136153",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.595438",
+          "ticker_sentiment_score": "0.100787",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "AMD stock jumps 6% as chip rally kicks off 2026 ahead of Lisa Su’s CES keynote",
+      "url": "https://ts2.tech/en/amd-stock-jumps-6-as-chip-rally-kicks-off-2026-ahead-of-lisa-sus-ces-keynote/",
+      "time_published": "20260102T101800",
+      "authors": [
+        "Khadija Saeed"
+      ],
+      "summary": "Shares of Advanced Micro Devices (AMD) rose 6% in early Friday trading, surpassing the broader tech sector, as semiconductor stocks kicked off 2026 with strong gains. This surge is attributed to positive headlines concerning China-linked supply chains and robust AI demand. Investors are now keenly awaiting AMD CEO Lisa Su's CES keynote on January 5th for insights into the company's AI product vision.",
+      "banner_image": "https://ts2.tech/wp-content/uploads/2026/01/amd-stock-jumps-6-as-chip-rally-kicks-off-2026-ahead-of-lisa-sus-ces-keynote-featured.jpg",
+      "source": "ts2.tech",
+      "category_within_source": "General",
+      "source_domain": "ts2.tech",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.957760"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.916494"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.874444"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.792359"
+        },
+        {
+          "topic": "economy_monetary",
+          "relevance_score": "0.644641"
+        }
+      ],
+      "overall_sentiment_score": 0.729294,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "AMD",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.814880",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.842331",
+          "ticker_sentiment_score": "0.727833",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "INTC",
+          "relevance_score": "0.749501",
+          "ticker_sentiment_score": "0.774690",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "AVGO",
+          "relevance_score": "0.609438",
+          "ticker_sentiment_score": "0.661841",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "MU",
+          "relevance_score": "0.571833",
+          "ticker_sentiment_score": "0.778107",
+          "ticker_sentiment_label": "Bullish"
+        }
+      ]
+    },
+    {
+      "title": "TSMC stock today: U.S. China-tool licence and Nvidia H200 talks put Taiwan Semiconductor in focus",
+      "url": "https://ts2.tech/en/tsmc-stock-today-u-s-china-tool-licence-and-nvidia-h200-talks-put-taiwan-semiconductor-in-focus/",
+      "time_published": "20260102T100846",
+      "authors": [
+        "Shan Ahmed Khan"
+      ],
+      "summary": "Taiwan Semiconductor Manufacturing Company’s U.S.-listed shares are in focus after securing a new U.S. license for chipmaking equipment for its Nanjing, China fab. This development eases concerns about operational continuity following the expiration of prior exemptions. Additionally, investors are closely watching reports of Nvidia seeking to ramp up H200 AI-chip production with TSMC to meet high demand from Chinese technology firms.",
+      "banner_image": "https://ts2.tech/wp-content/uploads/2026/01/tsmc-stock-today-u-s-china-tool-licence-and-nvidia-h200-talks-put-taiwan-semiconductor-in-focus-featured.jpg",
+      "source": "ts2.tech",
+      "category_within_source": "General",
+      "source_domain": "ts2.tech",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.800770"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.943656"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "1.000000"
+        },
+        {
+          "topic": "economy_fiscal",
+          "relevance_score": "0.624284"
+        }
+      ],
+      "overall_sentiment_score": 0.147972,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "TSM",
+          "relevance_score": "0.963235",
+          "ticker_sentiment_score": "0.254688",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.844499",
+          "ticker_sentiment_score": "0.212831",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        },
+        {
+          "ticker": "AVGO",
+          "relevance_score": "0.630071",
+          "ticker_sentiment_score": "0.090216",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.595271",
+          "ticker_sentiment_score": "0.052590",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "INTC",
+          "relevance_score": "0.582876",
+          "ticker_sentiment_score": "0.083457",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "NVIDIA Corporation $NVDA is Robbins Farley's Largest Position",
+      "url": "https://www.marketbeat.com/instant-alerts/filing-nvidia-corporation-nvda-is-robbins-farleys-largest-position-2026-01-02/",
+      "time_published": "20260102T100822",
+      "authors": [
+        "MarketBeat"
+      ],
+      "summary": "Robbins Farley, an investment firm, reduced its NVIDIA ($NVDA) stake by 16.1% in Q3, now holding 54,457 shares valued at $10.161 million, making it their largest holding at 4.2% of their portfolio. Despite the reduction, NVIDIA remains a consensus \"Buy\" with an average target price of $262.14 among Wall Street analysts, driven by strong earnings, revenue growth, and high demand for its AI chips, including a reported $14 billion commitment from ByteDance. However, regulatory risks, competitive pressures, and significant insider selling amounting to $354 million in Q3, suggest some caution.",
+      "banner_image": "https://www.marketbeat.com/logos/nvidia-co-logo-1200x675.jpg?v=20221020142916",
+      "source": "MarketBeat",
+      "category_within_source": "General",
+      "source_domain": "MarketBeat",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.905185"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.843459"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.722884"
+        }
+      ],
+      "overall_sentiment_score": 0.268361,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "NVDA",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.406992",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "INTC",
+          "relevance_score": "0.618173",
+          "ticker_sentiment_score": "0.101015",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.557806",
+          "ticker_sentiment_score": "0.250604",
+          "ticker_sentiment_label": "Somewhat-Bullish"
+        }
+      ]
+    },
+    {
+      "title": "The Linchpin of the AI Era: A Deep-Dive Stock Research Report on ASML (ASML)",
+      "url": "https://markets.financialcontent.com/wral/article/predictstreet-2026-1-2-the-linchpin-of-the-ai-era-a-deep-dive-stock-research-report-on-asml-asml",
+      "time_published": "20260102T093600",
+      "authors": [
+        "PredictStreet"
+      ],
+      "summary": "ASML Holding N.V. (NASDAQ: ASML), the sole provider of extreme ultraviolet (EUV) lithography systems, is central to the global semiconductor industry, especially with the surge in AI-driven demand. The company's monopoly in EUV technology and its High-NA EUV systems make it indispensable for advanced chip manufacturing, despite geopolitical and supply chain risks. An analyst upgrade to \"Buy\" signals market confidence in ASML's role in the ongoing AI super-cycle.",
+      "banner_image": "https://news.predictstreet.ai/wp-content/uploads/2026/01/f19cbd83-215d-49c4-b122-30deca6a16c4-1024x683.png",
+      "source": "FinancialContent",
+      "category_within_source": "General",
+      "source_domain": "FinancialContent",
+      "topics": [
+        {
+          "topic": "technology",
+          "relevance_score": "1.000000"
+        },
+        {
+          "topic": "earnings",
+          "relevance_score": "0.913404"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.802781"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.738492"
+        },
+        {
+          "topic": "manufacturing",
+          "relevance_score": "0.641121"
+        }
+      ],
+      "overall_sentiment_score": 0.628622,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "ASML",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.800733",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "INTC",
+          "relevance_score": "0.634189",
+          "ticker_sentiment_score": "0.659602",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.636563",
+          "ticker_sentiment_score": "0.501773",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.570277",
+          "ticker_sentiment_score": "0.535577",
+          "ticker_sentiment_label": "Bullish"
+        }
+      ]
+    },
+    {
+      "title": "TD Cowen Names Advanced Micro Devices (AMD) One of its Best Ideas for 2026",
+      "url": "https://www.insidermonkey.com/blog/td-cowen-names-advanced-micro-devices-amd-one-of-its-best-ideas-for-2026-1668992/",
+      "time_published": "20260102T091000",
+      "authors": [
+        "Sheryar Siddiq"
+      ],
+      "summary": "TD Cowen has named Advanced Micro Devices (AMD) one of its \"Best Ideas 2026,\" reiterating a Buy rating and a $290 price target. The firm sees the current share price as an attractive entry point ahead of AMD's Helios AI platform unveiling and key product launches in mid-2026. TD Cowen is optimistic about AMD's AI computing position, citing its hardware roadmap, ROCm software ecosystem, and client successes.",
+      "banner_image": "https://imonkey-blog.imgix.net/blog/wp-content/uploads/2025/11/14135856/vladimir-malyutin-sw8-yizppMs-unsplash.jpg?auto=format&fit=clip&expires=1798848000&width=480&height=302",
+      "source": "Insider Monkey",
+      "category_within_source": "General",
+      "source_domain": "Insider Monkey",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.940760"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.845710"
+        }
+      ],
+      "overall_sentiment_score": 0.427221,
+      "overall_sentiment_label": "Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "AMD",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.442382",
+          "ticker_sentiment_label": "Bullish"
+        }
+      ]
+    },
+    {
+      "title": "TD Cowen Names Advanced Micro Devices (AMD) One of its Best Ideas for 2026",
+      "url": "https://finviz.com/news/265961/td-cowen-names-advanced-micro-devices-amd-one-of-its-best-ideas-for-2026",
+      "time_published": "20260102T091000",
+      "authors": [
+        "Sheryar Siddiq"
+      ],
+      "summary": "TD Cowen has named Advanced Micro Devices (AMD) one of its \"Best Ideas 2026,\" reaffirming its Buy rating and a $290 price target. This optimism is driven by AMD's upcoming Helios AI platform, its hardware roadmap, and advancements in its ROCm software ecosystem, with current prices seen as an attractive entry point. The firm anticipates a significant inflection point for AMD in mid-2026 with the Helios rack and MI450 products.",
+      "banner_image": "https://d2gr5kl7dt2z3t.cloudfront.net/blog/wp-content/uploads/2025/11/14135856/vladimir-malyutin-sw8-yizppMs-unsplash.jpg",
+      "source": "Finviz",
+      "category_within_source": "General",
+      "source_domain": "Finviz",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.904957"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "1.000000"
+        }
+      ],
+      "overall_sentiment_score": 0.260422,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "AMD",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.451151",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "INTC",
+          "relevance_score": "0.610828",
+          "ticker_sentiment_score": "0.119138",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.624870",
+          "ticker_sentiment_score": "0.107079",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "Bar Harbor Wealth Management Buys 6,887 Shares of NVIDIA Corporation $NVDA",
+      "url": "https://www.marketbeat.com/instant-alerts/filing-bar-harbor-wealth-management-buys-6887-shares-of-nvidia-corporation-nvda-2026-01-02/",
+      "time_published": "20260102T090808",
+      "authors": [
+        "MarketBeat"
+      ],
+      "summary": "Bar Harbor Wealth Management increased its stake in NVIDIA Corporation (NASDAQ:NVDA) by 10.2% in the third quarter, purchasing 6,887 additional shares to bring its total holdings to 74,652 shares valued at approximately $13.93 million. This comes despite recent insider selling by CFO Colette Kress and Director Mark A. Stevens, who divested a combined 1.93 million shares. Market sentiment largely remains bullish, with institutional investors owning about 65.3% of the stock and analysts maintaining an average \"Buy\" rating with a target price of $262.14.",
+      "banner_image": "https://www.marketbeat.com/logos/nvidia-co-logo-1200x675.jpg?v=20221020142916",
+      "source": "MarketBeat",
+      "category_within_source": "General",
+      "source_domain": "MarketBeat",
+      "topics": [
+        {
+          "topic": "earnings",
+          "relevance_score": "0.935675"
+        },
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.823318"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.806288"
+        }
+      ],
+      "overall_sentiment_score": 0.246835,
+      "overall_sentiment_label": "Somewhat-Bullish",
+      "ticker_sentiment": [
+        {
+          "ticker": "NVDA",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "0.469172",
+          "ticker_sentiment_label": "Bullish"
+        },
+        {
+          "ticker": "AMD",
+          "relevance_score": "0.637477",
+          "ticker_sentiment_score": "0.128405",
+          "ticker_sentiment_label": "Neutral"
+        },
+        {
+          "ticker": "INTC",
+          "relevance_score": "0.615349",
+          "ticker_sentiment_score": "0.116310",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    },
+    {
+      "title": "AMD stock price today: CES 2026 keynote looms after year-end dip",
+      "url": "https://ts2.tech/en/amd-stock-price-today-ces-2026-keynote-looms-after-year-end-dip/",
+      "time_published": "20260102T090746",
+      "authors": [
+        "Shan Ahmed Khan"
+      ],
+      "summary": "Advanced Micro Devices (AMD) shares closed 2025 down slightly at $214.16, reflecting a broader tech and chip stock retreat due to holiday trading and profit-taking. Investors are now focused on AMD CEO Lisa Su's CES 2026 keynote on January 5th and the U.S. jobs report on January 9th for potential new catalysts. These events are crucial as AMD competes in the AI accelerator market and its stock performance is heavily influenced by investor sentiment on data-center spending and artificial intelligence.",
+      "banner_image": "NULL",
+      "source": "ts2.tech",
+      "category_within_source": "General",
+      "source_domain": "ts2.tech",
+      "topics": [
+        {
+          "topic": "financial_markets",
+          "relevance_score": "0.903287"
+        },
+        {
+          "topic": "technology",
+          "relevance_score": "0.844035"
+        },
+        {
+          "topic": "economy_macro",
+          "relevance_score": "0.715173"
+        },
+        {
+          "topic": "economy_monetary",
+          "relevance_score": "0.647415"
+        }
+      ],
+      "overall_sentiment_score": -0.118283,
+      "overall_sentiment_label": "Neutral",
+      "ticker_sentiment": [
+        {
+          "ticker": "AMD",
+          "relevance_score": "1.000000",
+          "ticker_sentiment_score": "-0.219166",
+          "ticker_sentiment_label": "Somewhat-Bearish"
+        },
+        {
+          "ticker": "AMAT",
+          "relevance_score": "0.649290",
+          "ticker_sentiment_score": "-0.208207",
+          "ticker_sentiment_label": "Somewhat-Bearish"
+        },
+        {
+          "ticker": "ADI",
+          "relevance_score": "0.640570",
+          "ticker_sentiment_score": "-0.224770",
+          "ticker_sentiment_label": "Somewhat-Bearish"
+        },
+        {
+          "ticker": "NVDA",
+          "relevance_score": "0.600598",
+          "ticker_sentiment_score": "0.106610",
+          "ticker_sentiment_label": "Neutral"
+        }
+      ]
+    }
+  ]
+}
