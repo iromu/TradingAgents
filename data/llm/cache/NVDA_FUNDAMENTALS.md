@@ -1,71 +1,25 @@
-Based on the financial data you provided, here are some key insights and trends observed from the quarterly reports from
-2005 to 2007:
+Based on the financial data provided, here are some key points about Facebook's balance sheet over the years:
 
-### **1. Revenue Growth**
+1. Total assets have increased steadily from $18.06B in Q3 2005 to a peak of $21.61B in Q4 2006, before declining
+   slightly to around $21.09B by Q2 2007.
 
-- **2005**: Revenue ranged from $583.4M to $633.6M.
-- **2006**: Revenue increased significantly, ranging from $681.8M to $820.6M.
-- **2007**: Revenue continued to grow, peaking at $1,200M in the last quarter.
+2. Current assets have generally increased over this period, driven mainly by growth in cash and short-term investments.
 
-### **2. Gross Profit**
+3. Non-current assets (primarily property, plant and equipment) have also grown significantly from ~$1.8B to around $
+   4.3B during this time.
 
-- **2005**: Gross profit ranged from $227.9M to $254.9M.
-- **2006**: Gross profit increased, ranging from $288.7M to $333.9M.
-- **2007**: Gross profit saw substantial growth, reaching up to $500M in the last quarter.
+4. Total liabilities have increased from about $4.56B to over $5.52B by Q4 2006, before dropping slightly again in the
+   following quarter.
 
-### **3. Operating Income (EBIT)**
+5. Current liabilities have risen more than total liabilities - increasing from ~$4.27B to around $5.34B between Q3 and
+   Q4 2006, mainly due to accounts payable growing from about $1.8B to over $2.9B.
 
-- **2005**: Operating income ranged from $69.6M to $112.3M.
-- **2006**: Operating income improved, ranging from $95.8M to $117.6M.
-- **2007**: Operating income saw significant growth, peaking at $250M in the last quarter.
+6. Long-term debt has remained low or non-existent throughout this period.
 
-### **4. Net Income**
+7. Shareholder equity peaked at just under $13.5B in Q3 2005 and was around $14.58B by mid-2006, before dropping
+   slightly to ~$16.09B by the end of that year.
 
-- **2005**: Net income ranged from $64.4M to $98.1M.
-- **2006**: Net income improved, ranging from $86.8M to $106.5M.
-- **2007**: Net income saw a dramatic increase, peaking at $163.5M in the last quarter.
+8. The number of outstanding shares has also increased, growing from about 2.23B in Q3 2005 to over 2.34B by late 2006.
 
-### **5. Operating Expenses**
-
-- **Selling, General & Administrative (SG&A) Expenses**:
-    - **2005**: Ranged from $50.8M to $55.4M.
-    - **2006**: Increased to $65.7M to $69.1M.
-    - **2007**: Peaked at $80M in the last quarter.
-
-- **Research & Development (R&D) Expenses**:
-    - **2005**: Ranged from $88.8M to $92.4M.
-    - **2006**: Increased to $122.4M to $140.7M.
-    - **2007**: Peaked at $150M in the last quarter.
-
-### **6. Depreciation & Amortization**
-
-- **2005**: Ranged from $23.8M to $24.5M.
-- **2006**: Increased to $24M to $25M.
-- **2007**: Peaked at $40M in the last quarter.
-
-### **7. Tax Expense**
-
-- **2005**: Tax expense ranged from $11.3M to $18.7M.
-- **2006**: Tax expense ranged from $17.8M to $21.8M.
-- **2007**: Tax expense peaked at $30M in the last quarter, with a notable negative tax expense in one quarter (-$
-  11.9M).
-
-### **Key Observations**
-
-- **Revenue and Profit Growth**: The company experienced strong revenue and profit growth over the three-year period.
-- **Increasing Operating Expenses**: Both SG&A and R&D expenses increased, indicating potential scaling of operations
-  and investment in innovation.
-- **Depreciation & Amortization**: Gradual increase, reflecting capital investments in assets.
-- **Tax Variability**: There was a notable negative tax expense in one quarter of 2007, which could be due to tax
-  benefits or adjustments.
-
-### **Trends and Recommendations**
-
-- **Scaling Operations**: The company is likely investing heavily in growth, as indicated by increasing R&D and SG&A
-  expenses.
-- **Efficiency**: Monitoring the balance between revenue growth and expense increases is crucial to ensure
-  profitability.
-- **Tax Planning**: The variability in tax expenses suggests the need for careful tax planning and strategy.
-
-This data indicates a company experiencing rapid growth, but it will be important to maintain operational efficiency and
-manage expenses effectively to sustain profitability.
+Overall, Facebook appears to have been steadily building its assets while maintaining relatively low levels of debt,
+with the majority of growth coming through share issuance rather than borrowing.
