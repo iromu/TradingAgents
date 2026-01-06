@@ -15,7 +15,7 @@
     <name>Gekko</name>
     <properties>
         <java.version>25</java.version>
-        <embabel-agent.version>0.3.1-SNAPSHOT</embabel-agent.version>
+        <embabel-agent.version>0.3.1</embabel-agent.version>
         <!--        <spring-ai.version>1.1.2</spring-ai.version>-->
     </properties>
 
