@@ -18,17 +18,17 @@ embabel:
         bean: false
 
   models:
-    default-llm: ministral-3:14b
+    default-llm: qwen2.5:7b-instruct
     default-embedding-model: nomic-embed-text:latest
     llms:
-      best: ministral-3:14b
+      best: qwen2.5:7b-instruct
       cheapest: ministral-3:3b
     embedding-services:
       best: nomic-embed-text:latest
       cheapest: nomic-embed-text:latest
   agent-platform:
     ranking:
-      llm: ministral-3:3b
+      llm: qwen2.5:7b-instruct
 
 spring.profiles.active: base,app,observability,local
 logging:
