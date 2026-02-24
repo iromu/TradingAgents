@@ -30,7 +30,7 @@ embabel:
     ranking:
       llm: qwen2.5:7b-instruct
 
-spring.profiles.active: base,app,observability,local
+spring.profiles.active: base,app,lmstudio,observability,local
 logging:
   level:
     com.embabel: WARN

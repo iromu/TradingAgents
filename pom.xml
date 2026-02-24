@@ -46,11 +46,6 @@
         <!--            <version>${embabel-agent.version}</version>-->
         <!--        </dependency>-->
 
-        <dependency>
-            <groupId>com.embabel.agent</groupId>
-            <artifactId>embabel-agent-starter-ollama</artifactId>
-            <version>${embabel-agent.version}</version>
-        </dependency>
 
         <dependency>
             <groupId>com.embabel.agent</groupId>
@@ -156,11 +151,19 @@
 
     <profiles>
         <profile>
+            <id>ollama-models</id>
+            <dependencies>
+                <dependency>
+                    <groupId>com.embabel.agent</groupId>
+                    <artifactId>embabel-agent-starter-ollama</artifactId>
+                    <version>${embabel-agent.version}</version>
+                </dependency>
+            </dependencies>
+        </profile>
+        <profile>
             <id>openai-models</id>
             <activation>
-                <property>
-                    <name>env.OPENAI_API_KEY</name>
-                </property>
+                <activeByDefault>true</activeByDefault>
             </activation>
             <dependencies>
                 <dependency>
