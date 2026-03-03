@@ -151,7 +151,7 @@ public class GekkoLoggingAgenticEventListener extends LoggingAgenticEventListene
     public String getLlmRequestEventMessage(LlmRequestEvent<?> e) {
         return String.format("[%s] (%s) Consulting LLM %s to gain the edge. Producing: %s",
                 e.getProcessId(), e.getInteraction().getName(),
-                e.getLlm().getName(), e.getOutputClass().getSimpleName());
+                e.getLlmMetadata().getName(), e.getOutputClass().getSimpleName());
     }
 
     @Override

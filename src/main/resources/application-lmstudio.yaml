@@ -1,22 +1,18 @@
-OPENAI_API_KEY: lmstudio
-#OPENAI_BASE_URL: http://localhost:11434/v1
-
-spring:
-  ai:
-    openai:
-      api-key: ${OPENAI_API_KEY}
-      base-url: ${OPENAI_BASE_URL:http://localhost:1234/v1}
-
 embabel:
   models:
-    default-llm: qwen/qwen3-4b
+    default-llm: qwen/qwen3-4b-2507
     default-embedding-model: text-embedding-nomic-embed-text-v1.5
     llms:
-      best: qwen/qwen3-4b
-      cheapest: qwen/qwen3-4b
+      best: qwen/qwen3-4b-2507
+      cheapest: qwen/qwen3-4b-2507
     embedding-services:
       best: text-embedding-nomic-embed-text-v1.5
       cheapest: text-embedding-nomic-embed-text-v1.5
   agent-platform:
     ranking:
-      llm: qwen/qwen3-4b
+      llm: qwen/qwen3-4b-2507
+  agent:
+    platform:
+      models:
+        lmstudio:
+          base-url: http://localhost:1234 # Default
