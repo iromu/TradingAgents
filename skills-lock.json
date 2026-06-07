@@ -1,11 +1,23 @@
 {
   "version": 1,
   "skills": {
+    "agentic-patterns-core": {
+      "source": "iromu/awesome-qwen",
+      "sourceType": "github",
+      "skillPath": "skills/agentic-patterns-core/SKILL.md",
+      "computedHash": "19519c9ef7b5b51322f8da2172fb7f870ce298f47109b3752fd59a683691f933"
+    },
     "agentic-patterns-extra": {
       "source": "iromu/awesome-qwen",
       "sourceType": "github",
       "skillPath": "skills/agentic-patterns-extra/SKILL.md",
       "computedHash": "f28a0bb31be02c0c970ad8e55aa690beb1478df63f28048b5ff4128422308b8d"
+    },
+    "agentic-patterns-research": {
+      "source": "iromu/awesome-qwen",
+      "sourceType": "github",
+      "skillPath": "skills/agentic-patterns-research/SKILL.md",
+      "computedHash": "216ba5fe51bb308c9298205b16512278b5901d9fb1d049206b362e561df3fef1"
     },
     "embabel-agent": {
       "source": "iromu/awesome-qwen",
