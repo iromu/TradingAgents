@@ -1,0 +1,11 @@
+{
+  "version": 1,
+  "skills": {
+    "embabel-agent": {
+      "source": "iromu/awesome-qwen",
+      "sourceType": "github",
+      "skillPath": "skills/embabel-agent/SKILL.md",
+      "computedHash": "1cb7aea32f409de557111c2ac192811788c81fade9903ea7c496581460ce7be9"
+    }
+  }
+}
