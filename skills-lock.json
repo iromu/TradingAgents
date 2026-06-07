@@ -1,6 +1,12 @@
 {
   "version": 1,
   "skills": {
+    "agentic-patterns-extra": {
+      "source": "iromu/awesome-qwen",
+      "sourceType": "github",
+      "skillPath": "skills/agentic-patterns-extra/SKILL.md",
+      "computedHash": "f28a0bb31be02c0c970ad8e55aa690beb1478df63f28048b5ff4128422308b8d"
+    },
     "embabel-agent": {
       "source": "iromu/awesome-qwen",
       "sourceType": "github",
