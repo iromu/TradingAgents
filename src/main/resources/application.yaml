@@ -4,33 +4,25 @@
 spring:
   application:
     name: Gekko
-  ai:
-    #    openai:
-    #      api-key: ${OPENAI_API_KEY:ollama}
-    #      base-url: ${OPENAI_BASE_URL:http://localhost:11434/v1}
-    ollama:
-      base-url: ${OLLAMA_BASE_URL:http://localhost:11434}
 
 embabel:
+  models:
+    default-llm: ${OPENAI_MODEL:Qwen3.6-35B-A3B}
+    llms:
+      cheapest: ${OPENAI_MODEL:Qwen3.6-35B-A3B}
+      best: ${OPENAI_MODEL:Qwen3.6-35B-A3B}
   agent:
     platform:
+      models:
+        openai:
+          custom:
+            api-key: ${OPENAI_API_KEY:your-dev-key}
+            base-url: ${OPENAI_BASE_URL:http://spark.local:4000}
+            models: ${OPENAI_MODEL:Qwen3.6-35B-A3B}
       scanning:
         bean: false
 
-  models:
-    default-llm: qwen2.5:7b-instruct
-    default-embedding-model: nomic-embed-text:latest
-    llms:
-      best: qwen2.5:7b-instruct
-      cheapest: ministral-3:3b
-    embedding-services:
-      best: nomic-embed-text:latest
-      cheapest: nomic-embed-text:latest
-  agent-platform:
-    ranking:
-      llm: qwen2.5:7b-instruct
-
-spring.profiles.active: base,app,lmstudio,observability,local
+spring.profiles.active: base,app,observability,local
 logging:
   level:
     com.embabel: WARN
