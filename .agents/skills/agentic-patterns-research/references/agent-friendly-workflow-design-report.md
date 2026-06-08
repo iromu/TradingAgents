@@ -1,5 +1,6 @@
 <!-- Source: https://github.com/nibzard/awesome-agentic-patterns/tree/main/research/agent-friendly-workflow-design-report.md -->
 
+
 # Agent-Friendly Workflow Design - Research Report
 
 **Pattern ID**: agent-friendly-workflow-design
@@ -18,20 +19,17 @@ and production deployment best practices.
 ### Key Findings
 
 **Platform Approaches:**
-
 - **GitHub Copilot Workspace**: Collaborative model with full editability and continuous human oversight
 - **Claude Code**: Spec-driven workflow with strict planning-execution separation
 - **Cursor AI**: Human-in-the-loop code modification with explicit approval workflows
 
 **Production Realities:**
-
 - 93% of projects get stuck in POC-to-production transition
 - Reliability is the #1 challenge (37.9%), surpassing compliance/governance
 - 41-86.7% of multi-agent systems fail in production
 - Successful teams deploy → observe → iterate in days, not months
 
 **Core Best Practices:**
-
 1. Start simple; complexity explodes exponentially
 2. Design observability from day one
 3. Separate planning and execution
@@ -52,7 +50,6 @@ points to maximize AI agent effectiveness. The pattern emphasizes giving agents 
 definitions, and structured interfaces rather than micromanaging technical decisions.
 
 ### Key Characteristics
-
 - **Clear Goal Definition**: High-level goals over prescriptive step-by-step instructions
 - **Appropriate Autonomy**: Freedom to make implementation choices
 - **Structured Input/Output**: Clear interfaces for information exchange
@@ -60,7 +57,6 @@ definitions, and structured interfaces rather than micromanaging technical decis
 - **Tool Provisioning**: Access to necessary tools and understanding of their use
 
 ### Current Pattern Status
-
 - **Status**: best-practice
 - **Authors**: Nikola Balic (@nibzard)
 - **Based on**: Amjad Masad (Replit)
@@ -134,7 +130,6 @@ oversight rather than full autonomy.
 > "We firmly believe that the combination of humans and AI always produces better results."
 
 **Workflow Characteristics:**
-
 - **Full Editability**: Every AI proposal—from plans to code—can be modified at any time
 - **Multi-stage Workflow**: Starts from GitHub Issue/PR → Analyzes codebase → Proposes solutions → Generates executable
   code
@@ -143,7 +138,6 @@ oversight rather than full autonomy.
 - **Natural Language Editing**: Can adjust behavior, plans, or code using natural language at any step
 
 **Human-Agent Handoff:**
-
 - Unlike autonomous agents that work independently, Workspace maintains human oversight
 - Developers can return and adjust behavior or plans, then retry
 - Built-in terminal with secure port forwarding for testing and verification
@@ -156,7 +150,6 @@ oversight rather than full autonomy.
 Claude Code follows a **spec-driven workflow** approach with clear separation between planning and execution.
 
 **Core Workflow Principles:**
-
 1. **Planning First**: Most sessions start with "Plan mode" (Shift+Tab twice)
 2. **Never Code Before Planning**: Complete separation—no code written before approving the written plan
 3. **Team Knowledge Sharing**: CLAUDE.md files continuously updated with lessons learned
@@ -164,25 +157,21 @@ Claude Code follows a **spec-driven workflow** approach with clear separation be
 5. **Verification Mechanisms**: Automatic test running, building, and UI testing for closed-loop feedback
 
 **Workflow Cycle:**
-
 ```
 Research → Planning → Annotation iteration → Todo list → Implementation → Feedback iteration
 ```
 
 **Sub-Agent Strategy:**
-
 - Heavily use subagents to keep main context window clean
 - Outsource research, exploration, and parallel analysis to subagents
 - Each subagent focuses on one direction
 
 **Autonomy Levels:**
-
 - **Plan Node Default**: Non-trivial tasks (3+ steps) must enter plan mode
 - **Stop and Replan**: Immediately replan upon deviation from plan
 - **Autonomous Bug Fixing**: Fix bugs directly without hand-holding when errors are clear
 
 **Sources:**
-
 - [CSDN - Anthropic Claude Code Development Discussion](https://m.blog.csdn.net/qq_62953555/article/details/145423256)
 - [Claude Code Best Practices](https://github.com/anthropics/anthropic-quickstarts/tree/main/cd-cd)
 
@@ -191,14 +180,12 @@ Research → Planning → Annotation iteration → Todo list → Implementation 
 Cursor implements **Human-in-the-Loop (HITL)** patterns for code modification with explicit approval workflows.
 
 **Key Features:**
-
 - **Code Modification Approval**: Agent must receive approval before making changes
 - **Agent Mode**: Can autonomously execute multi-step tasks
 - **AI Chat Panel**: Commands like `/edit` and `/explain` for structured interactions
 - **Model Selection**: Choice between "Agent" mode and "Auto" mode
 
 **HITL Implementation:**
-
 - Pause execution at critical decision points for human approval
 - Maintain state persistence during human review
 - Support resumability after approval decision
@@ -212,7 +199,6 @@ While specific Replit documentation wasn't directly accessible in search results
 Amjad Masad (Replit CEO) emphasizing **macro delegation with micro guidance**.
 
 **Core Principles:**
-
 - Give agents high-level goals
 - Humans handle critical decisions
 - Define clear decision nodes for human intervention
@@ -234,20 +220,17 @@ seamlessly—similar to passing a baton in a relay race.
 | **Handoff**    | Decentralized, active relay            | "Employee A finishes and hands off to Employee B, no boss needed" |
 
 **When to Use Handoff:**
-
 - Dynamic, unpredictable workflows (e.g., customer service: product inquiry → complaint → refund)
 - Multi-modal/multi-tool collaboration (text → image → video)
 - Distributed deployments (regional agents → aggregation agent)
 - Flexible exploration requiring specialized agent接力
 
 **When Supervisor is Better:**
-
 - Strictly regulated processes (financial audits, medical reports)
 - Strong oversight requirements
 - Fixed, predefined workflows
 
 **Production Example: Customer Service System**
-
 ```
 GPT-4 mini → Route incoming requests (Triage Agent)
    ↓ handoff
@@ -260,7 +243,6 @@ o3 mini → Accuracy-sensitive tasks (Refund eligibility check)
 flexibility across scenarios.
 
 **Sources:**
-
 - [OpenAI Swarm Documentation](https://github.com/openai/swarm)
 - [Multi-Agent Handoff Patterns](https://devblogs.microsoft.com/dotnet/introducing-microsoft-agent-framework-preview/)
 
@@ -269,7 +251,6 @@ flexibility across scenarios.
 Microsoft's framework supports multiple orchestration patterns:
 
 **Core Patterns:**
-
 - **Sequential**: Agents execute in order
 - **Concurrent**: Parallel execution across agents
 - **Handoff**: Transfer between agents
@@ -279,7 +260,6 @@ Microsoft's framework supports multiple orchestration patterns:
 - **Human-in-the-loop**: Interactive workflows
 
 **Handoff Implementation:**
-
 ```python
 triage_agent = Agent(
     name="Triage agent",
@@ -289,34 +269,29 @@ triage_agent = Agent(
 ```
 
 **Sources:**
-
 - [Microsoft Agent Framework Documentation](https://learn.microsoft.com/en-us/agent-framework/)
 - [AutoGen Migration Guide](https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-autogen/)
 
 #### LangChain/LangGraph Agent Workflows
 
 **Core Architecture:**
-
 - **StateGraph Pattern**: Nodes, edges, and state management
 - **ReAct Framework**: Reasoning and Acting loop
 - **ToolNode Component**: Efficient tool chain execution
 - **Conditional Routing**: Based on LLM decisions
 
 **Tool Provisioning:**
-
 - **300+ pre-built tools** in LangChain ecosystem
 - **@tool decorator** pattern for custom tool creation
 - **Parallel tool calling** support
 - **Hot-reloading** during development
 
 **Human Feedback:**
-
 - LangGraph supports **human-in-the-loop** with task interruption
 - **Memory systems** maintain context across interactions
 - **Checkpointing** allows pausing and resuming workflows
 
 **Sources:**
-
 - [LangChain Agent Architecture](https://python.langchain.com/docs/modules/agents/)
 - [LangGraph Documentation](https://langchain-ai.github.io/langgraph/)
 
@@ -325,7 +300,6 @@ triage_agent = Agent(
 ## 4. Related Patterns
 
 ### Known Related Patterns
-
 - **LLM-Friendly API Design**: Complementary pattern focused on API interfaces
 - *More to be discovered...*
 
@@ -336,7 +310,6 @@ triage_agent = Agent(
 ### Production Deployment Statistics
 
 **Current State (2025-2026):**
-
 - **57% of organizations** have deployed at least one agent in production
 - **93% of projects** get stuck in transition from POC to production (only 7-10% succeed)
 - **79% of multi-agent system failures** come from specification and coordination layers
@@ -350,13 +323,11 @@ compliance or governance issues.
 **Problem:** Started with 100+ tools and 50+ sub-agents
 
 **Issues Encountered:**
-
 - Scheduling agents couldn't find correct sub-agents (buried "three hops away")
 - One buggy sub-agent dragging down entire reasoning chains
 - Agents forming infinite loops passing work between each other
 
 **Solution:**
-
 - Reduced to **5 core tools** and few general-purpose agents
 - Became more reliable with simpler architecture
 
@@ -376,7 +347,6 @@ discipline:
 5. **Rapid Deployment**: Deploy improvements in **days, not quarters**
 
 **Mindset Shift:**
-
 - **Traditional**: Perfect → Test → Deploy (months/quarters)
 - **Agent Engineering**: Deploy → Observe → Iterate (days)
 
@@ -401,13 +371,11 @@ discipline:
     - Critical for understanding temporal behavior changes
 
 **Industry Adoption:**
-
 - **89%** of enterprises have implemented agent observability
 - **62%** have detailed tracing capabilities
 - For production agents: **94%** have observability, **71.5%** have complete tracing
 
 **Real-world Data Scale:**
-
 - 100K DAU × 5 interactions × 3 LLM calls = 1.5M calls/day
 - ~45B tokens/day for typical RAG scenarios
 - 7.5GB/day observability data (medium app)
@@ -433,7 +401,6 @@ discipline:
     - Pattern detection for repeated failures
 
 **Best Practices:**
-
 - Use low temperature (0-0.2) for deterministic function calling
 - Implement read-only restrictions for data access
 - Deploy in sandbox environments before production
@@ -457,7 +424,6 @@ discipline:
 #### 2. Clear Agent Responsibilities
 
 **Dify Architecture Pattern (Hybrid Approach):**
-
 - **Workflow** = Process Controller (main flow, visual paths, error fallback)
 - **Agent** = AI Decision Brain (multi-turn reasoning, function tools)
 - **Best Practice**: Combine both for systems that are both "predictable" and "thoughtful"
@@ -465,7 +431,6 @@ discipline:
 #### 3. Separation of Planning and Execution
 
 **Claude Code Approach:**
-
 - Never write code before approving the written plan
 - Dramatically reduces waste and rework
 - Enables early course correction
@@ -475,24 +440,20 @@ discipline:
 **Three-Level Evaluation:**
 
 **a. Single-Step (Run-level)**
-
 - Validate individual decisions
 - Test specific tool calls and decision logic
 
 **b. Complete Round (Trace-level)**
-
 - End-to-end trajectory validation
 - Test: trajectory, final response, state changes
 
 **c. Multi-Round (Thread-level)**
-
 - Test conversation flows and context persistence
 - Verify memory across interactions
 
 #### 5. Production Deployment Checklist
 
 **Essential Components:**
-
 - Persistent backend
 - Task scheduler
 - Auto-scaling strategies
@@ -503,7 +464,6 @@ discipline:
 - Detailed metrics framework
 
 **Three Pillars for Production:**
-
 1. **Automated Evaluation**
 2. **CI/CD (Automated Deployment)**
 3. **Comprehensive Observability**
@@ -511,7 +471,6 @@ discipline:
 #### 6. Tool Provisioning Strategy
 
 **Effective Tool Design:**
-
 - Expose **necessary functions only** (abstraction layers)
 - Hide dangerous operations behind safe wrappers
 - Use **read-only restrictions** for data access
@@ -521,13 +480,11 @@ discipline:
 #### 7. Human-Agent Collaboration Patterns
 
 **Three Collaboration Modes:**
-
 1. **Embedding Mode**: AI assists within existing workflows
 2. **Copilot Mode**: AI works alongside human
 3. **Agent Mode**: AI takes primary role with human oversight (becoming dominant pattern)
 
 **UX Patterns:**
-
 - **AI Notice Pattern**: Clear indication when AI is acting
 - **Pilot-Copilot Relationship**: Appropriate balance of control
 - **Checkpointing**: Save state before human review
@@ -540,7 +497,6 @@ discipline:
 **Anti-Pattern:** Starting with complex multi-agent architectures
 
 **Why It Fails:**
-
 - Complexity explodes exponentially (not linearly)
 - Coordination overhead exceeds benefits
 - Debugging becomes nearly impossible
@@ -553,7 +509,6 @@ discipline:
 **Anti-Pattern:** Prescriptive step-by-step instructions
 
 **Why It Fails:**
-
 - Eliminates agent's problem-solving capabilities
 - Creates rigidity in workflow
 - Agent becomes brittle script executor
@@ -566,7 +521,6 @@ discipline:
 **Anti-Pattern:** Deploying without complete tracing
 
 **Why It Fails:**
-
 - Cannot debug when things go wrong
 - No understanding of decision trajectories
 - Cannot measure quality or improvement
@@ -579,7 +533,6 @@ discipline:
 **Anti-Pattern:** Perfecting in development, then deploying
 
 **Why It Fails:**
-
 - Real-world inputs reveal unanticipated scenarios
 - Production data differs from carefully curated POC data
 - Cannot predict all edge cases upfront
@@ -592,7 +545,6 @@ discipline:
 **Anti-Pattern:** Agents transferring control without clear protocols
 
 **Why It Fails:**
-
 - Context loss during transfers
 - Infinite handoff loops
 - Unclear responsibility boundaries
@@ -605,7 +557,6 @@ discipline:
 **Anti-Pattern:** No error handling or retry strategies
 
 **Why It Fails:**
-
 - System crashes on first error
 - No graceful degradation
 - Poor user experience
@@ -640,55 +591,46 @@ discipline:
 ## 8. References
 
 ### Primary Source
-
 - [How AI Agents Are Reshaping Creation](https://www.nibzard.com/silent-revolution) by Nikola Balic (@nibzard)
 
 ### Platform Documentation
 
 #### GitHub Copilot Workspace
-
 - [GitHub Copilot Workspace Features](https://github.com/features/copilot-workspace)
 - Developer-focused task-driven development with continuous human oversight
 
 #### Claude Code (Anthropic)
-
 - [Claude Code Documentation](https://docs.anthropic.com/en/docs/build-with-claude/claude-code)
 - [Anthropic Quickstarts - CD-CD](https://github.com/anthropics/anthropic-quickstarts/tree/main/cd-cd)
 
 #### Cursor AI
-
 - [Cursor Documentation](https://cursor.sh/docs)
 - Human-in-the-loop code modification patterns
 
 ### Framework Documentation
 
 #### Microsoft Agent Framework
-
 - [Microsoft Agent Framework Documentation](https://learn.microsoft.com/en-us/agent-framework/)
 - [AutoGen Migration Guide](https://learn.microsoft.com/en-us/agent-framework/migration-guide/from-autogen/)
 - [Multi-Agent Handoff Patterns](https://devblogs.microsoft.com/dotnet/introducing-microsoft-agent-framework-preview/)
 
 #### LangChain/LangGraph
-
 - [LangChain Agent Architecture](https://python.langchain.com/docs/modules/agents/)
 - [LangGraph Documentation](https://langchain-ai.github.io/langgraph/)
 - [LangGraph Agent Tutorial](https://blog.csdn.net/Metal1/article/details/158291010)
 
 #### OpenAI Swarm
-
 - [OpenAI Swarm GitHub Repository](https://github.com/openai/swarm)
 - Original handoff pattern implementation
 
 ### Industry Best Practices
 
 #### Production Deployment
-
 - [A Practical Guide for Production-Grade Agentic AI Workflows](https://arxiv.org/abs/2412.05950) (arXiv, Dec 2025)
 - [Production-Grade Agent Workflow实战](https://cloud.tencent.com/developer/article/2577787) (Tencent Cloud, Oct 2025)
 - [Agent Engineering: Deploy to Observe](https://www.anthropic.com/index/agent-engineering) (Anthropic, 2025)
 
 #### Observability & Monitoring
-
 - [OpenTelemetry GenAI Semantic Conventions](https://opentelemetry.io/docs/reference/specification/trace/semantic_conventions/gen-ai/)
 - [Agent Observability Best Practices](https://www.langfuse.com/blog/guides/agent-observability) (Langfuse)
 - [Datadog AI Agent Monitoring](https://www.datadoghq.com/blog/ai-monitoring/)
@@ -708,7 +650,6 @@ discipline:
 - [Handoff vs Supervisor Patterns](https://arxiv.org/abs/2410.12345) (arXiv, Oct 2024)
 
 #### Human-AI Collaboration
-
 - [Human-in-the-Loop AI Systems](https://dl.acm.org/doi/10.1145/1234567) (ACM, 2025)
 - [UX Patterns for Human-AI Partnership](https://learn.microsoft.com/zh-cn/community/content/best-practices-ai-ux) (
   Microsoft)
@@ -716,12 +657,10 @@ discipline:
 ### Community Resources
 
 #### Claude Code Ecosystem
-
 - [awesome-claude-code-toolkit](https://github.com/webmaxru/awesome-claude-code-toolkit)
 - [Claude Code Workflow Studio](https://github.com/breaking-brake/cc-wf-studio) - Visual workflow editor
 
 #### Agent Frameworks
-
 - [awesome-microsoft-agent-framework](https://github.com/webmaxru/awesome-microsoft-agent-framework)
 - [Strands Agents SDK](https://aws.amazon.com/blogs/machine-learning/strands-agents-sdk-a-technical-deep-dive/) (AWS)
 
@@ -730,7 +669,7 @@ discipline:
 - [Agent vs Workflow: Who is the Efficiency Revolution Protagonist?](https://www.woshipm.com/ai/6306330.html) (Dec 2025)
 - [From Prototype to Production: AI Agent Course](https://www.cloudskillsboost.google/paths/118) (Google, Dec 2025)
 - [Building Effective Agents - 7 Design Patterns](https://m.blog.csdn.net/huang9604/article/details/152119711) (CSDN,
-    2025)
+  2025)
 
 ### Chinese-Language Resources (Translated Insights)
 
@@ -738,7 +677,7 @@ discipline:
   Baidu Developer, Oct 2025)
 - [Agent & Workflow Technical Practice](https://cloud.tencent.com/developer/article/2577787) (Tencent Cloud, Oct 2025)
 - [Advanced Architecture Patterns for Agentic AI](https://blog.csdn.net/2501_91473346/article/details/150918931) (CSDN,
-    2025)
+  2025)
 
 ---
 

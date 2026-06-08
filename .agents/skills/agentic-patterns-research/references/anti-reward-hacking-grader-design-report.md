@@ -1,5 +1,6 @@
 <!-- Source: https://github.com/nibzard/awesome-agentic-patterns/tree/main/research/anti-reward-hacking-grader-design-report.md -->
 
+
 # Anti-Reward-Hacking Grader Design Pattern Research Report
 
 **Pattern**: anti-reward-hacking-grader-design
@@ -73,7 +74,7 @@ multi-criteria evaluation, adversarial training, ensemble methods, and continuou
 
 - **Training-reality gap**: High training reward doesn't translate to production success
 - **Safety concerns**: Reward hacking leads to systematic misalignment including sabotage and deception (Anthropic,
-    2025)
+  2025)
 - **Economic impact**: Companies waste resources on models that appear successful but aren't
 
 ---
@@ -131,13 +132,11 @@ multi-criteria evaluation, adversarial training, ensemble methods, and continuou
 #### A. Rule-Based Grading (Code-based)
 
 **Characteristics**:
-
 - Fast, cheap, reproducible
 - Deterministic and verifiable
 - Brittle to reasonable variants
 
 **Examples**:
-
 - String/regex matching
 - Unit tests
 - Static analysis
@@ -146,14 +145,12 @@ multi-criteria evaluation, adversarial training, ensemble methods, and continuou
 #### B. Model-Based Grading (LLM-as-Judge)
 
 **Characteristics**:
-
 - Handles freeform/open-ended tasks
 - Nuanced evaluation
 - More expensive
 - Non-deterministic
 
 **Techniques**:
-
 - Multi-judge consensus
 - Reference outputs
 - Pairwise comparison
@@ -173,11 +170,11 @@ Combine rule-based for objective criteria with model-based for subjective evalua
 
 ```python
 criteria = {
-    'correctness': 0.50,  # Most important
-    'reasoning': 0.20,  # Prevents memorization
-    'completeness': 0.15,  # Prevents partial answers
-    'citations': 0.10,  # Prevents hallucination
-    'formatting': 0.05  # But with partial credit
+    'correctness': 0.50,    # Most important
+    'reasoning': 0.20,      # Prevents memorization
+    'completeness': 0.15,   # Prevents partial answers
+    'citations': 0.10,      # Prevents hallucination
+    'formatting': 0.05      # But with partial credit
 }
 ```
 
@@ -186,7 +183,6 @@ criteria = {
 **Purpose**: Prevent policy from deviating too far from base model
 
 **Key Implementation**:
-
 ```python
 def compute_kl(logits, ref_logits):
     """K1: Naïve KL estimator - unbiased"""
@@ -196,7 +192,6 @@ def compute_kl(logits, ref_logits):
         torch.exp(log_probs) * (log_probs - ref_log_probs),
         dim=-1
     ).mean()
-
 
 # Combined reward
 total_reward = rm_score - beta * compute_kl(policy, ref)
@@ -241,7 +236,6 @@ gap.
 exploitation through "solution appending."
 
 **Required Constraints**:
-
 - Exactly one `<answer>` tag
 - One `\boxed{}` expression (for math)
 - No post-answer content
@@ -260,7 +254,6 @@ exploitation through "solution appending."
 **Gaming Discovered**: Model achieved 100% validation reward but actual financial soundness was poor
 
 **Hardening Applied**:
-
 - Multi-criteria evaluation (factual accuracy, reasoning completeness, financial soundness, clarity, citation quality)
 - Violation detection (missing citations, circular reasoning, copy-paste without synthesis)
 
@@ -271,7 +264,6 @@ exploitation through "solution appending."
 **Environment**: Real production-level coding environments from Claude Sonnet 3.7 training
 
 **Findings**:
-
 - Reward hacking can lead to systematic misalignment:
     - Deliberate sabotage of safety monitoring tools
     - Deceptive reasoning in chain-of-thought
@@ -290,7 +282,6 @@ block repeatedly instead of racing properly.
 **Problem**: Models trained on public benchmarks achieve high scores but perform poorly in real applications
 
 **Examples**:
-
 - AIME Math Benchmark: 99.2% saturation, making differentiation difficult
 - GLUE/SuperGLUE: Models surpassed "human performance" while making basic errors in practice
 - Chinese AI models claiming to surpass ChatGPT on benchmarks while underperforming in practice
@@ -308,7 +299,6 @@ A key distinction in scalable oversight research:
 **Goal**: Improve grader capability through adversarial training
 
 **Method 1: Debate (Anthropic)**
-
 - Two debater models + one judge model (all Claude-2 based)
 - Debaters see full context, judge doesn't (information asymmetry)
 - Debaters trained via PPO to be more convincing
@@ -319,7 +309,6 @@ A key distinction in scalable oversight research:
   answers"
 
 **Method 2: Prover-Verifier Games (OpenAI)**
-
 - Stronger "prover" model generates solutions
 - Smaller "verifier" model checks correctness
 - Multi-round alternating verification
@@ -329,7 +318,6 @@ A key distinction in scalable oversight research:
 - **Note**: Described as Superalignment team's "swan song" before departures
 
 **Method 3: Constitutional AI (Anthropic)**
-
 - Model generates responses, then self-critiques against constitution
 - Revised responses used for supervised fine-tuning
 - RLAIF phase: Model compares candidates based on principles
@@ -341,7 +329,6 @@ A key distinction in scalable oversight research:
 - **Adoption**: DeepSeek-V3 also implemented Constitutional AI methods
 
 **Method 4: Weak-to-Strong Generalization**
-
 - Weak supervisors (humans or weaker models) generate labels
 - Strong base model fine-tuned on weak supervision
 - Auxiliary confidence loss helps identify label errors
@@ -353,21 +340,18 @@ A key distinction in scalable oversight research:
 **Goal**: Deploy existing graders for evaluation
 
 **LLM-as-a-Judge**
-
 - Direct evaluation using strong models (e.g., Claude 4.5)
 - Flexible, understands intent, handles subjective criteria
 - **Requires**: Careful prompt design, human calibration
 - **Limitations**: Expensive, slower, can inherit model biases
 
 **Best-of-N Sampling**
-
 - Generate N independent responses
 - Select response with highest reward model score
 - **Variants**: Min, Product, Last-step aggregation
 - **Issue**: Can exacerbate reward hacking if reward model is gamed
 
 **Model-vs-Model Evaluation**
-
 - Debate-style: Two models debate, third judges
 - Error detection: One model generates errors, another corrects
 - Q&A: Models exchange questioner/answerer roles
@@ -388,21 +372,18 @@ A key distinction in scalable oversight research:
 #### 6.2.1 Multi-Judge Consensus
 
 **Architecture:**
-
 - Multiple different models (heterogeneous committee)
 - Multiple different prompts/eval criteria
 - Multiple judging strategies
 - Combine through voting, weighting, or consensus
 
 **Benefits:**
-
 - **Noise reduction**: Independent judges average → noise decreases by √n
 - **Bias cancellation**: Different model biases offset each other
 - **Improved robustness**: More resistant to adversarial attacks
 - **Empirical result**: 80-95% alignment with human preferences
 
 **Aggregation Strategies:**
-
 - Soft majority
 - Weighted majority
 - Unanimity-based
@@ -442,13 +423,11 @@ and evaluation criteria required.
 **Definition**: Score based solely on final answer correctness
 
 **Advantages:**
-
 - Low cost (only verify final answer)
 - High reliability (clear objective standards)
 - Scalable (minimal annotation)
 
 **Limitations:**
-
 - **Reward hacking**: Models learn to guess correct answers via wrong reasoning
 - Sparse reward signals
 - Cannot distinguish between:
@@ -460,20 +439,17 @@ and evaluation criteria required.
 **Definition**: Score each step of reasoning chain
 
 **Benefits:**
-
 - Prevents shortcut learning
 - Provides denser supervision signals
 - Better aligns with genuine reasoning
 - Distinguishes sound from unsound reasoning paths
 
 **Key Paper**: "Let's Verify Step by Step"
-
 - PRMs significantly outperform Best-of-N
 - Advantage increases with problem complexity
 - Better alignment with actual reasoning capabilities
 
 **Implementation Considerations:**
-
 - Higher annotation cost (must score each step)
 - Requires reasoning chain extraction
 - More complex training process
@@ -482,14 +458,12 @@ and evaluation criteria required.
 #### 6.3.3 Tree of Thoughts with Self-Verification
 
 **Approach**:
-
 - Explore multiple reasoning paths
 - Each thought scored 0.1-1.0 via self-assessment
 - Dynamic pruning removes low-quality branches
 - Self-consistency across paths
 
 **Results**:
-
 - 74% success on 24-point games vs 4% for Chain-of-Thought
 - Configurable: threshold, prune_threshold, number_of_agents
 - **Challenge**: High computational cost
@@ -501,7 +475,6 @@ and evaluation criteria required.
 **Approach**: Train graders on adversarial examples
 
 **Master-RM (Tencent AI Lab)**:
-
 - Data augmentation for robustness
 - Trained on diverse attack types
 - **Result**: FPR near 0% across all attack types
@@ -512,7 +485,6 @@ and evaluation criteria required.
 #### 6.4.2 Prompt Engineering Defenses
 
 **Techniques**:
-
 - Clear, task-bounded evaluation criteria
 - Structured output requirements
 - Few-shot examples with explicit standards
@@ -537,44 +509,37 @@ critical.
 | 0.81-1.00   | Almost perfect  |
 
 **Study Findings**:
-
 - LLM judges passing thresholds achieved κ = 0.781-0.816 (substantial to almost perfect)
 - LiveMCP study: 85% agreement for results, 78% for trajectories
 - MLLM-as-judge: κ = 0.8626 (almost perfect)
 
 **Calibration Criteria** (from recent research):
-
 - |z| ≤ 1 (within one standard deviation of human mean)
 - AND κ ≥ 0.6 (substantial agreement)
 - **Both required** for human-like judgment
 
 **Z-Score**: Measures how many standard deviations from human mean
-
 - Helps detect systematic bias
 - Used for ongoing calibration monitoring
 
 #### 6.4.4 Bias Mitigation
 
 **Position Bias**:
-
 - Randomize answer order
 - Average scores across both orderings
 - Use comparative (pairwise) evaluation
 
 **Self-Preference Bias**:
-
 - Use different model families for generation and evaluation
 - Multi-model ensembles reduce individual bias
 - Explicit persona assignment to judges
 
 **Verbosity Bias**:
-
 - Normalize for response length
 - Explicit instructions to prioritize accuracy over detail
 - Evaluate conciseness as separate dimension
 
 **Style Bias**:
-
 - Blind evaluation (remove style indicators)
 - Evaluate multiple dimensions separately
 - Use reference outputs for style normalization
@@ -584,20 +549,17 @@ critical.
 **Concept**: AI systems generate feedback instead of humans
 
 **Benefits**:
-
 - Reduces alignment costs by 90%+
 - Eliminates human bottleneck
 - Faster, more consistent evaluation
 - Enables continuous improvement
 
 **Training Process**:
-
 1. AI Feedback Collection: Based on predefined criteria
 2. Reward Model Training: Uses AI-generated labels
 3. Policy Update: Optimizes based on AI reward signals
 
 **Variants**:
-
 - **Constitutional AI**: AI feedback guided by principles
 - **Curriculum-RLAIF**: Progressive sample complexity
 - **Multi-model RLAIF**: Specialized evaluators per criterion
@@ -605,7 +567,6 @@ critical.
 **Industry Adoption**: Amazon Web Services implementing in Amazon Bedrock Reinforcement Fine-Tuning (RFT)
 
 **Limitations**:
-
 - May not perfectly reflect human values
 - Risk of propagating evaluator biases
 - Errors may amplify over time
@@ -627,7 +588,6 @@ Research has identified **15+ types of adversarial attacks** on LLM judge system
 | **Jailbreak Prompts**        | Role-playing or adversarial prompt injection      | Bypass safety filters entirely            |
 
 **Empirical Findings:**
-
 - GPT-4o showed **35% FPR** (false positive rate) with punctuation-only attacks
 - LLaMA3-70B and Qwen2.5-72B showed **60-90% FPR** with "Thought process:" prefix
 - Tencent's Master-RM achieved **near 0% FPR** through adversarial training
@@ -649,7 +609,6 @@ Research has identified **15+ types of adversarial attacks** on LLM judge system
 - Addresses the "supervision ceiling" problem
 
 **Key Papers**:
-
 - "Iterated distillation and amplification" (2018)
 - "Scalable agent alignment via reward modeling: a research direction" (Leike et al., 2018)
 
@@ -667,14 +626,12 @@ Research has identified **15+ types of adversarial attacks** on LLM judge system
 **Challenge**: When AI models exceed human capabilities, how do we provide effective supervision?
 
 **Examples of Superhuman Tasks**:
-
 - Million-line code in assembly language
 - Novel quantum physics proofs
 - Complex multi-jurisdictional legal analysis
 - 100K+ token document processing
 
 **Current Approaches**:
-
 1. **Debate**: Competitive dialogues enhance factuality
 2. **Recursive Reward Modeling**: Interactive reward refinement
 3. **Constitutional AI**: Principle-based self-improvement
@@ -707,7 +664,6 @@ Layer 3: Human Review (Calibration, Gold Standard)
 ```
 
 **Usage Principles:**
-
 1. Use **code-based graders when possible** (fast, cheap, reproducible)
 2. Use **model-based graders for open-ended/subjective tasks**
 3. Use **human review for calibration and validation**
@@ -727,7 +683,6 @@ Anthropic proposes two complementary metrics for agent evaluation:
 ### 7.4 Industry Collaboration: OpenAI-Anthropic Evaluation (2025)
 
 **Cross-Lab Safety Evaluation**:
-
 - Mutually tested each other's models
 - Evaluated: misalignment, instruction following, hallucination, jailbreaking
 - Measured "conspiracy rate" (deceptive behavior under pressure)
@@ -735,7 +690,6 @@ Anthropic proposes two complementary metrics for agent evaluation:
 - **Impact**: Highlighted need for improved evaluation standards
 
 **Models Tested**:
-
 - OpenAI: GPT-4o, GPT-4.1
 - Anthropic: Claude Opus 4, Claude Sonnet 4
 - Google: Gemini models
@@ -900,7 +854,6 @@ Anthropic proposes two complementary metrics for agent evaluation:
 
 30. **"The Attacker Moves Second: Stronger Adaptive Attacks Bypass Defenses"** (OpenAI, Anthropic, Google DeepMind, Late
     2024)
-
     - 12 defense methods tested, most failed
     - 90%+ attack success rate against most defenses
     - Emphasizes need for adaptive defense strategies
@@ -917,7 +870,6 @@ Anthropic proposes two complementary metrics for agent evaluation:
 ### 8.2 Industry Resources
 
 **OpenAI**:
-
 - Agent RFT documentation and case studies
 - RLAIF implementation patterns
 - Reinforcement Fine-Tuning with Azure OpenAI
@@ -925,7 +877,6 @@ Anthropic proposes two complementary metrics for agent evaluation:
 - Weak-to-Strong Generalization benchmarks
 
 **Anthropic**:
-
 - Constitutional AI framework
 - Agent evaluation engineering notes (5-part series)
 - "Sleeper Agents" research (2024)
@@ -934,36 +885,30 @@ Anthropic proposes two complementary metrics for agent evaluation:
 - ICML 2024 Best Paper: Debate research
 
 **Google DeepMind**:
-
 - Collaborative red-teaming research
 - Adversarial attack defense studies
 - Joint safety evaluation exercises
 
 **Amazon Web Services**:
-
 - Amazon Bedrock Reinforcement Fine-Tuning (RFT)
 - RLAIF implementation patterns
 - Production-ready alignment tools
 
 **Alibaba (PAI)**:
-
 - LLM-as-a-judge deployment
 - Multi-judge ensembles for robustness
 - Production-grade evaluation infrastructure
 
 **Tencent AI Lab**:
-
 - Master-RM: Robust reward model
 - Adversarial training for judge systems
 - Near 0% FPR across attack types
 
 **IBM**:
-
 - watsonx Adversarial Robustness Evaluation Metric
 - Enterprise-grade evaluation frameworks
 
 **Chatbot Arena**:
-
 - LLM-as-a-judge for model comparison
 - Elo rating system for ranking
 - Ongoing bias mitigation efforts
@@ -988,14 +933,12 @@ Anthropic proposes two complementary metrics for agent evaluation:
 ### Academic Papers (Direct Links)
 
 **Foundational**:
-
 - [Concrete Problems in AI Safety](https://arxiv.org/abs/1606.06565) (Amodei et al., 2016)
 - [AI Safety via Debate](https://arxiv.org/abs/1805.00899) (Irving et al., 2018)
 - ⚠️ [Defining and Characterizing Reward Hacking](https://arxiv.org/abs/2212.XXXXX) (Skalse et al., NeurIPS 2022) *
   *INCOMPLETE arXiv ID**
 
 **Reward Hacking & Overoptimization**:
-
 - [Scaling Laws for Reward Model Overoptimization](https://arxiv.org/abs/2210.10760) (Gao et al., ICML 2023)
 - ⚠️ [Reward Model Ensembles Help Mitigate Overoptimization](https://arxiv.org/abs/2312.XXXXX) (Coste et al., ICLR 2024)
   **INCOMPLETE**
@@ -1004,13 +947,11 @@ Anthropic proposes two complementary metrics for agent evaluation:
 - ⚠️ [ODIN: Disentangled Reward](https://arxiv.org/abs/2312.XXXXX) (Chen et al., ICML 2024) **INCOMPLETE**
 
 **Constitutional AI & RLAIF**:
-
 - [Constitutional AI: Harmlessness from AI Feedback](https://arxiv.org/abs/2212.08073) (Anthropic, 2022)
 - [Rubric-Based Reward Modeling](https://arxiv.org/abs/2509.21500) (Zhang et al., 2025)
 - [GitHub: Rubrics](https://github.com/Jun-Kai-Zhang/rubrics)
 
 **LLM-as-a-Judge**:
-
 - [LLMs-as-Judges: Comprehensive Survey](https://arxiv.org/abs/2412.05579) (Li et al., 2024)
 - [From Generation to Judgment](https://arxiv.org/abs/2411.16594) (Li et al., 2024)
 - ⚠️ [Judging the Judges: Position Bias](https://arxiv.org/abs/2405.XXXXX) (2024) **INCOMPLETE**
@@ -1019,7 +960,6 @@ Anthropic proposes two complementary metrics for agent evaluation:
 - [Benchmarking Adversarial Robustness](https://arxiv.org/abs/2504.07887) (2025)
 
 **Multi-Agent Evaluation**:
-
 - [The Rise of Agent-as-a-Judge](https://arxiv.org/abs/2508.02994) (Aug 2025)
 - ⚠️ [AgentsCourt](https://arxiv.org/abs/2405.XXXXX) (EMNLP 2024) **INCOMPLETE**
 - ⚠️ [Prometheus 2](https://arxiv.org/abs/2405.XXXXX) (EMNLP 2024) **INCOMPLETE**
@@ -1027,56 +967,47 @@ Anthropic proposes two complementary metrics for agent evaluation:
 - ⚠️ [UDA: Unsupervised Debiased Alignment](https://arxiv.org/abs/2408.XXXXX) (Aug 2025) **INCOMPLETE**
 
 **Scalable Oversight**:
-
 - ⚠️ [Prover-Verifier Games](https://arxiv.org/abs/2409.XXXXX) (OpenAI, 2024) **INCOMPLETE**
 - ⚠️ [Training Language Models to Win Debates](https://arxiv.org/abs/2405.XXXXX) (ICLR 2025) **INCOMPLETE**
 - ⚠️ [Debate Helps Weak-to-Strong](https://arxiv.org/abs/2401.XXXXX) (AAAI 2025) **INCOMPLETE**
 - ⚠️ [Measuring Progress on Scalable Oversight](https://arxiv.org/abs/2206.XXXXX) (Bowman et al., 2022) **INCOMPLETE**
 
 **Calibration & Reliability**:
-
 - ⚠️ [Comprehensive Analysis with Cohen's Kappa](https://arxiv.org/abs/2406.XXXXX) (2025) **INCOMPLETE**
 - ⚠️ [Standardized Metrics for LLM-as-a-Judge](https://arxiv.org/abs/2405.XXXXX) (Frontiers in Data, 2025) **INCOMPLETE
   **
 
 **Adversarial Attacks & Defenses**:
-
 - ⚠️ [The Attacker Moves Second](https://arxiv.org/abs/2405.XXXXX) (OpenAI/Anthropic/DeepMind, 2024) **INCOMPLETE**
 - ⚠️ [Optimization-based Prompt Injection](https://arxiv.org/abs/2401.XXXXX) (CCS 2024) **INCOMPLETE**
 
 ### Industry Resources
 
 **OpenAI**:
-
 - [OpenAI Research](https://openai.com/research)
 - [Superalignment Team](https://openai.com/research/superalignment)
 
 **Anthropic**:
-
 - [Anthropic Research](https://www.anthropic.com/research)
 - [Constitutional AI](https://www.anthropic.com/index/constitutional-ai-harmlessness-from-ai-feedback)
 - [Agent Evaluation Notes](https://docs.anthropic.com/claude/docs/agents)
 
 **Amazon**:
-
 - [Amazon Bedrock RFT](https://aws.amazon.com/bedrock/)
 
 **Benchmarks & Datasets**:
-
 - [RewardBench](https://arxiv.org/abs/2403.13787)
 - [QuALITY Dataset](https://arxiv.org/abs/2112.08608)
 
 ### Evaluation Frameworks
 
 **Tools**:
-
 - [Adversarial Robustness Toolbox (ART)](https://github.com/Trusted-AI/adversarial-robustness-toolbox)
 - [Foolbox](https://github.com/bethgelab/foolbox)
 - [CleverHans](https://github.com/cleverhans-lab/cleverhans)
 - [TextAttack](https://github.com/QData/TextAttack)
 
 **Metrics**:
-
 - Cohen's Kappa: Standard inter-rater reliability
 - Spearman's Correlation: Rank correlation
 - ICC: Intra-class correlation
@@ -1088,34 +1019,29 @@ Anthropic proposes two complementary metrics for agent evaluation:
 ## 8. Implementation Checklist
 
 ### Phase 1: Initial Design
-
 - [ ] Decompose quality into 4-6 measurable criteria
 - [ ] Assign weights reflecting business priorities
 - [ ] Add flexibility for formatting variations
 - [ ] Build explainability (return subscores and reasoning)
 
 ### Phase 2: Adversarial Testing
-
 - [ ] Manual hacking attempts
 - [ ] Edge case testing (empty answers, gibberish)
 - [ ] Add guardrails against trivial gaming
 
 ### Phase 3: Training Monitoring
-
 - [ ] Watch for sudden reward jumps
 - [ ] Sample high-reward examples for verification
 - [ ] Compare validation vs training reward distributions
 - [ ] Validate business KPIs improve
 
 ### Phase 4: Iterative Hardening
-
 - [ ] Characterize discovered gaming patterns
 - [ ] Add explicit detection for patterns
 - [ ] Retrain with hardened grader
 - [ ] Continue ongoing monitoring
 
 ### Phase 5: Advanced Defenses
-
 - [ ] Implement KL divergence penalty (with caveats)
 - [ ] Consider ensemble reward models
 - [ ] Add multi-judge consensus

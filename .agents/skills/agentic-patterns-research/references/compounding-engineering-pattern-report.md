@@ -1,5 +1,6 @@
 <!-- Source: https://github.com/nibzard/awesome-agentic-patterns/tree/main/research/compounding-engineering-pattern-report.md -->
 
+
 # Compounding Engineering Pattern Research Report
 
 **Pattern:** Compounding Engineering Pattern
@@ -44,14 +45,12 @@ complete a feature, document:
 4. **Patterns and best practices** that should be reused
 
 Then embed these insights into:
-
 - **Claude MD / system prompts**: Global coding standards
 - **Slash commands**: Repeatable workflows (e.g., `/test-with-validation`)
 - **Subagents**: Specialized validators (e.g., security review agent)
 - **Hooks**: Automated checks that prevent regressions
 
 ### Key Outcome
-
 > "Each feature makes the next easier because the codebase becomes increasingly 'self-teaching.'"
 
 ---
@@ -101,7 +100,6 @@ graph LR
 ### Direct Related Patterns (Same Category: Learning & Adaptation)
 
 #### 1. Skill Library Evolution (Established)
-
 - **File:** `patterns/skill-library-evolution.md`
 - **Relationship:** Builds agent capability over time by persisting working code as reusable functions
 - **Similarities:**
@@ -111,7 +109,6 @@ graph LR
   process-level learnings
 
 #### 2. Memory Synthesis from Execution Logs (Emerging)
-
 - **File:** `patterns/memory-synthesis-from-execution-logs.md`
 - **Relationship:** Provides the mechanism to identify patterns across multiple features
 - **How it complements:**
@@ -122,7 +119,6 @@ graph LR
 ### Feedback & Iteration Patterns
 
 #### 3. Iterative Prompt & Skill Refinement (Proposed)
-
 - **File:** `patterns/iterative-prompt-skill-refinement.md`
 - **Relationship:** Provides refinement mechanisms for improving codified knowledge
 - **Complementary aspects:**
@@ -130,7 +126,6 @@ graph LR
     - Responsive feedback, owner-led refinement, Claude-enhanced refinement, dashboard tracking
 
 #### 4. Coding Agent CI Feedback Loop (Best Practice)
-
 - **File:** `patterns/coding-agent-ci-feedback-loop.md`
 - **Relationship:** Provides structured feedback from testing that can be codified
 - **Complementary aspects:**
@@ -141,20 +136,17 @@ graph LR
 ### Progressive & Accumulation Patterns
 
 #### 5. Progressive Autonomy with Model Evolution (Best Practice)
-
 - **File:** `patterns/progressive-autonomy-with-model-evolution.md`
 - **Relationship:** Actively removes scaffolding as models become more capable
 - **Contrast:** While Progressive Autonomy focuses on capability growth, Compounding Engineering focuses on knowledge
   growth
 
 #### 6. Progressive Complexity Escalation (Emerging)
-
 - **File:** `patterns/progressive-complexity-escalation.md`
 - **Relationship:** Starts with low-complexity, high-reliability tasks
 - **Similar approach:** Gradually unlocks more complex capabilities as systems improve
 
 #### 7. Self-Identity Accumulation (Emerging)
-
 - **File:** `patterns/self-identity-accumulation.md`
 - **Relationship:** Dual-hook architecture for accumulating agent identity across sessions
 - **Parallel:** Identity Accumulation builds personal knowledge; Compounding Engineering builds organizational knowledge
@@ -162,7 +154,6 @@ graph LR
 ### Knowledge & Context Patterns
 
 #### 8. Agent-Powered Codebase QA & Onboarding (Validated in Production)
-
 - **File:** `patterns/agent-powered-codebase-qa-onboarding.md`
 - **Relationship:** AI agent with retrieval capabilities for understanding codebases
 - **Synergy:** Accelerates developer onboarding through intelligent Q&A, complements accumulated knowledge
@@ -172,7 +163,6 @@ graph LR
 ## Pattern Relationships & Dependencies
 
 ### Prerequisite Patterns
-
 These patterns provide the foundation needed for compounding engineering to work effectively:
 
 1. **Team-Shared Agent Configuration as Code** (best-practice)
@@ -191,7 +181,6 @@ These patterns provide the foundation needed for compounding engineering to work
     - Ensures compounding doesn't amplify bad patterns
 
 ### Complementary Patterns
-
 These patterns enhance and work alongside compounding engineering:
 
 1. **Memory Synthesis from Execution Logs** - Provides mechanism for identifying "what worked" and "what didn't"
@@ -200,7 +189,6 @@ These patterns enhance and work alongside compounding engineering:
 4. **Episodic Memory Retrieval & Injection** - Ensures codified knowledge is applied appropriately
 
 ### Implementation Mechanisms
-
 These patterns provide specific mechanisms for implementing compounding engineering:
 
 1. **Skill Library Evolution** - Implements codification of working solutions into reusable skills
@@ -267,8 +255,8 @@ Compounding Engineering Pattern (Core):
 ### Primary Sources
 
 1. **Dan Shipper & Every Engineering Team**
-   -
-   Source: [AI & I Podcast: How to Use Claude Code Like the People Who Built It](https://every.to/podcast/transcript-how-to-use-claude-code-like-the-people-who-built-it)
+    -
+    Source: [AI & I Podcast: How to Use Claude Code Like the People Who Built It](https://every.to/podcast/transcript-how-to-use-claude-code-like-the-people-who-built-it)
     - Key Quotes:
       > "In normal engineering, every feature you add, it makes it harder to add the next feature. In compounding
       engineering, your goal is to make the next feature easier to build from the feature that you just added."

@@ -1,5 +1,6 @@
 <!-- Source: https://github.com/nibzard/awesome-agentic-patterns/tree/main/research/factory-over-assistant-report.md -->
 
+
 # Factory over Assistant - Research Report
 
 **Pattern:** Factory over Assistant
@@ -14,7 +15,6 @@
 **Factory over Assistant** is a paradigm-shifting pattern that advocates moving from interactive, sidebar-based agent
 workflows (assistant model) to autonomous, parallel agent spawning architectures (factory model). The pattern originates
 from the AMP (Anthropic) team's experience, particularly articulated in the "Raising an Agent" podcast episodes 9 and
-
 10.
 
 **Key Finding:** The assistant model—working one-on-one with an agent in a sidebar, watching it work, ping-ponging back
@@ -23,7 +23,6 @@ bottleneck as the feedback loop. The factory model enables spawning multiple aut
 with periodic check-ins rather than continuous supervision.
 
 **Status Assessment:** The pattern is "emerging" but rapidly moving toward "validated-in-production" based on:
-
 - Strong theoretical foundations
 - Multiple production implementations (AMP, Anthropic Claude Code, GitHub, Cursor)
 - Documented case studies with 10x+ speedups
@@ -36,7 +35,6 @@ with periodic check-ins rather than continuous supervision.
 ### Problem Statement
 
 The "assistant" model limits productivity and scalability through:
-
 1. **Limits parallelization**: You can only effectively run one agent when watching it in a sidebar
 2. **Human as crutch**: You become the feedback loop when you should be setting up automated loops
 3. **Wrong optimization**: Sidebar UX optimizes for watching, not for autonomous work
@@ -45,7 +43,6 @@ The "assistant" model limits productivity and scalability through:
 ### Solution
 
 Shift from the **assistant model** to the **factory model**:
-
 - Spawn multiple autonomous agents that work in parallel
 - Check on them periodically (30-60 minutes later)
 - Focus time on higher-level orchestration rather than being the feedback loop
@@ -115,17 +112,14 @@ The factory-over-assistant pattern is supported by extensive academic research o
 ### Primary Implementations
 
 #### 1. AMP (Anthropic)
-
 **Status:** Leading implementation, actively deprecating assistant model
 
 **Key Evidence:**
-
 - Explicitly killing their VS Code extension because "the sidebar is dead for frontier development"
 - CLI-first approach for agent spawning
 - Background agent execution as primary workflow
 
 **Technical Approach:**
-
 ```bash
 # AMP-style background agent execution
 amp run --background "task description" --max-time 3600
@@ -136,11 +130,9 @@ amp run --background "task description" --max-time 3600
 > And we think we can get that to 10% or 1% or something."
 
 #### 2. Anthropic Claude Code
-
 **Status:** Production-validated with heavy usage
 
 **Key Evidence:**
-
 - Internal users spending $1000+/month on factory-style workflows
 - Sub-agent spawning with 10+ parallel agents
 - Map-reduce execution for codebase migrations
@@ -151,36 +143,29 @@ amp run --background "task description" --max-time 3600
 > stuff over."
 
 **Measured Results:**
-
 - 10x+ speedup on framework migrations
 - Successful migrations on Solid to React, browser from scratch (1M lines)
 
 #### 3. GitHub Agentic Workflows
-
 **Status:** Mainstream enterprise adoption
 
 **Key Features:**
-
 - AI agents running in GitHub Actions
 - Branch-per-task isolation
 - CI/CD integration for feedback loops
 
 #### 4. Cursor Background Agent
-
 **Status:** Production cloud-based autonomous development
 
 **Key Features:**
-
 - Automatic PR creation
 - Cloud-based execution
 - Minimal human intervention required
 
 #### 5. OpenHands
-
 **Status:** Open-source platform (64K+ GitHub stars)
 
 **Key Features:**
-
 - Multi-agent collaboration
 - Autonomous software development
 - Production validation
@@ -265,7 +250,6 @@ exploratory/learning work
 ### 1. Agent Spawning Mechanisms
 
 #### CLI-Based Spawning (AMP Pattern)
-
 ```bash
 # AMP-style background agent execution
 amp run --background "task description" --max-time 3600
@@ -279,17 +263,14 @@ spawn_subagent(
 ```
 
 **Characteristics:**
-
 - Shell-based execution
 - State externalization to filesystem
 - Asynchronous execution
 - PTY-aware for TTY-required commands
 
 #### SDK/Programmatic Spawning
-
 ```python
 from anthropic import AnthropicBedrock
-
 
 def spawn_agent(task, context, model="claude-3-5-sonnet-20241022"):
     response = client.messages.create(
@@ -305,7 +286,6 @@ def spawn_agent(task, context, model="claude-3-5-sonnet-20241022"):
 ### 2. Monitoring and Check-In Systems
 
 #### Filesystem-Based State Tracking
-
 ```
 workspace/
 ├── state/
@@ -320,7 +300,6 @@ workspace/
 ```
 
 #### LLM Observability Platforms
-
 - Datadog LLM Observability: Span tracing, metrics
 - LangSmith: Evaluation, tracing
 - Arize Phoenix: Open-source tracing
@@ -328,20 +307,18 @@ workspace/
 ### 3. Feedback Loop Automation
 
 #### CI/CD Integration Pattern
-
 ```mermaid
 sequenceDiagram
-    Agent ->> Git: push branch
-    Agent -->> CI: trigger tests
-    CI -->> Agent: failures
-    Agent ->> Files: patch
-    Agent -->> CI: re-run
-    CI -->> Agent: all green
-    Agent -->> Dev: PR ready
+  Agent->>Git: push branch
+  Agent-->>CI: trigger tests
+  CI-->>Agent: failures
+  Agent->>Files: patch
+  Agent-->>CI: re-run
+  CI-->>Agent: all green
+  Agent-->>Dev: PR ready
 ```
 
 **Implementation Mechanics:**
-
 1. Branch creation for task isolation
 2. CI triggering via API
 3. Result polling with exponential backoff
@@ -352,18 +329,16 @@ sequenceDiagram
 ### 4. Resource Management
 
 #### Lane-Based Execution Queueing
-
 ```typescript
 const lanes = {
-    main: {maxConcurrent: 1},      // Serial CLI commands
-    cron: {maxConcurrent: 2},      // Scheduled tasks
-    subagent: {maxConcurrent: 10}, // Parallel spawned agents
-    session: {maxConcurrent: 1}    // Per-user queues
+  main: { maxConcurrent: 1 },      // Serial CLI commands
+  cron: { maxConcurrent: 2 },      // Scheduled tasks
+  subagent: { maxConcurrent: 10 }, // Parallel spawned agents
+  session: { maxConcurrent: 1 }    // Per-user queues
 };
 ```
 
 #### Cost Control
-
 ```python
 from litellm import Router
 
@@ -384,7 +359,7 @@ router = Router(
 ```mermaid
 graph TD
     subgraph Assistant_Old["Assistant Model (Old)"]
-        A1[Human] <-->|Sidebar ping - pong| B1[Agent]
+        A1[Human] <-->|Sidebar ping-pong| B1[Agent]
         B1 -->|One task at a time| C1[Results]
     end
 
@@ -400,10 +375,10 @@ graph TD
         A2 -->|Check in periodically| C4
     end
 
-    style B1 fill: #ffcdd2, stroke: #c62828
-    style B2 fill: #c8e6c9, stroke: #2e7d32
-    style B3 fill: #c8e6c9, stroke: #2e7d32
-    style B4 fill: #c8e6c9, stroke: #2e7d32
+    style B1 fill:#ffcdd2,stroke:#c62828
+    style B2 fill:#c8e6c9,stroke:#2e7d32
+    style B3 fill:#c8e6c9,stroke:#2e7d32
+    style B4 fill:#c8e6c9,stroke:#2e7d32
 ```
 
 ---
@@ -444,21 +419,18 @@ graph TD
 ## Real-World Case Studies
 
 ### Case Study 1: Solid to React Migration
-
 **Source:** Anthropic internal use (Boris Cherny)
 **Approach:** Factory model with 10+ parallel agents
 **Results:** 3 weeks, +266K/-193K edits
 **Speedup:** 10x+ compared to manual migration
 
 ### Case Study 2: Browser from Scratch
-
 **Source:** Cursor Engineering
 **Approach:** Planner-worker separation, hundreds of concurrent agents
 **Scale:** 1M lines of code, 1,000 files
 **Duration:** Ran for weeks
 
 ### Case Study 3: Framework Migration at Scale
-
 **Source:** Anthropic Claude Code users
 **Approach:** Main agent creates todo list, spawns 10 agents, map-reduce execution
 **Cost:** $1000+/month per user
@@ -471,7 +443,6 @@ graph TD
 ### Transitioning from Assistant to Factory
 
 **1. Shift Time Investment:**
-
 ```yaml
 # Assistant model (old)
 time_distribution:
@@ -486,19 +457,16 @@ time_distribution:
 ```
 
 **2. Build Automated Feedback Loops:**
-
 - Test commands that agents run automatically
 - Build commands that verify correctness
 - Skills that encapsulate common operations
 - Linters and formatters that agents use
 
 **3. Use Appropriate Models:**
-
 - **Interactive mode**: "Trigger happy" models like Opus for quick tasks
 - **Factory mode**: "Lazy" research-oriented models like GPT-5.2 for autonomous work
 
 **4. Embrace Asynchronous Workflows:**
-
 ```pseudo
 # Old workflow (assistant)
 user → agent → user → agent → user → agent → result
@@ -574,7 +542,6 @@ user → spawn(agent1) + spawn(agent2) + spawn(agent3)
   AMP (Thorsten Ball, Quinn Slack, 2025)
 
 ### Academic Papers
-
 - OpenDevin: [arxiv.org/abs/2407.16819](https://arxiv.org/abs/2407.16819)
 - AutoGen: [arxiv.org/abs/2308.08160](https://arxiv.org/abs/2308.08160)
 - CAMEL: [arxiv.org/abs/2303.17760](https://arxiv.org/abs/2303.17760)
@@ -583,14 +550,12 @@ user → spawn(agent1) + spawn(agent2) + spawn(agent3)
 - AgentVerse: [arxiv.org/abs/2308.11468](https://arxiv.org/abs/2308.11468)
 
 ### Industry Resources
-
 - [AMP Manual](https://ampcode.com/manual#background)
 - [Claude Code GitHub](https://github.com/anthropics/claude-code)
 - [Cursor](https://cursor.sh)
 - [OpenHands](https://github.com/OpenDevin/OpenDevin)
 
 ### Related Pattern Documentation
-
 - `patterns/agent-modes-by-model-personality.md`
 - `patterns/rich-feedback-loops.md`
 - `patterns/asynchronous-coding-agent-pipeline.md`

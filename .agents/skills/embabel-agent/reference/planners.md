@@ -14,7 +14,6 @@
 The default planner. Uses A* search to find a sequence of actions that achieves the goal state.
 
 ### How it works
-
 1. The planner examines the current state (bindings on the blackboard)
 2. It identifies goals that haven't been achieved
 3. It searches for actions whose postconditions satisfy the goal
@@ -22,7 +21,6 @@ The default planner. Uses A* search to find a sequence of actions that achieves 
 5. After each action, it replans from the new state
 
 ### When to use
-
 - You have well-defined goals with clear success conditions
 - You want deterministic, verifiable planning
 - Your domain has a rich set of reusable actions
@@ -50,7 +48,6 @@ public class TravelAgent {
 Selects the action with the highest **net value** (`value - cost`) from all available actions at each step.
 
 ### When to use
-
 - Event-driven systems that react to incoming events
 - Chatbots with multiple response options
 - Exploration tasks where you want to discover what's possible
@@ -98,7 +95,6 @@ val agent = Agent(
 Uses an LLM to orchestrate actions dynamically. Non-deterministic.
 
 ### When to use
-
 - Action ordering is context-dependent
 - You want an LLM to synthesize across multiple sources
 - Non-determinism is acceptable

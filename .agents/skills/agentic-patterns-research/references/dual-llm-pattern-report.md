@@ -1,5 +1,6 @@
 <!-- Source: https://github.com/nibzard/awesome-agentic-patterns/tree/main/research/dual-llm-pattern-report.md -->
 
+
 # Dual-LLM Pattern Research Report
 
 **Research Date**: 2026-02-27
@@ -34,7 +35,6 @@ achieve goals that would be difficult or risky for a single model. Rather than u
 divides concerns between specialized models that interact through well-defined interfaces.
 
 **Fundamental insight**: Separating concerns across two models creates:
-
 - **Clear trust boundaries** for security-sensitive operations
 - **Improved reliability** through independent verification
 - **Better quality** through critique and revision cycles
@@ -59,7 +59,6 @@ Dual-LLM architectures share these characteristics:
 **Purpose**: Addresses security by separating privilege levels
 
 **Roles:**
-
 - **Privileged LLM**: Plans and calls tools but never sees raw untrusted data
 - **Quarantined LLM**: Reads untrusted data but has zero tool access
 
@@ -80,7 +79,6 @@ execute(plan, subst={ "$VAR1": var1 })
 **Purpose**: Separates planning from execution
 
 **Roles:**
-
 - **Planner LLM**: Generates a fixed sequence of tool calls before seeing untrusted data
 - **Executor**: Runs that exact sequence deterministically
 
@@ -103,13 +101,11 @@ vary
 **Purpose**: Uses one model to generate and another to critique
 
 **Roles:**
-
 - **Generator**: Produces initial content, code, or responses
 - **Critic**: Evaluates, critiques, and identifies issues
 - **Iteration Loop**: Critic feedback improves generator output in multiple rounds
 
 **Key Mechanism**:
-
 ```python
 code = generator.generate(task)
 review = critic.review_code(code)
@@ -126,13 +122,11 @@ if review.has_critical_issues():
 **Purpose**: Creates adversarial agents to challenge each other
 
 **Roles:**
-
 - **Agent 1 (Advocate)**: Argues for one approach or position
 - **Agent 2 (Critic/Auditor)**: Challenges and scrutinizes the position
 - **Synthesis**: Results are combined or a winner is selected
 
 **Example Configurations**:
-
 - Pro vs. Con
 - Optimistic vs. Conservative
 - User advocate vs. Company auditor
@@ -147,7 +141,6 @@ if review.has_critical_issues():
 **Purpose**: Cost-optimized dual-model system
 
 **Roles:**
-
 - **Worker (Claude Sonnet 4)**: Fast, capable, cost-effective agent handling bulk tool use and code generation
 - **Oracle (OpenAI o3/Gemini 2.5 Pro)**: Powerful, expensive model reserved for high-level reasoning, architectural
   planning, and debugging complex issues
@@ -163,7 +156,6 @@ if review.has_critical_issues():
 **Purpose**: Extends dual-idea to scalable multi-agent systems
 
 **Roles:**
-
 - **Planners**: Explore codebase and create tasks (can spawn sub-planners)
 - **Workers**: Pick up tasks and complete them without coordination
 - **Judge**: Evaluates results and determines whether to continue
@@ -238,25 +230,21 @@ next, making the control flow attackable.
 ### 4.1 Communication Protocols
 
 **Symbolic Variables (Privileged/Quarantined)**:
-
 - Quarantined model returns typed values or opaque handles
 - Privileged model only manipulates references
 - Raw untrusted text never crosses the boundary
 
 **Frozen Plans (Plan-Then-Execute)**:
-
 - Planner commits to a bounded action graph upfront
 - Executor enforces that graph deterministically
 - Tool outputs can shape arguments but not control flow
 
 **Critique/Revision Cycles (Generator/Critic)**:
-
 ```
 Generator -> Output -> Critic -> Feedback -> Generator -> Improved Output
 ```
 
 **Debate/Synthesis (Opponent/Processor)**:
-
 ```
 Task -> Agent 1 (Propose) -> Agent 2 (Challenge) -> Debate -> Synthesis
 ```
@@ -274,19 +262,16 @@ Task -> Agent 1 (Propose) -> Agent 2 (Challenge) -> Debate -> Synthesis
 ### 4.3 State Management
 
 **Isolated Contexts**: Each model has its own context window
-
 - Prevents context pollution
 - Enables parallel execution
 - Reduces blast radius of errors
 
 **State Externalization**: Agents explicitly pass state between models
-
 - Virtual file passing
 - Symbolic variable substitution
 - Structured I/O contracts
 
 **Checkpointing**: State is saved at interaction boundaries
-
 - Enables replay and debugging
 - Allows recovery from failures
 - Facilitates comparison of approaches
@@ -298,20 +283,17 @@ Task -> Agent 1 (Propose) -> Agent 2 (Challenge) -> Debate -> Synthesis
 ### 5.1 Coding/Development
 
 **Code Generation + Review** (Sequential iterative refinement)
-
 - Roles: Generator produces code, Critic identifies bugs/security issues
 - Coordination: Sequential critique/revision cycles
 - Benefits: 30-50% bug reduction, faster development cycles
 - Examples: OpenAI CriticGPT (production), GitHub Copilot Workspace
 
 **Pair Programming Simulation** (Parallel continuous communication)
-
 - Roles: Driver writes code, Navigator reviews architecture
 - Coordination: Parallel with continuous feedback
 - Benefits: Better architecture decisions, fewer defects
 
 **Oracle-Worker Cost Optimization** (On-demand consultation)
-
 - Roles: Worker handles routine tasks, Oracle consulted for complex problems
 - Coordination: Worker requests Oracle when stuck
 - Benefits: 90% cost reduction vs. using frontier model for all operations
@@ -319,13 +301,11 @@ Task -> Agent 1 (Propose) -> Agent 2 (Challenge) -> Debate -> Synthesis
 ### 5.2 Writing/Content
 
 **Draft + Edit Workflow**
-
 - Roles: Writer creates draft, Editor improves quality
 - Coordination: Sequential with multiple editorial passes
 - Benefits: Higher content quality, consistent style
 
 **Writer + Fact-Checker**
-
 - Roles: Writer generates content, Fact-Checker verifies claims
 - Coordination: Sequential verification
 - Benefits: Reduces hallucinations, improves accuracy
@@ -333,13 +313,11 @@ Task -> Agent 1 (Propose) -> Agent 2 (Challenge) -> Debate -> Synthesis
 ### 5.3 Research/Analysis
 
 **Investigator + Critic**
-
 - Roles: Investigator gathers evidence, Critic challenges conclusions
 - Coordination: Iterative debate
 - Benefits: Reduces confirmation bias, more rigorous analysis
 
 **Hypothesizer + Reviewer**
-
 - Roles: Hypothesizer generates theories, Reviewer evaluates evidence
 - Coordination: Sequential evaluation
 - Benefits: More rigorous scientific inquiry
@@ -347,13 +325,11 @@ Task -> Agent 1 (Propose) -> Agent 2 (Challenge) -> Debate -> Synthesis
 ### 5.4 Decision Making
 
 **Proposer + Evaluator**
-
 - Roles: Proposer suggests options, Evaluator scores against criteria
 - Coordination: Sequential evaluation
 - Benefits: Structured decision-making with clear rationale
 
 **Advocate + Devil's Advocate**
-
 - Roles: Advocate argues for position, Devil's Advocate challenges assumptions
 - Coordination: Adversarial debate
 - Benefits: Exposes blind spots, reduces groupthink
@@ -361,13 +337,11 @@ Task -> Agent 1 (Propose) -> Agent 2 (Challenge) -> Debate -> Synthesis
 ### 5.5 Education
 
 **Tutor + Assessor**
-
 - Roles: Tutor teaches concepts, Assessor evaluates understanding
 - Coordination: Teaching-learning-evaluation cycle
 - Benefits: Accurate assessment, personalized learning paths
 
 **Explainer + Quizzer**
-
 - Roles: Explainer presents content, Quizzer tests comprehension
 - Coordination: Explain-quiz-explain cycle
 - Benefits: Active learning, immediate feedback
@@ -375,13 +349,11 @@ Task -> Agent 1 (Propose) -> Agent 2 (Challenge) -> Debate -> Synthesis
 ### 5.6 Creative Work
 
 **Generator + Curator**
-
 - Roles: Generator creates options, Curator selects best
 - Coordination: Generate-curate-refine cycle
 - Benefits: Quality filtering, creative exploration
 
 **Creator + Critic**
-
 - Roles: Creator produces work, Critic provides feedback
 - Coordination: Creation-feedback loop
 - Benefits: Artistic improvement, refined output
@@ -430,13 +402,11 @@ Task -> Agent 1 (Propose) -> Agent 2 (Challenge) -> Debate -> Synthesis
 ### 7.1 Cost Considerations
 
 **Direct Costs:**
-
 - API costs for running two models (often 2x single model cost)
 - Infrastructure for coordination and state management
 - Development time for orchestration logic
 
 **Indirect Costs:**
-
 - Increased latency (sequential critique/revision)
 - Debugging complexity (issues may arise from interactions)
 - Maintenance of two model configurations
@@ -453,7 +423,6 @@ Task -> Agent 1 (Propose) -> Agent 2 (Challenge) -> Debate -> Synthesis
 ### 7.3 ROI Framework
 
 **Break-even Analysis Template:**
-
 ```
 Fixed costs: Setup + orchestration development
 Variable costs: 2x model API costs per transaction
@@ -463,7 +432,6 @@ Break-even transactions = Fixed costs / (Savings per transaction - Variable cost
 ```
 
 **Decision Tree:**
-
 1. Is the task security-sensitive? → YES: Use Privileged/Quarantined
 2. Is high-quality output critical? → YES: Use Generator/Critic
 3. Is cost a major concern? → YES: Use Oracle/Worker on-demand
@@ -506,21 +474,18 @@ Break-even transactions = Fixed costs / (Savings per transaction - Variable cost
 ### 9.1 Validated in Production
 
 **OpenAI - CriticGPT** (July 2024)
-
 - Status: Validated in production
 - Pattern: Generator/Critic
 - Application: Code review and quality assurance
 - Results: Near-human evaluation accuracy at 100x lower cost
 
 **Anthropic - Constitutional AI**
-
 - Status: Production
 - Pattern: Generator/Critic with constitutional principles
 - Application: AI alignment and harmlessness
 - Source: https://arxiv.org/abs/2212.08073
 
 **Sourcegraph - Oracle and Worker**
-
 - Status: Emerging
 - Pattern: Oracle/Worker cost optimization
 - Application: Development environments, complex coding tasks
@@ -650,7 +615,6 @@ class OnDemandDualLLM:
 ### 13.1 When to Adopt Dual-LLM
 
 **Best fit for:**
-
 - Security-sensitive operations requiring privilege separation
 - Quality-critical tasks needing automated review
 - Complex decisions benefiting from multiple perspectives
@@ -658,7 +622,6 @@ class OnDemandDualLLM:
 - Well-defined tasks with clear evaluation criteria
 
 **Avoid for:**
-
 - Simple, well-understood tasks
 - Rapid prototyping where speed matters more than quality
 - Exploratory work requiring human creativity

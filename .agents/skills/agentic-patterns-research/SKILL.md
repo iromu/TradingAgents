@@ -159,7 +159,6 @@ enabling true multi-agent collaboration (OpenDevin, AutoGen, MetaGPT).
 ### Reading Reference Files
 
 Each reference file follows a consistent structure:
-
 - **Executive Summary** — Key findings and production status
 - **Problem Statement** — What issue the pattern solves
 - **Solution** — How the pattern works (with code examples)

@@ -1,5 +1,6 @@
 <!-- Source: https://github.com/nibzard/awesome-agentic-patterns/tree/main/research/agent-reinforcement-fine-tuning-report.md -->
 
+
 # Agent Reinforcement Fine-Tuning (Agent RFT) - Research Report
 
 **Pattern**: agent-reinforcement-fine-tuning
@@ -195,13 +196,11 @@ language model alignment, and agentic AI.
 ### API Overview and Availability
 
 OpenAI's Agent Reinforcement Fine-Tuning (RFT) is available through:
-
 - **o4-mini**: Fully available for production use
 - **GPT-5**: Currently in private beta/testing phase (as of October 2025) - *Needs verification*
 - **AgentKit SDK**: Announced at OpenAI DevDay 2025, provides visual builder and evaluation tools
 
 **Documentation Resources:**
-
 - Official developer portal: `https://developers.openai.com/apps-sdk`
 - [OpenAI Build Hour Video - Agent RFT Full Tutorial](https://www.youtube.com/watch?v=1s_7RMG4O4U)
 - [Agent RFT Technical Analysis (Bilibili)](https://m.bilibili.com/video/BV1X6kkB5EeT/)
@@ -211,7 +210,6 @@ OpenAI's Agent Reinforcement Fine-Tuning (RFT) is available through:
 #### Supported Grader Types
 
 **1. String Check Grader**
-
 ```json
 {
   "type": "string_check",
@@ -223,7 +221,6 @@ OpenAI's Agent Reinforcement Fine-Tuning (RFT) is available through:
 ```
 
 **2. Score Model Grader (LLM-as-a-Judge)**
-
 ```json
 {
   "type": "score_model",
@@ -239,15 +236,11 @@ OpenAI's Agent Reinforcement Fine-Tuning (RFT) is available through:
       "content": "Reference: {{item.reference_answer}}. Model answer: {{sample.output_text}}"
     }
   ],
-  "range": [
-    0,
-    1
-  ]
+  "range": [0, 1]
 }
 ```
 
 **3. Python Code Grader**
-
 ```json
 {
   "type": "python",
@@ -257,7 +250,6 @@ OpenAI's Agent Reinforcement Fine-Tuning (RFT) is available through:
 ```
 
 #### API Endpoints
-
 - `/openai/v1/fine_tuning/alpha/graders/validate` - Validate grader configurations
 - `/openai/v1/fine_tuning/alpha/graders/run` - Execute grading on model outputs
 
@@ -271,7 +263,6 @@ import uvicorn
 
 app = FastAPI(title="Agent RFT Grader Endpoint")
 
-
 class GraderRequest(BaseModel):
     """Request schema for OpenAI's RFT grader calls"""
     rollout_id: str
@@ -280,13 +271,11 @@ class GraderRequest(BaseModel):
     context: Dict[str, Any]
     metadata: Optional[Dict[str, Any]] = {}
 
-
 class GraderResponse(BaseModel):
     """Response schema with reward signal"""
     score: float  # Range: 0.0 to 1.0
     feedback: Optional[str] = None
     metadata: Optional[Dict[str, Any]] = {}
-
 
 @app.post("/grade")
 async def grade_rollout(request: GraderRequest) -> GraderResponse:
@@ -321,11 +310,9 @@ async def grade_rollout(request: GraderRequest) -> GraderResponse:
         metadata={"rollout_id": request.rollout_id, "num_tool_calls": len(request.tool_calls)}
     )
 
-
 @app.get("/health")
 async def health_check():
     return {"status": "healthy", "service": "grader"}
-
 
 if __name__ == "__main__":
     uvicorn.run(app, host="0.0.0.0", port=8000)
@@ -337,7 +324,6 @@ if __name__ == "__main__":
 import modal
 
 app = modal.App("agent-rft-grader")
-
 
 @app.function(
     image=modal.Image.debian_slim().pip_install("fastapi", "uvicorn"),
@@ -353,7 +339,6 @@ def grade(rollout_data: dict) -> dict:
         "score": score,
         "rollout_id": rollout_data.get("rollout_id")
     }
-
 
 def evaluate_rollout(data: dict) -> float:
     """Implement evaluation logic"""
@@ -376,7 +361,6 @@ in OpenAI's current fine-tuning API documentation. The standard parameters are:
 | `seed`                     | Integer | Controls job reproducibility                          | Any integer                              |
 
 **Example API Call:**
-
 ```python
 from openai import AzureOpenAI
 
@@ -398,7 +382,6 @@ client.fine_tuning.jobs.create(
 ```
 
 **Guidelines:**
-
 - Larger batch sizes work better with larger datasets
 - Larger learning rates tend to perform better with larger batch sizes
 - Smaller learning rates can help avoid overfitting
@@ -407,26 +390,22 @@ client.fine_tuning.jobs.create(
 ### Grader Design Best Practices
 
 **Principle 1: Provide Gradient Rewards**
-
 - ❌ Anti-pattern: Binary scoring (0/1) confuses models
 - ✅ Best practice: Use 0-1 floating point scores for clear feedback
 
 **Principle 2: Prevent Reward Hacking**
 Common exploitation patterns to prevent:
-
 - Outputting specific formats to trick the grader
 - Getting answers right by luck with incorrect reasoning
 - Burying correct answers in large amounts of information
 
 **Design Techniques:**
-
 - Use Model Graders instead of simple string matching
 - Check the reasoning process, not just the final answer
 - Give low scores for "lucky guesses"
 - Implement multi-dimensional evaluation
 
 **Principle 3: Align with Domain Knowledge**
-
 - Have human experts evaluate a batch of samples
 - Have the grader evaluate the same samples
 - Calculate consistency (e.g., Cohen's Kappa)
@@ -441,20 +420,17 @@ AI Agent infrastructure must handle "thundering herd" patterns where single goal
 sub-tasks.
 
 **Key Challenges:**
-
 1. **Scalability vs. Stability**: Task durations vary dramatically (5-10 minutes to 3-4 hours)
 2. **Thundering Herd Problem**: Massive concurrent request spikes from recursive goal expansion
 3. **Concurrency Limits**: Need orders-of-magnitude higher concurrent execution capacity
 4. **Cold Start Optimization**: Must minimize startup latency for on-demand scaling
 
 **Deployment Patterns:**
-
 - **Cloud VMs**: Excellent scalability, but network latency affects experience
 - **Local VMs**: Fast startup, great for demos, but unsustainable at scale
 - **Serverless (Modal/Lambda)**: Handles bursty traffic well, minimizes cold starts
 
 **Requirements for Agent-Native Infrastructure (2026+):**
-
 - Handle recursive expansion of single goals into thousands of sub-tasks
 - Reduce cold start times
 - Minimize latency variance
@@ -463,7 +439,6 @@ sub-tasks.
 ### Data Format Requirements
 
 **Input Format:**
-
 - Must follow OpenAI reinforcement fine-tuning format
 - JSONL format (one JSON object per line)
 - JSON structure containing:
@@ -471,7 +446,6 @@ sub-tasks.
     - Optional metadata like `reference_answer`
 
 **Current Limitations:**
-
 - Text-only (no multimodal inputs: images, audio, video) - *Needs verification*
 - Single-turn conversations only (not multi-turn dialogue support) - *Needs verification*
 - JSONL format required
@@ -511,7 +485,6 @@ specific Agent RFT implementation details and quantitative results could not be 
 documentation.
 
 #### Cognition (Devon AI) - File Planning Agent
-
 - **Task**: File planning agent to identify which files to edit for code changes
 - **Tools**: `read_file`, `shell` (grep, find commands)
 - **Reported Results**:
@@ -523,7 +496,6 @@ documentation.
   exceeding previous baselines.
 
 #### Ambience Healthcare - ICD-10 Medical Coding
-
 - **Task**: Medical coding from clinical transcripts using ICD-10 codes
 - **Tools**: Semantic search over 70,000+ medical codes
 - **Reported Results**:
@@ -534,7 +506,6 @@ documentation.
   being developed for medical coding using semantic search techniques.
 
 #### Rogo Finance - Financial Reasoning and Summarization
-
 - **Task**: Financial document analysis and summarization from SEC filings and financial reports
 - **Tools**: Document retrieval, financial analysis tools
 - **Reported Results**:
@@ -546,7 +517,6 @@ documentation.
   Sequoia Capital investment. Research did not find specific public documentation of their Agent RFT implementation.
 
 #### Modular (Mojo GPU Kernels) - Code Generation for New Hardware
-
 - **Task**: Write performant GPU kernels for new hardware architectures
 - **Tools**: Compiler, kernel execution environment
 - **Reported Results**:
@@ -565,16 +535,13 @@ Multiple sources reference FinQA (financial question answering) as a demonstrati
 company implementations beyond the pattern file were not detailed in public sources.
 
 #### OpenAI Internal Use Cases
-
 OpenAI has demonstrated Agent RFT on:
-
 - Code editing planning agents
 - Code review research agents
 - Enterprise coding tasks
 - Financial QA benchmarks
 
 #### ChatGPT Agent Team (OpenAI)
-
 - **Architecture**: All tools integrated into a shared virtual machine environment
 - **Tools**: Text browser, GUI browser, terminal tools, image generation tools
 - **Training Paradigm**: No pre-specified rules; model learns optimal tool combinations through RL exploration
@@ -583,7 +550,6 @@ OpenAI has demonstrated Agent RFT on:
 ### Related Open-Source Implementations
 
 #### ASearcher (GitHub: inclusionAI/ASearcher)
-
 - Large-scale reinforcement learning framework for search agents
 - Fully asynchronous agentic RL framework
 - Data synthesis agent for generating training data
@@ -591,26 +557,22 @@ OpenAI has demonstrated Agent RFT on:
 - Achieves state-of-the-art on GAIA, xBench-DeepSearch, and Frames benchmarks
 
 #### Awesome-AgenticLLM-RL-Papers (GitHub)
-
 - Comprehensive resource collection for agentic RL research
 - Lists environments: AlfWorld, GAIA, SWE-Bench, BrowseComp
 - Training frameworks for PPO, DPO, GRPO algorithms
 
 #### ReTool (2025)
-
 - Two-stage training (SFT + RL) using interleaved code execution
 - Built on DeepSeek R1-Zero training paradigm
 - Achieved 72.5% accuracy on AIME benchmark with 32B model
 - "Reflect-and-Retry" mechanism for self-correcting tool failures
 
 #### OTC: Optimal Tool Calls via Reinforcement Learning (2025)
-
 - Focuses on minimizing redundant tool invocations
 - Demonstrates better generalization and reduced unnecessary tool calls
 - Reward design incorporates correctness, format compliance, and tool execution efficiency
 
 #### Tool-R1 (2025)
-
 - Sample-efficient RL for general tool use
 - Enables compositional, multi-step tool use
 - Significant improvements over Qwen2.5-14B-Instruct baseline
@@ -631,23 +593,19 @@ OpenAI has demonstrated Agent RFT on:
 ### Implementation Insights
 
 #### Tool Call Optimization Patterns
-
 1. **Parallelization**: Agents learn to make independent tool calls simultaneously rather than sequentially
 2. **Early Termination**: Agents learn to stop exploration once sufficient information is gathered
 3. **Tool Selection**: Agents learn which tools are most effective for specific task types
 4. **Context Management**: Efficient use of context window to minimize redundant information retrieval
 
 #### Grader Design Patterns
-
 From reward hacking research, effective graders should:
-
 - Provide continuous (not binary) rewards for better gradient signals
 - Evaluate both final answers and intermediate tool call traces
 - Be hardened against common reward hacking patterns (modifying tests instead of solving problems)
 - Consider multiple criteria: correctness, format compliance, efficiency, and safety
 
 #### Training Infrastructure Considerations
-
 - **Bursty Traffic**: Training sends hundreds of simultaneous requests at step boundaries
 - **State Management**: Each rollout requires unique ID for tracking across tool calls
 - **Tool Endpoint Robustness**: Must handle training loads that differ from production patterns
@@ -656,7 +614,6 @@ From reward hacking research, effective graders should:
 ### Technical Approaches and Algorithms
 
 #### GRPO (Group Relative Policy Optimization)
-
 - Developed by DeepSeek for R1 training
 - Simpler than PPO (no separate critic/value network needed)
 - Samples group of outputs for each question
@@ -664,21 +621,18 @@ From reward hacking research, effective graders should:
 - Applied to agent tool use scenarios with sparse rewards
 
 #### RLVR (Reinforcement Learning with Verifiable Rewards)
-
 - Became widely adopted training stage in 2025
 - LLMs spontaneously develop "reasoning" strategies
 - Training on automatically verifiable rewards in math and coding environments
 - High cost-effectiveness but significant compute requirements
 
 #### Two-Stage Training (SFT + RL)
-
 - Most common paradigm: Supervised Fine-Tuning followed by RL optimization
 - SFT on tool-use demonstration data
 - RL for optimization using reward signals
 - Alternative pure RL approaches show better generalization but higher sample complexity
 
 #### Reward Function Design Components
-
 - Correctness Reward: Task completion accuracy
 - Format Reward: Proper tool invocation formatting
 - Tool Execution Reward: Successful tool operation
@@ -803,7 +757,6 @@ From reward hacking research, effective graders should:
   in Agent RFT.
 
 **Reflection Loop**
-
 - **Description**: After generating draft, run self-evaluation pass and feed critique into revision attempt.
 - **Relationship to Agent RFT**: **Inference-time pattern** - Reflection happens during inference; Agent RFT trains the
   model to internalize this behavior.
@@ -825,7 +778,6 @@ From reward hacking research, effective graders should:
 ### Development and Research Patterns
 
 **Shipping as Research**
-
 - **Description**: Treat shipping as research to learn what works rather than waiting for certainty before release.
 - **Relationship to Agent RFT**: **Development philosophy** - Agent RFT itself is an experimental technique requiring
   rapid iteration and validation.
@@ -850,7 +802,6 @@ From reward hacking research, effective graders should:
 - **Relationship to Agent RFT**: **Testing infrastructure** - Enables regression testing of Agent RFT-trained models.
 
 **Explicit Posterior-Sampling Planner**
-
 - **Description**: Embeds full RL algorithm (PSRL) inside LLM's reasoning for principled exploration/exploitation.
 - **Relationship to Agent RFT**: **Algorithmic alternative** - PSRL runs at inference time; Agent RFT trains weights
   offline.
@@ -873,7 +824,6 @@ From reward hacking research, effective graders should:
 ### Pattern Relationships Summary
 
 **Complementary to Agent RFT** (used together):
-
 - RLAIF (reward generation)
 - Tool Use Incentivization (reward engineering)
 - Inference-Healed Code Review (grader design)
@@ -882,13 +832,11 @@ From reward hacking research, effective graders should:
 - Isolated VM per Rollout (infrastructure)
 
 **Alternative Approaches** (choose one):
-
 - Agent RFT (weight updates) vs. MemRL (memory utilities, frozen weights)
 - Agent RFT (offline training) vs. Explicit Posterior-Sampling Planner (online reasoning)
 - Agent RFT (end-to-end) vs. Self-Critique Evaluator (reward model only)
 
 **Supporting Infrastructure** (enables Agent RFT):
-
 - Workflow Evals with Mocked Tools (validation)
 - Action Caching & Replay (testing)
 - Rich Feedback Loops (signal provision)
@@ -896,7 +844,6 @@ From reward hacking research, effective graders should:
 - Shipping as Research (development approach)
 
 **Inference-Time Patterns** (complement trained models):
-
 - Reflection Loop (revision after training)
 - Schema Validation Retry (structured output)
 - Parallel Tool Call Learning (emergent behavior)
@@ -917,28 +864,24 @@ From reward hacking research, effective graders should:
 ### Remaining Open Questions
 
 **Technical Clarifications:**
-
 - [ ] Exact policy optimization algorithm used in Agent RFT implementation
 - [ ] Detailed API specification for grader endpoints
 - [ ] Compute multiplier hyperparameter - mentioned in pattern but not found in public API docs
 - [ ] Mechanism for converting grader scores to RL gradients
 
 **Validation Needed:**
-
 - [ ] Independent verification of case study results (companies confirmed, specific Agent RFT results not)
 - [ ] GPT-5 RFT availability status (private beta as of October 2025)
 - [ ] Multimodal input support limitations
 - [ ] Multi-turn dialogue support limitations
 
 **Research Gaps:**
-
 - [ ] Systematic comparison of Agent RFT vs. MemRL for same tasks
 - [ ] Best practices for training grader models (self-taught vs. supervised)
 - [ ] Standardized evaluation metrics for Agent RFT-trained agents
 - [ ] Sample efficiency benchmarks comparing to traditional RL
 
 **Implementation Patterns:**
-
 - [ ] Credit assignment algorithms for multi-step tool call traces
 - [ ] Reward shaping theory applied to tool use incentivization
 - [ ] Constitutional AI integration with Agent RFT grader endpoints
@@ -960,7 +903,6 @@ well-established RL research (RLHF, RLAIF, GRPO) while extending it to handle th
 tool use, multi-step reasoning, and environment interaction.
 
 Real-world implementations demonstrate compelling results across diverse domains:
-
 - **20-70% performance improvements** on specialized tasks
 - **40-50% latency reductions** through learned tool call optimization
 - **High sample efficiency** with strong results from 100 examples

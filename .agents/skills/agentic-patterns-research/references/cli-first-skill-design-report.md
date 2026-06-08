@@ -1,5 +1,6 @@
 <!-- Source: https://github.com/nibzard/awesome-agentic-patterns/tree/main/research/cli-first-skill-design-report.md -->
 
+
 # CLI-First Skill Design Pattern - Research Report
 
 **Pattern**: `cli-first-skill-design`
@@ -13,7 +14,6 @@ for both humans and AI agents. This research synthesized findings from four para
 real-world implementations, tooling frameworks, and related patterns.
 
 **Key Findings:**
-
 - The pattern builds on 50+ years of Unix philosophy and POSIX standards
 - Production examples abound: GitHub CLI, kubectl, AWS CLI, Terraform, and the Claude Code skills ecosystem
 - No major CLI framework provides built-in JSON output switching—all require manual implementation
@@ -26,7 +26,6 @@ CLI-First Skill Design is a pattern where agent skills (reusable capabilities) a
 them naturally dual-use: humans can invoke them from terminals, and agents can invoke them via shell commands.
 
 **Core Principles:**
-
 1. **One script, one skill** - Each capability is a standalone executable
 2. **Subcommands for operations** - `skill.sh list`, `skill.sh get <id>`, `skill.sh create`
 3. **Structured output** - JSON for programmatic use, human-readable for TTY
@@ -64,7 +63,6 @@ The CLI-first pattern directly applies Doug McIlroy's three foundational rules:
 ### POSIX Standards and Conventions
 
 **Standard Command Structure:**
-
 1. Command name (executable)
 2. Subcommands (optional)
 3. Options (short `-v` and long `--verbose` forms)
@@ -92,13 +90,11 @@ The CLI-first pattern directly applies Doug McIlroy's three foundational rules:
 ### TTY Detection for Dual Output Modes
 
 **Pattern:**
-
 - Detect if stdout is connected to a terminal (TTY)
 - When `is_tty == true`: Friendly, colorful, formatted output
 - When `is_tty == false`: Structured output suitable for parsing
 
 **Implementation Examples:**
-
 ```python
 # Python
 if sys.stdout.isatty():
@@ -140,7 +136,6 @@ if (process.stdout.isTTY) {
 **Official Repository:** [anthropics/skills](https://github.com/anthropics/skills) (45.9k stars)
 
 **Standard Directory Structure:**
-
 ```
 skill-name/
 ├── SKILL.md          # Required (core instruction file)
@@ -150,7 +145,6 @@ skill-name/
 ```
 
 **SKILL.md Format:**
-
 ```yaml
 ---
 name: skill-name
@@ -164,7 +158,6 @@ metadata:
 ```
 
 **Popular Community Collections:**
-
 - [obra/superpowers](https://github.com/obra/superpowers) (22.1k stars) - 20+ practical skills
 - [ComposioHQ/awesome-claude-skills](https://github.com/ComposioHQ/awesome-claude-skills) (19.2k stars)
 - [JackyST0/awesome-agent-skills](https://github.com/JackyST0/awesome-agent-skills) - Multi-platform
@@ -172,7 +165,6 @@ metadata:
 ### GitHub CLI (gh) - Dual-Use Design Exemplar
 
 **JSON Output for Automation:**
-
 ```bash
 # List public repos with jq filtering
 gh repo list --json nameWithOwner,isPrivate,updatedAt \
@@ -183,7 +175,6 @@ gh pr list --state open --json number,title,author,createdAt > prs.json
 ```
 
 **GitHub Actions Integration:**
-
 ```yaml
 - name: Auto-label PR
   run: |
@@ -196,7 +187,6 @@ gh pr list --state open --json number,title,author,createdAt > prs.json
 ### Infrastructure CLIs - Automation Patterns
 
 **kubectl (Kubernetes):**
-
 ```bash
 # JSON output for automation
 kubectl get pods -o json
@@ -209,7 +199,6 @@ kubectl get pods -o json | jq '.items[] | select(.status.phase == "Running") | .
 ```
 
 **AWS CLI:**
-
 ```bash
 # JSON output with jq pipeline
 aws ec2 describe-instances --output json | \
@@ -221,7 +210,6 @@ aws dynamodb scan --table-name my-prod-table | \
 ```
 
 **Terraform CLI:**
-
 ```bash
 # Output all values as JSON
 terraform output -json
@@ -237,14 +225,12 @@ PUBLIC_IP=$(terraform output -json instance_info | jq -r '.public_ip')
 ### Shell Composition in Production
 
 **Log Analysis:**
-
 ```bash
 # Error counting and ranking
 cat log.txt | grep "ERROR" | sort | uniq -c | sort -nr
 ```
 
 **curl + jq Pattern:**
-
 ```bash
 # Pretty print JSON for human reading
 curl http://api.example.com/data | jq '.'
@@ -279,11 +265,9 @@ curl http://api.example.com/users | \
 ### JSON Output Implementation Patterns
 
 **Python (Click):**
-
 ```python
 import click
 import json
-
 
 @click.command()
 @click.option('--json', 'output_json', is_flag=True)
@@ -296,25 +280,23 @@ def main(output_json):
 ```
 
 **Node.js (Commander.js):**
-
 ```typescript
-import {Command} from 'commander';
+import { Command } from 'commander';
 
 const program = new Command();
 program
-    .option('--json', 'output as JSON')
-    .action((options) => {
-        const data = {status: 'ok', value: 42};
-        if (options.json) {
-            console.log(JSON.stringify(data));
-        } else {
-            console.log(`Status: ${data.status}, Value: ${data.value}`);
-        }
-    });
+  .option('--json', 'output as JSON')
+  .action((options) => {
+    const data = { status: 'ok', value: 42 };
+    if (options.json) {
+      console.log(JSON.stringify(data));
+    } else {
+      console.log(`Status: ${data.status}, Value: ${data.value}`);
+    }
+  });
 ```
 
 **Rust (clap + serde):**
-
 ```rust
 use clap::Parser;
 use serde::Serialize;
@@ -348,18 +330,15 @@ fn main() {
 | Cobra        | Automatic from command return |
 
 **Python Exit Code Enum:**
-
 ```python
 import sys
 import enum
-
 
 class ExitCodes(enum.IntEnum):
     OK = 0
     ERROR = 1
     BAD_PARAMS = 2
     API_ERROR = 3
-
 
 try:
     # skill logic
@@ -379,7 +358,6 @@ except Exception as e:
 | ShellCheck | Static   | Bash/sh analysis |
 
 **Bats Example:**
-
 ```bash
 #!/usr/bin/env bats
 
@@ -399,7 +377,6 @@ except Exception as e:
 ### Agent Skill Scaffolding Tools (2026)
 
 **skills.sh CLI:**
-
 ```bash
 npx skills add vercel-labs/agent-skills
 npx skills find [query]
@@ -407,7 +384,6 @@ npx skills list
 ```
 
 **Skill Structure Standard:**
-
 ```
 my_skill/
 ├── SKILL.md           # Core instructions (required)
@@ -418,7 +394,6 @@ my_skill/
 ### Recommendations by Language
 
 **For Python Skills:**
-
 - Use Typer for quick development with type annotations
 - Use Click for complex CLIs requiring custom behavior
 - Integrate Rich for enhanced terminal output
@@ -426,18 +401,15 @@ my_skill/
 - Use IntEnum for exit codes
 
 **For Node.js/TypeScript Skills:**
-
 - Use Commander.js for most use cases (90% of projects)
 - Use oclif for enterprise-scale CLIs with plugins
 
 **For Rust Skills:**
-
 - Use clap v4+ with derive macros
 - Use atty crate for TTY detection
 - Use serde_json for JSON serialization
 
 **For Go Skills:**
-
 - Use Cobra for Kubernetes-style CLIs
 - Use Viper for configuration management
 
@@ -489,19 +461,16 @@ my_skill/
 ### Ecosystem Insights
 
 **Progression Trends:**
-
 - Individual tool design (Dual-Use, CLI-First)
 - Tool orchestration (Parallel Execution)
 - Higher-level control patterns (Plan-Then-Execute, Action-Selector)
 
 **Security as Cross-Cutting Concern:**
-
 - Execution safety (Intelligent Bash Execution)
 - Control-flow integrity (Action-Selector, Plan-Then-Execute)
 - Capability segregation (Tool Capability Compartmentalization)
 
 **CLI-First Uniqueness:**
-
 - Focus on executable scripts as the interface
 - Contrasts with API-based approaches (Code-First Tool Interface)
 - Contrasts with generated code approaches (Code-Then-Execute)
@@ -548,14 +517,12 @@ my_skill/
 ## Sources
 
 ### Academic & Technical
-
 - POSIX Standards Documentation - Oracle getoptcvt Documentation
 - GNU Coding Standards - Command-Line Interfaces
 - The Art of Unix Programming - Eric S. Raymond (2003)
 - IEEE Std 1003.1-2001 - POSIX Utility Syntax Guidelines
 
 ### Real-World Implementations
-
 - [anthropics/skills](https://github.com/anthropics/skills) - Official Anthropic Skills Repository
 - [obra/superpowers](https://github.com/obra/superpowers) - Community Skills Collection
 - [cli/cli](https://github.com/cli/cli) - Official GitHub CLI Repository
@@ -564,7 +531,6 @@ my_skill/
 - Terraform CLI Documentation
 
 ### Frameworks & Tooling
-
 - [CLI Development Guide 2026 - Python](https://zenn.dev/gaku1234/articles/cli-automation-guide-2026-introduction)
 - [clap Tutorial](https://docs.rs/clap/latest/clap/_tutorial/index.html)
 - [Commander.js GitHub](https://github.com/tj/commander.js)
@@ -572,14 +538,12 @@ my_skill/
 - [Bats Testing Framework](https://github.com/bats-core/bats-core)
 
 ### Design Principles
-
 - ThoughtWorks CLI Design Guidelines
 - Atlassian CLI Design Principles
 - Rust CLI Development - clap and cargo subcommands guides
 - Python CLI Frameworks - Click design documentation
 
 ### Related Patterns
-
 - Awesome Agentic Patterns repository - patterns/ directory
 - [Agent Skills Specification](https://github.com/modelcontextprotocol/skills)
 
@@ -592,7 +556,6 @@ decades of CLI tool design wisdom while addressing the unique requirements of AI
 
 The pattern's strength lies in its simplicity and universality—by following Unix philosophy and POSIX conventions,
 developers can create skills that are:
-
 - Immediately useful to both humans and agents
 - Composable through standard shell mechanisms
 - Debuggable without special tooling

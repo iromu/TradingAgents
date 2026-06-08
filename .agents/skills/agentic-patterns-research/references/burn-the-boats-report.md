@@ -1,5 +1,6 @@
 <!-- Source: https://github.com/nibzard/awesome-agentic-patterns/tree/main/research/burn-the-boats-report.md -->
 
+
 # Burn the Boats Pattern - Research Report
 
 **Pattern**: Burn the Boats (Commitment Strategy / Irreversible Action)
@@ -45,7 +46,6 @@ implementation pattern for agent safety.
 - **Historical Source**: *Records of the Grand Historian* (《史记·项羽本纪》) by Sima Qian
 
 **The Strategy (破釜沉舟 - Breaking Cauldrons, Sinking Boats)**:
-
 1. Sink all boats - Destroy all transportation back
 2. Break all cooking cauldrons - Destroy all cooking vessels
 3. Burn all shelters - No place to rest or regroup
@@ -75,7 +75,6 @@ remains the dominant narrative.
 **Book**: *The Strategy of Conflict* (1960), Harvard University Press
 
 **Key Contributions**:
-
 - **Credible Commitment**: Limiting one's options can strengthen bargaining position
 - **Strategic Paradox**: Restricting freedom of choice in visible, credible ways enhances negotiating power
 - **"Burn Your Bridges" Strategy**: Destroying escape routes demonstrates commitment to fight to the death
@@ -92,7 +91,6 @@ the only rational choice.
 **Paper**: "An Economic Theory of Self-Control" (1981), *Journal of Political Economy*
 
 **The Planner-Doer Model**:
-
 - **"planner"** - Long-term, forward-thinking perspective
 - **"doer"** - Short-term, present-focused perspective
 
@@ -113,12 +111,10 @@ evidence it was wrong. Also known as **Sunk Cost Fallacy** or **Concorde Fallacy
 ### Evolutionary Economics (1985, 1989)
 
 **Paul A. David (1985)**: "Clio and the Economics of QWERTY"
-
 - **Path Dependence**: Economic outcomes influenced by historical accidents and initial conditions
 - **Lock-In**: QWERTY keyboard dominates despite technical inferiority due to historical circumstances
 
 **W. Brian Arthur (1989)**: "Competing Technologies, Increasing Returns, and Lock-In"
-
 - **Network Externalities**: Value of technologies increases with adoption
 - **Winner-Take-All Markets**: Self-reinforcing cycles amplify small advantages
 
@@ -127,7 +123,6 @@ evidence it was wrong. Also known as **Sunk Cost Fallacy** or **Concorde Fallacy
 **Bryan, Karlan & Nelson**: "Commitment Devices" (2010), *Annual Review of Economics*
 
 **Key Contributions**:
-
 - Distinguishes "hard" and "soft" commitments
 - Examines demand for commitment devices in laboratory and field studies
 - Applications: Savings, health behavior, gym attendance, medical adherence
@@ -146,7 +141,6 @@ evidence it was wrong. Also known as **Sunk Cost Fallacy** or **Concorde Fallacy
 choice with commitment"** became foundational for BDI architectures.
 
 **Related Works** (1990):
-
 - "Persistence, Intention, and Commitment" in *Intentions in Communication* (MIT Press)
 - "Rational interaction as the basis for communication"
 - "On Acting Together" (AAAI-90)
@@ -178,13 +172,11 @@ reconsideration prevents achievement of long-term goals.
 **Key Researchers**: Rao & Georgeff
 
 **Structure**:
-
 - **Beliefs**: Agent's information state about the world
 - **Desires**: Goals or situations the agent wishes to achieve
 - **Intentions**: Subset of desires the agent commits to achieving
 
 **Control Cycle**:
-
 ```
 update beliefs → generate options (desires) →
 filter to select commitments (intentions) → take action
@@ -196,7 +188,6 @@ filter to select commitments (intentions) → take action
 intentions"
 
 **Joint Action Properties**:
-
 1. Team members are mutually responsive
 2. Team members have a joint commitment to the joint action
 3. Members commit to mutual support when pursuing joint goals
@@ -220,7 +211,6 @@ intentions"
 **Sun et al. (November 2023)**
 
 **Technical Approach**:
-
 - **Decentralized Implementation**: Blockchain/smart contracts
 - **Zero-knowledge proofs** for privacy-preserving commitments
 - **Applications**: Secure coordination and monitoring for AI agent systems
@@ -228,13 +218,11 @@ intentions"
 #### AI Safety Implications
 
 **Commitment Races** (Oesterheld):
-
 - Consequentialist agents motivated to commit early to influence other agents' behavior
 - Balancing early commitment against need to learn and think
 - Particularly problematic for systems that can alter code to make devastating commitments
 
 **Program Equilibrium**:
-
 - AI agents achieving cooperation through source code commitment
 - "Cheap methods of precommitment" unavailable to humans
 - Simulation-based equilibria for AI agent economies
@@ -246,7 +234,6 @@ intentions"
 ### Key Finding: Industry Rejects "No Fallback" Approach
 
 **The "Measuring Agents in Production" Study (UC Berkeley, 2025)**:
-
 - Surveyed **306 practitioners** across **26 industries**
 - **68% of production agents** require human intervention within 10 steps
 - **95% of AI agent deployments** reportedly fail in production
@@ -258,14 +245,12 @@ intentions"
 #### Anthropic (2025)
 
 **Official Agent Methodology**:
-
 - **Start simple**, only add complexity when justified
 - **Sandbox testing** before production deployment
 - **Checkpoint rollback mechanisms** for safety
 - **Guardrails and safety mechanisms**
 
 **Five Core Workflow Patterns** (ordered from simple to complex):
-
 1. Enhanced LLM (basic retrieval, tools, memory)
 2. Router (task routing)
 3. Parallelization (simultaneous execution)
@@ -277,7 +262,6 @@ intentions"
 #### OpenAI Agents SDK
 
 **Core Primitives**:
-
 - **Agents**: LLMs with instructions and tools
 - **Handoffs**: Delegation between agents
 - **Guardrails**: Input validation and constraint enforcement
@@ -289,7 +273,6 @@ intentions"
 **Strategic Partnerships**: Apptronik, Agile Robots, Agility Robotics, Boston Dynamics
 
 **Safety Framework**:
-
 - Hierarchical safety policies
 - Robotics constitution (inspired by Asimov's Three Laws)
 - Safety benchmarks
@@ -301,12 +284,10 @@ fallbacks.
 ### Autonomous Vehicle Industry: Fallback Systems as Requirements
 
 **Aurora and Continental Partnership (2027 production target)**:
-
 - SAE Level 4 autonomous trucking with **dedicated fallback systems**
 - Specialized secondary computer that takes over if primary system fails
 
 **Kodiak Robotics**:
-
 - Demonstrated **"fallback" safety system** for autonomous roadside movement
 - CEO states this is a **"fundamental necessity"** for deployment
 
@@ -325,7 +306,6 @@ fallbacks.
 > have... every 3 months."
 
 **Strategic Reasons**:
-
 - Paradigm shift from "assistant" to "factory"
 - Feature limits users from better ways of working
 - Maintaining old features splits focus
@@ -341,20 +321,17 @@ fallbacks.
 ### Robotics Success Stories
 
 **Zhiyuan Robotics (China)**:
-
 - 100% task success rate on factory production lines
 - Tens of minutes to learn and deploy new tasks
 - Network-distributed skills (one robot learns, thousands update)
 
 **CATL (World's Largest EV Battery Manufacturer)**:
-
 - "Xiao Mo" humanoid robots in Henan Luoyang factory
 - 3x daily work output vs human workers
 - 99%+ connection success rate
 - 24/7 operation capability
 
 **Boston Dynamics Atlas (CES 2026)**:
-
 - First customers: Hyundai Motor, Google DeepMind
 - Autonomously navigate to charging stations
 - Replace own batteries
@@ -415,7 +392,6 @@ Giving agents irreversible operations with broad permissions is extremely danger
 **2. Context Window Overflow**
 
 Safety constraints can be "forgotten" as context compresses:
-
 - Long-running agents may lose safety instructions
 - Confirm-before-acting prompts get dropped
 - Critical constraints disappear from attention
@@ -423,13 +399,11 @@ Safety constraints can be "forgotten" as context compresses:
 **3. Cascading Errors**
 
 Multi-step workflows amplify single errors:
-
 - One mistake → Incorrect state → Irreversible commit → Catastrophic outcome
 
 **4. Prompt Injection Vulnerabilities**
 
 External data can control agent flow:
-
 - Compromised action-selection loop
 - Injected text influences next action
 - Irreversible operations triggered by attacker
@@ -495,31 +469,26 @@ Isolate destructive operations
 ### Anti-Patterns
 
 **1. Burn the Boats for Critical Infrastructure**
-
 - **Anti-pattern**: Removing fallback from systems requiring high availability
 - **Why wrong**: Mission-critical systems need rollback capability
 - **Example**: Banking transaction processing without rollback
 
 **2. Burn the Boats Without Testing**
-
 - **Anti-pattern**: Committing to irreversible changes without validation
 - **Why wrong**: Bugs in irreversible code are permanent
 - **Example**: Database schema changes without migration rollback path
 
 **3. Burn the Boats Based on Hype**
-
 - **Anti-pattern**: Removing features because new tech is "trendy"
 - **Why wrong**: May remove value without adding equivalent capability
 - **Example**: Removing working CLI for "AI-first" interface that isn't ready
 
 **4. Burn the Boats as Substitute for Testing**
-
 - **Anti-pattern**: Using irreversibility to force quality instead of proper testing
 - **Why wrong**: Creates pressure that leads to mistakes
 - **Example**: Removing staging environment to force production readiness
 
 **5. Burn the Boats with Unclear Alternative**
-
 - **Anti-pattern**: Removing old feature before new one works
 - **Why wrong**: Leaves users with no viable option
 - **Example**: Disabling API before v2 is documented and tested
@@ -527,7 +496,6 @@ Isolate destructive operations
 ### When NOT to Use Burn the Boats
 
 **1. High-Stakes Environments**
-
 - Medical devices
 - Autonomous weapons
 - Aviation systems
@@ -535,28 +503,24 @@ Isolate destructive operations
 - Financial clearing houses
 
 **2. Systems Without Comprehensive Testing**
-
 - No automated test coverage
 - No staging environment
 - No canary deployment capability
 - Limited monitoring
 
 **3. User Experience Regression Risk**
-
 - Accessibility features
 - Critical user workflows
 - Regulatory compliance requirements
 - Established user habits
 
 **4. Team Not Ready**
-
 - Team unclear on new approach
 - Insufficient training
 - No clear migration path
 - Low morale / high turnover
 
 **5. Competitive Pressure**
-
 - Competitors still offer old feature
 - Users might switch to maintain workflow
 - Market not ready for paradigm shift
@@ -587,7 +551,6 @@ that has fascinated thinkers from Xiang Yu to Schelling to modern AI developers.
 - **Cortés Historical Accounts**: Various sources on the Spanish conquest of Mexico (1519)
 
 ### Game Theory
-
 - **Thomas Schelling**: *The Strategy of Conflict* (1960), Harvard University Press
 
 ### Behavioral Economics
@@ -602,7 +565,6 @@ that has fascinated thinkers from Xiang Yu to Schelling to modern AI developers.
   *Organizational Behavior and Human Performance*, 16(1), 27-44
 
 ### Evolutionary Economics
-
 - **Paul A. David**: "Clio and the Economics of QWERTY" (1985), *The American Economic Review*
 - **W. Brian Arthur**: "Competing Technologies, Increasing Returns, and Lock-In by Historical Events" (1989), *The
   Economic Journal*, Vol. 99, March 1989, pp. 116-131
@@ -625,13 +587,11 @@ that has fascinated thinkers from Xiang Yu to Schelling to modern AI developers.
   AMP (Thorsten Ball, Quinn Slack, 2025)
 
 ### Technical Documentation
-
 - [State Machine + Workflow for AI Agents](https://m.blog.csdn.net/vaminal/article/details/155258412) (Nov 2025)
 - [LangGraph Tutorial Series](https://developer.aliyun.com/article/1710060) (2025)
 - [Temporal Workflow: Agent Systems](https://juejin.cn/post/7600967006893735945) (Jan 2026)
 
 ### Robotics Case Studies
-
 - Zhiyuan Robotics (智元机器人) - China factory deployments
 - CATL (宁德时代) - Battery production with Xiao Mo robots
 - AgiBot - Fulin Precision Machinery deployment

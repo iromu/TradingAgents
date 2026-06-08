@@ -1,5 +1,6 @@
 <!-- Source: https://github.com/nibzard/awesome-agentic-patterns/tree/main/research/coding-agent-ci-feedback-loop-report.md -->
 
+
 # Coding Agent CI Feedback Loop Pattern - Research Report
 
 **Pattern Name:** coding-agent-ci-feedback-loop
@@ -41,15 +42,15 @@ The coding-agent-ci-feedback-loop pattern describes running coding agents asynch
 
 ```mermaid
 sequenceDiagram
-    Agent ->> GitRepo: create branch coding-agent-refactor
-    Agent ->> CI: trigger tests remotely
+    Agent->>GitRepo: create branch coding-agent-refactor
+    Agent->>CI: trigger tests remotely
     loop every 30s
-        CI -->> Agent: partial failures or success chunk
-        Agent ->> Files: patch specific failures
-        Agent ->> CI: re-run only failing tests
+        CI-->>Agent: partial failures or success chunk
+        Agent->>Files: patch specific failures
+        Agent->>CI: re-run only failing tests
     end
-    CI -->> Agent: all tests green
-    Agent -->> User: "PR is ready to merge"
+    CI-->>Agent: all tests green
+    Agent-->>User: "PR is ready to merge"
 ```
 
 ### Pattern Metadata
@@ -102,7 +103,6 @@ sequenceDiagram
 ### 3.2 GitHub Agentic Workflows (2026)
 
 **Key Features:**
-
 - AI agents run within GitHub Actions
 - Authored in Markdown (not YAML)
 - Auto-triages issues, investigates CI failures
@@ -115,7 +115,6 @@ sequenceDiagram
 ### 3.3 Cursor Background Agent
 
 **Use Cases:**
-
 - Automated testing as "safety net"
 - One-click test generation (80%+ coverage)
 - Legacy refactoring (1000+ file projects)
@@ -177,16 +176,16 @@ sequenceDiagram
 
 ```yaml
 # Event Triggers
-on: [ push, pull_request, workflow_dispatch, schedule, status ]
+on: [push, pull_request, workflow_dispatch, schedule, status]
 
 # Agent Actions
-actions: [ analyze, fix, test, report, commit, branch ]
+actions: [analyze, fix, test, report, commit, branch]
 
 # Loop Closure
-closure: [ commit, comment, notify, draft_pr, status_check ]
+closure: [commit, comment, notify, draft_pr, status_check]
 
 # Feedback Mechanisms
-feedback: [ webhook, api_polling, event_driven ]
+feedback: [webhook, api_polling, event_driven]
 ```
 
 ---

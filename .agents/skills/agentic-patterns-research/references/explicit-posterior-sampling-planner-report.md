@@ -1,5 +1,6 @@
 <!-- Source: https://github.com/nibzard/awesome-agentic-patterns/tree/main/research/explicit-posterior-sampling-planner-report.md -->
 
+
 # Explicit Posterior-Sampling Planner - Research Report
 
 **Pattern Status:** Emerging
@@ -26,7 +27,6 @@ application of PSRL to LLM agent reasoning is an emerging research area.
 ### 1.1 Problem Statement
 
 Heuristic planning loops in LLM agents often:
-
 - Over-exploit the first plausible strategy
 - Under-explore alternatives
 - Drive repeated dead ends in uncertain environments
@@ -49,7 +49,6 @@ Each step is expressed in natural language so the core LLM can carry it out with
 
 By treating the LLM as a Bayesian reasoning engine that can explicitly represent and sample from posterior distributions
 over possible task models, agents can achieve:
-
 - More sample-efficient exploration
 - Better decision consistency under uncertainty
 - Principled exploration instead of ad-hoc retries
@@ -61,7 +60,6 @@ over possible task models, agents can achieve:
 ### 2.1 Primary Source
 
 **Arumugam & Griffiths (2025)** - "Toward Efficient Exploration by LLM Agents"
-
 - arXiv: 2504.20997
 - https://arxiv.org/abs/2504.20997
 - Key contribution: Embeds PSRL directly inside LLM reasoning for principled exploration
@@ -77,14 +75,12 @@ over possible task models, agents can achieve:
 ### 2.3 Key Concepts
 
 **Posterior Sampling for Reinforcement Learning (PSRL):**
-
 - Bayesian approach to exploration-exploitation
 - Samples MDP from posterior, acts optimally under sample
 - Principled uncertainty quantification
 - Near-optimal regret bounds: O(H√SAT)
 
 **Thompson Sampling:**
-
 - Bandit version of PSRL (single state)
 - Originally Thompson (1933) for clinical trials
 - Generalized to MDPs in PSRL
@@ -94,7 +90,6 @@ over possible task models, agents can achieve:
 ### 2.4 Bayesian RL Literature
 
 **Ghavamzadeh et al. (2015)** - "Bayesian Reinforcement Learning: A Survey"
-
 - Comprehensive survey with 1,500+ citations
 - Covers model-based BRL (including PSRL)
 - Value of information theory
@@ -111,7 +106,6 @@ over possible task models, agents can achieve:
 ### 2.6 Regret Bounds
 
 Theoretical comparison (asymptotic):
-
 ```
 ε-greedy:     O(T)           (Linear regret - no guarantee)
 UCB:          O(√T log T)    (Logarithmic for bandits)
@@ -204,7 +198,6 @@ Step 4: Posterior Update
 ### 4.3 Mathematical Foundations
 
 **Bayesian Inference for Transitions (Dirichlet-Multinomial):**
-
 ```
 p(T|D) ∝ p(D|T) × p(T)
 
@@ -217,7 +210,6 @@ Conjugate update: α_posterior = α_prior + count(data)
 ```
 
 **Probability Matching (Thompson Sampling):**
-
 ```
 P(a = argmax Q*(s,a)) = ∫ I[a = argmax Q_M(s,a)] p(M|data) dM
 ```
@@ -227,7 +219,6 @@ P(a = argmax Q*(s,a)) = ∫ I[a = argmax Q_M(s,a)] p(M|data) dM
 LLM agents operate in unstructured text spaces, requiring state abstraction:
 
 **Solutions:**
-
 1. **Abstract State Representation:** Discretize context into features
 2. **Embedding-Based Clustering:** Use embeddings to create state clusters
 3. **Semantic State Hashing:** Extract state features via LLM
@@ -257,7 +248,6 @@ LLM agents operate in unstructured text spaces, requiring state abstraction:
 ### 5.1 When to Use PSRL
 
 **Ideal Use Cases:**
-
 - Small-to-medium state spaces (|S| < 10,000)
 - Sample efficiency is critical
 - Tasks with good reward signals
@@ -265,7 +255,6 @@ LLM agents operate in unstructured text spaces, requiring state abstraction:
 - Transferable domain knowledge available
 
 **When to Consider Alternatives:**
-
 - Very large state spaces (use deep RL with entropy bonus)
 - Extremely sparse rewards (consider curiosity-driven exploration)
 - Real-time constraints (use ε-greedy or UCB)
@@ -290,7 +279,6 @@ LLM agents operate in unstructured text spaces, requiring state abstraction:
 ### 5.4 Deployment Checklist
 
 **Pre-Deployment:**
-
 - [ ] State abstraction designed and validated
 - [ ] Reward function tested for sparsity
 - [ ] Prior parameters specified based on domain knowledge
@@ -298,7 +286,6 @@ LLM agents operate in unstructured text spaces, requiring state abstraction:
 - [ ] Posterior representation memory requirements estimated
 
 **Post-Deployment Monitoring:**
-
 - [ ] Track posterior entropy over time (should decrease)
 - [ ] Monitor regret vs. optimal policy
 - [ ] Log exploration-exploitation ratio
@@ -413,7 +400,6 @@ class BayesianAgent:
    2504.20997. https://arxiv.org/abs/2504.20997
 
 ### Foundational PSRL
-
 2. Strens, M. (2000). A Bayesian Framework for Reinforcement Learning. ICML.
 3. Osband, I., Blundell, C., Pritzel, A., & Van Roy, B. (2013). More Efficient Reinforcement Learning via Posterior
    Sampling. NeurIPS. arXiv:1306.0940
@@ -425,17 +411,14 @@ class BayesianAgent:
 5. Russo, D., & Van Roy, B. (2014). Learning to Optimize via Posterior Sampling. Mathematics of Operations Research.
 
 ### Thompson Sampling
-
 6. Thompson, W. R. (1933). On the Likelihood that One Unknown Probability Exceeds Another. Biometrika.
 7. Agrawal, S., & Goyal, N. (2012). Analysis of Thompson Sampling for the Multi-armed Bandit Problem. COLT.
 
 ### LLM Agents
-
 8. Shinn, N., et al. (2023). Reflexion: Language Agents with Verbal Reinforcement Learning. NeurIPS. arXiv:2303.11366
 9. Yao, S., et al. (2022). ReAct: Synergizing Reasoning and Acting in Language Models. ICLR 2023. arXiv:2210.03629
 
 ### Industry
-
 10. Vowpal Wabbit: Microsoft's contextual bandit library
 11. TensorFlow Bandits: Google's Bayesian optimization library
 
@@ -448,7 +431,6 @@ strategies in LLM agents. While Thompson sampling is widely deployed in producti
 application of PSRL to LLM agent reasoning remains an emerging research area.
 
 Key takeaways:
-
 - **Strong theoretical foundation** with near-optimal regret bounds
 - **Sample-efficient exploration** through uncertainty-directed action selection
 - **Implementation challenges** around state representation and posterior tracking

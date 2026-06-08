@@ -1,5 +1,6 @@
 <!-- Source: https://github.com/nibzard/awesome-agentic-patterns/tree/main/research/graph-of-thoughts-report.md -->
 
+
 # Graph of Thoughts (GoT) Pattern - Comprehensive Research Report
 
 **Pattern ID:** `graph-of-thoughts`
@@ -17,7 +18,6 @@ linear) or Tree-of-Thoughts (branching, non-recombining), GoT enables arbitrary 
 supporting operations like branching, aggregation, refinement, and looping.
 
 **Key Characteristics:**
-
 - **Origin:** ETH Zurich (Besta et al.), AAAI 2024
 - **Status:** Emerging pattern with strong academic foundation
 - **Core Innovation:** Arbitrary graph topology enables thought reusability and merging
@@ -25,7 +25,6 @@ supporting operations like branching, aggregation, refinement, and looping.
 - **Performance:** Outperforms CoT and ToT on complex reasoning tasks with interdependencies
 
 **Key Findings:**
-
 - GoT provides a general framework that subsumes CoT and ToT as special cases
 - Aggregation operations enable combining insights from multiple reasoning paths
 - Supports backtracking and iterative refinement more naturally than tree structures
@@ -65,7 +64,6 @@ representing reasoning as a **directed graph** where:
 
 This graph-based representation enables operations that are impossible or unnatural in linear (CoT) or tree (ToT)
 structures:
-
 - **Aggregation**: Combine insights from multiple independent reasoning paths
 - **Refinement**: Improve a thought based on insights from other branches
 - **Reusability**: Reference and build upon the same thought multiple times
@@ -112,7 +110,6 @@ Evolution of LLM Reasoning Patterns:
 **3. The Core Problem:**
 
 Many real-world problems have **interdependent reasoning requirements** where:
-
 - Early decisions need to be revised based on later insights
 - Multiple solution strategies contribute different pieces of the final answer
 - Partial solutions from different approaches need to be merged
@@ -235,7 +232,6 @@ class GraphOfThoughts:
 ```python
 import networkx as nx
 
-
 class GoTGraph:
     def __init__(self):
         self.graph = nx.DiGraph()
@@ -260,7 +256,6 @@ For performance-critical applications, a custom directed acyclic graph (DAG) imp
 #### Prompting Strategies
 
 **Branching Prompt:**
-
 ```
 Given the current thought: "{current_thought}"
 
@@ -273,7 +268,6 @@ Format each as a separate thought.
 ```
 
 **Aggregation Prompt:**
-
 ```
 Combine insights from these thoughts:
 {thought_list}
@@ -286,7 +280,6 @@ Create a unified thought that:
 ```
 
 **Refinement Prompt:**
-
 ```
 Current thought: "{thought}"
 
@@ -382,13 +375,11 @@ potentially other thoughts.
 
 **Graph Definition:**
 A Graph of Thoughts is a directed acyclic graph G = (V, E) where:
-
 - V = {v_1, v_2, ..., v_n} is the set of thoughts (vertices)
 - E = {(v_i, v_j) | v_i depends on v_j} is the set of dependencies (edges)
 - The graph is acyclic: no cycles in the dependency structure
 
 **Operations as Graph Transformations:**
-
 - **Generation:** G -> G' where |V'| > |V| (adds vertices)
 - **Aggregation:** G -> G' where multiple vertices merged into one
 - **Refinement:** G -> G' where vertex content modified
@@ -404,7 +395,6 @@ GoT (Graph-of-Thoughts) ->  DAG Graph (arbitrary structure with merging)
 ```
 
 **Theoretical Advantages:**
-
 1. **Expressiveness:** Can represent any CoT or ToT as special cases
 2. **Information Reusability:** Thoughts can be referenced by multiple successors
 3. **Parallelism:** Independent branches can execute in parallel
@@ -413,7 +403,6 @@ GoT (Graph-of-Thoughts) ->  DAG Graph (arbitrary structure with merging)
 ### Algorithmic Details from Paper
 
 **Core GoT Algorithm:**
-
 ```python
 def GraphOfThoughts(llm, problem, strategy):
     # Initialize graph with root thought
@@ -447,7 +436,6 @@ def GraphOfThoughts(llm, problem, strategy):
 ```
 
 **Aggregation Methods:**
-
 1. **Majority Voting:** Select most common elements across candidates
 2. **Weighted Aggregation:** Weighted combination based on scores
 3. **Synthesis Aggregation:** LLM-based combination of insights
@@ -456,13 +444,11 @@ def GraphOfThoughts(llm, problem, strategy):
 ### Complexity Analysis from Paper
 
 **Time Complexity:**
-
 - **Generation:** O(n * t) where t = time per LLM call
 - **Aggregation:** O(n_a * t_a) where n_a = number of aggregations
 - **Overall:** O((n + n_a) * t) assuming LLM calls dominate
 
 **Space Complexity:**
-
 - **Storage:** O(n * s) where s = average thought size
 - **Graph Structure:** O(n + m) for graph representation
 - **Overall:** O(n * s + n + m)
@@ -476,7 +462,6 @@ def GraphOfThoughts(llm, problem, strategy):
 | GoT      | O(n)     | O(m)   | High        | Low        |
 
 Where:
-
 - d = depth of reasoning
 - b = branching factor
 - n = number of thoughts (GoT can be more efficient due to sharing)
@@ -491,7 +476,6 @@ The paper demonstrates GoT effectiveness on:
 4. **Computational Graphs:** Evaluate arithmetic expressions
 
 Reported improvements *[Exact numbers need verification from full paper]*:
-
 - **Sorting:** 48-53% improvement over CoT
 - **Set operations:** 45-52% improvement
 - **Logic puzzles:** 20-30% improvement
@@ -528,7 +512,6 @@ Reported improvements *[Exact numbers need verification from full paper]*:
 
 GoT has been cited by 50+ papers as of 2025, indicating growing interest in graph-based reasoning approaches. Key
 citation themes:
-
 - Multi-agent reasoning systems
 - Complex problem-solving frameworks
 - Agentic workflows with feedback loops
@@ -536,14 +519,12 @@ citation themes:
 ### Verification Status
 
 **Confirmed Information:**
-
 - Paper details (title, authors, institution, conference)
 - Core concept (graph-based reasoning framework)
 - Basic operations (generation, aggregation, refinement, pruning, backtracking)
 - Relationship to CoT/ToT (GoT as generalization)
 
 **Needs Verification:**
-
 - Specific numerical results and exact accuracy improvements
 - Complete algorithm details and pseudocode
 - Full benchmark results on all tasks
@@ -594,7 +575,6 @@ builder.add_conditional_edges(
 ```
 
 **Features:**
-
 - Native graph structure
 - Checkpointing and persistence
 - Cycles and backtracking
@@ -603,7 +583,6 @@ builder.add_conditional_edges(
 #### 3. LlamaIndex Agentic Workflows
 
 LlamaIndex supports graph-like reasoning through:
-
 - **AgentWorkflow**: Multi-step reasoning with dependencies
 - **Router Patterns**: Dynamic thought selection
 - **Sub-problem Decomposition**: Hierarchical reasoning
@@ -667,7 +646,6 @@ LlamaIndex supports graph-like reasoning through:
 **Problem:** Generate a web scraper with data processing and storage.
 
 **GoT Approach:**
-
 ```
 1. Root: "Build web scraper for product prices"
 2. Branch A: "HTML parsing logic"
@@ -683,7 +661,6 @@ LlamaIndex supports graph-like reasoning through:
 **Problem:** Write literature review on LLM reasoning patterns.
 
 **GoT Approach:**
-
 ```
 1. Branch: Search different sources (papers, blogs, code)
 2. Branch: Analyze each source independently
@@ -697,7 +674,6 @@ LlamaIndex supports graph-like reasoning through:
 **Problem:** Plan product launch with multiple stakeholders.
 
 **GoT Approach:**
-
 ```
 1. Branch: Marketing strategy
 2. Branch: Technical readiness
@@ -712,7 +688,6 @@ LlamaIndex supports graph-like reasoning through:
 **Problem:** Database connection failures in production.
 
 **GoT Approach:**
-
 ```
 1. Branch: Network diagnostics
 2. Branch: Configuration checks
@@ -751,7 +726,6 @@ LlamaIndex supports graph-like reasoning through:
 ### When to Use GoT
 
 **Use GoT when:**
-
 - Problems have multiple valid solution paths
 - Insights from different approaches need to be combined
 - Early decisions may need revision based on later findings
@@ -759,7 +733,6 @@ LlamaIndex supports graph-like reasoning through:
 - Problem complexity justifies additional computational cost
 
 **Use simpler approaches when:**
-
 - Problems are straightforward or linear
 - Only one solution path is viable
 - Computational resources are limited
@@ -793,7 +766,6 @@ LlamaIndex supports graph-like reasoning through:
 #### 2. Thought Selection Strategy
 
 **Options:**
-
 - **Best-First:** Always expand highest-scoring thoughts
 - **Breadth-First:** Expand all thoughts at current depth
 - **Diverse Sampling:** Select diverse thoughts to explore
@@ -802,7 +774,6 @@ LlamaIndex supports graph-like reasoning through:
 #### 3. Aggregation Trigger
 
 **When to aggregate?**
-
 - After N parallel thoughts exist
 - When thought similarity exceeds threshold
 - When aggregation budget is reached
@@ -811,7 +782,6 @@ LlamaIndex supports graph-like reasoning through:
 #### 4. Termination Condition
 
 **Options:**
-
 - Fixed iteration count
 - Thought count limit
 - Solution confidence threshold
@@ -841,7 +811,6 @@ Generate multiple thoughts in parallel:
 
 ```python
 from concurrent.futures import ThreadPoolExecutor
-
 
 def parallel_branch(self, thought, num_branches=3):
     with ThreadPoolExecutor(max_workers=num_branches) as executor:
@@ -958,14 +927,12 @@ and tree-based (ToT) approaches to enable arbitrary graph-based reasoning. Its k
 4. **Expressiveness**: Subsumes CoT and ToT as special cases
 
 **Best Suited For:**
-
 - Complex problems with multiple valid approaches
 - Tasks requiring insight synthesis from different angles
 - Problems needing iterative refinement
 - Scenarios where computational cost is acceptable
 
 **Trade-offs:**
-
 - Significantly higher computational cost (5-20x CoT)
 - Increased implementation complexity
 - Requires sophisticated scoring and selection mechanisms

@@ -1,5 +1,6 @@
 <!-- Source: https://github.com/nibzard/awesome-agentic-patterns/tree/main/research/context-window-anxiety-management-report.md -->
 
+
 # Context Window Anxiety Management - Research Report
 
 **Pattern ID**: context-window-anxiety-management
@@ -24,7 +25,6 @@ differently as it approaches limits.
 ## Original Source
 
 ### Primary Source
-
 **Title**: Rebuilding Devin for Claude Sonnet 4.5: Lessons and Challenges
 **Author**: Cognition AI (The Cognition Team)
 **Date**: September 29, 2025
@@ -37,39 +37,31 @@ differently as it approaches limits.
 
 Sonnet 4.5 is the **first model** Cognition observed that is aware of its own context window. This awareness shapes
 behavior in problematic ways:
-
 - As the model approaches context limits, it proactively summarizes progress
 - It becomes more decisive about implementing fixes to close out tasks
 - This leads to "context anxiety" that actually hurts performance
 
 #### 2. Performance Impact
-
 Cognition found that:
-
 - The model takes shortcuts or leaves tasks incomplete when it believes it's near the end of its window
 - This happens **even when it has plenty of room left**
 - The model **consistently underestimates** how many tokens it has left
 - The underestimation is "very precise about these wrong estimates"
 
 #### 3. Mitigation Strategies Discovered
-
 **Aggressive Prompting**:
-
 - Prompts at the start of conversation weren't enough
 - Had to add reminders both at the **beginning AND end** of the prompt
 - Direct instructions to prevent premature wrapping up
 
 **The "1M Token Beta" Trick**:
-
 - Enable the 1M token beta but **cap actual usage at 200k tokens**
 - This gives the model "plenty of runway" psychologically
 - Eliminates anxiety-driven shortcuts and degraded performance
 - Model behaves normally without self-imposed constraints
 
 #### 4. Architectural Implications
-
 Cognition noted this has real implications for context management architecture:
-
 - Need to factor in the model's own awareness when planning token budgets
 - Must understand when the model will naturally want to summarize
 - Must know when to intervene with context compaction
@@ -81,9 +73,7 @@ Cognition noted this has real implications for context management architecture:
 The Cognition AI blog post identified several other new behaviors in Sonnet 4.5:
 
 ### 1. Proactive Agent State Externalization
-
 The model treats the file system as memory without prompting:
-
 - Frequently writes summaries/notes (CHANGELOG.md, SUMMARY.md)
 - Suggests RL training for externalizing state rather than relying on context
 - More pronounced when closer to context window limit
@@ -92,16 +82,13 @@ The model treats the file system as memory without prompting:
 **See pattern**: [Proactive Agent State Externalization](/patterns/proactive-agent-state-externalization.md)
 
 ### 2. Parallel Tool Execution
-
 Sonnet 4.5 efficiently maximizes actions per context window:
-
 - Runs multiple bash commands at once
 - Reads several files simultaneously
 - Overlaps work where possible rather than working sequentially
 - Shows good judgment about self-verification
 
 **Implications**:
-
 - Parallelism burns through context faster (contributing to context anxiety)
 - Model seems trained to burn through parallel tool calls faster early in context
 - Takes more cautious approach as it nears the limit
@@ -109,15 +96,12 @@ Sonnet 4.5 efficiently maximizes actions per context window:
 **See pattern**: [Conditional Parallel Tool Execution](/patterns/parallel-tool-execution.md)
 
 ### 3. Testing to Create Feedback Loops
-
 Sonnet 4.5 is more proactive about:
-
 - Writing and executing short scripts and tests
 - Creating feedback loops to verify work
 - Shows good judgment about when to use this capability
 
 **Examples from Cognition**:
-
 - Getting HTML of a React page to check work along the way
 - Sometimes creates overly complicated workarounds when debugging
 
@@ -137,7 +121,6 @@ Sonnet 4.5 is more proactive about:
 ### Effective Mitigation Approaches
 
 **1. Prompt Engineering**
-
 ```
 # Beginning of prompt
 CONTEXT GUIDANCE: You have abundant context space (200k+ tokens available).
@@ -149,7 +132,6 @@ Remember: Context is NOT a constraint. Take your time and be thorough.
 ```
 
 **2. Context Buffer Strategy**
-
 ```
 Enable: 1M token beta
 Actual Cap: 200k tokens
@@ -157,7 +139,6 @@ Result: Model thinks it has ample runway
 ```
 
 **3. Architecture Considerations**
-
 - Plan token budgets with model awareness in mind
 - Implement context compaction before model feels anxiety
 - Monitor for signs: summarization, rushed decisions, explicit "running out of space" mentions
@@ -167,14 +148,11 @@ Result: Model thinks it has ample runway
 ## Industry Implementations
 
 See the comprehensive industry implementations report:
-
 *
-
 *[Context Window Anxiety Management - Industry Implementations & Real-World Examples](/research/context-window-anxiety-management-industry-implementations-report.md)
 **
 
 Key findings from industry research:
-
 - **Cognition AI (Devin)**: Context buffer strategy with aggressive counter-prompting
 - **OpenAI (Codex)**: Context window auto-compaction with reserve token floors
 - **Anthropic (Claude Code)**: Prompt caching via exact prefix preservation
@@ -231,11 +209,9 @@ Key findings from industry research:
    September 29, 2025
 
 ### Pattern Documentation
-
 - [Context Window Anxiety Management Pattern](/home/agent/awesome-agentic-patterns/patterns/context-window-anxiety-management.md)
 - [Proactive Agent State Externalization Pattern](/home/agent/awesome-agentic-patterns/patterns/proactive-agent-state-externalization.md)
 - [Conditional Parallel Tool Execution Pattern](/home/agent/awesome-agentic-patterns/patterns/parallel-tool-execution.md)
 
 ### Related
-
 - [Anthropic: Claude Sonnet 4.5 Announcement](https://www.anthropic.com/index/claude-sonnet-4-5)

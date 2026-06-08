@@ -45,33 +45,32 @@ Every Embabel agent is built from these building blocks:
 Use `@Agent` for agents you call directly, or `@Agentic` for agents the platform auto-discovers and selects.
 
 ```java
-
 @Agent(description = "Writes and reviews stories")
 public class WriteAndReviewAgent {
 
     @Action
     public Story writeStory(UserInput input, OperationContext context) {
         var writer = LlmOptions.withModel(OpenAiModels.GPT_4O_MINI)
-                .withTemperature(0.8)
-                .withPersona("You are a creative storyteller");
+            .withTemperature(0.8)
+            .withPersona("You are a creative storyteller");
         return context.ai()
-                .withLlm(writer)
-                .withId("write-story")
-                .creating(Story.class)
-                .fromPrompt("Write a story about: " + input.getContent());
+            .withLlm(writer)
+            .withId("write-story")
+            .creating(Story.class)
+            .fromPrompt("Write a story about: " + input.getContent());
     }
 
     @AchievesGoal(description = "Review and improve the story")
     @Action
     public ReviewedStory reviewStory(Story story, OperationContext context) {
         var reviewer = LlmOptions.withModel(OpenAiModels.GPT_4O_MINI)
-                .withTemperature(0.2)
-                .withPersona("You are a careful editor");
+            .withTemperature(0.2)
+            .withPersona("You are a careful editor");
         return context.ai()
-                .withLlm(reviewer)
-                .withId("review-story")
-                .creating(ReviewedStory.class)
-                .fromPrompt("Review this story and suggest improvements: " + story.text());
+            .withLlm(reviewer)
+            .withId("review-story")
+            .creating(ReviewedStory.class)
+            .fromPrompt("Review this story and suggest improvements: " + story.text());
     }
 }
 ```
@@ -120,28 +119,25 @@ Utility agents use `@EmbabelComponent` for action classes (not `@Agent`). Each a
 The planner picks the action with the highest net value.
 
 ```java
-
 @EmbabelComponent
 public class IssueActions {
 
     @Action(cost = 0.1, value = 0.8, outputBinding = "ghIssue")
-    public GHIssue saveNewIssue(GHIssue ghIssue, OperationContext context) { ...}
+    public GHIssue saveNewIssue(GHIssue ghIssue, OperationContext context) { ... }
 
     @Action(pre = {"spel:newEntity.newEntities.?[#this instanceof T(com.embabel.shepherd.domain.Issue)].size() > 0"})
-    public IssueAssessment reactToNewIssue(GHIssue ghIssue, NewEntity<?> newEntity, Ai ai) { ...}
+    public IssueAssessment reactToNewIssue(GHIssue ghIssue, NewEntity<?> newEntity, Ai ai) { ... }
 }
 ```
 
 Use `@State` sealed interfaces to model state transitions:
 
 ```java
-
 @Agent(description = "Triage support tickets", planner = PlannerType.UTILITY)
 public class TicketTriageAgent {
 
     @State
-    public sealed interface TicketCategory permits CriticalTicket, BugTicket, GeneralTicket {
-    }
+    public sealed interface TicketCategory permits CriticalTicket, BugTicket, GeneralTicket {}
 
     @Action
     public TicketCategory triageTicket(Ticket ticket) {
@@ -155,7 +151,7 @@ public class TicketTriageAgent {
     public record CriticalTicket(Ticket ticket) implements TicketCategory {
         @AchievesGoal(description = "Handle critical ticket")
         @Action
-        public ResolvedTicket handleCritical() { ...}
+        public ResolvedTicket handleCritical() { ... }
     }
 }
 ```
@@ -173,14 +169,10 @@ public class TicketTriageAgent {
 AgentProcess process = agentPlatform.createAgentProcess(myAgent, options, bindings);
 
 // Closed (LLM picks agent)
-autonomy.
-
-chooseAndRunAgent(userIntent, ProcessOptions.DEFAULT);
+autonomy.chooseAndRunAgent(userIntent, ProcessOptions.DEFAULT);
 
 // Open (LLM picks goal + assembles agent)
-autonomy.
-
-chooseAndAccomplishGoal(options, approver, agentPlatform, bindings, selectionOptions);
+autonomy.chooseAndAccomplishGoal(options, approver, agentPlatform, bindings, selectionOptions);
 ```
 
 ## Tools and MCP Integration
@@ -201,12 +193,11 @@ Tools can be stateful — they often encapsulate domain objects with private sta
 ### Tool Groups
 
 ```java
-
 @Action
 public RelevantNews findNews(StarPerson person, OperationContext context) {
     return context.ai().withDefaultLlm()
-            .withToolGroup(CoreToolGroups.WEB)
-            .createObject(prompt, RelevantNews.class);
+        .withToolGroup(CoreToolGroups.WEB)
+        .createObject(prompt, RelevantNews.class);
 }
 ```
 
@@ -230,7 +221,6 @@ embabel:
 For infrastructure metadata (auth tokens, tenant IDs) that the LLM should never see:
 
 ```java
-
 @LlmTool(description = "Look up customer")
 public String lookupCustomer(
         @LlmTool.Param(description = "Customer ID") long customerId,
@@ -287,7 +277,6 @@ val skills = Skills(name = "my-skills", description = "Skills for my agent")
 ```
 
 SKILL.md structure:
-
 ```
 my-skill/
 ├── SKILL.md        # Required: name, description, instructions
@@ -305,17 +294,16 @@ Script execution supports Process (direct) and Docker (sandboxed) engines.
 ```java
 // Cheap model for simple tasks
 var writer = LlmOptions.withModel(OpenAiModels.GPT_4O_MINI)
-                .withTemperature(0.8);
+    .withTemperature(0.8);
 
 // Expensive model for complex reasoning
 var reviewer = LlmOptions.withModel(OpenAiModels.GPT_4O)
-        .withTemperature(0.2);
+    .withTemperature(0.2);
 ```
 
 ### Using the Ai Interface
 
 ```java
-
 @Component
 public record InjectedComponent(Ai ai) {
     public String tellJoke(String topic) {
@@ -324,9 +312,9 @@ public record InjectedComponent(Ai ai) {
 
     public Joke createJoke(String topic1, String topic2, String voice) {
         return ai.withLlm(LlmOptions.withDefaultLlm().withTemperature(.8))
-                .withId("tell-joke")
-                .creating(Joke.class)
-                .fromPrompt("Tell me a joke about %s and %s. Voice: %s".formatted(topic1, topic2, voice));
+            .withId("tell-joke")
+            .creating(Joke.class)
+            .fromPrompt("Tell me a joke about %s and %s. Voice: %s".formatted(topic1, topic2, voice));
     }
 }
 ```
@@ -401,7 +389,6 @@ CompletableFuture<TravelPlan> future = invocation.invokeAsync(travelRequest);
 ### REST Endpoints
 
 Embabel exposes REST endpoints out of the box:
-
 - `GET /api/v1/process/{processId}` — Process status
 - `DELETE /api/v1/process/{processId}` — Kill process
 - `GET /events/process/{processId}` — SSE stream
@@ -411,7 +398,6 @@ Embabel exposes REST endpoints out of the box:
 ### Setup (Maven)
 
 ```xml
-
 <dependency>
     <groupId>com.embabel.agent</groupId>
     <artifactId>embabel-agent-starter</artifactId>
@@ -420,9 +406,7 @@ Embabel exposes REST endpoints out of the box:
 ```
 
 Add repositories:
-
 ```xml
-
 <repositories>
     <repository>
         <id>embabel-releases</id>
@@ -460,7 +444,7 @@ class StoryWriterTest {
 
     @Test
     void writeStory_promptContainsTopic() {
-        var(context, promptRunner) = ContextAndRunner.create();
+        var (context, promptRunner) = ContextAndRunner.create();
         var expectedStory = new Story("Once upon a time...");
         context.expectResponse(expectedStory);
 
@@ -474,27 +458,27 @@ class StoryWriterTest {
 
     @Test
     void writeStory_temperatureIs0_8() {
-        var(context, promptRunner) = ContextAndRunner.create();
+        var (context, promptRunner) = ContextAndRunner.create();
         context.expectResponse(new Story("..."));
 
         var agent = new WriteAndReviewAgent();
         agent.writeStory(new UserInput("test"), context);
 
         var temperature = promptRunner.getLlmInvocations().getFirst()
-                .getInteraction().getLlm().getTemperature();
+            .getInteraction().getLlm().getTemperature();
         assertEquals(0.8, temperature, 0.01);
     }
 
     @Test
     void writeStory_interactionIdIsSet() {
-        var(context, promptRunner) = ContextAndRunner.create();
+        var (context, promptRunner) = ContextAndRunner.create();
         context.expectResponse(new Story("..."));
 
         var agent = new WriteAndReviewAgent();
         agent.writeStory(new UserInput("test"), context);
 
         var id = promptRunner.getLlmInvocations().getFirst()
-                .getInteraction().getId().getValue();
+            .getInteraction().getId().getValue();
         assertEquals("write-story", id);
     }
 }
@@ -529,9 +513,9 @@ class StoryWriterIntegrationTest extends EmbabelMockitoIntegrationTest {
 
         assertNotNull(result);
         verifyCreateObjectMatching(
-                prompt -> prompt.contains("Craft a short story"),
-                Story.class,
-                llm -> llm.getLlm().getTemperature() == 0.9
+            prompt -> prompt.contains("Craft a short story"),
+            Story.class,
+            llm -> llm.getLlm().getTemperature() == 0.9
         );
         verifyNoMoreInteractions();
     }

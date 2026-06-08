@@ -5,7 +5,6 @@
 Annotate your Spring Boot application class:
 
 ```java
-
 @SpringBootApplication
 public class MyAgentApplication {
     static void main(String[] args) {

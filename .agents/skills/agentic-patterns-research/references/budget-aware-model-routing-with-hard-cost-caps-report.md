@@ -1,5 +1,6 @@
 <!-- Source: https://github.com/nibzard/awesome-agentic-patterns/tree/main/research/budget-aware-model-routing-with-hard-cost-caps-report.md -->
 
+
 # Budget-Aware Model Routing with Hard Cost Caps - Research Report
 
 **Pattern Name**: Budget-Aware Model Routing with Hard Cost Caps
@@ -23,7 +24,6 @@ that spending never exceeds predefined limits regardless of other factors.
 **arXiv**: [2305.05176](https://arxiv.org/abs/2305.05176)
 
 **Key Contributions**:
-
 - Establishes the foundational framework for **LLM cascading** as a cost optimization strategy
 - Demonstrates that querying different LLM APIs can differ in cost by **up to two orders of magnitude**
 - Introduces three core strategies: prompt adaptation, LLM approximation, and **LLM cascading**
@@ -42,7 +42,6 @@ that can be combined with hard budget constraints.
 **Published**: January 2026
 
 **Key Contributions**:
-
 - Implements **Service Level Agreement (SLA) aware routing** using Lagrangian Reinforcement Learning
 - Provides **multi-objective optimization** that allows operators to set:
     - **Accuracy floors** (minimum quality thresholds)
@@ -65,7 +64,6 @@ Ion Stoica
 **arXiv**: [2406.18665](https://arxiv.org/abs/2406.18665)
 
 **Key Contributions**:
-
 - Learns intelligent routing between "strong" (expensive) and "weak" (cheap) models based on **human preference data**
 - Uses **80k battle data from Chatbot Arena** for training
 - Implements three classifier architectures:
@@ -86,7 +84,6 @@ adjusting routing thresholds based on remaining budget.
 **Published**: October 2025
 
 **Key Contributions**:
-
 - Implements a **complete reward/cost accounting framework** for training cost-aware routers
 - Frames routing as a **reinforcement learning problem** with explicit cost-performance trade-offs
 - Uses **DAPO** (a GRPO-style algorithm) for training with reward function:
@@ -112,7 +109,6 @@ penalties in the reward function, enabling enforcement of hard budget constraint
 **Code**: [GitHub: GeniusHTX/TALE](https://github.com/GeniusHTX/TALE)
 
 **Key Contributions**:
-
 - Introduces **token budget constraints** to optimize LLM inference
 - **Dynamically adjusts reasoning token quantities** based on question complexity
 - Two implementation approaches:
@@ -134,7 +130,6 @@ automatic fallback and degradation strategies when budgets are exceeded.
 **Status**: Under review (weak accept recommendation)
 
 **Key Contributions**:
-
 - **Combines model routing and model cascade approaches**
 - Introduces **"cascade routing"** (multiple rounds of model routing)
 - Studies how to use multiple LLMs to improve performance **under budget constraints**
@@ -153,7 +148,6 @@ enabling more sophisticated budget enforcement across multiple routing decisions
 **Code**: [GitHub: zju-real/hbpo](https://github.com/zju-real/hbpo)
 
 **Key Contributions**:
-
 - **Reinforcement learning framework** enabling models to learn problem-specific reasoning depth
 - Addresses "exploration space collapse" in efficiency-oriented training
 - Implements **hierarchical budget exploration** strategies
@@ -173,7 +167,6 @@ accuracy, providing strong evidence for the effectiveness of hard budget constra
 **Status**: Production-ready
 
 **Key Features**:
-
 - **Cost-based routing** with `budget_limit` parameter
 - Documented **49.5-70% cost reduction**
 - Multi-level budgeting: user, team, and organization levels
@@ -181,7 +174,6 @@ accuracy, providing strong evidence for the effectiveness of hard budget constra
 - Pre-flight cost estimation with rejection before calling
 
 **Code Example**:
-
 ```python
 from litellm import Router
 
@@ -203,14 +195,12 @@ router = Router(
 **Status**: Open Source
 
 **Key Features**:
-
 - **Hard dollar limits** with automatic circuit breaking
 - Zero-infrastructure (no Redis/DB required)
 - Drop-in patching mode for OpenAI/Anthropic SDKs
 - LangChain integration available
 
 **Code Example**:
-
 ```python
 from agentbudget import patch_openai
 import openai
@@ -230,7 +220,6 @@ response = openai.ChatCompletion.create(...)
 **Status**: Open source, production-ready
 
 **Key Features**:
-
 - Pre-trained routers for cost-aware selection
 - **85% cost reduction at 95% GPT-4 quality**
 - Configurable cost thresholds
@@ -244,7 +233,6 @@ response = openai.ChatCompletion.create(...)
 **Backend**: Redis
 
 **Key Features**:
-
 - Multi-process budget sharing via Redis
 - Per-call and total cost limits
 - Tool whitelisting/blacklisting
@@ -258,7 +246,6 @@ response = openai.ChatCompletion.create(...)
 **Status**: Commercial service
 
 **Key Features**:
-
 - Auto model routing with intelligent selection
 - Free model routing (200K context)
 - Budget tracking per API key
@@ -278,7 +265,6 @@ response = openai.ChatCompletion.create(...)
 | BATS Framework          | Research    | Budget-aware test-time scaling |
 
 **Common Implementation Patterns**:
-
 1. **Drop-in SDK Patching** - Automatic interception of API calls
 2. **Context Manager Wrapping** - Explicit budget tracking scopes
 3. **Pre-flight Cost Estimation** - Reject before calling
@@ -286,7 +272,6 @@ response = openai.ChatCompletion.create(...)
 5. **Distributed Budget Pooling** - Redis-backed shared budgets
 
 **Production Results**:
-
 - **50-98% cost reduction** across implementations
 - **Quality parity** maintained with intelligent routing
 - **80%+ of queries** can use cheaper models in some domains
@@ -296,7 +281,6 @@ response = openai.ChatCompletion.create(...)
 #### Direct Complementary Patterns
 
 **1. Failover-Aware Model Fallback**
-
 - **Relationship**: Handles model unavailability and service failures in a routing context
 - **Complementarity**: While budget-aware routing handles cost constraints, failover-aware fallback handles reliability
   constraints
@@ -304,58 +288,49 @@ response = openai.ChatCompletion.create(...)
   budget-aware routing's need to detect actual cost issues vs. transient failures
 
 **2. Oracle and Worker Multi-Model Approach**
-
 - **Relationship**: Explicitly separates high-cost reasoning models from cost-effective execution models
 - **Complementarity**: This pattern implements the "tiered model catalog" concept from budget-aware routing
 - **Synergy**: The Oracle serves as the escalation mechanism when cost-justified
 
 **3. Non-Custodial Spending Controls**
-
 - **Relationship**: Provides policy enforcement for financial transactions
 - **Complementarity**: Could be used to enforce organizational spending limits that constrain the routing decisions
 
 #### Performance and Resource Optimization Patterns
 
 **4. Inference-Time Scaling**
-
 - **Relationship**: Manages computational resources during model inference
 - **Complementarity**: The "compute budget" concept could be integrated with the cost budget in routing decisions
 
 **5. Adaptive Sandbox Fan-Out Controller**
-
 - **Relationship**: Manages parallel execution with cost constraints
 - **Complementarity**: Enforces budget guardrails for parallel execution, complementing the per-request cost caps in
   budget-aware routing
 
 **6. LLM Observability**
-
 - **Relationship**: Provides visibility into model performance and costs
 - **Complementarity**: Essential for monitoring the effectiveness of budget-aware routing decisions
 
 #### Control and Safety Patterns
 
 **7. Action-Selector Pattern**
-
 - **Relationship**: Constrains agent actions to a pre-approved allowlist
 - **Complementarity**: While budget-aware routing constrains model selection, action-selector constrains the actions
   that can be taken
 - **Synergy**: Both use allowlist-based approaches to reduce risk (cost risk vs. security risk)
 
 **8. Context-Minimization Pattern**
-
 - **Relationship**: Reduces context usage to prevent unnecessary token consumption
 - **Complementarity**: Works alongside budget-aware routing to reduce overall costs by minimizing context token costs
 
 #### Implementation Considerations
 
 **Integration Points**:
-
 - Failover-aware fallback for reliability
 - LLM observability for monitoring
 - Action-selector for security constraints
 
 **Layered Approach**:
-
 1. Security layer (action-selector, non-custodial controls)
 2. Cost layer (budget-aware routing, context minimization)
 3. Performance layer (inference-time scaling, adaptive fan-out)
@@ -366,37 +341,31 @@ response = openai.ChatCompletion.create(...)
 #### Key Techniques Identified
 
 **1. Cost Ceilings**
-
 - Hard spending limits enforced via SLA specifications
 - Zero circuit-breaking when limits are reached
 - Multi-level budgeting (user, team, organization)
 
 **2. Lagrangian RL**
-
 - Constrained optimization for budget-aware routing
 - Jointly optimizes accuracy, cost, and response time
 - Cost-adaptive routing where model costs are runtime inputs
 
 **3. Cascade Routing**
-
 - Multi-round model selection under budget constraints
 - Try cheap model first, escalate if needed
 - Quality gates between cascade stages
 
 **4. Token Budgeting**
-
 - Per-request token limits with automatic fallback
 - Dynamic adjustment based on question complexity
 - Addresses "token elasticity" phenomenon
 
 **5. Threshold-Based Routing**
-
 - Adaptive routing based on remaining budget
 - Cost thresholds for routing decisions
 - Learned from human preference data
 
 **6. Cost-Performance Pareto Frontier**
-
 - Optimal trade-off analysis
 - Reward function: `Reward = (success) × (success_bonus - λ × total_cost)`
 - Zero reward for unsuccessful requests regardless of cost
@@ -449,7 +418,6 @@ response = openai.ChatCompletion.create(...)
 ## References
 
 ### Academic Papers
-
 - [FrugalGPT](https://arxiv.org/abs/2305.05176) - Stanford, 2023
 - [SLA-Aware Routing](https://arxiv.org/html/2601.19402v3) - 2026
 - [RouteLLM](https://arxiv.org/abs/2406.18665) - ICLR 2024
@@ -459,7 +427,6 @@ response = openai.ChatCompletion.create(...)
 - [HBPO](https://github.com/zju-real/hbpo) - 2024
 
 ### Industry Sources
-
 - [LiteLLM](https://github.com/BerriAI/litellm) - Production router with budget limits
 - [RouteLLM](https://github.com/lm-sys/RouteLLM) - Pre-trained routers
 - [OpenRouter](https://openrouter.ai) - Auto routing service
@@ -467,7 +434,6 @@ response = openai.ChatCompletion.create(...)
 - [Mandate](https://github.com/av Court/mandate) - Distributed budget enforcement
 
 ### Related Code
-
 - [CascadeFlow](https://github.com/cascade-flow) - Cascading model selection
 - [LLMRouter](https://github.com/mlabonne/llm-router) - 16+ routing strategies
 

@@ -1,5 +1,6 @@
 <!-- Source: https://github.com/nibzard/awesome-agentic-patterns/tree/main/research/continuous-autonomous-task-loop-pattern-report.md -->
 
+
 # Continuous Autonomous Task Loop Pattern - Research Report
 
 **Pattern**: continuous-autonomous-task-loop-pattern
@@ -30,7 +31,6 @@ implementation.
 ### 1.1 Core Concept
 
 The Continuous Autonomous Task Loop Pattern implements a self-sustaining execution cycle where an AI agent:
-
 1. Selects the next task from a structured task file (e.g., TODO.md)
 2. Executes the task with fresh context
 3. Commits changes automatically
@@ -41,7 +41,6 @@ The Continuous Autonomous Task Loop Pattern implements a self-sustaining executi
 ### 1.2 Problem Statement
 
 Traditional development workflows require constant human intervention for:
-
 - **Manual Task Selection**: Developers spend time deciding what to work on next from todo lists
 - **Context Switching Overhead**: Moving between different types of tasks interrupts flow state
 - **Rate Limit Interruptions**: API rate limits break development momentum and require manual waiting
@@ -59,22 +58,24 @@ sequenceDiagram
     participant System as File System
 
     loop Continuous Task Processing
-        Script ->> TaskAgent: Select next task from TODO.md
-        TaskAgent -->> Script: "Implement user authentication"
-        Script ->> MainAgent: Execute task autonomously
+        Script->>TaskAgent: Select next task from TODO.md
+        TaskAgent-->>Script: "Implement user authentication"
+
+        Script->>MainAgent: Execute task autonomously
         Note over MainAgent: --dangerously-skip-permissions<br/>Fresh context, focused execution
-        MainAgent ->> System: Implement code changes
-        MainAgent -->> Script: Task completed successfully
-        Script ->> GitAgent: Commit changes
-        GitAgent ->> System: git add, commit with message
-        GitAgent -->> Script: Changes committed
+        MainAgent->>System: Implement code changes
+        MainAgent-->>Script: Task completed successfully
+
+        Script->>GitAgent: Commit changes
+        GitAgent->>System: git add, commit with message
+        GitAgent-->>Script: Changes committed
 
         alt Rate Limit Detected
-            Script ->> Script: Exponential backoff wait
+            Script->>Script: Exponential backoff wait
             Note over Script: Intelligent delay before retry
         end
 
-        Script ->> Script: Update progress counters
+        Script->>Script: Update progress counters
         Note over Script: Continue to next iteration
     end
 ```
@@ -167,7 +168,6 @@ Continuous Autonomous Task Loop (Core Pattern)
 ### 4.1 Foundational Academic Papers
 
 #### **ReAct: Synergizing Reasoning and Acting**
-
 - **Authors**: Yao et al.
 - **Venue**: NeurIPS 2022
 - **arXiv**: [2210.03629](https://arxiv.org/abs/2210.03629)
@@ -175,7 +175,6 @@ Continuous Autonomous Task Loop (Core Pattern)
 - **Relevance**: Core theoretical foundation for continuous task execution loops
 
 #### **Reflexion: Language Agents with Verbal Reinforcement Learning**
-
 - **Authors**: Noah Shinn, Federico Cassano, et al.
 - **Venue**: NeurIPS 2023
 - **arXiv**: [2303.11366](https://arxiv.org/abs/2303.11366)
@@ -183,7 +182,6 @@ Continuous Autonomous Task Loop (Core Pattern)
 - **Relevance**: Core loop: Generate → Reflect → (if inadequate, regenerate) → End
 
 #### **Self-Refine: Improving Reasoning via Iterative Feedback**
-
 - **Authors**: Shinn et al.
 - **Venue**: arXiv 2023
 - **arXiv**: [2303.11366](https://arxiv.org/abs/2303.11366)
@@ -193,7 +191,6 @@ Continuous Autonomous Task Loop (Core Pattern)
 ### 4.2 Agentic Reinforcement Learning
 
 #### **The Landscape of Agentic Reinforcement Learning for LLMs**
-
 - **Venue**: arXiv 2025
 - **arXiv**: [2509.02547](https://arxiv.org/abs/2509.02547)
 - **Key Contribution**: Framework for "Agentic RL" distinguishing it from conventional LLM-RL
@@ -201,7 +198,6 @@ Continuous Autonomous Task Loop (Core Pattern)
 - **Relevance**: Addresses temporally extended decision-making in agentic settings
 
 #### **Scaling Environments for LLM Agents**
-
 - **Venue**: Survey Paper 2025
 - **Key Contribution**: **Generation-Execution-Feedback (GEF) cycle framework**
 - **Components**: Generation → Execution → Feedback → Cycle continues
@@ -209,7 +205,6 @@ Continuous Autonomous Task Loop (Core Pattern)
 ### 4.3 Memory-Based Continuous Learning
 
 #### **Self-Evolving Agents via Runtime Reinforcement Learning on Episodic Memory**
-
 - **Authors**: Shengtao Zhang, Jiaqian Wang, et al.
 - **Affiliation**: Shanghai Jiao Tong University, Xidian University, MemTensor
 - **Year**: 2025
@@ -221,20 +216,17 @@ Continuous Autonomous Task Loop (Core Pattern)
 ### 4.4 How Academics Describe Continuous Autonomous Loops
 
 **1. Agentic RL Framework (arXiv:2509.02547)**
-
 - Formulates as **Partially Observable Markov Decision Processes (POMDPs)**
 - Key components: States, Actions, Observations, Rewards, Policies
 - Emphasizes **temporally extended decision-making**
 
 **2. Generation-Execution-Feedback (GEF) Cycle (2025 Survey)**
-
 - **Generation**: Agent produces actions/outputs
 - **Execution**: Environment responds with outcomes
 - **Feedback**: Agent receives reward/observation signals
 - **Cycle**: Continues until task completion or episode termination
 
 **3. Reflexion Framework (NeurIPS 2023)**
-
 ```
 for episode in range(max_episodes):
     result = agent.generate()
@@ -272,21 +264,18 @@ for episode in range(max_episodes):
 ### 5.3 Platform-Specific Implementations
 
 **GitHub Agentic Workflows** (2025)
-
 - Official GitHub feature for autonomous task execution
 - Branch-per-task isolation
 - CI integration as feedback channel
 - Retry budgets and stop rules
 
 **Cursor Background Agent**
-
 - Production implementation for continuous coding
 - Intelligent rate limiting
 - Automated git operations
 - Stream-based progress tracking
 
 **OpenHands**
-
 - Open-source autonomous software development platform
 - Containerized execution environments
 - Stateless architecture with fresh context per iteration
@@ -481,7 +470,6 @@ while iteration < MAX_ITERATIONS and tasks_remaining > 0:
   Balic (@nibzard)
 
 ### 11.2 Academic Papers
-
 - [ReAct: Synergizing Reasoning and Acting (ICLR 2023)](https://arxiv.org/abs/2210.03629) - Yao et al.
 - [Reflexion: Language Agents with Verbal RL (NeurIPS 2023)](https://arxiv.org/abs/2303.11366) - Shinn et al.
 - [Self-Refine: Iterative Feedback (arXiv 2023)](https://arxiv.org/abs/2303.11366) - Shinn et al.
@@ -490,21 +478,18 @@ while iteration < MAX_ITERATIONS and tasks_remaining > 0:
 - [A Survey on LLM-based Human-Agent Systems (arXiv 2025)](https://arxiv.org/abs/2505.00753) - Zou et al.
 
 ### 11.3 Industry Documentation
-
 - [Claude Code Documentation](https://docs.anthropic.com/en/docs/claude-code)
 - [GitHub Agentic Workflows](https://github.blog/ai-and-ml/automate-repository-tasks-with-github-agentic-workflows/)
 - [LangGraph Documentation](https://langchain-ai.github.io/langgraph/)
 - [AutoGen Documentation](https://microsoft.github.io/autogen/)
 
 ### 11.4 Open Source Implementations
-
 - [AutoGPT GitHub](https://github.com/Significant-Gravitas/AutoGPT) - 177K+ stars
 - [OpenHands GitHub](https://github.com/All-Hands-AI/OpenHands) - 64K+ stars
 - [SWE-agent GitHub](https://github.com/princeton-nlp/SWE-agent)
 - [CrewAI](https://www.crewai.com)
 
 ### 11.5 Related Patterns in This Repository
-
 - `/home/agent/awesome-agentic-patterns/patterns/autonomous-workflow-agent-architecture.md`
 - `/home/agent/awesome-agentic-patterns/patterns/ai-web-search-agent-loop.md`
 - `/home/agent/awesome-agentic-patterns/patterns/background-agent-ci.md`
@@ -524,7 +509,6 @@ repetitive development workflows. It occupies a unique position in the agentic p
 - **Complements** safety patterns like Action-Selector and Plan-Then-Execute
 
 The pattern is particularly valuable for scenarios where:
-
 1. Tasks can be well-defined upfront
 2. Clear success criteria exist
 3. Repetitive execution is beneficial
@@ -540,7 +524,6 @@ OpenHands, and GitHub Agentic Workflows.
 **Research Method**: Parallel agent research team (codebase analysis, academic literature, web sources, industry
 implementations)
 **Research Team Members**:
-
 1. Agent a7a5788865f84861f - Codebase Exploration for Related Patterns
 2. Agent a89594cc8d008280b - Academic Literature Research
 3. Agent aeb3040ab5e43d91a - Web Sources and Documentation Research

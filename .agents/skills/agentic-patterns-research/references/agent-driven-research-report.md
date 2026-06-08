@@ -1,5 +1,6 @@
 <!-- Source: https://github.com/nibzard/awesome-agentic-patterns/tree/main/research/agent-driven-research-report.md -->
 
+
 # Agent-Driven Research Pattern - Research Report
 
 **Research Started:** 2026-02-27
@@ -42,7 +43,6 @@ until sufficient information is gathered.
 ### Core Problem Solved
 
 Traditional information retrieval systems cannot handle complex, multi-faceted research tasks requiring:
-
 - Multiple rounds of investigation from different angles
 - Cross-source synthesis and verification
 - Dynamic adjustment of search strategy based on findings
@@ -116,25 +116,21 @@ flowchart TD
 Based on industry research, agent-driven research systems typically include:
 
 **1. Planning System**
-
 - Uses LLM reasoning to break down vague instructions into atomic tasks
 - Multi-step planning with reinforcement learning
 - Dynamic task addition during execution
 
 **2. Memory System**
-
 - Short-term: Context window maintenance
 - Long-term: Vector databases with RAG
 - Three-layer hierarchy: episodic + semantic + procedural
 
 **3. Action System**
-
 - MCP protocol interfaces for external operations
 - API calls, web search, Python script execution
 - Tool selection and orchestration
 
 **4. Reflection System**
-
 - Self-correction logic comparing expected vs actual outputs
 - Iterative evaluation until information is comprehensive
 - Adaptive query refinement based on retrieved results
@@ -142,7 +138,6 @@ Based on industry research, agent-driven research systems typically include:
 ### Notable Implementations
 
 **OpenAI Deep Research**
-
 - Powered by o3 model specialized for web browsing and data analysis
 - End-to-end reinforcement learning for autonomous planning
 - BrowseComp benchmark: 51.5% pass@1
@@ -150,7 +145,6 @@ Based on industry research, agent-driven research systems typically include:
 - Can complete in tens of minutes what would take humans hours
 
 **Tongyi DeepResearch (Alibaba)**
-
 - 30.5B total parameters, 3.3B activated per token
 - 60% inference cost reduction
 - Humanity's Last Exam: 32.9 score
@@ -158,7 +152,6 @@ Based on industry research, agent-driven research systems typically include:
 - Fully open-sourced model, framework, and solutions
 
 **Agent Laboratory (AMD + Johns Hopkins)**
-
 - Three-phase workflow: Literature Review → Experimentation → Report Writing
 - 84% cost reduction vs traditional methods
 - o1-preview generates highest quality research outputs
@@ -166,7 +159,6 @@ Based on industry research, agent-driven research systems typically include:
 - AgentRxiv framework for cumulative research progress
 
 **Claude Research Mode (Anthropic)**
-
 - Multi-agent system with parallel search across different sources
 - Integration with Google Workspace (Gmail, Calendar, Docs)
 - Four core strategies: file system access, semantic search, web search, Workspace integration
@@ -228,7 +220,6 @@ other agentic AI patterns.
 ### Common Pattern Combinations
 
 **Research Pipeline Stack**:
-
 ```
 Agent-Driven Research (core)
     + AI Web Search Agent Loop (web searches)
@@ -238,7 +229,6 @@ Agent-Driven Research (core)
 ```
 
 **Autonomous Research Factory**:
-
 ```
 Factory over Assistant (spawn multiple agents)
     + Planner-Worker Separation (coordinate tasks)
@@ -247,7 +237,6 @@ Factory over Assistant (spawn multiple agents)
 ```
 
 **Safe Research System**:
-
 ```
 Agent-Driven Research (core research)
     + Action-Selector Pattern (control flow integrity)
@@ -275,49 +264,41 @@ Agent-Driven Research (core research)
 ### Named Variants
 
 **1. ReAct (Reasoning + Acting)**
-
 - Origin: Princeton University & Google Research (2022), ICLR 2023
 - Pattern: Thought → Action → Observation (TAO) loop
 - Performance: 12-30% accuracy improvements over pure reasoning or acting
 - Status: Foundational pattern widely adopted across frameworks
 
 **2. Reflection Loop / Self-Refine**
-
 - Origin: Shinn et al. (2023)
 - Pattern: Generate → Critique → Refine → Repeat
 - Use Case: Quality-critical writing, reasoning, or code generation
 
 **3. Reflexion**
-
 - Pattern: Enhanced reflection with persistent memory and verbal reinforcement learning
 - Performance: ReAct + Reflexion completed 130/134 AlfWorld tasks
 
 **4. Language Agent Tree Search (LATS)**
-
 - Origin: Zhou et al., University of Illinois (2023)
 - Pattern: Monte Carlo Tree Search (MCTS) with LLM reflection
 - Performance: Outperforms ReAct, Reflexion, and ToT on complex reasoning tasks
 
 **5. Graph of Thoughts (GoT)**
-
 - Origin: Besta et al., ETH Zurich (AAAI 2024)
 - Pattern: Reasoning as directed graph with arbitrary node connections
 - Operations: Branching, Aggregation, Refinement, Looping
 
 **6. Tree of Thoughts (ToT)**
-
 - Origin: Yao et al. (NeurIPS 2023)
 - Pattern: Multi-step reasoning with thought trees
 - Precursor to Graph of Thoughts
 
 **7. Agentic RAG**
-
 - Evolution: Traditional RAG → Agentic RAG (2024-2025)
 - Pattern: Multi-round iterative retrieval with dynamic strategy
 - Trade-offs: 5-10x token consumption vs. basic RAG, but superior for complex tasks
 
 **8. Multi-Agent Research Systems**
-
 - Query Generation Agent, Web Search Agent, Reflection Agent, Report Generation Agent
 - Hierarchical Reasoning Framework (HiRA)
 - TAIS (Team of AI-made Scientists)
@@ -417,7 +398,6 @@ Based on recent Agentic AI reviews:
 ## Sources
 
 ### Academic Papers
-
 - [The AI Scientist (arXiv:2408.06292)](https://arxiv.org/abs/2408.06292)
 - [From AI for Science to Agentic Science (arXiv:2508.14111)](https://arxiv.org/abs/2508.14111)
 - [Reinforcement Learning Foundations for Deep Research (arXiv:2509.06733)](https://arxiv.org/abs/2509.06733)
@@ -433,7 +413,6 @@ Based on recent Agentic AI reviews:
 - [Tree of Thoughts (arXiv:2301.02663)](https://arxiv.org/abs/2301.02663)
 
 ### Open Source
-
 - [Alibaba-NLP/DeepResearch](https://github.com/Alibaba-NLP/DeepResearch)
 - [HKUDS/Auto-Deep-Research](https://github.com/HKUDS/Auto-Deep-Research)
 - [awesome-deep-research-agent](https://github.com/ai-agents-2030/awesome-deep-research-agent)
@@ -441,7 +420,6 @@ Based on recent Agentic AI reviews:
 - [AutoGen](https://github.com/microsoft/autogen)
 
 ### Frameworks
-
 - [LangGraph](https://www.langchain.com/langgraph) - Deep Research multi-agent systems
 - [CrewAI](https://www.crewai.com) - Research assistant examples
 - [LlamaIndex AgentQueryEngine](https://www.llamaindex.ai/) - Agentic RAG implementations
@@ -470,7 +448,6 @@ Based on recent Agentic AI reviews:
 *Report compiled by multi-agent research team. All sources verified and cited.*
 
 **Research Team Members:**
-
 1. Agent a6d4596041bf6c55c - Definition and Sources Research
 2. Agent ae053174076ea17a9 - Implementations Research
 3. Agent a79950474a1af4954 - Related Patterns Analysis

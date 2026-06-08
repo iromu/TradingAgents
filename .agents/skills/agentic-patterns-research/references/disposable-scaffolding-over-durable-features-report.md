@@ -1,5 +1,6 @@
 <!-- Source: https://github.com/nibzard/awesome-agentic-patterns/tree/main/research/disposable-scaffolding-over-durable-features-report.md -->
 
+
 # Disposable Scaffolding Over Durable Features - Research Report
 
 **Pattern Name**: Disposable Scaffolding Over Durable Features
@@ -17,7 +18,6 @@ obsolete. This pattern is based on "The Bitter Lesson" - that much complex scaff
 improved model capabilities.
 
 **Key Findings:**
-
 - **Core Philosophy**: Separate durable business value from temporary model-specific workarounds
 - **Economic Rationale**: Model capabilities double every ~6 months; complex tooling investments become obsolete quickly
 - **Implementation Pattern**: Use ephemeral execution environments (containers, VMs, serverless) with auto-cleanup
@@ -27,7 +27,6 @@ improved model capabilities.
 ---
 
 ## Table of Contents
-
 1. [Pattern Definition](#pattern-definition)
 2. [Academic Research Sources](#academic-research-sources)
 3. [Industry Implementations](#industry-implementations)
@@ -80,7 +79,6 @@ Before building complex tooling, ask: *"Will this be useful in 6 months when mod
 ### Scaffolding in AI/ML Systems
 
 #### Scratch Copilot: Supporting Youth Creative Coding with AI (2025)
-
 - **Authors**: IDC 2025 Conference
 - **arXiv ID**: 2505.03867v1
 - **Venue**: IDC 2025, Reykjavik, Iceland
@@ -90,7 +88,6 @@ Before building complex tooling, ask: *"Will this be useful in 6 months when mod
 - **Link**: https://arxiv.org/abs/2505.03867v1
 
 #### Biscuit: A Temporal Logic for AI Safety (2024)
-
 - **arXiv ID**: 2404.07387v1
 - **Focus**: Temporal logic for AI safety and policy enforcement
 - **Key Finding**: Introduces temporal constraints on AI agent behavior
@@ -98,7 +95,6 @@ Before building complex tooling, ask: *"Will this be useful in 6 months when mod
 - **Link**: https://arxiv.org/abs/2404.07387v1
 
 #### CodeGen: An Open Large Language Model for Code with Multi-Turn Program Synthesis (2022)
-
 - **Authors**: Nijkamp et al.
 - **arXiv ID**: 2203.13474
 - **Focus**: Multi-turn program synthesis and code generation
@@ -109,7 +105,6 @@ Before building complex tooling, ask: *"Will this be useful in 6 months when mod
 ### Temporary vs. Durable Component Separation
 
 #### ESAA: Event Sourcing for Autonomous Agents (2026)
-
 - **Authors**: Elzo Brito dos Santos Filho
 - **arXiv ID**: 2602.23193v1
 - **Focus**: Event-sourced architectures for LLM agents
@@ -118,7 +113,6 @@ Before building complex tooling, ask: *"Will this be useful in 6 months when mod
 - **Link**: https://arxiv.org/abs/2602.23193v1
 
 #### ParamMem: Augmenting Language Agents with Parametric Reflective Memory (2026)
-
 - **Authors**: Tianjun Yao et al.
 - **arXiv ID**: 2602.23320v1
 - **Focus**: Reflective memory architectures for agents
@@ -127,7 +121,6 @@ Before building complex tooling, ask: *"Will this be useful in 6 months when mod
 - **Link**: https://arxiv.org/abs/2602.23320v1
 
 #### Code-Then-Execute Pattern - CaMeL Framework (2025)
-
 - **Authors**: Luca Beurer-Kellner et al. (DeepMind CaMeL)
 - **arXiv ID**: 2506.08837
 - **Focus**: Comprehensive framework for secure LLM agent execution through generated code
@@ -139,7 +132,6 @@ Before building complex tooling, ask: *"Will this be useful in 6 months when mod
 ### Scaffolding Theory and Cognitive Development
 
 #### A Survey on Large Language Model based Human-Agent Systems (2025)
-
 - **arXiv ID**: 2505.00753
 - **Focus**: Human-AI collaboration and agent systems
 - **Key Finding**: "85% of developers now regularly use AI tools for scaffolding and development"
@@ -147,7 +139,6 @@ Before building complex tooling, ask: *"Will this be useful in 6 months when mod
 - **Link**: https://arxiv.org/abs/2505.00753
 
 #### TDAG: A Multi-Agent Framework based on Dynamic Task Decomposition and Agent Generation (2024)
-
 - **arXiv ID**: 2402.10178
 - **Venue**: Neural Networks 2025
 - **Focus**: Dynamic task decomposition and on-demand agent creation
@@ -158,7 +149,6 @@ Before building complex tooling, ask: *"Will this be useful in 6 months when mod
 ### Foundational Theory
 
 #### Intention is Choice with Commitment (1990)
-
 - **Authors**: Cohen & Levesque
 - **Venue**: Artificial Intelligence, Vol. 42
 - **Focus**: Formal logical framework for mental states in artificial agents
@@ -186,7 +176,6 @@ calls.
   optimization)
 
 **Technical Details**:
-
 - Schema discovery converts MCP tool schemas to TypeScript API interfaces
 - LLM generates orchestration code that runs in isolated V8 environments
 - Secure bindings control access to MCP servers that own credentials
@@ -202,14 +191,12 @@ calls.
 after completion.
 
 **Key Features**:
-
 - **Rollout ID Tracking**: Each RL rollout receives unique ID mapped to dedicated VM
 - **Clean State**: Each VM starts with identical filesystem, packages, and configuration
 - **Auto-Cleanup**: VMs destroyed after rollout completes (success or failure)
 - **Bursty Scaling**: Handles 100-500 simultaneous VM requests during training
 
 **Technical Details**:
-
 - Uses Modal for fast VM provisioning
 - Repository corpus replicated into each VM
 - Shell tool access safe because of isolation
@@ -225,14 +212,12 @@ after completion.
 sandboxed dev environments.
 
 **Key Features**:
-
 - **Sandboxed Execution**: Uses infrastructure like Modal for ephemeral dev environments
 - **Real-Time Communication**: WebSocket connection streams stdout/stderr to client
 - **Closed Feedback Loop**: Agent iterates autonomously with machine-readable feedback
 - **Model-Agnostic**: Pluggable interface supporting multiple frontier models
 
 **Technical Details**:
-
 - Agent runs with same context as developers: codebase, dependencies, dev tools
 - Two-instance kickoff pattern: Instance 1 (Scaffolding Agent) creates project skeleton, Instance 2 works on
   implementation
@@ -248,14 +233,12 @@ sandboxed dev environments.
 services for integration testing.
 
 **Key Features**:
-
 - **Disposable Environments**: Each test gets fresh, isolated container instance
 - **Docker-Based**: Leverages Docker containers for consistency
 - **Programmatic Control**: Start/stop containers programmatically in tests
 - **Auto-Cleanup**: Containers automatically stopped and removed after tests complete
 
 **Technical Details**:
-
 - No lingering state between test runs
 - Supports: PostgreSQL, MySQL, MongoDB, Kafka, RabbitMQ, Redis, NGINX
 - Multi-Language Support: Java, .NET, Go, Node.js, Python
@@ -269,14 +252,12 @@ services for integration testing.
 **Implementation**: Cursor's Composer model supports running up to 8 AI agents simultaneously in isolation.
 
 **Key Features**:
-
 - **Parallel Agents**: Each agent works in isolation using git worktrees or remote machines
 - **Aggregated Diff Views**: Compare and select best solutions from parallel approaches
 - **250 Tokens/Second**: 4x faster than competitors for rapid iteration
 - **Embedded Browser**: For agents to run and test code
 
 **Technical Details**:
-
 - Agents can work on different implementation approaches in parallel
 - MoE Architecture: Mixture of Experts optimized for low-latency programming
 - Voice Mode for speaking to write code
@@ -291,14 +272,12 @@ services for integration testing.
 ephemeral development.
 
 **Key Features**:
-
 - **Zero Installation**: Works entirely in browser, no setup required
 - **WebContainers**: Runs complete Node.js environment in browser
 - **One-Click Deployment**: Deploy directly to Netlify or Cloudflare
 - **AI-Managed Lifecycle**: AI manages entire lifecycle: file system, Node.js server, package manager, terminal
 
 **Technical Details**:
-
 - 20% Faster Build Speed than local environments
 - Generates frontend, backend, and database integration code
 - 3 million+ registered users, 1 million+ monthly active
@@ -314,14 +293,12 @@ ephemeral development.
 as needed.
 
 **Key Features**:
-
 - **Automatic Scaling**: Runners created when jobs are queued, removed after jobs complete
 - **Cost Efficiency**: Only pay for infrastructure when jobs are running
 - **Isolation**: Each job can run on clean, fresh instance
 - **Lifecycle Management**: Automated without manual intervention
 
 **Technical Details**:
-
 - Action Runner Controller (ARC) for Kubernetes-based runner management
 - Auto-scaling groups with custom images
 - Infrastructure as Code using Terraform
@@ -336,14 +313,12 @@ as needed.
 execution.
 
 **Key Features**:
-
 - **Fast Provisioning**: Containers spin up in seconds
 - **Auto-Cleanup**: Containers automatically destroyed after function execution
 - **Isolation**: Each function execution gets isolated environment
 - **No Infrastructure Management**: Zero devops overhead
 
 **Technical Details**:
-
 - Used extensively for AI agent workloads
 - Supports bursty traffic patterns
 - Base images with dependencies cached
@@ -359,14 +334,12 @@ execution.
 environments.
 
 **Key Features**:
-
 - **Instant Preview**: Real-time preview of generated applications
 - **One-Click Deploy**: Deploy to Vercel with single click
 - **Iterative Refinement**: Make changes and see results immediately
 - **Environment Replication**: Each preview is isolated environment
 
 **Technical Details**:
-
 - Evolved from v0.dev to v0.app (August 2025)
 - Shift from UI-only to full-stack generation
 - 3 different interface options generated per request
@@ -381,14 +354,12 @@ environments.
 **Implementation**: Open-source tool that adaptively scales parallel sandbox executions based on observed signals.
 
 **Key Features**:
-
 - **Start Small**: Launch batch of N=3-5 sandboxes in parallel
 - **Early Signal Sampling**: Collect results from first X runs
 - **Adaptive Decisions**: Scale up, stop early, refine prompt, or switch strategy
 - **Budget Guardrails**: Max sandboxes, runtime caps, no-progress conditions
 
 **Technical Details**:
-
 - Start N=3, scale up if good success but high variance
 - Stop early if judge confident + tests pass + solutions converge
 - Refine prompt if error clustering >70%
@@ -438,18 +409,20 @@ graph TB
     I <--> F
     I <--> G
     I <--> H
+
     E -.-> A
     F -.-> B
     G -.-> C
     H -.-> D
-    style E fill: #ffcccc
-    style F fill: #ffcccc
-    style G fill: #ffcccc
-    style H fill: #ffcccc
-    style A fill: #ccffcc
-    style B fill: #ccffcc
-    style C fill: #ccffcc
-    style D fill: #ccffcc
+
+    style E fill:#ffcccc
+    style F fill:#ffcccc
+    style G fill:#ffcccc
+    style H fill:#ffcccc
+    style A fill:#ccffcc
+    style B fill:#ccffcc
+    style C fill:#ccffcc
+    style D fill:#ccffcc
 ```
 
 #### 2. Architectural Patterns for Layer Separation
@@ -463,19 +436,16 @@ class CodeEditorInterface(ABC):
     def edit_file(self, path: str, changes: Edit) -> Result:
         pass
 
-
 # Disposable Scaffolding: Model-specific implementation
 class ClaudeOpus41Editor(CodeEditorInterface):
     def edit_file(self, path: str, changes: Edit) -> Result:
         # Complex orchestration Opus 4.1 needs
         return self._complex_multi_step_edit(path, changes)
 
-
 class ClaudeSonnet45Editor(CodeEditorInterface):
     def edit_file(self, path: str, changes: Edit) -> Result:
         # Simpler - Sonnet 4.5 handles this natively
         return self._direct_edit(path, changes)
-
 
 # Factory for easy switching
 editor_factory = {
@@ -495,7 +465,6 @@ class ScaffoldingStrategy(ABC):
     @abstractmethod
     def execute(self, *args, **kwargs):
         pass
-
 
 class ContextCompressionScaffolding(ScaffoldingStrategy):
     def is_needed(self, model_version: str) -> bool:
@@ -529,7 +498,6 @@ stateDiagram-v2
 from enum import Enum
 from datetime import datetime
 
-
 class ScaffoldingLifecycle(Enum):
     PROPOSED = "proposed"
     ACTIVE = "active"
@@ -537,7 +505,6 @@ class ScaffoldingLifecycle(Enum):
     TESTING_REMOVAL = "testing"
     DEPRECATED = "deprecated"
     ARCHIVED = "archived"
-
 
 class ScaffoldingComponent:
     def __init__(self, name: str):
@@ -644,12 +611,10 @@ class ScaffoldingTestSuite:
 - **Key synergy**: Both reject "sunk cost fallacy" in AI development
 
 #### Factory over Assistant
-
 - **Relationship**: Both optimize for future model capabilities rather than current limitations
 - **Key synergy**: Both recognize that assistant/sidebar interactions are temporary scaffolding
 
 #### Code-First Tool Interface Pattern (Code Mode)
-
 - **Relationship**: Code Mode treats execution as ephemeral and disposable
 - **Key synergy**: "Write once, vaporize immediately" embodies the disposable mindset
 
@@ -665,13 +630,11 @@ class ScaffoldingTestSuite:
   workarounds)
 
 #### Codebase Optimization for Agents
-
 - **Relationship**: Partial tension - Codebase optimization encourages permanent changes to support agents
 - **Conflict**: Heavy optimization for current model limitations may be wasted if better models emerge
 - **Resolution**: Focus optimizations on durable value, not temporary limitations
 
 #### Custom Sandboxed Background Agent
-
 - **Relationship**: Strong tension - Custom agents require significant engineering investment
 - **Conflict**: Building custom infrastructure vs. treating tooling as disposable
 - **Resolution**: Build custom agents for durable value (company-specific workflows), not model-specific workarounds
@@ -679,29 +642,24 @@ class ScaffoldingTestSuite:
 ### PREREQUISITES
 
 #### Discrete Phase Separation
-
 - **Relationship**: Enables disposable scaffolding by separating planning from execution
 - **Key insight**: Separating concerns makes it easier to identify what scaffolding can be safely discarded
 
 #### Plan-Then-Execute Pattern
-
 - **Relationship**: Creates planning artifacts that can inform scaffolding decisions
 - **Key insight**: Plans can be reused across different scaffolding implementations
 
 ### COMBINES WELL
 
 #### Action-Selector Pattern
-
 - **Relationship**: Both advocate for constrained, auditable systems
 - **Key synergy**: Action allowlists can be treated as disposable scaffolding around model capabilities
 
 #### Context-Minimization Pattern
-
 - **Relationship**: Both advocate for reducing complexity around the model
 - **Key synergy**: Simpler contexts require less complex scaffolding
 
 #### Asynchronous Coding Agent Pipeline
-
 - **Relationship**: Async architecture makes it easier to swap out components
 - **Key synergy**: Modular pipeline components can be treated as disposable scaffolding
 
@@ -742,7 +700,6 @@ simplified significantly.
 **Problem**: Ramp needed to reduce 2-3 days of manual project scaffolding to minutes.
 
 **Disposable Scaffolding Approach**:
-
 - Instance 1 (Scaffolding Agent): Creates project skeleton - disposable by design
 - Instance 2 (Implementation Agent): Works on actual features - durable value
 - Used Modal sandboxes that auto-destroy after completion
@@ -808,14 +765,12 @@ models improve.
 ## References
 
 ### Primary Sources
-
 - Sourcegraph: "Disposable Scaffolding Over Durable Features" (Thorsten Ball)
 - Cloudflare Engineering Blog: Code Mode Pattern
 - Ramp Engineering Blog: "Why We Built Our Own Background Agent"
 - OpenAI Build Hour: Agent RFT (November 2025)
 
 ### Academic Sources
-
 - Scratch Copilot: arXiv:2505.03867v1
 - ESAA: arXiv:2602.23193v1
 - ParamMem: arXiv:2602.23320v1
@@ -824,7 +779,6 @@ models improve.
 - Cohen & Levesque (1990): "Intention is Choice with Commitment"
 
 ### Related Patterns
-
 - Burn the Boats
 - Factory over Assistant
 - Code-First Tool Interface (Code Mode)

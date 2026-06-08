@@ -1,5 +1,6 @@
 <!-- Source: https://github.com/nibzard/awesome-agentic-patterns/tree/main/research/agent-powered-codebase-qa-onboarding-report.md -->
 
+
 # Agent-Powered Codebase QA & Onboarding Pattern Research Report
 
 **Pattern**: agent-powered-codebase-qa-onboarding
@@ -110,7 +111,6 @@ interfaces.
 ### Existing Related Patterns (in codebase)
 
 The pattern **already exists** in this codebase at:
-
 - **File**: `patterns/agent-powered-codebase-qa-onboarding.md`
 - **Status**: validated-in-production
 - **Category**: Context & Memory
@@ -136,7 +136,6 @@ The pattern **already exists** in this codebase at:
 ### Problem Statement
 
 Developers face significant challenges when:
-
 - **Onboarding to new codebases**: Understanding large, complex codebases takes weeks or months
 - **Answering codebase questions**: Finding where specific features are implemented or understanding component
   relationships
@@ -162,14 +161,12 @@ The **Agent-Powered Codebase QA & Onboarding** pattern uses AI agents with retri
 #### 1. Repository Indexing
 
 **Technologies:**
-
 - **Vector Embeddings**: FAISS, Sentence-Transformers, Cohere Embed for semantic search
 - **AST Parsing**: Tree-sitter for multi-language code structure analysis
 - **Code Graphs**: Symbol graphs capturing relationships, imports, and call chains
 - **Static Analysis**: Extracting symbols, dependencies, and cross-references
 
 **Implementation Examples:**
-
 - RepoAgent: Structured content indexes with dual RAG + full context injection
 - Sourcegraph: Symbolic code graph from compilation process
 - Aider: Repo-map using Tree-sitter for token-efficient context
@@ -177,14 +174,12 @@ The **Agent-Powered Codebase QA & Onboarding** pattern uses AI agents with retri
 #### 2. Query Processing
 
 **Query Types:**
-
 - **Location queries**: "Where is the authentication logic implemented?"
 - **Behavioral queries**: "What happens when a user clicks this button?"
 - **Impact queries**: "Which modules are affected by this change?"
 - **Relationship queries**: "How does component A depend on component B?"
 
 **Processing Pipeline:**
-
 1. **Query Understanding**: Parse natural language intent
 2. **Context Retrieval**: Find relevant code using semantic search and graph traversal
 3. **Context Reranking**: Rank and select most relevant sections
@@ -193,7 +188,6 @@ The **Agent-Powered Codebase QA & Onboarding** pattern uses AI agents with retri
 #### 3. Context Management
 
 **Techniques:**
-
 - **Curated File Context**: Use sub-agents to search/rank files without polluting main context
 - **Dynamic Context Discovery**: Automatically identify relevant code to prevent context bloat
 - **Token-Efficient Delivery**: Compressed representations (repo-maps, hierarchical summaries)
@@ -209,7 +203,6 @@ The **Agent-Powered Codebase QA & Onboarding** pattern uses AI agents with retri
 | Multi-Agent  | MetaGPT, ChatDev    | Specialized roles, better for complex tasks, higher cost |
 
 **Specialized Agent Roles:**
-
 - **Navigation Agent**: Explores codebase structure
 - **QA Agent**: Answers specific questions
 - **Documentation Agent**: Generates and maintains docs
@@ -226,7 +219,6 @@ The **Agent-Powered Codebase QA & Onboarding** pattern uses AI agents with retri
 **Finding**: Modern tools have evolved from single-file analysis to repository-wide understanding.
 
 **Evidence:**
-
 - Cursor's @Codebase: Scans entire project for relevant code
 - Sourcegraph: Handles millions to billions of lines of code
 - CodeAgent: Specifically designed for repository-level tasks (vs. single-function)
@@ -238,7 +230,6 @@ The **Agent-Powered Codebase QA & Onboarding** pattern uses AI agents with retri
 **Finding**: Code graphs provide structural understanding that pure embeddings miss.
 
 **Evidence:**
-
 - RepoGraph: Repository-level code graph for structural understanding
 - CGM (Code Graph Model): Integrates graph structures with LLMs
 - CoSIL: Graph searching achieves 43-44.6% top-1 localization on SWE-bench
@@ -250,7 +241,6 @@ The **Agent-Powered Codebase QA & Onboarding** pattern uses AI agents with retri
 **Finding**: Documentation generation is evolving from text-only to multi-modal formats.
 
 **Evidence:**
-
 - VisDocSketcher: First method using agentic systems for visual documentation
 - AI-Researcher: Automated Documentation Agent as part of multi-agent system
 - RepoAgent: Generates function descriptions, parameters, examples
@@ -264,7 +254,6 @@ The **Agent-Powered Codebase QA & Onboarding** pattern uses AI agents with retri
 **Trend**: Evolution from simple code completion to full agentic capabilities.
 
 **Evidence:**
-
 - GitHub Copilot: Expanded from inline completion to @workspace, PR summaries, documentation queries
 - Cursor: From completion to multi-file editing, @Codebase, context gathering pipeline
 - Sourcegraph Cody: From code search to enterprise-scale code intelligence platform
@@ -274,7 +263,6 @@ The **Agent-Powered Codebase QA & Onboarding** pattern uses AI agents with retri
 **Trend**: Configuration files (CLAUDE.md, AGENTS.md) serve as onboarding documentation for AI agents.
 
 **Evidence:**
-
 - Claude Code: CLAUDE.md read at start of every session
 - Cursor: .cursorignore file for exclusion rules
 - Best practice: 150-200 instructions max, project-specific, explain "why" not just "what"
@@ -286,7 +274,6 @@ The **Agent-Powered Codebase QA & Onboarding** pattern uses AI agents with retri
 **Trend**: Model Context Protocol becoming industry standard.
 
 **Evidence:**
-
 - Anthropic MCP Core, GitHub MCP, Azure OpenAI MCP
 - Major Chinese cloud providers (Alibaba, Baidu, Tencent) adopting
 - Enables "USB-C for AI" plug-and-play interface
@@ -300,13 +287,11 @@ The **Agent-Powered Codebase QA & Onboarding** pattern uses AI agents with retri
 **Finding**: SWE-bench has become the standard benchmark for repository-level agents.
 
 **Key Results:**
-
 - SWE-agent: State-of-the-art on SWE-bench, 300+ citations
 - CoSIL: 43-44.6% top-1 localization, outperforms by 8.6%-98.2%
 - ExpeRepair: 49.3% pass@1 on SWE-bench Lite
 
 **Evaluation Criteria:**
-
 - Real GitHub issues from Django, PyTorch, etc.
 - Complete loop: understanding, debugging, modification, verification
 - Whether fix passes original project's test suite
@@ -316,13 +301,11 @@ The **Agent-Powered Codebase QA & Onboarding** pattern uses AI agents with retri
 **Finding**: Strong open-source alternatives are emerging to commercial tools.
 
 **Open Source:**
-
 - Aider: Apache-2.0, cost-effective, strong SWE-bench performance
 - Continue.dev: Open-source autopilot for VS Code/JetBrains
 - OpenHands: MIT license, 64k+ stars
 
 **Commercial:**
-
 - Sourcegraph Cody: Enterprise features, SOC2, self-hosted
 - Cursor: @Codebase, automatic indexing
 - GitHub Copilot: Direct GitHub integration
