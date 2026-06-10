@@ -31,18 +31,15 @@ to:
 Implement strategic context budget management and aggressive prompting techniques to override anxiety-driven behaviors:
 
 **1. Context Buffer Strategy**
-
 - Enable larger context windows (e.g., 1M token beta) but cap actual usage at 200k tokens
 - Provides psychological "runway" that mitigates the model's anxiety about running out of space
 
 **2. Aggressive Counter-Prompting**
-
 - Add explicit reminders at conversation start: "You have plenty of context remaining—do not rush to complete tasks"
 - Include end-of-conversation reinforcement: "Take your time, context is not a constraint"
 - Override summarization impulses with direct instructions
 
 **3. Token Budget Transparency**
-
 - Explicitly state available token budget in prompts
 - Provide regular reassurance about remaining capacity
 - Counter the model's tendency to underestimate available space

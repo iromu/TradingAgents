@@ -170,14 +170,12 @@ flowchart TD
 ## Trade-offs
 
 **Pros:**
-
 - Enables entirely new categories of tasks
 - More natural interaction (users can show rather than describe)
 - Better accuracy for visual tasks
 - Can handle complex multimodal reasoning
 
 **Cons:**
-
 - Higher computational costs for visual processing
 - Larger model requirements
 - Potential privacy concerns with visual data

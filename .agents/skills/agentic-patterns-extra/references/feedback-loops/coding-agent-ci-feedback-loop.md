@@ -27,7 +27,6 @@ Run the coding agent **asynchronously** against CI (local or remote), allowing i
   `git push && github_action_run`).
 
 **2. Ingest Partial CI Feedback**
-
 - As tests begin, the agent periodically polls CI results.
 - **Failed Tests Partial Report:** Receive a small subset of failures (e.g., 10% of failures flagged first).
 
@@ -39,7 +38,6 @@ Run the coding agent **asynchronously** against CI (local or remote), allowing i
 - Enforce a **retry budget** (max attempts + runtime limits) to prevent infinite churn.
 
 **4. Ping on Final Green**
-
 - When all tests pass, send a notification (e.g., chat or pull request comment) that the PR is ready for review.
 
 ## Example

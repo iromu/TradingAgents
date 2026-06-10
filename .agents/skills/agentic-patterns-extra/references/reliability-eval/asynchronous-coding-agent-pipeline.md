@@ -25,13 +25,11 @@ Decouple the **inference**, **tool execution**, and **learning** into **parallel
 communicating via message queues:
 
 **1. Inference Workers (GPU)**
-
 - Continuously sample from the latest policy.
 - Output "actions" that are either low-compute (e.g., "suggest next line") or external tool calls (e.g., "
   CompileSubagent(serviceA)").
 
 **2. Tool Executors (CPU / Container Hosts)**
-
 - Listen to a queue of tool call requests (`compile`, `run_tests`, `lint`).
 - Run each tool in an isolated environment, then push the results (success/failure, logs) back to the **Inference
   Workers**.
@@ -43,13 +41,11 @@ communicating via message queues:
 - Push `(trajectory_id, reward)` to the **Learner**.
 
 **4. Learner / Parameter Server (GPU)**
-
 - Periodically aggregates gradients from recent trajectories, updates policy weights, and publishes new checkpoints.
 - Completely decouples generation and training, addressing synchronous bottlenecks in large-scale RL systems (up to
   2.77x acceleration).
 
 **5. Replay & Buffer System**
-
 - **Experience Replay:** Stores recent `(state, action, reward)` tuples, allowing the Learner to sample minibatches.
 - **Priority Queues:** If certain coding episodes show high variance (e.g., intermittent compile successes), re-evaluate
   them with updated reward models.

@@ -71,5 +71,4 @@ gantt
   performance curve; information at beginning/end of context is accessed 20-30% more reliably than middle positions.
 - Nagaraj et al. (2023). "MemGPT: Towards LLMs as Operating Systems." arXiv:2310.08560—Hierarchical memory
   architecture (primary context, secondary memory, archival) for extended sessions.
-
 ---

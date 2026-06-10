@@ -24,14 +24,12 @@ the agent to produce maintainable, high-quality code.
 Use an **inference-healed reward model**—a code-review critic that:
 
 **1. Decomposes Code Quality into Subcriteria**
-
 - **Correctness:** Does the code pass all existing and newly added tests?
 - **Style:** Are linters (e.g., ESLint, pylint) satisfied (zero or minimal warnings)?
 - **Performance:** Are there clear performance regressions gauged by simple benchmarks?
 - **Security:** Does a static analyzer (e.g., Bandit, SonarQube) flag no critical issues?
 
 **2. Runs Internal Chain-of-Thought (CoT) Reasoning**
-
 - If uncertain about a subcriterion (e.g., performance), the critic runs a short CoT inside itself:
   ```text
   "Step: performance check. Baseline runtime: 50ms. New code runtime: 65ms.
@@ -41,13 +39,11 @@ Use an **inference-healed reward model**—a code-review critic that:
 - Use smaller critic models (1–2B parameters) to keep CoT generation cost-efficient.
 
 **3. Aggregates Subscores**
-
 - Each subcriterion returns a float ∈ [0, 1].
 - A weighted sum (e.g., 0.4 × correctness + 0.2 × style + 0.2 × performance + 0.2 × security) yields the final
   code-review score.
 
 **4. Generates Human-Readable Feedback**
-
 - Alongside a numerical score, return a short analysis:
   ```json
   {

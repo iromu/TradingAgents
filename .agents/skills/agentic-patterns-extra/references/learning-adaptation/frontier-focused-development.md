@@ -96,7 +96,6 @@ frontier_test:
 **The risk of subscription models:**
 
 When you offer a subscription (like Claude Max), you become tied to that model:
-
 - Can't switch if a better model emerges
 - Price changes become user-hostile
 - Roadmap decisions dictated by one company

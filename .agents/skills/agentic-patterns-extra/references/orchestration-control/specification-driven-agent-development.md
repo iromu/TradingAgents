@@ -30,7 +30,6 @@ if new_feature_requested:
 ```
 
 **Core Framework (SPEC/EXPOSURE/TASK DELTA):**
-
 - **SPEC**: Version-controlled markdown capturing intent and values
 - **EXPOSURE**: What customers experience; spec is permanent, code is temporary
 - **TASK DELTA**: Continuous loop evaluating SPEC ↔ PRODUCT to identify gaps

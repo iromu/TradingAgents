@@ -19,7 +19,6 @@ thorough research before acting.
 
 Design **different agent modes** optimized for each model's personality rather than forcing all models into a single
 interaction pattern. Each mode should have its own:
-
 - UI/UX patterns (font, prompt length guidance)
 - Tool configurations
 - Expectation setting
@@ -70,7 +69,6 @@ graph LR
 **Example from AMP:**
 
 AMP created three distinct modes:
-
 - **Smart Mode**: Opus 4.5 for interactive assistant work
 - **Rush Mode**: Haiku for fast, less smart tasks
 - **Deep Mode**: GPT-5.2 for thorough research and autonomous work
@@ -100,14 +98,12 @@ The team explicitly avoids a "model selector" dropdown and instead presents thes
 **When to use each mode:**
 
 **Smart Mode (Opus-like):**
-
 - Quick configuration tasks
 - Debugging with rapid iteration
 - Tasks requiring frequent human feedback
 - "Set up my .zshrc and reload it" style tasks
 
 **Deep Mode (GPT-5.2-like):**
-
 - Well-scoped problems
 - Big tasks with clear requirements
 - Research and information gathering
@@ -149,7 +145,6 @@ feedback: minimal, batched at end
 
 The fundamental challenge: Different modes require fundamentally different user expectations, but the UI (a text box)
 looks identical. Solutions:
-
 - Visual differentiation (fonts, colors)
 - Explicit instructions ("minimum 100 words for Deep mode")
 - Mode-specific guidance in the UI

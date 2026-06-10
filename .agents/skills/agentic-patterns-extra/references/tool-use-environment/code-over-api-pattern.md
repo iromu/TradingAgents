@@ -97,7 +97,6 @@ The agent sees the log output and return value, but the full dataset never enter
     - Performs filtering, transformation, aggregation in code
     - Logs only summaries or samples for visibility
     - Returns final results
-
 3. Execution environment runs code with tool access
 4. Only logs and return values flow back to agent context
 

@@ -44,7 +44,6 @@ agent architecture to eliminate what newer models have internalized.
 **Core principle**: Push complexity into the model itself rather than external scaffolding.
 
 Operationalize this as a repeating simplification loop:
-
 - Identify instructions that existed to compensate for older model weaknesses.
 - Remove a slice of scaffolding and run controlled evals against production-like tasks.
 - Keep deletions that preserve quality; revert deletions that increase failure risk.

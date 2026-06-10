@@ -81,14 +81,12 @@ class RLAIFAgent:
 ## Trade-offs
 
 **Pros:**
-
 - **Cost Efficiency**: 100x cheaper than human feedback ($0.01 vs $1+)
 - **Scalability**: Can generate unlimited feedback data without human bottlenecks
 - **Consistency**: AI feedback is more consistent than varying human annotators
 - **Speed**: Near-instantaneous feedback generation
 
 **Cons:**
-
 - **Bias Amplification**: May reinforce existing model biases
 - **Alignment Dependency**: Inherits alignment properties of the supervisory model
 - **Chicken-and-Egg Problem**: Requires a capable supervisory model to train frontier models

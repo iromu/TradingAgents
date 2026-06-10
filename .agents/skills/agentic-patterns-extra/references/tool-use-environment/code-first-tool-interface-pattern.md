@@ -34,7 +34,6 @@ instructions for themselves—it's **turtles writing code all the way down**[^1]
 ### Token Waste in Multi-Step Operations
 
 Classic MCP forces this inefficient pattern:
-
 ```
 LLM → tool #1 → large JSON response → LLM context
 LLM → tool #2 → large JSON response → LLM context

@@ -121,13 +121,11 @@ The agent has full autonomy within the workflow scope but cannot exceed it — a
 - **Finance**: Monitor price feeds → detect threshold crossings → execute hedging strategy
 
 **Prerequisites:**
-
 - A CLI-first skill set (see: CLI-First Skill Design)
 - At least one structured signal source
 - Defined activation thresholds per signal type
 
 **Key considerations:**
-
 - Start with high-confidence signals (low false-positive rate) to build trust
 - Log every activation with signal context for auditability
 - Set conservative cooldowns initially — tighten as you validate
@@ -136,14 +134,12 @@ The agent has full autonomy within the workflow scope but cannot exceed it — a
 ## Trade-offs
 
 **Advantages:**
-
 - Agents act at the right moment without human triage
 - Scales to signal volumes no human team can monitor
 - Composable — new signal sources and workflows plug in independently
 - Auditable — every action traces back to a specific signal event
 
 **Drawbacks:**
-
 - False positives trigger unnecessary workflows (noisy signals waste resources)
 - Requires upfront investment in signal normalization
 - Debugging chains (signal → rule → workflow) is harder than debugging direct commands

@@ -52,7 +52,6 @@ privileged actions (e.g., database writes, external API calls, file system opera
 ## References
 
 * Willison, *Dual LLM Pattern* (Apr 2023); adopted in Beurer-Kellner et al., §3.1 (4).
-
 - Primary source: https://arxiv.org/abs/2506.08837
 
 ---

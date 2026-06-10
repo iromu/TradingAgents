@@ -38,13 +38,11 @@ needed, rather than preloaded on initialization.
 ## How to use it
 
 **For MCP server creators:**
-
 - Enhance server instructions to help agents know when to search for your tools
 - Include rich descriptions and tags to improve searchability
 - Organize related tools to make discovery more intuitive
 
 **For MCP client creators:**
-
 - Implement ToolSearchTool for search-based discovery
 - Use agentic search (not basic vector RAG)
 - Set appropriate thresholds based on your use case (Claude Code uses 10%)

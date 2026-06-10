@@ -20,7 +20,6 @@ Treat agent policy changes like production releases: ship to a small traffic sli
 and auto-rollback when guardrails are breached.
 
 Core components:
-
 - A traffic splitter that routes a fixed percentage to the new policy.
 - A policy version registry with immutable identifiers.
 - Real-time monitors for quality, latency, failure rate, safety flags, spend, goal achievement rate, and infinite loop
@@ -29,7 +28,6 @@ Core components:
 - Optional shadow mode: validate technical stability before user exposure.
 
 Recommended stages:
-
 1. `1%` traffic canary for fast anomaly detection.
 2. `5-10%` validation phase with stricter thresholds.
 3. `25-50%` soak period for stability under mixed load.

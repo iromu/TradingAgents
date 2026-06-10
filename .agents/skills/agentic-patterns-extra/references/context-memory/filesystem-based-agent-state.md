@@ -25,7 +25,6 @@ later run can inspect and continue from. This gives agents a resumable execution
 deterministic.
 
 **Core pattern:**
-
 ```python
 # Agent writes intermediate state to files
 def multi_step_workflow():
@@ -62,7 +61,6 @@ prompting when approaching context limits, treating the filesystem as extended w
 ## Trade-offs
 
 **Pros:**
-
 - Enables workflow resumption after interruption
 - Protects against data loss from transient failures
 - Supports long-running tasks beyond single-session limits
@@ -70,7 +68,6 @@ prompting when approaching context limits, treating the filesystem as extended w
 - Multiple agents can collaborate by reading/writing shared state
 
 **Cons:**
-
 - Agents must write checkpoint/recovery logic
 - File I/O adds overhead to workflow execution
 - Requires discipline around state naming and organization

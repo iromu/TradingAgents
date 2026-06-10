@@ -26,7 +26,6 @@ Expose agent capabilities through a **first-class command-line interface** (here
 - `claude repl` — drop into an interactive shell with all project context pre-loaded.
 
 **Key mechanisms:**
-
 - **Structured output**: JSON for scripts (`--json` flag), human-readable for terminals
 - **Exit code semantics**: `0` for success, non-zero for failure
 - **TTY detection**: Auto-switch output format based on execution context

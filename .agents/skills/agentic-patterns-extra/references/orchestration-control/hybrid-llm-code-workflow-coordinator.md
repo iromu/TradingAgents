@@ -51,14 +51,12 @@ coordinator_script: scripts/pr_merged.py
 ```
 
 **When `coordinator: llm`:**
-
 - Handler selects configuration based on trigger
 - Loads prompt, tools, virtual files
 - LLM decides which tools to call
 - Handler coordinates tool calls based on LLM responses
 
 **When `coordinator: script`:**
-
 - Custom Python script controls workflow
 - Same access to tools, trigger data, virtual files as LLM
 - Can invoke LLM via subagent tool when explicitly needed

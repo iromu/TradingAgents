@@ -17,7 +17,6 @@ lacks durable historical context.
 ## Solution
 
 Add a **vector-backed episodic memory store**:
-
 1. After every episode, write a short "memory blob" (event, outcome, rationale) to the DB.
 2. On new tasks, embed the prompt, retrieve top-k similar memories, and inject as *hints* in the context.
 3. Apply TTL or decay scoring to prune stale memories.

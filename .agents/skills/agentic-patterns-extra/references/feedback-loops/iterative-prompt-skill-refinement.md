@@ -23,26 +23,22 @@ irreplaceable for alignment, while RLAIF demonstrates AI-assisted feedback enabl
 **Four key mechanisms:**
 
 **1. Responsive Feedback (Primary)**
-
 - Monitor internal `#ai` channel for issues
 - Skim workflow interactions daily
 - This is the most valuable ongoing source of improvement
 
 **2. Owner-Led Refinement (Secondary)**
-
 - Store prompts in editable documents (Notion, Google Docs)
 - Most prompts editable by anyone at the company
 - Include prompt links in workflow outputs (Slack messages, Jira comments)
 - Prompts must be discoverable + editable
 
 **3. Claude-Enhanced Refinement (Specialized)**
-
 - Use Datadog MCP to pull logs into skill repository
 - Skills are a "platform" used by many workflows
 - Often maintained by central AI team, not individual owners
 
 **4. Dashboard Tracking (Quantitative)**
-
 - Track workflow run frequency and errors
 - Track tool usage (how often each skill loads)
 - Data-driven prioritization of improvements

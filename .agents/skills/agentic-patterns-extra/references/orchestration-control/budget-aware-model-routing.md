@@ -26,14 +26,12 @@ token spend for routine work.
 Introduce a routing layer with explicit budget contracts and hard caps per request, user, and workflow lane.
 
 Key elements:
-
 - A tiered model catalog (`small`, `medium`, `frontier`) with capability metadata.
 - A policy engine that computes a maximum allowable spend before each call.
 - Deterministic fallback rules when the selected model would exceed budget.
 - Quality override paths for safety-critical or high-value workflows.
 
 Typical flow:
-
 1. Classify task complexity and risk.
 2. Assign an expected token envelope and max dollar budget.
 3. Select the cheapest model that satisfies required capabilities.

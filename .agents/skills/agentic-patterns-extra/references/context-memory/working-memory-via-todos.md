@@ -17,7 +17,6 @@ updated_at: '2026-01-05'
 ## Problem
 
 During complex multi-step tasks, AI agents lose track of:
-
 - What tasks are pending, in progress, or completed
 - Which tasks are blocked by dependencies
 - Verification steps that need to run

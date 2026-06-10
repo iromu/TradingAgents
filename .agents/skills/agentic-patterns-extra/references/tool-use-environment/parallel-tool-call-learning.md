@@ -63,7 +63,6 @@ During RL exploration, the agent discovers that:
 **Tool Classification for Safe Parallelization:**
 
 Agents learn to distinguish between:
-
 - **Read-only tools**: Safe to parallelize (search, read_file, list)
 - **State-modifying tools**: Require serialization (write_file, delete, state-changing APIs)
 

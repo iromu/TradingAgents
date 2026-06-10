@@ -31,7 +31,6 @@ only:
 **2. Binary Artifacts (if needed):** Reference IDs (e.g., paths to compiled object files) rather than raw binaries.
 
 **Workflow:**
-
 - **Main Agent Request:** "Compile module `auth-service`."
 - **Spawn `CompileSubagent(auth-service)`**
     - Subagent runs `mvn clean install` or `go build ./auth-service`.

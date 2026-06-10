@@ -17,7 +17,6 @@ functionality becomes crucial and time-consuming.
 ## Solution
 
 Develop and employ AI-powered tools and processes for code review:
-
 - AI agents that analyze code changes and highlight potential issues
 - Tools that summarize intent or impact of code changes
 - Interactive systems where reviewers can ask the AI to explain code

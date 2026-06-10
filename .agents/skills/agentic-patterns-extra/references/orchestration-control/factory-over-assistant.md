@@ -26,7 +26,6 @@ Shift from the **assistant model** to the **factory model**: spawn multiple auto
 check on them periodically, and focus your time on higher-level orchestration rather than being the feedback loop.
 
 **The factory mindset:**
-
 - Send off multiple agents to work on different tasks
 - Check in on them periodically (30-60 minutes later)
 - Focus on setting up automated feedback loops (tests, builds, skills)
@@ -87,7 +86,6 @@ time_distribution:
 **2. Build automated feedback loops:**
 
 Instead of being the feedback loop yourself, set up:
-
 - Test commands that agents run automatically
 - Build commands that verify correctness
 - Skills that encapsulate common operations

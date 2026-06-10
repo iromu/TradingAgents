@@ -11,7 +11,6 @@ tags: [prompt-caching, token-optimization, prefix-preservation, cost-reduction, 
 ## Problem
 
 Long-running agent conversations with many tool calls can suffer from **quadratic performance degradation**:
-
 - **Growing JSON payloads**: Each iteration sends the entire conversation history to the API
 - **Expensive re-computation**: Without caching, the model re-processes the same static content repeatedly
 - **ZDR constraints**: Zero Data Retention (ZDR) policies prevent server-side state, ruling out `previous_response_id`
@@ -26,7 +25,6 @@ modifying existing ones, and carefully order messages to maximize cache hits.
 previous request, the cached computation can be reused.
 
 **Message ordering strategy:**
-
 1. **Static content first** (cached across all requests): system message, tool definitions, developer instructions
 2. **Variable content last** (changes per request): user message, assistant messages, tool call results
 
@@ -41,7 +39,6 @@ modifying an existing one.
 ## How to use it
 
 **Prompt construction checklist:**
-
 1. Order messages by stability: Static → Variable
 2. Never modify existing messages: Always append new ones
 3. Keep tool order consistent: Enumerate tools in deterministic order

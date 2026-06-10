@@ -66,7 +66,6 @@ keep up with the rate of change.
 **Real example from AMP:**
 
 AMP has ripped out multiple features that users loved:
-
 - To-dos
 - Forking
 - Tabs
@@ -106,7 +105,6 @@ shipping_criteria:
 **2. Design for reversibility:**
 
 Build features so they can be easily removed:
-
 - Minimal dependencies
 - Clean interfaces
 - No deep coupling
@@ -120,7 +118,6 @@ Let users know they're part of the research:
 **4. Measure everything:**
 
 You can't learn without data:
-
 - Usage metrics
 - Success/failure rates
 - User feedback patterns

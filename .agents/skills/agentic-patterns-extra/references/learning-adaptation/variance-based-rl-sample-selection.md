@@ -35,7 +35,6 @@ always got them right or always wrong), meaning only ~15% of samples could actua
 - **Always correct** (variance = 0): Model already knows this
     - **Always incorrect** (variance = 0): Model can't learn this (too hard or needs different approach)
     - **Sometimes correct** (variance > 0): **Prime candidates for RL**
-
 4. **Focus Training**: Prioritize or exclusively use high-variance samples
 
 **Understanding the Variance Plot:**

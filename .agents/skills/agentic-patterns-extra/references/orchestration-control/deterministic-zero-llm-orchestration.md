@@ -23,14 +23,12 @@ Goal → Decompose (deterministic) → Assign to parallel agents → Verify (tes
 ```
 
 The orchestrator handles:
-
 - Task decomposition via rule-based planning
 - Agent assignment and parallel spawning (Claude Code, Codex CLI, Gemini CLI)
 - Result verification through test execution
 - Git operations (branching, merging, committing)
 
 Agents handle:
-
 - Code generation
 - Problem solving
 - Implementation decisions
@@ -49,7 +47,6 @@ bernstein --evolve --budget 5.00
 ```
 
 Key implementation choices:
-
 - **No LLM router** — task-to-agent mapping is code, not prompts
 - **Test-driven verification** — a janitor process runs tests after each agent completes
 - **Git worktree isolation** — each agent works in its own worktree, no conflicts
@@ -58,14 +55,12 @@ Key implementation choices:
 ## Trade-offs
 
 **Pros:**
-
 - Predictable coordination cost (zero LLM tokens)
 - Deterministic behavior — same goal produces same task breakdown
 - Faster iteration — no waiting for LLM to decide what to do next
 - Supports heterogeneous agents (Claude Code, Codex CLI, Gemini CLI, Qwen)
 
 **Cons:**
-
 - Rigid decomposition — can't handle ambiguous goals that need LLM judgment to split
 - Requires well-defined project structure for rule-based planning
 - Less adaptive than LLM-routed orchestration for novel task types

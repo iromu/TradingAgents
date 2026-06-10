@@ -127,6 +127,5 @@ implementation.
   *Artificial Intelligence*, 77(2), 321-357. — Established abstract argumentation frameworks (Dung's Framework)
 
 **Industry implementations:**
-
 * Microsoft AutoGen — Multi-agent conversations with critic/reviewer agents
 * Anthropic Constitutional AI — Self-critique against constitutional principles (RLAIF)

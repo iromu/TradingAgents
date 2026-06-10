@@ -16,7 +16,6 @@ shaping, agents optimize for token efficiency rather than task success.
 ## Solution
 
 Shape rewards to incentivize effective tool use:
-
 - Positive reward for correct tool selection and usage
 - Negative reward for tool misuse or avoidance
 - Gradient rewards for progressive tool mastery

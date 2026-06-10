@@ -62,7 +62,8 @@ public class TradingHtmxController {
                 agent,
                 ProcessOptions.DEFAULT
                         .withVerbosity(new Verbosity(true, true))
-                        .withBudget(new Budget(Budget.DEFAULT_TOKEN_LIMIT * 3)),
+//                        .withBudget(new Budget(Budget.DEFAULT_TOKEN_LIMIT * 3)),
+                        .withBudget(new Budget().withTokens(16384)),
                 form
         );
 

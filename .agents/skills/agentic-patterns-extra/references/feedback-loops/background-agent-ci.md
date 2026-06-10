@@ -36,7 +36,6 @@ pulled back in for approvals, ambiguous failures, or final review.
 Production implementations include GitHub Agentic Workflows, Cursor Background Agent, and OpenHands.
 
 Key mechanics:
-
 - Branch-per-task isolation (often via cloud-based execution or git worktrees).
 - CI log ingestion into structured failure signals.
 - Retry budget and stop rules to avoid infinite churn.

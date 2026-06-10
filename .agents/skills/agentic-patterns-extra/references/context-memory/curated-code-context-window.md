@@ -22,7 +22,6 @@ about changes or generate new functionality.
 Maintain a **minimal, high-signal code context** (keeping the context "sterile") for the main coding agent by:
 
 **1. Context Sterilization**
-
 - Exclude unrelated modules (e.g., test utilities when working on a UI component).
 - Automatically identify relevant files via a lightweight **search agent** that returns top-K matches for a function or
   class name.
@@ -35,7 +34,6 @@ Maintain a **minimal, high-signal code context** (keeping the context "sterile")
 - Use **progressive disclosure**: fetch file summaries first, then load full content only when needed.
 
 **3. Context Update Cycle**
-
 - **Main Agent:** "I need to refactor `UserService`."
 - **SearchSubagent:** "Found `user_service.py`, `models/user.py`, `utils/auth.py`."
 - **Context Injection:** Only those three files (or their summaries) enter the main agent's window.

@@ -11,7 +11,6 @@ tags: [security, prompt-injection, threat-model, data-exfiltration]
 ## Problem
 
 Combining three agent capabilities—
-
 1. **Access to private data**
 2. **Exposure to untrusted content**
 3. **Ability to externally communicate**

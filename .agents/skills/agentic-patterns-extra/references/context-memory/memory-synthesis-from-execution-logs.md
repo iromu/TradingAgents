@@ -11,7 +11,6 @@ tags: [memory, synthesis, pattern-extraction, learning, execution-logs, two-tier
 ## Problem
 
 Individual task execution transcripts contain valuable learnings, but:
-
 - **Too specific**: "Make this button pink" isn't useful as general guidance
 - **Unknown relevance**: Hard to predict which learnings apply to future tasks
 - **Scattered knowledge**: Insights buried across hundreds of conversation logs
@@ -29,7 +28,6 @@ execution. This approach is validated by academic research: Reflexion (NeurIPS 2
 using episodic memory with self-reflection.
 
 **Example diary entry format:**
-
 ```markdown
 ## Task: Add authentication to checkout flow
 Attempted approaches:
@@ -54,18 +52,15 @@ Patterns discovered: Auth changes always need CORS update
 ## How to use it
 
 **Phase 1: Structured logging**
-
 - Configure agents to write task diaries in consistent format
 - Record what was attempted, what failed, what succeeded, and why
 
 **Phase 2: Periodic synthesis**
-
 - Run synthesis agents over recent logs (weekly, after N tasks)
 - Identify patterns appearing in 3+ tasks
 - Suggest general rules, slash commands, and test cases
 
 **Phase 3: Knowledge integration**
-
 - Feed synthesized insights into system prompts, reusable commands, automated checks, and test suites
 
 ## Trade-offs

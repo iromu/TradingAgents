@@ -1,6 +1,3 @@
-#OPENAI_API_KEY: ollama
-#OPENAI_BASE_URL: http://localhost:11434/v1
-
 spring:
   application:
     name: Gekko
@@ -16,7 +13,7 @@ embabel:
       models:
         openai:
           custom:
-            api-key: ${OPENAI_API_KEY:your-dev-key}
+            api-key: ${OPENAI_API_KEY:dummy}
             base-url: ${OPENAI_BASE_URL:http://spark.local:4000}
             models: ${OPENAI_MODEL:Qwen3.6-35B-A3B}
       scanning:

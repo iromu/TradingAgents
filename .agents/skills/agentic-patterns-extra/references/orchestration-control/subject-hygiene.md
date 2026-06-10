@@ -34,14 +34,12 @@ subject should:
 **Examples:**
 
 ❌ **Bad subjects:**
-
 - `""` (empty)
 - `"research"`
 - `"explore"`
 - `"task"`
 
 ✅ **Good subjects:**
-
 - `"Explore newsletter component implementation"`
 - `"Search for dark mode patterns in codebase"`
 - `"Analyze error handling in API routes"`
@@ -82,7 +80,6 @@ flowchart LR
 ```
 
 Examples:
-
 - "Explore + newsletter component + implementation details"
 - "Search + codebase + for dark mode patterns"
 - "Analyze + API routes + error handling approach"
@@ -96,7 +93,6 @@ Prevents "Empty Subject Anti-Pattern" which makes conversations untraceable and 
 
 Validated in production across Claude Code, Cursor, AMP, LangChain, AutoGen, and CrewAI. From nibzard-web session with 4
 parallel subagents:
-
 - agent-a7911db: "Newsletter component exploration"
 - agent-adeac17: "Modal pattern discovery"
 - agent-a03b9c9: "Search implementation research"

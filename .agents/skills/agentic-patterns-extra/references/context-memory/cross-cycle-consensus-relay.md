@@ -16,7 +16,6 @@ files don't encode the *structured reasoning* — what was decided, why, and wha
 good decisions in subsequent cycles.
 
 Without a structured relay mechanism, autonomous loops suffer from:
-
 - **Drift**: each cycle restarts without awareness of prior decisions
 - **Repetition**: agents re-debate already-settled questions
 - **Stalls**: no convergence signal — agents loop indefinitely without shipping

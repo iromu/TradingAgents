@@ -10,7 +10,6 @@ tags: [reinforcement-learning, memory, episodic, self-evolution, utility-ranking
 ## Problem
 
 LLMs struggle with **runtime self-evolution** due to the stability-plasticity dilemma:
-
 - **Fine-tuning**: Computationally expensive and prone to catastrophic forgetting
 - **RAG/memory systems**: Rely on semantic similarity that retrieves noise
 - **No utility learning**: Can't distinguish high-value strategies from semantically similar but ineffective ones
@@ -21,13 +20,11 @@ LLMs struggle with **runtime self-evolution** due to the stability-plasticity di
 learns utility scores on episodic memories.
 
 **Memory triplet structure:**
-
 - **Intent**: What the user asked for (embedded)
 - **Experience**: What the agent tried (solution trace)
 - **Utility**: How well it worked (learned score, updated over time)
 
 **Two-phase retrieval:**
-
 1. **Phase A - Semantic filter**: Find semantically similar memories
 2. **Phase B - Utility ranking**: Re-rank by learned utility scores
 

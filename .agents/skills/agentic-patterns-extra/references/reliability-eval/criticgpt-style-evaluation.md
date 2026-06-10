@@ -249,7 +249,6 @@ sequenceDiagram
 ## Trade-offs
 
 **Pros:**
-
 - Scalable code review process
 - Consistent quality standards
 - Catches issues early in development
@@ -257,7 +256,6 @@ sequenceDiagram
 - Improves over time with more training
 
 **Cons:**
-
 - May have false positives requiring human verification
 - Training specialized critic models is resource-intensive
 - Cannot understand full business context like humans

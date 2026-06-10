@@ -23,7 +23,6 @@ authors:
   to prevent models from gaming graders, ensuring training rewards align with
   actual task quality.
   updated_at: '2026-01-05'
-
 ---
 
 ## Problem
@@ -226,7 +225,6 @@ graph TD
 
 Process-aware rewards without strict format constraints lead to catastrophic exploitation (Spark Research, December
 2025). Always enforce:
-
 - Exactly one answer tag or boxed expression
 - No post-answer content allowed
 - Strict output format requirements

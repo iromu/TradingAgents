@@ -64,7 +64,6 @@ AMP announced they're killing their VS Code extension (and Cursor support) in ~6
 > more important."
 
 If you keep the old feature around:
-
 - Users will keep using it
 - You'll feel pressure to maintain it
 - Your team splits attention between old and new

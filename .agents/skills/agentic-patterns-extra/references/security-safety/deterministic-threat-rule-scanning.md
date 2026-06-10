@@ -31,7 +31,6 @@ agent attacks. These rules run against tool descriptions, tool call arguments, t
 files before the agent processes them.
 
 Each rule specifies:
-
 - A threat category (e.g., prompt injection, data exfiltration, privilege escalation)
 - One or more regex patterns matching known attack signatures
 - Severity level and recommended action (block, warn, log)

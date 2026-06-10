@@ -26,12 +26,10 @@ refactoring, semantic migration) may choose suboptimal tools if not explicitly g
 prompt. Techniques include:
 
 **1. Direct Tool Invocation**
-
 - Prepend: "Use the `apply_patch` tool to insert a new function `validate_input` in `auth_service.py`."
 - The agent recognizes "apply_patch" as the preferred patching mechanism.
 
 **2. Tool Usage Teaching**
-
 - Provide a mini-manual in the context:
   ```text
   "Our `ASTRefactor` tool takes JSON describing node edits:  
@@ -47,12 +45,10 @@ prompt. Techniques include:
   maps this to the ASTRefactor tool under the hood."
 
 **4. Reason-Encouraging Phrases**
-
 - Add: "Think about type safety before choosing a patch tool."
 - Promotes deeper reasoning so the agent doesn't just apply surface-level text replacements.
 
 **5. Negative Constraints**
-
 - Specify what NOT to use: "Do NOT use text-based patching for function signature changes (will break imports)."
 - Explicit anti-patterns prevent unsafe tool selections more effectively than positive instructions alone.
 

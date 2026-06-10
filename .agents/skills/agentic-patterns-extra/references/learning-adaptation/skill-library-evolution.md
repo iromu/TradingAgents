@@ -145,7 +145,6 @@ def load_skills(skill_names):
 ```
 
 **Benefits of progressive disclosure:**
-
 - Reduces conflicting or unnecessary context
 - Minimizes formatting inconsistencies (e.g., Markdown vs Slack mrkdwn)
 - In-context learning examples stay focused on relevant tools
@@ -172,7 +171,6 @@ loading:
 ```
 
 **Token savings example:**
-
 - chrome-devtools MCP: 26 tools = 17k tokens
 - Lazy-loaded subset: 4 tools = 1.5k tokens (91% reduction)
 

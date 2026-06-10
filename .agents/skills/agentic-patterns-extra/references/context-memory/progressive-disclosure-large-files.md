@@ -19,7 +19,6 @@ performance.
 Apply **progressive disclosure**: load file metadata first, then provide tools to load content on-demand.
 
 **Core approach:**
-
 1. **Always include file metadata** in the prompt (not full content)
 2. **Optionally preload first N KB** of appropriate mimetypes (configurable per-workflow)
 3. **Provide three file operations:**

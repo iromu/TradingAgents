@@ -74,7 +74,6 @@ Platform Event → Webhook → Agent Trigger → Workflow Execution
 **Implementation considerations:**
 
 **Authentication and authorization:**
-
 - OAuth2 tokens + SSL where possible
 - Platform-specific security (Slack request verification)
 - No authorization tokens for platforms that don't support it
@@ -102,7 +101,6 @@ queue:
 ```
 
 **Private channel security:**
-
 ```yaml
 slack_private_channels:
   auto_join: false  # Don't auto-join private channels

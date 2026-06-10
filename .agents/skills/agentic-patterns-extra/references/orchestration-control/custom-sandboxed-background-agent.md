@@ -28,37 +28,31 @@ Companies need coding agents that:
 Build a **custom background agent** that runs in a sandboxed environment identical to developers, with:
 
 **1. Sandboxed Execution Environment**
-
 - Use infrastructure like Modal for ephemeral, sandboxed dev environments
 - Agent runs with same context: codebase, dependencies, dev tools
 - Isolated from production but mirroring development setup
 
 **2. Real-Time Communication Layer**
-
 - WebSocket connection streams stdout/stderr to client
 - User sees agent progress in real-time (not polling)
 - Two-way communication for prompts and status updates
 
 **3. Closed Feedback Loop**
-
 - Agent iterates autonomously with machine-readable feedback
 - Compiler errors, linter warnings, test failures guide iterations
 - Not 1-shot implementation - but iterative refinement
 
 **4. Model-Agnostic Architecture**
-
 - Support multiple frontier models via pluggable interface
 - Switch between providers without rewriting infrastructure
 - Leverage best model for specific task type
 
 **5. Company-Specific Integration**
-
 - Deep integration with internal tooling, scripts, and workflows
 - Access to private repos, internal APIs, documentation
 - Customized to team's specific development practices
 
 **6. Security Best Practices**
-
 - Network isolation with egress lockdown (default-deny outbound rules)
 - Tool authorization with pattern-based allow/deny lists
 - Execution limits: timeouts, resource caps, privilege restrictions
@@ -94,14 +88,12 @@ flowchart TD
 ## How to use it
 
 **Architecture Components:**
-
 - **Sandbox provider**: Modal, sprites.dev, or custom container orchestration
 - **WebSocket server**: For real-time bidirectional communication
 - **Model abstraction layer**: Interface supporting multiple LLM providers
 - **Feedback loop integrations**: Parser for compiler/linter/test output
 
 **Implementation Steps:**
-
 1. Create a sandbox service that spins up isolated dev environments
 2. Build WebSocket layer for prompt submission and progress streaming
 3. Implement model-agnostic agent interface
@@ -109,14 +101,12 @@ flowchart TD
 5. Connect to version control for branch/PR creation
 
 **Security Considerations:**
-
 - Configure egress firewall rules (allow-list required destinations only)
 - Implement deny-by-default tool authorization with policy inheritance
 - Set execution timeouts with SIGTERM → SIGKILL progression
 - Enforce per-sandbox resource quotas (CPU, memory, concurrent executions)
 
 **Why Custom vs. Off-the-Shelf:**
-
 - Off-the-shelf agents (Devin, Cursor) work great for generic tasks
 - But they can't deeply integrate with your company's specific infrastructure
 - Building custom lets you optimize for your workflows, tools, and security requirements

@@ -65,7 +65,6 @@ graph TD
 **The ticket example:**
 
 **Old world (human writes code):**
-
 1. Bug reported
 2. Developer is busy, working on something else
 3. Create ticket for next sprint
@@ -74,7 +73,6 @@ graph TD
 6. Developer fixes bug
 
 **New world (agent writes code):**
-
 1. Bug reported
 2. Send agent immediately to investigate
 3. Agent diagnoses and fixes in same time it would take to create a ticket
@@ -87,7 +85,6 @@ graph TD
 **The code review example:**
 
 GitHub features assume changes are valuable:
-
 - Emoji reactions (❤️ 😃)
 - Assigning reviewers
 - Careful consideration before merging
@@ -128,14 +125,12 @@ variants:
 > generating new code...I don't think the given tools are going to cut it."
 
 This requires new mental models and new interfaces:
-
 - Not linear tickets, but continuous streams
 - Not PR reviews, but automated quality gates
 - Not sprint planning, but real-time prioritization
 - Not code ownership, but dynamic attribution
 
 **Industry examples:**
-
 - **Model Context Protocol (MCP)**: Universal "USB-C for AI" standard replacing proprietary tool integrations
 - **Unified logging** (Sourcegraph): Single JSONL stream for all system events, optimized for agent consumption
 - **Code-first interfaces** (Cloudflare): LLMs write code to call tools, reducing tokens 10-100x

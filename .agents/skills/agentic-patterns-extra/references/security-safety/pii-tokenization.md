@@ -22,7 +22,6 @@ authors:
   before reaching model and untokenizes for tool calls, enabling agents to
   orchestrate sensitive workflows without exposing raw data to LLM.
   updated_at: '2026-01-05'
-
 ---
 
 ## Problem

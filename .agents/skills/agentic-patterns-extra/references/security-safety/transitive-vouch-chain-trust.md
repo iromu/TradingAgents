@@ -17,7 +17,6 @@ completely or you do not trust it at all. There is no mechanism to derive partia
 relationships.
 
 Traditional approaches fail in different ways:
-
 - **Central registries** create single points of failure and require all agents to trust the same authority.
 - **Self-asserted identity** (claiming "I am X") provides no verification — any agent can claim any identity.
 - **Binary web-of-trust** (PGP model) only answers "is this key valid?" but not "how much should I trust this agent's
@@ -102,20 +101,17 @@ trust categories, and are designed for automated verification by agents rather t
 ## How to use it
 
 **When to apply:**
-
 - Multi-agent systems where agents from different organizations or operators need to collaborate.
 - Marketplaces where agents offer services to other agents.
 - Any system where agents must make trust decisions about previously unknown agents.
 
 **Prerequisites:**
-
 - Each agent must have a stable cryptographic identity (keypair + identifier).
 - A registry or gossip protocol for publishing and discovering vouches.
 - Domain-separated signatures to prevent cross-protocol replay (e.g., prefix vouch messages with `vouch:` before
   signing).
 
 **Implementation steps:**
-
 1. Define your identity scheme (DID, public key hash, etc.).
 2. Implement vouch creation: agent signs a statement binding its identity to the target's identity.
 3. Implement chain traversal: given a target, find paths through the vouch graph back to trusted roots.

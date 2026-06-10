@@ -32,7 +32,6 @@ The team built Zveltch (Zig implementation of spelt-check) to make spell-check f
 VS Code experience worse for humans. They had a difficult decision: preserve human DX or optimize for agents?
 
 They ultimately chose to optimize for agents, leading to a "snowball effect":
-
 - Agent tooling gets better
 - Humans use agents more
 - Humans use editors less
@@ -61,7 +60,6 @@ graph LR
 **"Welding the agent to the codebase":**
 
 The metaphor of welding means creating tight, automated feedback loops so the agent can:
-
 - Verify its changes work automatically
 - Get clear signals about success/failure
 - Iterate without human intervention
@@ -135,7 +133,6 @@ kubectl (`-o json`), AWS CLI (`--output json`), Terraform (`output -json`).
 The most impactful optimization: build **skills** that encapsulate your codebase's unique operations.
 
 From AMP:
-
 - GCloud skill for log analysis (replaces need for web dashboards)
 - BigQuery skill for data queries
 - Release management skills
@@ -144,7 +141,6 @@ From AMP:
 **5. Agents.md files**
 
 Create `AGENTS.md` or similar documentation that explains:
-
 - How to test the application
 - How to authenticate
 - What feedback mechanisms to use

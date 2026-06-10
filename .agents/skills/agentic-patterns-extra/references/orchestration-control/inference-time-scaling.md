@@ -215,14 +215,12 @@ flowchart TD
 ## Trade-offs
 
 **Pros:**
-
 - Can dramatically improve performance on complex tasks
 - More cost-effective than training larger models
 - Allows dynamic resource allocation based on task difficulty
 - Enables "System 2" thinking in AI systems
 
 **Cons:**
-
 - Increased latency for responses
 - Higher inference costs for complex problems
 - Diminishing returns beyond certain compute thresholds

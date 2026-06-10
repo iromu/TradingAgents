@@ -124,14 +124,12 @@ class LATSAgent:
 ## Trade-offs
 
 **Pros:**
-
 - Significantly better performance on complex reasoning tasks
 - Systematic exploration prevents getting stuck
 - Naturally handles problems with multiple valid approaches
 - Provides interpretable reasoning traces
 
 **Cons:**
-
 - Higher computational cost (5-20x more LLM calls than simpler approaches)
 - Inherently sequential—unsuitable for real-time applications
 - Implementation complexity requires correct MCTS and tree state management
@@ -140,20 +138,17 @@ class LATSAgent:
 ## How to use it
 
 **When to use LATS:**
-
 - Complex reasoning tasks requiring strategic planning and multi-step decision making
 - Problems with multiple valid solution paths where exploration matters
 - Mathematical reasoning, algorithm design, or debugging with multiple potential causes
 - Budgets allow for higher computational cost (5-20x more LLM calls than simpler approaches)
 
 **When to use alternatives:**
-
 - Simple or linear tasks: use ReAct or Chain-of-Thought
 - Real-time response requirements: use single-pass with Reflection Loop
 - Cost-sensitive applications: use Tree-of-Thoughts with limited branching
 
 **Implementation guidance:**
-
 - Start with fixed iterations (10-25) before tuning exploration constant c
 - Use lower temperature (0.1-0.3) for evaluation, higher (0.7-1.0) for expansion
 - Consider LangGraph for graph infrastructure supporting MCTS-like workflows

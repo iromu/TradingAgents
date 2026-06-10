@@ -11,7 +11,6 @@ tags: [identity, self-improvement, dual-hook, session-lifecycle, personalized-be
 ## Problem
 
 AI agents lack continuous memory across sessions. Each conversation starts from zero, causing:
-
 - **Lost familiarity**: The agent doesn't remember user preferences, goals, or working patterns
 - **Repetitive explanations**: Users must re-explain context and preferences each session
 - **Shallow relationships**: Agent cannot build deeper understanding of user's needs over time
@@ -19,7 +18,6 @@ AI agents lack continuous memory across sessions. Each conversation starts from 
 ## Solution
 
 Implement **dual-hook architecture** for self-identity accumulation:
-
 1. **SessionStart Hook**: Inject accumulated identity/profile at session start
 2. **SessionEnd Hook**: Extract new insights and refine the profile after each session
 3. **Identity Document**: A persistent file (e.g., `WHO_AM_I.md`, `SOUL.md`) that evolves over time

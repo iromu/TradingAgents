@@ -19,7 +19,6 @@ repeat incidents and false confidence from stale benchmark sets.
 Convert every production incident into one or more executable eval cases, then gate future changes on those cases.
 
 Pattern mechanics:
-
 - Capture incident artifacts: inputs, context, tool traces, outputs, and impact.
 - Normalize sensitive data and derive a minimal reproducible scenario.
 - Encode expected behavior as objective pass/fail criteria.

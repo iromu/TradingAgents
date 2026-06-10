@@ -21,7 +21,6 @@ generation) and **code generation/reasoning** typically requires a massive centr
 Adopt a **decentralized training + model merging** approach:
 
 **1. Train a "Language Specialist"**
-
 - Fine-tune a base LLM on documentation generation, summarization, code comments, and general NL tasks.
 - Save checkpoint `lang-specialist-ckpt.pt`.
 
@@ -32,7 +31,6 @@ Adopt a **decentralized training + model merging** approach:
 - Save checkpoint `code-specialist-ckpt.pt`.
 
 **3. Merge Techniques**
-
 - **Simple Weight Averaging:** Arithmetic mean of model weights (Model Soups, NeurIPS 2022).
 - **Task Arithmetic:** Treat fine-tuning as vector operations—add/subtract task vectors:
   `W_merged = W_base + Σ λ_i * τ_i` where `τ_task = W_finetuned - W_base` (ICLR 2024).

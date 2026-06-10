@@ -12,7 +12,6 @@ tags: [state-management, self-documentation, hybrid-memory, progressive-state]
 
 Modern models like Claude Sonnet 4.5 proactively attempt to externalize their state by writing summaries and notes (
 e.g., `CHANGELOG.md`, `SUMMARY.md`) to the file system without explicit prompting. However:
-
 - Self-generated notes are often incomplete or miss crucial context
 - Models may spend more tokens on documentation than actual problem-solving
 - Performance can degrade when agents rely exclusively on their own summaries
@@ -23,19 +22,16 @@ e.g., `CHANGELOG.md`, `SUMMARY.md`) to the file system without explicit promptin
 Implement structured approaches to leverage and enhance the model's natural tendency toward state externalization:
 
 **1. Guided Self-Documentation Framework**
-
 - Provide templates and schemas for agent-generated notes
 - Define minimum information requirements for state preservation
 - Establish validation checkpoints for self-generated summaries
 
 **2. Hybrid Memory Architecture**
-
 - Combine agent self-documentation with external memory management
 - Use agent notes as supplementary, not primary, state storage
 - Implement fallback mechanisms when self-generated context is insufficient
 
 **3. Progressive State Building**
-
 - Encourage incremental note-taking throughout long sessions
 - Structure documentation to capture decision rationale, not just actions
 - Include explicit uncertainty markers and knowledge gaps

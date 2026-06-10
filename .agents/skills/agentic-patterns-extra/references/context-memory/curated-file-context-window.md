@@ -11,7 +11,6 @@ tags: [context-management, file-discovery, code-search, noise-reduction, sub-age
 ## Problem
 
 A coding agent often needs to reason about multiple source files, but dumping **all** files into its prompt:
-
 - Quickly exceeds token limits or inference budget.
 - Introduces noise: unrelated files (e.g., tests for other modules, assets, docs) distract the agent.
 - Makes the agent's output slower and less focused on the immediate coding task.
@@ -35,7 +34,6 @@ task, and let **helper sub-agents** gather and rank additional files without pol
 - It returns a ranked list of file paths (e.g., "UserController.java," "UserService.kt," "models/user.rs").
 
 **3. Fetch & Summarize Secondary Files**
-
 - For each top-N file (e.g., N = 5), determine loading strategy by file size and relevance:
     - Small files (<~200 tokens): load full content
     - Medium files with high relevance: load full content or specific sections
@@ -46,7 +44,6 @@ task, and let **helper sub-agents** gather and rank additional files without pol
     - **Semantic similarity**: content exceeds similarity threshold (when embeddings available)
 
 **4. Proceed with Coding Task**
-
 - With a compact, high‐signal context, the agent generates or refactors code, focusing solely on the curated set.
 
 ## Evidence

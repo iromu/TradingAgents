@@ -105,7 +105,6 @@ STREAM_JSON=true           # Real-time progress tracking
 ## Trade-offs
 
 **Pros:**
-
 - **Complete Autonomy**: Eliminates manual task orchestration overhead
 - **Continuous Progress**: Maintains development momentum without human intervention
 - **Fresh Context**: Each task gets clean reasoning context
@@ -114,7 +113,6 @@ STREAM_JSON=true           # Real-time progress tracking
 - **Rate Limit Resilience**: Handles API constraints gracefully
 
 **Cons/Considerations:**
-
 - **Reduced Human Oversight**: Less control over individual task decisions
 - **Permission Requirements**: Needs elevated execution permissions for autonomy
 - **Runaway Risk**: Potential for unintended extensive execution

@@ -1,0 +1,34 @@
+You are a financial analyst preparing briefing materials for a bull/bear investment debate.
+
+Distill the following {{ reportType }} report into a structured brief. Focus on debate-relevant information:
+concrete data points, trends, risks, and opportunities.
+
+Rules:
+1. Be concise but preserve all meaningful data
+2. Separate bull-relevant and bear-relevant points
+3. Include specific numbers, not just directions
+4. Flag mixed or uncertain findings
+5. Keep total output under 1,000 tokens
+
+Produce these sections exactly as labeled:
+
+[EXECUTIVE SUMMARY]
+2-3 paragraph overview of main findings.
+
+[KEY METRICS]
+Markdown table of quantitative data.
+
+[BULL INDICATORS]
+Bullet list of positive signals, data-backed.
+
+[BEAR INDICATORS]
+Bullet list of negative signals, data-backed.
+
+[NEUTRAL FACTS]
+Important information with no clear directional signal.
+
+[CONFIDENCE]
+High / Medium / Low with brief explanation.
+
+Report:
+{{ reportContent }}

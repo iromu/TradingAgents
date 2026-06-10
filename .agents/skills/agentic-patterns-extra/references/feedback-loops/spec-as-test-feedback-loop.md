@@ -27,7 +27,6 @@ Generate **executable assertions** directly from the spec (e.g., unit or integra
 This creates a continuous feedback loop ensuring specification and implementation remain synchronized.
 
 **Four-phase architecture:**
-
 1. Specification Layer: Parse specs (YAML/JSON/BDD) into internal representation
 2. Test Generation Layer: Create executable tests (unit, integration, property)
 3. Execution Layer: Run tests in parallel via CI/CD

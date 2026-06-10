@@ -138,7 +138,6 @@ Use the `priority-report` skill when user asks about:
 **Hybrid approach:**
 
 Combine explicit triggers with semantic fallback:
-
 1. Check explicit trigger matches first (fast, predictable)
 2. If no match, use embedding similarity (flexible, slower)
 3. Log unmatched inputs to discover new trigger candidates

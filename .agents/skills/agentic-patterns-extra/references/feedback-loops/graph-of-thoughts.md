@@ -30,7 +30,6 @@ In GoT:
 - **Backtracking** allows revisiting and refining previous thoughts
 
 This enables operations like:
-
 1. **Branching**: Generate multiple thoughts from one
 2. **Aggregation**: Combine insights from multiple reasoning paths
 3. **Refinement**: Improve thoughts based on later insights
@@ -195,14 +194,12 @@ graph TD
 ## Trade-offs
 
 **Pros:**
-
 - Handles complex problems with interdependent reasoning steps
 - Can discover non-obvious connections between ideas
 - Supports iterative refinement and backtracking
 - More expressive than linear or tree-based approaches
 
 **Cons:**
-
 - Significantly higher computational cost (5-20x vs. linear reasoning)
 - Complex to implement and debug
 - May generate many redundant thoughts
@@ -215,7 +212,6 @@ Use for complex problems where multiple solution approaches need to be merged or
 based on later insights. LangGraph provides native support for GoT-like workflows with cycles and backtracking.
 
 Use simpler approaches (CoT, ToT) for:
-
 - Straightforward problems with single viable solution paths
 - Cases where computational resources are limited
 - Problems where reasoning branches don't need to recombine

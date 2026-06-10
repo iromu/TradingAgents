@@ -12,7 +12,6 @@ tags: [graphrag, schema, multi-hop, retrieval, knowledge-graph]
 
 Complex QA over private or domain-specific corpora often needs more structure than flat chunk retrieval, but naive
 GraphRAG systems still fail in predictable ways:
-
 - **Retrieval is too broad:** entity, relation, keyword, and summary nodes all compete during search
 - **Question decomposition is disconnected from storage:** planner doesn't know which entity types exist
 - **Domain transfer is expensive:** each new corpus needs hand-tuned ontology work

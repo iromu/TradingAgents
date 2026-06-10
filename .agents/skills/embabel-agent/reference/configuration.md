@@ -7,7 +7,7 @@ Annotate your Spring Boot application class:
 ```java
 @SpringBootApplication
 public class MyAgentApplication {
-    static void main(String[] args) {
+    public static void main(String[] args) {
         SpringApplication.run(MyAgentApplication.class, args);
     }
 }

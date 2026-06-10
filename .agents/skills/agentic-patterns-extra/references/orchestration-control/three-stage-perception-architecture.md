@@ -184,7 +184,6 @@ flowchart LR
 ## Trade-offs
 
 **Pros:**
-
 - Clean separation of concerns
 - Easier to maintain and extend
 - Better error isolation
@@ -192,7 +191,6 @@ flowchart LR
 - Facilitates team collaboration (different teams per stage)
 
 **Cons:**
-
 - Additional complexity for simple tasks
 - Potential latency from stage transitions
 - Requires careful interface design between stages

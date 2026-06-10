@@ -153,7 +153,6 @@ job = client.fine_tuning.jobs.create(
 **Tool Call Optimization Patterns:**
 
 Models naturally learn to optimize tool use through exploration:
-
 - **Parallelization**: Make independent tool calls simultaneously rather than sequentially
 - **Early termination**: Stop exploration once sufficient information is gathered
 - **Tool selection**: Learn which tools are most effective for specific task types

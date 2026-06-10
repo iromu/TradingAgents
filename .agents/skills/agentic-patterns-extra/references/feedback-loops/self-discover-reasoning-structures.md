@@ -134,14 +134,12 @@ flowchart TD
 ## Trade-offs
 
 **Pros:**
-
 - Significant performance improvements on diverse reasoning tasks
 - More efficient than trying all reasoning strategies
 - Creates reusable reasoning templates
 - Adapts to novel problem types
 
 **Cons:**
-
 - Computational overhead: approximately 2-3x the cost of single-pass Chain-of-Thought due to multiple LLM calls
 - Requires a diverse set of reasoning modules (typically 20-30 for good coverage)
 - May over-engineer simple problems
