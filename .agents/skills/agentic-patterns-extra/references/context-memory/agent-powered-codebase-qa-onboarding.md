@@ -27,8 +27,8 @@ codebase. The agent can:
 
 - **Evidence Grade:** `validated-in-production`
 - **Key Findings:**
-    - Cursor team uses QA features for onboarding and codebase exploration
-    - Semantic embeddings + AST parsing + code graphs for repository-scale context
+  - Cursor team uses QA features for onboarding and codebase exploration
+  - Semantic embeddings + AST parsing + code graphs for repository-scale context
 
 ## How to use it
 
