@@ -10,8 +10,7 @@ tags: [tools, workflow, best-practices, efficiency, patterns, exploration, modif
 
 ## Problem
 
-AI agents often struggle to select the optimal tool for a given task, leading to inefficient workflows. Common
-anti-patterns include:
+AI agents often struggle to select the optimal tool for a given task, leading to inefficient workflows. Common anti-patterns include:
 
 - Using `Write` when `Edit` would be more appropriate
 - Launching subagents for simple exploration tasks
@@ -22,42 +21,41 @@ These ineff compound across long sessions, resulting in wasted tokens, slower co
 
 ## Solution
 
-Encode data-driven tool selection patterns that emerged from analysis of 88 real-world Claude conversation sessions. By
-matching task type to optimal tool, agents can follow proven workflows.
+Encode data-driven tool selection patterns that emerged from analysis of 88 real-world Claude conversation sessions. By matching task type to optimal tool, agents can follow proven workflows.
 
 **Tool preference patterns from actual usage data:**
 
-| Task Type            | Recommended Tool          | Evidence                                 |
-|----------------------|---------------------------|------------------------------------------|
-| Codebase exploration | Read → Grep → Glob        | Consistent pattern across all projects   |
-| Code modification    | Edit (not Write)          | 3.4:1 Edit:Write ratio in nibzard-web    |
-| New file creation    | Write                     | Appropriate use case                     |
-| Build verification   | Bash                      | 324 uses in nibzard-web, 276 in patterns |
-| Research delegation  | Task (with clear subject) | 48 invocations across sessions           |
+| Task Type | Recommended Tool | Evidence |
+|-----------|-----------------|----------|
+| Codebase exploration | Read → Grep → Glob | Consistent pattern across all projects |
+| Code modification | Edit (not Write) | 3.4:1 Edit:Write ratio in nibzard-web |
+| New file creation | Write | Appropriate use case |
+| Build verification | Bash | 324 uses in nibzard-web, 276 in patterns |
+| Research delegation | Task (with clear subject) | 48 invocations across sessions |
 
 **Key selection criteria:**
 
 1. **Exploration tasks** (discovering code structure, finding patterns):
-    - Start with `Glob` for file discovery
-    - Use `Grep` for content search (syntax-aware when available)
-    - Use `Read` for targeted file inspection
+   - Start with `Glob` for file discovery
+   - Use `Grep` for content search (syntax-aware when available)
+   - Use `Read` for targeted file inspection
 
 2. **Code modification tasks** (changing existing code):
-    - **Prefer `Edit` over `Write`** - preserves existing context and comments, saves ~66% tokens
-    - Only use `Write` for brand new files or complete rewrites (with permission)
-    - Use `Write` when changing >50% of a file; otherwise use `Edit`
-    - Always `Read` the file before editing
+   - **Prefer `Edit` over `Write`** - preserves existing context and comments, saves ~66% tokens
+   - Only use `Write` for brand new files or complete rewrites (with permission)
+   - Use `Write` when changing >50% of a file; otherwise use `Edit`
+   - Always `Read` the file before editing
 
 3. **Verification tasks** (testing, building, checking):
-    - Use `Bash` for build commands, test runners, and linting
-    - Run verification **after** every Edit/Write operation
-    - Check for errors/warnings before proceeding
+   - Use `Bash` for build commands, test runners, and linting
+   - Run verification **after** every Edit/Write operation
+   - Check for errors/warnings before proceeding
 
 4. **Delegation tasks** (parallel exploration):
-    - Use `Task` tool for subagent delegation
-    - **Always provide clear task subjects** (no empty strings)
-    - Prefer parallel over sequential for independent exploration
-    - Parallel delegation can provide 10x+ speedup for independent tasks (e.g., framework migrations)
+   - Use `Task` tool for subagent delegation
+   - **Always provide clear task subjects** (no empty strings)
+   - Prefer parallel over sequential for independent exploration
+   - Parallel delegation can provide 10x+ speedup for independent tasks (e.g., framework migrations)
 
 ```mermaid
 flowchart TD
@@ -127,10 +125,7 @@ flowchart TD
 
 ## References
 
-* [SKILLS-AGENTIC-LESSONS.md](https://github.com/nibzard/SKILLS-AGENTIC-LESSONS) - Skills based on lessons learned from
-  analyzing 88 real-world Claude conversation sessions
-* Related
-  patterns: [Sub-Agent Spawning](sub-agent-spawning.md), [Discrete Phase Separation](discrete-phase-separation.md), [Subject Hygiene](subject-hygiene.md)
-* ToolFormer: [Language Models Can Teach Themselves to Use Tools](https://arxiv.org/abs/2302.04761) (Schick et al.,
-  2023)
+* [SKILLS-AGENTIC-LESSONS.md](https://github.com/nibzard/SKILLS-AGENTIC-LESSONS) - Skills based on lessons learned from analyzing 88 real-world Claude conversation sessions
+* Related patterns: [Sub-Agent Spawning](sub-agent-spawning.md), [Discrete Phase Separation](discrete-phase-separation.md), [Subject Hygiene](subject-hygiene.md)
+* ToolFormer: [Language Models Can Teach Themselves to Use Tools](https://arxiv.org/abs/2302.04761) (Schick et al., 2023)
 * ReAct: [Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629) (Yao et al., 2022)

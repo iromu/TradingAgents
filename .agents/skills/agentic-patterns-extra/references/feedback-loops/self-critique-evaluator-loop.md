@@ -10,9 +10,7 @@ tags: [self-critique, evaluator, reward-model, synthetic-data, reflexion, rlaif]
 
 ## Problem
 
-Human-labeled preference datasets are expensive to produce, slow to refresh, and quickly stale as base models and
-domains change. Teams need scalable evaluation signals that can keep pace with model evolution without waiting on large
-annotation cycles. Risk of evaluator collapse and bias amplification must be mitigated.
+Human-labeled preference datasets are expensive to produce, slow to refresh, and quickly stale as base models and domains change. Teams need scalable evaluation signals that can keep pace with model evolution without waiting on large annotation cycles. Risk of evaluator collapse and bias amplification must be mitigated.
 
 ## Solution
 
@@ -26,8 +24,7 @@ Train a **self-taught evaluator** that bootstraps from synthetic data:
 
 **Dual-model variant** (RLAIF):** Use a separate critic model to evaluate the generator, reducing bias at higher cost.
 
-To prevent evaluator collapse, keep evaluation prompts and generation prompts partially decoupled, inject adversarial
-counterexamples, and benchmark against a small human-labeled anchor set.
+To prevent evaluator collapse, keep evaluation prompts and generation prompts partially decoupled, inject adversarial counterexamples, and benchmark against a small human-labeled anchor set.
 
 ## Pros & Cons
 

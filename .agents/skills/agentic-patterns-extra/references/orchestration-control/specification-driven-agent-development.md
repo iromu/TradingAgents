@@ -10,13 +10,11 @@ tags: [spec-first, scaffolding, contract, requirements]
 
 ## Problem
 
-Hand-crafted prompts or loose user stories leave room for ambiguity; agents can wander, over-interpret, or produce code
-that conflicts with stakeholder intent.
+Hand-crafted prompts or loose user stories leave room for ambiguity; agents can wander, over-interpret, or produce code that conflicts with stakeholder intent.
 
 ## Solution
 
-Adopt a **spec-first workflow** in which a formal specification file (e.g., Markdown, OpenAPI, JSON Schema) is the
-agent's *primary* input and source of truth.
+Adopt a **spec-first workflow** in which a formal specification file (e.g., Markdown, OpenAPI, JSON Schema) is the agent's *primary* input and source of truth.
 
 - **Parse spec** → agent builds an explicit task graph.
 - **Scaffold** project structure & stub code straight from the spec.
@@ -36,11 +34,9 @@ if new_feature_requested:
 
 ## How to use it
 
-Write specifications first (Markdown files in git), then let agents scaffold from them. Documentation IS the spec—write
-it before code.
+Write specifications first (Markdown files in git), then let agents scaffold from them. Documentation IS the spec—write it before code.
 
-Use tiered review: AI for patterns, humans for logic. Parallelize via git worktrees or multiple agents coordinating
-through shared spec files.
+Use tiered review: AI for patterns, humans for logic. Parallelize via git worktrees or multiple agents coordinating through shared spec files.
 
 Pitfalls: coarse or under-specified requirements still propagate errors.
 

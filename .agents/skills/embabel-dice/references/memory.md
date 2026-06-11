@@ -26,20 +26,19 @@ var memory = Memory.forContext(contextId)
     .narrowedBy(q -> q.withEntityId("alice-123"));
 ```
 
-**When to use:** Whenever an agent needs to recall facts, preferences, or events from the knowledge graph during
-conversation.
+**When to use:** Whenever an agent needs to recall facts, preferences, or events from the knowledge graph during conversation.
 
 ## Memory Configuration
 
-| Setting        | Method                              | Description                            | Default                |
-|----------------|-------------------------------------|----------------------------------------|------------------------|
-| Min confidence | `withMinConfidence(double)`         | Minimum effective confidence threshold | `0.5`                  |
-| Default limit  | `withDefaultLimit(int)`             | Max results per search                 | `10`                   |
-| Topic          | `withTopic(String)`                 | Memory topic description               | `"the user & context"` |
-| Eager search   | `withEagerSearchAbout(String, int)` | Preload relevant context by text       | none                   |
-| Eager topic    | `withEagerTopicSearch(int)`         | Preload by topic count                 | none                   |
-| Eager query    | `withEagerQuery(PropositionQuery)`  | Preload with custom query              | none                   |
-| Narrowed by    | `narrowedBy(PropositionQuery)`      | Filter results                         | none                   |
+| Setting | Method | Description | Default |
+|---------|--------|-------------|---------|
+| Min confidence | `withMinConfidence(double)` | Minimum effective confidence threshold | `0.5` |
+| Default limit | `withDefaultLimit(int)` | Max results per search | `10` |
+| Topic | `withTopic(String)` | Memory topic description | `"the user & context"` |
+| Eager search | `withEagerSearchAbout(String, int)` | Preload relevant context by text | none |
+| Eager topic | `withEagerTopicSearch(int)` | Preload by topic count | none |
+| Eager query | `withEagerQuery(PropositionQuery)` | Preload with custom query | none |
+| Narrowed by | `narrowedBy(PropositionQuery)` | Filter results | none |
 
 ### Eager Search Patterns
 
@@ -75,8 +74,7 @@ var memory = Memory.forContext(contextId)
     .withProjector(memoryProjector);
 ```
 
-**Without context scoping**, propositions from different users/sessions mix together, causing data leakage and incorrect
-recall.
+**Without context scoping**, propositions from different users/sessions mix together, causing data leakage and incorrect recall.
 
 ### Pre-populating Blackboard
 
@@ -134,13 +132,8 @@ dice:
 
 ## Common Pitfalls
 
-1. **Not setting min-confidence** — Without `withMinConfidence`, low-quality propositions flood the agent's context. Set
-   an appropriate threshold (default `0.5`).
-2. **Not scoping by ContextId** — Without context scoping, propositions from different users/sessions mix together.
-   Always use `ContextId`.
-3. **Not configuring eager search** — Without `withEagerSearchAbout`, the agent must search on every turn. Preload
-   context for better latency and response quality.
-4. **Not limiting eager search results** — Without `withLimit` or `withDefaultLimit`, eager search can return too many
-   propositions, bloating the prompt. Set appropriate limits.
-5. **Using Memory without a projector** — The `Memory` facade needs a projector (typically
-   `DefaultMemoryProjector.DEFAULT`) to materialize propositions.
+1. **Not setting min-confidence** — Without `withMinConfidence`, low-quality propositions flood the agent's context. Set an appropriate threshold (default `0.5`).
+2. **Not scoping by ContextId** — Without context scoping, propositions from different users/sessions mix together. Always use `ContextId`.
+3. **Not configuring eager search** — Without `withEagerSearchAbout`, the agent must search on every turn. Preload context for better latency and response quality.
+4. **Not limiting eager search results** — Without `withLimit` or `withDefaultLimit`, eager search can return too many propositions, bloating the prompt. Set appropriate limits.
+5. **Using Memory without a projector** — The `Memory` facade needs a projector (typically `DefaultMemoryProjector.DEFAULT`) to materialize propositions.

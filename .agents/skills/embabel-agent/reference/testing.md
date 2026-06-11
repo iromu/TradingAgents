@@ -2,8 +2,7 @@
 
 ## Unit Testing with FakePromptRunner
 
-Use `FakePromptRunner` and `FakeOperationContext` to mock LLM interactions while verifying prompts, hyperparameters, and
-business logic.
+Use `FakePromptRunner` and `FakeOperationContext` to mock LLM interactions while verifying prompts, hyperparameters, and business logic.
 
 ### Testing a Simple Action
 

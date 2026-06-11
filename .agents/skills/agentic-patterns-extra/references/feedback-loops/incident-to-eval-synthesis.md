@@ -10,9 +10,7 @@ tags: [evals, incidents, reliability, feedback, continuous-improvement]
 
 ## Problem
 
-Many teams run agent evaluations, but the eval suite drifts away from real failures seen in production. Incidents get
-resolved operationally, yet the exact failure mode is rarely converted into a durable regression test. This creates
-repeat incidents and false confidence from stale benchmark sets.
+Many teams run agent evaluations, but the eval suite drifts away from real failures seen in production. Incidents get resolved operationally, yet the exact failure mode is rarely converted into a durable regression test. This creates repeat incidents and false confidence from stale benchmark sets.
 
 ## Solution
 
@@ -42,11 +40,10 @@ if not suite.run(candidate_policy).pass(case.id):
 
 - **Evidence Grade:** `medium`
 - **Most Valuable Findings:**
-    - Academic research shows 60-80% success rates for automated test generation from failure reports
-    - Only 30% of organizations systematically reuse incident data; those that do see fewer repeat incidents
-    - Industry adoption at OpenAI, Anthropic, and Meta validates production-derived evals for ML systems
-- **Unverified / Unclear:** Limited research specifically on AI agent incident-to-eval synthesis; most work focuses on
-  traditional software or model evaluation
+  - Academic research shows 60-80% success rates for automated test generation from failure reports
+  - Only 30% of organizations systematically reuse incident data; those that do see fewer repeat incidents
+  - Industry adoption at OpenAI, Anthropic, and Meta validates production-derived evals for ML systems
+- **Unverified / Unclear:** Limited research specifically on AI agent incident-to-eval synthesis; most work focuses on traditional software or model evaluation
 
 ## How to use it
 
@@ -63,6 +60,5 @@ if not suite.run(candidate_policy).pass(case.id):
 ## References
 
 - https://sre.google/sre-book/postmortem-culture/
-- https://dl.acm.org/doi/10.1145/2635868.2635920 (Thummalapenta et al., FSE 2014: Automatic Generation of Test Cases
-  from Bug Reports)
+- https://dl.acm.org/doi/10.1145/2635868.2635920 (Thummalapenta et al., FSE 2014: Automatic Generation of Test Cases from Bug Reports)
 - https://martinfowler.com/articles/practical-test-pyramid.html

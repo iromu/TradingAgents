@@ -10,9 +10,7 @@ tags: [evaluation, code-review, critique, quality-assurance, bug-detection, gpt-
 
 ## Problem
 
-As AI-generated code becomes more sophisticated, it becomes increasingly difficult for human reviewers to catch subtle
-bugs, security issues, or quality problems. Traditional code review processes may miss issues in AI-generated code
-because:
+As AI-generated code becomes more sophisticated, it becomes increasingly difficult for human reviewers to catch subtle bugs, security issues, or quality problems. Traditional code review processes may miss issues in AI-generated code because:
 
 - The volume of generated code can overwhelm human reviewers
 - Subtle bugs may appear correct at first glance
@@ -21,9 +19,7 @@ because:
 
 ## Solution
 
-Deploy specialized AI models trained specifically for code critique and evaluation. This approach builds on RLAIF (
-Reinforcement Learning from AI Feedback), which achieves ~100x cost reduction compared to human-only annotation. These
-models act as automated code reviewers that can:
+Deploy specialized AI models trained specifically for code critique and evaluation. This approach builds on RLAIF (Reinforcement Learning from AI Feedback), which achieves ~100x cost reduction compared to human-only annotation. These models act as automated code reviewers that can:
 
 1. **Identify bugs** that human reviewers might miss
 2. **Detect security vulnerabilities** in generated code
@@ -31,8 +27,7 @@ models act as automated code reviewers that can:
 4. **Verify correctness** of implemented solutions
 5. **Check adherence** to coding standards and best practices
 
-The critic model works alongside code generation models, providing an additional layer of quality assurance before code
-reaches human review or production.
+The critic model works alongside code generation models, providing an additional layer of quality assurance before code reaches human review or production.
 
 ## Example
 
@@ -275,11 +270,8 @@ sequenceDiagram
 ## References
 
 - [OpenAI's CriticGPT Announcement (July 2024)](https://openai.com/research/criticgpt)
-- [Constitutional AI: Harmlessness from AI Feedback (Anthropic, 2022)](https://arxiv.org/abs/2212.08073) - RLAIF
-  foundation with 100x cost reduction vs human annotation
-- [Self-Taught Evaluators (Meta AI, 2024)](https://arxiv.org/abs/2408.02666) - Bootstrap critic models from synthetic
-  data
-- [Evaluating LLMs for Code Review (2025)](https://arxiv.org/abs/2505.20206) - GPT-4o: 68.50% classification accuracy
-  with context
+- [Constitutional AI: Harmlessness from AI Feedback (Anthropic, 2022)](https://arxiv.org/abs/2212.08073) - RLAIF foundation with 100x cost reduction vs human annotation
+- [Self-Taught Evaluators (Meta AI, 2024)](https://arxiv.org/abs/2408.02666) - Bootstrap critic models from synthetic data
+- [Evaluating LLMs for Code Review (2025)](https://arxiv.org/abs/2505.20206) - GPT-4o: 68.50% classification accuracy with context
 
 ---

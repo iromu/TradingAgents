@@ -4,8 +4,7 @@ Source: [embabel/embabel-agent-docs/rag.md](https://github.com/embabel/embabel/b
 
 ## Overview
 
-Reasoning (also called "thinking") enables models to generate a chain-of-thought before producing a final answer. This
-improves accuracy for complex tasks like math, logic, and multi-step reasoning.
+Reasoning (also called "thinking") enables models to generate a chain-of-thought before producing a final answer. This improves accuracy for complex tasks like math, logic, and multi-step reasoning.
 
 ## Enabling Reasoning
 
@@ -37,11 +36,11 @@ ChatbotBuilder chatbot = ChatbotBuilder.builder()
 
 Controls how many tokens the model can use for its chain-of-thought:
 
-| Budget    | Use Case                        |
-|-----------|---------------------------------|
-| 256-512   | Simple reasoning, quick answers |
+| Budget | Use Case |
+|--------|----------|
+| 256-512 | Simple reasoning, quick answers |
 | 1024-2048 | Moderate complexity, multi-step |
-| 4096+     | Complex math, deep analysis     |
+| 4096+ | Complex math, deep analysis |
 
 ```java
 ChatOptions options = ChatOptions.builder()
@@ -54,12 +53,12 @@ ChatOptions options = ChatOptions.builder()
 
 Not all models support reasoning. Check model documentation:
 
-| Model       | Reasoning Support |
-|-------------|-------------------|
-| qwen-plus   | Yes               |
-| qwen-turbo  | Limited           |
-| gpt-4o      | Yes               |
-| gpt-4o-mini | Limited           |
+| Model | Reasoning Support |
+|-------|-------------------|
+| qwen-plus | Yes |
+| qwen-turbo | Limited |
+| gpt-4o | Yes |
+| gpt-4o-mini | Limited |
 
 When a model doesn't support reasoning, the `thinking` flag is silently ignored.
 

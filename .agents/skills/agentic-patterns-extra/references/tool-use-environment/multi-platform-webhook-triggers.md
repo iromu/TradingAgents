@@ -27,42 +27,38 @@ updated_at: '2026-01-13'
 
 ## Problem
 
-An internal agent only provides value when its workflows are initiated. Building out a library of workflow
-initialization mechanisms (triggers) is core to agent adoption. Without easy triggers, employees can't effectively
-automate their day-to-day workflows.
+An internal agent only provides value when its workflows are initiated. Building out a library of workflow initialization mechanisms (triggers) is core to agent adoption. Without easy triggers, employees can't effectively automate their day-to-day workflows.
 
 ## Solution
 
-Implement **multi-platform webhook triggers** that allow external SaaS tools to initiate agent workflows automatically.
-This pattern leverages a mature ecosystem of workflow automation platforms (n8n with 400+ integrations, Zapier with
-6,000+, Make.com with 1,000+) that can be used directly or as reference implementations.
+Implement **multi-platform webhook triggers** that allow external SaaS tools to initiate agent workflows automatically. This pattern leverages a mature ecosystem of workflow automation platforms (n8n with 400+ integrations, Zapier with 6,000+, Make.com with 1,000+) that can be used directly or as reference implementations.
 
 **Trigger types implemented:**
 
 1. **Notion webhooks**: Fire on page/database modifications
-    - Document status changes (draft → "ready for review")
-    - Request for Comment (RFC) workflows
-    - Auto-assign reviewers based on topic
-    - In-line commenting with suggestions
+   - Document status changes (draft → "ready for review")
+   - Request for Comment (RFC) workflows
+   - Auto-assign reviewers based on topic
+   - In-line commenting with suggestions
 
 2. **Slack messages**: Bot responds in channels
-    - Public channel responses
-    - Private channel support (with careful logging)
-    - Channel creation triggers for auto-joining
-    - Default prompts for new channels (respond only when mentioned)
+   - Public channel responses
+   - Private channel support (with careful logging)
+   - Channel creation triggers for auto-joining
+   - Default prompts for new channels (respond only when mentioned)
 
 3. **Jira webhooks**: Issue lifecycle events
-    - Issue creation, updates, comments
-    - Custom routing logic for ticket assignment
+   - Issue creation, updates, comments
+   - Custom routing logic for ticket assignment
 
 4. **Slack reacji (emoji reactions)**: Quick workflow initiation
-    - Listen for specific emojis in any channel
-    - Example: `:jira:` reaction turns thread into ticket
-    - Centralized routing instructions
+   - Listen for specific emojis in any channel
+   - Example: `:jira:` reaction turns thread into ticket
+   - Centralized routing instructions
 
 5. **Scheduled events**: Periodic triggers
-    - Slack workflows publishing to channels
-    - GitHub Actions cron jobs
+   - Slack workflows publishing to channels
+   - GitHub Actions cron jobs
 
 ```pseudo
 # Trigger flow
@@ -201,8 +197,7 @@ Custom implementation allows nuances like:
 ## References
 
 * [Building an internal agent: Triggers](https://lethain.com/agents-triggers/) - Will Larson (2025)
-* Related: [Proactive Trigger Vocabulary](proactive-trigger-vocabulary.md) - Natural language trigger phrases for skill
-  routing
+* Related: [Proactive Trigger Vocabulary](proactive-trigger-vocabulary.md) - Natural language trigger phrases for skill routing
 * [n8n](https://n8n.io) - Open-source workflow automation with 400+ integrations (45K+ GitHub stars)
 * Hohpe, G. "Enterprise Integration Patterns." 2003 - Foundational patterns for event-driven integration
 * Omicini et al. "Blending Event-Based and Multi-Agent Systems Around Coordination Abstractions." IFIP WG 6.1, 2015

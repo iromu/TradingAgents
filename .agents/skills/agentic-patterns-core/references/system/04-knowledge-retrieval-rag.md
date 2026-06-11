@@ -1,8 +1,6 @@
 # Knowledge Retrieval (RAG) Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -87,15 +85,9 @@ class RAGSystem:
 
 ## Real-World Examples
 
-1. **Enterprise KM**: Index policies/procedures → Retrieve HR guidelines → Search tech docs → Access project data →
-   Sourced answers
-2. **Legal Research**: Index case law/statutes → Retrieve precedents → Search commentary → Find similar cases → Generate
-   briefs with citations
-3. **Medical Info**: Index medical literature → Retrieve treatment guidelines → Search drug interactions → Access
-   clinical trials → Evidence-based recommendations
-4. **Academic Research**: Index research papers → Retrieve relevant studies → Search across disciplines → Find citation
-   networks → Generate literature reviews
-5. **Tech Support**: Index product docs → Retrieve troubleshooting → Search error codes → Access config examples →
-   Solution steps with references
-6. **News Aggregation**: Index articles real-time → Retrieve relevant coverage → Search archives → Find related
-   stories → Summaries with sources
+1. **Enterprise KM**: Index policies/procedures → Retrieve HR guidelines → Search tech docs → Access project data → Sourced answers
+2. **Legal Research**: Index case law/statutes → Retrieve precedents → Search commentary → Find similar cases → Generate briefs with citations
+3. **Medical Info**: Index medical literature → Retrieve treatment guidelines → Search drug interactions → Access clinical trials → Evidence-based recommendations
+4. **Academic Research**: Index research papers → Retrieve relevant studies → Search across disciplines → Find citation networks → Generate literature reviews
+5. **Tech Support**: Index product docs → Retrieve troubleshooting → Search error codes → Access config examples → Solution steps with references
+6. **News Aggregation**: Index articles real-time → Retrieve relevant coverage → Search archives → Find related stories → Summaries with sources

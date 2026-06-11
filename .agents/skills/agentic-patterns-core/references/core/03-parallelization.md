@@ -1,8 +1,6 @@
 # Parallelization Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -75,10 +73,7 @@ async def parallel_process(docs):
 
 1. **News Aggregation**: Simultaneously fetch from 50+ sources, rate limit to 10 concurrent, merge and deduplicate
 2. **Price Monitoring**: Monitor 100+ competitor sites with parallel workers, handle retries, aggregate pricing data
-3. **Document Intelligence**: Process 1000+ page set split into 50-page chunks, each worker extracts entities, merge
-   findings
-4. **Social Media Analytics**: Parallel workers per platform (Twitter, LinkedIn, Facebook, Instagram), aggregate into
-   unified dashboard
+3. **Document Intelligence**: Process 1000+ page set split into 50-page chunks, each worker extracts entities, merge findings
+4. **Social Media Analytics**: Parallel workers per platform (Twitter, LinkedIn, Facebook, Instagram), aggregate into unified dashboard
 5. **Security Scanning**: Parallel workers analyze different codebase directories, collect and prioritize all findings
-6. **Translation Project**: Parallel workers per language pair (15 languages), maintain consistency with translation
-   memory
+6. **Translation Project**: Parallel workers per language pair (15 languages), maintain consistency with translation memory

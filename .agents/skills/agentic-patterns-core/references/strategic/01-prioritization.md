@@ -1,8 +1,6 @@
 # Prioritization Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -91,15 +89,9 @@ def prioritize_queue(tasks):
 
 ## Real-World Examples
 
-1. **Customer Support**: Premium priority, urgent ranking, age-based escalation, skill-based routing, SLA tracking, load
-   balancing
-2. **Dev Pipeline**: Critical bugs first, feature value scoring, technical debt scheduling, dependency resolution,
-   sprint planning, resource allocation
-3. **Healthcare Triage**: Emergency severity scoring, wait time consideration, resource availability, specialist
-   routing, test prioritization, appointment scheduling
-4. **Manufacturing**: Order value priority, deadline management, resource optimization, setup time minimization, quality
-   requirements, maintenance windows
-5. **Content Publishing**: Trending topic priority, editorial calendar, author availability, SEO scoring, social timing,
-   cross-platform coordination
-6. **Network Traffic**: QoS packet prioritization, bandwidth allocation, latency-sensitive routing, fair queuing,
-   emergency priority, load balancing
+1. **Customer Support**: Premium priority, urgent ranking, age-based escalation, skill-based routing, SLA tracking, load balancing
+2. **Dev Pipeline**: Critical bugs first, feature value scoring, technical debt scheduling, dependency resolution, sprint planning, resource allocation
+3. **Healthcare Triage**: Emergency severity scoring, wait time consideration, resource availability, specialist routing, test prioritization, appointment scheduling
+4. **Manufacturing**: Order value priority, deadline management, resource optimization, setup time minimization, quality requirements, maintenance windows
+5. **Content Publishing**: Trending topic priority, editorial calendar, author availability, SEO scoring, social timing, cross-platform coordination
+6. **Network Traffic**: QoS packet prioritization, bandwidth allocation, latency-sensitive routing, fair queuing, emergency priority, load balancing

@@ -10,19 +10,13 @@ tags: [state-management, checkpoints, resumption, durability, filesystem]
 
 ## Problem
 
-Many agent workflows are long-running or may be interrupted (by errors, timeouts, or user intervention). Keeping all
-intermediate state in the model's context window is fragile and doesn't persist across sessions. When failures occur or
-when agents hit context limits, work is lost and must restart from scratch.
+Many agent workflows are long-running or may be interrupted (by errors, timeouts, or user intervention). Keeping all intermediate state in the model's context window is fragile and doesn't persist across sessions. When failures occur or when agents hit context limits, work is lost and must restart from scratch.
 
 ## Solution
 
-Agents persist intermediate results and working state to files in the execution environment. This creates durable
-checkpoints that enable workflow resumption, recovery from failures, and support for tasks that exceed single-session
-context limits.
+Agents persist intermediate results and working state to files in the execution environment. This creates durable checkpoints that enable workflow resumption, recovery from failures, and support for tasks that exceed single-session context limits.
 
-Instead of treating state as transient prompt text, the workflow externalizes progress into explicit artifacts that any
-later run can inspect and continue from. This gives agents a resumable execution model and makes failure recovery
-deterministic.
+Instead of treating state as transient prompt text, the workflow externalizes progress into explicit artifacts that any later run can inspect and continue from. This gives agents a resumable execution model and makes failure recovery deterministic.
 
 **Core pattern:**
 ```python
@@ -37,26 +31,24 @@ def multi_step_workflow():
     # Continue with step 2...
 ```
 
-Some agents exhibit "proactive state externalization" — writing `SUMMARY.md` or `CHANGELOG.md` without explicit
-prompting when approaching context limits, treating the filesystem as extended working memory.
+Some agents exhibit "proactive state externalization" — writing `SUMMARY.md` or `CHANGELOG.md` without explicit prompting when approaching context limits, treating the filesystem as extended working memory.
 
 ## Evidence
 
 - **Evidence Grade:** `validated-in-production`
 - **Key Findings:**
-    - Anthropic Engineering: Code Execution with MCP (2024)
-    - Cognition AI: Devin's proactive state externalization to `SUMMARY.md`/`CHANGELOG.md`
-    - LangChain: `FileStore` and `FileBasedCache` for persistent agent memory
+  - Anthropic Engineering: Code Execution with MCP (2024)
+  - Cognition AI: Devin's proactive state externalization to `SUMMARY.md`/`CHANGELOG.md`
+  - LangChain: `FileStore` and `FileBasedCache` for persistent agent memory
 
 ## How to use it
 
-- **Best for:** Multi-step workflows with expensive operations, long-running tasks, workflows needing recovery from
-  transient failures.
+- **Best for:** Multi-step workflows with expensive operations, long-running tasks, workflows needing recovery from transient failures.
 - **Implementation patterns:**
-    1. Checkpoint after expensive operations
-    2. State file with metadata (workflow_id, current_step, completed_steps)
-    3. Progress logging for visibility
-    4. Use framework primitives (LangChain FileStore)
+  1. Checkpoint after expensive operations
+  2. State file with metadata (workflow_id, current_step, completed_steps)
+  3. Progress logging for visibility
+  4. Use framework primitives (LangChain FileStore)
 
 ## Trade-offs
 

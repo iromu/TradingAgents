@@ -22,15 +22,11 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-When agents have access to large tool catalogs (dozens to thousands of available tools), loading all tool definitions
-upfront consumes excessive context window space. Most tools won't be used in a given workflow, making this preloading
-wasteful and limiting the context available for actual task execution.
+When agents have access to large tool catalogs (dozens to thousands of available tools), loading all tool definitions upfront consumes excessive context window space. Most tools won't be used in a given workflow, making this preloading wasteful and limiting the context available for actual task execution.
 
 ## Solution
 
-Present tools through a filesystem-like hierarchy where agents discover capabilities on-demand by exploring the
-structure. This pattern scales to 1000+ tools and is production-validated across major platforms (MCP, Cloudflare Code
-Mode, OpenAI, LangChain).
+Present tools through a filesystem-like hierarchy where agents discover capabilities on-demand by exploring the structure. This pattern scales to 1000+ tools and is production-validated across major platforms (MCP, Cloudflare Code Mode, OpenAI, LangChain).
 
 Implement a `search_tools` capability that allows agents to request different levels of detail:
 
@@ -38,8 +34,7 @@ Implement a `search_tools` capability that allows agents to request different le
 2. **Name + description**: Enough to understand tool purpose
 3. **Full definition with schemas**: Complete API details only when needed
 
-Tools are organized hierarchically (e.g., `servers/google-drive/getDocument.ts`, `servers/slack/sendMessage.ts`) so
-agents can:
+Tools are organized hierarchically (e.g., `servers/google-drive/getDocument.ts`, `servers/slack/sendMessage.ts`) so agents can:
 
 - List the `./servers/` directory to see available integrations
 - Navigate into specific server directories to find relevant tools

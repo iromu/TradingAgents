@@ -16,25 +16,21 @@ Recursive delegation (parent agent → sub-agents → sub-sub-agents) decomposes
 - Errors compound up the tree: "one bad leaf" can derail the whole rollout
 - Pure recursion underuses parallelism when a node is uncertain: you want multiple shots *right where the ambiguity is*
 
-Meanwhile, "best-of-N" parallel attempts help reliability, but without structure they waste compute by repeatedly
-solving the *same* problem instead of decomposing it. The pattern applies parallelism only where uncertainty exists—at
-the subtask level—while maintaining structured decomposition.
+Meanwhile, "best-of-N" parallel attempts help reliability, but without structure they waste compute by repeatedly solving the *same* problem instead of decomposing it. The pattern applies parallelism only where uncertainty exists—at the subtask level—while maintaining structured decomposition.
 
 ## Solution
 
-At *each node* in a recursive agent tree, run **best-of-N** for the current subtask before expanding further. This
-combines the structured decomposition of recursive delegation with the reliability of self-consistency sampling:
+At *each node* in a recursive agent tree, run **best-of-N** for the current subtask before expanding further. This combines the structured decomposition of recursive delegation with the reliability of self-consistency sampling:
 
 1. **Decompose:** Parent turns task into sub-tasks (like normal recursive delegation)
-2. **Parallel candidates per subtask:** For each subtask, spawn **K candidate workers** in isolated sandboxes (K=2-5
-   typical)
+2. **Parallel candidates per subtask:** For each subtask, spawn **K candidate workers** in isolated sandboxes (K=2-5 typical)
 3. **Score candidates:** Use a judge that combines:
-    - Automated signals (tests, lint, exit code, diff size, runtime)
-    - LLM-as-judge rubric (correctness, adherence to constraints, simplicity)
+   - Automated signals (tests, lint, exit code, diff size, runtime)
+   - LLM-as-judge rubric (correctness, adherence to constraints, simplicity)
 4. **Select + promote:** Pick the top candidate as the "canonical" result for that subtask
 5. **Escalate uncertainty:** If the judge confidence is low (or candidates disagree), either:
-    - Increase K for that subtask, or
-    - Spawn a focused "investigator" sub-agent to gather missing facts, then re-run selection
+   - Increase K for that subtask, or
+   - Spawn a focused "investigator" sub-agent to gather missing facts, then re-run selection
 6. **Aggregate upward:** Parent synthesizes selected results and continues recursion
 
 ```mermaid
@@ -96,5 +92,4 @@ Practical defaults:
 * [Tree-of-Thoughts (Yao et al. 2023): Tree-based reasoning with evaluation mechanisms](https://arxiv.org/abs/2305.10601)
 * [Labruno (GitHub): Parallel sandboxes + LLM judge selects best implementation](https://github.com/nibzard/labruno-agent)
 * [Daytona RLM Guide: Recursive delegation with sandboxed execution](https://www.daytona.io/docs/en/recursive-language-models/)
-* Related
-  patterns: [Sub-Agent Spawning](sub-agent-spawning.md), [Swarm Migration Pattern](swarm-migration-pattern.md), [Self-Critique / Evaluator loops](self-critique-evaluator-loop.md)
+* Related patterns: [Sub-Agent Spawning](sub-agent-spawning.md), [Swarm Migration Pattern](swarm-migration-pattern.md), [Self-Critique / Evaluator loops](self-critique-evaluator-loop.md)

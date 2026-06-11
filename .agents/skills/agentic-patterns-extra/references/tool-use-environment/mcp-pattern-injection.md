@@ -10,16 +10,14 @@ tags: [mcp, code-patterns, tool-injection, context-enhancement, langgraph]
 
 ## Problem
 
-AI coding assistants lack domain-specific knowledge about framework best practices. When building LangGraph agents,
-developers must repeatedly explain patterns, copy-paste from docs, or watch the AI reinvent suboptimal solutions. The
-assistant's training data is often outdated relative to fast-moving frameworks.
+AI coding assistants lack domain-specific knowledge about framework best practices. When building LangGraph agents, developers must repeatedly explain patterns, copy-paste from docs, or watch the AI reinvent suboptimal solutions. The assistant's training data is often outdated relative to fast-moving frameworks.
 
 ## Solution
 
 Use **MCP (Model Context Protocol) servers** to inject production patterns directly into the AI assistant's context:
 
 1. Create an MCP server that exposes domain patterns as tools and resources
-2. Structure patterns with clear signatures, descriptions, and code snippets
+2. Structure patterns with clear signatures, descriptions, and code snippets  
 3. Configure Claude Desktop or Cursor to connect to the MCP server
 4. The AI can now "call" patterns on-demand, getting current best practices
 
@@ -36,8 +34,7 @@ server.tool("get_pattern", { name: z.string() }, async ({ name }) => {
 });
 ```
 
-The key insight: MCP servers act as **live documentation** that the AI can query, rather than static context that burns
-tokens.
+The key insight: MCP servers act as **live documentation** that the AI can query, rather than static context that burns tokens.
 
 ## Trade-offs
 

@@ -2,8 +2,7 @@
 
 ## Overview
 
-`PersistenceManager` is Drivine4j's low-level API for executing manual Cypher queries. It gives full control over query
-construction, parameter binding, and result transformation.
+`PersistenceManager` is Drivine4j's low-level API for executing manual Cypher queries. It gives full control over query construction, parameter binding, and result transformation.
 
 ## Core Types
 
@@ -18,13 +17,13 @@ QuerySpecification
     .transform(Person::class.java)
 ```
 
-| Method                       | Purpose                                              |
-|------------------------------|------------------------------------------------------|
-| `withStatement(String)`      | The Cypher query string                              |
-| `bind(Map<String, Any>)`     | Bind named parameters                                |
-| `bindObject(String, Any)`    | Bind an object as a map (e.g., for `SET p = $props`) |
-| `transform(Class<T>)`        | Transform results to a Java/Kotlin type              |
-| `withDialect(CypherDialect)` | Override the default dialect for this query          |
+| Method | Purpose |
+|--------|---------|
+| `withStatement(String)` | The Cypher query string |
+| `bind(Map<String, Any>)` | Bind named parameters |
+| `bindObject(String, Any)` | Bind an object as a map (e.g., for `SET p = $props`) |
+| `transform(Class<T>)` | Transform results to a Java/Kotlin type |
+| `withDialect(CypherDialect)` | Override the default dialect for this query |
 
 ### PersistenceManager
 
@@ -38,11 +37,11 @@ val manager: PersistenceManager
 
 ### Key Methods
 
-| Method                        | Returns           | Description                                       |
-|-------------------------------|-------------------|---------------------------------------------------|
-| `query(QuerySpecification)`   | `List<T>`         | Execute and return all results                    |
-| `getOne(QuerySpecification)`  | `T`               | Execute and return single result (throws if none) |
-| `execute(QuerySpecification)` | `ExecutionResult` | Execute without transformation (raw access)       |
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `query(QuerySpecification)` | `List<T>` | Execute and return all results |
+| `getOne(QuerySpecification)` | `T` | Execute and return single result (throws if none) |
+| `execute(QuerySpecification)` | `ExecutionResult` | Execute without transformation (raw access) |
 
 ## Transaction Management
 
@@ -86,8 +85,7 @@ fun createAll(people: List<Person>): List<Person> {
 }
 ```
 
-For very large batches, consider using the Neo4j native batch API or Drivine's batch helpers to avoid N+1 query
-patterns.
+For very large batches, consider using the Neo4j native batch API or Drivine's batch helpers to avoid N+1 query patterns.
 
 ## Result Transformation
 
@@ -111,13 +109,13 @@ return result.records.map { record ->
 
 ## Cypher Dialects
 
-| Dialect             | Database       |
-|---------------------|----------------|
-| `NEO4J_5` (default) | Neo4j 5.x      |
-| `NEO4J_4`           | Neo4j 4.x      |
-| `FALKORDB`          | FalkorDB       |
-| `NEPTUNE`           | Amazon Neptune |
-| `MEMGRAPH`          | Memgraph       |
+| Dialect | Database |
+|---------|----------|
+| `NEO4J_5` (default) | Neo4j 5.x |
+| `NEO4J_4` | Neo4j 4.x |
+| `FALKORDB` | FalkorDB |
+| `NEPTUNE` | Amazon Neptune |
+| `MEMGRAPH` | Memgraph |
 
 Override per-query:
 

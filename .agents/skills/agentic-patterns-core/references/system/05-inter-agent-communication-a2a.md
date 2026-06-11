@@ -1,8 +1,6 @@
 # Inter-Agent Communication (A2A) Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -95,15 +93,9 @@ class Agent:
 
 ## Real-World Examples
 
-1. **E-commerce Order**: Inventory checks stock → Pricing calculates costs → Payment processes → Shipping arranges →
-   Notification updates → Orchestrator coordinates
-2. **News Production**: Crawler gathers → Fact-check verifies → Writer creates → Editor reviews → Publisher posts →
-   Analytics tracks
-3. **Financial Analysis**: Data collects → Technical charts → Fundamental analyzes → Risk assesses → Report generates →
-   Compliance ensures
-4. **Smart Manufacturing**: Sensors monitor → Quality checks → Maintenance schedules → Inventory manages → Planning
-   optimizes → Control coordinates
-5. **Healthcare**: Triage assesses → Diagnostic suggests → Specialists provide → Treatment recommends → Pharmacy
-   manages → Scheduler books
-6. **Research Platform**: Literature searches → Data manages → Analysis runs → Visualization creates → Writing drafts →
-   Review checks
+1. **E-commerce Order**: Inventory checks stock → Pricing calculates costs → Payment processes → Shipping arranges → Notification updates → Orchestrator coordinates
+2. **News Production**: Crawler gathers → Fact-check verifies → Writer creates → Editor reviews → Publisher posts → Analytics tracks
+3. **Financial Analysis**: Data collects → Technical charts → Fundamental analyzes → Risk assesses → Report generates → Compliance ensures
+4. **Smart Manufacturing**: Sensors monitor → Quality checks → Maintenance schedules → Inventory manages → Planning optimizes → Control coordinates
+5. **Healthcare**: Triage assesses → Diagnostic suggests → Specialists provide → Treatment recommends → Pharmacy manages → Scheduler books
+6. **Research Platform**: Literature searches → Data manages → Analysis runs → Visualization creates → Writing drafts → Review checks

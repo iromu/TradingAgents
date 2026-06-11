@@ -10,31 +10,24 @@ tags: [queueing, concurrency, lanes, isolation, parallelism, deadlock-prevention
 
 ## Problem
 
-Traditional agent systems serialize all operations through a single execution queue, creating bottlenecks that limit
-throughput. Concurrent execution is desirable but risky:
+Traditional agent systems serialize all operations through a single execution queue, creating bottlenecks that limit throughput. Concurrent execution is desirable but risky:
 
 - **Interleaving hazards**: Multiple commands writing to stdin/stdout simultaneously corrupt user-facing output
 - **Race conditions**: Shared state access without proper synchronization causes data corruption
 - **Deadlock risks**: Naive concurrent queuing can create circular dependencies between operations
 
-Agentic systems need parallelism to remain responsive (e.g., background tasks shouldn't block user interactions), but
-must preserve isolation guarantees.
+Agentic systems need parallelism to remain responsive (e.g., background tasks shouldn't block user interactions), but must preserve isolation guarantees.
 
 ## Solution
 
-Isolated execution lanes with independent queues and configurable concurrency per lane. Each lane is a named queue with
-its own concurrency limit, drained independently without interference.
+Isolated execution lanes with independent queues and configurable concurrency per lane. Each lane is a named queue with its own concurrency limit, drained independently without interference.
 
 **Core concepts:**
 
-- **Session lanes**: Per-conversation queues prevent message interleaving. Each user session gets an isolated lane (
-  e.g., `session:telegram:user123`).
-- **Global lanes**: Background tasks (cron jobs, health checks) execute in dedicated lanes (e.g., `cron`, `subagent`)
-  without blocking session lanes.
-- **Hierarchical composition**: Operations can nest lanes (session → global) via queue chaining. The outer lane waits
-  for the inner lane, preventing deadlocks through structured queuing.
-- **Configurable concurrency**: Each lane supports `maxConcurrent` workers (default 1). High-throughput lanes can run
-  parallel tasks; serial lanes preserve ordering.
+- **Session lanes**: Per-conversation queues prevent message interleaving. Each user session gets an isolated lane (e.g., `session:telegram:user123`).
+- **Global lanes**: Background tasks (cron jobs, health checks) execute in dedicated lanes (e.g., `cron`, `subagent`) without blocking session lanes.
+- **Hierarchical composition**: Operations can nest lanes (session → global) via queue chaining. The outer lane waits for the inner lane, preventing deadlocks through structured queuing.
+- **Configurable concurrency**: Each lane supports `maxConcurrent` workers (default 1). High-throughput lanes can run parallel tasks; serial lanes preserve ordering.
 - **Wait-time warnings**: Tasks that sit queued too long trigger warnings and callbacks, surfacing performance issues.
 
 **Implementation sketch:**
@@ -98,22 +91,16 @@ await enqueueCommandInLane(sessionLane, () =>
 2. **Define lane names**: Use a hierarchy (e.g., `session:telegram:user123`) for scoping.
 3. **Set concurrency limits**: Serial lanes use `maxConcurrent=1`; parallel lanes use higher values.
 4. **Queue tasks**: Call `enqueueCommandInLane(lane, task)` to schedule work.
-5. **Compose hierarchically**: When a queued task must spawn work in another lane, await the inner enqueue from the
-   outer task.
+5. **Compose hierarchically**: When a queued task must spawn work in another lane, await the inner enqueue from the outer task.
 
-**Observability**: Track per-lane metrics (queue depth, active count, wait times) to detect backpressure and starvation.
-Key signals include `queue_size_per_lane`, `active_tasks_per_lane`, and `wait_time_p95`.
+**Observability**: Track per-lane metrics (queue depth, active count, wait times) to detect backpressure and starvation. Key signals include `queue_size_per_lane`, `active_tasks_per_lane`, and `wait_time_p95`.
 
 **Pitfalls to avoid:**
 
-- **Over-parallelization**: Too many concurrent workers can exhaust resources (file handles, memory). Monitor `active`
-  count.
-- **Starvation**: Low-priority lanes may wait indefinitely if high-priority lanes are always full. Use wait-time
-  warnings to detect.
-- **Missing hierarchy**: Direct cross-lane dependencies without nested queuing risk deadlocks. Always compose via
-  `enqueueCommandInLane(() => enqueueCommandInLane(...))`.
-- **Dynamic lane proliferation**: Creating lanes with unstable identifiers (e.g., timestamps) causes unbounded memory
-  growth. Use stable names and implement lane garbage collection for session-scoped lanes.
+- **Over-parallelization**: Too many concurrent workers can exhaust resources (file handles, memory). Monitor `active` count.
+- **Starvation**: Low-priority lanes may wait indefinitely if high-priority lanes are always full. Use wait-time warnings to detect.
+- **Missing hierarchy**: Direct cross-lane dependencies without nested queuing risk deadlocks. Always compose via `enqueueCommandInLane(() => enqueueCommandInLane(...))`.
+- **Dynamic lane proliferation**: Creating lanes with unstable identifiers (e.g., timestamps) causes unbounded memory growth. Use stable names and implement lane garbage collection for session-scoped lanes.
 
 ## Trade-offs
 
@@ -128,16 +115,13 @@ Key signals include `queue_size_per_lane`, `active_tasks_per_lane`, and `wait_ti
 
 - **Memory overhead**: Each lane maintains a queue; thousands of idle lanes may waste memory.
 - **Tuning required**: Concurrency limits need calibration based on workload characteristics.
-- **Not a general scheduler**: No priority queues, deadlines, or work stealing. Use a proper scheduler for complex
-  needs.
+- **Not a general scheduler**: No priority queues, deadlines, or work stealing. Use a proper scheduler for complex needs.
 
 ## References
 
-- [Clawdbot command-queue.ts](https://github.com/clawdbot/clawdbot/blob/main/src/process/command-queue.ts) - Core queue
-  implementation
+- [Clawdbot command-queue.ts](https://github.com/clawdbot/clawdbot/blob/main/src/process/command-queue.ts) - Core queue implementation
 - [Clawdbot lanes.ts](https://github.com/clawdbot/clawdbot/blob/main/src/process/lanes.ts) - Lane definitions
-- [Clawdbot lane resolution](https://github.com/clawdbot/clawdbot/blob/main/src/agents/pi-embedded-runner/lanes.ts) -
-  Runtime lane mapping
+- [Clawdbot lane resolution](https://github.com/clawdbot/clawdbot/blob/main/src/agents/pi-embedded-runner/lanes.ts) - Runtime lane mapping
 - Related: [Parallel Tool Execution](/patterns/parallel-tool-execution) for tool-level parallelism
 - Academic foundations: Actor Model (IJCAI '73), Work-Stealing (SOSP '95), CALM Theorem (PODS '11)
 - Industry analogs: Sidekiq queues, BullMQ isolation, Airflow pools

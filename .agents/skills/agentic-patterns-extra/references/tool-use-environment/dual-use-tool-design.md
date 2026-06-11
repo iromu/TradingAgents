@@ -36,13 +36,11 @@ Building separate tools for humans and AI agents creates:
 
 ## Solution
 
-Design all tools to be **dual-use**—equally accessible and useful to both humans and AI agents. When a human can invoke
-a tool manually, the agent should be able to call it programmatically, and vice versa.
+Design all tools to be **dual-use**—equally accessible and useful to both humans and AI agents. When a human can invoke a tool manually, the agent should be able to call it programmatically, and vice versa.
 
 **Core principle**: "Everything you can do, Claude can do. There's nothing in between."
 
-**Academic support**: Validated by LLM-HAS research (arXiv:2505.00753, 2025) showing shared interfaces reduce
-coordination overhead and improve human-agent collaboration.
+**Academic support**: Validated by LLM-HAS research (arXiv:2505.00753, 2025) showing shared interfaces reduce coordination overhead and improve human-agent collaboration.
 
 **Key characteristics of dual-use tools:**
 
@@ -125,14 +123,9 @@ agent.call_slash_command("/commit")
 
 ## References
 
-* [A Survey on Large Language Model based Human-Agent Systems](https://arxiv.org/abs/2505.00753) (arXiv:2505.00753, May
-  2025) — validates shared interfaces for effective human-agent collaboration
-* [Why Human-Agent Systems Should Precede AI Autonomy](https://arxiv.org/html/2506.09420v1) (arXiv:2506.09420, June
-  2025) — argues for designing tools for both humans and agents from the start
-* Boris Cherny: "Tools were built for engineers, but now it's equal parts engineers and models... everything is dual
-  use."
-* Boris Cherny: "I have a slash command for slash commit... I run it manually, but also Claude can run this for me. And
-  this is pretty useful because we get to share this logic."
-* Cat Wu: "Claude Code has access to everything that an engineer does at the terminal. Making them dual use actually
-  makes the tools a lot easier to understand. Everything you can do, Claude can do. There's nothing in between."
+* [A Survey on Large Language Model based Human-Agent Systems](https://arxiv.org/abs/2505.00753) (arXiv:2505.00753, May 2025) — validates shared interfaces for effective human-agent collaboration
+* [Why Human-Agent Systems Should Precede AI Autonomy](https://arxiv.org/html/2506.09420v1) (arXiv:2506.09420, June 2025) — argues for designing tools for both humans and agents from the start
+* Boris Cherny: "Tools were built for engineers, but now it's equal parts engineers and models... everything is dual use."
+* Boris Cherny: "I have a slash command for slash commit... I run it manually, but also Claude can run this for me. And this is pretty useful because we get to share this logic."
+* Cat Wu: "Claude Code has access to everything that an engineer does at the terminal. Making them dual use actually makes the tools a lot easier to understand. Everything you can do, Claude can do. There's nothing in between."
 * [AI & I Podcast: How to Use Claude Code Like the People Who Built It](https://every.to/podcast/transcript-how-to-use-claude-code-like-the-people-who-built-it)

@@ -5,11 +5,9 @@
 An `AgentProcess` manages the complete execution lifecycle:
 
 **Process States:**
-
 - `NOT_STARTED` → `RUNNING` → `COMPLETED` / `FAILED` / `TERMINATED` / `KILLED` / `STUCK` / `WAITING` / `PAUSED`
 
 **Execution Methods:**
-
 - `tick()` — perform the next single step
 - `run()` — execute as far as possible
 
@@ -158,11 +156,11 @@ choose-goal "Find a horoscope for Alice"
 
 Embabel exposes REST endpoints out of the box:
 
-| Endpoint                      | Method | Description                  |
-|-------------------------------|--------|------------------------------|
-| `/api/v1/process/{processId}` | GET    | Process status, result, URLs |
-| `/api/v1/process/{processId}` | DELETE | Kill process                 |
-| `/events/process/{processId}` | GET    | SSE stream of events         |
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/v1/process/{processId}` | GET | Process status, result, URLs |
+| `/api/v1/process/{processId}` | DELETE | Kill process |
+| `/events/process/{processId}` | GET | SSE stream of events |
 
 Each can be individually disabled via configuration:
 
@@ -235,8 +233,7 @@ blackboard.get("key", MyClass.class); // get by name and type
 blackboard.hide(MyClass.class);      // hide from planning
 ```
 
-Most of the time, user code doesn't interact with the blackboard directly — action inputs come from it and outputs are
-automatically added.
+Most of the time, user code doesn't interact with the blackboard directly — action inputs come from it and outputs are automatically added.
 
 ## Context (Cross-Process State)
 
@@ -248,8 +245,7 @@ var options = ProcessOptions.builder()
     .build();
 ```
 
-Context is identified by `contextId` and populated into each process's blackboard. Implementation depends on
-`ContextRepository` — the default is in-memory only.
+Context is identified by `contextId` and populated into each process's blackboard. Implementation depends on `ContextRepository` — the default is in-memory only.
 
 ## Key Points
 

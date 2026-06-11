@@ -1,8 +1,6 @@
 # Exploration and Discovery Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -90,15 +88,9 @@ class Explorer:
 
 ## Real-World Examples
 
-1. **Drug Discovery**: Literature mining for targets → Chemical space exploration → Side effect analysis → Clinical
-   trial mining → Hypothesis generation → Experimental design
-2. **Market Opportunity**: Consumer trend analysis → Competitor mapping → Tech convergence → Unmet need discovery →
-   Business model innovation → Partnership scouting
-3. **Scientific Research**: Literature review → Cross-discipline connections → Experimental design suggestions → Data
-   pattern discovery → Hypothesis generation → Collaboration networks
-4. **Tech Innovation**: Patent landscape analysis → Emerging tech tracking → Research lab monitoring → Startup ecosystem
-   mapping → Feasibility assessment → Opportunity ranking
-5. **Intelligence Analysis**: OSINT gathering → Pattern recognition → Threat mapping → Anomaly detection → Predictive
-   modeling → Strategic assessment
-6. **Education Research**: Learning method exploration → Curriculum gap analysis → Student performance patterns →
-   Pedagogical innovation → Best practices → Intervention strategies
+1. **Drug Discovery**: Literature mining for targets → Chemical space exploration → Side effect analysis → Clinical trial mining → Hypothesis generation → Experimental design
+2. **Market Opportunity**: Consumer trend analysis → Competitor mapping → Tech convergence → Unmet need discovery → Business model innovation → Partnership scouting
+3. **Scientific Research**: Literature review → Cross-discipline connections → Experimental design suggestions → Data pattern discovery → Hypothesis generation → Collaboration networks
+4. **Tech Innovation**: Patent landscape analysis → Emerging tech tracking → Research lab monitoring → Startup ecosystem mapping → Feasibility assessment → Opportunity ranking
+5. **Intelligence Analysis**: OSINT gathering → Pattern recognition → Threat mapping → Anomaly detection → Predictive modeling → Strategic assessment
+6. **Education Research**: Learning method exploration → Curriculum gap analysis → Student performance patterns → Pedagogical innovation → Best practices → Intervention strategies

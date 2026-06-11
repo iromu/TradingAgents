@@ -26,8 +26,7 @@ updated_at: '2026-01-13'
 
 ## Problem
 
-Unit tests, linters, and typecheckers validate individual components but don't test agent workflows end-to-end. It's
-easy to create prompts that don't work well despite all underlying pieces being correct.
+Unit tests, linters, and typecheckers validate individual components but don't test agent workflows end-to-end. It's easy to create prompts that don't work well despite all underlying pieces being correct.
 
 You need to validate that prompts and tools work together effectively as a system.
 
@@ -50,9 +49,9 @@ Implement **workflow evals (simulations)** that test complete agent workflows wi
    ```
 
 2. **Simulation configuration**: Each eval defines:
-    - **Initial prompt**: What the agent receives
-    - **Metadata**: Situation context available to harness
-    - **Evaluation criteria**: Success/failure determination
+   - **Initial prompt**: What the agent receives
+   - **Metadata**: Situation context available to harness
+   - **Evaluation criteria**: Success/failure determination
 
    ```yaml
    evals:
@@ -75,13 +74,13 @@ Implement **workflow evals (simulations)** that test complete agent workflows wi
 3. **Dual evaluation criteria**:
 
    **Objective criteria**:
-    - Which tools were called
-    - Which tools were NOT called
-    - Tags/states added to conversation (if applicable)
+   - Which tools were called
+   - Which tools were NOT called
+   - Tags/states added to conversation (if applicable)
 
    **Subjective criteria**:
-    - Agent-as-judge assessments (e.g., "Was response friendly?")
-    - LLM evaluations of qualitative outcomes
+   - Agent-as-judge assessments (e.g., "Was response friendly?")
+   - LLM evaluations of qualitative outcomes
 
 4. **CI/CD integration**: Run evals automatically on every PR
 
@@ -108,9 +107,9 @@ Implement **workflow evals (simulations)** that test complete agent workflows wi
 
 - **Evidence Grade:** `emerging` - Early production adoption, primarily industry-driven
 - **Key Findings:**
-    - Strong production use case: unit tests and linters don't validate prompt-tool integration effectively
-    - Dual evaluation (objective + subjective) is standard across implementations
-    - Non-determinism remains the primary challenge; best used for directional guidance
+  - Strong production use case: unit tests and linters don't validate prompt-tool integration effectively
+  - Dual evaluation (objective + subjective) is standard across implementations
+  - Non-determinism remains the primary challenge; best used for directional guidance
 - **Unclear:** Optimal mock fidelity requirements for valid evaluation
 
 ## How to use it
@@ -239,11 +238,9 @@ The article notes evals are "not nearly as well as I had hoped" due to non-deter
 
 **Operational challenges:**
 
-> "This is working well, but not nearly as well as I had hoped... there's very strong signal when they all fail, and
-> strong signal when they all pass, but most runs are in between."
+> "This is working well, but not nearly as well as I had hoped... there's very strong signal when they all fail, and strong signal when they all pass, but most runs are in between."
 
-> "Our reliance on prompt-driven workflows rather than code-driven workflows introduces a lot of non-determinism, which
-> I don't have a way to solve without... prompt and mock tuning."
+> "Our reliance on prompt-driven workflows rather than code-driven workflows introduces a lot of non-determinism, which I don't have a way to solve without... prompt and mock tuning."
 
 **Improvement strategies:**
 

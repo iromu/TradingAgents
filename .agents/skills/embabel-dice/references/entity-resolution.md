@@ -1,7 +1,6 @@
 # DICE Entity Resolution — Reference Guide
 
-Entity resolution maps mentions to canonical entities in the knowledge graph, preventing duplicate entities for the same
-real-world thing.
+Entity resolution maps mentions to canonical entities in the knowledge graph, preventing duplicate entities for the same real-world thing.
 
 ## Table of Contents
 
@@ -14,11 +13,11 @@ real-world thing.
 
 ## Entity Resolver Types
 
-| Resolver                   | Strategy                        | When to Use                                               |
-|----------------------------|---------------------------------|-----------------------------------------------------------|
-| `EscalatingEntityResolver` | Heuristics → LLM bakeoff        | **Recommended** — best accuracy with performance tradeoff |
-| `InMemoryEntityResolver`   | Exact/normalized name match     | Simple cases, no LLM dependency                           |
-| `LlmCandidateBakeoff`      | LLM-powered candidate selection | Fallback when heuristics fail                             |
+| Resolver | Strategy | When to Use |
+|----------|----------|-------------|
+| `EscalatingEntityResolver` | Heuristics → LLM bakeoff | **Recommended** — best accuracy with performance tradeoff |
+| `InMemoryEntityResolver` | Exact/normalized name match | Simple cases, no LLM dependency |
+| `LlmCandidateBakeoff` | LLM-powered candidate selection | Fallback when heuristics fail |
 
 ## Escalating Entity Resolver
 
@@ -45,7 +44,6 @@ EntityResolver entityResolver(
 ```
 
 **Resolution flow:**
-
 1. **Exact match** — Check by entity ID
 2. **Normalized name match** — Check by normalized name (lowercase, trimmed)
 3. **Fuzzy match** — Check by Levenshtein distance
@@ -55,15 +53,15 @@ EntityResolver entityResolver(
 
 DICE provides multiple candidate searchers for entity resolution:
 
-| Searcher                          | Strategy                        | Example                                                |
-|-----------------------------------|---------------------------------|--------------------------------------------------------|
-| `ByIdCandidateSearcher`           | Exact ID match                  | `"alice-123"` → entity with ID `alice-123`             |
-| `ByExactNameCandidateSearcher`    | Exact name match                | `"Alice Smith"` → entity named exactly `"Alice Smith"` |
-| `NormalizedNameCandidateSearcher` | Normalized name match           | `"  ALICE SMITH  "` → entity named `"Alice Smith"`     |
-| `PartialNameCandidateSearcher`    | Partial name match              | `"Alice"` → entity named `"Alice Smith"`               |
-| `FuzzyNameCandidateSearcher`      | Fuzzy name match (Levenshtein)  | `"Alic Smith"` → entity named `"Alice Smith"`          |
-| `VectorCandidateSearcher`         | Vector similarity               | Embedding-based matching                               |
-| `AgenticCandidateSearcher`        | LLM-powered candidate selection | Complex disambiguation                                 |
+| Searcher | Strategy | Example |
+|----------|----------|---------|
+| `ByIdCandidateSearcher` | Exact ID match | `"alice-123"` → entity with ID `alice-123` |
+| `ByExactNameCandidateSearcher` | Exact name match | `"Alice Smith"` → entity named exactly `"Alice Smith"` |
+| `NormalizedNameCandidateSearcher` | Normalized name match | `"  ALICE SMITH  "` → entity named `"Alice Smith"` |
+| `PartialNameCandidateSearcher` | Partial name match | `"Alice"` → entity named `"Alice Smith"` |
+| `FuzzyNameCandidateSearcher` | Fuzzy name match (Levenshtein) | `"Alic Smith"` → entity named `"Alice Smith"` |
+| `VectorCandidateSearcher` | Vector similarity | Embedding-based matching |
+| `AgenticCandidateSearcher` | LLM-powered candidate selection | Complex disambiguation |
 
 ### Configuring Candidate Searchers
 
@@ -83,12 +81,12 @@ var resolver = EscalatingEntityResolver.builder()
 
 ## Resolution Outcomes
 
-| Outcome               | When                              | Action                          |
-|-----------------------|-----------------------------------|---------------------------------|
-| `NewEntity`           | No matching entity found          | Create new entity in repository |
-| `ExistingEntity`      | Match found in repository         | Use existing entity ID          |
-| `ReferenceOnlyEntity` | Known entity (e.g., current user) | Use reference, don't create     |
-| `VetoedEntity`        | Non-creatable type, no match      | Skip, don't create              |
+| Outcome | When | Action |
+|---------|------|--------|
+| `NewEntity` | No matching entity found | Create new entity in repository |
+| `ExistingEntity` | Match found in repository | Use existing entity ID |
+| `ReferenceOnlyEntity` | Known entity (e.g., current user) | Use reference, don't create |
+| `VetoedEntity` | Non-creatable type, no match | Skip, don't create |
 
 ## Entity Resolution Service
 
@@ -130,11 +128,7 @@ dice:
 
 ## Common Pitfalls
 
-1. **Not using an entity resolver** — Without resolution, the same entity mentioned differently creates duplicates.
-   Always configure at least `InMemoryEntityResolver`.
-2. **Skipping fuzzy matching** — Without fuzzy matching, "Alice Smith" and "Alic Smith" create separate entities. Use
-   `FuzzyNameCandidateSearcher` with appropriate distance thresholds.
-3. **Not configuring max-distance-ratio** — Too high and false positives increase; too low and legitimate matches are
-   missed. Start with `0.2`.
-4. **Using `heuristic-only: true` in production** — This skips LLM bakeoff, which may miss matches that heuristics can't
-   detect. Only use for performance-critical paths.
+1. **Not using an entity resolver** — Without resolution, the same entity mentioned differently creates duplicates. Always configure at least `InMemoryEntityResolver`.
+2. **Skipping fuzzy matching** — Without fuzzy matching, "Alice Smith" and "Alic Smith" create separate entities. Use `FuzzyNameCandidateSearcher` with appropriate distance thresholds.
+3. **Not configuring max-distance-ratio** — Too high and false positives increase; too low and legitimate matches are missed. Start with `0.2`.
+4. **Using `heuristic-only: true` in production** — This skips LLM bakeoff, which may miss matches that heuristics can't detect. Only use for performance-critical paths.

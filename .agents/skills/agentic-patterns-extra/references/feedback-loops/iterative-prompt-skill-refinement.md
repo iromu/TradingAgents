@@ -10,15 +10,11 @@ tags: [refinement, iteration, prompts, skills, feedback, multi-mechanism, contin
 
 ## Problem
 
-Agent usage reveals gaps in prompts, skills, and tools—but how do you systematically improve them? When a workflow fails
-or behaves sub-optimally, you need multiple mechanisms to capture feedback and iterate. Single approaches aren't enough;
-you need a **multi-pronged refinement strategy**.
+Agent usage reveals gaps in prompts, skills, and tools—but how do you systematically improve them? When a workflow fails or behaves sub-optimally, you need multiple mechanisms to capture feedback and iterate. Single approaches aren't enough; you need a **multi-pronged refinement strategy**.
 
 ## Solution
 
-Implement **multiple complementary refinement mechanisms** that work together. No single mechanism catches all
-issues—you need layered approaches. This approach is grounded in RLHF research showing that human feedback is
-irreplaceable for alignment, while RLAIF demonstrates AI-assisted feedback enables scale.
+Implement **multiple complementary refinement mechanisms** that work together. No single mechanism catches all issues—you need layered approaches. This approach is grounded in RLHF research showing that human feedback is irreplaceable for alignment, while RLAIF demonstrates AI-assisted feedback enables scale.
 
 **Four key mechanisms:**
 
@@ -116,20 +112,17 @@ Include subjective eval after each run:
 
 **Workflow archetypes:**
 
-| Type                             | Refinement Strategy                |
-|----------------------------------|------------------------------------|
-| **Chatbots**                     | Post-run evals + human-in-the-loop |
-| **Well-understood workflows**    | Code-driven (deterministic)        |
-| **Not-yet-understood workflows** | The open question                  |
+| Type | Refinement Strategy |
+|------|---------------------|
+| **Chatbots** | Post-run evals + human-in-the-loop |
+| **Well-understood workflows** | Code-driven (deterministic) |
+| **Not-yet-understood workflows** | The open question |
 
-**Open challenge:** How to scalably identify and iterate on "not-yet-well-understood" workflows without product
-engineers implementing each individually?
+**Open challenge:** How to scalably identify and iterate on "not-yet-well-understood" workflows without product engineers implementing each individually?
 
 ## References
 
-* [Iterative prompt and skill refinement](https://lethain.com/agents-iterative-refinement/) - Will Larson (Imprint,
-  2026)
+* [Iterative prompt and skill refinement](https://lethain.com/agents-iterative-refinement/) - Will Larson (Imprint, 2026)
 * [Constitutional AI: Harmlessness from AI Feedback](https://arxiv.org/abs/2212.08073) - Bai et al. (arXiv, 2022)
-* [Reflexion: Language Agents with Verbal Reinforcement Learning](https://arxiv.org/abs/2303.11366) - Shinn et al. (
-  NeurIPS, 2023)
+* [Reflexion: Language Agents with Verbal Reinforcement Learning](https://arxiv.org/abs/2303.11366) - Shinn et al. (NeurIPS, 2023)
 * Related: Dogfooding with Rapid Iteration, Compounding Engineering, Memory Synthesis from Execution Logs

@@ -5,9 +5,7 @@ description: Build proposition-based knowledge graphs that give AI agents struct
 
 # Embabel DICE — Domain-Integrated Context Engineering
 
-Build proposition-based knowledge graphs that give agents structured, confidence-weighted memory. DICE (
-Domain-Integrated Context Engineering) extends context engineering by emphasizing the importance of a domain model to
-structure context, and considering LLM outputs as well as inputs.
+Build proposition-based knowledge graphs that give agents structured, confidence-weighted memory. DICE (Domain-Integrated Context Engineering) extends context engineering by emphasizing the importance of a domain model to structure context, and considering LLM outputs as well as inputs.
 
 ## Output Quality
 
@@ -22,15 +20,13 @@ When producing code or documentation:
 
 ## Core Concepts
 
-DICE is built on a proposition-based architecture inspired by the General User Models (GUM) research from
-Stanford/Microsoft.
+DICE is built on a proposition-based architecture inspired by the General User Models (GUM) research from Stanford/Microsoft.
 
 ```
 Input → Pipeline → Propositions (System of Record) → Projections
 ```
 
-**Propositions** are confidence-weighted natural language statements. They are the system of record. Multiple
-observations accumulate evidence, and high-confidence propositions project to typed backends.
+**Propositions** are confidence-weighted natural language statements. They are the system of record. Multiple observations accumulate evidence, and high-confidence propositions project to typed backends.
 
 **Projections** (materialized views):
 | Projection | Backend | Use Case |
@@ -42,7 +38,6 @@ observations accumulate evidence, and high-confidence propositions project to ty
 | **Oracle** | NL QA | Natural language question answering |
 
 **Knowledge Types** (`KnowledgeType`):
-
 - `SEMANTIC` — General facts and knowledge
 - `EPISODIC` — Specific events and experiences
 - `PROCEDURAL` — How-to knowledge
@@ -61,7 +56,6 @@ observations accumulate evidence, and high-confidence propositions project to ty
 ```
 
 Additional modules:
-
 - `embabel-dice-neo4j` — Neo4j projections
 - `embabel-dice-prolog` — Prolog projections
 - `embabel-dice-vector` — Vector store projections
@@ -141,15 +135,15 @@ DataDictionary schema = DataDictionary.fromDomainTypes("my-schema", List.of(pers
 
 ### Mention Validation Rules
 
-| Rule                       | Description                                |
-|----------------------------|--------------------------------------------|
-| `NotBlank`                 | Rejects empty/whitespace mentions          |
-| `NoVagueReferences()`      | Rejects demonstratives like "this company" |
-| `LengthConstraint(max)`    | Enforces maximum length                    |
-| `MinWordCount(min)`        | Requires minimum word count                |
-| `PatternConstraint(regex)` | Enforces regex pattern                     |
-| `AllOf(rules...)`          | Compose — all rules must pass              |
-| `AnyOf(rules...)`          | Compose — any rule must pass               |
+| Rule | Description |
+|------|-------------|
+| `NotBlank` | Rejects empty/whitespace mentions |
+| `NoVagueReferences()` | Rejects demonstratives like "this company" |
+| `LengthConstraint(max)` | Enforces maximum length |
+| `MinWordCount(min)` | Requires minimum word count |
+| `PatternConstraint(regex)` | Enforces regex pattern |
+| `AllOf(rules...)` | Compose — all rules must pass |
+| `AnyOf(rules...)` | Compose — any rule must pass |
 
 ## Proposition Pipeline
 
@@ -275,11 +269,9 @@ IncrementalAnalyzer<String, PropositionResult> incrementalAnalyzer(
 
 ## Entity Resolution
 
-Entity resolution maps mentions to canonical entities, preventing duplicates. See `references/entity-resolution.md` for
-full details on resolver types, candidate searchers, and bakeoff configuration.
+Entity resolution maps mentions to canonical entities, preventing duplicates. See `references/entity-resolution.md` for full details on resolver types, candidate searchers, and bakeoff configuration.
 
-**Recommended:** `EscalatingEntityResolver` with `LlmCandidateBakeoff` — uses heuristics first, falls back to LLM when
-uncertain.
+**Recommended:** `EscalatingEntityResolver` with `LlmCandidateBakeoff` — uses heuristics first, falls back to LLM when uncertain.
 
 ```java
 @Bean
@@ -289,11 +281,9 @@ EntityResolver entityResolver(EntityRepository entityRepository, Ai ai, LlmOptio
 }
 ```
 
-**Resolution outcomes:** `NewEntity` (no match), `ExistingEntity` (match found), `ReferenceOnlyEntity` (known entity),
-`VetoedEntity` (non-creatable type).
+**Resolution outcomes:** `NewEntity` (no match), `ExistingEntity` (match found), `ReferenceOnlyEntity` (known entity), `VetoedEntity` (non-creatable type).
 
 **Entity extraction** (standalone, without proposition pipeline):
-
 ```java
 var results = EntityPipeline.builder().withExtractor(extractor).build().process(chunks, context);
 ```
@@ -338,8 +328,7 @@ var confidentFacts = repository.query(
 
 ## Memory — Agentic Recall
 
-The `Memory` facade provides agents access to DICE knowledge. See `references/memory.md` for eager search patterns,
-context scoping, and configuration.
+The `Memory` facade provides agents access to DICE knowledge. See `references/memory.md` for eager search patterns, context scoping, and configuration.
 
 ```java
 var memory = Memory.forContext(contextId)
@@ -354,8 +343,7 @@ var memory = Memory.forContext(contextId)
 ai.withReferences(memory).respond(prompt);
 ```
 
-**Key settings:** `withMinConfidence` (default 0.5), `withDefaultLimit` (default 10), `withTopic`,
-`withEagerSearchAbout`, `narrowedBy`.
+**Key settings:** `withMinConfidence` (default 0.5), `withDefaultLimit` (default 10), `withTopic`, `withEagerSearchAbout`, `narrowedBy`.
 
 ## Memory Maintenance
 
@@ -376,8 +364,7 @@ memoryMaintenanceOrchestrator.maintain(contextId, sessionProps);
 
 ## Projections
 
-Projections materialize propositions to typed backends. See `references/projections.md` for full setup details on
-Vector, Neo4j, Prolog, Memory, and Oracle projections.
+Projections materialize propositions to typed backends. See `references/projections.md` for full setup details on Vector, Neo4j, Prolog, Memory, and Oracle projections.
 
 ### Relation-Based Graph Projection (Neo4j)
 
@@ -437,32 +424,20 @@ public class KnowledgeAgent {
 
 ## Common Pitfalls
 
-1. **Not setting a schema** — Without a DataDictionary, the pipeline accepts any proposition structure. Always define
-   types with validation rules.
-2. **Skipping entity resolution** — Without an EntityResolver, the same entity mentioned differently creates duplicates.
-   Use `EscalatingEntityResolver` with `LlmCandidateBakeoff`.
-3. **Not using deduplication** — Without `processOnce` or a `ChunkHistoryStore`, identical content is reprocessed.
-   Always use deduplication for production.
-4. **Ignoring mention filters** — Without `SchemaValidatedMentionFilter`, low-quality mentions pollute the knowledge
-   graph. Always validate.
-5. **Not scoping by ContextId** — Without context scoping, propositions from different users/sessions mix together.
-   Always use `ContextId`.
-6. **Not configuring memory eager search** — Without `withEagerSearchAbout`, the agent must search on every turn.
-   Preload context for better latency.
-7. **Not maintaining the knowledge graph** — Over time, low-confidence propositions accumulate. Run
-   `MemoryMaintenanceOrchestrator` periodically.
-8. **Using SchemaAdherence.LOOSE in production** — Loose adherence allows the LLM to create arbitrary proposition
-   structures. Use `STRICT` for schema compliance.
-9. **Not setting min-confidence on Memory** — Without `withMinConfidence`, low-quality propositions flood the agent's
-   context. Set an appropriate threshold.
-10. **Forgetting to persist results** — `processOnce` and `process` return results but don't auto-persist. Call
-    `result.persist(repository, entityRepository)` or configure auto-persist.
+1. **Not setting a schema** — Without a DataDictionary, the pipeline accepts any proposition structure. Always define types with validation rules.
+2. **Skipping entity resolution** — Without an EntityResolver, the same entity mentioned differently creates duplicates. Use `EscalatingEntityResolver` with `LlmCandidateBakeoff`.
+3. **Not using deduplication** — Without `processOnce` or a `ChunkHistoryStore`, identical content is reprocessed. Always use deduplication for production.
+4. **Ignoring mention filters** — Without `SchemaValidatedMentionFilter`, low-quality mentions pollute the knowledge graph. Always validate.
+5. **Not scoping by ContextId** — Without context scoping, propositions from different users/sessions mix together. Always use `ContextId`.
+6. **Not configuring memory eager search** — Without `withEagerSearchAbout`, the agent must search on every turn. Preload context for better latency.
+7. **Not maintaining the knowledge graph** — Over time, low-confidence propositions accumulate. Run `MemoryMaintenanceOrchestrator` periodically.
+8. **Using SchemaAdherence.LOOSE in production** — Loose adherence allows the LLM to create arbitrary proposition structures. Use `STRICT` for schema compliance.
+9. **Not setting min-confidence on Memory** — Without `withMinConfidence`, low-quality propositions flood the agent's context. Set an appropriate threshold.
+10. **Forgetting to persist results** — `processOnce` and `process` return results but don't auto-persist. Call `result.persist(repository, entityRepository)` or configure auto-persist.
 
 ## Reference Files
 
-- `references/pipeline.md` — Proposition pipeline architecture, extractor/reviser templates, deduplication, incremental
-  analysis
+- `references/pipeline.md` — Proposition pipeline architecture, extractor/reviser templates, deduplication, incremental analysis
 - `references/projections.md` — Projection backends (Vector, Neo4j, Prolog, Memory, Oracle) setup and configuration
-- `references/entity-resolution.md` — Entity resolver types, candidate searchers, bakeoff configuration, resolution
-  outcomes
+- `references/entity-resolution.md` — Entity resolver types, candidate searchers, bakeoff configuration, resolution outcomes
 - `references/memory.md` — Memory facade, eager search patterns, context scoping, integration with LLM calls

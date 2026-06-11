@@ -35,8 +35,7 @@ Teams end up building two interfaces or choosing one audience over the other.
 
 ## Solution
 
-Design all skills as **CLI tools first**. A well-designed CLI is naturally dual-use: humans can invoke it from the
-terminal, and agents can invoke it via shell commands.
+Design all skills as **CLI tools first**. A well-designed CLI is naturally dual-use: humans can invoke it from the terminal, and agents can invoke it via shell commands.
 
 ```mermaid
 graph LR

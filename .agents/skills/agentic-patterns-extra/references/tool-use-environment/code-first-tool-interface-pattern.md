@@ -27,9 +27,7 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-Traditional Model Context Protocol (MCP) approaches of directly exposing tools to Large Language Models create
-significant token waste and complexity issues. We've moved from telling LLMs what to do, to teaching them to write
-instructions for themselves—it's **turtles writing code all the way down**[^1] for all domains.
+Traditional Model Context Protocol (MCP) approaches of directly exposing tools to Large Language Models create significant token waste and complexity issues. We've moved from telling LLMs what to do, to teaching them to write instructions for themselves—it's **turtles writing code all the way down**[^1] for all domains.
 
 ### Token Waste in Multi-Step Operations
 
@@ -41,8 +39,7 @@ LLM → tool #3 → large JSON response → LLM context
 → final answer
 ```
 
-Every intermediate result must ride back through the model's context, burning tokens and adding latency at each step.
-For complex workflows requiring 5-10 tool calls, this becomes extremely expensive.
+Every intermediate result must ride back through the model's context, burning tokens and adding latency at each step. For complex workflows requiring 5-10 tool calls, this becomes extremely expensive.
 
 ### Fan-Out Inefficiency at Scale
 
@@ -55,8 +52,7 @@ The traditional approach breaks down dramatically with bulk operations:
 - Total context bloat: 100k+ tokens before any actual work begins
 - Result: Context overflow, degraded performance, or outright failure
 
-**Code Mode alternative:** Simple `for` loop over 100 entries, processing entirely within the sandbox with only final
-results surfaced to LLM context.
+**Code Mode alternative:** Simple `for` loop over 100 entries, processing entirely within the sandbox with only final results surfaced to LLM context.
 
 ### Core Interface Limitations
 
@@ -70,8 +66,7 @@ The fundamental insight: **LLMs are better at writing code to orchestrate MCP to
 
 ## Solution
 
-Code Mode complements (not replaces) MCP servers by adding an ephemeral execution layer that eliminates token-heavy
-round-trips:
+Code Mode complements (not replaces) MCP servers by adding an ephemeral execution layer that eliminates token-heavy round-trips:
 
 ### The Division of Responsibilities
 
@@ -99,19 +94,16 @@ round-trips:
 5. **V8 Isolate Execution**: Lightweight, secure sandbox that dies after execution (no persistent state)
 6. **Controlled Bindings**: Secure bridges to MCP servers that own the real credentials and logic
 
-**Key Insight**: The LLM knows what code to write because it receives the complete TypeScript API generated from MCP
-server schemas, not because it guesses - it's provided with strongly-typed interfaces and documentation.
+**Key Insight**: The LLM knows what code to write because it receives the complete TypeScript API generated from MCP server schemas, not because it guesses - it's provided with strongly-typed interfaces and documentation.
 
 ### Enhanced Capabilities
 
 - **Verification**: Compile-time validation catches errors before execution
-- **Static Analysis**: Code-first patterns enable formal verification (e.g., CaMeL's taint analysis for
-  security-sensitive workflows)
+- **Static Analysis**: Code-first patterns enable formal verification (e.g., CaMeL's taint analysis for security-sensitive workflows)
 - **Semantic Caching**: Reuse successful workflows via typed API signatures
 - **Idempotency**: Checkpoint/resume patterns using KV stores for partial failure recovery
 
-This creates a "best of both worlds" approach: MCP servers handle the operational complexity while Code Mode eliminates
-the chatty, token-expensive parts of multi-step workflows.
+This creates a "best of both worlds" approach: MCP servers handle the operational complexity while Code Mode eliminates the chatty, token-expensive parts of multi-step workflows.
 
 ## When to Use Code Mode
 
@@ -121,15 +113,13 @@ the chatty, token-expensive parts of multi-step workflows.
 
 Code Mode excels when you have clear sequences of operations:
 
-- **Infrastructure provisioning**: "Please provision an EC2 instance of m4 class that I can SSH to, place that in public
-  SG and attach an IPGW, make sure it's tagged nicely"
+- **Infrastructure provisioning**: "Please provision an EC2 instance of m4 class that I can SSH to, place that in public SG and attach an IPGW, make sure it's tagged nicely"
 - **Data pipeline orchestration**: Extract from API A, transform according to rules B, load into system C
 - **Bulk operations**: Processing 100+ items where traditional MCP would exceed context limits
 
 **Fan-Out Scenarios:**
 
-Much easier to one-shot code with a `for` loop over 100 entries instead of expecting an LLM to nail 100 tool calls,
-either in parallel or sequentially. Performance only gets worse with bigger N, but Code Mode stays fast.
+Much easier to one-shot code with a `for` loop over 100 entries instead of expecting an LLM to nail 100 tool calls, either in parallel or sequentially. Performance only gets worse with bigger N, but Code Mode stays fast.
 
 **CaMeL-Style Self-Debugging:**
 
@@ -145,24 +135,19 @@ Agents debug their own homework with built-in error handling, logging, and retry
 
 **Open-Ended Research Loops:**
 
-Code Mode struggles with problems where you decide at each step what to even do next. You can try to account for each
-edge case, but it defeats the purpose.
+Code Mode struggles with problems where you decide at each step what to even do next. You can try to account for each edge case, but it defeats the purpose.
 
 **Intelligence Required Mid-Execution:**
 
-Right now, Code Mode especially fails at cases where intelligence needs to be _inserted in the middle of code_. Example:
-A spreadsheet with 100 emails where you want to write a *personalized* email for each entry. The `body` argument for
-that `send_email` call must be computed using LLM for personalization.
+Right now, Code Mode especially fails at cases where intelligence needs to be _inserted in the middle of code_. Example: A spreadsheet with 100 emails where you want to write a *personalized* email for each entry. The `body` argument for that `send_email` call must be computed using LLM for personalization.
 
 **Highly Dynamic Workflows:**
 
-When the sequence of operations depends heavily on intermediate results in unpredictable ways, traditional MCP's
-step-by-step approach may be more appropriate.
+When the sequence of operations depends heavily on intermediate results in unpredictable ways, traditional MCP's step-by-step approach may be more appropriate.
 
 ## Example: EC2 Infrastructure Provisioning
 
-**User Request:** "Please provision an EC2 instance of m4 class that I can SSH to, place that in public SG and attach an
-IPGW, make sure it's tagged nicely"
+**User Request:** "Please provision an EC2 instance of m4 class that I can SSH to, place that in public SG and attach an IPGW, make sure it's tagged nicely"
 
 This demonstrates Code Mode's strength with workflow-like problems:
 
@@ -228,8 +213,7 @@ for (const contact of contacts) {
 }
 ```
 
-**Why it fails:** You're back to traditional agenting, just wrapped in TypeScript. Each `callLLM()` requires context
-round-trips, eliminating Code Mode's token efficiency benefits.
+**Why it fails:** You're back to traditional agenting, just wrapped in TypeScript. Each `callLLM()` requires context round-trips, eliminating Code Mode's token efficiency benefits.
 
 ## How to use it
 
@@ -237,11 +221,11 @@ round-trips, eliminating Code Mode's token efficiency benefits.
 2. **Implement Bindings**: Develop secure bindings that control access to external resources
 3. **Sandbox Setup**: Configure V8 isolates with appropriate security constraints
 4. **Code Execution Flow**:
-
+   
 - LLM generates TypeScript code using the provided APIs
-    - Code runs in isolated V8 environment
-    - Bindings provide controlled access to tools
-    - Results return to the agent for further processing
+   - Code runs in isolated V8 environment
+   - Bindings provide controlled access to tools
+   - Results return to the agent for further processing
 
 ## Traditional MCP vs Code Mode Comparison
 
@@ -279,8 +263,7 @@ User Request → LLM → Generated Code → V8 Isolate
 
 **Pros:**
 
-- **Dramatic token savings** on multi-step workflows (10-100x reduction; Anthropic reports 75x on 10K-row spreadsheets:
-  150K → 2K tokens)
+- **Dramatic token savings** on multi-step workflows (10-100x reduction; Anthropic reports 75x on 10K-row spreadsheets: 150K → 2K tokens)
 - **Dramatic fan-out efficiency** - for loops over 100+ entries vs 100+ tool calls (speed + reliability at scale)
 - **Faster execution** through elimination of round-trips
 - **Enhanced security** - credentials stay in MCP servers, never in LLM
@@ -322,12 +305,9 @@ User Request → LLM → Generated Code → V8 Isolate
 ## References
 
 - [Cloudflare Code Mode Blog Post](https://blog.cloudflare.com/code-mode/) - Original announcement and technical details
-- [Anthropic Engineering: Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp) -
-  Code-Over-API pattern with data processing examples
-- [CaMeL: Code-Augmented Language Model (Beurer-Kellner et al., 2025)](https://arxiv.org/abs/2506.08837) - Formal
-  verification and taint analysis for code-first tool use
+- [Anthropic Engineering: Code Execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp) - Code-Over-API pattern with data processing examples
+- [CaMeL: Code-Augmented Language Model (Beurer-Kellner et al., 2025)](https://arxiv.org/abs/2506.08837) - Formal verification and taint analysis for code-first tool use
 - [Model Context Protocol](https://modelcontextprotocol.io/) - Background on traditional tool calling approaches
-- [Rafal Wilinski's Code Mode Analysis](https://x.com/rafalwilinski/status/1972362720579035146) - Real-world insights on
-  Code Mode strengths and limitations
+- [Rafal Wilinski's Code Mode Analysis](https://x.com/rafalwilinski/status/1972362720579035146) - Real-world insights on Code Mode strengths and limitations
 
 [^1]: Phrase coined by Rafal Wilinski in his Code Mode analysis

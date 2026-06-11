@@ -38,11 +38,11 @@ for the specific pattern you need.
 
 Patterns for managing the agent's context window efficiently and securely.
 
-| Pattern                       | Reference File                                             | Status                          |
-|-------------------------------|------------------------------------------------------------|---------------------------------|
-| **Context Minimization**      | `references/context-minimization-pattern-report.md`        | Validated at Anthropic & OpenAI |
-| **Episodic Memory Retrieval** | `references/episodic-memory-retrieval-injection-report.md` | Best practice                   |
-| **Context Window Anxiety**    | `references/context-window-anxiety-management-report.md`   | Emerging                        |
+| Pattern | Reference File | Status |
+|---------|---------------|--------|
+| **Context Minimization** | `references/context-minimization-pattern-report.md` | Validated at Anthropic & OpenAI |
+| **Episodic Memory Retrieval** | `references/episodic-memory-retrieval-injection-report.md` | Best practice |
+| **Context Window Anxiety** | `references/context-window-anxiety-management-report.md` | Emerging |
 
 **Key insight:** Context minimization eliminates delayed prompt-injection attacks
 while reducing token consumption 10-100x. Treat context as a staged pipeline:
@@ -52,10 +52,10 @@ ingest untrusted text → transform → aggressively discard.
 
 Patterns for how agents reason, plan, and make decisions.
 
-| Pattern                           | Reference File                                                  | Status        |
-|-----------------------------------|-----------------------------------------------------------------|---------------|
-| **Graph of Thoughts**             | `references/graph-of-thoughts-report.md`                        | Best practice |
-| **Posterior-Sampling Planner**    | `references/explicit-posterior-sampling-planner-report.md`      | Emerging      |
+| Pattern | Reference File | Status |
+|---------|---------------|--------|
+| **Graph of Thoughts** | `references/graph-of-thoughts-report.md` | Best practice |
+| **Posterior-Sampling Planner** | `references/explicit-posterior-sampling-planner-report.md` | Emerging |
 | **CoT Monitoring & Interruption** | `references/chain-of-thought-monitoring-interruption-report.md` | Best practice |
 
 **Key insight:** Graph of Thoughts generalizes Chain-of-Thought and Tree-of-Thoughts,
@@ -66,11 +66,11 @@ their approach iteratively.
 
 Patterns for structuring and orchestrating autonomous agents.
 
-| Pattern                             | Reference File                                                 | Status                  |
-|-------------------------------------|----------------------------------------------------------------|-------------------------|
-| **Agent-Driven Research**           | `references/agent-driven-research-report.md`                   | Best practice           |
-| **Codebase QA & Onboarding**        | `references/agent-powered-codebase-qa-onboarding-report.md`    | Validated-in-production |
-| **Continuous Autonomous Task Loop** | `references/continuous-autonomous-task-loop-pattern-report.md` | Best practice           |
+| Pattern | Reference File | Status |
+|---------|---------------|--------|
+| **Agent-Driven Research** | `references/agent-driven-research-report.md` | Best practice |
+| **Codebase QA & Onboarding** | `references/agent-powered-codebase-qa-onboarding-report.md` | Validated-in-production |
+| **Continuous Autonomous Task Loop** | `references/continuous-autonomous-task-loop-pattern-report.md` | Best practice |
 
 **Key insight:** Agent-driven research maintains awareness of what has been covered,
 identifies gaps, determines next exploration directions autonomously, and iterates
@@ -80,11 +80,11 @@ until sufficient information is gathered — unlike traditional RAG.
 
 Patterns for how agents interact with code and tools effectively.
 
-| Pattern                           | Reference File                                         | Status        |
-|-----------------------------------|--------------------------------------------------------|---------------|
+| Pattern | Reference File | Status |
+|---------|---------------|--------|
 | **Agent-First Tooling & Logging** | `references/agent-first-tooling-and-logging-report.md` | Best practice |
-| **Code-Over-API**                 | `references/code-over-api-pattern-report.md`           | Established   |
-| **CLI-First Skill Design**        | `references/cli-first-skill-design-report.md`          | Best practice |
+| **Code-Over-API** | `references/code-over-api-pattern-report.md` | Established |
+| **CLI-First Skill Design** | `references/cli-first-skill-design-report.md` | Best practice |
 
 **Key insight:** Code-over-API achieves 75-2000x token reduction by having agents
 write code instead of making direct API calls. Validated at Anthropic, Cloudflare,
@@ -94,11 +94,11 @@ and Cognition.
 
 Patterns for protecting agents and their outputs.
 
-| Pattern                          | Reference File                                                 | Status        |
-|----------------------------------|----------------------------------------------------------------|---------------|
-| **Egress Lockdown**              | `references/egress-lockdown-no-exfiltration-channel-report.md` | Established   |
-| **Hook-Based Safety Guardrails** | `references/hook-based-safety-guard-rails-report.md`           | Best practice |
-| **Anti-Reward-Hacking Grader**   | `references/anti-reward-hacking-grader-design-report.md`       | Best practice |
+| Pattern | Reference File | Status |
+|---------|---------------|--------|
+| **Egress Lockdown** | `references/egress-lockdown-no-exfiltration-channel-report.md` | Established |
+| **Hook-Based Safety Guardrails** | `references/hook-based-safety-guard-rails-report.md` | Best practice |
+| **Anti-Reward-Hacking Grader** | `references/anti-reward-hacking-grader-design-report.md` | Best practice |
 
 **Key insight:** Hook-based guardrails run safety checks *outside* the agent's
 reasoning loop (PreToolUse/PostToolUse), preventing the agent from rationalizing
@@ -108,10 +108,10 @@ past its own safety constraints.
 
 Patterns for integrating agents into development workflows.
 
-| Pattern                           | Reference File                                       | Status                  |
-|-----------------------------------|------------------------------------------------------|-------------------------|
-| **Coding Agent CI Feedback Loop** | `references/coding-agent-ci-feedback-loop-report.md` | Best practice           |
-| **Background Agent CI**           | `references/background-agent-ci-report.md`           | Validated-in-production |
+| Pattern | Reference File | Status |
+|---------|---------------|--------|
+| **Coding Agent CI Feedback Loop** | `references/coding-agent-ci-feedback-loop-report.md` | Best practice |
+| **Background Agent CI** | `references/background-agent-ci-report.md` | Validated-in-production |
 
 **Key insight:** Branch-per-task isolation with CI log ingestion and retry budgets
 enables agents to iterate on code changes autonomously while maintaining reliable
@@ -121,10 +121,10 @@ feedback channels.
 
 Patterns for managing agent costs and model selection.
 
-| Pattern                             | Reference File                                                        | Status        |
-|-------------------------------------|-----------------------------------------------------------------------|---------------|
-| **Budget-Aware Model Routing**      | `references/budget-aware-model-routing-with-hard-cost-caps-report.md` | Best practice |
-| **Agent Reinforcement Fine-Tuning** | `references/agent-reinforcement-fine-tuning-report.md`                | Emerging      |
+| Pattern | Reference File | Status |
+|---------|---------------|--------|
+| **Budget-Aware Model Routing** | `references/budget-aware-model-routing-with-hard-cost-caps-report.md` | Best practice |
+| **Agent Reinforcement Fine-Tuning** | `references/agent-reinforcement-fine-tuning-report.md` | Emerging |
 
 **Key insight:** Hard cost caps with SLA-aware routing (FrugalGST, RouteLLM,
 xRouter) enable agents to balance quality and cost dynamically, automatically
@@ -134,14 +134,14 @@ selecting the cheapest model that meets quality thresholds.
 
 Patterns for designing effective agent workflows and team structures.
 
-| Pattern                            | Reference File                                                      | Status        |
-|------------------------------------|---------------------------------------------------------------------|---------------|
-| **Agent-Friendly Workflow Design** | `references/agent-friendly-workflow-design-report.md`               | Best practice |
-| **Factory Over Assistant**         | `references/factory-over-assistant-report.md`                       | Emerging      |
-| **Burn the Boats**                 | `references/burn-the-boats-report.md`                               | Best practice |
-| **Compounding Engineering**        | `references/compounding-engineering-pattern-report.md`              | Emerging      |
-| **Disposable Scaffolding**         | `references/disposable-scaffolding-over-durable-features-report.md` | Best practice |
-| **Dual-LLM Pattern**               | `references/dual-llm-pattern-report.md`                             | Best practice |
+| Pattern | Reference File | Status |
+|---------|---------------|--------|
+| **Agent-Friendly Workflow Design** | `references/agent-friendly-workflow-design-report.md` | Best practice |
+| **Factory Over Assistant** | `references/factory-over-assistant-report.md` | Emerging |
+| **Burn the Boats** | `references/burn-the-boats-report.md` | Best practice |
+| **Compounding Engineering** | `references/compounding-engineering-pattern-report.md` | Emerging |
+| **Disposable Scaffolding** | `references/disposable-scaffolding-over-durable-features-report.md` | Best practice |
+| **Dual-LLM Pattern** | `references/dual-llm-pattern-report.md` | Best practice |
 
 **Key insight:** The Factory-over-Assistant paradigm moves from sidebar-based agents
 to autonomous parallel spawning — agents spawn sub-agents with specific roles,
@@ -190,13 +190,13 @@ These combinations work well together in production:
 
 Several patterns have been validated-in-production at major companies:
 
-| Pattern              | Companies                                   | Evidence                                 |
-|----------------------|---------------------------------------------|------------------------------------------|
-| Context Minimization | Anthropic (Claude Code), OpenAI (Codex)     | Documented 10-100x token reduction       |
-| Code-Over-API        | Anthropic, Cloudflare, Cognition            | Documented 75-2000x token reduction      |
-| Dual-LLM             | OpenAI, Anthropic, Sourcegraph              | 30-50% bug reduction, 90% cost reduction |
-| CI Feedback Loop     | GitHub Agentic Workflows, Cursor, OpenHands | Production deployment                    |
-| Egress Lockdown      | Microsoft, GitHub, GitLab, AWS, Azure, GCP  | Vendor implementations                   |
+| Pattern | Companies | Evidence |
+|---------|-----------|----------|
+| Context Minimization | Anthropic (Claude Code), OpenAI (Codex) | Documented 10-100x token reduction |
+| Code-Over-API | Anthropic, Cloudflare, Cognition | Documented 75-2000x token reduction |
+| Dual-LLM | OpenAI, Anthropic, Sourcegraph | 30-50% bug reduction, 90% cost reduction |
+| CI Feedback Loop | GitHub Agentic Workflows, Cursor, OpenHands | Production deployment |
+| Egress Lockdown | Microsoft, GitHub, GitLab, AWS, Azure, GCP | Vendor implementations |
 
 ## Source Attribution
 

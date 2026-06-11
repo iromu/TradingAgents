@@ -12,10 +12,7 @@
 
 ## Executive Summary
 
-The **Compounding Engineering Pattern** is a methodology for AI-assisted software development that systematically
-captures and codifies knowledge from completed features to make subsequent features easier to build. It transforms
-traditional software engineering's diminishing returns model (where each feature adds complexity) into an accelerating
-returns model.
+The **Compounding Engineering Pattern** is a methodology for AI-assisted software development that systematically captures and codifies knowledge from completed features to make subsequent features easier to build. It transforms traditional software engineering's diminishing returns model (where each feature adds complexity) into an accelerating returns model.
 
 **Origin:** Industry practice from Dan Shipper and the Every Engineering Team
 **Source:** AI & I Podcast: "How to Use Claude Code Like the People Who Built It"
@@ -26,18 +23,12 @@ returns model.
 ## Core Concept Definition
 
 ### Problem Statement
+Traditional software engineering has **diminishing returns**: each feature added increases complexity, making subsequent features harder to build. Technical debt accumulates, onboarding takes longer, and new team members struggle to be productive.
 
-Traditional software engineering has **diminishing returns**: each feature added increases complexity, making subsequent
-features harder to build. Technical debt accumulates, onboarding takes longer, and new team members struggle to be
-productive.
-
-With AI coding agents, this problem is amplified—agents make the same mistakes repeatedly because learnings aren't
-systematically captured and codified.
+With AI coding agents, this problem is amplified—agents make the same mistakes repeatedly because learnings aren't systematically captured and codified.
 
 ### Solution Approach
-
-Flip the equation: make each feature **compound** by codifying all learnings into reusable agent instructions. When you
-complete a feature, document:
+Flip the equation: make each feature **compound** by codifying all learnings into reusable agent instructions. When you complete a feature, document:
 
 1. **What worked in the plan** and what needed adjustment
 2. **Issues discovered during testing** that weren't caught earlier
@@ -57,22 +48,19 @@ Then embed these insights into:
 
 ## Key Principles
 
-1. **Knowledge Codification**: After completing each feature, document what worked, what didn't, common mistakes, and
-   patterns that should be reused.
+1. **Knowledge Codification**: After completing each feature, document what worked, what didn't, common mistakes, and patterns that should be reused.
 
 2. **Reusable Instruction Forms**: Convert learnings into:
-    - Claude MD/system prompts (global coding standards)
-    - Slash commands (repeatable workflows)
-    - Subagents (specialized validators)
-    - Hooks (automated checks preventing regressions)
+   - Claude MD/system prompts (global coding standards)
+   - Slash commands (repeatable workflows)
+   - Subagents (specialized validators)
+   - Hooks (automated checks preventing regressions)
 
-3. **Accelerating Productivity**: Each feature genuinely makes the next faster because the codebase becomes
-   increasingly "self-teaching"
+3. **Accelerating Productivity**: Each feature genuinely makes the next faster because the codebase becomes increasingly "self-teaching"
 
 4. **Living Documentation**: Instructions stay current because they're used and refined daily
 
-5. **Cross-Team Knowledge Transfer**: New team members (human or AI) can be productive immediately without learning the
-   entire codebase
+5. **Cross-Team Knowledge Transfer**: New team members (human or AI) can be productive immediately without learning the entire codebase
 
 ---
 
@@ -103,18 +91,17 @@ graph LR
 - **File:** `patterns/skill-library-evolution.md`
 - **Relationship:** Builds agent capability over time by persisting working code as reusable functions
 - **Similarities:**
-    - Follows similar evolution path: ad-hoc code → reusable function → documented skill → agent capability
-    - Both focus on progressive accumulation of capabilities
-- **Differences:** Skill Library Evolution focuses on code-level capabilities; Compounding Engineering focuses on
-  process-level learnings
+  - Follows similar evolution path: ad-hoc code → reusable function → documented skill → agent capability
+  - Both focus on progressive accumulation of capabilities
+- **Differences:** Skill Library Evolution focuses on code-level capabilities; Compounding Engineering focuses on process-level learnings
 
 #### 2. Memory Synthesis from Execution Logs (Emerging)
 - **File:** `patterns/memory-synthesis-from-execution-logs.md`
 - **Relationship:** Provides the mechanism to identify patterns across multiple features
 - **How it complements:**
-    - Two-tier memory system: task diaries + synthesis agents
-    - Extracts reusable patterns across multiple task executions
-    - Feeds synthesized insights back into system prompts, commands, and tests
+  - Two-tier memory system: task diaries + synthesis agents
+  - Extracts reusable patterns across multiple task executions
+  - Feeds synthesized insights back into system prompts, commands, and tests
 
 ### Feedback & Iteration Patterns
 
@@ -122,24 +109,23 @@ graph LR
 - **File:** `patterns/iterative-prompt-skill-refinement.md`
 - **Relationship:** Provides refinement mechanisms for improving codified knowledge
 - **Complementary aspects:**
-    - Multiple complementary refinement mechanisms for improving prompts and skills
-    - Responsive feedback, owner-led refinement, Claude-enhanced refinement, dashboard tracking
+  - Multiple complementary refinement mechanisms for improving prompts and skills
+  - Responsive feedback, owner-led refinement, Claude-enhanced refinement, dashboard tracking
 
 #### 4. Coding Agent CI Feedback Loop (Best Practice)
 - **File:** `patterns/coding-agent-ci-feedback-loop.md`
 - **Relationship:** Provides structured feedback from testing that can be codified
 - **Complementary aspects:**
-    - Asynchronous CI integration allowing agents to work while tests run
-    - Iterative patch refinement based on test feedback
-    - Machine-readable error translation into fixes
+  - Asynchronous CI integration allowing agents to work while tests run
+  - Iterative patch refinement based on test feedback
+  - Machine-readable error translation into fixes
 
 ### Progressive & Accumulation Patterns
 
 #### 5. Progressive Autonomy with Model Evolution (Best Practice)
 - **File:** `patterns/progressive-autonomy-with-model-evolution.md`
 - **Relationship:** Actively removes scaffolding as models become more capable
-- **Contrast:** While Progressive Autonomy focuses on capability growth, Compounding Engineering focuses on knowledge
-  growth
+- **Contrast:** While Progressive Autonomy focuses on capability growth, Compounding Engineering focuses on knowledge growth
 
 #### 6. Progressive Complexity Escalation (Emerging)
 - **File:** `patterns/progressive-complexity-escalation.md`
@@ -166,19 +152,19 @@ graph LR
 These patterns provide the foundation needed for compounding engineering to work effectively:
 
 1. **Team-Shared Agent Configuration as Code** (best-practice)
-    - Establishes the shared configuration repository where codified knowledge lives
-    - Provides the mechanism for distributing slash commands and subagents across the team
-    - Ensures consistent behavior so compounding benefits everyone equally
+   - Establishes the shared configuration repository where codified knowledge lives
+   - Provides the mechanism for distributing slash commands and subagents across the team
+   - Ensures consistent behavior so compounding benefits everyone equally
 
 2. **Agent-Friendly Workflow Design** (best-practice)
-    - Creates the collaborative environment where agents have appropriate autonomy
-    - Establishes structured feedback loops for capturing learnings
-    - Ensures workflows are designed to benefit from accumulated knowledge
+   - Creates the collaborative environment where agents have appropriate autonomy
+   - Establishes structured feedback loops for capturing learnings
+   - Ensures workflows are designed to benefit from accumulated knowledge
 
 3. **Hook-Based Safety Guard Rails** (validated-in-production)
-    - Provides safety mechanisms that can be codified as part of compounding
-    - Creates automated checks that prevent recurring mistakes
-    - Ensures compounding doesn't amplify bad patterns
+   - Provides safety mechanisms that can be codified as part of compounding
+   - Creates automated checks that prevent recurring mistakes
+   - Ensures compounding doesn't amplify bad patterns
 
 ### Complementary Patterns
 These patterns enhance and work alongside compounding engineering:
@@ -230,23 +216,23 @@ Compounding Engineering Pattern (Core):
 
 ### Pros
 
-| Benefit                       | Description                                                   |
-|-------------------------------|---------------------------------------------------------------|
-| **Accelerating productivity** | Each feature genuinely makes the next faster                  |
-| **Knowledge preservation**    | Learnings don't depend on individual memory                   |
-| **Better onboarding**         | New team members (human or AI) leverage accumulated knowledge |
-| **Reduced repetition**        | Agent stops making the same mistakes                          |
-| **Living documentation**      | Instructions stay current because they're used daily          |
+| Benefit | Description |
+|---------|-------------|
+| **Accelerating productivity** | Each feature genuinely makes the next faster |
+| **Knowledge preservation** | Learnings don't depend on individual memory |
+| **Better onboarding** | New team members (human or AI) leverage accumulated knowledge |
+| **Reduced repetition** | Agent stops making the same mistakes |
+| **Living documentation** | Instructions stay current because they're used daily |
 
 ### Cons
 
-| Challenge                   | Description                                                 |
-|-----------------------------|-------------------------------------------------------------|
-| **Upfront time investment** | Requires discipline to document after each feature          |
-| **Maintenance overhead**    | Prompts and commands need updates as patterns change        |
-| **Over-specification risk** | Too many rules can make agents inflexible                   |
-| **Requires tooling**        | Needs extensible agent system (slash commands, hooks, etc.) |
-| **Prompt bloat**            | System prompts can grow large over time                     |
+| Challenge | Description |
+|-----------|-------------|
+| **Upfront time investment** | Requires discipline to document after each feature |
+| **Maintenance overhead** | Prompts and commands need updates as patterns change |
+| **Over-specification risk** | Too many rules can make agents inflexible |
+| **Requires tooling** | Needs extensible agent system (slash commands, hooks, etc.) |
+| **Prompt bloat** | System prompts can grow large over time |
 
 ---
 
@@ -255,24 +241,17 @@ Compounding Engineering Pattern (Core):
 ### Primary Sources
 
 1. **Dan Shipper & Every Engineering Team**
-    -
-    Source: [AI & I Podcast: How to Use Claude Code Like the People Who Built It](https://every.to/podcast/transcript-how-to-use-claude-code-like-the-people-who-built-it)
-    - Key Quotes:
-      > "In normal engineering, every feature you add, it makes it harder to add the next feature. In compounding
-      engineering, your goal is to make the next feature easier to build from the feature that you just added."
-      >
-      > "We codify all the learnings... how did we make the plan, what parts needed to be changed, when we started
-      testing it what issues did we find, what are the things that we missed, and then we codify them back into all the
-      prompts and all the subagents and all the slash commands."
-      >
-      > "I can hop into one of our code bases and start being productive even though I don't know anything about how the
-      code works because we have this built up memory system."
+   - Source: [AI & I Podcast: How to Use Claude Code Like the People Who Built It](https://every.to/podcast/transcript-how-to-use-claude-code-like-the-people-who-built-it)
+   - Key Quotes:
+     > "In normal engineering, every feature you add, it makes it harder to add the next feature. In compounding engineering, your goal is to make the next feature easier to build from the feature that you just added."
+     >
+     > "We codify all the learnings... how did we make the plan, what parts needed to be changed, when we started testing it what issues did we find, what are the things that we missed, and then we codify them back into all the prompts and all the subagents and all the slash commands."
+     >
+     > "I can hop into one of our code bases and start being productive even though I don't know anything about how the code works because we have this built up memory system."
 
 ### Related Academic Research
 
-**Note:** The search revealed a significant gap in direct academic citations for "continual learning" and "lifelong
-learning" concepts. Most academic references are from 2024-2026 focused on multi-agent systems, human-AI collaboration,
-and workflow optimization.
+**Note:** The search revealed a significant gap in direct academic citations for "continual learning" and "lifelong learning" concepts. Most academic references are from 2024-2026 focused on multi-agent systems, human-AI collaboration, and workflow optimization.
 
 #### Relevant Academic Areas (Needs Verification)
 
@@ -286,9 +265,7 @@ and workflow optimization.
 2. **Codebase Optimization for Agents** - 120+ academic papers on agent optimization
 3. **Agent-Friendly Workflow Design Academic Sources** - Academic papers on workflow design
 
-**Gap Analysis:** The compounding concepts are primarily represented through industry practices (Every, Cursor,
-Anthropic) rather than formal academic literature, suggesting this is an emerging area where industry is ahead of
-academic research.
+**Gap Analysis:** The compounding concepts are primarily represented through industry practices (Every, Cursor, Anthropic) rather than formal academic literature, suggesting this is an emerging area where industry is ahead of academic research.
 
 ---
 
@@ -335,8 +312,7 @@ sequenceDiagram
 
 2. **It creates a flywheel effect** - Successful implementations of other patterns feed into the compounding system
 
-3. **Knowledge management is central** - Patterns like memory synthesis and skill evolution are the engine of
-   compounding
+3. **Knowledge management is central** - Patterns like memory synthesis and skill evolution are the engine of compounding
 
 4. **Team coordination matters** - Without shared configuration and workflow design, compounding benefits don't scale
 
@@ -348,13 +324,13 @@ sequenceDiagram
 
 ## Validation Status
 
-| Aspect                   | Status                                                    |
-|--------------------------|-----------------------------------------------------------|
-| Pattern Definition       | ✓ Documented                                              |
-| Related Patterns Mapped  | ✓ 8+ patterns identified                                  |
-| Academic Sources         | ⚠ Limited (industry practice primary)                     |
-| Industry Implementations | ✓ Every Engineering Team                                  |
-| Pattern Relationships    | ✓ Prerequisites, complementary, implementation identified |
+| Aspect | Status |
+|--------|--------|
+| Pattern Definition | ✓ Documented |
+| Related Patterns Mapped | ✓ 8+ patterns identified |
+| Academic Sources | ⚠ Limited (industry practice primary) |
+| Industry Implementations | ✓ Every Engineering Team |
+| Pattern Relationships | ✓ Prerequisites, complementary, implementation identified |
 
 ---
 

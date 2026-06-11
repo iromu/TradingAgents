@@ -18,13 +18,13 @@ RagBuilder.builder()
 
 A source of documents for RAG retrieval. Common implementations:
 
-| Implementation       | Use Case                    |
-|----------------------|-----------------------------|
-| `FileRagSource`      | Documents on the filesystem |
-| `WebRagSource`       | URLs to scrape              |
-| `DatabaseRagSource`  | Data from a database        |
-| `ApiRagSource`       | Data from an external API   |
-| `CompositeRagSource` | Multiple sources combined   |
+| Implementation | Use Case |
+|---------------|----------|
+| `FileRagSource` | Documents on the filesystem |
+| `WebRagSource` | URLs to scrape |
+| `DatabaseRagSource` | Data from a database |
+| `ApiRagSource` | Data from an external API |
+| `CompositeRagSource` | Multiple sources combined |
 
 ### FileRagSource
 

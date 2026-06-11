@@ -9,9 +9,7 @@
 
 ## Executive Summary
 
-CLI-First Skill Design is a pattern where agent skills are designed as CLI tools first, making them naturally dual-use
-for both humans and AI agents. This research synthesized findings from four parallel tracks: academic foundations,
-real-world implementations, tooling frameworks, and related patterns.
+CLI-First Skill Design is a pattern where agent skills are designed as CLI tools first, making them naturally dual-use for both humans and AI agents. This research synthesized findings from four parallel tracks: academic foundations, real-world implementations, tooling frameworks, and related patterns.
 
 **Key Findings:**
 - The pattern builds on 50+ years of Unix philosophy and POSIX standards
@@ -22,8 +20,7 @@ real-world implementations, tooling frameworks, and related patterns.
 
 ## Pattern Overview
 
-CLI-First Skill Design is a pattern where agent skills (reusable capabilities) are designed as CLI tools first, making
-them naturally dual-use: humans can invoke them from terminals, and agents can invoke them via shell commands.
+CLI-First Skill Design is a pattern where agent skills (reusable capabilities) are designed as CLI tools first, making them naturally dual-use: humans can invoke them from terminals, and agents can invoke them via shell commands.
 
 **Core Principles:**
 1. **One script, one skill** - Each capability is a standalone executable
@@ -42,23 +39,22 @@ The CLI-first pattern directly applies Doug McIlroy's three foundational rules:
 
 1. **"Write programs that do one thing and do it well"** - Each skill has a single purpose
 2. **"Write programs to work together"** - Skills compose via pipes and chaining
-3. **"Write programs to handle text streams, because that is a universal interface"** - stdin/stdout as the lingua
-   franca
+3. **"Write programs to handle text streams, because that is a universal interface"** - stdin/stdout as the lingua franca
 
 ### Eric S. Raymond's 17 Unix Design Rules (Relevant Subset)
 
-| Rule               | Relevance to Agent Skills                         |
-|--------------------|---------------------------------------------------|
-| **Modularity**     | Skills should be single-purpose, composable units |
-| **Clarity**        | Clear skill interfaces for both humans and agents |
-| **Composition**    | Skills designed for chaining/pipelining           |
-| **Separation**     | Logic separate from interface                     |
-| **Simplicity**     | Avoid over-engineering skills                     |
-| **Transparency**   | Observable skill execution                        |
-| **Robustness**     | Simple, transparent skills are more robust        |
-| **Least Surprise** | Predictable skill behavior                        |
-| **Silence**        | Only output meaningful results                    |
-| **Repair**         | Fail noisily and as soon as possible (exit codes) |
+| Rule | Relevance to Agent Skills |
+|------|---------------------------|
+| **Modularity** | Skills should be single-purpose, composable units |
+| **Clarity** | Clear skill interfaces for both humans and agents |
+| **Composition** | Skills designed for chaining/pipelining |
+| **Separation** | Logic separate from interface |
+| **Simplicity** | Avoid over-engineering skills |
+| **Transparency** | Observable skill execution |
+| **Robustness** | Simple, transparent skills are more robust |
+| **Least Surprise** | Predictable skill behavior |
+| **Silence** | Only output meaningful results |
+| **Repair** | Fail noisily and as soon as possible (exit codes) |
 
 ### POSIX Standards and Conventions
 
@@ -70,14 +66,14 @@ The CLI-first pattern directly applies Doug McIlroy's three foundational rules:
 
 **Exit Code Conventions:**
 
-| Exit Code   | Meaning                          | Agent Skill Relevance          |
-|-------------|----------------------------------|--------------------------------|
-| **0**       | Success                          | Agent knows skill succeeded    |
-| **1**       | General error                    | Non-specific failure           |
-| **2**       | Incorrect usage                  | Agent called skill incorrectly |
-| **126**     | Command found but not executable | Permission/configuration issue |
-| **127**     | Command not found                | Skill not available            |
-| **128 + N** | Terminated by signal N           | Interrupted operation          |
+| Exit Code | Meaning | Agent Skill Relevance |
+|-----------|---------|----------------------|
+| **0** | Success | Agent knows skill succeeded |
+| **1** | General error | Non-specific failure |
+| **2** | Incorrect usage | Agent called skill incorrectly |
+| **126** | Command found but not executable | Permission/configuration issue |
+| **127** | Command not found | Skill not available |
+| **128 + N** | Terminated by signal N | Interrupted operation |
 
 ### 2026 AI-Native CLI Principles
 
@@ -120,12 +116,12 @@ if (process.stdout.isTTY) {
 
 **Core Composition Tools:**
 
-| Tool      | Purpose                            | Example                               |
-|-----------|------------------------------------|---------------------------------------|
-| **Pipe (  | )**                                | Pass stdout to stdin                  | `cat file.txt \| grep "word" \| sort` |
-| **xargs** | Convert stdin to command arguments | `find . -name "*.txt" \| xargs cat`   |
-| **tee**   | Split output to terminal AND file  | `ps aux \| grep nginx \| tee log.txt` |
-| **jq**    | JSON processing                    | `curl api/data \| jq '.name'`         |
+| Tool | Purpose | Example |
+|------|---------|---------|
+| **Pipe (|)** | Pass stdout to stdin | `cat file.txt \| grep "word" \| sort` |
+| **xargs** | Convert stdin to command arguments | `find . -name "*.txt" \| xargs cat` |
+| **tee** | Split output to terminal AND file | `ps aux \| grep nginx \| tee log.txt` |
+| **jq** | JSON processing | `curl api/data \| jq '.name'` |
 
 ---
 
@@ -251,16 +247,16 @@ curl http://api.example.com/users | \
 
 **Key Finding:** None of the major frameworks provide built-in JSON output switching—all require manual implementation.
 
-| Framework    | Language | JSON Support   | TTY Detection           | Subcommands |
-|--------------|----------|----------------|-------------------------|-------------|
-| Click        | Python   | Manual         | `sys.stdout.isatty()`   | Groups      |
-| Typer        | Python   | Manual         | `sys.stdout.isatty()`   | Automatic   |
-| argparse     | Python   | Manual         | `sys.stdout.isatty()`   | Manual      |
-| Commander.js | Node.js  | Manual         | `process.stdout.isTTY`  | Declarative |
-| oclif        | Node.js  | Manual         | `process.stdout.isTTY`  | File-based  |
-| yargs        | Node.js  | Manual         | `process.stdout.isTTY`  | Complex     |
-| clap         | Rust     | Manual (serde) | `atty` crate            | Enum-based  |
-| Cobra        | Go       | Manual         | `terminal.IsTerminal()` | File-based  |
+| Framework | Language | JSON Support | TTY Detection | Subcommands |
+|-----------|----------|--------------|---------------|-------------|
+| Click | Python | Manual | `sys.stdout.isatty()` | Groups |
+| Typer | Python | Manual | `sys.stdout.isatty()` | Automatic |
+| argparse | Python | Manual | `sys.stdout.isatty()` | Manual |
+| Commander.js | Node.js | Manual | `process.stdout.isTTY` | Declarative |
+| oclif | Node.js | Manual | `process.stdout.isTTY` | File-based |
+| yargs | Node.js | Manual | `process.stdout.isTTY` | Complex |
+| clap | Rust | Manual (serde) | `atty` crate | Enum-based |
+| Cobra | Go | Manual | `terminal.IsTerminal()` | File-based |
 
 ### JSON Output Implementation Patterns
 
@@ -320,14 +316,14 @@ fn main() {
 
 ### Exit Code Best Practices
 
-| Framework    | Recommended Pattern           |
-|--------------|-------------------------------|
-| Click        | `sys.exit()` with IntEnum     |
-| Typer        | `raise typer.Exit(code)`      |
-| argparse     | `sys.exit()`                  |
-| Commander.js | `process.exit(code)`          |
-| clap         | `std::process::exit()`        |
-| Cobra        | Automatic from command return |
+| Framework | Recommended Pattern |
+|-----------|---------------------|
+| Click | `sys.exit()` with IntEnum |
+| Typer | `raise typer.Exit(code)` |
+| argparse | `sys.exit()` |
+| Commander.js | `process.exit(code)` |
+| clap | `std::process::exit()` |
+| Cobra | Automatic from command return |
 
 **Python Exit Code Enum:**
 ```python
@@ -350,12 +346,12 @@ except Exception as e:
 
 ### Testing Frameworks for CLI Tools
 
-| Framework  | Language | Style            |
-|------------|----------|------------------|
-| Bats       | Bash     | TAP output       |
-| shunit2    | Shell    | JUnit-like       |
-| assert.sh  | Shell    | Lightweight      |
-| ShellCheck | Static   | Bash/sh analysis |
+| Framework | Language | Style |
+|-----------|----------|-------|
+| Bats | Bash | TAP output |
+| shunit2 | Shell | JUnit-like |
+| assert.sh | Shell | Lightweight |
+| ShellCheck | Static | Bash/sh analysis |
 
 **Bats Example:**
 ```bash
@@ -422,38 +418,36 @@ my_skill/
 **Directly Related (Tool Use & Environment Category):**
 
 1. **Dual-Use Tool Design** (best-practice)
-    - *Relationship:* **Complements** - CLI-first is a specific implementation approach within broader dual-use design
-      philosophy
-    - *Shared principle:* "Everything you can do, Claude can do"
+   - *Relationship:* **Complements** - CLI-first is a specific implementation approach within broader dual-use design philosophy
+   - *Shared principle:* "Everything you can do, Claude can do"
 
 2. **Code-First Tool Interface Pattern** (established)
-    - *Relationship:* **Alternative approach** - Uses TypeScript/JavaScript interfaces and V8 isolates instead of shell
-      commands
+   - *Relationship:* **Alternative approach** - Uses TypeScript/JavaScript interfaces and V8 isolates instead of shell commands
 
 3. **Intelligent Bash Tool Execution** (validated-in-production)
-    - *Relationship:* **Implementation foundation** - Provides secure execution layer for CLI-first skills
+   - *Relationship:* **Implementation foundation** - Provides secure execution layer for CLI-first skills
 
 4. **Agent-First Tooling and Logging** (emerging)
-    - *Relationship:* **Design philosophy alignment** - Machine-readable output over human-centric design
+   - *Relationship:* **Design philosophy alignment** - Machine-readable output over human-centric design
 
 5. **CLI-Native Agent Orchestration** (proposed)
-    - *Relationship:* **Ecosystem extension** - Extends CLI-first concepts to entire agent workflows
+   - *Relationship:* **Ecosystem extension** - Extends CLI-first concepts to entire agent workflows
 
 **Patterns CLI-First Builds Upon:**
 
 6. **Parallel Tool Execution** (validated-in-production)
-    - *Relationship:* **Orchestration foundation** - Enables efficient composition of CLI-first skills
+   - *Relationship:* **Orchestration foundation** - Enables efficient composition of CLI-first skills
 
 7. **Plan-Then-Execute Pattern** (emerging)
-    - *Relationship:* **Safety framework** - CLI-first skills can be composed within plan-then-execute workflows
+   - *Relationship:* **Safety framework** - CLI-first skills can be composed within plan-then-execute workflows
 
 8. **Action-Selector Pattern** (emerging)
-    - *Relationship:* **Security enhancement** - Maps natural language to pre-approved CLI commands
+   - *Relationship:* **Security enhancement** - Maps natural language to pre-approved CLI commands
 
 **Patterns That Could Use CLI-First Skills:**
 
 9. **Code-Then-Execute Pattern** (emerging)
-    - *Relationship:* **Execution model** - CLI-first skills serve as building blocks within code-then-execute workflows
+   - *Relationship:* **Execution model** - CLI-first skills serve as building blocks within code-then-execute workflows
 
 10. **Tool Capability Compartmentalization** (emerging)
     - *Relationship:* **Security framework** - CLI-first skills can be categorized into capability classes
@@ -489,13 +483,13 @@ my_skill/
 
 ### Limitations and Trade-offs
 
-| Limitation            | Impact                                  | Mitigation           |
-|-----------------------|-----------------------------------------|----------------------|
-| Shell limitations     | Complex data structures awkward         | Use JSON + jq        |
-| Error handling        | Less structured than exceptions         | Exit codes + stderr  |
-| Performance           | Process spawn overhead                  | Accept for <100/sec  |
-| State management      | No persistent state between invocations | Design stateless     |
-| Windows compatibility | Requires WSL or Git Bash                | Document requirement |
+| Limitation | Impact | Mitigation |
+|------------|--------|------------|
+| Shell limitations | Complex data structures awkward | Use JSON + jq |
+| Error handling | Less structured than exceptions | Exit codes + stderr |
+| Performance | Process spawn overhead | Accept for <100/sec |
+| State management | No persistent state between invocations | Design stateless |
+| Windows compatibility | Requires WSL or Git Bash | Document requirement |
 
 ### Anti-Patterns to Avoid
 
@@ -551,18 +545,15 @@ my_skill/
 
 ## Conclusion
 
-CLI-First Skill Design represents a practical, Unix-inspired approach to building agent capabilities that leverages
-decades of CLI tool design wisdom while addressing the unique requirements of AI-human collaboration.
+CLI-First Skill Design represents a practical, Unix-inspired approach to building agent capabilities that leverages decades of CLI tool design wisdom while addressing the unique requirements of AI-human collaboration.
 
-The pattern's strength lies in its simplicity and universality—by following Unix philosophy and POSIX conventions,
-developers can create skills that are:
+The pattern's strength lies in its simplicity and universality—by following Unix philosophy and POSIX conventions, developers can create skills that are:
 - Immediately useful to both humans and agents
 - Composable through standard shell mechanisms
 - Debuggable without special tooling
 - Testable with established frameworks
 
-As the AI agent ecosystem matures, CLI-first design serves as a bridge between traditional software engineering
-practices and emerging agent architectures, enabling gradual adoption without requiring entirely new paradigms.
+As the AI agent ecosystem matures, CLI-first design serves as a bridge between traditional software engineering practices and emerging agent architectures, enabling gradual adoption without requiring entirely new paradigms.
 
 ---
 

@@ -16,9 +16,7 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-In long agent sessions, raw user text and tool outputs often remain in-context long after they are needed. If those
-tokens include adversarial instructions, they can silently bias later reasoning steps, even when the current step is
-unrelated. This creates delayed prompt-injection risk and unnecessary context bloat.
+In long agent sessions, raw user text and tool outputs often remain in-context long after they are needed. If those tokens include adversarial instructions, they can silently bias later reasoning steps, even when the current step is unrelated. This creates delayed prompt-injection risk and unnecessary context bloat.
 
 ## Solution
 
@@ -28,8 +26,7 @@ unrelated. This creates delayed prompt-injection risk and unnecessary context bl
 - Subsequent reasoning sees **only trusted data**, eliminating latent injections.
 - A **strong variant** also removes intermediate LLM outputs that may have been tainted.
 
-Treat context as a staged pipeline: ingest untrusted text, transform it, then aggressively discard the original tainted
-material. Keep only signed-off structured artifacts that downstream steps are allowed to consume.
+Treat context as a staged pipeline: ingest untrusted text, transform it, then aggressively discard the original tainted material. Keep only signed-off structured artifacts that downstream steps are allowed to consume.
 
 ```pseudo
 sql = LLM("to SQL", user_prompt)
@@ -51,22 +48,17 @@ flowchart LR
 
 ## How to use it
 
-Customer-service chat, medical Q&A, database query generation, any multi-turn flow where initial text shouldn't steer
-later steps.
+Customer-service chat, medical Q&A, database query generation, any multi-turn flow where initial text shouldn't steer later steps.
 
 ## Trade-offs
 
-* **Pros:** Simple; no extra models needed; helps prevent [context window anxiety](context-window-anxiety-management.md)
-  by reducing overall context usage; provides compliance benefits (HIPAA/GDPR data minimization).
-* **Cons:** Later turns lose conversational nuance; may hurt UX; overly aggressive minimization can remove useful
-  context; risks broken referential coherence when earlier turns are referenced ("the function I mentioned before").
+* **Pros:** Simple; no extra models needed; helps prevent [context window anxiety](context-window-anxiety-management.md) by reducing overall context usage; provides compliance benefits (HIPAA/GDPR data minimization).
+* **Cons:** Later turns lose conversational nuance; may hurt UX; overly aggressive minimization can remove useful context; risks broken referential coherence when earlier turns are referenced ("the function I mentioned before").
 
 ## References
 
 * Beurer-Kellner et al., §3.1 (6) Context-Minimization.
-* [Building Companies with Claude Code](https://claude.com/blog/building-companies-with-claude-code) - Emphasizes
-  discrete phase separation and distilled handoffs to prevent context contamination.
-* OpenAI, [Unrolling the Codex Agent Loop](https://openai.com/index/unrolling-the-codex-agent-loop/) - Documents context
-  auto-compaction in production.
+* [Building Companies with Claude Code](https://claude.com/blog/building-companies-with-claude-code) - Emphasizes discrete phase separation and distilled handoffs to prevent context contamination.
+* OpenAI, [Unrolling the Codex Agent Loop](https://openai.com/index/unrolling-the-codex-agent-loop/) - Documents context auto-compaction in production.
 
 ---

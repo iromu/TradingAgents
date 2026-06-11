@@ -12,21 +12,17 @@ tags: [frontier, state-of-the-art, model-selection, product-strategy, learning, 
 
 ## Problem
 
-AI capabilities advance rapidly along predictable scaling laws—products optimized for today's models become obsolete in
-months. Many teams waste time solving problems that frontier models already solve, or build products tied to specific
-models that won't stay competitive.
+AI capabilities advance rapidly along predictable scaling laws—products optimized for today's models become obsolete in months. Many teams waste time solving problems that frontier models already solve, or build products tied to specific models that won't stay competitive.
 
 ## Solution
 
-**Always target the frontier**—the state-of-the-art models—and design products that can rapidly evolve as the frontier
-moves. Don't optimize for older, cheaper models, and don't offer model selectors that trap users in the past.
+**Always target the frontier**—the state-of-the-art models—and design products that can rapidly evolve as the frontier moves. Don't optimize for older, cheaper models, and don't offer model selectors that trap users in the past.
 
 **Core principles:**
 
 1. **No model selector**: Pick the best model for each use case, don't let users choose
 2. **Frontier or nothing**: Only build features that push boundaries and generate learning
-3. **Rapid evolution**: Expect to completely change your product every 3 months (AI product lifecycle research confirms
-   quarterly cycles are necessary to remain competitive)
+3. **Rapid evolution**: Expect to completely change your product every 3 months (AI product lifecycle research confirms quarterly cycles are necessary to remain competitive)
 4. **Subscription resistance**: Avoid being tied to one model's pricing structure
 
 ```mermaid
@@ -51,13 +47,9 @@ graph TD
 
 **The problem with optimizing for cost:**
 
-Emergent abilities research shows some capabilities appear suddenly at scale and cannot be predicted or engineered
-around in smaller models. Cost optimization against today's models solves problems that frontier models will soon solve
-inherently.
+Emergent abilities research shows some capabilities appear suddenly at scale and cannot be predicted or engineered around in smaller models. Cost optimization against today's models solves problems that frontier models will soon solve inherently.
 
-> "If you do this right now and you try to make non-frontier models work and optimize for cost, what you're doing is
-> you're building something that will be outdated in half a year... and you're building it for people who by the very
-> definition do not want to pay a lot."
+> "If you do this right now and you try to make non-frontier models work and optimize for cost, what you're doing is you're building something that will be outdated in half a year... and you're building it for people who by the very definition do not want to pay a lot."
 
 ## How to use it
 
@@ -75,23 +67,21 @@ frontier_test:
 
 **Model strategy:**
 
-| Approach                | Problem                                | Solution                                   |
-|-------------------------|----------------------------------------|--------------------------------------------|
-| **Model selector**      | Users stuck on old models, no learning | Pick best model per mode, no user choice   |
-| **Cost optimization**   | Solving problems new models solve      | Use frontier, cost will drop over time     |
-| **Subscription tie-in** | Locked to one model's roadmap          | Pay-as-you-go, switch models anytime       |
-| **Multi-model support** | Maintenance nightmare, confusion       | Use best model, switch when better emerges |
+| Approach | Problem | Solution |
+|----------|---------|----------|
+| **Model selector** | Users stuck on old models, no learning | Pick best model per mode, no user choice |
+| **Cost optimization** | Solving problems new models solve | Use frontier, cost will drop over time |
+| **Subscription tie-in** | Locked to one model's roadmap | Pay-as-you-go, switch models anytime |
+| **Multi-model support** | Maintenance nightmare, confusion | Use best model, switch when better emerges |
 
 **Why no model selector?**
 
-1. **Learning**: Can't learn how users interact if everyone uses different models (research shows focused single-model
-   products learn faster)
+1. **Learning**: Can't learn how users interact if everyone uses different models (research shows focused single-model products learn faster)
 2. **Focus**: One way to use the product means everyone benefits from improvements
 3. **Evolution**: Not beholden to models that were popular 3-6 months ago
 4. **Quality**: Can optimize specifically for the best model's capabilities
 
-> "If you're using AMP it's only possible to be used in the way that we think is good. At least we try to make it really
-> hard to use in an archaic way."
+> "If you're using AMP it's only possible to be used in the way that we think is good. At least we try to make it really hard to use in an archaic way."
 
 **The risk of subscription models:**
 
@@ -100,8 +90,7 @@ When you offer a subscription (like Claude Max), you become tied to that model:
 - Price changes become user-hostile
 - Roadmap decisions dictated by one company
 
-> "If the models that the sub offered access to suddenly became not the best models that we wanted to use in AMP, then
-> if we were to switch, we would have a lot of users who say, 'Well, you just jacked up my price by 10 times or more.'"
+> "If the models that the sub offered access to suddenly became not the best models that we wanted to use in AMP, then if we were to switch, we would have a lot of users who say, 'Well, you just jacked up my price by 10 times or more.'"
 
 ## Trade-offs
 
@@ -129,8 +118,7 @@ When you offer a subscription (like Claude Max), you become tied to that model:
 - Products where AI capability is the core differentiator
 - Users who want to be on the cutting edge
 
-**Production implementations**: AMP (Anthropic), Claude Code, Cursor, v0.dev, Perplexity—all use opinionated frontier
-model choices without user-facing selectors.
+**Production implementations**: AMP (Anthropic), Claude Code, Cursor, v0.dev, Perplexity—all use opinionated frontier model choices without user-facing selectors.
 
 **When to consider alternatives:**
 
@@ -141,20 +129,16 @@ model choices without user-facing selectors.
 
 **The "primordial soup" of agents:**
 
-When everything is in flux—the models, the software, how we write it—optimizing for stability is a losing strategy.
-Embrace the chaos:
+When everything is in flux—the models, the software, how we write it—optimizing for stability is a losing strategy. Embrace the chaos:
 
-> "A lot of the software we're seeing now has this non-deterministic element in it called LLM. So the software itself is
-> changing. How we write software is changing. Who or what writes software is changing."
+> "A lot of the software we're seeing now has this non-deterministic element in it called LLM. So the software itself is changing. How we write software is changing. Who or what writes software is changing."
 
 ## References
 
-* [Raising an Agent Episode 9: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=2wjnV6F2arc) -
-  AMP (Thorsten Ball, Quinn Slack, 2025)
+* [Raising an Agent Episode 9: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=2wjnV6F2arc) - AMP (Thorsten Ball, Quinn Slack, 2025)
 * Kaplan et al. (2020). [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361). NeurIPS 2020.
 * Wei et al. (2022). [Emergent Abilities of Large Language Models](https://arxiv.org/abs/2206.07682). TMLR 2022.
 * Wang et al. (2023). [The Lifecycle of AI](https://arxiv.org/abs/2304.06425). CHI 2023.
-*
-Related: [Disposable Scaffolding Over Durable Features](disposable-scaffolding-over-durable-features.md), [Agent Modes by Model Personality](agent-modes-by-model-personality.md)
+* Related: [Disposable Scaffolding Over Durable Features](disposable-scaffolding-over-durable-features.md), [Agent Modes by Model Personality](agent-modes-by-model-personality.md)
 
 ---

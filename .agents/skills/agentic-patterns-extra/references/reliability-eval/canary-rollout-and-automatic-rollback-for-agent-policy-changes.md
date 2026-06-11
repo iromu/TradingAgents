@@ -10,20 +10,16 @@ tags: [canary, rollback, reliability, policy, evaluation]
 
 ## Problem
 
-Agent behavior changes frequently through prompt updates, tool policies, routing rules, and evaluator thresholds. Even
-small policy edits can produce broad regressions in cost, latency, safety, or task quality. Full rollouts without staged
-exposure make rollback slow and user impact large.
+Agent behavior changes frequently through prompt updates, tool policies, routing rules, and evaluator thresholds. Even small policy edits can produce broad regressions in cost, latency, safety, or task quality. Full rollouts without staged exposure make rollback slow and user impact large.
 
 ## Solution
 
-Treat agent policy changes like production releases: ship to a small traffic slice first, monitor leading indicators,
-and auto-rollback when guardrails are breached.
+Treat agent policy changes like production releases: ship to a small traffic slice first, monitor leading indicators, and auto-rollback when guardrails are breached.
 
 Core components:
 - A traffic splitter that routes a fixed percentage to the new policy.
 - A policy version registry with immutable identifiers.
-- Real-time monitors for quality, latency, failure rate, safety flags, spend, goal achievement rate, and infinite loop
-  detection.
+- Real-time monitors for quality, latency, failure rate, safety flags, spend, goal achievement rate, and infinite loop detection.
 - Rollback automation that restores the previous stable policy without manual intervention.
 - Optional shadow mode: validate technical stability before user exposure.
 
@@ -47,8 +43,7 @@ if monitors.breach(policy.version):
 
 ## How to use it
 
-- Use this for any change that can alter external behavior: prompts, tools, evaluator logic, memory policies, and
-  routing.
+- Use this for any change that can alter external behavior: prompts, tools, evaluator logic, memory policies, and routing.
 - Define rollback triggers before rollout starts. Set observation windows (e.g., 2+ minutes) to avoid false positives.
 - Keep rollback deterministic: always restore the last known-good version.
 - Store policy artifacts with versioned metadata so incidents are reproducible.

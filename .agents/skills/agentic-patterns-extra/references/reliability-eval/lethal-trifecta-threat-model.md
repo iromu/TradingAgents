@@ -20,14 +20,14 @@ LLMs cannot reliably distinguish "good" instructions from malicious ones once th
 
 ## Solution
 
-Adopt a **Trifecta Threat Model**:
+Adopt a **Trifecta Threat Model**:  
 
-- **Audit every tool** an agent can call and classify it against the three capabilities.
-- **Guarantee that at least one circle is missing** in any execution path. Options include:
-
-- Remove external network access (no exfiltration).
-    - Deny direct file/database reads (no private data).
-    - Sanitize or segregate untrusted inputs (no hostile instructions).
+- **Audit every tool** an agent can call and classify it against the three capabilities.  
+- **Guarantee that at least one circle is missing** in any execution path. Options include:  
+  
+- Remove external network access (no exfiltration).  
+  - Deny direct file/database reads (no private data).  
+  - Sanitize or segregate untrusted inputs (no hostile instructions).  
 - Enforce this at orchestration time, not with brittle prompt guardrails.
 
 ```python
@@ -52,14 +52,11 @@ if tool.can_externally_communicate and
 ## References
 
 * Willison, *The Lethal Trifecta for AI Agents* (June 16 2025).
-* Beurer-Kellner et al., *Design Patterns for Securing LLM Agents against Prompt Injections* (arXiv:2506.08837, June
-  2025).
+* Beurer-Kellner et al., *Design Patterns for Securing LLM Agents against Prompt Injections* (arXiv:2506.08837, June 2025).
 
 - Primary source: https://simonwillison.net/2025/Jun/16/lethal-trifecta/
 - Academic source: https://doi.org/10.48550/arXiv/2506.08837
 
-> **Note on terminology**: This pattern describes Simon Willison's prompt injection threat model (private data +
-> untrusted content + external communication), distinct from the AI safety literature's "lethal trifecta" (advanced
-> capabilities + agentic behavior + situational awareness).
+> **Note on terminology**: This pattern describes Simon Willison's prompt injection threat model (private data + untrusted content + external communication), distinct from the AI safety literature's "lethal trifecta" (advanced capabilities + agentic behavior + situational awareness).
 
 ---

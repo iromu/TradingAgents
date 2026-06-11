@@ -2,12 +2,12 @@
 
 ## Supported Databases
 
-| Database           | Version  | Dialect                        |
-|--------------------|----------|--------------------------------|
-| **Neo4j**          | 5.x, 4.x | `NEO4J_5` (default), `NEO4J_4` |
-| **FalkorDB**       | Latest   | `FALKORDB`                     |
-| **Amazon Neptune** | Latest   | `NEPTUNE`                      |
-| **Memgraph**       | Latest   | `MEMGRAPH`                     |
+| Database | Version | Dialect |
+|----------|---------|---------|
+| **Neo4j** | 5.x, 4.x | `NEO4J_5` (default), `NEO4J_4` |
+| **FalkorDB** | Latest | `FALKORDB` |
+| **Amazon Neptune** | Latest | `NEPTUNE` |
+| **Memgraph** | Latest | `MEMGRAPH` |
 
 ## Connection Configuration
 
@@ -54,8 +54,7 @@ val falkorManager: PersistenceManager
 
 ## Cypher Dialects
 
-The dialect controls engine-specific Cypher generation — existence checks, collection sorting, and nested view
-projections.
+The dialect controls engine-specific Cypher generation — existence checks, collection sorting, and nested view projections.
 
 ### Global Default
 
@@ -72,11 +71,11 @@ QuerySpecification
 
 ### Dialect Differences
 
-| Feature            | NEO4J_5       | NEO4J_4       | FALKORDB | NEPTUNE     | MEMGRAPH |
-|--------------------|---------------|---------------|----------|-------------|----------|
-| Existence checks   | `IS NOT NULL` | `IS NOT NULL` | Varies   | Varies      | Varies   |
-| Collection sorting | Built-in      | Workarounds   | Native   | Workarounds | Native   |
-| Nested views       | Full support  | Limited       | Native   | Limited     | Native   |
+| Feature | NEO4J_5 | NEO4J_4 | FALKORDB | NEPTUNE | MEMGRAPH |
+|---------|---------|---------|----------|---------|----------|
+| Existence checks | `IS NOT NULL` | `IS NOT NULL` | Varies | Varies | Varies |
+| Collection sorting | Built-in | Workarounds | Native | Workarounds | Native |
+| Nested views | Full support | Limited | Native | Limited | Native |
 
 ## Database-Specific Notes
 

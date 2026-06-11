@@ -10,16 +10,11 @@ tags: [governance, audit-trail, compliance, cryptographic-signing, policy-enforc
 
 ## Problem
 
-When AI agents execute tool calls autonomously, there is no tamper-evident record of what happened. Traditional logging
-is mutable - logs can be altered after the fact. In regulated environments (finance, healthcare, EU AI Act), teams need
-to prove exactly what an agent did, when, and whether it operated within policy. Without cryptographic guarantees, audit
-trails have no legal or compliance weight.
+When AI agents execute tool calls autonomously, there is no tamper-evident record of what happened. Traditional logging is mutable - logs can be altered after the fact. In regulated environments (finance, healthcare, EU AI Act), teams need to prove exactly what an agent did, when, and whether it operated within policy. Without cryptographic guarantees, audit trails have no legal or compliance weight.
 
 ## Solution
 
-Sign every agent action with a post-quantum digital signature (ML-DSA) at the point of execution. Each tool call
-produces a signed receipt containing the action, parameters, result hash, timestamp, and policy evaluation outcome.
-These receipts form an append-only chain that is tamper-evident by construction.
+Sign every agent action with a post-quantum digital signature (ML-DSA) at the point of execution. Each tool call produces a signed receipt containing the action, parameters, result hash, timestamp, and policy evaluation outcome. These receipts form an append-only chain that is tamper-evident by construction.
 
 The governance layer operates as middleware that wraps the agent tool-calling interface:
 
@@ -31,8 +26,8 @@ The governance layer operates as middleware that wraps the agent tool-calling in
 
 - **Evidence Grade:** medium
 - **Most Valuable Findings:**
-    - SCITT architecture (IETF RFC 9334) validates the append-only signed receipt pattern for supply chain integrity
-    - OWASP Agentic Top 10 lists lack of audit trail as a top vulnerability for agent systems
+  - SCITT architecture (IETF RFC 9334) validates the append-only signed receipt pattern for supply chain integrity
+  - OWASP Agentic Top 10 lists lack of audit trail as a top vulnerability for agent systems
 - **Unverified / Unclear:** Long-term storage and verification overhead at scale needs more production data
 
 ## How to use it
@@ -45,8 +40,7 @@ The governance layer operates as middleware that wraps the agent tool-calling in
 ## Trade-offs
 
 - **Pros:** Tamper-evident audit trail, policy enforcement before execution, quantum-safe signatures, framework-agnostic
-- **Cons:** Adds latency to each tool call (signing overhead), requires key management, receipt storage grows linearly
-  with agent activity
+- **Cons:** Adds latency to each tool call (signing overhead), requires key management, receipt storage grows linearly with agent activity
 
 ## References
 

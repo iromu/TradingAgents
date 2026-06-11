@@ -17,8 +17,7 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-Simply providing an AI agent with a task is often not enough for optimal performance. If workflows are too rigid, or if
-humans micromanage the agent's technical decisions, the agent may struggle or produce suboptimal results.
+Simply providing an AI agent with a task is often not enough for optimal performance. If workflows are too rigid, or if humans micromanage the agent's technical decisions, the agent may struggle or produce suboptimal results.
 
 ## Solution
 
@@ -29,8 +28,7 @@ Consciously design and adapt workflows to be "agent-friendly":
 - **Structured Input/Output:** Define clear interfaces for how the agent receives information and delivers results
 - **Iterative Feedback Loops:** Establish mechanisms for intermediate work presentation and corrective feedback
 - **Tool Provisioning:** Ensure the agent has access to the necessary tools and understanding
-- **Planning-Execution Separation:** Separate planning from execution—never implement before reviewing and approving the
-  plan
+- **Planning-Execution Separation:** Separate planning from execution—never implement before reviewing and approving the plan
 - **Clear Handoff Protocols:** For multi-agent systems, define explicit handoff criteria and context preservation
 
 ```mermaid
@@ -61,10 +59,8 @@ flowchart TD
 
 ## Trade-offs
 
-* **Pros:** Creates clearer human-agent handoffs, better operational trust, and enables rapid iteration based on
-  real-world feedback.
-* **Cons:** Needs explicit process design and coordination across teams. Multi-agent systems can become exponentially
-  complex.
+* **Pros:** Creates clearer human-agent handoffs, better operational trust, and enables rapid iteration based on real-world feedback.
+* **Cons:** Needs explicit process design and coordination across teams. Multi-agent systems can become exponentially complex.
 
 ## References
 

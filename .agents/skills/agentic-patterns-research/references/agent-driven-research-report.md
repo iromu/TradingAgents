@@ -12,19 +12,11 @@
 
 ## Executive Summary
 
-**Agent-Driven Research** is an agentic AI pattern where AI systems autonomously conduct the entire research
-process—from planning to information gathering, analysis, and synthesis—through iterative search, reflection, and
-strategy adjustment. It represents a paradigm shift from static information retrieval to dynamic, reasoning-based
-research that can explore complex topics, adjust strategies based on findings, and produce comprehensive, well-sourced
-reports.
+**Agent-Driven Research** is an agentic AI pattern where AI systems autonomously conduct the entire research process—from planning to information gathering, analysis, and synthesis—through iterative search, reflection, and strategy adjustment. It represents a paradigm shift from static information retrieval to dynamic, reasoning-based research that can explore complex topics, adjust strategies based on findings, and produce comprehensive, well-sourced reports.
 
-This pattern has emerged prominently in 2024-2025 with major implementations from OpenAI (Deep Research), Anthropic (
-Claude Research), Google (Gemini Deep Research), Alibaba (Tongyi DeepResearch), and the open-source community. It sits
-at the intersection of multiple agentic patterns including reflection loops, multi-agent systems, and agentic RAG.
+This pattern has emerged prominently in 2024-2025 with major implementations from OpenAI (Deep Research), Anthropic (Claude Research), Google (Gemini Deep Research), Alibaba (Tongyi DeepResearch), and the open-source community. It sits at the intersection of multiple agentic patterns including reflection loops, multi-agent systems, and agentic RAG.
 
-**Key Insight:** Unlike traditional RAG systems that perform single-round retrieval, agent-driven research maintains
-awareness of what has been covered, identifies gaps, determines next exploration directions autonomously, and iterates
-until sufficient information is gathered.
+**Key Insight:** Unlike traditional RAG systems that perform single-round retrieval, agent-driven research maintains awareness of what has been covered, identifies gaps, determines next exploration directions autonomously, and iterates until sufficient information is gathered.
 
 ---
 
@@ -69,43 +61,43 @@ flowchart TD
 
 ### Academic Papers
 
-| Paper                                                                                                   | Authors/Venue            | Year | Link                                                 |
-|---------------------------------------------------------------------------------------------------------|--------------------------|------|------------------------------------------------------|
-| "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery"                             | Sakana AI + Oxford + UBC | 2024 | [arXiv:2408.06292](https://arxiv.org/abs/2408.06292) |
-| "From AI for Science to Agentic Science: A Survey on Autonomous Scientific Discovery"                   | Shanghai AI Lab          | 2025 | [arXiv:2508.14111](https://arxiv.org/abs/2508.14111) |
-| "Reinforcement Learning Foundations for Deep Research Systems: A Survey"                                | -                        | 2025 | [arXiv:2509.06733](https://arxiv.org/abs/2509.06733) |
-| "Deep Research: A Survey of Autonomous Research Agents"                                                 | -                        | 2025 | [arXiv:2508.12752](https://arxiv.org/abs/2508.12752) |
-| "Tongyi DeepResearch: A New Era of Open-Source AI Researchers"                                          | Alibaba Tongyi Lab       | 2025 | [arXiv:2510.24701](https://arxiv.org/abs/2510.24701) |
-| "ScienceAgentBench: Toward Rigorous Assessment of Language Agents for Data-Driven Scientific Discovery" | Chen et al. (ICLR)       | 2024 | [arXiv:2410.05080](https://arxiv.org/abs/2410.05080) |
-| "ResearchAgent: Iterative Research Idea Generation Over Scientific Literature"                          | Baek et al.              | 2024 | [arXiv:2404.07738](https://arxiv.org/abs/2404.07738) |
-| "Agent Laboratory: 利用 LLM Agent 作为研究助手"                                                                 | AMD + Johns Hopkins      | 2025 | [arXiv:2501.04227](https://arxiv.org/abs/2501.04227) |
-| "ReAct: Synergizing Reasoning and Acting in Language Models"                                            | Princeton + Google       | 2022 | [ICLR 2023](https://react-lm.github.io/)             |
-| "Self-Refine: Improving Reasoning in Language Models via Iterative Feedback"                            | Shinn et al.             | 2023 | [arXiv:2303.11366](https://arxiv.org/abs/2303.11366) |
-| "Reflexion: Language Agents with Verbal Reinforcement Learning"                                         | -                        | 2023 | -                                                    |
-| "Language Agent Tree Search (LATS)"                                                                     | Zhou et al., UIUC        | 2023 | [arXiv:2310.04406](https://arxiv.org/abs/2310.04406) |
-| "Graph of Thoughts: Solving Elaborate Problems with Large Language Models"                              | Besta et al., ETH Zurich | 2024 | [arXiv:2308.09687](https://arxiv.org/abs/2308.09687) |
-| "Tree of Thoughts: Deliberate Problem Solving with Large Language Models"                               | Yao et al.               | 2023 | [NeurIPS 2023](https://arxiv.org/abs/2301.02663)     |
+| Paper | Authors/Venue | Year | Link |
+|-------|---------------|------|------|
+| "The AI Scientist: Towards Fully Automated Open-Ended Scientific Discovery" | Sakana AI + Oxford + UBC | 2024 | [arXiv:2408.06292](https://arxiv.org/abs/2408.06292) |
+| "From AI for Science to Agentic Science: A Survey on Autonomous Scientific Discovery" | Shanghai AI Lab | 2025 | [arXiv:2508.14111](https://arxiv.org/abs/2508.14111) |
+| "Reinforcement Learning Foundations for Deep Research Systems: A Survey" | - | 2025 | [arXiv:2509.06733](https://arxiv.org/abs/2509.06733) |
+| "Deep Research: A Survey of Autonomous Research Agents" | - | 2025 | [arXiv:2508.12752](https://arxiv.org/abs/2508.12752) |
+| "Tongyi DeepResearch: A New Era of Open-Source AI Researchers" | Alibaba Tongyi Lab | 2025 | [arXiv:2510.24701](https://arxiv.org/abs/2510.24701) |
+| "ScienceAgentBench: Toward Rigorous Assessment of Language Agents for Data-Driven Scientific Discovery" | Chen et al. (ICLR) | 2024 | [arXiv:2410.05080](https://arxiv.org/abs/2410.05080) |
+| "ResearchAgent: Iterative Research Idea Generation Over Scientific Literature" | Baek et al. | 2024 | [arXiv:2404.07738](https://arxiv.org/abs/2404.07738) |
+| "Agent Laboratory: 利用 LLM Agent 作为研究助手" | AMD + Johns Hopkins | 2025 | [arXiv:2501.04227](https://arxiv.org/abs/2501.04227) |
+| "ReAct: Synergizing Reasoning and Acting in Language Models" | Princeton + Google | 2022 | [ICLR 2023](https://react-lm.github.io/) |
+| "Self-Refine: Improving Reasoning in Language Models via Iterative Feedback" | Shinn et al. | 2023 | [arXiv:2303.11366](https://arxiv.org/abs/2303.11366) |
+| "Reflexion: Language Agents with Verbal Reinforcement Learning" | - | 2023 | - |
+| "Language Agent Tree Search (LATS)" | Zhou et al., UIUC | 2023 | [arXiv:2310.04406](https://arxiv.org/abs/2310.04406) |
+| "Graph of Thoughts: Solving Elaborate Problems with Large Language Models" | Besta et al., ETH Zurich | 2024 | [arXiv:2308.09687](https://arxiv.org/abs/2308.09687) |
+| "Tree of Thoughts: Deliberate Problem Solving with Large Language Models" | Yao et al. | 2023 | [NeurIPS 2023](https://arxiv.org/abs/2301.02663) |
 
 ### Industry Implementations
 
-| Implementation                  | Organization | Year      | Link                             |
-|---------------------------------|--------------|-----------|----------------------------------|
-| **OpenAI Deep Research**        | OpenAI       | 2025      | Launched February 3, 2025        |
-| **Claude Research Mode**        | Anthropic    | 2024-2025 | Multi-agent research system      |
-| **Google Gemini Deep Research** | Google       | 2025      | December 2025 release            |
-| **Tongyi DeepResearch**         | Alibaba      | 2025      | Open-source implementation       |
-| **Perplexity AI Deep Research** | Perplexity   | 2025      | Autonomous research capabilities |
+| Implementation | Organization | Year | Link |
+|----------------|--------------|------|------|
+| **OpenAI Deep Research** | OpenAI | 2025 | Launched February 3, 2025 |
+| **Claude Research Mode** | Anthropic | 2024-2025 | Multi-agent research system |
+| **Google Gemini Deep Research** | Google | 2025 | December 2025 release |
+| **Tongyi DeepResearch** | Alibaba | 2025 | Open-source implementation |
+| **Perplexity AI Deep Research** | Perplexity | 2025 | Autonomous research capabilities |
 
 ### Open Source Projects
 
-| Project                                        | Stars  | Framework  | Link                                                                    |
-|------------------------------------------------|--------|------------|-------------------------------------------------------------------------|
-| **Alibaba-NLP/DeepResearch**                   | 8,703+ | Python     | [GitHub](https://github.com/Alibaba-NLP/DeepResearch)                   |
-| **HKUDS/Auto-Deep-Research**                   | -      | LangGraph  | [GitHub](https://github.com/HKUDS/Auto-Deep-Research)                   |
-| **AgentScope Deep Research Agent**             | -      | AgentScope | [GitHub](https://github.com/agentscope-ai/agentscope)                   |
-| **ai-agents-2030/awesome-deep-research-agent** | -      | -          | [GitHub](https://github.com/ai-agents-2030/awesome-deep-research-agent) |
-| **AutoGen**                                    | 35.4K+ | Microsoft  | [GitHub](https://github.com/microsoft/autogen)                          |
-| **CrewAI**                                     | -      | Python     | [crewai.com](https://www.crewai.com)                                    |
+| Project | Stars | Framework | Link |
+|---------|-------|-----------|------|
+| **Alibaba-NLP/DeepResearch** | 8,703+ | Python | [GitHub](https://github.com/Alibaba-NLP/DeepResearch) |
+| **HKUDS/Auto-Deep-Research** | - | LangGraph | [GitHub](https://github.com/HKUDS/Auto-Deep-Research) |
+| **AgentScope Deep Research Agent** | - | AgentScope | [GitHub](https://github.com/agentscope-ai/agentscope) |
+| **ai-agents-2030/awesome-deep-research-agent** | - | - | [GitHub](https://github.com/ai-agents-2030/awesome-deep-research-agent) |
+| **AutoGen** | 35.4K+ | Microsoft | [GitHub](https://github.com/microsoft/autogen) |
+| **CrewAI** | - | Python | [crewai.com](https://www.crewai.com) |
 
 ---
 
@@ -179,43 +171,42 @@ Based on industry research, agent-driven research systems typically include:
 
 ## Relation to Other Patterns
 
-Agent-driven research is both a **distinct pattern** and a **composite pattern** that incorporates elements from several
-other agentic AI patterns.
+Agent-driven research is both a **distinct pattern** and a **composite pattern** that incorporates elements from several other agentic AI patterns.
 
 ### Component Patterns (Building Blocks)
 
-| Pattern                    | Relationship                                                                                   |
-|----------------------------|------------------------------------------------------------------------------------------------|
-| **Reflection Loop**        | Core mechanism - after each search iteration, agent evaluates sufficiency and adjusts strategy |
-| **Inference-Time Scaling** | Allocates more computational resources during difficult research tasks                         |
-| **LLM Map-Reduce Pattern** | Processes many documents in parallel, preventing cross-contamination                           |
+| Pattern | Relationship |
+|---------|--------------|
+| **Reflection Loop** | Core mechanism - after each search iteration, agent evaluates sufficiency and adjusts strategy |
+| **Inference-Time Scaling** | Allocates more computational resources during difficult research tasks |
+| **LLM Map-Reduce Pattern** | Processes many documents in parallel, preventing cross-contamination |
 
 ### Sister Patterns (Shared Characteristics)
 
-| Pattern                                   | Relationship                                                                                                                                                      |
-|-------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **AI Web Search Agent Loop**              | Nearly identical iterative structure - query formulation, search execution, result analysis, strategy refinement. AI Web Search is specifically for web/SERP APIs |
-| **Agentic Search Over Vector Embeddings** | Alternative approach - replaces vector embedding search with iterative tool-based search (grep, find, etc.)                                                       |
-| **Language Agent Tree Search (LATS)**     | Both use tree/graph exploration with evaluation and backpropagation. LATS is more formal (MCTS), agent-driven research is more pragmatic                          |
-| **Graph of Thoughts (GoT)**               | Both represent non-linear reasoning paths. GoT focuses on arbitrary graph structures for reasoning                                                                |
-| **ReAct**                                 | Foundational pattern - Thought → Action → Observation loop that inspired many research agents                                                                     |
+| Pattern | Relationship |
+|---------|--------------|
+| **AI Web Search Agent Loop** | Nearly identical iterative structure - query formulation, search execution, result analysis, strategy refinement. AI Web Search is specifically for web/SERP APIs |
+| **Agentic Search Over Vector Embeddings** | Alternative approach - replaces vector embedding search with iterative tool-based search (grep, find, etc.) |
+| **Language Agent Tree Search (LATS)** | Both use tree/graph exploration with evaluation and backpropagation. LATS is more formal (MCTS), agent-driven research is more pragmatic |
+| **Graph of Thoughts (GoT)** | Both represent non-linear reasoning paths. GoT focuses on arbitrary graph structures for reasoning |
+| **ReAct** | Foundational pattern - Thought → Action → Observation loop that inspired many research agents |
 
 ### Architectural Enablers
 
-| Pattern                       | Role                                                                      |
-|-------------------------------|---------------------------------------------------------------------------|
-| **Plan-Then-Execute Pattern** | Separates planning from execution, protecting control-flow integrity      |
-| **Action-Selector Pattern**   | Maps research intent to pre-approved actions, preventing prompt injection |
-| **Code-Then-Execute Pattern** | Outputs sandboxed research programs for static checking                   |
+| Pattern | Role |
+|---------|------|
+| **Plan-Then-Execute Pattern** | Separates planning from execution, protecting control-flow integrity |
+| **Action-Selector Pattern** | Maps research intent to pre-approved actions, preventing prompt injection |
+| **Code-Then-Execute Pattern** | Outputs sandboxed research programs for static checking |
 
 ### Multi-Agent Patterns for Scaling
 
-| Pattern                                 | Role                                                                        |
-|-----------------------------------------|-----------------------------------------------------------------------------|
-| **Iterative Multi-Agent Brainstorming** | Spawns multiple agents to research from different angles simultaneously     |
-| **Planner-Worker Separation**           | Planners create tasks; workers execute searches; judge evaluates completion |
-| **Factory over Assistant**              | Spawns multiple autonomous research agents in parallel                      |
-| **Continuous Autonomous Task Loop**     | Provides continuous loop structure for autonomous processing                |
+| Pattern | Role |
+|---------|------|
+| **Iterative Multi-Agent Brainstorming** | Spawns multiple agents to research from different angles simultaneously |
+| **Planner-Worker Separation** | Planners create tasks; workers execute searches; judge evaluates completion |
+| **Factory over Assistant** | Spawns multiple autonomous research agents in parallel |
+| **Continuous Autonomous Task Loop** | Provides continuous loop structure for autonomous processing |
 
 ### Common Pattern Combinations
 
@@ -305,20 +296,19 @@ Agent-Driven Research (core research)
 
 ### Alternative Approaches Comparison
 
-| Capability       | Traditional RAG  | Agentic RAG              | Agent-Driven Research                |
-|------------------|------------------|--------------------------|--------------------------------------|
-| Query Processing | Single retrieval | Multi-round iterative    | Multi-round with strategy adjustment |
-| Strategy         | Fixed            | Agent decides            | Agent modifies strategy dynamically  |
-| Tool Usage       | None             | APIs, SQL, graphs        | Full tool orchestration              |
-| Complex Queries  | Limited          | Decomposes into subtasks | Decomposes and adapts                |
-| Error Handling   | No awareness     | Auto-retry               | Auto-retry + strategy change         |
-| Token Cost       | 1x baseline      | 5-10x baseline           | 5-10x baseline                       |
+| Capability | Traditional RAG | Agentic RAG | Agent-Driven Research |
+|------------|-----------------|-------------|----------------------|
+| Query Processing | Single retrieval | Multi-round iterative | Multi-round with strategy adjustment |
+| Strategy | Fixed | Agent decides | Agent modifies strategy dynamically |
+| Tool Usage | None | APIs, SQL, graphs | Full tool orchestration |
+| Complex Queries | Limited | Decomposes into subtasks | Decomposes and adapts |
+| Error Handling | No awareness | Auto-retry | Auto-retry + strategy change |
+| Token Cost | 1x baseline | 5-10x baseline | 5-10x baseline |
 
 ### When to Use Each Approach
 
 - **Traditional/Hybrid RAG**: Simple lookup queries like "Where is this information in the documents?"
-- **GraphRAG**: Queries requiring "summarizing common features across multiple documents" or "finding relationships
-  between entities"
+- **GraphRAG**: Queries requiring "summarizing common features across multiple documents" or "finding relationships between entities"
 - **Agentic RAG**: Complex analytical tasks requiring multi-step reasoning
 - **Agent-Driven Research**: Open-ended research requiring strategy adaptation and synthesis
 
@@ -349,11 +339,11 @@ Agent-Driven Research (core research)
 
 ### Performance Benchmarks
 
-| System                      | BrowseComp | HLE   | Notes                    |
-|-----------------------------|------------|-------|--------------------------|
-| OpenAI Deep Research        | 51.5%      | 26.6% | o3-based                 |
-| Tongyi DeepResearch         | 45.3       | 32.9  | 3B activated parameters  |
-| Google Gemini Deep Research | 46.4%      | -     | 1/10th cost of GPT-5 Pro |
+| System | BrowseComp | HLE | Notes |
+|--------|------------|-----|-------|
+| OpenAI Deep Research | 51.5% | 26.6% | o3-based |
+| Tongyi DeepResearch | 45.3 | 32.9 | 3B activated parameters |
+| Google Gemini Deep Research | 46.4% | - | 1/10th cost of GPT-5 Pro |
 
 ### Training Paradigms
 
@@ -386,8 +376,7 @@ Based on recent Agentic AI reviews:
 
 ### Future Vision
 
-- **Fully autonomous "AI Scientists"** capable of independently managing the entire research lifecycle (hypothesis
-  generation, experiment design, execution, analysis, manuscript writing)
+- **Fully autonomous "AI Scientists"** capable of independently managing the entire research lifecycle (hypothesis generation, experiment design, execution, analysis, manuscript writing)
 - **Cumulative research progress** through frameworks like AgentRxiv
 - **Human-AI collaboration** where agents handle research logistics, humans focus on creative conceptualization
 - **Multi-modal research** integrating text, images, video, and code

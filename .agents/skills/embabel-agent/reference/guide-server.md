@@ -1,7 +1,6 @@
 # Embabel Guide Server Reference
 
-The Guide server is a companion project that exposes Embabel documentation, blogs, and API information via chat, Spring
-Shell, and MCP.
+The Guide server is a companion project that exposes Embabel documentation, blogs, and API information via chat, Spring Shell, and MCP.
 
 ## Quick Start
 
@@ -43,16 +42,15 @@ curl -X POST http://localhost:1337/api/v1/data/load-references
 curl http://localhost:1337/api/v1/data/stats
 ```
 
-RAG storage uses `ChunkingContentElementRepository` from `embabel-agent-rag-core`, defaulting to Neo4j via
-`DrivineStore`.
+RAG storage uses `ChunkingContentElementRepository` from `embabel-agent-rag-core`, defaulting to Neo4j via `DrivineStore`.
 
 ## Graph Database Backends
 
-| Backend  | Profile    | Port | Compose Profile |
-|----------|------------|------|-----------------|
-| Neo4j    | `neo4j`    | 7687 | `neo4j`         |
-| FalkorDB | `falkordb` | 6379 | `falkordb`      |
-| Memgraph | `memgraph` | 7688 | `memgraph`      |
+| Backend  | Profile    | Port  | Compose Profile |
+|----------|------------|-------|-----------------|
+| Neo4j    | `neo4j`    | 7687  | `neo4j`         |
+| FalkorDB | `falkordb` | 6379  | `falkordb`      |
+| Memgraph | `memgraph` | 7688  | `memgraph`      |
 
 ### Switching backends
 
@@ -203,25 +201,25 @@ client.activate();
 
 CORS open (`*`).
 
-| Endpoint                | Method | Description                            |
-|-------------------------|--------|----------------------------------------|
-| `/api/hub/register`     | POST   | Register user                          |
-| `/api/hub/login`        | POST   | Login (returns JWT)                    |
-| `/api/hub/personas`     | GET    | List personas                          |
-| `/api/hub/persona/mine` | PUT    | Update persona (requires Bearer token) |
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/hub/register` | POST | Register user |
+| `/api/hub/login` | POST | Login (returns JWT) |
+| `/api/hub/personas` | GET | List personas |
+| `/api/hub/persona/mine` | PUT | Update persona (requires Bearer token) |
 
 ## Environment Variables
 
-| Variable             | Default     | Description       |
-|----------------------|-------------|-------------------|
-| `GUIDE_PORT`         | `1337`      | Host port mapping |
-| `OPENAI_API_KEY`     | —           | OpenAI key        |
-| `ANTHROPIC_API_KEY`  | —           | Anthropic key     |
-| `MISTRAL_API_KEY`    | —           | Mistral key       |
-| `DEEPSEEK_API_KEY`   | —           | DeepSeek key      |
-| `NEO4J_PASSWORD`     | `brahmsian` | Neo4j password    |
-| `EMBABEL_KEY_SECRET` | —           | AES key for BYOK  |
-| `DISCORD_TOKEN`      | —           | Discord bot token |
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `GUIDE_PORT` | `1337` | Host port mapping |
+| `OPENAI_API_KEY` | — | OpenAI key |
+| `ANTHROPIC_API_KEY` | — | Anthropic key |
+| `MISTRAL_API_KEY` | — | Mistral key |
+| `DEEPSEEK_API_KEY` | — | DeepSeek key |
+| `NEO4J_PASSWORD` | `brahmsian` | Neo4j password |
+| `EMBABEL_KEY_SECRET` | — | AES key for BYOK |
+| `DISCORD_TOKEN` | — | Discord bot token |
 
 ## Testing
 

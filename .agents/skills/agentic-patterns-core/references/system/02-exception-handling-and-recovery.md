@@ -1,8 +1,6 @@
 # Exception Handling and Recovery Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -77,14 +75,9 @@ def execute_with_recovery(operation, max_retries=3, fallback=None):
 
 ## Real-World Examples
 
-1. **Payment Processing**: Retry with backoff → Fallback to alternative gateway → Save state for manual review →
-   Auto-refund on persistent failure
-2. **Data Pipeline**: Handle malformed data → Retry with jitter → Use cached data when unavailable → Checkpoint for
-   resume → Alert on quality issues
-3. **Chatbot**: Fallback to simple responses → Escalate to human → Save conversation state → Retry knowledge base →
-   Default to FAQ
+1. **Payment Processing**: Retry with backoff → Fallback to alternative gateway → Save state for manual review → Auto-refund on persistent failure
+2. **Data Pipeline**: Handle malformed data → Retry with jitter → Use cached data when unavailable → Checkpoint for resume → Alert on quality issues
+3. **Chatbot**: Fallback to simple responses → Escalate to human → Save conversation state → Retry knowledge base → Default to FAQ
 4. **CDN**: Retry origin fetches → Serve stale content → Route to backup → Circuit breakers → Geographic failover
-5. **ML Pipeline**: Handle model loading failures → Fallback to simpler model → Retry predictions → Cache frequent
-   predictions → Graceful degradation
-6. **IoT Management**: Retry device commands → Queue for offline → Use last known state → Watchdog timers → Auto-reboot
-   protocols
+5. **ML Pipeline**: Handle model loading failures → Fallback to simpler model → Retry predictions → Cache frequent predictions → Graceful degradation
+6. **IoT Management**: Retry device commands → Queue for offline → Use last known state → Watchdog timers → Auto-reboot protocols

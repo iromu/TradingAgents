@@ -23,9 +23,7 @@ Implement a **two-tier memory system**:
 1. **Task diaries**: Agent writes structured logs for each task (what it tried, what failed, why)
 2. **Synthesis agents**: Periodically review multiple task logs to extract reusable patterns
 
-The synthesis step identifies recurring themes across logs, surfacing insights that aren't obvious from any single
-execution. This approach is validated by academic research: Reflexion (NeurIPS 2023) achieved 91% pass@1 on HumanEval
-using episodic memory with self-reflection.
+The synthesis step identifies recurring themes across logs, surfacing insights that aren't obvious from any single execution. This approach is validated by academic research: Reflexion (NeurIPS 2023) achieved 91% pass@1 on HumanEval using episodic memory with self-reflection.
 
 **Example diary entry format:**
 ```markdown
@@ -43,11 +41,9 @@ Patterns discovered: Auth changes always need CORS update
 
 - **Evidence Grade:** `validated-in-production`
 - **Key Findings:**
-    - Cat Wu (Anthropic): "Some people at Anthropic where for every task they do, they tell Claude Code to write a diary
-      entry in a specific format... they even have these agents that look over the past memory and synthesize it into
-      observations."
-    - Reflexion (NeurIPS 2023): 91% pass@1 on HumanEval using episodic memory with self-reflection
-    - Structured records (event, outcome, rationale) reduce repetition and improve synthesis (ParamMem 2026)
+  - Cat Wu (Anthropic): "Some people at Anthropic where for every task they do, they tell Claude Code to write a diary entry in a specific format... they even have these agents that look over the past memory and synthesize it into observations."
+  - Reflexion (NeurIPS 2023): 91% pass@1 on HumanEval using episodic memory with self-reflection
+  - Structured records (event, outcome, rationale) reduce repetition and improve synthesis (ParamMem 2026)
 
 ## How to use it
 

@@ -10,13 +10,11 @@ tags: [orchestration, multi-agent, parallel-execution, deterministic, test-drive
 
 ## Problem
 
-Multi-agent coding systems typically spend LLM tokens on coordination — deciding which agent works on what, routing
-tasks, merging results. This coordination overhead adds cost, latency, and non-determinism where none is needed.
+Multi-agent coding systems typically spend LLM tokens on coordination — deciding which agent works on what, routing tasks, merging results. This coordination overhead adds cost, latency, and non-determinism where none is needed.
 
 ## Solution
 
-Keep the orchestrator as **deterministic Python code** that spends zero LLM tokens on coordination. The LLM budget goes
-entirely to the agents doing actual work.
+Keep the orchestrator as **deterministic Python code** that spends zero LLM tokens on coordination. The LLM budget goes entirely to the agents doing actual work.
 
 ```
 Goal → Decompose (deterministic) → Assign to parallel agents → Verify (tests) → Commit

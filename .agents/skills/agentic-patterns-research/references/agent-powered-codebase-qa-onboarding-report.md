@@ -11,10 +11,7 @@
 
 ## Research Summary
 
-This report compiles research from academic literature (arXiv), industry sources, and existing pattern analysis to
-document the **Agent-Powered Codebase QA & Onboarding** pattern. The pattern describes using AI agents with
-retrieval/search capabilities to help developers understand, explore, and onboard to codebases through intelligent Q&A
-interfaces.
+This report compiles research from academic literature (arXiv), industry sources, and existing pattern analysis to document the **Agent-Powered Codebase QA & Onboarding** pattern. The pattern describes using AI agents with retrieval/search capabilities to help developers understand, explore, and onboard to codebases through intelligent Q&A interfaces.
 
 ---
 
@@ -33,80 +30,80 @@ interfaces.
 
 #### Repository-Level Code Understanding & Documentation
 
-| Paper          | arXiv ID                                       | Year | Venue      | Key Contribution                                                  |
-|----------------|------------------------------------------------|------|------------|-------------------------------------------------------------------|
-| RepoAgent      | [2402.16667](https://arxiv.org/abs/2402.16667) | 2024 | EMNLP 2024 | First framework for automated repository-level code documentation |
-| VisDocSketcher | [2509.11942](https://arxiv.org/abs/2509.11942) | 2025 | -          | Visual documentation generation with agentic systems              |
-| AI-Researcher  | [2505.18705](https://arxiv.org/abs/2505.18705) | 2025 | -          | Multi-agent system with Automated Documentation Agent             |
+| Paper | arXiv ID | Year | Venue | Key Contribution |
+|-------|----------|------|-------|------------------|
+| RepoAgent | [2402.16667](https://arxiv.org/abs/2402.16667) | 2024 | EMNLP 2024 | First framework for automated repository-level code documentation |
+| VisDocSketcher | [2509.11942](https://arxiv.org/abs/2509.11942) | 2025 | - | Visual documentation generation with agentic systems |
+| AI-Researcher | [2505.18705](https://arxiv.org/abs/2505.18705) | 2025 | - | Multi-agent system with Automated Documentation Agent |
 
 #### Codebase Navigation & Exploration
 
-| Paper      | arXiv ID                                       | Year | Venue          | Key Contribution                                           |
-|------------|------------------------------------------------|------|----------------|------------------------------------------------------------|
-| SWE-agent  | [2405.15793](https://arxiv.org/abs/2405.15793) | 2024 | arXiv preprint | Agent-Computer Interfaces (ACI) for repository interaction |
-| CodeAgent  | [2401.07339](https://arxiv.org/abs/2401.07339) | 2024 | ACL 2024       | Tool-integrated agent system for repo-level challenges     |
-| Trae Agent | [2507.23370](https://arxiv.org/abs/2507.23370) | 2025 | -              | Ensemble reasoning for repository-level issue resolution   |
-| RepoMaster | [2505.21577](https://arxiv.org/abs/2505.21577) | 2025 | -              | Autonomous exploration and understanding                   |
+| Paper | arXiv ID | Year | Venue | Key Contribution |
+|-------|----------|------|-------|------------------|
+| SWE-agent | [2405.15793](https://arxiv.org/abs/2405.15793) | 2024 | arXiv preprint | Agent-Computer Interfaces (ACI) for repository interaction |
+| CodeAgent | [2401.07339](https://arxiv.org/abs/2401.07339) | 2024 | ACL 2024 | Tool-integrated agent system for repo-level challenges |
+| Trae Agent | [2507.23370](https://arxiv.org/abs/2507.23370) | 2025 | - | Ensemble reasoning for repository-level issue resolution |
+| RepoMaster | [2505.21577](https://arxiv.org/abs/2505.21577) | 2025 | - | Autonomous exploration and understanding |
 
 #### Codebase Question Answering
 
-| Paper                     | arXiv ID                                       | Year | Key Contribution                                  |
-|---------------------------|------------------------------------------------|------|---------------------------------------------------|
-| CoreQA                    | [2501.03447](https://arxiv.org/abs/2501.03447) | 2025 | Mining LLM potential in code repository QA        |
-| CodeRepoQA                | [2412.14764](https://arxiv.org/abs/2412.14764) | 2024 | Large-scale benchmark for software engineering QA |
-| Neural QA for Subroutines | [2101.03999](https://arxiv.org/abs/2101.03999) | 2021 | Context-based QA for software engineering         |
+| Paper | arXiv ID | Year | Key Contribution |
+|-------|----------|------|------------------|
+| CoreQA | [2501.03447](https://arxiv.org/abs/2501.03447) | 2025 | Mining LLM potential in code repository QA |
+| CodeRepoQA | [2412.14764](https://arxiv.org/abs/2412.14764) | 2024 | Large-scale benchmark for software engineering QA |
+| Neural QA for Subroutines | [2101.03999](https://arxiv.org/abs/2101.03999) | 2021 | Context-based QA for software engineering |
 
 #### Graph-Based Repository Understanding
 
-| Paper                  | arXiv ID                                       | Year | Key Contribution                                |
-|------------------------|------------------------------------------------|------|-------------------------------------------------|
-| RepoGraph              | [2410.14684](https://arxiv.org/abs/2410.14684) | 2024 | Repository-level code graph representation      |
+| Paper | arXiv ID | Year | Key Contribution |
+|-------|----------|------|------------------|
+| RepoGraph | [2410.14684](https://arxiv.org/abs/2410.14684) | 2024 | Repository-level code graph representation |
 | Code Graph Model (CGM) | [2505.16901](https://arxiv.org/abs/2505.16901) | 2025 | Graph-integrated LLM for repository-level tasks |
-| CoSIL                  | [2503.22424](https://arxiv.org/abs/2503.22424) | 2025 | LLM-driven code repository graph searching      |
+| CoSIL | [2503.22424](https://arxiv.org/abs/2503.22424) | 2025 | LLM-driven code repository graph searching |
 
 #### Multi-Agent Software Development
 
-| Paper   | arXiv ID                                       | Year | Key Contribution                               |
-|---------|------------------------------------------------|------|------------------------------------------------|
-| ChatDev | [2307.07924](https://arxiv.org/abs/2307.07924) | 2023 | Multi-role agents simulating software company  |
+| Paper | arXiv ID | Year | Key Contribution |
+|-------|----------|------|------------------|
+| ChatDev | [2307.07924](https://arxiv.org/abs/2307.07924) | 2023 | Multi-role agents simulating software company |
 | MetaGPT | [2308.00952](https://arxiv.org/abs/2308.00952) | 2023 | Meta programming for multi-agent collaboration |
 
 #### Program Comprehension & Repair
 
-| Paper                  | arXiv ID                                       | Year | Key Contribution                                      |
-|------------------------|------------------------------------------------|------|-------------------------------------------------------|
-| ExpeRepair             | [2506.10484](https://arxiv.org/abs/2506.10484) | 2025 | Dual-memory enhanced repository-level program repair  |
-| SWE-bench Survey       | [2408.02479](https://arxiv.org/abs/2408.02479) | 2024 | Comprehensive survey on LLM-based agents for SE       |
+| Paper | arXiv ID | Year | Key Contribution |
+|-------|----------|------|------------------|
+| ExpeRepair | [2506.10484](https://arxiv.org/abs/2506.10484) | 2025 | Dual-memory enhanced repository-level program repair |
+| SWE-bench Survey | [2408.02479](https://arxiv.org/abs/2408.02479) | 2024 | Comprehensive survey on LLM-based agents for SE |
 | Code Generation Survey | [2508.00083](https://arxiv.org/abs/2508.00083) | 2025 | Systematic survey of LLM-based code generation agents |
 
 ### Industry Sources
 
 #### Commercial Tools
 
-| Tool             | Organization     | Website                                                            | Key Features                                                  |
-|------------------|------------------|--------------------------------------------------------------------|---------------------------------------------------------------|
-| Sourcegraph Cody | Sourcegraph      | [sourcegraph.com](https://sourcegraph.com)                         | Large-scale AST-based codebase understanding, semantic search |
-| Cursor IDE       | Cursor Inc.      | [cursor.com](https://www.cursor.com)                               | @Codebase annotation, automatic indexing, multi-file editing  |
-| GitHub Copilot   | GitHub/Microsoft | [github.com/features/copilot](https://github.com/features/copilot) | @workspace, PR summaries, documentation queries               |
-| Codeium Windsurf | Codeium          | [codeium.com/windsurf](https://codeium.com/windsurf)               | Deep Context Awareness, Cascade AI Agent, MCP integration     |
-| Continue.dev     | Continue Dev     | [docs.continue.dev](https://docs.continue.dev)                     | Open-source, context providers (@codebase, @docs, @files)     |
+| Tool | Organization | Website | Key Features |
+|------|--------------|---------|--------------|
+| Sourcegraph Cody | Sourcegraph | [sourcegraph.com](https://sourcegraph.com) | Large-scale AST-based codebase understanding, semantic search |
+| Cursor IDE | Cursor Inc. | [cursor.com](https://www.cursor.com) | @Codebase annotation, automatic indexing, multi-file editing |
+| GitHub Copilot | GitHub/Microsoft | [github.com/features/copilot](https://github.com/features/copilot) | @workspace, PR summaries, documentation queries |
+| Codeium Windsurf | Codeium | [codeium.com/windsurf](https://codeium.com/windsurf) | Deep Context Awareness, Cascade AI Agent, MCP integration |
+| Continue.dev | Continue Dev | [docs.continue.dev](https://docs.continue.dev) | Open-source, context providers (@codebase, @docs, @files) |
 
 #### Open Source Projects
 
-| Project             | Repository                                                                            | Stars | Key Technology                               |
-|---------------------|---------------------------------------------------------------------------------------|-------|----------------------------------------------|
-| Aider               | [Aider-AI/aider](https://github.com/Aider-AI/aider)                                   | ~29k  | Repo-map with Tree-sitter parser             |
-| OpenHands           | [All-Hands-AI/OpenHands](https://github.com/All-Hands-AI/OpenHands)                   | ~64k  | 128K context, CodeAct Framework              |
-| GitHub Second Brain | [BaoNguyen09/github-second-brain](https://github.com/BaoNguyen09/github-second-brain) | -     | MCP server for GitHub exploration            |
-| Shadow              | [ishaan1013/shadow](https://github.com/ishaan1013/shadow)                             | -     | Background AI assistant with QEMU containers |
-| Skill Seekers       | [yusufkaraaslan/Skill_Seekers](https://github.com/yusufkaraaslan/Skill_Seekers)       | -     | Converts repos to optimized prompts          |
+| Project | Repository | Stars | Key Technology |
+|---------|------------|-------|-----------------|
+| Aider | [Aider-AI/aider](https://github.com/Aider-AI/aider) | ~29k | Repo-map with Tree-sitter parser |
+| OpenHands | [All-Hands-AI/OpenHands](https://github.com/All-Hands-AI/OpenHands) | ~64k | 128K context, CodeAct Framework |
+| GitHub Second Brain | [BaoNguyen09/github-second-brain](https://github.com/BaoNguyen09/github-second-brain) | - | MCP server for GitHub exploration |
+| Shadow | [ishaan1013/shadow](https://github.com/ishaan1013/shadow) | - | Background AI assistant with QEMU containers |
+| Skill Seekers | [yusufkaraaslan/Skill_Seekers](https://github.com/yusufkaraaslan/Skill_Seekers) | - | Converts repos to optimized prompts |
 
 #### Architectural Standards
 
-| Standard                     | Developer | Website                                                    | Description                                                 |
-|------------------------------|-----------|------------------------------------------------------------|-------------------------------------------------------------|
+| Standard | Developer | Website | Description |
+|----------|-----------|---------|-------------|
 | Model Context Protocol (MCP) | Anthropic | [modelcontextprotocol.io](https://modelcontextprotocol.io) | Universal protocol for AI-tool integration ("USB-C for AI") |
-| CLAUDE.md                    | Anthropic | [claude.ai/code](https://claude.ai/code)                   | Project instruction file for AI onboarding                  |
+| CLAUDE.md | Anthropic | [claude.ai/code](https://claude.ai/code) | Project instruction file for AI onboarding |
 
 ### Existing Related Patterns (in codebase)
 
@@ -117,17 +114,17 @@ The pattern **already exists** in this codebase at:
 
 #### Related Patterns Identified:
 
-| Pattern                                     | Category | Connection                                                       |
-|---------------------------------------------|----------|------------------------------------------------------------------|
-| abstracted-code-representation-for-review   | -        | Complementary - provides high-level abstraction for efficient QA |
-| ai-assisted-code-review-verification        | -        | Verification step after code discovery                           |
-| agent-assisted-scaffolding                  | -        | Creates structure that QA can explore                            |
-| semantic-context-filtering                  | -        | Essential optimization - reduces noise in large codebases        |
-| curated-file-context-window                 | -        | Limits context to relevant files                                 |
-| dynamic-code-injection-on-demand-file-fetch | -        | Enables interactive exploration                                  |
-| agent-driven-research                       | -        | Extends QA to broader research tasks                             |
-| structured-output-specification             | -        | Ensures reliable Q&A responses                                   |
-| codebase-optimization-for-agents            | -        | Fundamental enabler for QA patterns                              |
+| Pattern | Category | Connection |
+|---------|----------|------------|
+| abstracted-code-representation-for-review | - | Complementary - provides high-level abstraction for efficient QA |
+| ai-assisted-code-review-verification | - | Verification step after code discovery |
+| agent-assisted-scaffolding | - | Creates structure that QA can explore |
+| semantic-context-filtering | - | Essential optimization - reduces noise in large codebases |
+| curated-file-context-window | - | Limits context to relevant files |
+| dynamic-code-injection-on-demand-file-fetch | - | Enables interactive exploration |
+| agent-driven-research | - | Extends QA to broader research tasks |
+| structured-output-specification | - | Ensures reliable Q&A responses |
+| codebase-optimization-for-agents | - | Fundamental enabler for QA patterns |
 
 ---
 
@@ -137,14 +134,12 @@ The pattern **already exists** in this codebase at:
 
 Developers face significant challenges when:
 - **Onboarding to new codebases**: Understanding large, complex codebases takes weeks or months
-- **Answering codebase questions**: Finding where specific features are implemented or understanding component
-  relationships
+- **Answering codebase questions**: Finding where specific features are implemented or understanding component relationships
 - **Navigating legacy systems**: Old code with outdated or missing documentation
 - **Context switching**: Maintaining understanding across multiple repositories
 - **Knowledge transfer**: Capturing and sharing institutional knowledge about codebases
 
-Traditional approaches (grep, IDE search, documentation) are time-consuming and often insufficient for modern
-large-scale codebases.
+Traditional approaches (grep, IDE search, documentation) are time-consuming and often insufficient for modern large-scale codebases.
 
 ### Solution Description
 
@@ -197,10 +192,10 @@ The **Agent-Powered Codebase QA & Onboarding** pattern uses AI agents with retri
 
 **Single-Agent vs Multi-Agent:**
 
-| Approach     | Examples            | Trade-offs                                               |
-|--------------|---------------------|----------------------------------------------------------|
-| Single-Agent | Continue.dev, Aider | Simpler, lower cost, may miss complex relationships      |
-| Multi-Agent  | MetaGPT, ChatDev    | Specialized roles, better for complex tasks, higher cost |
+| Approach | Examples | Trade-offs |
+|----------|----------|------------|
+| Single-Agent | Continue.dev, Aider | Simpler, lower cost, may miss complex relationships |
+| Multi-Agent | MetaGPT, ChatDev | Specialized roles, better for complex tasks, higher cost |
 
 **Specialized Agent Roles:**
 - **Navigation Agent**: Explores codebase structure
@@ -350,14 +345,14 @@ graph LR
 
 ### Technology Stack Recommendations
 
-| Component    | Open Source Options                 | Commercial Options |
-|--------------|-------------------------------------|--------------------|
-| Embeddings   | Sentence-Transformers, Cohere Embed | OpenAI Embeddings  |
-| Vector Store | FAISS, Chroma, Weaviate             | Pinecone           |
-| Graph Store  | Neo4j, NetworkX                     | Neo4j Enterprise   |
-| AST Parser   | Tree-sitter (multi-language)        | -                  |
-| LLM          | Ollama (local), Llama               | Claude, GPT-4      |
-| Protocol     | MCP                                 | -                  |
+| Component | Open Source Options | Commercial Options |
+|-----------|---------------------|-------------------|
+| Embeddings | Sentence-Transformers, Cohere Embed | OpenAI Embeddings |
+| Vector Store | FAISS, Chroma, Weaviate | Pinecone |
+| Graph Store | Neo4j, NetworkX | Neo4j Enterprise |
+| AST Parser | Tree-sitter (multi-language) | - |
+| LLM | Ollama (local), Llama | Claude, GPT-4 |
+| Protocol | MCP | - |
 
 ### Configuration Best Practices
 
@@ -418,29 +413,21 @@ graph LR
 
 ### Academic Papers
 
-1. Luo, Q., et al. (2024). "RepoAgent: An LLM-Powered Open-Source Framework for Repository-level Code Documentation
-   Generation." [arXiv:2402.16667](https://arxiv.org/abs/2402.16667) - EMNLP 2024
+1. Luo, Q., et al. (2024). "RepoAgent: An LLM-Powered Open-Source Framework for Repository-level Code Documentation Generation." [arXiv:2402.16667](https://arxiv.org/abs/2402.16667) - EMNLP 2024
 
-2. Yang, J., et al. (2024). "SWE-agent: Agent-Computer Interfaces Enable Automated Software
-   Engineering." [arXiv:2405.15793](https://arxiv.org/abs/2405.15793) - NeurIPS 2024
+2. Yang, J., et al. (2024). "SWE-agent: Agent-Computer Interfaces Enable Automated Software Engineering." [arXiv:2405.15793](https://arxiv.org/abs/2405.15793) - NeurIPS 2024
 
-3. Zhang, F., et al. (2024). "CodeAgent: Enhancing Code Generation with Tool-Integrated Agent
-   Systems." [arXiv:2401.07339](https://arxiv.org/abs/2401.07339) - ACL 2024
+3. Zhang, F., et al. (2024). "CodeAgent: Enhancing Code Generation with Tool-Integrated Agent Systems." [arXiv:2401.07339](https://arxiv.org/abs/2401.07339) - ACL 2024
 
-4. Chen, H., et al. (2024). "ChatDev: Communicative Agents for Software
-   Development." [arXiv:2307.07924](https://arxiv.org/abs/2307.07924)
+4. Chen, H., et al. (2024). "ChatDev: Communicative Agents for Software Development." [arXiv:2307.07924](https://arxiv.org/abs/2307.07924)
 
-5. Hong, S., et al. (2023). "MetaGPT: Meta Programming for Multi-Agent
-   Collaboration." [arXiv:2308.00952](https://arxiv.org/abs/2308.00952)
+5. Hong, S., et al. (2023). "MetaGPT: Meta Programming for Multi-Agent Collaboration." [arXiv:2308.00952](https://arxiv.org/abs/2308.00952)
 
-6. Tao, H., et al. (2025). "Code Graph Model (CGM): A Graph-Integrated Large Language Model for Repository-Level
-   Software Engineering Tasks." [arXiv:2505.16901](https://arxiv.org/abs/2505.16901)
+6. Tao, H., et al. (2025). "Code Graph Model (CGM): A Graph-Integrated Large Language Model for Repository-Level Software Engineering Tasks." [arXiv:2505.16901](https://arxiv.org/abs/2505.16901)
 
-7. Various (2024). "RepoGraph: Enhancing AI Software Engineering with Repository-level Code
-   Graph." [arXiv:2410.14684](https://arxiv.org/abs/2410.14684)
+7. Various (2024). "RepoGraph: Enhancing AI Software Engineering with Repository-level Code Graph." [arXiv:2410.14684](https://arxiv.org/abs/2410.14684)
 
-8. Various (2024). "From LLMs to LLM-based Agents for Software Engineering: A
-   Survey." [arXiv:2408.02479](https://arxiv.org/abs/2408.02479)
+8. Various (2024). "From LLMs to LLM-based Agents for Software Engineering: A Survey." [arXiv:2408.02479](https://arxiv.org/abs/2408.02479)
 
 ### Industry Documentation
 

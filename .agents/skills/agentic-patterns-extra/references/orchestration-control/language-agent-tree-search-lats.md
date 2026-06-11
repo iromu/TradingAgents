@@ -10,23 +10,18 @@ tags: [search, monte-carlo, tree-search, reasoning, planning, reflection, evalua
 
 ## Problem
 
-Current language agents often struggle with complex reasoning tasks that require exploration of multiple solution paths.
-Simple linear approaches like ReACT or basic reflection patterns can get stuck in local optima or fail to consider
-alternative strategies. This is particularly problematic for tasks requiring strategic planning, mathematical reasoning,
-or multi-step problem solving where early decisions significantly impact later outcomes.
+Current language agents often struggle with complex reasoning tasks that require exploration of multiple solution paths. Simple linear approaches like ReACT or basic reflection patterns can get stuck in local optima or fail to consider alternative strategies. This is particularly problematic for tasks requiring strategic planning, mathematical reasoning, or multi-step problem solving where early decisions significantly impact later outcomes.
 
 ## Solution
 
-Language Agent Tree Search (LATS) combines Monte Carlo Tree Search (MCTS) with language model reflection and evaluation
-capabilities. The approach treats the problem-solving process as a tree where:
+Language Agent Tree Search (LATS) combines Monte Carlo Tree Search (MCTS) with language model reflection and evaluation capabilities. The approach treats the problem-solving process as a tree where:
 
 1. **Nodes** represent states (partial solutions or reasoning steps)
 2. **Edges** represent actions (next steps in reasoning)
 3. **Leaf nodes** are evaluated using the LLM's self-reflection capabilities
 4. **Backpropagation** updates value estimates throughout the tree
 
-The agent explores promising branches more deeply while maintaining breadth to avoid getting stuck. This creates a
-best-of-both-worlds approach combining systematic search with LLM reasoning.
+The agent explores promising branches more deeply while maintaining breadth to avoid getting stuck. This creates a best-of-both-worlds approach combining systematic search with LLM reasoning.
 
 **Selection uses the UCB (Upper Confidence Bound) formula:**
 
@@ -34,12 +29,9 @@ best-of-both-worlds approach combining systematic search with LLM reasoning.
 UCB(node) = Q(node) + c × √(ln(parent_visits) / node_visits)
 ```
 
-Where Q(node) is the estimated value, c is the exploration constant (typically 1.4), and the logarithmic term balances
-exploration of less-visited nodes. This principled approach yields better sample efficiency than breadth-first or random
-exploration.
+Where Q(node) is the estimated value, c is the exploration constant (typically 1.4), and the logarithmic term balances exploration of less-visited nodes. This principled approach yields better sample efficiency than breadth-first or random exploration.
 
-**Evaluation mechanisms** include: direct confidence scoring (0-1), critique-based evaluation, or multi-aspect scoring.
-The choice depends on task complexity and required precision.
+**Evaluation mechanisms** include: direct confidence scoring (0-1), critique-based evaluation, or multi-aspect scoring. The choice depends on task complexity and required precision.
 
 ## Example
 
@@ -156,7 +148,6 @@ class LATSAgent:
 ## References
 
 - [Language Agent Tree Search (LATS) Paper](https://arxiv.org/abs/2310.04406) - Zhou et al., 2023
-- [Monte Carlo Tree Search: A Survey](https://doi.org/10.1109/TCIAIG.2012.2206890) - Browne et al., 2012 (foundational
-  MCTS theory)
+- [Monte Carlo Tree Search: A Survey](https://doi.org/10.1109/TCIAIG.2012.2206890) - Browne et al., 2012 (foundational MCTS theory)
 - [Tree of Thoughts: Deliberate Problem Solving](https://arxiv.org/abs/2305.10601) - Yao et al., NeurIPS 2023
 - [Reflexion: Language Agents with Verbal RL](https://arxiv.org/abs/2303.11366) - Shinn et al., 2023

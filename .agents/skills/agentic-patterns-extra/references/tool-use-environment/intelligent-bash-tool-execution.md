@@ -17,28 +17,20 @@ Secure, reliable command execution from agents is complex and error-prone:
 - **Security concerns**: Arbitrary command execution needs approval workflows, elevated mode detection
 - **Background management**: Long-running processes need tracking, output aggregation, and cleanup
 
-Agents need a multi-mode execution strategy that adapts to the command's requirements while maintaining security and
-reliability.
+Agents need a multi-mode execution strategy that adapts to the command's requirements while maintaining security and reliability.
 
 ## Solution
 
-Multi-mode execution with adaptive fallback: direct exec → PTY, with automatic selection based on command requirements
-and runtime capabilities. The system handles PTY spawn failures gracefully, manages background processes, and provides
-security-aware approval workflows.
+Multi-mode execution with adaptive fallback: direct exec → PTY, with automatic selection based on command requirements and runtime capabilities. The system handles PTY spawn failures gracefully, manages background processes, and provides security-aware approval workflows.
 
 **Core concepts:**
 
-- **Tool schema definition**: Bash commands invoked through structured tool interfaces (MCP, OpenAI Function Calling)
-  with validated parameters.
-- **PTY-first for TTY-required commands**: Detects when commands need a pseudo-terminal (coding agents, interactive
-  CLIs) and spawns via `node-pty`.
-- **Graceful PTY fallback**: If PTY spawn fails (module missing, platform unsupported), falls back to direct exec with a
-  warning.
-- **Platform-specific handling**: macOS requires detached processes for proper signal propagation; Linux handles both
-  modes.
+- **Tool schema definition**: Bash commands invoked through structured tool interfaces (MCP, OpenAI Function Calling) with validated parameters.
+- **PTY-first for TTY-required commands**: Detects when commands need a pseudo-terminal (coding agents, interactive CLIs) and spawns via `node-pty`.
+- **Graceful PTY fallback**: If PTY spawn fails (module missing, platform unsupported), falls back to direct exec with a warning.
+- **Platform-specific handling**: macOS requires detached processes for proper signal propagation; Linux handles both modes.
 - **Security-aware modes**: Elevated mode detection with approval workflows (deny, allowlist, full).
-- **Background process registry**: Long-running processes tracked with session IDs, output tailing, and exit
-  notifications.
+- **Background process registry**: Long-running processes tracked with session IDs, output tailing, and exit notifications.
 - **Output truncation**: Enforce `maxOutput` limits to prevent memory exhaustion for verbose processes.
 - **Proper signal propagation**: SIGTERM/SIGKILL delivered correctly to child processes on timeout or abort.
 
@@ -220,22 +212,18 @@ function killSession(session: ProcessSession) {
 
 ## How to use it
 
-1. **Detect TTY requirements**: Check if the command is a TTY-required CLI (coding agent, interactive tool) and set
-   `usePty: true`.
+1. **Detect TTY requirements**: Check if the command is a TTY-required CLI (coding agent, interactive tool) and set `usePty: true`.
 2. **Handle PTY failures**: Wrap PTY spawn in try-catch and fall back to direct exec with appropriate warnings.
-3. **Configure security modes**: Set default security level (`deny`, `allowlist`, `full`) and approval behavior (`off`,
-   `on-miss`, `always`).
+3. **Configure security modes**: Set default security level (`deny`, `allowlist`, `full`) and approval behavior (`off`, `on-miss`, `always`).
 4. **Register background processes**: Add sessions to a registry for tracking, polling, and cleanup.
-5. **Propagate signals correctly**: Use SIGTERM then SIGKILL for graceful shutdown, and handle platform-specific
-   detached process behavior.
+5. **Propagate signals correctly**: Use SIGTERM then SIGKILL for graceful shutdown, and handle platform-specific detached process behavior.
 6. **Aggregate output**: Collect stdout/stderr into `aggregated` and maintain a `tail` for user notifications.
 7. **Enforce output limits**: Set `maxOutput` thresholds to prevent memory exhaustion on verbose processes.
 
 **Pitfalls to avoid:**
 
 - **Missing PTY module**: `node-pty` may not be available in all environments; always provide fallback.
-- **Signal handling differences**: macOS detached processes don't receive signals; use process groups or alternative
-  signaling.
+- **Signal handling differences**: macOS detached processes don't receive signals; use process groups or alternative signaling.
 - **Zombie processes**: Always handle the `"close"` event and clean up session registry entries.
 - **Output truncation**: Large outputs can overwhelm memory; enforce `maxOutput` limits and truncate middle sections.
 
@@ -258,12 +246,9 @@ function killSession(session: ProcessSession) {
 
 ## References
 
-- [Clawdbot bash-tools.exec.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/bash-tools.exec.ts) -
-  Execution modes
-- [Clawdbot bash-tools.process.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/bash-tools.process.ts) -
-  Process management
-- [Clawdbot bash-process-registry.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/bash-process-registry.ts) -
-  Background registry
+- [Clawdbot bash-tools.exec.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/bash-tools.exec.ts) - Execution modes
+- [Clawdbot bash-tools.process.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/bash-tools.process.ts) - Process management
+- [Clawdbot bash-process-registry.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/bash-process-registry.ts) - Background registry
 - [Claude Code](https://claude.ai/code) - Tool-mediated bash execution with `run_in_background` support
 - [Model Context Protocol](https://modelcontextprotocol.io) - Structured tool definition standard
 - Related: [Virtual Machine Operator Agent](/patterns/virtual-machine-operator-agent) for remote execution patterns

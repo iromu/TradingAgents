@@ -24,15 +24,11 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-AI agents can pursue misguided reasoning paths for extended periods before producing final outputs. By the time
-developers realize the approach is wrong, significant time and tokens have been wasted on a fundamentally flawed
-direction. Traditional "fire and forget" agent execution provides no opportunity for early course correction.
+AI agents can pursue misguided reasoning paths for extended periods before producing final outputs. By the time developers realize the approach is wrong, significant time and tokens have been wasted on a fundamentally flawed direction. Traditional "fire and forget" agent execution provides no opportunity for early course correction.
 
 ## Solution
 
-Implement active surveillance of the agent's intermediate reasoning steps with the capability to interrupt and redirect
-before completing full execution sequences. Monitor chain-of-thought outputs, tool calls, and intermediate results in
-real-time, maintaining a "finger on the trigger" to catch wrong directions early.
+Implement active surveillance of the agent's intermediate reasoning steps with the capability to interrupt and redirect before completing full execution sequences. Monitor chain-of-thought outputs, tool calls, and intermediate results in real-time, maintaining a "finger on the trigger" to catch wrong directions early.
 
 **Key mechanisms:**
 
@@ -90,8 +86,7 @@ sequenceDiagram
 
 **Framework-level:**
 
-- **LangGraph:** `interrupt()` function with checkpointing via `MemorySaver`; supports static breakpoints (
-  `interrupt_before`/`interrupt_after`) and dynamic event-driven interruption
+- **LangGraph:** `interrupt()` function with checkpointing via `MemorySaver`; supports static breakpoints (`interrupt_before`/`interrupt_after`) and dynamic event-driven interruption
 - **LlamaIndex:** Event logging with `AgentRunStepStartEvent`/`AgentRunStepEndEvent` for step boundaries
 - **AgentScope:** Safe interruption with context preservation and graceful cancellation
 
@@ -134,17 +129,12 @@ sequenceDiagram
 - May create dependency on human oversight for routine tasks
 - Adds cognitive load to monitor agent reasoning
 - Risk of over-correcting and preventing valid creative approaches
-- **Low faithfulness:** Current models' CoT frequently doesn't reflect true reasoning (Claude 3.7: ~25%, DeepSeek R1: ~
-  39%)
+- **Low faithfulness:** Current models' CoT frequently doesn't reflect true reasoning (Claude 3.7: ~25%, DeepSeek R1: ~39%)
 
 ## References
 
-- [Building Companies with Claude Code](https://claude.com/blog/building-companies-with-claude-code) - Tanner Jones (
-  Vulcan) advises: "Have your finger on the trigger to escape and interrupt any bad behavior."
-- [Effectively Controlling Reasoning Models through Thinking Intervention](https://arxiv.org/pdf/2503.24370) (Princeton
-  et al., March 2025) - "Thinking intervention" for strategically inserting/modifying thinking tokens during generation
-- [Dynamic Early Exit in Reasoning Models](https://arxiv.org/abs/2504.15895) (arXiv:2504.15895, April 2025) -
-  Confidence-based early stopping; ~75% of samples contain early exit opportunities
+- [Building Companies with Claude Code](https://claude.com/blog/building-companies-with-claude-code) - Tanner Jones (Vulcan) advises: "Have your finger on the trigger to escape and interrupt any bad behavior."
+- [Effectively Controlling Reasoning Models through Thinking Intervention](https://arxiv.org/pdf/2503.24370) (Princeton et al., March 2025) - "Thinking intervention" for strategically inserting/modifying thinking tokens during generation
+- [Dynamic Early Exit in Reasoning Models](https://arxiv.org/abs/2504.15895) (arXiv:2504.15895, April 2025) - Confidence-based early stopping; ~75% of samples contain early exit opportunities
 - [OpenTelemetry GenAI Semantic Conventions](https://opentelemetry.io/) - Standard attributes for AI agent tracing
-- Related
-  patterns: [Spectrum of Control / Blended Initiative](spectrum-of-control.md), [Verbose Reasoning Transparency](verbose-reasoning-transparency.md)
+- Related patterns: [Spectrum of Control / Blended Initiative](spectrum-of-control.md), [Verbose Reasoning Transparency](verbose-reasoning-transparency.md)

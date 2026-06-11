@@ -13,20 +13,16 @@ tags: [multi-agent, coordination, long-running, hierarchical, parallelism]
 Running multiple AI agents in parallel for complex, multi-week projects creates significant coordination challenges:
 
 - **Flat structures** lead to conflicts, duplicated work, and agents stepping on each other
-- **Dynamic coordination** through shared files with locking becomes a bottleneck - most agents spend time waiting
-  rather than working
-- **Equal status** agents become risk-averse, avoiding difficult tasks and making only small, safe changes instead of
-  tackling end-to-end implementation
+- **Dynamic coordination** through shared files with locking becomes a bottleneck - most agents spend time waiting rather than working
+- **Equal status** agents become risk-averse, avoiding difficult tasks and making only small, safe changes instead of tackling end-to-end implementation
 - **No agent takes ownership** of hard problems or overall project direction
 
 ## Solution
 
 Separate agent roles into a hierarchical planner-worker structure:
 
-- **Planners**: Continuously explore the codebase and create tasks. They can spawn sub-planners for specific areas,
-  making planning itself parallel and recursive.
-- **Workers**: Pick up tasks and focus entirely on completing them. They don't coordinate with other workers or worry
-  about the big picture. They grind on their assigned task until done, then push changes.
+- **Planners**: Continuously explore the codebase and create tasks. They can spawn sub-planners for specific areas, making planning itself parallel and recursive.
+- **Workers**: Pick up tasks and focus entirely on completing them. They don't coordinate with other workers or worry about the big picture. They grind on their assigned task until done, then push changes.
 - **Judge**: At the end of each cycle, determines whether to continue or if the goal is achieved.
 
 This creates an iterative cycle where each iteration starts fresh, combating drift and tunnel vision.
@@ -34,12 +30,9 @@ This creates an iterative cycle where each iteration starts fresh, combating dri
 ## Evidence
 
 - **Evidence Grade:** `high` (production-validated at scale)
-- **Validated Findings:** Cursor demonstrated hundreds of concurrent agents running for weeks on massive codebases (1M+
-  lines of code)
-- **Academic Foundation:** Decades of research in hierarchical RL (Feudal Networks, 2017; Options Framework, 1999)
-  provide theoretical backing for planning-execution separation
-- **Multi-Source Validation:** Complementary implementations by Anthropic (initializer-maintainer), AMP (
-  factory-over-assistant), and GitHub Agentic Workflows confirm pattern utility
+- **Validated Findings:** Cursor demonstrated hundreds of concurrent agents running for weeks on massive codebases (1M+ lines of code)
+- **Academic Foundation:** Decades of research in hierarchical RL (Feudal Networks, 2017; Options Framework, 1999) provide theoretical backing for planning-execution separation
+- **Multi-Source Validation:** Complementary implementations by Anthropic (initializer-maintainer), AMP (factory-over-assistant), and GitHub Agentic Workflows confirm pattern utility
 
 ```mermaid
 graph TD
@@ -79,14 +72,12 @@ graph TD
 
 **Implementation considerations:**
 
-- **Model choice per role**: Different models excel at different roles. Use planning-focused models for planners even if
-  coding-focused models exist for workers.
+- **Model choice per role**: Different models excel at different roles. Use planning-focused models for planners even if coding-focused models exist for workers.
 - **Fresh starts**: Each cycle should start fresh to combat drift and tunnel vision from long-running contexts.
 - **Parallel planning**: Planners can spawn sub-planners, making the planning process itself parallel and recursive.
 - **Worker isolation**: Workers should be task-focused and not worry about coordination with other workers.
 
-**Prompting is critical**: Getting agents to coordinate well, avoid pathological behaviors, and maintain focus over long
-periods requires extensive experimentation with prompts.
+**Prompting is critical**: Getting agents to coordinate well, avoid pathological behaviors, and maintain focus over long periods requires extensive experimentation with prompts.
 
 ## Trade-offs
 
@@ -108,19 +99,13 @@ periods requires extensive experimentation with prompts.
 
 ## Key Insights
 
-1. **Model choice matters**: GPT-5.2 models are better at extended autonomous work than Opus 4.5, which tends to stop
-   early and take shortcuts. Different models excel at different roles - GPT-5.2 is a better planner than GPT-5.1-codex,
-   even though the latter is coding-specific.
+1. **Model choice matters**: GPT-5.2 models are better at extended autonomous work than Opus 4.5, which tends to stop early and take shortcuts. Different models excel at different roles - GPT-5.2 is a better planner than GPT-5.1-codex, even though the latter is coding-specific.
 
-2. **Remove complexity**: Many improvements came from removing complexity rather than adding it. An initial "integrator"
-   role for quality control created more bottlenecks than it solved - workers were already capable of handling
-   conflicts.
+2. **Remove complexity**: Many improvements came from removing complexity rather than adding it. An initial "integrator" role for quality control created more bottlenecks than it solved - workers were already capable of handling conflicts.
 
-3. **Middle structure**: The right amount of structure is in the middle. Too little structure and agents conflict,
-   duplicate work, and drift. Too much structure creates fragility.
+3. **Middle structure**: The right amount of structure is in the middle. Too little structure and agents conflict, duplicate work, and drift. Too much structure creates fragility.
 
-4. **Distributed systems don't always translate**: Initial attempts to model systems from distributed computing and
-   organizational design didn't work for agents.
+4. **Distributed systems don't always translate**: Initial attempts to model systems from distributed computing and organizational design didn't work for agents.
 
 ## Examples
 
@@ -135,12 +120,8 @@ periods requires extensive experimentation with prompts.
 
 ## References
 
-* [Scaling long-running autonomous coding](https://cursor.com/blog/scaling-agents) - Cursor blog post on running
-  hundreds of concurrent agents for weeks at a time
+* [Scaling long-running autonomous coding](https://cursor.com/blog/scaling-agents) - Cursor blog post on running hundreds of concurrent agents for weeks at a time
 * [Browser source code on GitHub](https://github.com/getcursor/browser) - 1M+ lines of agent-generated code
-* [Feudal Networks (FuN)](https://arxiv.org/abs/1706.06121) - ICML 2017 paper introducing manager-worker separation in
-  hierarchical RL (Vezhnevets et al.)
-* [The Options Framework](https://doi.org/10.1016/S0004-3702(99)00052-1) - Seminal work on temporal abstraction creating
-  planning-execution hierarchy (Sutton et al., 1999)
-* [HIRO: Hierarchical RL with Off-Policy Correction](https://arxiv.org/abs/2005.08996) - ICML 2020 paper on high-level
-  planners and low-level workers (Lee et al.)
+* [Feudal Networks (FuN)](https://arxiv.org/abs/1706.06121) - ICML 2017 paper introducing manager-worker separation in hierarchical RL (Vezhnevets et al.)
+* [The Options Framework](https://doi.org/10.1016/S0004-3702(99)00052-1) - Seminal work on temporal abstraction creating planning-execution hierarchy (Sutton et al., 1999)
+* [HIRO: Hierarchical RL with Off-Policy Correction](https://arxiv.org/abs/2005.08996) - ICML 2020 paper on high-level planners and low-level workers (Lee et al.)

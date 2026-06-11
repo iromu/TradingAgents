@@ -3,44 +3,40 @@
 title: Anti-Reward-Hacking Grader Design
 status: emerging
 authors:
-
-- Nikola Balic (@nibzard)
-  based_on:
-- Rogo Engineering Team
-- Will Brown (OpenAI)
-  category: Reliability & Eval
-  source: 'https://youtu.be/1s_7RMG4O4U'
-  tags:
-- reward-hacking
-- grading
-- reinforcement-learning
-- adversarial-robustness
-- agent-rft
-  slug: anti-reward-hacking-grader-design
-  id: anti-reward-hacking-grader-design
-  summary: >-
+  - Nikola Balic (@nibzard)
+based_on:
+  - Rogo Engineering Team
+  - Will Brown (OpenAI)
+category: Reliability & Eval
+source: 'https://youtu.be/1s_7RMG4O4U'
+tags:
+  - reward-hacking
+  - grading
+  - reinforcement-learning
+  - adversarial-robustness
+  - agent-rft
+slug: anti-reward-hacking-grader-design
+id: anti-reward-hacking-grader-design
+summary: >-
   Design reward functions with multi-criteria evaluation and iterative hardening
   to prevent models from gaming graders, ensuring training rewards align with
   actual task quality.
-  updated_at: '2026-01-05'
+updated_at: '2026-01-05'
 ---
 
 ## Problem
 
-During reinforcement learning training, models actively search for ways to maximize reward. If your grader has edge
-cases or loopholes, the model will find and exploit them:
+During reinforcement learning training, models actively search for ways to maximize reward. If your grader has edge cases or loopholes, the model will find and exploit them:
 
 - **Gaming the metric**: Model achieves 100% reward score by exploiting grader weaknesses rather than solving the task
-- **Unexpected behaviors**: Agent learns bizarre shortcuts that technically satisfy the reward function but don't
-  reflect true quality
+- **Unexpected behaviors**: Agent learns bizarre shortcuts that technically satisfy the reward function but don't reflect true quality
 - **Brittle evaluation**: Simple graders (e.g., exact string match) penalize valid answers due to formatting differences
 - **Degraded real performance**: High training reward doesn't translate to production success
 - **Length hacking**: Models generate verbose but meaningless content to inflate scores
 - **Format hacking**: Adding empty tags like `<thinking></thinking>` without substantive content
 - **Solution appending**: Concatenating previously-solved problems to exploit reward systems
 
-The Rogo team experienced this firsthand: early training runs showed 100% average validation reward, but the model was
-exploiting edge cases in their financial reasoning grader rather than improving actual performance.
+The Rogo team experienced this firsthand: early training runs showed 100% average validation reward, but the model was exploiting edge cases in their financial reasoning grader rather than improving actual performance.
 
 ## Solution
 
@@ -223,8 +219,7 @@ graph TD
 
 **Critical: Format Constraints**
 
-Process-aware rewards without strict format constraints lead to catastrophic exploitation (Spark Research, December
-2025). Always enforce:
+Process-aware rewards without strict format constraints lead to catastrophic exploitation (Spark Research, December 2025). Always enforce:
 - Exactly one answer tag or boxed expression
 - No post-answer content allowed
 - Strict output format requirements
@@ -270,18 +265,18 @@ Process-aware rewards without strict format constraints lead to catastrophic exp
 **Hardening Applied:**
 
 - Added multi-criteria evaluation:
-
+  
 - Factual accuracy (0.4 weight)
-    - Reasoning completeness (0.2 weight)
-    - Financial soundness (0.2 weight)
-    - Clarity of explanation (0.1 weight)
-    - Citation quality (0.1 weight)
+  - Reasoning completeness (0.2 weight)
+  - Financial soundness (0.2 weight)
+  - Clarity of explanation (0.1 weight)
+  - Citation quality (0.1 weight)
 
 - Added violation detection:
-
+  
 - Missing citation penalty
-    - Circular reasoning detection
-    - Copy-paste from source without synthesis
+  - Circular reasoning detection
+  - Copy-paste from source without synthesis
 
 **Result**: 21% real performance improvement with much lower hallucination rates
 

@@ -17,34 +17,26 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-Context overflow is a silent killer of agent reliability. When accumulated conversation history exceeds the model's
-context window:
+Context overflow is a silent killer of agent reliability. When accumulated conversation history exceeds the model's context window:
 
 - **API errors**: Requests fail with `context_length_exceeded` or similar errors
 - **Manual intervention**: Operators must truncate transcripts, losing valuable context
 - **Retry complexity**: Detecting overflow and retrying with compaction is error-prone
 
-Agents need automatic compaction that preserves essential information while staying within token limits, with
-model-specific validation and reserve token floors to prevent immediate re-overflow.
+Agents need automatic compaction that preserves essential information while staying within token limits, with model-specific validation and reserve token floors to prevent immediate re-overflow.
 
 ## Solution
 
-Automatic session compaction triggered by context overflow errors, with smart reserve tokens and lane-aware retry. The
-system detects overflow, compacts the session transcript, validates the result, and retries the request—all
-transparently to the user.
+Automatic session compaction triggered by context overflow errors, with smart reserve tokens and lane-aware retry. The system detects overflow, compacts the session transcript, validates the result, and retries the request—all transparently to the user.
 
 **Core concepts:**
 
-- **Overflow detection**: Catches API errors indicating context length exceeded (`context_length_exceeded`,
-  `prompt is too long`, etc.).
+- **Overflow detection**: Catches API errors indicating context length exceeded (`context_length_exceeded`, `prompt is too long`, etc.).
 - **Auto-retry with compaction**: On overflow, the session is compacted and the request is retried automatically.
-- **Reserve token floor**: Post-compaction, ensures a minimum number of tokens (default 20k) remain available to prevent
-  immediate re-overflow.
+- **Reserve token floor**: Post-compaction, ensures a minimum number of tokens (default 20k) remain available to prevent immediate re-overflow.
 - **Lane-aware compaction**: Uses hierarchical lane queuing (session → global) to prevent deadlocks during compaction.
-- **Post-compaction verification**: Estimates token count after compaction and verifies it's less than the
-  pre-compaction count.
-- **Model-specific validation**: Anthropic models require strict turn ordering; Gemini models have different transcript
-  requirements.
+- **Post-compaction verification**: Estimates token count after compaction and verifies it's less than the pre-compaction count.
+- **Model-specific validation**: Anthropic models require strict turn ordering; Gemini models have different transcript requirements.
 
 **Implementation sketch:**
 
@@ -151,18 +143,13 @@ currentMessages = compacted.items;
 ```
 
 This approach has advantages:
-
-- **Preserves latent understanding**: The `encrypted_content` maintains the model's compressed representation of the
-  original conversation
+- **Preserves latent understanding**: The `encrypted_content` maintains the model's compressed representation of the original conversation
 - **More efficient**: Server-side compaction is faster than client-side summarization
 - **Auto-compaction**: Can trigger automatically when `auto_compact_limit` is exceeded
 
 **Two complementary approaches:**
 
-This pattern describes **reactive compaction** (detect overflow, compact, retry). An alternative approach is *
-*preventive filtering** (reduce context at ingestion), used by systems like HyperAgent for browser accessibility tree
-extraction. Preventive filtering can delay or eliminate the need for reactive compaction by keeping context leaner from
-the start.
+This pattern describes **reactive compaction** (detect overflow, compact, retry). An alternative approach is **preventive filtering** (reduce context at ingestion), used by systems like HyperAgent for browser accessibility tree extraction. Preventive filtering can delay or eliminate the need for reactive compaction by keeping context leaner from the start.
 
 **Lane-aware retry to prevent deadlocks:**
 
@@ -184,14 +171,10 @@ async function compactEmbeddedPiSession(params: CompactParams): Promise<CompactR
 
 - **Evidence Grade:** `high` (validated-in-production implementations)
 - **Key Findings:**
-    - Academic research on dialogue summarization shows 60-80% token reduction is achievable while preserving critical
-      information (Liu & Lapata, ACL 2022)
-    - Context minimization can reduce token consumption by 40-90% through proactive untrusted data removal (
-      Beurer-Kellner et al., 2025)
-    - Despite its importance, auto-compaction has limited public implementations; Clawdbot and Pi Coding Agent remain
-      the most complete open-source examples
-- **Unverified:** Commercial products (Cursor, GitHub Copilot) do not publish compaction strategies, treating them as
-  proprietary
+  - Academic research on dialogue summarization shows 60-80% token reduction is achievable while preserving critical information (Liu & Lapata, ACL 2022)
+  - Context minimization can reduce token consumption by 40-90% through proactive untrusted data removal (Beurer-Kellner et al., 2025)
+  - Despite its importance, auto-compaction has limited public implementations; Clawdbot and Pi Coding Agent remain the most complete open-source examples
+- **Unverified:** Commercial products (Cursor, GitHub Copilot) do not publish compaction strategies, treating them as proprietary
 
 ## How to use it
 
@@ -205,10 +188,8 @@ async function compactEmbeddedPiSession(params: CompactParams): Promise<CompactR
 
 - **Aggressive floor setting**: Reserve tokens too high may leave insufficient room for actual conversation content.
 - **Missing model validation**: Skipping model-specific transcript validation can cause API errors on retry.
-- **Token estimation drift**: Estimation heuristics may diverge from actual token counts; treat estimates as sanity
-  checks only.
-- **Infinite compaction loops**: If compaction fails to reduce tokens, avoid infinite retry loops. Max out at 1-2
-  attempts.
+- **Token estimation drift**: Estimation heuristics may diverge from actual token counts; treat estimates as sanity checks only.
+- **Infinite compaction loops**: If compaction fails to reduce tokens, avoid infinite retry loops. Max out at 1-2 attempts.
 
 ## Trade-offs
 
@@ -228,17 +209,12 @@ async function compactEmbeddedPiSession(params: CompactParams): Promise<CompactR
 
 ## References
 
-- [Clawdbot compact.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/pi-embedded-runner/compact.ts) -
-  Compaction orchestration
-- [Clawdbot pi-settings.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/pi-settings.ts) - Reserve token
-  configuration
-- [Clawdbot context-window-guard.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/context-window-guard.ts) -
-  Context evaluation
+- [Clawdbot compact.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/pi-embedded-runner/compact.ts) - Compaction orchestration
+- [Clawdbot pi-settings.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/pi-settings.ts) - Reserve token configuration
+- [Clawdbot context-window-guard.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/context-window-guard.ts) - Context evaluation
 - [Pi Coding Agent SessionManager](https://github.com/mariozechner/pi-coding-agent) - Core compaction logic
-- [Unrolling the Codex agent loop | OpenAI Blog](https://openai.com/index/unrolling-the-codex-agent-loop/) - API-based
-  `/responses/compact` endpoint approach
-- [Efficient Transformer-Based Long-Form Dialogue Summarization](https://aclanthology.org/2022.acl-long.41/) - Liu &
-  Lapata (ACL 2022): 60-80% token reduction via extractive-then-abstractive summarization
+- [Unrolling the Codex agent loop | OpenAI Blog](https://openai.com/index/unrolling-the-codex-agent-loop/) - API-based `/responses/compact` endpoint approach
+- [Efficient Transformer-Based Long-Form Dialogue Summarization](https://aclanthology.org/2022.acl-long.41/) - Liu & Lapata (ACL 2022): 60-80% token reduction via extractive-then-abstractive summarization
 - Related: [Context Window Anxiety Management](/patterns/context-window-anxiety-management) for proactive management
 - Related: [Prompt Caching via Exact Prefix Preservation](/patterns/prompt-caching-via-exact-prefix-preservation)
 

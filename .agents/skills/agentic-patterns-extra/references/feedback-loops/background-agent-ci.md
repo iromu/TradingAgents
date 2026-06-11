@@ -23,15 +23,11 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-Long-running refactors and flaky-fix cycles force developers into synchronous supervision. When the agent must wait on
-tests, build jobs, and deployment checks, human attention gets wasted on polling instead of decision-making. This
-bottleneck is worse in distributed teams where CI feedback arrives minutes later and context-switch cost is high.
+Long-running refactors and flaky-fix cycles force developers into synchronous supervision. When the agent must wait on tests, build jobs, and deployment checks, human attention gets wasted on polling instead of decision-making. This bottleneck is worse in distributed teams where CI feedback arrives minutes later and context-switch cost is high.
 
 ## Solution
 
-Run the agent asynchronously in the background with CI as the objective feedback channel. The agent pushes a branch,
-waits for CI results, patches failures, and repeats until policy-defined stopping conditions are met. Users are only
-pulled back in for approvals, ambiguous failures, or final review.
+Run the agent asynchronously in the background with CI as the objective feedback channel. The agent pushes a branch, waits for CI results, patches failures, and repeats until policy-defined stopping conditions are met. Users are only pulled back in for approvals, ambiguous failures, or final review.
 
 Production implementations include GitHub Agentic Workflows, Cursor Background Agent, and OpenHands.
 

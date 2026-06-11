@@ -10,8 +10,7 @@ tags: [reward-shaping, tool-use, incentivization, reinforcement-learning]
 
 ## Problem
 
-Agents may avoid using tools even when they would improve outcomes, or use them inefficiently. Without proper reward
-shaping, agents optimize for token efficiency rather than task success.
+Agents may avoid using tools even when they would improve outcomes, or use them inefficiently. Without proper reward shaping, agents optimize for token efficiency rather than task success.
 
 ## Solution
 
@@ -38,5 +37,4 @@ Shape rewards to incentivize effective tool use:
 
 ## References
 
-*
-Related: [Agent Reinforcement Fine-Tuning](../learning-adaptation/agent-reinforcement-fine-tuning.md), [Inference-Healed Code Review Reward](inference-healed-code-review-reward.md)
+* Related: [Agent Reinforcement Fine-Tuning](../learning-adaptation/agent-reinforcement-fine-tuning.md), [Inference-Healed Code Review Reward](inference-healed-code-review-reward.md)

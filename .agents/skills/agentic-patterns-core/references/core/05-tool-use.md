@@ -1,8 +1,6 @@
 # Tool Use (Function Calling) Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -79,13 +77,9 @@ def use_tool(agent, tool_name, params):
 
 ## Real-World Examples
 
-1. **Financial Analysis**: Stock price API, portfolio calculator, historical DB queries, chart generation, email
-   distribution
-2. **Code Development**: File system access, compiler/interpreter, Git commands, testing frameworks, documentation
-   generators
-3. **E-commerce Orders**: Inventory queries, payment processing, shipping integrations, email/SMS notifications, CRM
-   updates
+1. **Financial Analysis**: Stock price API, portfolio calculator, historical DB queries, chart generation, email distribution
+2. **Code Development**: File system access, compiler/interpreter, Git commands, testing frameworks, documentation generators
+3. **E-commerce Orders**: Inventory queries, payment processing, shipping integrations, email/SMS notifications, CRM updates
 4. **Research Paper**: Academic DB searches, citation management, PDF parsing, reference formatting, plagiarism checking
 5. **Smart Home**: IoT device APIs, weather service, calendar access, energy monitoring, security system controls
-6. **HR Recruitment**: Resume parsing, job board APIs, calendar scheduling, email automation, background checks, video
-   interviews
+6. **HR Recruitment**: Resume parsing, job board APIs, calendar scheduling, email automation, background checks, video interviews

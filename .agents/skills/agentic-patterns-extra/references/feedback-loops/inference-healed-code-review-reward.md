@@ -10,14 +10,10 @@ tags: [reward-modeling, code-review, inference-healing, quality-assessment]
 
 ## Problem
 
-Simple reward functions that only check for "all tests passed" fail to capture nuanced code quality issues (e.g.,
-performance regressions, style violations, missing edge-case handling). A single binary signal at the end cannot guide
-the agent to produce maintainable, high-quality code.
+Simple reward functions that only check for "all tests passed" fail to capture nuanced code quality issues (e.g., performance regressions, style violations, missing edge-case handling). A single binary signal at the end cannot guide the agent to produce maintainable, high-quality code.
 
-- Verifying **only** final correctness misses suboptimal commits (e.g., a patch that removes error handling but still
-  passes tests).
-- Reward models that produce a single scalar lack **explainability** to tell the agent which aspect of the code needs
-  improvement.
+- Verifying **only** final correctness misses suboptimal commits (e.g., a patch that removes error handling but still passes tests).
+- Reward models that produce a single scalar lack **explainability** to tell the agent which aspect of the code needs improvement.
 
 ## Solution
 
@@ -40,8 +36,7 @@ Use an **inference-healed reward model**—a code-review critic that:
 
 **3. Aggregates Subscores**
 - Each subcriterion returns a float ∈ [0, 1].
-- A weighted sum (e.g., 0.4 × correctness + 0.2 × style + 0.2 × performance + 0.2 × security) yields the final
-  code-review score.
+- A weighted sum (e.g., 0.4 × correctness + 0.2 × style + 0.2 × performance + 0.2 × security) yields the final code-review score.
 
 **4. Generates Human-Readable Feedback**
 - Alongside a numerical score, return a short analysis:
@@ -73,35 +68,25 @@ return final_score, subscores, comments
 
 - **Critic Dataset Collection:** Gather examples of good vs. bad code patches, labeled along each subcriterion.
 - **Critic Training:** Fine-tune a small LLM (e.g., 1–2 B parameters) to produce sub-scores and CoT justifications.
-- **Integration into RL Loop:** Replace or augment the existing binary "tests-passed" reward with
-  `inference_healed_reward(patch)`.
-- **Selective Healing:** Generate CoT explanations only for subscores below a threshold (e.g., < 0.8) to reduce latency
-  and cost.
-- **Parallel Execution:** Run tests, linters, benchmarks, and security scans concurrently to reduce total evaluation
-  time.
-- **Human-in-the-Loop Checkpoints:** If a patch is borderline (e.g., final_score ∈ [0.5, 0.7]), route it for manual code
-  review to generate better labels for future training.
+- **Integration into RL Loop:** Replace or augment the existing binary "tests-passed" reward with `inference_healed_reward(patch)`.
+- **Selective Healing:** Generate CoT explanations only for subscores below a threshold (e.g., < 0.8) to reduce latency and cost.
+- **Parallel Execution:** Run tests, linters, benchmarks, and security scans concurrently to reduce total evaluation time.
+- **Human-in-the-Loop Checkpoints:** If a patch is borderline (e.g., final_score ∈ [0.5, 0.7]), route it for manual code review to generate better labels for future training.
 
 ## Trade-offs
 
 - **Pros:**
-    - **Explainable Feedback:** The agent knows *why* a patch scored poorly, allowing targeted improvements.
-    - **Higher Code Quality:** Incorporates non-functional criteria (performance, security), leading to more robust
-      code.
+  - **Explainable Feedback:** The agent knows *why* a patch scored poorly, allowing targeted improvements.
+  - **Higher Code Quality:** Incorporates non-functional criteria (performance, security), leading to more robust code.
 - **Cons/Considerations:**
-    - **Compute Overhead:** Each reward invocation may involve running tests, linters, benchmarks, and a static
-      analysis, adding latency.
-    - **Critic Maintenance:** As coding standards or security rules evolve, retrain or update the critic models and
-      rubrics.
+  - **Compute Overhead:** Each reward invocation may involve running tests, linters, benchmarks, and a static analysis, adding latency.
+  - **Critic Maintenance:** As coding standards or security rules evolve, retrain or update the critic models and rubrics.
 
 ## References
 
-- Derived from "inference healing" in reward modeling, as discussed in the Open Source Agent RL talk (May 2025) and by
-  Will Brown (Prime Intellect).
+- Derived from "inference healing" in reward modeling, as discussed in the Open Source Agent RL talk (May 2025) and by Will Brown (Prime Intellect).
 - Similar principles in "Criterion-Led Reward Models" (DeepMind blog, April 2025).
-- Related academic work: "CodeRL: Mastering Code Generation through Pretrained Models and Deep Reinforcement Learning" (
-  NeurIPS 2022) introduces critic-based reward signals for code generation.
-- Industry validation: Multi-criteria code review deployed at scale by Microsoft (600K+ PRs/month), Tencent (325M
-  lines/month), and Tekion (60% faster time to merge).
+- Related academic work: "CodeRL: Mastering Code Generation through Pretrained Models and Deep Reinforcement Learning" (NeurIPS 2022) introduces critic-based reward signals for code generation.
+- Industry validation: Multi-criteria code review deployed at scale by Microsoft (600K+ PRs/month), Tencent (325M lines/month), and Tekion (60% faster time to merge).
 
 - Primary source: https://www.youtube.com/watch?v=Xkwok_XXQgw

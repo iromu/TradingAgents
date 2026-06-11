@@ -16,31 +16,23 @@ AI model requests fail for varied and often opaque reasons. Simple retry logic f
 - **Semantic failures** (auth errors, billing issues) where retry is futile
 - **User aborts** where retry wastes resources and frustrates users
 
-Agents using multiple models or providers need intelligent fallback strategies that respect failure semantics, avoid
-retry loops, and provide clear diagnostics.
+Agents using multiple models or providers need intelligent fallback strategies that respect failure semantics, avoid retry loops, and provide clear diagnostics.
 
 ## Solution
 
-Semantic error classification with intelligent fallback chains. Each failure is categorized into a specific reason type,
-and fallback behavior is tailored to that reason. Multi-model fallback chains are configured per-request, with
-provider-specific allowlists and cooldown tracking.
+Semantic error classification with intelligent fallback chains. Each failure is categorized into a specific reason type, and fallback behavior is tailored to that reason. Multi-model fallback chains are configured per-request, with provider-specific allowlists and cooldown tracking.
 
 **Core concepts:**
 
-- **Error classification**: Failures are mapped to semantic reason types (`timeout`, `rate_limit`, `auth`, `billing`,
-  `format`, `context_overflow`), mapping provider-specific error codes to universal semantic types for consistent
-  handling.
+- **Error classification**: Failures are mapped to semantic reason types (`timeout`, `rate_limit`, `auth`, `billing`, `format`, `context_overflow`), mapping provider-specific error codes to universal semantic types for consistent handling.
 - **Reason-aware fallback**: Different reasons trigger different fallback behaviors:
-    - `timeout`, `rate_limit`: Retry with next model in chain
-    - `auth`, `billing`: Fail immediately; retry won't help
-    - `format`, `context_overflow`: May retry with adjusted request
-- **User abort detection**: Distinguishes user-initiated aborts from timeout-induced aborts. User aborts rethrow
-  immediately; timeouts trigger fallback.
-- **Multi-model chains**: Ordered list of `{provider, model}` candidates. Each attempt uses the next candidate until
-  success or exhaustion.
+  - `timeout`, `rate_limit`: Retry with next model in chain
+  - `auth`, `billing`: Fail immediately; retry won't help
+  - `format`, `context_overflow`: May retry with adjusted request
+- **User abort detection**: Distinguishes user-initiated aborts from timeout-induced aborts. User aborts rethrow immediately; timeouts trigger fallback.
+- **Multi-model chains**: Ordered list of `{provider, model}` candidates. Each attempt uses the next candidate until success or exhaustion.
 - **Provider allowlists**: Optional per-provider model restrictions prevent fallback to incompatible models.
-- **Diagnostics tracking**: Each failed attempt is recorded with error details, reason, status code, and provider/model
-  for debugging.
+- **Diagnostics tracking**: Each failed attempt is recorded with error details, reason, status code, and provider/model for debugging.
 
 **Implementation sketch:**
 
@@ -134,8 +126,7 @@ agents:
 
 **Pitfalls to avoid:**
 
-- **Over-fallback**: Too many fallback chains can cascade failures across providers. Use exponential backoff with jitter
-  to prevent thundering herd problems.
+- **Over-fallback**: Too many fallback chains can cascade failures across providers. Use exponential backoff with jitter to prevent thundering herd problems.
 - **Semantic mismatch**: Fallback models may have different capabilities (vision, tools). Filter by required features.
 - **Silent failures**: Some errors (`format`) indicate request incompatibility. Fallback may fail identically.
 
@@ -157,14 +148,10 @@ agents:
 
 ## References
 
-- [Clawdbot model-fallback.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/model-fallback.ts) - Fallback
-  orchestration
-- [Release It!](https://www.pragmaticprogrammer.com/titles/mnee2) by Michael Nygard (2007) - Circuit Breaker pattern
-  foundation
-- [Clawdbot failover-error.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/failover-error.ts) - Error
-  classification
-- [Clawdbot error helpers](https://github.com/clawdbot/clawdbot/blob/main/src/agents/pi-embedded-helpers/errors.ts) -
-  Reason classification logic
+- [Clawdbot model-fallback.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/model-fallback.ts) - Fallback orchestration
+- [Release It!](https://www.pragmaticprogrammer.com/titles/mnee2) by Michael Nygard (2007) - Circuit Breaker pattern foundation
+- [Clawdbot failover-error.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/failover-error.ts) - Error classification
+- [Clawdbot error helpers](https://github.com/clawdbot/clawdbot/blob/main/src/agents/pi-embedded-helpers/errors.ts) - Reason classification logic
 - Related: [Extended Coherence Work Sessions](/patterns/extended-coherence-work-sessions) for reliability patterns
 
 ---

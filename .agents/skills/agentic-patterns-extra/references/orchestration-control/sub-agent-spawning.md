@@ -16,16 +16,13 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-Large multi-file tasks blow out the main agent's context window and reasoning budget. You need a way to delegate work to
-specialized agents with isolated contexts and tools.
+Large multi-file tasks blow out the main agent's context window and reasoning budget. You need a way to delegate work to specialized agents with isolated contexts and tools.
 
 ## Solution
 
-Let the main agent **spawn focused sub-agents**, each with its own fresh context, to work in parallel on shardable
-subtasks. Aggregate their results when done.
+Let the main agent **spawn focused sub-agents**, each with its own fresh context, to work in parallel on shardable subtasks. Aggregate their results when done.
 
-**Critical requirement**: Each subagent invocation must have a clear, specific task subject for traceability. Empty or
-generic subjects make parallel work untraceable and synthesis difficult.
+**Critical requirement**: Each subagent invocation must have a clear, specific task subject for traceability. Empty or generic subjects make parallel work untraceable and synthesis difficult.
 
 **Implementation approaches:**
 
@@ -131,15 +128,10 @@ sequenceDiagram
 
 ## References
 
-* [SKILLS-AGENTIC-LESSONS.md](https://github.com/nibzard/SKILLS-AGENTIC-LESSONS) - Analysis of 88 sessions emphasizing
-  clear task subjects and parallel delegation patterns
-* Vezhnevets, A., et al. (
-  2017). [Feudal Networks for Hierarchical Reinforcement Learning](https://arxiv.org/abs/1706.06121). ICML.
-* [Building Companies with Claude Code](https://claude.com/blog/building-companies-with-claude-code) - Ambral's "robust
-  research engine" uses dedicated sub-agents
-* [Building an internal agent: Subagent support](https://lethain.com/agents-subagents/) - Will Larson on YAML-configured
-  subagents
-* [Cursor: Scaling long-running autonomous coding](https://cursor.com/blog/scaling-agents) - Hierarchical spawning with
-  hundreds of concurrent agents
+* [SKILLS-AGENTIC-LESSONS.md](https://github.com/nibzard/SKILLS-AGENTIC-LESSONS) - Analysis of 88 sessions emphasizing clear task subjects and parallel delegation patterns
+* Vezhnevets, A., et al. (2017). [Feudal Networks for Hierarchical Reinforcement Learning](https://arxiv.org/abs/1706.06121). ICML.
+* [Building Companies with Claude Code](https://claude.com/blog/building-companies-with-claude-code) - Ambral's "robust research engine" uses dedicated sub-agents
+* [Building an internal agent: Subagent support](https://lethain.com/agents-subagents/) - Will Larson on YAML-configured subagents
+* [Cursor: Scaling long-running autonomous coding](https://cursor.com/blog/scaling-agents) - Hierarchical spawning with hundreds of concurrent agents
 
 ---

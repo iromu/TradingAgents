@@ -23,14 +23,11 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-When AI agents attempt to simultaneously research, plan, and implement solutions, context contamination occurs.
-Competing priorities within a single conversation degrade output quality as the agent struggles to balance exploration,
-strategic thinking, and execution. This results in incomplete research, unclear plans, and suboptimal implementations.
+When AI agents attempt to simultaneously research, plan, and implement solutions, context contamination occurs. Competing priorities within a single conversation degrade output quality as the agent struggles to balance exploration, strategic thinking, and execution. This results in incomplete research, unclear plans, and suboptimal implementations.
 
 ## Solution
 
-Break development workflows into isolated phases with clean handoffs between them. Each phase runs in a separate
-conversation with a fresh context window, focusing exclusively on its objective:
+Break development workflows into isolated phases with clean handoffs between them. Each phase runs in a separate conversation with a fresh context window, focusing exclusively on its objective:
 
 **Research Phase (Opus 4.1):**
 
@@ -50,8 +47,7 @@ conversation with a fresh context window, focusing exclusively on its objective:
 - Focus purely on code quality and functionality
 - Leverage the distilled outputs from previous phases
 
-**Key principle:** Pass only distilled conclusions between phases, not full conversation history. This prevents context
-pollution while maintaining necessary information flow.
+**Key principle:** Pass only distilled conclusions between phases, not full conversation history. This prevents context pollution while maintaining necessary information flow.
 
 ```mermaid
 graph LR
@@ -104,9 +100,7 @@ graph LR
 
 ## References
 
-- [Building Companies with Claude Code](https://claude.com/blog/building-companies-with-claude-code) - Sam Stettner (
-  Ambral) emphasizes: "Don't make Claude do research while it's trying to plan, while it's trying to implement."
-- [Deliberation Before Action: Language Models with Tool Use](https://arxiv.org/abs/2403.05441) - Parisien et al., ICLR
-  2024
+- [Building Companies with Claude Code](https://claude.com/blog/building-companies-with-claude-code) - Sam Stettner (Ambral) emphasizes: "Don't make Claude do research while it's trying to plan, while it's trying to implement."
+- [Deliberation Before Action: Language Models with Tool Use](https://arxiv.org/abs/2403.05441) - Parisien et al., ICLR 2024
 
 ---

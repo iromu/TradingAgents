@@ -10,19 +10,16 @@ tags: [multi-model, cost-optimization, strategic-reasoning, architecture]
 
 ## Problem
 
-Relying on a single AI model creates a trade-off between capability and cost. High-performance models are expensive for
-routine tasks, while cost-effective models may lack the reasoning power for complex problems.
+Relying on a single AI model creates a trade-off between capability and cost. High-performance models are expensive for routine tasks, while cost-effective models may lack the reasoning power for complex problems.
 
 ## Solution
 
 Implement a two-tier system with specialized roles:
 
 - **The Worker (Claude Sonnet 4):** Fast, capable, and cost-effective agent handling bulk tool use and code generation
-- **The Oracle (OpenAI o3 / Gemini 2.5 Pro):** Powerful, expensive model reserved for high-level reasoning,
-  architectural planning, and debugging complex issues
+- **The Oracle (OpenAI o3 / Gemini 2.5 Pro):** Powerful, expensive model reserved for high-level reasoning, architectural planning, and debugging complex issues
 
-The Worker can explicitly request Oracle consultation when stuck or needing better strategy. The Oracle reviews the
-Worker's approach and suggests course corrections without polluting the main agent's context.
+The Worker can explicitly request Oracle consultation when stuck or needing better strategy. The Oracle reviews the Worker's approach and suggests course corrections without polluting the main agent's context.
 
 ```mermaid
 graph TD
@@ -39,20 +36,17 @@ graph TD
 ## Evidence
 
 - **Evidence Grade:** `emerging`
-- **Most Valuable Findings:** Validated in production at Sourcegraph (~90% cost reduction vs. all-frontier); academic
-  foundation from model cascading research (FrugalGPT: up to 98% cost reduction with quality parity)
+- **Most Valuable Findings:** Validated in production at Sourcegraph (~90% cost reduction vs. all-frontier); academic foundation from model cascading research (FrugalGPT: up to 98% cost reduction with quality parity)
 - **Unverified:** Optimal Oracle invocation thresholds remain application-specific
 
 ## How to use it
 
-Development environments, complex coding tasks, architectural decisions, debugging sessions where initial approaches
-fail. Also known in literature as model cascading, weak-strong model routing, or hierarchical model systems.
+Development environments, complex coding tasks, architectural decisions, debugging sessions where initial approaches fail. Also known in literature as model cascading, weak-strong model routing, or hierarchical model systems.
 
 ## Trade-offs
 
 * **Pros:** Cost-efficient use of frontier models; sophisticated problem-solving; specialized AI team approach
-* **Cons:** Additional orchestration complexity; potential latency from model switching; requires careful Oracle
-  invocation logic
+* **Cons:** Additional orchestration complexity; potential latency from model switching; requires careful Oracle invocation logic
 
 ## References
 

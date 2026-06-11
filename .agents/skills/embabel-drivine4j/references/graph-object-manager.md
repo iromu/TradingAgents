@@ -2,8 +2,7 @@
 
 ## Overview
 
-`GraphObjectManager` provides a high-level API for working with graph-mapped objects using annotated models. It
-generates efficient Cypher queries automatically and provides a type-safe DSL for filtering and ordering.
+`GraphObjectManager` provides a high-level API for working with graph-mapped objects using annotated models. It generates efficient Cypher queries automatically and provides a type-safe DSL for filtering and ordering.
 
 ## Annotations
 
@@ -20,12 +19,11 @@ data class Person(
 )
 ```
 
-| Attribute | Default         | Description               |
-|-----------|-----------------|---------------------------|
-| `labels`  | `["ClassName"]` | Neo4j labels for the node |
+| Attribute | Default | Description |
+|-----------|---------|-------------|
+| `labels` | `["ClassName"]` | Neo4j labels for the node |
 
 **Required properties on `@NodeId`:**
-
 - Must be a `String` or `UUID`
 - Used to identify nodes for updates and deletions
 - Drivine uses this to generate `MATCH (n {uuid: $uuid})` clauses
@@ -43,12 +41,11 @@ data class PersonCareer(
 )
 ```
 
-| Attribute | Default    | Description                         |
-|-----------|------------|-------------------------------------|
-| `name`    | class name | View name (used for DSL generation) |
+| Attribute | Default | Description |
+|-----------|---------|-------------|
+| `name` | class name | View name (used for DSL generation) |
 
 **Rules:**
-
 - Exactly one field must be annotated with `@Root`
 - Other fields use `@GraphRelationship` to define edges
 - Collections are supported for multi-edge relationships
@@ -70,12 +67,12 @@ Defines a relationship edge in a `@GraphView`.
 val employmentHistory: List<WorkHistory>
 ```
 
-| Attribute   | Default              | Description                 |
-|-------------|----------------------|-----------------------------|
-| `type`      | required             | Cypher relationship type    |
-| `direction` | `Direction.OUTGOING` | `INCOMING` or `OUTGOING`    |
-| `cascade`   | `NONE`               | Delete cascade policy       |
-| `maxDepth`  | 1                    | For recursive relationships |
+| Attribute | Default | Description |
+|-----------|---------|-------------|
+| `type` | required | Cypher relationship type |
+| `direction` | `Direction.OUTGOING` | `INCOMING` or `OUTGOING` |
+| `cascade` | `NONE` | Delete cascade policy |
+| `maxDepth` | 1 | For recursive relationships |
 
 ### @RelationshipFragment
 
@@ -120,13 +117,13 @@ Adds a computed aggregate per root node:
 val avgRating: Double
 ```
 
-| AggregateFunction | Description                |
-|-------------------|----------------------------|
-| `AVG`             | Average                    |
-| `SUM`             | Sum                        |
-| `MIN`             | Minimum                    |
-| `MAX`             | Maximum                    |
-| `COUNT`           | Count (alias for `@Count`) |
+| AggregateFunction | Description |
+|-------------------|-------------|
+| `AVG` | Average |
+| `SUM` | Sum |
+| `MIN` | Minimum |
+| `MAX` | Maximum |
+| `COUNT` | Count (alias for `@Count`) |
 
 ### @Default
 
@@ -150,29 +147,29 @@ The KSP code generator creates a DSL for each `@GraphView`. Available operators:
 
 ### Comparison
 
-| Operator    | Generated Cypher |
-|-------------|------------------|
-| `eq`        | `= $value`       |
-| `ne`        | `<> $value`      |
-| `gt`, `gte` | `> / >= $value`  |
-| `lt`, `lte` | `< / <= $value`  |
-| `contains`  | `=~ $regex`      |
-| `in`        | `IN $values`     |
-| `isNotNull` | `IS NOT NULL`    |
-| `isNull`    | `IS NULL`        |
+| Operator | Generated Cypher |
+|----------|------------------|
+| `eq` | `= $value` |
+| `ne` | `<> $value` |
+| `gt`, `gte` | `> / >= $value` |
+| `lt`, `lte` | `< / <= $value` |
+| `contains` | `=~ $regex` |
+| `in` | `IN $values` |
+| `isNotNull` | `IS NOT NULL` |
+| `isNull` | `IS NULL` |
 
 ### Boolean
 
-| Operator        | Generated Cypher                |
-|-----------------|---------------------------------|
-| `anyOf { ... }` | `(condition1) OR (condition2)`  |
-| implicit AND    | `(condition1) AND (condition2)` |
+| Operator | Generated Cypher |
+|----------|------------------|
+| `anyOf { ... }` | `(condition1) OR (condition2)` |
+| implicit AND | `(condition1) AND (condition2)` |
 
 ### Ordering
 
-| Operator  | Generated Cypher      |
-|-----------|-----------------------|
-| `.asc()`  | `ORDER BY field ASC`  |
+| Operator | Generated Cypher |
+|----------|------------------|
+| `.asc()` | `ORDER BY field ASC` |
 | `.desc()` | `ORDER BY field DESC` |
 
 ### DSL Usage
@@ -236,8 +233,7 @@ val updated = person.copy(person = person.person.copy(bio = "Updated bio"))
 graphObjectManager.save(updated)  // Only dirty fields written
 ```
 
-**Important:** Dirty tracking only works on objects loaded within the same manager context. Detached objects will not be
-tracked.
+**Important:** Dirty tracking only works on objects loaded within the same manager context. Detached objects will not be tracked.
 
 ### Deleting
 
@@ -247,11 +243,11 @@ graphObjectManager.delete(personCareer)
 
 Delete behavior follows the `cascade` policy on `@GraphRelationship`:
 
-| Cascade Policy   | Behavior                                                                           |
-|------------------|------------------------------------------------------------------------------------|
-| `NONE` (default) | Only deletes the relationship, leaves target nodes intact                          |
-| `DELETE_ORPHAN`  | Deletes relationship and target only if no other relationships exist to the target |
-| `DELETE_ALL`     | Always deletes both the relationship and target nodes                              |
+| Cascade Policy | Behavior |
+|----------------|----------|
+| `NONE` (default) | Only deletes the relationship, leaves target nodes intact |
+| `DELETE_ORPHAN` | Deletes relationship and target only if no other relationships exist to the target |
+| `DELETE_ALL` | Always deletes both the relationship and target nodes |
 
 ## Polymorphic Relationships
 

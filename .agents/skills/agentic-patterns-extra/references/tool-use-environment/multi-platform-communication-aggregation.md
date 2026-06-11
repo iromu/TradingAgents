@@ -24,14 +24,11 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-Users communicate across multiple platforms (email, Slack, iMessage, etc.) and need to search for information that might
-exist in any of them. Searching each platform manually is slow and error-prone. An agent tasked with "find what X said
-about Y" must know which platform to check—or check all of them.
+Users communicate across multiple platforms (email, Slack, iMessage, etc.) and need to search for information that might exist in any of them. Searching each platform manually is slow and error-prone. An agent tasked with "find what X said about Y" must know which platform to check—or check all of them.
 
 ## Solution
 
-Create a unified search interface that queries all communication platforms in parallel and aggregates results into a
-single, consistent format. Also known academically as **Federated Search** or **Mediator-Based Integration**.
+Create a unified search interface that queries all communication platforms in parallel and aggregates results into a single, consistent format. Also known academically as **Federated Search** or **Mediator-Based Integration**.
 
 ```mermaid
 graph TD

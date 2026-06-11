@@ -11,14 +11,9 @@
 
 ## Executive Summary
 
-The **Explicit Posterior-Sampling Planner** pattern represents a principled approach to exploration-exploitation
-trade-offs in LLM agents by embedding Posterior Sampling for Reinforcement Learning (PSRL) directly into the reasoning
-process. Unlike heuristic approaches that rely on improvised chain-of-thought exploration, this pattern maintains an
-explicit Bayesian posterior over task models and uses Thompson sampling for principled exploration.
+The **Explicit Posterior-Sampling Planner** pattern represents a principled approach to exploration-exploitation trade-offs in LLM agents by embedding Posterior Sampling for Reinforcement Learning (PSRL) directly into the reasoning process. Unlike heuristic approaches that rely on improvised chain-of-thought exploration, this pattern maintains an explicit Bayesian posterior over task models and uses Thompson sampling for principled exploration.
 
-**Key Finding:** This pattern remains primarily academic with no verified production implementations yet. While Thompson
-sampling is widely deployed in industry for bandit problems (Netflix, Amazon, Spotify, Google, Meta), the specific
-application of PSRL to LLM agent reasoning is an emerging research area.
+**Key Finding:** This pattern remains primarily academic with no verified production implementations yet. While Thompson sampling is widely deployed in industry for bandit problems (Netflix, Amazon, Spotify, Google, Meta), the specific application of PSRL to LLM agent reasoning is an emerging research area.
 
 ---
 
@@ -47,8 +42,7 @@ Each step is expressed in natural language so the core LLM can carry it out with
 
 ### 1.3 Key Insight
 
-By treating the LLM as a Bayesian reasoning engine that can explicitly represent and sample from posterior distributions
-over possible task models, agents can achieve:
+By treating the LLM as a Bayesian reasoning engine that can explicitly represent and sample from posterior distributions over possible task models, agents can achieve:
 - More sample-efficient exploration
 - Better decision consistency under uncertainty
 - Principled exploration instead of ad-hoc retries
@@ -66,11 +60,11 @@ over possible task models, agents can achieve:
 
 ### 2.2 Foundational PSRL Papers
 
-| Paper                                                      | Venue   | Year | Significance                  |
-|------------------------------------------------------------|---------|------|-------------------------------|
-| Strens - "A Bayesian Framework for Reinforcement Learning" | ICML    | 2000 | First formulation of PSRL     |
-| Osband et al. - "More Efficient RL via Posterior Sampling" | NeurIPS | 2013 | Improved regret bounds        |
-| Osband & Van Roy - "Bootstrapped DQN"                      | -       | 2016 | PSRL for deep neural networks |
+| Paper | Venue | Year | Significance |
+|-------|-------|------|--------------|
+| Strens - "A Bayesian Framework for Reinforcement Learning" | ICML | 2000 | First formulation of PSRL |
+| Osband et al. - "More Efficient RL via Posterior Sampling" | NeurIPS | 2013 | Improved regret bounds |
+| Osband & Van Roy - "Bootstrapped DQN" | - | 2016 | PSRL for deep neural networks |
 
 ### 2.3 Key Concepts
 
@@ -97,11 +91,11 @@ over possible task models, agents can achieve:
 
 ### 2.5 Related LLM Agent Exploration Work
 
-| Paper                          | Approach                     | Comparison                      |
-|--------------------------------|------------------------------|---------------------------------|
-| Reflexion (Shinn et al., 2023) | Memory + self-reflection     | Different exploration mechanism |
-| ReAct (Yao et al., 2022)       | Thought-Action-Observation   | Provides framework for PSRL     |
-| CDE (2025)                     | Curiosity-driven exploration | Intrinsic motivation approach   |
+| Paper | Approach | Comparison |
+|-------|----------|------------|
+| Reflexion (Shinn et al., 2023) | Memory + self-reflection | Different exploration mechanism |
+| ReAct (Yao et al., 2022) | Thought-Action-Observation | Provides framework for PSRL |
+| CDE (2025) | Curiosity-driven exploration | Intrinsic motivation approach |
 
 ### 2.6 Regret Bounds
 
@@ -119,30 +113,29 @@ Entropy:      O(√T log T)    (Similar to UCB with bonus)
 
 ### 3.1 Direct Pattern Implementation: NOT FOUND IN PRODUCTION
 
-The specific PSRL-in-LLM pattern (embedding Posterior Sampling for Reinforcement Learning inside LLM reasoning) remains
-**primarily academic** with no verified production implementations.
+The specific PSRL-in-LLM pattern (embedding Posterior Sampling for Reinforcement Learning inside LLM reasoning) remains **primarily academic** with no verified production implementations.
 
 ### 3.2 Thompson Sampling in Production: WIDELY DEPLOYED
 
 While the PSRL-LLM pattern is emerging, Thompson sampling is extensively used:
 
-| Domain                     | Companies                        | Use Case                               |
-|----------------------------|----------------------------------|----------------------------------------|
-| **Recommendation Systems** | Netflix, Amazon, Spotify         | Personalization via contextual bandits |
-| **Online Advertising**     | Google, Meta                     | Ad placement optimization              |
-| **Web Optimization**       | VWO, Optimizely                  | Conversion rate optimization           |
-| **Clinical Trials**        | Various                          | Adaptive randomization                 |
-| **Agent A/B Testing**      | Documented in dogfooding pattern | Agent variant selection                |
+| Domain | Companies | Use Case |
+|--------|-----------|----------|
+| **Recommendation Systems** | Netflix, Amazon, Spotify | Personalization via contextual bandits |
+| **Online Advertising** | Google, Meta | Ad placement optimization |
+| **Web Optimization** | VWO, Optimizely | Conversion rate optimization |
+| **Clinical Trials** | Various | Adaptive randomization |
+| **Agent A/B Testing** | Documented in dogfooding pattern | Agent variant selection |
 
 ### 3.3 Production Code Repositories
 
-| Repository                 | Organization | Stars | Relevance                                 |
-|----------------------------|--------------|-------|-------------------------------------------|
-| Vowpal Wabbit              | Microsoft    | -     | Contextual bandits with Thompson sampling |
-| Microsoft Decision Service | Microsoft    | -     | Enterprise contextual bandit service      |
-| TensorFlow Bandits         | Google       | -     | Bayesian optimization for bandits         |
-| LangChain                  | langchain-ai | 200k+ | ReAct pattern (not Bayesian but relevant) |
-| OpenAI Swarm               | OpenAI       | -     | Multi-agent orchestration                 |
+| Repository | Organization | Stars | Relevance |
+|------------|--------------|-------|-----------|
+| Vowpal Wabbit | Microsoft | - | Contextual bandits with Thompson sampling |
+| Microsoft Decision Service | Microsoft | - | Enterprise contextual bandit service |
+| TensorFlow Bandits | Google | - | Bayesian optimization for bandits |
+| LangChain | langchain-ai | 200k+ | ReAct pattern (not Bayesian but relevant) |
+| OpenAI Swarm | OpenAI | - | Multi-agent orchestration |
 
 ### 3.4 Research Gaps
 
@@ -187,13 +180,13 @@ Step 4: Posterior Update
 
 ### 4.2 Component Mapping to LLM Agents
 
-| PSRL Component         | LLM Agent Implementation        | Description                         |
-|------------------------|---------------------------------|-------------------------------------|
+| PSRL Component | LLM Agent Implementation | Description |
+|----------------|------------------------|-------------|
 | Posterior Distribution | Structured Context/Belief State | JSON tracking counts and statistics |
-| Model Sampling         | LLM Generation with Template    | Natural language sampling           |
-| Planning               | Chain-of-Thought Reasoning      | LLM computes optimal policy         |
-| Execution              | Tool Calls                      | Deterministic execution             |
-| Posterior Update       | Structured State Update         | Code updates statistics             |
+| Model Sampling | LLM Generation with Template | Natural language sampling |
+| Planning | Chain-of-Thought Reasoning | LLM computes optimal policy |
+| Execution | Tool Calls | Deterministic execution |
+| Posterior Update | Structured State Update | Code updates statistics |
 
 ### 4.3 Mathematical Foundations
 
@@ -225,21 +218,21 @@ LLM agents operate in unstructured text spaces, requiring state abstraction:
 
 ### 4.5 Comparison with Exploration Strategies
 
-| Strategy      | Principle                            | Pros                                            | Cons                               | Best For                                           |
-|---------------|--------------------------------------|-------------------------------------------------|------------------------------------|----------------------------------------------------|
-| **PSRL**      | Sample from posterior, act optimally | Principled, automatic tuning, strong guarantees | Complex, computationally expensive | Small-to-medium spaces, sample efficiency critical |
-| **ε-Greedy**  | Random exploration                   | Simple, low overhead                            | Inefficient, needs tuning          | Baselines, rapid prototyping                       |
-| **UCB**       | Optimistic bounds                    | Optimism, good bounds                           | Needs confidence intervals         | Bandit problems                                    |
-| **Entropy**   | Maximize information gain            | Directed exploration                            | Complex, high variance             | High-dimensional spaces                            |
-| **Boltzmann** | Probabilistic by value               | Smooth, differentiable                          | Temperature sensitive              | Policy gradient methods                            |
+| Strategy | Principle | Pros | Cons | Best For |
+|----------|-----------|-------|------|----------|
+| **PSRL** | Sample from posterior, act optimally | Principled, automatic tuning, strong guarantees | Complex, computationally expensive | Small-to-medium spaces, sample efficiency critical |
+| **ε-Greedy** | Random exploration | Simple, low overhead | Inefficient, needs tuning | Baselines, rapid prototyping |
+| **UCB** | Optimistic bounds | Optimism, good bounds | Needs confidence intervals | Bandit problems |
+| **Entropy** | Maximize information gain | Directed exploration | Complex, high variance | High-dimensional spaces |
+| **Boltzmann** | Probabilistic by value | Smooth, differentiable | Temperature sensitive | Policy gradient methods |
 
 ### 4.6 Parameter Sensitivity
 
-| Parameter          | Typical Range | Effect                 | Recommendation           |
-|--------------------|---------------|------------------------|--------------------------|
-| Prior strength (α) | 0.1 - 10.0    | Exploration level      | Start with 1.0 (uniform) |
-| Discount (γ)       | 0.9 - 0.99    | Myopia vs. far-sighted | Use 0.95 for most tasks  |
-| Horizon (H)        | 10 - 100      | Planning depth         | Based on task complexity |
+| Parameter | Typical Range | Effect | Recommendation |
+|-----------|---------------|--------|----------------|
+| Prior strength (α) | 0.1 - 10.0 | Exploration level | Start with 1.0 (uniform) |
+| Discount (γ) | 0.9 - 0.99 | Myopia vs. far-sighted | Use 0.95 for most tasks |
+| Horizon (H) | 10 - 100 | Planning depth | Based on task complexity |
 
 ---
 
@@ -294,13 +287,13 @@ LLM agents operate in unstructured text spaces, requiring state abstraction:
 
 ### 5.5 Common Pitfalls
 
-| Pitfall                | Symptom                       | Solution                                     |
-|------------------------|-------------------------------|----------------------------------------------|
-| Poor state abstraction | No learning, high variance    | Use semantic state extraction                |
-| Reward hacking         | High reward, poor performance | Add constraints, use potential-based shaping |
-| Overconfident prior    | Ignoring good actions         | Weaken prior (lower α)                       |
-| Under-exploration      | Stuck in local optima         | Decrease α, add exploration bonus            |
-| Over-exploration       | Never exploiting              | Increase α, add exploitation phase           |
+| Pitfall | Symptom | Solution |
+|---------|---------|----------|
+| Poor state abstraction | No learning, high variance | Use semantic state extraction |
+| Reward hacking | High reward, poor performance | Add constraints, use potential-based shaping |
+| Overconfident prior | Ignoring good actions | Weaken prior (lower α) |
+| Under-exploration | Stuck in local optima | Decrease α, add exploration bonus |
+| Over-exploration | Never exploiting | Increase α, add exploitation phase |
 
 ---
 
@@ -308,12 +301,12 @@ LLM agents operate in unstructured text spaces, requiring state abstraction:
 
 ### 6.1 Complementary Patterns
 
-| Pattern             | Relationship                                                                   |
-|---------------------|--------------------------------------------------------------------------------|
-| **Agent RFT**       | Agent RFT updates weights offline; PSRL reasons online. Can be combined.       |
-| **ReAct**           | Provides reasoning framework for PSRL to embed within.                         |
-| **Reflexion**       | Both address exploration; Reflexion uses memory, PSRL uses Bayesian posterior. |
-| **Action Selector** | Action selector for security; PSRL could select from allowlist.                |
+| Pattern | Relationship |
+|---------|--------------|
+| **Agent RFT** | Agent RFT updates weights offline; PSRL reasons online. Can be combined. |
+| **ReAct** | Provides reasoning framework for PSRL to embed within. |
+| **Reflexion** | Both address exploration; Reflexion uses memory, PSRL uses Bayesian posterior. |
+| **Action Selector** | Action selector for security; PSRL could select from allowlist. |
 
 ### 6.2 Related Patterns in Repository
 
@@ -395,19 +388,14 @@ class BayesianAgent:
 ## 9. References
 
 ### Primary Sources
-
-1. Arumugam, D., & Griffiths, T. L. (2025). Toward Efficient Exploration by LLM Agents. arXiv:
-   2504.20997. https://arxiv.org/abs/2504.20997
+1. Arumugam, D., & Griffiths, T. L. (2025). Toward Efficient Exploration by LLM Agents. arXiv:2504.20997. https://arxiv.org/abs/2504.20997
 
 ### Foundational PSRL
 2. Strens, M. (2000). A Bayesian Framework for Reinforcement Learning. ICML.
-3. Osband, I., Blundell, C., Pritzel, A., & Van Roy, B. (2013). More Efficient Reinforcement Learning via Posterior
-   Sampling. NeurIPS. arXiv:1306.0940
+3. Osband, I., Blundell, C., Pritzel, A., & Van Roy, B. (2013). More Efficient Reinforcement Learning via Posterior Sampling. NeurIPS. arXiv:1306.0940
 
 ### Bayesian RL
-
-4. Ghavamzadeh, M., et al. (2015). Bayesian Reinforcement Learning: A Survey. Foundations and Trends in Machine
-   Learning.
+4. Ghavamzadeh, M., et al. (2015). Bayesian Reinforcement Learning: A Survey. Foundations and Trends in Machine Learning.
 5. Russo, D., & Van Roy, B. (2014). Learning to Optimize via Posterior Sampling. Mathematics of Operations Research.
 
 ### Thompson Sampling
@@ -426,9 +414,7 @@ class BayesianAgent:
 
 ## 10. Conclusion
 
-The **Explicit Posterior-Sampling Planner** pattern offers a principled Bayesian alternative to heuristic exploration
-strategies in LLM agents. While Thompson sampling is widely deployed in production for bandit problems, the specific
-application of PSRL to LLM agent reasoning remains an emerging research area.
+The **Explicit Posterior-Sampling Planner** pattern offers a principled Bayesian alternative to heuristic exploration strategies in LLM agents. While Thompson sampling is widely deployed in production for bandit problems, the specific application of PSRL to LLM agent reasoning remains an emerging research area.
 
 Key takeaways:
 - **Strong theoretical foundation** with near-optimal regret bounds
@@ -437,9 +423,7 @@ Key takeaways:
 - **Production status:** Emerging pattern, not yet validated in production
 - **Best fit:** Bounded environments with measurable rewards and sample efficiency requirements
 
-Success requires careful design of state abstractions, informative reward functions, and appropriate prior
-specifications. When implemented correctly, PSRL provides interpretable, theoretically-grounded exploration that can
-significantly reduce API costs through improved sample efficiency.
+Success requires careful design of state abstractions, informative reward functions, and appropriate prior specifications. When implemented correctly, PSRL provides interpretable, theoretically-grounded exploration that can significantly reduce API costs through improved sample efficiency.
 
 ---
 

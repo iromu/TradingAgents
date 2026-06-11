@@ -10,16 +10,11 @@ tags: [reasoning, graph-based, problem-solving, thought-exploration, backtrackin
 
 ## Problem
 
-Linear reasoning approaches like Chain-of-Thought (CoT) and even tree-based methods like Tree-of-Thoughts (ToT) have
-limitations when dealing with problems that require complex interdependencies between reasoning steps. Many real-world
-problems involve reasoning paths that merge, split, and recombine in ways that don't fit neatly into linear or tree
-structures. These problems need a more flexible approach that can represent arbitrary relationships between thoughts.
+Linear reasoning approaches like Chain-of-Thought (CoT) and even tree-based methods like Tree-of-Thoughts (ToT) have limitations when dealing with problems that require complex interdependencies between reasoning steps. Many real-world problems involve reasoning paths that merge, split, and recombine in ways that don't fit neatly into linear or tree structures. These problems need a more flexible approach that can represent arbitrary relationships between thoughts.
 
 ## Solution
 
-Graph of Thoughts (GoT) extends reasoning frameworks by representing the thought process as a directed graph. GoT
-provides a general framework that subsumes Chain-of-Thought (linear) and Tree-of-Thoughts (branching) as special cases,
-with aggregation as the key enabling operation.
+Graph of Thoughts (GoT) extends reasoning frameworks by representing the thought process as a directed graph. GoT provides a general framework that subsumes Chain-of-Thought (linear) and Tree-of-Thoughts (branching) as special cases, with aggregation as the key enabling operation.
 
 In GoT:
 
@@ -208,8 +203,7 @@ graph TD
 
 ## How to use it
 
-Use for complex problems where multiple solution approaches need to be merged or where early decisions may need revision
-based on later insights. LangGraph provides native support for GoT-like workflows with cycles and backtracking.
+Use for complex problems where multiple solution approaches need to be merged or where early decisions may need revision based on later insights. LangGraph provides native support for GoT-like workflows with cycles and backtracking.
 
 Use simpler approaches (CoT, ToT) for:
 - Straightforward problems with single viable solution paths
@@ -218,7 +212,6 @@ Use simpler approaches (CoT, ToT) for:
 
 ## References
 
-- [Graph of Thoughts: Solving Elaborate Problems with Large Language Models (AAAI 2024)](https://arxiv.org/abs/2308.09687) -
-  Besta et al., ETH Zurich
+- [Graph of Thoughts: Solving Elaborate Problems with Large Language Models (AAAI 2024)](https://arxiv.org/abs/2308.09687) - Besta et al., ETH Zurich
 - [Code Implementation](https://github.com/spcl/graph-of-thoughts)
 - [LangGraph - Graph-based Agent Workflows](https://www.langchain.com/langgraph)

@@ -9,8 +9,7 @@ Within each state, GOAP planning works normally. When an action returns a `@Stat
 3. **Re-plans from the new state** — considers only actions from the new state
 4. **Continues execution** — until goal reached or no plan found
 
-**Context is preserved** across state transitions — non-state objects (user messages, customer data, conversation
-history) remain available. Only state objects are hidden.
+**Context is preserved** across state transitions — non-state objects (user messages, customer data, conversation history) remain available. Only state objects are hidden.
 
 ## When to Use States
 
@@ -108,7 +107,6 @@ public WaitFor<HumanFeedback> getFeedback() {
 ```
 
 When this action executes:
-
 1. The agent process enters a `WAITING` state
 2. A form is generated from the record structure
 3. User fills out and submits the form

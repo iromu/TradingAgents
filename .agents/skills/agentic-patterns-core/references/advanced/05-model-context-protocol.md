@@ -1,8 +1,6 @@
 # Model Context Protocol (MCP) Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -87,15 +85,9 @@ class MCPRegistry:
 
 ## Real-World Examples
 
-1. **Enterprise Data Platform**: Unified access to databases/APIs/files, role-based access control, audit logging,
-   version management, discovery service
-2. **Multi-Cloud AI Services**: Standardized interface to AWS/Azure/GCP, credential management, service discovery, cost
-   tracking, failover handling
-3. **Healthcare AI**: HIPAA-compliant data access, patient privacy controls, medical device integrations, EHR
-   connections, audit trails
-4. **Financial Services**: Market data feeds, trading system connections, risk management tools, compliance checking,
-   transaction audit logging
-5. **Manufacturing IoT**: Sensor data collection, equipment control interfaces, quality assurance connections, supply
-   chain data, predictive maintenance
-6. **Research Computing**: Scientific database access, compute cluster jobs, experiment tracking, collaboration tools,
-   version control
+1. **Enterprise Data Platform**: Unified access to databases/APIs/files, role-based access control, audit logging, version management, discovery service
+2. **Multi-Cloud AI Services**: Standardized interface to AWS/Azure/GCP, credential management, service discovery, cost tracking, failover handling
+3. **Healthcare AI**: HIPAA-compliant data access, patient privacy controls, medical device integrations, EHR connections, audit trails
+4. **Financial Services**: Market data feeds, trading system connections, risk management tools, compliance checking, transaction audit logging
+5. **Manufacturing IoT**: Sensor data collection, equipment control interfaces, quality assurance connections, supply chain data, predictive maintenance
+6. **Research Computing**: Scientific database access, compute cluster jobs, experiment tracking, collaboration tools, version control

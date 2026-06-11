@@ -11,14 +11,9 @@
 
 ## Executive Summary
 
-The **"Burn the Boats"** pattern is a strategic commitment approach where options for retreat are deliberately
-eliminated to force forward progress. This report synthesizes findings from academic literature, industry
-implementations, historical analysis, pattern relationships, and technical implementation approaches.
+The **"Burn the Boats"** pattern is a strategic commitment approach where options for retreat are deliberately eliminated to force forward progress. This report synthesizes findings from academic literature, industry implementations, historical analysis, pattern relationships, and technical implementation approaches.
 
-**Key Finding**: While the pattern has rich historical and academic foundations dating back 2,200+ years, **modern
-production AI systems largely reject "no fallback" approaches** in favor of bounded autonomy with human oversight. The
-pattern is more relevant as a **product/organizational strategy** (e.g., feature deprecation) than as a technical
-implementation pattern for agent safety.
+**Key Finding**: While the pattern has rich historical and academic foundations dating back 2,200+ years, **modern production AI systems largely reject "no fallback" approaches** in favor of bounded autonomy with human oversight. The pattern is more relevant as a **product/organizational strategy** (e.g., feature deprecation) than as a technical implementation pattern for agent safety.
 
 ---
 
@@ -51,20 +46,15 @@ implementation pattern for agent safety.
 3. Burn all shelters - No place to rest or regroup
 4. Carry only 3 days of rations - Forcing quick, decisive battle
 
-**Outcome**: With no possibility of retreat, Chu soldiers fought with extraordinary desperation, achieving "nine
-consecutive victories" (九战九捷) against vastly superior forces. This battle broke the main Qin military power.
+**Outcome**: With no possibility of retreat, Chu soldiers fought with extraordinary desperation, achieving "nine consecutive victories" (九战九捷) against vastly superior forces. This battle broke the main Qin military power.
 
-**Philosophy**: **"置之死地而后生"** - "placing oneself in a position of death to then survive" - fighting desperately
-when there is no retreat.
+**Philosophy**: **"置之死地而后生"** - "placing oneself in a position of death to then survive" - fighting desperately when there is no retreat.
 
 ### Spanish Conquest (1519 AD)
 
-**Hernán Cortés** - Before marching inland to conquer the Aztec Empire, Cortés ordered his ships destroyed (burned or
-scuttled) at Veracruz. With ~500 soldiers and no option to retreat, the conquest succeeded, leading to the fall of the
-Aztec Empire by 1521.
+**Hernán Cortés** - Before marching inland to conquer the Aztec Empire, Cortés ordered his ships destroyed (burned or scuttled) at Veracruz. With ~500 soldiers and no option to retreat, the conquest succeeded, leading to the fall of the Aztec Empire by 1521.
 
-**Historical Note**: Some sources suggest ships were dismantled for parts rather than burned, but the symbolic act
-remains the dominant narrative.
+**Historical Note**: Some sources suggest ships were dismantled for parts rather than burned, but the symbolic act remains the dominant narrative.
 
 ---
 
@@ -79,8 +69,7 @@ remains the dominant narrative.
 - **Strategic Paradox**: Restricting freedom of choice in visible, credible ways enhances negotiating power
 - **"Burn Your Bridges" Strategy**: Destroying escape routes demonstrates commitment to fight to the death
 
-**Core Insight**: If you preserve your options, threats become less credible. By eliminating retreat, fighting becomes
-the only rational choice.
+**Core Insight**: If you preserve your options, threats become less credible. By eliminating retreat, fighting becomes the only rational choice.
 
 **Applications**: Cuban Missile Crisis, nuclear deterrence theory, international relations
 
@@ -94,8 +83,7 @@ the only rational choice.
 - **"planner"** - Long-term, forward-thinking perspective
 - **"doer"** - Short-term, present-focused perspective
 
-**Commitment Devices as Solutions**: Strategies to solve self-control problems by restricting future choices (e.g.,
-Odysseus tying himself to the mast).
+**Commitment Devices as Solutions**: Strategies to solve self-control problems by restricting future choices (e.g., Odysseus tying himself to the mast).
 
 **Recognition**: Richard Thaler won the Nobel Prize in Economics (2017)
 
@@ -103,8 +91,7 @@ Odysseus tying himself to the mast).
 
 **Paper**: "Knee-deep in the big muddy: A study of escalating commitment to a chosen course of action" (1976)
 
-**Definition**: **Escalation of Commitment** - Continuing to invest resources in a failing course of action despite
-evidence it was wrong. Also known as **Sunk Cost Fallacy** or **Concorde Fallacy**.
+**Definition**: **Escalation of Commitment** - Continuing to invest resources in a failing course of action despite evidence it was wrong. Also known as **Sunk Cost Fallacy** or **Concorde Fallacy**.
 
 **Note**: This is the **inverse** (pathological version) of "burn the boats" - where commitment becomes maladaptive.
 
@@ -137,8 +124,7 @@ evidence it was wrong. Also known as **Sunk Cost Fallacy** or **Concorde Fallacy
 
 **Paper**: "Intention is Choice with Commitment" (Artificial Intelligence, Vol. 42)
 
-**Key Contribution**: Formal logical framework for understanding mental states in artificial agents. **"Intention is
-choice with commitment"** became foundational for BDI architectures.
+**Key Contribution**: Formal logical framework for understanding mental states in artificial agents. **"Intention is choice with commitment"** became foundational for BDI architectures.
 
 **Related Works** (1990):
 - "Persistence, Intention, and Commitment" in *Intentions in Communication* (MIT Press)
@@ -150,22 +136,21 @@ choice with commitment"** became foundational for BDI architectures.
 **Research identifies three commitment strategies**:
 
 1. **Blind Commitment (Fanatical)**
-    - Agent maintains intention until achieved, regardless of changing circumstances
-    - Will persist even when goal is no longer possible OR no longer desired
-    - Risk: Wastes resources on unachievable goals
+   - Agent maintains intention until achieved, regardless of changing circumstances
+   - Will persist even when goal is no longer possible OR no longer desired
+   - Risk: Wastes resources on unachievable goals
 
 2. **Single-Minded Commitment**
-    - Agent continues until achieved OR no longer possible
-    - Will drop goals when impossibility is discovered
-    - Most commonly implemented in BDI systems
+   - Agent continues until achieved OR no longer possible
+   - Will drop goals when impossibility is discovered
+   - Most commonly implemented in BDI systems
 
 3. **Open-Minded Commitment**
-    - Agent maintains commitment only while possible AND still desired
-    - Most flexible approach
-    - Risk: Too much reconsideration prevents achievement of long-term goals
+   - Agent maintains commitment only while possible AND still desired
+   - Most flexible approach
+   - Risk: Too much reconsideration prevents achievement of long-term goals
 
-**The Commitment Trade-off**: Too little reconsideration leads to persistence in impossible goals; too much
-reconsideration prevents achievement of long-term goals.
+**The Commitment Trade-off**: Too little reconsideration leads to persistence in impossible goals; too much reconsideration prevents achievement of long-term goals.
 
 #### BDI Architecture
 
@@ -184,8 +169,7 @@ filter to select commitments (intentions) → take action
 
 #### Multi-Agent Commitment
 
-**Wooldridge & Jennings (1995)**: "Controlling cooperative problem solving in industrial multi-agent systems using joint
-intentions"
+**Wooldridge & Jennings (1995)**: "Controlling cooperative problem solving in industrial multi-agent systems using joint intentions"
 
 **Joint Action Properties**:
 1. Team members are mutually responsive
@@ -199,12 +183,9 @@ intentions"
 **arXiv Paper (2501.10114)**: Comprehensive analysis of commitment devices for AI systems
 
 **Key Concepts**:
-
-- **Commitment Devices**: Mechanisms that enforce commitments, addressing problems where rational actors cannot credibly
-  commit
+- **Commitment Devices**: Mechanisms that enforce commitments, addressing problems where rational actors cannot credibly commit
 - **Applications**: Agent-based Kickstarter-like assurance contracts, avoiding tragedy of the commons
-- **Challenges**: Language-model-based agents may not reliably follow instructions; users could circumvent commitment
-  devices
+- **Challenges**: Language-model-based agents may not reliably follow instructions; users could circumvent commitment devices
 
 #### Cooperative AI via Decentralized Commitment Devices (2023)
 
@@ -278,8 +259,7 @@ intentions"
 - Safety benchmarks
 - External expert consultation
 
-**Key Commitment**: Building intelligence for physical world, **with multiple safety layers** rather than eliminating
-fallbacks.
+**Key Commitment**: Building intelligence for physical world, **with multiple safety layers** rather than eliminating fallbacks.
 
 ### Autonomous Vehicle Industry: Fallback Systems as Requirements
 
@@ -302,8 +282,7 @@ fallbacks.
 **Rationale**: "The sidebar is dead" - shifting from editor extension to CLI tool architecture.
 
 **Philosophy**:
-> "We have to totally reearn all of the usage of AMP today, all of the revenue that we're doing, all the customers we
-> have... every 3 months."
+> "We have to totally reearn all of the usage of AMP today, all of the revenue that we're doing, all the customers we have... every 3 months."
 
 **Strategic Reasons**:
 - Paradigm shift from "assistant" to "factory"
@@ -315,8 +294,7 @@ fallbacks.
 **Self-Destruct Timer Pattern**: AMP implemented a literal self-destruct timer in their VS Code extension:
 > "It will self-destruct in about 60 days from now. We don't know exactly when. We'll put the timer. You'll see it."
 
-**Source
-**: [Raising an Agent Episode 10: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=4rx36wc9ugw)
+**Source**: [Raising an Agent Episode 10: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=4rx36wc9ugw)
 
 ### Robotics Success Stories
 
@@ -343,12 +321,12 @@ fallbacks.
 
 ### Directly Related Patterns
 
-| Pattern                          | Relationship       | Integration Mechanism                                                   |
-|----------------------------------|--------------------|-------------------------------------------------------------------------|
-| **Factory over Assistant**       | Extends            | Paradigm shift from sidebar to factory creates need for irreversibility |
-| **Disposable Scaffolding**       | Aligns             | Reduces sunk cost fallacy, makes removal easier                         |
-| **Frontier-Focused Development** | Creates conditions | Rapid obsolescence defines what's worth keeping                         |
-| **Shipping as Research**         | Operationalizes    | Rapid experimentation validates what to remove                          |
+| Pattern | Relationship | Integration Mechanism |
+|---------|--------------|----------------------|
+| **Factory over Assistant** | Extends | Paradigm shift from sidebar to factory creates need for irreversibility |
+| **Disposable Scaffolding** | Aligns | Reduces sunk cost fallacy, makes removal easier |
+| **Frontier-Focused Development** | Creates conditions | Rapid obsolescence defines what's worth keeping |
+| **Shipping as Research** | Operationalizes | Rapid experimentation validates what to remove |
 
 ### Complementary Patterns
 
@@ -359,11 +337,11 @@ fallbacks.
 
 ### Contrasting Patterns
 
-| Pattern                                | Contrast                         | Integration Point                        |
-|----------------------------------------|----------------------------------|------------------------------------------|
-| **Planner-Worker Separation**          | Careful planning vs rapid action | Use planning before committing           |
-| **Feature List as Immutable Contract** | Stability vs rapid change        | Define new paradigm requirements first   |
-| **Progressive Autonomy**               | Gradual vs sudden transition     | Progressive autonomy within new paradigm |
+| Pattern | Contrast | Integration Point |
+|---------|----------|-------------------|
+| **Planner-Worker Separation** | Careful planning vs rapid action | Use planning before committing |
+| **Feature List as Immutable Contract** | Stability vs rapid change | Define new paradigm requirements first |
+| **Progressive Autonomy** | Gradual vs sudden transition | Progressive autonomy within new paradigm |
 
 ### Pattern Taxonomy
 
@@ -386,8 +364,8 @@ Giving agents irreversible operations with broad permissions is extremely danger
 - **Problem**: Agents granted long-term, high-level access
 - **Consequence**: Prompt injection or misinterpretation leads to catastrophic damage
 - **Real Examples (February 2026)**:
-    - Summer Yue / Meta AI: OpenClaw agent deleted 200+ emails despite "confirm before acting"
-    - Qu Jiangfeng / Antigravity AI: Space character in file path caused irreversible data loss
+  - Summer Yue / Meta AI: OpenClaw agent deleted 200+ emails despite "confirm before acting"
+  - Qu Jiangfeng / Antigravity AI: Space character in file path caused irreversible data loss
 
 **2. Context Window Overflow**
 
@@ -537,54 +515,40 @@ Across all disciplines, the "burn the boats" pattern shares a common strategic l
 3. **Signaling Mechanism**: Visible commitment deters opponents or rallies supporters
 4. **Selection Effect**: Filters for those committed to the new paradigm
 
-**The Paradox**: Voluntarily restricting freedom of action can strengthen strategic position—a counterintuitive insight
-that has fascinated thinkers from Xiang Yu to Schelling to modern AI developers.
+**The Paradox**: Voluntarily restricting freedom of action can strengthen strategic position—a counterintuitive insight that has fascinated thinkers from Xiang Yu to Schelling to modern AI developers.
 
 ---
 
 ## Sources
 
 ### Historical Origins
-
-- **Sima Qian**: *Records of the Grand Historian* (《史记·项羽本纪》) - Original source on Xiang Yu's Battle of Julu (207
-  BC)
+- **Sima Qian**: *Records of the Grand Historian* (《史记·项羽本纪》) - Original source on Xiang Yu's Battle of Julu (207 BC)
 - **Cortés Historical Accounts**: Various sources on the Spanish conquest of Mexico (1519)
 
 ### Game Theory
 - **Thomas Schelling**: *The Strategy of Conflict* (1960), Harvard University Press
 
 ### Behavioral Economics
-
-- **Shefrin & Thaler**: "An Economic Theory of Self-Control" (1981), *Journal of Political Economy*, Vol. 89, pp.
-  392-406
+- **Shefrin & Thaler**: "An Economic Theory of Self-Control" (1981), *Journal of Political Economy*, Vol. 89, pp. 392-406
 - **Bryan, Karlan & Nelson**: "Commitment Devices" (2010), *Annual Review of Economics*
 
 ### Organizational Behavior
-
-- **Barry M. Staw**: "Knee-deep in the big muddy: A study of escalating commitment to a chosen course of action" (1976),
-  *Organizational Behavior and Human Performance*, 16(1), 27-44
+- **Barry M. Staw**: "Knee-deep in the big muddy: A study of escalating commitment to a chosen course of action" (1976), *Organizational Behavior and Human Performance*, 16(1), 27-44
 
 ### Evolutionary Economics
 - **Paul A. David**: "Clio and the Economics of QWERTY" (1985), *The American Economic Review*
-- **W. Brian Arthur**: "Competing Technologies, Increasing Returns, and Lock-In by Historical Events" (1989), *The
-  Economic Journal*, Vol. 99, March 1989, pp. 116-131
+- **W. Brian Arthur**: "Competing Technologies, Increasing Returns, and Lock-In by Historical Events" (1989), *The Economic Journal*, Vol. 99, March 1989, pp. 116-131
 
 ### Academic AI Research
-
-- [Cohen & Levesque (1990) - Intention is Choice with Commitment](https://doi.org/10.1016/0004-3702(90)90055-5) -
-  Artificial Intelligence, Vol. 42
+- [Cohen & Levesque (1990) - Intention is Choice with Commitment](https://doi.org/10.1016/0004-3702(90)90055-5) - Artificial Intelligence, Vol. 42
 - [Infrastructure for AI Agents (arXiv:2501.10114)](https://arxiv.org/html/2501.10114v3) - June 2025
 - [Sun et al. (2023) - Cooperative AI via Decentralized Commitment Devices](https://arxiv.org/) - November 2023
 - [An Economy of AI Agents (arXiv:2509.01063)](https://arxiv.org/) - August 2025
 
 ### Industry Sources
-
-- [Measuring Agents in Production - arXiv](https://arxiv.org/html/2512.04123v1) - UC Berkeley study (306 practitioners,
-  20 case studies)
-- [Anthropic's Official Agent Methodology](https://docs.anthropic.com/en/docs/build-with-claude/patterns) - Five
-  workflow patterns, production safeguards
-- [Raising an Agent Episode 10: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=4rx36wc9ugw) -
-  AMP (Thorsten Ball, Quinn Slack, 2025)
+- [Measuring Agents in Production - arXiv](https://arxiv.org/html/2512.04123v1) - UC Berkeley study (306 practitioners, 20 case studies)
+- [Anthropic's Official Agent Methodology](https://docs.anthropic.com/en/docs/build-with-claude/patterns) - Five workflow patterns, production safeguards
+- [Raising an Agent Episode 10: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=4rx36wc9ugw) - AMP (Thorsten Ball, Quinn Slack, 2025)
 
 ### Technical Documentation
 - [State Machine + Workflow for AI Agents](https://m.blog.csdn.net/vaminal/article/details/155258412) (Nov 2025)
@@ -601,17 +565,17 @@ that has fascinated thinkers from Xiang Yu to Schelling to modern AI developers.
 
 ## Key Contributors Timeline
 
-| **Period** | **Researcher**    | **Contribution**                    | **Discipline**          |
-|------------|-------------------|-------------------------------------|-------------------------|
-| 207 BC     | Xiang Yu          | First documented use (破釜沉舟)         | Military Strategy       |
-| 1519 AD    | Hernán Cortés     | Popularized in Western history      | Military Strategy       |
-| 1960       | Thomas Schelling  | Credible commitment theory          | Game Theory             |
-| 1976       | Barry M. Staw     | Escalation of commitment            | Organizational Behavior |
-| 1981       | Thaler & Shefrin  | Self-control and commitment devices | Behavioral Economics    |
-| 1985       | Paul A. David     | Path dependence and lock-in theory  | Evolutionary Economics  |
-| 1989       | W. Brian Arthur   | Increasing returns and lock-in      | Economics               |
-| 1990       | Cohen & Levesque  | Intention formalization in AI       | AI Research             |
-| 2025       | AMP (Ball, Slack) | Applied to AI product development   | AI/Software Engineering |
+| **Period** | **Researcher** | **Contribution** | **Discipline** |
+|------------|----------------|------------------|----------------|
+| 207 BC | Xiang Yu | First documented use (破釜沉舟) | Military Strategy |
+| 1519 AD | Hernán Cortés | Popularized in Western history | Military Strategy |
+| 1960 | Thomas Schelling | Credible commitment theory | Game Theory |
+| 1976 | Barry M. Staw | Escalation of commitment | Organizational Behavior |
+| 1981 | Thaler & Shefrin | Self-control and commitment devices | Behavioral Economics |
+| 1985 | Paul A. David | Path dependence and lock-in theory | Evolutionary Economics |
+| 1989 | W. Brian Arthur | Increasing returns and lock-in | Economics |
+| 1990 | Cohen & Levesque | Intention formalization in AI | AI Research |
+| 2025 | AMP (Ball, Slack) | Applied to AI product development | AI/Software Engineering |
 
 ---
 

@@ -15,20 +15,13 @@ last_updated: "2026-03-31"
 
 ## Problem
 
-AI agents that invoke external tools (MCP servers, function calls, skill files) are exposed to a class of attacks where
-malicious content is embedded in tool descriptions, responses, or skill definitions. These attacks include prompt
-injection via tool output, data exfiltration through encoded parameters, privilege escalation via hidden instructions,
-and tool poisoning through manipulated descriptions.
+AI agents that invoke external tools (MCP servers, function calls, skill files) are exposed to a class of attacks where malicious content is embedded in tool descriptions, responses, or skill definitions. These attacks include prompt injection via tool output, data exfiltration through encoded parameters, privilege escalation via hidden instructions, and tool poisoning through manipulated descriptions.
 
-LLM-based detection alone is unreliable for these threats: adversaries can craft payloads that exploit the same
-reasoning flexibility that makes LLMs useful. Security requires a deterministic baseline that cannot be bypassed by
-clever prompt engineering.
+LLM-based detection alone is unreliable for these threats: adversaries can craft payloads that exploit the same reasoning flexibility that makes LLMs useful. Security requires a deterministic baseline that cannot be bypassed by clever prompt engineering.
 
 ## Solution
 
-Maintain a library of deterministic regex-based rules, each targeting a specific threat pattern observed in real-world
-agent attacks. These rules run against tool descriptions, tool call arguments, tool responses, and skill definition
-files before the agent processes them.
+Maintain a library of deterministic regex-based rules, each targeting a specific threat pattern observed in real-world agent attacks. These rules run against tool descriptions, tool call arguments, tool responses, and skill definition files before the agent processes them.
 
 Each rule specifies:
 - A threat category (e.g., prompt injection, data exfiltration, privilege escalation)
@@ -74,69 +67,58 @@ graph TD
     I[Tool Description] --> C
 ```
 
-The key insight is layered defense: deterministic rules catch known patterns with near-perfect precision, while
-LLM-based review handles novel or ambiguous threats as a second layer. The deterministic layer provides a floor of
-protection that does not degrade with adversarial prompt engineering.
+The key insight is layered defense: deterministic rules catch known patterns with near-perfect precision, while LLM-based review handles novel or ambiguous threats as a second layer. The deterministic layer provides a floor of protection that does not degrade with adversarial prompt engineering.
 
 ## Evidence
 
 - **Evidence Grade:** `medium`
 - **Most Valuable Findings:**
-    - A regex-based rule library achieved 62.7% recall and 99.7% precision on the PINT prompt injection benchmark,
-      demonstrating that deterministic rules reliably catch known patterns with very few false positives.
-    - Scanning 36,394 MCP server tool definitions with deterministic rules identified 182 CRITICAL and 1,124 HIGH
-      severity findings, indicating measurable threat prevalence in real tool ecosystems.
-    - Layering deterministic scanning before LLM-based review reduces cost and latency: regex runs in microseconds per
-      rule, reserving expensive LLM calls for ambiguous cases only.
+  - A regex-based rule library achieved 62.7% recall and 99.7% precision on the PINT prompt injection benchmark, demonstrating that deterministic rules reliably catch known patterns with very few false positives.
+  - Scanning 36,394 MCP server tool definitions with deterministic rules identified 182 CRITICAL and 1,124 HIGH severity findings, indicating measurable threat prevalence in real tool ecosystems.
+  - Layering deterministic scanning before LLM-based review reduces cost and latency: regex runs in microseconds per rule, reserving expensive LLM calls for ambiguous cases only.
 - **Unverified / Unclear:**
-    - Recall on novel attack patterns not yet captured by rules is unknown; the 62.7% figure reflects coverage of known
-      patterns only.
-    - Effectiveness against adversarial evasion techniques (e.g., encoding variations, Unicode obfuscation) has not been
-      systematically benchmarked.
+  - Recall on novel attack patterns not yet captured by rules is unknown; the 62.7% figure reflects coverage of known patterns only.
+  - Effectiveness against adversarial evasion techniques (e.g., encoding variations, Unicode obfuscation) has not been systematically benchmarked.
 
 ## How to use it
 
 1. **Choose interception points** based on your agent framework:
-    - Tool descriptions (scan when tools are registered)
-    - Tool call arguments (scan before execution)
-    - Tool responses (scan before agent processes output)
-    - Skill/plugin definition files (scan at install time)
+   - Tool descriptions (scan when tools are registered)
+   - Tool call arguments (scan before execution)
+   - Tool responses (scan before agent processes output)
+   - Skill/plugin definition files (scan at install time)
 
 2. **Start with high-confidence rules** targeting well-documented attack patterns:
-    - Base64-encoded payloads in tool responses
-    - Hidden instructions using Unicode or whitespace tricks
-    - Cross-tool data exfiltration patterns
-    - Privilege escalation via `sudo`, `chmod`, or role manipulation
+   - Base64-encoded payloads in tool responses
+   - Hidden instructions using Unicode or whitespace tricks
+   - Cross-tool data exfiltration patterns
+   - Privilege escalation via `sudo`, `chmod`, or role manipulation
 
 3. **Integrate into your agent pipeline** as a synchronous check:
-    - Block on CRITICAL findings (known dangerous patterns)
-    - Warn on HIGH findings (suspicious but may be legitimate)
-    - Log everything for post-incident analysis
+   - Block on CRITICAL findings (known dangerous patterns)
+   - Warn on HIGH findings (suspicious but may be legitimate)
+   - Log everything for post-incident analysis
 
-4. **Evolve rules continuously** as new attack techniques emerge. Each rule should include test cases to prevent false
-   positives from regressing precision.
+4. **Evolve rules continuously** as new attack techniques emerge. Each rule should include test cases to prevent false positives from regressing precision.
 
 ## Trade-offs
 
 - **Pros:**
-    - Deterministic and auditable: every detection decision is traceable to a specific rule
-    - Near-zero latency compared to LLM-based security review
-    - Cannot be bypassed by prompt injection (rules run outside the LLM context)
-    - Rules are composable and independently testable
-    - Complements LLM-based detection as part of a layered defense
+  - Deterministic and auditable: every detection decision is traceable to a specific rule
+  - Near-zero latency compared to LLM-based security review
+  - Cannot be bypassed by prompt injection (rules run outside the LLM context)
+  - Rules are composable and independently testable
+  - Complements LLM-based detection as part of a layered defense
 
 - **Cons:**
-    - Regex rules only catch known patterns; novel attacks require rule updates
-    - Recall is inherently limited by the rule library's coverage
-    - May produce false positives on legitimate content that resembles attack patterns
-    - Requires ongoing maintenance as the threat landscape evolves
-    - Pattern matching cannot understand semantic intent (e.g., distinguishing a legitimate base64 string from an
-      exfiltration payload)
+  - Regex rules only catch known patterns; novel attacks require rule updates
+  - Recall is inherently limited by the rule library's coverage
+  - May produce false positives on legitimate content that resembles attack patterns
+  - Requires ongoing maintenance as the threat landscape evolves
+  - Pattern matching cannot understand semantic intent (e.g., distinguishing a legitimate base64 string from an exfiltration payload)
 
 ## References
 
-- [Agent Threat Rules (ATR)](https://github.com/panguard-ai/agent-threat-rules) — Open-source rule library with 76
-  deterministic detection rules covering prompt injection, tool poisoning, data exfiltration, and privilege escalation
-- [OWASP Top 10 for Agentic Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/) —
-  Industry framework categorizing agent-specific security risks
+- [Agent Threat Rules (ATR)](https://github.com/panguard-ai/agent-threat-rules) — Open-source rule library with 76 deterministic detection rules covering prompt injection, tool poisoning, data exfiltration, and privilege escalation
+- [OWASP Top 10 for Agentic Applications](https://owasp.org/www-project-top-10-for-large-language-model-applications/) — Industry framework categorizing agent-specific security risks
 - [PINT Benchmark](https://arxiv.org/abs/2312.10997) — Prompt injection benchmark for evaluating detection systems

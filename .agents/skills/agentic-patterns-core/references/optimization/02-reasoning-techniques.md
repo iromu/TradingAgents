@@ -1,8 +1,6 @@
 # Reasoning Techniques Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -95,15 +93,9 @@ def reason(problem, method="chain_of_thought", max_iterations=3):
 
 ## Real-World Examples
 
-1. **Math Solver**: Chain-of-Thought step-by-step → Self-consistency multiple approaches → Tree-of-Thoughts exploring
-   branches → Validation → Explanation
-2. **Business Advisor**: Tree-of-Thoughts strategy exploration → Debate growth vs efficiency → Self-consistency across
-   analyses → ReAct with data → Synthesis
-3. **Code Architect**: Chain-of-Thought design decisions → Tree exploration architectures → Debate design patterns →
-   ReAct with code analysis → Documentation
-4. **Medical Diagnostic**: Differential diagnosis tree → Self-consistency across symptoms → Chain-of-Thought treatment
-   plans → Debate treatment options → Evidence traces
-5. **Legal Case**: Chain-of-Thought legal arguments → Tree exploration precedents → Debate interpretations →
-   Self-consistency across statutes → Structured reasoning
-6. **Investment Analysis**: Tree-of-Thoughts scenarios → Self-consistency valuations → Debate bull vs bear → Chain
-   reasoning DCF → ReAct with market data
+1. **Math Solver**: Chain-of-Thought step-by-step → Self-consistency multiple approaches → Tree-of-Thoughts exploring branches → Validation → Explanation
+2. **Business Advisor**: Tree-of-Thoughts strategy exploration → Debate growth vs efficiency → Self-consistency across analyses → ReAct with data → Synthesis
+3. **Code Architect**: Chain-of-Thought design decisions → Tree exploration architectures → Debate design patterns → ReAct with code analysis → Documentation
+4. **Medical Diagnostic**: Differential diagnosis tree → Self-consistency across symptoms → Chain-of-Thought treatment plans → Debate treatment options → Evidence traces
+5. **Legal Case**: Chain-of-Thought legal arguments → Tree exploration precedents → Debate interpretations → Self-consistency across statutes → Structured reasoning
+6. **Investment Analysis**: Tree-of-Thoughts scenarios → Self-consistency valuations → Debate bull vs bear → Chain reasoning DCF → ReAct with market data

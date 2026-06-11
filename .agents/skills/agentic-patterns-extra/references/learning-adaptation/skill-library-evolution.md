@@ -30,15 +30,11 @@ updated_at: '2026-01-13'
 
 ## Problem
 
-Agents frequently solve similar problems across different sessions or workflows. Without a mechanism to preserve and
-reuse working code, agents must rediscover solutions each time, wasting tokens and time. Organizations want agents to
-build up capability over time rather than starting from scratch every session.
+Agents frequently solve similar problems across different sessions or workflows. Without a mechanism to preserve and reuse working code, agents must rediscover solutions each time, wasting tokens and time. Organizations want agents to build up capability over time rather than starting from scratch every session.
 
 ## Solution
 
-Agents persist working code implementations as reusable functions in a `skills/` directory. Over time, these
-implementations evolve into well-documented, tested "skills" that become higher-level capabilities the agent can
-leverage.
+Agents persist working code implementations as reusable functions in a `skills/` directory. Over time, these implementations evolve into well-documented, tested "skills" that become higher-level capabilities the agent can leverage.
 
 **Skill types:**
 
@@ -112,8 +108,7 @@ def analyze_sentiment(text, granularity='binary'):
 
 **Progressive disclosure with on-demand loading (Imprint approach):**
 
-Instead of loading all skills into context, inject skill descriptions into system prompt and provide a `load_skills`
-tool for full content:
+Instead of loading all skills into context, inject skill descriptions into system prompt and provide a `load_skills` tool for full content:
 
 ```yaml
 # skills/pdf-processing/SKILL.md
@@ -151,8 +146,7 @@ def load_skills(skill_names):
 
 **Lazy-loading MCP tools via skills (Amp approach):**
 
-MCP servers often expose many tools that consume significant context. Bind MCP servers to skills with selective tool
-loading:
+MCP servers often expose many tools that consume significant context. Bind MCP servers to skills with selective tool loading:
 
 ```json
 // skills/chrome-automation/mcp.json
@@ -182,27 +176,27 @@ The agent sees only the skill description initially. When invoked, only the spec
 
 1. **Ad-hoc → Saved**
 
-    - Agent writes code to solve immediate problem
-    - If solution works, save to `skills/` directory
-    - Use descriptive names: `skills/pdf_to_markdown.py`
+   - Agent writes code to solve immediate problem
+   - If solution works, save to `skills/` directory
+   - Use descriptive names: `skills/pdf_to_markdown.py`
 
 2. **Saved → Reusable**
 
-    - Refactor for generalization (parameterize hard-coded values)
-    - Add basic error handling
-    - Create simple function signature
+   - Refactor for generalization (parameterize hard-coded values)
+   - Add basic error handling
+   - Create simple function signature
 
 3. **Reusable → Documented**
 
-    - Add docstrings with purpose, parameters, returns, examples
-    - Include any prerequisites or dependencies
-    - Note when last tested or validated
+   - Add docstrings with purpose, parameters, returns, examples
+   - Include any prerequisites or dependencies
+   - Note when last tested or validated
 
 4. **Documented → Capability**
 
-    - Agent can discover skills through directory listing
-    - Skills become part of agent's effective capability set
-    - Skills are composed into higher-level workflows
+   - Agent can discover skills through directory listing
+   - Skills become part of agent's effective capability set
+   - Skills are composed into higher-level workflows
 
 **Skill organization:**
 
@@ -283,19 +277,18 @@ def discover_skills():
 
 **Anti-patterns to avoid:**
 
-| Anti-Pattern          | Consequence      | Correct Approach            |
-|-----------------------|------------------|-----------------------------|
-| **Hard-coded values** | Not reusable     | Parameterize inputs         |
-| **No documentation**  | Not discoverable | Add docstrings and examples |
-| **Monolithic skills** | Not composable   | Split into atomic units     |
-| **No testing**        | Unreliable       | Add validation tests        |
-| **Prompt bloat**      | Context overflow | Progressive disclosure      |
+| Anti-Pattern | Consequence | Correct Approach |
+|--------------|-------------|------------------|
+| **Hard-coded values** | Not reusable | Parameterize inputs |
+| **No documentation** | Not discoverable | Add docstrings and examples |
+| **Monolithic skills** | Not composable | Split into atomic units |
+| **No testing** | Unreliable | Add validation tests |
+| **Prompt bloat** | Context overflow | Progressive disclosure |
 
 ## References
 
 * Anthropic Engineering: Code Execution with MCP (2024)
-* [Building an internal agent: Adding support for Agent Skills](https://lethain.com/agents-skills/) - Will Larson (
-  Imprint, 2025)
+* [Building an internal agent: Adding support for Agent Skills](https://lethain.com/agents-skills/) - Will Larson (Imprint, 2025)
 * [Efficient MCP Tool Loading](https://ampcode.com/news/lazy-load-mcp-with-skills) - Amp (Nicolay, 2025)
 * Related: Compounding Engineering Pattern, CLI-First Skill Design
 

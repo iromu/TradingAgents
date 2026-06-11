@@ -15,11 +15,9 @@ Parallel sandboxes are intoxicating: you can spawn 10... 100... 1000 runs. But t
 1. **Diminishing returns:** After some N, you're mostly paying for redundant failures or near-duplicate solutions
 2. **Prompt fragility:** If the prompt is underspecified, scaling N just scales errors (lots of sandboxes fail fast)
 3. **Resource risk:** Unbounded fan-out can overwhelm budgets, rate limits, or queues
-4. **Oscillation risk:** Poorly tuned thresholds can cause scale-up/scale-down thrashing as the controller oscillates
-   between decisions
+4. **Oscillation risk:** Poorly tuned thresholds can cause scale-up/scale-down thrashing as the controller oscillates between decisions
 
-Static "N=10 always" policies don't adapt to task difficulty, model variance, or observed failure rates. Most
-implementations use static caps rather than true signal-driven adaptation.
+Static "N=10 always" policies don't adapt to task difficulty, model variance, or observed failure rates. Most implementations use static caps rather than true signal-driven adaptation.
 
 ## Solution
 
@@ -30,22 +28,21 @@ Add a controller that *adapts fan-out in real time* based on observed signals fr
 1. **Start small:** Launch a small batch (e.g., N=3-5) in parallel
 2. **Early signal sampling:** As soon as the first X runs finish (or after T seconds), compute:
 
-    - success rate (exit code / test pass)
-    - diversity score (are solutions meaningfully different?)
-    - judge confidence / winner margin
-    - error clustering (same error everywhere vs varied errors)
+   - success rate (exit code / test pass)
+   - diversity score (are solutions meaningfully different?)
+   - judge confidence / winner margin
+   - error clustering (same error everywhere vs varied errors)
 
 3. **Decide next action:**
 
-    - **Scale up** if: success rate is good but quality variance is high (you want a better winner)
-    - **Stop early** if: judge is confident + tests pass + solutions converge
-    - **Refine prompt / spec** if: error clustering is high (everyone fails the same way)
-    - **Switch strategy** if: repeated failure suggests decomposition is needed (spawn investigative sub-agent)
+   - **Scale up** if: success rate is good but quality variance is high (you want a better winner)
+   - **Stop early** if: judge is confident + tests pass + solutions converge
+   - **Refine prompt / spec** if: error clustering is high (everyone fails the same way)
+   - **Switch strategy** if: repeated failure suggests decomposition is needed (spawn investigative sub-agent)
 
 4. **Budget guardrails:** Enforce max sandboxes, max runtime, and "no-progress" stop conditions
 
-5. **Hysteresis for stability:** Use different thresholds for scale-up vs. stop (e.g., scale up if confidence < 0.65,
-   stop only if > 0.75) to prevent oscillation
+5. **Hysteresis for stability:** Use different thresholds for scale-up vs. stop (e.g., scale up if confidence < 0.65, stop only if > 0.75) to prevent oscillation
 
 ```mermaid
 flowchart TD
@@ -94,11 +91,7 @@ Concrete heuristics (example):
 
 ## References
 
-* [Labruno: Scaling number of parallel sandboxes + judging winners (video)](https://www.youtube.com/watch?v=zuhHQ9aMHV0) —
-  **Note: Uses static `MAX_SANDBOXES` rather than true signal-driven adaptation**
-* [Labruno (GitHub)](https://github.com/nibzard/labruno-agent) — Parallel execution with post-hoc judging, not adaptive
-  fanout
-* [OpenClaw Orchestrator](https://github.com/zeynepyorulmaz/openclaw-orchestrator) — Closest verified implementation;
-  LLM decides next steps based on accumulated results
-* Related patterns: [Swarm Migration Pattern](swarm-migration-pattern.md) (batch tuning, resource
-  caps), [Sub-Agent Spawning](sub-agent-spawning.md) (switch to decomposition when needed)
+* [Labruno: Scaling number of parallel sandboxes + judging winners (video)](https://www.youtube.com/watch?v=zuhHQ9aMHV0) — **Note: Uses static `MAX_SANDBOXES` rather than true signal-driven adaptation**
+* [Labruno (GitHub)](https://github.com/nibzard/labruno-agent) — Parallel execution with post-hoc judging, not adaptive fanout
+* [OpenClaw Orchestrator](https://github.com/zeynepyorulmaz/openclaw-orchestrator) — Closest verified implementation; LLM decides next steps based on accumulated results
+* Related patterns: [Swarm Migration Pattern](swarm-migration-pattern.md) (batch tuning, resource caps), [Sub-Agent Spawning](sub-agent-spawning.md) (switch to decomposition when needed)

@@ -10,8 +10,7 @@ tags: [retry, validation, cross-step-learning, structured-output, zod, error-acc
 
 ## Problem
 
-LLMs don't always produce valid structured output matching the expected schema. Single-attempt validation leads to task
-failures even when retry would succeed.
+LLMs don't always produce valid structured output matching the expected schema. Single-attempt validation leads to task failures even when retry would succeed.
 
 The issues compound in multi-step workflows:
 
@@ -23,15 +22,13 @@ The issues compound in multi-step workflows:
 
 ## Solution
 
-Implement multi-step retry with detailed error feedback and cross-step error accumulation. The agent learns from its
-validation failures across the entire workflow.
+Implement multi-step retry with detailed error feedback and cross-step error accumulation. The agent learns from its validation failures across the entire workflow.
 
 ### Core Mechanisms
 
 **1. Multi-attempt retry with detailed feedback:**
 
-Industry practice uses 2-3 retry attempts; research shows iterative refinement with feedback improves output quality by
-15-45% (Self-Refine, ICLR 2024).
+Industry practice uses 2-3 retry attempts; research shows iterative refinement with feedback improves output quality by 15-45% (Self-Refine, ICLR 2024).
 
 ```typescript
 const maxAttempts = 3;
@@ -98,8 +95,7 @@ if (recentErrors) {
 
 **3. Structured feedback loop:**
 
-**Alternative: Server-side validation** - OpenAI Structured Outputs and Anthropic Tool Use enforce schema compliance at
-the API level, eliminating the need for client-side retry loops.
+**Alternative: Server-side validation** - OpenAI Structured Outputs and Anthropic Tool Use enforce schema compliance at the API level, eliminating the need for client-side retry loops.
 
 Each retry iteration provides specific, actionable feedback:
 
@@ -309,11 +305,9 @@ const context: AgentContext = {
 
 ## References
 
-- [HyperAgent GitHub Repository](https://github.com/hyperbrowserai/HyperAgent) - Original implementation (see
-  `src/agent/tools/agent.ts` lines 424-509)
+- [HyperAgent GitHub Repository](https://github.com/hyperbrowserai/HyperAgent) - Original implementation (see `src/agent/tools/agent.ts` lines 424-509)
 - [Zod Validation Documentation](https://zod.dev/) - Schema validation library
 - [Self-Refine: Improving Reasoning via Iterative Feedback](https://arxiv.org/abs/2303.11366) - ICLR 2024, Shinn et al.
-- Related
-  patterns: [Structured Output Specification](structured-output-specification.md), [Action Caching & Replay](action-caching-replay.md)
+- Related patterns: [Structured Output Specification](structured-output-specification.md), [Action Caching & Replay](action-caching-replay.md)
 
 ---

@@ -17,31 +17,26 @@ A coding agent often needs to reason about multiple source files, but dumping **
 
 ## Solution
 
-Maintain a **sterile, curated "main" context window** containing only the code files directly relevant to the current
-task, and let **helper sub-agents** gather and rank additional files without polluting the main context:
+Maintain a **sterile, curated "main" context window** containing only the code files directly relevant to the current task, and let **helper sub-agents** gather and rank additional files without polluting the main context:
 
 **1. Identify Primary Files**
-
-- At task kickoff, the agent selects the set of files where changes are intended (e.g., the module under refactoring or
-  feature implementation).
+- At task kickoff, the agent selects the set of files where changes are intended (e.g., the module under refactoring or feature implementation).
 - Load only those files (plus any explicit dependencies) into the **Main Context Window**.
 
 **2. Spawn a File-Search Sub-Agent**
-
-- The sub-agent runs a quick search using agentic techniques (ripgrep, grep, AST heuristics) over the repository for
-  symbols, imports, or keywords related to the task.
+- The sub-agent runs a quick search using agentic techniques (ripgrep, grep, AST heuristics) over the repository for symbols, imports, or keywords related to the task.
 - Modern implementations favor direct search (e.g., `rg`) over complex vector embeddings for simplicity and freshness.
 - It returns a ranked list of file paths (e.g., "UserController.java," "UserService.kt," "models/user.rs").
 
 **3. Fetch & Summarize Secondary Files**
 - For each top-N file (e.g., N = 5), determine loading strategy by file size and relevance:
-    - Small files (<~200 tokens): load full content
-    - Medium files with high relevance: load full content or specific sections
-    - Large or peripheral files: load summaries, function signatures, or class structure only
+  - Small files (<~200 tokens): load full content
+  - Medium files with high relevance: load full content or specific sections
+  - Large or peripheral files: load summaries, function signatures, or class structure only
 - Append those summaries (or extracted code snippets) to the **Main Context Window** if they pass a relevance threshold:
-    - **Symbol overlap**: file shares ≥50% of symbols with primary files
-    - **Dependency distance**: file is within 1-2 hops in dependency graph
-    - **Semantic similarity**: content exceeds similarity threshold (when embeddings available)
+  - **Symbol overlap**: file shares ≥50% of symbols with primary files
+  - **Dependency distance**: file is within 1-2 hops in dependency graph
+  - **Semantic similarity**: content exceeds similarity threshold (when embeddings available)
 
 **4. Proceed with Coding Task**
 - With a compact, high‐signal context, the agent generates or refactors code, focusing solely on the curated set.
@@ -50,22 +45,20 @@ task, and let **helper sub-agents** gather and rank additional files without pol
 
 - **Evidence Grade:** `best-practice`
 - **Key Findings:**
-    - Anthropic Claude Code uses agentic search (ripgrep, AST heuristics) over vector embeddings for always-fresh
-      results
-    - Cursor AI uses `.cursorignore` exclusion rules and semantic codebase-wide queries
-    - Sourcegraph Cody uses AST-based code graph for large-scale repositories
+  - Anthropic Claude Code uses agentic search (ripgrep, AST heuristics) over vector embeddings for always-fresh results
+  - Cursor AI uses `.cursorignore` exclusion rules and semantic codebase-wide queries
+  - Sourcegraph Cody uses AST-based code graph for large-scale repositories
 
 ## How to use it
 
 - **Initialization:**
-    1. Agent receives a natural-language or structured request (e.g., "Add validation to `signup()` in
-       `UserController.java`").
-    2. Automatically parse the request to identify "primary files" (`UserController.java`).
+  1. Agent receives a natural-language or structured request (e.g., "Add validation to `signup()` in `UserController.java`").
+  2. Automatically parse the request to identify "primary files" (`UserController.java`).
 
 - **Sub-Agent Workflow:**
-    1. Invoke a **Search Sub-Agent** via shell commands (e.g., `rg "signup" -tjava`) or lightweight AST traversal.
-    2. For each matched file, run snippet extraction (method signatures, class definitions referencing task symbols).
-    3. Pass snippets back to main agent; filter for purely relevant code (ignore long comments, unrelated classes).
+  1. Invoke a **Search Sub-Agent** via shell commands (e.g., `rg "signup" -tjava`) or lightweight AST traversal.
+  2. For each matched file, run snippet extraction (method signatures, class definitions referencing task symbols).
+  3. Pass snippets back to main agent; filter for purely relevant code (ignore long comments, unrelated classes).
 
 - **Context Assembly:**
   ```
@@ -81,19 +74,18 @@ task, and let **helper sub-agents** gather and rank additional files without pol
 ## Trade-offs
 
 - **Pros:**
-    - Keeps the agent's prompt size **minimum** and directly on-target.
-    - Improves response time and reduces hallucinations from irrelevant code.
-    - Scales to large repositories because only a handful of files are ever loaded.
-    - Agentic search (ripgrep/AST) works with uncommitted changes and requires no indexing infrastructure.
+  - Keeps the agent's prompt size **minimum** and directly on-target.
+  - Improves response time and reduces hallucinations from irrelevant code.
+  - Scales to large repositories because only a handful of files are ever loaded.
+  - Agentic search (ripgrep/AST) works with uncommitted changes and requires no indexing infrastructure.
 - **Cons/Considerations:**
-    - Requires a file-search mechanism (ripgrep for simplicity, or indexed AST for scale).
-    - May miss edge cases if the sub-agent's ranking heuristic is suboptimal—critical files can be omitted.
-    - When using indexed approaches, the index must stay up-to-date as code changes (agentic search avoids this).
+  - Requires a file-search mechanism (ripgrep for simplicity, or indexed AST for scale).
+  - May miss edge cases if the sub-agent's ranking heuristic is suboptimal—critical files can be omitted.
+  - When using indexed approaches, the index must stay up-to-date as code changes (agentic search avoids this).
 
 ## References
 
-- Anthropic Claude Code - Curated file context workflow with agentic
-  search: https://docs.anthropic.com/en/docs/claude-code/common-workflows
+- Anthropic Claude Code - Curated file context workflow with agentic search: https://docs.anthropic.com/en/docs/claude-code/common-workflows
 - Cursor AI - `.cursorignore` exclusion rules and semantic codebase-wide queries: https://cursor.sh/docs
 - Sourcegraph Cody - AST-based code graph for large-scale repositories: https://docs.sourcegraph.com
 - Will Brown / Prime Intellect Talk (2025) - "Context is sacred" principle: https://www.youtube.com/watch?v=Xkwok_XXQgw

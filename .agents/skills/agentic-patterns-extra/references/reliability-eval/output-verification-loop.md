@@ -25,23 +25,17 @@ related: ["reflection-loop", "self-critique-evaluator-loop"]
 
 ## Problem
 
-LLM agents confidently produce outputs that contain factual errors, hallucinated citations, or unsupported claims. In
-multi-agent pipelines the problem compounds: one agent's hallucination becomes another agent's input. Standard
-reflection loops catch stylistic issues but lack grounding against external evidence, so factual errors pass through
-unchallenged.
+LLM agents confidently produce outputs that contain factual errors, hallucinated citations, or unsupported claims. In multi-agent pipelines the problem compounds: one agent's hallucination becomes another agent's input. Standard reflection loops catch stylistic issues but lack grounding against external evidence, so factual errors pass through unchallenged.
 
 ## Solution
 
 Insert a verification step between generation and action. The step works in three phases:
 
 1. **Claim extraction** -- decompose the LLM output into individual, atomic claims.
-2. **Evidence retrieval** -- for each claim, retrieve supporting or contradicting evidence from authoritative sources (
-   APIs, knowledge bases, RAG stores).
-3. **Scoring** -- assign a per-claim trust score based on evidence alignment and return an aggregate confidence for the
-   full output.
+2. **Evidence retrieval** -- for each claim, retrieve supporting or contradicting evidence from authoritative sources (APIs, knowledge bases, RAG stores).
+3. **Scoring** -- assign a per-claim trust score based on evidence alignment and return an aggregate confidence for the full output.
 
-The agent (or orchestrator) uses the scores to decide whether to proceed, retry with a corrected prompt, or escalate to
-a human.
+The agent (or orchestrator) uses the scores to decide whether to proceed, retry with a corrected prompt, or escalate to a human.
 
 ```pseudo
 output = agent.generate(prompt)
@@ -53,8 +47,7 @@ else:
     retry_with_feedback(result.flagged_claims)
 ```
 
-In multi-agent systems, run verification at each hand-off between agents so errors don't propagate through the pipeline.
-Verification receipts (signed, timestamped results) provide an audit trail for compliance.
+In multi-agent systems, run verification at each hand-off between agents so errors don't propagate through the pipeline. Verification receipts (signed, timestamped results) provide an audit trail for compliance.
 
 ## How to use it
 
@@ -65,22 +58,17 @@ Verification receipts (signed, timestamped results) provide an audit trail for c
 
 ### Known implementations
 
-- [VeroQ Shield](https://github.com/veroq-ai/shield) -- claim-level verification with evidence chains, Python and
-  TypeScript SDKs. Self-hosted Docker option for air-gapped deployments.
+- [VeroQ Shield](https://github.com/veroq-ai/shield) -- claim-level verification with evidence chains, Python and TypeScript SDKs. Self-hosted Docker option for air-gapped deployments.
 
 ## Trade-offs
 
-- **Pros:** Catches factual errors that reflection loops miss; provides quantified confidence rather than binary
-  pass/fail; audit trail via receipts; composable across multi-agent pipelines.
-- **Cons:** Adds latency per verification call; evidence quality bounds verification quality; requires an evidence
-  source relevant to the domain.
+- **Pros:** Catches factual errors that reflection loops miss; provides quantified confidence rather than binary pass/fail; audit trail via receipts; composable across multi-agent pipelines.
+- **Cons:** Adds latency per verification call; evidence quality bounds verification quality; requires an evidence source relevant to the domain.
 
 ## References
 
 - [VeroQ Shield -- LLM output verification](https://github.com/veroq-ai/shield)
-- [Self-Refine: Iterative Refinement with Self-Feedback](https://arxiv.org/abs/2303.11366) -- related but lacks external
-  evidence grounding
-- [FacTool: Factuality Detection in Generative AI](https://arxiv.org/abs/2307.13528) -- academic approach to claim-level
-  verification
+- [Self-Refine: Iterative Refinement with Self-Feedback](https://arxiv.org/abs/2303.11366) -- related but lacks external evidence grounding
+- [FacTool: Factuality Detection in Generative AI](https://arxiv.org/abs/2307.13528) -- academic approach to claim-level verification
 
 ---

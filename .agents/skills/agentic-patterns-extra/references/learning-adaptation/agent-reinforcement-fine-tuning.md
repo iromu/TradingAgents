@@ -33,18 +33,14 @@ After optimizing prompts and task design, agents may still underperform on your 
 - **Suboptimal reasoning**: The model doesn't reason well across your specific tool outputs
 - **Sample scarcity**: Some domains (e.g., new GPU hardware, specialized finance) lack training data
 
-Traditional fine-tuning approaches don't work well because they can't train the agent end-to-end on multi-step tool
-interactions with your environment.
+Traditional fine-tuning approaches don't work well because they can't train the agent end-to-end on multi-step tool interactions with your environment.
 
 ## Solution
 
-**Agent Reinforcement Fine-Tuning (Agent RFT)** trains the model weights end-to-end on agentic tasks by allowing the
-model to:
+**Agent Reinforcement Fine-Tuning (Agent RFT)** trains the model weights end-to-end on agentic tasks by allowing the model to:
 
-1. **Explore via actual tool calls**: During training rollouts, the agent calls your real tool endpoints, learning from
-   actual responses
-2. **Receive custom reward signals**: You define what "good" looks like via flexible graders (model-based,
-   endpoint-based, or string-based)
+1. **Explore via actual tool calls**: During training rollouts, the agent calls your real tool endpoints, learning from actual responses
+2. **Receive custom reward signals**: You define what "good" looks like via flexible graders (model-based, endpoint-based, or string-based)
 3. **Learn multi-step reasoning**: The agent learns to reason across tool outputs in the context window
 4. **Optimize for your metrics**: Reduce tool calls, improve accuracy, or balance both based on your reward function
 
@@ -183,40 +179,40 @@ graph TD
 - Task: File planning agent to identify which files to edit
 - Tools: `read_file`, `shell` (grep, find)
 - Results:
-
+  
 - Reduced planning time by 50% (8-10 tool calls → 4 tool calls)
-    - Learned to parallelize tool calls automatically
-    - Improved F1 score on file identification
+  - Learned to parallelize tool calls automatically
+  - Improved F1 score on file identification
 
 **Ambience Healthcare**
 
 - Task: ICD-10 medical coding from transcripts
 - Tools: Semantic search over 70K medical codes
 - Results:
-
+  
 - F1 score: 0.52 → 0.57 (significant given 0.75 human ceiling)
-    - 18% latency reduction
-    - 50% reduction in samples exceeding latency threshold
+  - 18% latency reduction
+  - 50% reduction in samples exceeding latency threshold
 
 **Rogo Finance**
 
 - Task: Financial reasoning and summarization from filings
 - Tools: Document retrieval, analysis tools
 - Results:
-
+  
 - 21% ML performance improvement
-    - Reduced hallucinations and missing citations
-    - Required hardening grader against reward hacking
+  - Reduced hallucinations and missing citations
+  - Required hardening grader against reward hacking
 
 **Modular (Mojo GPU Kernels)**
 
 - Task: Write performant GPU kernels for new hardware
 - Tools: Compiler, kernel execution environment
 - Results:
-
+  
 - 72% improvement in correct + performant kernels
-    - Only 100 PyTorch prompts needed (sample efficient)
-    - No code examples required in training data
+  - Only 100 PyTorch prompts needed (sample efficient)
+  - No code examples required in training data
 
 ## Trade-offs
 
@@ -241,10 +237,8 @@ graph TD
 - [OpenAI Build Hour: Agent RFT (November 2025)](https://youtu.be/1s_7RMG4O4U)
 - [OpenAI Fine-tuning Guide](https://platform.openai.com/docs/guides/fine-tuning)
 - [ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629) (Yao et al., ICLR 2023)
-- [Reflexion: Language Agents with Verbal Reinforcement Learning](https://arxiv.org/abs/2303.11366) (Shinn et al.,
-  NeurIPS 2023)
+- [Reflexion: Language Agents with Verbal Reinforcement Learning](https://arxiv.org/abs/2303.11366) (Shinn et al., NeurIPS 2023)
 - [DeepSeekMath: GRPO for Mathematical Reasoning](https://arxiv.org/abs/2402.03300) (Shao et al., 2024)
-- Related patterns: RLAIF, Tool Use Incentivization via Reward Shaping, Inference-Healed Code Review Reward, Memory
-  Reinforcement Learning
+- Related patterns: RLAIF, Tool Use Incentivization via Reward Shaping, Inference-Healed Code Review Reward, Memory Reinforcement Learning
 
 ---

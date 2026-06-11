@@ -23,18 +23,13 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-When agents make direct API or tool calls, all intermediate data must flow through the model's context window. For
-data-heavy workflows (processing spreadsheets, filtering logs, transforming datasets), this creates massive token
-consumption and increased latency. A workflow that fetches 10,000 spreadsheet rows and filters them can easily consume
-150,000+ tokens just moving data through the context.
+When agents make direct API or tool calls, all intermediate data must flow through the model's context window. For data-heavy workflows (processing spreadsheets, filtering logs, transforming datasets), this creates massive token consumption and increased latency. A workflow that fetches 10,000 spreadsheet rows and filters them can easily consume 150,000+ tokens just moving data through the context.
 
 ## Solution
 
-Instead of making direct tool calls, agents write and execute code that interacts with tools. Data processing,
-filtering, and transformation happens in the execution environment, with only results flowing back to the model context.
+Instead of making direct tool calls, agents write and execute code that interacts with tools. Data processing, filtering, and transformation happens in the execution environment, with only results flowing back to the model context.
 
-**Core insight**: LLMs are better at writing code to call APIs than at calling APIs directly—due to training data
-alignment with millions of open-source code repositories.
+**Core insight**: LLMs are better at writing code to call APIs than at calling APIs directly—due to training data alignment with millions of open-source code repositories.
 
 **Direct API approach (high token cost):**
 
@@ -92,11 +87,11 @@ The agent sees the log output and return value, but the full dataset never enter
 
 1. Agent analyzes task and determines data processing needs
 2. Agent writes code that:
-
+   
 - Calls tools/APIs within the execution environment
-    - Performs filtering, transformation, aggregation in code
-    - Logs only summaries or samples for visibility
-    - Returns final results
+   - Performs filtering, transformation, aggregation in code
+   - Logs only summaries or samples for visibility
+   - Returns final results
 3. Execution environment runs code with tool access
 4. Only logs and return values flow back to agent context
 

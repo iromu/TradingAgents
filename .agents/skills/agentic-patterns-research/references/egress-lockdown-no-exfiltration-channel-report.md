@@ -12,12 +12,9 @@
 
 ## Executive Summary
 
-Egress Lockdown is a defense-in-depth security pattern that prevents AI agents from exfiltrating sensitive data by
-restricting outbound network communication channels. The pattern implements a default-deny egress policy with explicit
-allowlists, content filtering, and architectural separation between data access and external communication capabilities.
+Egress Lockdown is a defense-in-depth security pattern that prevents AI agents from exfiltrating sensitive data by restricting outbound network communication channels. The pattern implements a default-deny egress policy with explicit allowlists, content filtering, and architectural separation between data access and external communication capabilities.
 
-This report synthesizes academic literature, industry implementations, technical implementations, and pattern
-relationships to provide a comprehensive analysis of the Egress Lockdown pattern.
+This report synthesizes academic literature, industry implementations, technical implementations, and pattern relationships to provide a comprehensive analysis of the Egress Lockdown pattern.
 
 ---
 
@@ -36,8 +33,7 @@ relationships to provide a comprehensive analysis of the Egress Lockdown pattern
 
 ### Core Concept
 
-Even with private-data access and untrusted inputs, attacks fail if the agent has **no way to transmit stolen data**.
-Egress Lockdown implements an egress firewall for agent tools that:
+Even with private-data access and untrusted inputs, attacks fail if the agent has **no way to transmit stolen data**. Egress Lockdown implements an egress firewall for agent tools that:
 
 - **Default-deny outbound policy** - Block all external communication by default
 - **Explicit allowlists** - Allow only specific domains, methods, or payload sizes
@@ -47,10 +43,8 @@ Egress Lockdown implements an egress firewall for agent tools that:
 
 ### Primary Sources
 
-- **Simon Willison's "Lethal Trifecta"** (https://simonwillison.net/2025/Jun/16/lethal-trifecta/) - Identified three
-  ingredients for attacks: access to private data, untrusted inputs, and ability to communicate externally
-- **Vendor post-mortems** - Microsoft 365 Copilot, GitHub MCP, GitLab Duo Chatbot fixes all disabled egress paths as the
-  first patch
+- **Simon Willison's "Lethal Trifecta"** (https://simonwillison.net/2025/Jun/16/lethal-trifecta/) - Identified three ingredients for attacks: access to private data, untrusted inputs, and ability to communicate externally
+- **Vendor post-mortems** - Microsoft 365 Copilot, GitHub MCP, GitLab Duo Chatbot fixes all disabled egress paths as the first patch
 
 ### Basic Implementation
 
@@ -71,17 +65,17 @@ RUN iptables -A OUTPUT -d api.mycompany.internal -j ACCEPT
 **Survey Paper: Lightweight Virtualization and Container Security: A Comprehensive Survey**
 - **Venue:** IEEE/ACM Transactions (2019-2024)
 - **Key Findings:**
-    - Container isolation using Linux namespaces and cgroups provides strong security with <5% overhead
-    - iptables-based egress filtering is standard practice for container network isolation
-    - Default-deny outbound policies recommended for production deployments
+  - Container isolation using Linux namespaces and cgroups provides strong security with <5% overhead
+  - iptables-based egress filtering is standard practice for container network isolation
+  - Default-deny outbound policies recommended for production deployments
 - **Implementation:** iptables rules, network namespaces, cgroup-based traffic control
 
 **Survey Paper: Secure Container Orchestration for Multi-Tenant Environments**
 - **Venue:** ACM CCS, USENIX Security (2020-2024)
 - **Key Findings:**
-    - Network policies (Kubernetes NetworkPolicy) provide pod-level egress control
-    - Service mesh implementations add L7 egress filtering capabilities
-    - Egress monitoring essential for detecting data exfiltration attempts
+  - Network policies (Kubernetes NetworkPolicy) provide pod-level egress control
+  - Service mesh implementations add L7 egress filtering capabilities
+  - Egress monitoring essential for detecting data exfiltration attempts
 
 #### LLM Agent Security with Tool Use Control
 
@@ -90,10 +84,10 @@ RUN iptables -A OUTPUT -d api.mycompany.internal -j ACCEPT
 - **Venue:** arXiv preprint (2025)
 - **arXiv ID:** 2506.08837
 - **Key Findings:**
-    - Action Selector pattern treats LLM as instruction decoder, not live controller
-    - Tool access control through hard allowlists prevents unauthorized outbound requests
-    - Parameter validation against strict schemas before tool execution
-    - Prevents tool outputs from re-entering the selector prompt
+  - Action Selector pattern treats LLM as instruction decoder, not live controller
+  - Tool access control through hard allowlists prevents unauthorized outbound requests
+  - Parameter validation against strict schemas before tool execution
+  - Prevents tool outputs from re-entering the selector prompt
 - **DOI:** https://doi.org/10.48550/arXiv.2506.08837
 
 ### 2. Multi-Level Security (MLS) and Cross-Domain Solutions
@@ -103,25 +97,25 @@ RUN iptables -A OUTPUT -d api.mycompany.internal -j ACCEPT
 **Foundational Paper: A Model of Control for a Security Computer (Bell-LaPadula Model)**
 - **Authors:** D. Elliott Bell, Leonard J. LaPadula (1973)
 - **Key Properties:**
-    - **Simple Security Property:** No read up (low subjects cannot read high objects)
-    - **Star (*) Property:** No write down (high subjects cannot write to low objects)
-    - Foundation for mandatory access control (MAC) systems
+  - **Simple Security Property:** No read up (low subjects cannot read high objects)
+  - **Star (*) Property:** No write down (high subjects cannot write to low objects)
+  - Foundation for mandatory access control (MAC) systems
 
 **Paper: The Biba Integrity Model**
 - **Authors:** Kenneth J. Biba (1977)
 - **Key Properties:**
-    - Integrity-focused complement to Bell-LaPadula confidentiality model
-    - No read down, no write up properties prevent data corruption
-    - Applicable to data exfiltration prevention
+  - Integrity-focused complement to Bell-LaPadula confidentiality model
+  - No read down, no write up properties prevent data corruption
+  - Applicable to data exfiltration prevention
 
 #### Modern Cross-Domain Solutions
 
 **Survey Paper: Cross-Domain Solutions: A Comprehensive Survey**
 - **Venue:** IEEE S&P, ACM CCS (2015-2024)
 - **Key Findings:**
-    - Cross-domain solutions (CDS) enable controlled information flow between security domains
-    - Guards implement filtering, transformation, and auditing of cross-domain data
-    - Type enforcement and RBAC commonly used
+  - Cross-domain solutions (CDS) enable controlled information flow between security domains
+  - Guards implement filtering, transformation, and auditing of cross-domain data
+  - Type enforcement and RBAC commonly used
 
 ### 3. Data Diode Patterns and Unidirectional Gateways
 
@@ -130,16 +124,16 @@ RUN iptables -A OUTPUT -d api.mycompany.internal -j ACCEPT
 **Survey Paper: Data Diodes for Critical Infrastructure Protection: A Survey**
 - **Venue:** IEEE Transactions on Industrial Informatics (2015-2023)
 - **Key Findings:**
-    - Data diodes provide physical layer unidirectional data flow
-    - Optical isolation guarantees no reverse data flow
-    - Used extensively in SCADA/ICS environments
+  - Data diodes provide physical layer unidirectional data flow
+  - Optical isolation guarantees no reverse data flow
+  - Used extensively in SCADA/ICS environments
 
 **Paper: Unidirectional Gateways for Secure Cross-Domain Communication**
 - **Venue:** ACM CCS, USENIX Security (2018-2024)
 - **Key Findings:**
-    - Protocol breakers terminate TCP/IP and retransmit on isolated network
-    - Application-level proxies filter and validate data before transmission
-    - High availability configurations use redundant diodes with failover
+  - Protocol breakers terminate TCP/IP and retransmit on isolated network
+  - Application-level proxies filter and validate data before transmission
+  - High availability configurations use redundant diodes with failover
 
 ### 4. Container Network Isolation (iptables, eBPF)
 
@@ -148,9 +142,9 @@ RUN iptables -A OUTPUT -d api.mycompany.internal -j ACCEPT
 **Paper: Network Isolation in Containerized Environments: A Comparative Study**
 - **Venue:** IEEE International Conference on Cloud Computing (CLOUD) (2021)
 - **Key Findings:**
-    - iptables provides L3/L4 filtering with minimal overhead
-    - Default-deny egress policies recommended for production
-    - Connection tracking enables stateful filtering
+  - iptables provides L3/L4 filtering with minimal overhead
+  - Default-deny egress policies recommended for production
+  - Connection tracking enables stateful filtering
 
 ```bash
 # Example iptables configuration
@@ -164,16 +158,16 @@ iptables -A OUTPUT -j LOG --log-prefix "EGRESS-DROP: "  # Logging
 **Paper: XDP and eBPF for High-Performance Network Isolation**
 - **Venue:** ACM SIGCOMM, USENIX ATC (2020-2024)
 - **Key Findings:**
-    - eBPF programs can filter packets at XDP layer (before socket buffer)
-    - Significantly lower overhead than iptables for high-throughput scenarios
-    - Supports complex filtering logic with JIT compilation
+  - eBPF programs can filter packets at XDP layer (before socket buffer)
+  - Significantly lower overhead than iptables for high-throughput scenarios
+  - Supports complex filtering logic with JIT compilation
 
 **Paper: Cilium: eBPF-Based Network Security for Containers**
 - **Venue:** IEEE/ACM transactions (2020-2024)
 - **Key Findings:**
-    - eBPF enables L7-aware network policies (HTTP, gRPC, Kafka)
-    - Per-pod visibility into network traffic without sidecar overhead
-    - Dynamic policy updates without network disruption
+  - eBPF enables L7-aware network policies (HTTP, gRPC, Kafka)
+  - Per-pod visibility into network traffic without sidecar overhead
+  - Dynamic policy updates without network disruption
 
 ### 5. Covert Channel Elimination in Sandboxed Systems
 
@@ -182,25 +176,25 @@ iptables -A OUTPUT -j LOG --log-prefix "EGRESS-DROP: "  # Logging
 **Survey Paper: A Survey of Covert Channels and Their Elimination**
 - **Venue:** IEEE Transactions on Information Forensics and Security (2015-2024)
 - **Key Findings:**
-    - Covert channels bypass explicit security policies using shared resources
-    - Storage channels (file locks, disk space) and timing channels (CPU load, cache timing)
-    - Elimination requires either resource partitioning or noise injection
+  - Covert channels bypass explicit security policies using shared resources
+  - Storage channels (file locks, disk space) and timing channels (CPU load, cache timing)
+  - Elimination requires either resource partitioning or noise injection
 
 **Paper: Detecting and Mitigating Covert Channels in Containerized Environments**
 - **Venue:** USENIX Security, ACM CCS (2018-2024)
 - **Key Findings:**
-    - Container-level covert channels via shared kernel resources
-    - Side-channel attacks via CPU caches, branch predictors, memory buses
-    - Mitigation requires kernel-level isolation or noise injection
+  - Container-level covert channels via shared kernel resources
+  - Side-channel attacks via CPU caches, branch predictors, memory buses
+  - Mitigation requires kernel-level isolation or noise injection
 
 #### Information Flow Control
 
 **Paper: Information Flow Control for Secure Sandboxing**
 - **Venue:** IEEE Symposium on Security and Privacy (S&P) (2015-2023)
 - **Key Findings:**
-    - Static information flow control (IFC) languages enforce non-interference
-    - Dynamic IFC monitors taint propagation at runtime
-    - Declassification policies control authorized information release
+  - Static information flow control (IFC) languages enforce non-interference
+  - Dynamic IFC monitors taint propagation at runtime
+  - Declassification policies control authorized information release
 
 ### 6. Academic Consensus
 
@@ -381,15 +375,15 @@ spec:
 
 ### 8. Vendor Implementation Summary
 
-| Vendor/Product        | Primary Egress Control Mechanism         | AI-Specific Features        |
-|-----------------------|------------------------------------------|-----------------------------|
-| Microsoft 365 Copilot | Purview DLP, Graph API, Tenant Isolation | No external training        |
-| GitHub Copilot        | Proxy support, IP exclusions             | Code filtering              |
-| GitLab Duo            | Domain allowlisting, RBAC                | No model training           |
-| AWS                   | VPC Endpoints, Security Groups, WAF      | Bedrock PrivateLink         |
-| Azure                 | Private Endpoints, NSGs                  | OpenAI private connectivity |
-| GCP                   | VPC Service Controls                     | Vertex AI perimeters        |
-| Istio                 | Egress Gateway, ServiceEntry             | mTLS, telemetry             |
+| Vendor/Product | Primary Egress Control Mechanism | AI-Specific Features |
+|----------------|---------------------------------|---------------------|
+| Microsoft 365 Copilot | Purview DLP, Graph API, Tenant Isolation | No external training |
+| GitHub Copilot | Proxy support, IP exclusions | Code filtering |
+| GitLab Duo | Domain allowlisting, RBAC | No model training |
+| AWS | VPC Endpoints, Security Groups, WAF | Bedrock PrivateLink |
+| Azure | Private Endpoints, NSGs | OpenAI private connectivity |
+| GCP | VPC Service Controls | Vertex AI perimeters |
+| Istio | Egress Gateway, ServiceEntry | mTLS, telemetry |
 
 ---
 
@@ -400,8 +394,7 @@ spec:
 #### iptables/nftables
 
 **Technical Description:**
-Traditional Linux packet filtering framework operating at kernel level. Rules evaluated in chains (INPUT, OUTPUT,
-FORWARD).
+Traditional Linux packet filtering framework operating at kernel level. Rules evaluated in chains (INPUT, OUTPUT, FORWARD).
 
 ```bash
 # Default-deny egress policy
@@ -415,11 +408,11 @@ iptables -A OUTPUT -j LOG --log-prefix "EGRESS-DROP: "
 iptables -A OUTPUT -j DROP
 ```
 
-| Pros                               | Cons                             |
-|------------------------------------|----------------------------------|
-| Universally available on Linux     | Performance degradation at scale |
-| Well-understood, mature technology | Limited L7 visibility            |
-| Low implementation complexity      | Complex rule management          |
+| Pros | Cons |
+|------|------|
+| Universally available on Linux | Performance degradation at scale |
+| Well-understood, mature technology | Limited L7 visibility |
+| Low implementation complexity | Complex rule management |
 
 #### eBPF (Extended Berkeley Packet Filter)
 
@@ -431,11 +424,11 @@ Kernel-level programmable technology allowing sandboxed programs to attach to va
 - **TC (Traffic Control) BPF**: Layer 3 processing
 - **Socket filters**: Per-socket filtering
 
-| Pros                                 | Cons                           |
-|--------------------------------------|--------------------------------|
-| Near-wire-speed processing           | Steeper learning curve         |
-| Programmable and dynamic             | Requires newer kernels (4.19+) |
-| L7 awareness with payload inspection | Program size limitations       |
+| Pros | Cons |
+|------|------|
+| Near-wire-speed processing | Steeper learning curve |
+| Programmable and dynamic | Requires newer kernels (4.19+) |
+| L7 awareness with payload inspection | Program size limitations |
 
 ### 2. Container-Level Egress Control
 
@@ -476,11 +469,11 @@ spec:
 
 **CNI Plugin Comparison:**
 
-| CNI       | Data Plane      | L7 Support         | Kernel Req |
-|-----------|-----------------|--------------------|------------|
-| Calico    | iptables/IPsets | Limited            | Any Linux  |
-| Cilium    | eBPF            | Native (HTTP, DNS) | 4.19+      |
-| Weave Net | iptables        | Basic              | Any Linux  |
+| CNI | Data Plane | L7 Support | Kernel Req |
+|-----|------------|------------|------------|
+| Calico | iptables/IPsets | Limited | Any Linux |
+| Cilium | eBPF | Native (HTTP, DNS) | 4.19+ |
+| Weave Net | iptables | Basic | Any Linux |
 
 ### 3. Application-Level Egress Filtering
 
@@ -619,8 +612,7 @@ class ContentSanitizer:
 
 ### 7. "Dumb Worker" Pattern Implementations
 
-The "dumb worker" pattern separates data access from external communication. The agent sees sensitive data, but external
-calls are made by a separate worker process with no data access.
+The "dumb worker" pattern separates data access from external communication. The agent sees sensitive data, but external calls are made by a separate worker process with no data access.
 
 ```
 ┌─────────────────┐         ┌─────────────────┐         ┌─────────────────┐
@@ -701,17 +693,17 @@ class EgressWorker:
 
 ### 9. Tool Summary Table
 
-| Category  | Tool              | Layer     | Pros                       | Cons                  |
-|-----------|-------------------|-----------|----------------------------|-----------------------|
-| Network   | iptables          | L3/L4     | Universal, mature          | Performance at scale  |
-| Network   | eBPF/XDP          | L2/L7     | Fast, programmable         | Kernel 4.19+, complex |
-| Container | Docker networks   | Container | Simple                     | Limited granularity   |
-| Container | K8s NetworkPolicy | Pod       | Declarative, native        | Requires CNI          |
-| CNI       | Calico            | Cluster   | Proven, enterprise         | iptables overhead     |
-| CNI       | Cilium            | Cluster   | eBPF, L7 aware             | Newer tech            |
-| Runtime   | Seccomp           | Syscall   | Fine-grained, low overhead | Complex profiles      |
-| Runtime   | AppArmor          | MAC       | Easier than SELinux        | Less granular         |
-| Runtime   | SELinux           | MAC       | Most powerful              | Steep learning curve  |
+| Category | Tool | Layer | Pros | Cons |
+|----------|------|-------|------|------|
+| Network | iptables | L3/L4 | Universal, mature | Performance at scale |
+| Network | eBPF/XDP | L2/L7 | Fast, programmable | Kernel 4.19+, complex |
+| Container | Docker networks | Container | Simple | Limited granularity |
+| Container | K8s NetworkPolicy | Pod | Declarative, native | Requires CNI |
+| CNI | Calico | Cluster | Proven, enterprise | iptables overhead |
+| CNI | Cilium | Cluster | eBPF, L7 aware | Newer tech |
+| Runtime | Seccomp | Syscall | Fine-grained, low overhead | Complex profiles |
+| Runtime | AppArmor | MAC | Easier than SELinux | Less granular |
+| Runtime | SELinux | MAC | Most powerful | Steep learning curve |
 
 ---
 
@@ -723,40 +715,39 @@ class EgressWorker:
 - **Relationship**: Directly complements egress lockdown by providing input-side security controls
 - **Type**: Complementary
 - **Implementation Considerations**:
-    - Works with egress lockdown to create defense-in-depth
-    - Pattern matching can prevent malicious tools from being called in the first place
-    - Hierarchical policies allow subagents to inherit parent restrictions plus additional egress limitations
+  - Works with egress lockdown to create defense-in-depth
+  - Pattern matching can prevent malicious tools from being called in the first place
+  - Hierarchical policies allow subagents to inherit parent restrictions plus additional egress limitations
 
 #### 2. Hook-Based Safety Guard Rails
 - **Relationship**: Provides runtime enforcement mechanisms for egress lockdown policies
 - **Type**: Complementary
 - **Implementation Considerations**:
-    - Pre-tool hooks can block exfiltration attempts before network calls are made
-    - Post-tool hooks can monitor for suspicious patterns in tool outputs
-    - Hooks run outside agent context, making them immune to prompt injection
+  - Pre-tool hooks can block exfiltration attempts before network calls are made
+  - Post-tool hooks can monitor for suspicious patterns in tool outputs
+  - Hooks run outside agent context, making them immune to prompt injection
 
 #### 3. PII Tokenization
 - **Relationship**: Prevents sensitive data from reaching potential exfiltration channels
 - **Type**: Complementary
 - **Implementation Considerations**:
-    - Reduces attack surface by ensuring sensitive data never enters agent reasoning
-    - Complements egress lockdown by minimizing what needs to be blocked
+  - Reduces attack surface by ensuring sensitive data never enters agent reasoning
+  - Complements egress lockdown by minimizing what needs to be blocked
 
 #### 4. Lethal Trifecta Threat Model
 - **Relationship**: Provides the theoretical foundation for why egress lockdown is necessary
 - **Type**: Foundational
-- **Description**: Threat model showing how access to private data + untrusted inputs + external communication creates
-  complete attack paths
+- **Description**: Threat model showing how access to private data + untrusted inputs + external communication creates complete attack paths
 - **Implementation Considerations**:
-    - Egress lockdown is one of three primary mitigation strategies
-    - Helps design comprehensive security policies
+  - Egress lockdown is one of three primary mitigation strategies
+  - Helps design comprehensive security policies
 
 #### 5. Deterministic Security Scanning Build Loop
 - **Relationship**: Provides deterministic validation of generated code
 - **Type**: Complementary
 - **Implementation Considerations**:
-    - Works alongside egress lockdown to catch exfiltration attempts via code analysis
-    - Deterministic nature provides stronger guarantees than prompt-based restrictions
+  - Works alongside egress lockdown to catch exfiltration attempts via code analysis
+  - Deterministic nature provides stronger guarantees than prompt-based restrictions
 
 ### Potentially Conflicting Patterns
 
@@ -765,15 +756,15 @@ class EgressWorker:
 - **Type**: Tension
 - **Description**: Design philosophy that tools should be equally accessible to humans and agents
 - **Implementation Considerations**:
-    - Egress lockdown may break legitimate integrations needed by human users
-    - Requires careful balancing: allow essential external communication while blocking risky paths
+  - Egress lockdown may break legitimate integrations needed by human users
+  - Requires careful balancing: allow essential external communication while blocking risky paths
 
 #### 2. Planner-Worker Separation for Long-Running Agents
 - **Relationship**: May require relaxed egress controls for coordination
 - **Type**: Tension
 - **Implementation Considerations**:
-    - Workers may need external communication for status updates or coordination
-    - Planners might need to spawn workers with different egress policies
+  - Workers may need external communication for status updates or coordination
+  - Planners might need to spawn workers with different egress policies
 
 ### Defense-in-Depth Combinations
 
@@ -839,20 +830,17 @@ When controls fail (and they will), have detection and response procedures ready
 
 ### Identified Gaps
 
-1. **AI Agent-Specific Threat Models**: Limited academic research on AI agent-specific exfiltration techniques beyond
-   general container security.
+1. **AI Agent-Specific Threat Models**: Limited academic research on AI agent-specific exfiltration techniques beyond general container security.
 
 2. **Dynamic Policy Learning**: Limited research on learning egress policies from agent behavior vs. static allowlists.
 
-3. **Semantic Data Exfiltration**: Little research on detecting exfiltration of semantic information (not just literal
-   sensitive data).
+3. **Semantic Data Exfiltration**: Little research on detecting exfiltration of semantic information (not just literal sensitive data).
 
 4. **Covert Channels in Multi-Agent Systems**: Open problem: covert channels via multi-agent coordination protocols.
 
 ### Future Research Directions
 
-1. **Agent-Aware Network Security**: Network policies that understand agent tool semantics vs. generic port/protocol
-   filtering.
+1. **Agent-Aware Network Security**: Network policies that understand agent tool semantics vs. generic port/protocol filtering.
 
 2. **Behavioral Exfiltration Detection**: ML-based detection of anomalous agent outbound behavior patterns.
 
@@ -866,17 +854,14 @@ When controls fail (and they will), have detection and response procedures ready
 
 ### Primary Academic Sources
 
-- Beurer-Kellner, L., et al. (2025). "Design Patterns for Securing LLM Agents against Prompt Injections." arXiv:
-  2506.08837.
+- Beurer-Kellner, L., et al. (2025). "Design Patterns for Securing LLM Agents against Prompt Injections." arXiv:2506.08837.
 - Bell, D. E., & LaPadula, L. J. (1973). "A Model of Control for a Security Computer." MITRE Corporation.
 - Biba, K. J. (1977). "Integrity Considerations for Secure Computer Systems." MITRE Corporation.
 - "Lightweight Virtualization and Container Security: A Comprehensive Survey," IEEE/ACM Transactions, 2019-2024.
 - "XDP and eBPF for High-Performance Network Isolation," ACM SIGCOMM, USENIX ATC, 2020-2024.
 - "Cilium: eBPF-Based Network Security for Containers," IEEE/ACM transactions, 2020-2024.
-- "Data Diodes for Critical Infrastructure Protection: A Survey," IEEE Transactions on Industrial Informatics,
-  2015-2023.
-- "A Survey of Covert Channels and Their Elimination," IEEE Transactions on Information Forensics and Security,
-  2015-2024.
+- "Data Diodes for Critical Infrastructure Protection: A Survey," IEEE Transactions on Industrial Informatics, 2015-2023.
+- "A Survey of Covert Channels and Their Elimination," IEEE Transactions on Information Forensics and Security, 2015-2024.
 
 ### Industry Sources
 

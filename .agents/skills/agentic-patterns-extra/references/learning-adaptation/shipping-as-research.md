@@ -10,23 +10,17 @@ tags: [research, experimentation, rapid-iteration, learning, dogfooding, shippin
 
 ## Problem
 
-In the rapidly evolving AI landscape, waiting for certainty before building means you're always behind. Traditional
-product development emphasizes validation and certainty before release, but when the market changes every 3-6 weeks, you
-can't afford to wait.
+In the rapidly evolving AI landscape, waiting for certainty before building means you're always behind. Traditional product development emphasizes validation and certainty before release, but when the market changes every 3-6 weeks, you can't afford to wait.
 
-**Expert intuition is unreliable**: Research across major technology companies shows that 80-90% of product ideas fail
-to improve key metrics, even when experts are confident they will work (Kohavi et al., 2007). Real-world experimentation
-beats theoretical analysis.
+**Expert intuition is unreliable**: Research across major technology companies shows that 80-90% of product ideas fail to improve key metrics, even when experts are confident they will work (Kohavi et al., 2007). Real-world experimentation beats theoretical analysis.
 
 ## Solution
 
-**Treat shipping as research**: release features not because you're certain they'll work, but to learn whether they
-work. Ship to figure out what works and doesn't work. Let reality and customer feedback guide your evolution.
+**Treat shipping as research**: release features not because you're certain they'll work, but to learn whether they work. Ship to figure out what works and doesn't work. Let reality and customer feedback guide your evolution.
 
 **The alternative—sitting out—doesn't work:**
 
-> "A lot of big companies have this where they're like, well, we're going to sit this one out. This is too crazy for us.
-> We're going to wait and see where the dice are going to fall and then we're going to build for this."
+> "A lot of big companies have this where they're like, well, we're going to sit this one out. This is too crazy for us. We're going to wait and see where the dice are going to fall and then we're going to build for this."
 
 But if you wait for the dice to fall, you'll be too far away to catch up.
 
@@ -50,18 +44,17 @@ graph TD
     style I fill:#c8e6c9,stroke:#2e7d32
 ```
 
-**Key insight:** The frontier is moving so fast that you must ship to discover what works. Analysis and planning can't
-keep up with the rate of change.
+**Key insight:** The frontier is moving so fast that you must ship to discover what works. Analysis and planning can't keep up with the rate of change.
 
 **Research mindset vs. Product mindset:**
 
-| Product Mindset         | Research Mindset             |
-|-------------------------|------------------------------|
-| Ship when polished      | Ship to learn                |
-| Validate before release | Release to validate          |
-| Features must last      | Features may die in 3 months |
-| Customer acquisition    | Customer learning            |
-| Revenue optimization    | Insight optimization         |
+| Product Mindset | Research Mindset |
+|-----------------|------------------|
+| Ship when polished | Ship to learn |
+| Validate before release | Release to validate |
+| Features must last | Features may die in 3 months |
+| Customer acquisition | Customer learning |
+| Revenue optimization | Insight optimization |
 
 **Real example from AMP:**
 
@@ -74,8 +67,7 @@ AMP has ripped out multiple features that users loved:
 
 Each removal was greeted positively by users:
 
-> "People actually really like it when we remove stuff. They were like, 'This is good. Cut the stuff that we've all know
-> doesn't work anymore.'"
+> "People actually really like it when we remove stuff. They were like, 'This is good. Cut the stuff that we've all know doesn't work anymore.'"
 
 Shipping as research means being willing to both add AND remove features rapidly based on what you learn.
 
@@ -83,8 +75,7 @@ Shipping as research means being willing to both add AND remove features rapidly
 
 **Principles for shipping as research:**
 
-**Enabling infrastructure**: Feature flags and gradual rollout mechanisms (canary, ring-based) are essential enablers.
-They allow controlled exposure, instant rollback, and percentage-based traffic allocation without code deployment.
+**Enabling infrastructure**: Feature flags and gradual rollout mechanisms (canary, ring-based) are essential enablers. They allow controlled exposure, instant rollback, and percentage-based traffic allocation without code deployment.
 
 **1. Ship before you're certain:**
 
@@ -129,16 +120,13 @@ When something isn't working, remove it:
 
 > "We ripped out four features or something. We ripped out to-dos, we ripped out forking, we ripped out tabs..."
 
-> "I was like oh people won't care about this... and yet another removal, but we did and people actually really like it
-> when we remove stuff."
+> "I was like oh people won't care about this... and yet another removal, but we did and people actually really like it when we remove stuff."
 
 **The "art installation" mindset:**
 
 AMP describes themselves as "more like an art installation than a software company":
 
-> "What if AMP itself self-destructs? Like what if you know basically we saying like well AMP is gone here's the new
-> AMP... the construction and destruction of AMP you know like we joked about this but the funny thing is our customers
-> appreciate this."
+> "What if AMP itself self-destructs? Like what if you know basically we saying like well AMP is gone here's the new AMP... the construction and destruction of AMP you know like we joked about this but the funny thing is our customers appreciate this."
 
 This mindset embraces constant change and experimentation.
 
@@ -182,17 +170,12 @@ This mindset embraces constant change and experimentation.
 
 If you wait to see what happens before acting, you'll miss the window. The frontier moves too fast.
 
-> "You need to constantly look up and see where they're going and trying to follow them. And you need to ship and hit
-> reality and get customer feedback from customers such as ours to figure out what's going on, what's working and isn't
-> working."
+> "You need to constantly look up and see where they're going and trying to follow them. And you need to ship and hit reality and get customer feedback from customers such as ours to figure out what's going on, what's working and isn't working."
 
 ## References
 
-* [Raising an Agent Episode 10: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=4rx36wc9ugw) -
-  AMP (Thorsten Ball, Quinn Slack, 2025)
-* [Controlled Experiments on the Web: Survey and Practical Guide](https://doi.org/10.1007/s10618-007-0061-3) - Kohavi,
-  Henne, Sommerfield (2007)
-*
-Related: [Burn the Boats](burn-the-boats.md), [Disposable Scaffolding Over Durable Features](disposable-scaffolding-over-durable-features.md), [Dogfooding with Rapid Iteration for Agent Improvement](dogfooding-with-rapid-iteration-for-agent-improvement.md)
+* [Raising an Agent Episode 10: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=4rx36wc9ugw) - AMP (Thorsten Ball, Quinn Slack, 2025)
+* [Controlled Experiments on the Web: Survey and Practical Guide](https://doi.org/10.1007/s10618-007-0061-3) - Kohavi, Henne, Sommerfield (2007)
+* Related: [Burn the Boats](burn-the-boats.md), [Disposable Scaffolding Over Durable Features](disposable-scaffolding-over-durable-features.md), [Dogfooding with Rapid Iteration for Agent Improvement](dogfooding-with-rapid-iteration-for-agent-improvement.md)
 
 ---

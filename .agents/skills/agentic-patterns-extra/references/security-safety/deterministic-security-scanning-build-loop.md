@@ -10,9 +10,7 @@ tags: [security, deterministic, build-loop, backpressure, static-analysis, suppl
 
 ## Problem
 
-Non-deterministic approaches to security in AI code generation (Cursor rules, MCP security tools) are fundamentally
-flawed because security requires absolute determinism - code is either secure or not secure, with no grey area. These
-approaches are merely suggestions to the LLM that may or may not be followed consistently.
+Non-deterministic approaches to security in AI code generation (Cursor rules, MCP security tools) are fundamentally flawed because security requires absolute determinism - code is either secure or not secure, with no grey area. These approaches are merely suggestions to the LLM that may or may not be followed consistently.
 
 ## Solution
 
@@ -21,9 +19,7 @@ Implement **deterministic security validation** through the build loop using a t
 1. **Generation Phase** (non-deterministic): Agent generates code based on suggestions and context
 2. **Backpressure Phase** (deterministic): Security scanning tools validate the generated code
 
-The key is integrating existing security scanning tools (SAST, DAST, SCA) directly into the build target that agents
-must execute after every code change. This approach is grounded in supply chain security frameworks like SLSA and
-reproducible builds research.
+The key is integrating existing security scanning tools (SAST, DAST, SCA) directly into the build target that agents must execute after every code change. This approach is grounded in supply chain security frameworks like SLSA and reproducible builds research.
 
 ```makefile
 .PHONY: all build test security-scan
@@ -73,33 +69,31 @@ graph TD
 ## How to use it
 
 1. **Inner Loop (Development)**:
-
+   
 - Integrate existing security scanning tools into your build target
-    - Configure agent instructions to run build after every change
-    - Let the agent see security tool output and iterate
+   - Configure agent instructions to run build after every change
+   - Let the agent see security tool output and iterate
 
 2. **Outer Loop (CI/CD)**:
-
+   
 - Use the same security tools in your pull request checks
-    - Maintain one unified rules database across both loops
+   - Maintain one unified rules database across both loops
 
 3. **Implementation Steps**:
-
+   
 - Add security scanning tools to Makefile/package.json/build script
-    - Update agent configuration (AGENTS.md/Cursor rules) to mandate build execution
-    - Ensure security tools exit with non-zero codes on violations
+   - Update agent configuration (AGENTS.md/Cursor rules) to mandate build execution
+   - Ensure security tools exit with non-zero codes on violations
 
 ## Trade-offs
 
-**Pros:**
-
+**Pros:** 
 - Leverages deterministic, battle-tested security tools
 - Reuses existing security infrastructure and rules
 - Works with any coding agent/harness
 - Provides consistent security validation
 
-**Cons:**
-
+**Cons:** 
 - Increases build time and CI resource usage
 - May produce false positives requiring human review
 - Requires fast security tools for good developer experience
@@ -108,7 +102,6 @@ graph TD
 
 * [Geoffrey Huntley's blog post on secure code generation](https://ghuntley.com/secure-codegen/)
 * [SLSA (Supply-chain Levels for Software Artifacts)](https://slsa.dev) - Framework for supply chain security
-* [Build Systems a la Carte (Mokhov, Mitchell, Peyton Jones, POPL 2020)](https://dl.acm.org/doi/10.1145/3371091) -
-  Formal build system theory including backpressure
+* [Build Systems a la Carte (Mokhov, Mitchell, Peyton Jones, POPL 2020)](https://dl.acm.org/doi/10.1145/3371091) - Formal build system theory including backpressure
 * [Reproducible Builds Project](https://reproducible-builds.org) - Community initiative for verifiable builds
 * This generalizes beyond security to any code quality or pattern enforcement

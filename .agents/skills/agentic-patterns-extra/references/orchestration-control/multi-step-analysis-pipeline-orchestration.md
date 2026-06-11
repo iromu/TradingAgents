@@ -10,27 +10,18 @@ tags: [pipeline, multi-step, orchestration, report-generation, data-analysis, cl
 
 ## Problem
 
-Complex data analysis tasks often require running many sequential or parallel processing steps, each producing
-intermediate artifacts that feed into subsequent stages. Manually coordinating these steps — ensuring correct ordering,
-aggregating outputs, and producing a final unified result — is tedious and error-prone. Traditional scripting approaches
-hardcode the pipeline, making it inflexible when steps need to be added, reordered, or debugged.
+Complex data analysis tasks often require running many sequential or parallel processing steps, each producing intermediate artifacts that feed into subsequent stages. Manually coordinating these steps — ensuring correct ordering, aggregating outputs, and producing a final unified result — is tedious and error-prone. Traditional scripting approaches hardcode the pipeline, making it inflexible when steps need to be added, reordered, or debugged.
 
 ## Solution
 
-Use an LLM agent as the orchestration layer for an artifact-driven analysis pipeline. The distinctive move is that each
-step emits a structured intermediate artifact that the agent can inspect semantically, not just pass through
-mechanically. This makes the agent useful not only for scheduling steps, but also for integrating report content across
-steps before producing the final output.
+Use an LLM agent as the orchestration layer for an artifact-driven analysis pipeline. The distinctive move is that each step emits a structured intermediate artifact that the agent can inspect semantically, not just pass through mechanically. This makes the agent useful not only for scheduling steps, but also for integrating report content across steps before producing the final output.
 
 The agent:
 
-1. **Manages a collection of independent analysis scripts** — each script handles one domain and produces a structured
-   intermediate report (e.g., markdown).
-2. **Coordinates execution order** — runs scripts sequentially or in parallel as appropriate, handling failures
-   gracefully.
+1. **Manages a collection of independent analysis scripts** — each script handles one domain and produces a structured intermediate report (e.g., markdown).
+2. **Coordinates execution order** — runs scripts sequentially or in parallel as appropriate, handling failures gracefully.
 3. **Aggregates intermediate outputs** — reads all generated reports and synthesizes them into a unified artifact.
-4. **Produces final visualization** — generates a single self-contained output (e.g., an HTML page) from the aggregated
-   data.
+4. **Produces final visualization** — generates a single self-contained output (e.g., an HTML page) from the aggregated data.
 
 ```
 ┌─────────────┐     ┌──────────────┐     ┌──────────────┐
@@ -49,11 +40,7 @@ The agent:
                                          └──────────────┘
 ```
 
-The agent acts as both the scheduler (deciding what to run and when) and the integrator (combining outputs into a
-coherent whole). Unlike general workflow automation patterns that emphasize execution, recovery, and checkpointing, this
-pattern centers on semantic aggregation of structured intermediate reports. Because the agent understands the content of
-each report, it can apply domain-specific formatting, highlight anomalies, and produce richer output than a static
-template could.
+The agent acts as both the scheduler (deciding what to run and when) and the integrator (combining outputs into a coherent whole). Unlike general workflow automation patterns that emphasize execution, recovery, and checkpointing, this pattern centers on semantic aggregation of structured intermediate reports. Because the agent understands the content of each report, it can apply domain-specific formatting, highlight anomalies, and produce richer output than a static template could.
 
 ## How to use it
 
@@ -65,10 +52,8 @@ template could.
 
 **Implementation approach:**
 
-1. Structure each analysis step as an independent script with a consistent interface (same input path, predictable
-   output location)
-2. Use a configuration file (e.g., `CLAUDE.md`) to teach the agent about the pipeline: which scripts exist, execution
-   order, output locations
+1. Structure each analysis step as an independent script with a consistent interface (same input path, predictable output location)
+2. Use a configuration file (e.g., `CLAUDE.md`) to teach the agent about the pipeline: which scripts exist, execution order, output locations
 3. Let the agent execute each script, monitor for errors, and collect outputs
 4. Have the agent read all intermediate reports and generate the final artifact
 
@@ -76,8 +61,7 @@ template could.
 
 - Separate scripts analyze logging, access-control, encryption, and retention evidence from the same system snapshot
 - Each script produces a markdown or JSON report in `reports/`
-- The agent reads all reports, cross-references inconsistencies, and generates a single review dashboard with flagged
-  gaps
+- The agent reads all reports, cross-references inconsistencies, and generates a single review dashboard with flagged gaps
 
 ## Trade-offs
 
@@ -90,22 +74,17 @@ template could.
 
 **Cons:**
 
-- **Cost scales with output volume** — the agent must read all intermediate reports, consuming tokens proportional to
-  total output size
+- **Cost scales with output volume** — the agent must read all intermediate reports, consuming tokens proportional to total output size
 - **Reproducibility concerns** — LLM-generated final outputs may vary between runs unless carefully prompted
-- **Not suited for massive scale** — works best with tens of steps, not thousands; dedicated workflow engines are better
-  for large DAGs
+- **Not suited for massive scale** — works best with tens of steps, not thousands; dedicated workflow engines are better for large DAGs
 - **Requires structured intermediates** — scripts must produce outputs the agent can parse reliably
 
 ## Known Implementations
 
-- [dna-claude-analysis](https://github.com/shmlkv/dna-claude-analysis) — contributor example of a multi-step analysis
-  pipeline with agent-generated final reporting
+- [dna-claude-analysis](https://github.com/shmlkv/dna-claude-analysis) — contributor example of a multi-step analysis pipeline with agent-generated final reporting
 
 ## References
 
 - [Building Effective Agents — Anthropic](https://www.anthropic.com/engineering/building-effective-agents) (2024)
-- [Multi-Model Orchestration for Complex Edits](multi-model-orchestration-for-complex-edits.md) — related pattern for
-  staged orchestration across specialized steps
-- [Autonomous Workflow Agent Architecture](autonomous-workflow-agent-architecture.md) — related pattern focused on
-  workflow execution, monitoring, and recovery
+- [Multi-Model Orchestration for Complex Edits](multi-model-orchestration-for-complex-edits.md) — related pattern for staged orchestration across specialized steps
+- [Autonomous Workflow Agent Architecture](autonomous-workflow-agent-architecture.md) — related pattern focused on workflow execution, monitoring, and recovery

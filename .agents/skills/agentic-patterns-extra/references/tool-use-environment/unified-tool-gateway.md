@@ -24,36 +24,25 @@ updated_at: "2026-03-31"
 
 ## Problem
 
-As agent capabilities grow, they need access to an expanding set of external tools — web search, image generation,
-competitor research, security scanning, video production, and more. Each tool typically requires its own API key,
-authentication flow, rate-limiting logic, and billing integration.
+As agent capabilities grow, they need access to an expanding set of external tools — web search, image generation, competitor research, security scanning, video production, and more. Each tool typically requires its own API key, authentication flow, rate-limiting logic, and billing integration.
 
 This creates several compounding problems:
 
-* **Credential sprawl**: Agents or their operators must manage dozens of API keys across different providers, each with
-  different authentication schemes.
-* **Integration tax**: Every new tool requires custom integration code — error handling, retries, schema translation,
-  and response normalization.
-* **Billing fragmentation**: Usage is scattered across many provider dashboards, making cost tracking and budget
-  enforcement difficult.
-* **Discovery overhead**: Agents have no unified way to find what tools are available or what capabilities they can
-  access.
+* **Credential sprawl**: Agents or their operators must manage dozens of API keys across different providers, each with different authentication schemes.
+* **Integration tax**: Every new tool requires custom integration code — error handling, retries, schema translation, and response normalization.
+* **Billing fragmentation**: Usage is scattered across many provider dashboards, making cost tracking and budget enforcement difficult.
+* **Discovery overhead**: Agents have no unified way to find what tools are available or what capabilities they can access.
 
 ## Solution
 
-Place a single gateway between the agent and all external tool providers. The gateway handles discovery, authentication,
-routing, execution, and billing — exposing a uniform interface to the agent regardless of the underlying provider.
+Place a single gateway between the agent and all external tool providers. The gateway handles discovery, authentication, routing, execution, and billing — exposing a uniform interface to the agent regardless of the underlying provider.
 
 The pattern works through four layers:
 
-1. **Discovery layer**: A unified registry where agents query available tools and their capabilities via a single
-   endpoint or protocol (e.g., MCP `tools/list`).
-2. **Authentication layer**: The gateway holds provider credentials on behalf of the agent. The agent authenticates once
-   to the gateway; the gateway handles per-provider auth.
-3. **Routing layer**: Incoming tool calls are routed to the correct provider, with schema translation if needed.
-   Long-running tools are dispatched to async workers.
-4. **Metering layer**: Every call is logged, metered, and billed through a single system, enabling budget caps and usage
-   visibility.
+1. **Discovery layer**: A unified registry where agents query available tools and their capabilities via a single endpoint or protocol (e.g., MCP `tools/list`).
+2. **Authentication layer**: The gateway holds provider credentials on behalf of the agent. The agent authenticates once to the gateway; the gateway handles per-provider auth.
+3. **Routing layer**: Incoming tool calls are routed to the correct provider, with schema translation if needed. Long-running tools are dispatched to async workers.
+4. **Metering layer**: Every call is logged, metered, and billed through a single system, enabling budget caps and usage visibility.
 
 ```mermaid
 graph TD
@@ -96,14 +85,10 @@ result = gateway.get_result(job.job_id)
 
 **Implementation considerations:**
 
-- **Protocol choice**: MCP (Model Context Protocol) provides a natural fit since agents already speak it natively. The
-  gateway acts as an MCP server exposing all tools.
-- **Sync vs async**: Short tools (search, lookups) execute inline. Long tools (video generation, large scrapes) return a
-  job ID and execute on background workers.
-- **Credential management**: Users can bring their own API keys for specific providers (BYOK) to reduce costs, while the
-  gateway provides default keys for convenience.
-- **Schema normalization**: Each provider's response is normalized to a consistent output schema so agents don't need
-  provider-specific parsing logic.
+- **Protocol choice**: MCP (Model Context Protocol) provides a natural fit since agents already speak it natively. The gateway acts as an MCP server exposing all tools.
+- **Sync vs async**: Short tools (search, lookups) execute inline. Long tools (video generation, large scrapes) return a job ID and execute on background workers.
+- **Credential management**: Users can bring their own API keys for specific providers (BYOK) to reduce costs, while the gateway provides default keys for convenience.
+- **Schema normalization**: Each provider's response is normalized to a consistent output schema so agents don't need provider-specific parsing logic.
 - **Rate limiting**: Apply per-user and per-tool rate limits at the gateway level to prevent abuse and manage costs.
 
 ## Trade-offs
@@ -126,10 +111,7 @@ result = gateway.get_result(job.job_id)
 
 ## References
 
-- [API Gateway Pattern](https://microservices.io/patterns/apigateway.html) — the microservices predecessor pattern that
-  inspired this approach
-- [Model Context Protocol specification](https://modelcontextprotocol.io/) — the emerging standard for agent-tool
-  communication
-- [OpenAI Plugins Architecture](https://platform.openai.com/docs/plugins) — early exploration of unified tool access for
-  agents
+- [API Gateway Pattern](https://microservices.io/patterns/apigateway.html) — the microservices predecessor pattern that inspired this approach
+- [Model Context Protocol specification](https://modelcontextprotocol.io/) — the emerging standard for agent-tool communication
+- [OpenAI Plugins Architecture](https://platform.openai.com/docs/plugins) — early exploration of unified tool access for agents
 - [ToolRouter](https://toolrouter.com) — a production implementation of this pattern with 150+ tools accessible via MCP

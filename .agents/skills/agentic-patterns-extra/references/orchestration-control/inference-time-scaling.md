@@ -10,16 +10,11 @@ tags: [scaling, inference, compute, reasoning, performance, o1-model, test-time-
 
 ## Problem
 
-Traditional language models are limited by their training-time capabilities. Once trained, their performance is
-essentially fixed, regardless of how much compute is available at inference time. This means that for particularly
-challenging problems, we cannot simply "think harder" by allocating more computational resources to find better
-solutions. This limitation becomes especially apparent in complex reasoning tasks where more deliberation could lead to
-better outcomes.
+Traditional language models are limited by their training-time capabilities. Once trained, their performance is essentially fixed, regardless of how much compute is available at inference time. This means that for particularly challenging problems, we cannot simply "think harder" by allocating more computational resources to find better solutions. This limitation becomes especially apparent in complex reasoning tasks where more deliberation could lead to better outcomes.
 
 ## Solution
 
-Inference-Time Scaling allocates additional computational resources during inference to improve output quality. Instead
-of generating a single response, the system can:
+Inference-Time Scaling allocates additional computational resources during inference to improve output quality. Instead of generating a single response, the system can:
 
 1. **Generate multiple candidates** and select the best one (Best-of-N)
 2. **Perform extended reasoning** chains before responding (Chain-of-Thought)
@@ -27,8 +22,7 @@ of generating a single response, the system can:
 4. **Search through solution spaces** more thoroughly (Tree-of-Thought, MCTS)
 5. **Verify and validate** answers before returning them (Self-Consistency)
 
-This approach trades compute time for solution quality, allowing smaller models with inference-time scaling to
-outperform larger models using standard inference.
+This approach trades compute time for solution quality, allowing smaller models with inference-time scaling to outperform larger models using standard inference.
 
 ## Example
 
@@ -204,12 +198,9 @@ flowchart TD
 
 ## Real-World Evidence
 
-- **Academic Foundation**: Wei et al. (2022) established chain-of-thought prompting; Wang et al. (2022) demonstrated
-  self-consistency gains via multiple sampling
-- **Search-Based Methods**: Yao et al. (2023) showed Tree-of-Thought improves complex problem-solving through search
-  over reasoning paths
-- **Production Models**: OpenAI o1 (September 2024) and Anthropic Claude Extended Thinking implement inference-time
-  scaling with improved reasoning on math and coding tasks
+- **Academic Foundation**: Wei et al. (2022) established chain-of-thought prompting; Wang et al. (2022) demonstrated self-consistency gains via multiple sampling
+- **Search-Based Methods**: Yao et al. (2023) showed Tree-of-Thought improves complex problem-solving through search over reasoning paths
+- **Production Models**: OpenAI o1 (September 2024) and Anthropic Claude Extended Thinking implement inference-time scaling with improved reasoning on math and coding tasks
 - **Self-Refinement**: Shinn et al. (2023) Reflexion shows models can improve outputs through iterative self-critique
 
 ## Trade-offs

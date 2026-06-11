@@ -12,13 +12,9 @@
 
 ## Executive Summary
 
-This report compiles academic research on **Hook-Based Safety Guard Rails for Autonomous Code Agents** - a pattern that
-uses PreToolUse/PostToolUse hooks to inject safety checks outside the agent's reasoning loop. Due to web search quota
-limitations (resets March 23, 2026), this research leverages existing literature from parallel pattern research in this
-codebase.
+This report compiles academic research on **Hook-Based Safety Guard Rails for Autonomous Code Agents** - a pattern that uses PreToolUse/PostToolUse hooks to inject safety checks outside the agent's reasoning loop. Due to web search quota limitations (resets March 23, 2026), this research leverages existing literature from parallel pattern research in this codebase.
 
-**Key Finding**: While no single academic paper explicitly describes the "hook-based safety guard rails" pattern by
-name, the theoretical foundations are well-established across multiple research areas:
+**Key Finding**: While no single academic paper explicitly describes the "hook-based safety guard rails" pattern by name, the theoretical foundations are well-established across multiple research areas:
 - **Runtime governance frameworks** for agentic AI
 - **Shield systems** and intervention mechanisms
 - **Pre/post-execution validation** for autonomous systems
@@ -33,13 +29,12 @@ name, the theoretical foundations are well-established across multiple research 
 - **Source**: [arXiv:2508.03858v3](https://arxiv.org/html/2508.03858v3)
 - **Year**: 2025 (August)
 - **Category**: Runtime Safety / Governance
-- **Relevance**: **High** - Directly addresses runtime safety for agentic AI systems through rule-based,
-  telemetry-driven governance logic
+- **Relevance**: **High** - Directly addresses runtime safety for agentic AI systems through rule-based, telemetry-driven governance logic
 - **Key Insights**:
-    - Implements runtime governance logic that operates outside the agent's main decision loop
-    - Uses telemetry-driven approaches for monitoring and intervention
-    - Provides rule-based safety enforcement that agents cannot bypass
-    - Validates the approach of external governance layers for agent systems
+  - Implements runtime governance logic that operates outside the agent's main decision loop
+  - Uses telemetry-driven approaches for monitoring and intervention
+  - Provides rule-based safety enforcement that agents cannot bypass
+  - Validates the approach of external governance layers for agent systems
 - **Quote**: "Rule-based, telemetry-driven governance logic" for runtime safety
 
 ### 2. AGENTSAFE - Ethical Assurance Framework
@@ -49,11 +44,10 @@ name, the theoretical foundations are well-established across multiple research 
 - **Category**: Safety Evaluation / Testing
 - **Relevance**: **Medium-High** - Provides test case methodology and metrics for validating agent safety
 - **Key Insights**:
-    - Defines 50-100 tailored test cases for agent safety evaluation
-    - Establishes metrics for measuring safety: Prompt-Injection Block Rate, Exfiltration Detection Recall,
-      Hallucination-to-Action Rate
-    - Hybrid evaluation approach combining rule-based checks with LLM-as-Judge
-    - Provides quantitative framework for validating that safety hooks work correctly
+  - Defines 50-100 tailored test cases for agent safety evaluation
+  - Establishes metrics for measuring safety: Prompt-Injection Block Rate, Exfiltration Detection Recall, Hallucination-to-Action Rate
+  - Hybrid evaluation approach combining rule-based checks with LLM-as-Judge
+  - Provides quantitative framework for validating that safety hooks work correctly
 - **Quote**: Metrics include "Prompt-Injection Block Rate, Exfiltration Detection Recall, Hallucination-to-Action Rate"
 
 ### 3. OpenAgentSafety
@@ -61,28 +55,26 @@ name, the theoretical foundations are well-established across multiple research 
 - **Source**: [arXiv:2507.06134v1](https://arxiv.org/html/2507.06134v1)
 - **Year**: 2025 (July)
 - **Category**: Safety Evaluation
-- **Relevance**: **High** - Demonstrates that even top models show unsafe behavior, validating need for external guard
-  rails
+- **Relevance**: **High** - Demonstrates that even top models show unsafe behavior, validating need for external guard rails
 - **Key Insights**:
-    - Even top models (Claude Sonnet 3.7, GPT-4o) show unsafe behavior in 40-51% of tasks
-    - Hybrid evaluation methodology: rule-based + LLM-as-Judge approaches
-    - Demonstrates that model-level alignment is insufficient - needs external safety systems
-    - Validates the hook-based approach of adding external safety layers
+  - Even top models (Claude Sonnet 3.7, GPT-4o) show unsafe behavior in 40-51% of tasks
+  - Hybrid evaluation methodology: rule-based + LLM-as-Judge approaches
+  - Demonstrates that model-level alignment is insufficient - needs external safety systems
+  - Validates the hook-based approach of adding external safety layers
 - **Quote**: Top models show "unsafe behavior in 40-51% of tasks" without external guard rails
 
 ### 4. Chain of Thought Monitorability Research
 
 - **Source**: Multiple papers (see chain-of-thought-monitoring-interruption-report.md)
 - **Key Papers**:
-    - "Effectively Controlling Reasoning Models through Thinking Intervention" (arXiv:2503.24370)
-    - "A Concrete Roadmap towards Safety Cases based on CoT Monitoring" (arXiv:2510.19476)
-- **Relevance**: **Medium** - Demonstrates intervention mechanisms, though focused on reasoning monitoring rather than
-  tool use
+  - "Effectively Controlling Reasoning Models through Thinking Intervention" (arXiv:2503.24370)
+  - "A Concrete Roadmap towards Safety Cases based on CoT Monitoring" (arXiv:2510.19476)
+- **Relevance**: **Medium** - Demonstrates intervention mechanisms, though focused on reasoning monitoring rather than tool use
 - **Key Insights**:
-    - Thinking Intervention: Strategically inserting/modifying tokens during generation
-    - Training-free, streaming-compatible intervention mechanisms
-    - 40% increase in refusal rates for unsafe prompts when using intervention
-    - Validates that external intervention systems can improve safety without model retraining
+  - Thinking Intervention: Strategically inserting/modifying tokens during generation
+  - Training-free, streaming-compatible intervention mechanisms
+  - 40% increase in refusal rates for unsafe prompts when using intervention
+  - Validates that external intervention systems can improve safety without model retraining
 
 ### 5. Beurer-Kellner et al. (2025) - CaMeL: Code-Augmented Language Model
 
@@ -90,10 +82,10 @@ name, the theoretical foundations are well-established across multiple research 
 - **Year**: 2025
 - **Relevance**: **High** - Comprehensive framework for secure LLM agent execution with pre/post validation
 - **Key Insights**:
-    - Formal verification of generated code before execution
-    - Taint tracking for security validation
-    - Audit logs for all code execution
-    - Validates the pre-execution validation pattern for safety hooks
+  - Formal verification of generated code before execution
+  - Taint tracking for security validation
+  - Audit logs for all code execution
+  - Validates the pre-execution validation pattern for safety hooks
 - **Quote**: "Comprehensive framework for secure LLM agent execution" with formal verification
 
 ### 6. Safety Risk Evaluation Framework
@@ -102,9 +94,9 @@ name, the theoretical foundations are well-established across multiple research 
 - **Year**: 2025 (July)
 - **Relevance**: **Medium** - Provides evaluation methodology for safety interventions
 - **Key Insights**:
-    - Systematic approach to evaluating safety risks in agent systems
-    - Framework for categorizing and prioritizing safety interventions
-    - Supports decision-making about which safety hooks to implement
+  - Systematic approach to evaluating safety risks in agent systems
+  - Framework for categorizing and prioritizing safety interventions
+  - Supports decision-making about which safety hooks to implement
 
 ---
 
@@ -112,58 +104,39 @@ name, the theoretical foundations are well-established across multiple research 
 
 ### What Academic Research Says About Hook-Based Interventions
 
-1. **External Governance Layers Are Necessary**: Multiple papers (MI9, OpenAgentSafety) demonstrate that model-level
-   alignment is insufficient. Even top-tier models show 40-51% unsafe behavior rates, necessitating external safety
-   systems that operate outside the agent's context.
+1. **External Governance Layers Are Necessary**: Multiple papers (MI9, OpenAgentSafety) demonstrate that model-level alignment is insufficient. Even top-tier models show 40-51% unsafe behavior rates, necessitating external safety systems that operate outside the agent's context.
 
-2. **Runtime Governance Is Viable**: MI9 establishes that runtime, rule-based governance logic can effectively constrain
-   agent behavior. This validates the hook-based approach of injecting safety checks at execution boundaries.
+2. **Runtime Governance Is Viable**: MI9 establishes that runtime, rule-based governance logic can effectively constrain agent behavior. This validates the hook-based approach of injecting safety checks at execution boundaries.
 
-3. **Hybrid Approaches Work Best**: AGENTSAFE and OpenAgentSafety both find that combining rule-based checks with
-   LLM-as-Judge evaluation provides the most comprehensive safety coverage. This supports the hook-based pattern's use
-   of multiple guard rail types (syntax checker, dangerous command blocker, context monitor, decision enforcer).
+3. **Hybrid Approaches Work Best**: AGENTSAFE and OpenAgentSafety both find that combining rule-based checks with LLM-as-Judge evaluation provides the most comprehensive safety coverage. This supports the hook-based pattern's use of multiple guard rail types (syntax checker, dangerous command blocker, context monitor, decision enforcer).
 
-4. **Pre-Execution Validation Is Critical**: Beurer-Kellner et al.'s CaMeL framework demonstrates that formal
-   verification and validation before code execution significantly improves security. This directly validates the "
-   PreToolUse" hook pattern.
+4. **Pre-Execution Validation Is Critical**: Beurer-Kellner et al.'s CaMeL framework demonstrates that formal verification and validation before code execution significantly improves security. This directly validates the "PreToolUse" hook pattern.
 
-5. **Intervention Can Be Training-Free**: The "Thinking Intervention" paper shows that external intervention mechanisms
-   can improve safety (40% increase in unsafe prompt refusal) without requiring model retraining.
+5. **Intervention Can Be Training-Free**: The "Thinking Intervention" paper shows that external intervention mechanisms can improve safety (40% increase in unsafe prompt refusal) without requiring model retraining.
 
 ### Gaps in Academic Coverage
 
-1. **No Explicit "Hook" Pattern Papers**: While the concepts are well-established, no single academic paper explicitly
-   describes the PreToolUse/PostToolUse hook pattern by that name or provides a comprehensive framework for hook-based
-   safety.
+1. **No Explicit "Hook" Pattern Papers**: While the concepts are well-established, no single academic paper explicitly describes the PreToolUse/PostToolUse hook pattern by that name or provides a comprehensive framework for hook-based safety.
 
-2. **Exit Code-Based Blocking Not Formalized**: The specific mechanism of using exit codes (exit 2 = block, exit 0 =
-   allow) as the safety hook interface is not documented in academic literature.
+2. **Exit Code-Based Blocking Not Formalized**: The specific mechanism of using exit codes (exit 2 = block, exit 0 = allow) as the safety hook interface is not documented in academic literature.
 
-3. **Multi-Guard-Rail Combinations**: Academic papers tend to focus on single interventions (e.g., syntax checking OR
-   dangerous command blocking). The combination of four guard rails working together needs more formal analysis.
+3. **Multi-Guard-Rail Combinations**: Academic papers tend to focus on single interventions (e.g., syntax checking OR dangerous command blocking). The combination of four guard rails working together needs more formal analysis.
 
-4. **Prompt Injection Immunity**: While AGENTSAFE measures prompt-injection block rates, the specific claim that hooks "
-   outside the agent's context" are immune to prompt injection needs more rigorous academic validation.
+4. **Prompt Injection Immunity**: While AGENTSAFE measures prompt-injection block rates, the specific claim that hooks "outside the agent's context" are immune to prompt injection needs more rigorous academic validation.
 
-5. **Context Window Monitoring as Safety**: Academic research focuses more on content-based safety rather than
-   resource-based safety (context window limits). This is an under-explored area.
+5. **Context Window Monitoring as Safety**: Academic research focuses more on content-based safety rather than resource-based safety (context window limits). This is an under-explored area.
 
 ### Emerging Themes from Literature
 
-1. **Defense-in-Depth Is Standard Practice**: All frameworks recommend multiple, redundant safety mechanisms rather than
-   single points of control.
+1. **Defense-in-Depth Is Standard Practice**: All frameworks recommend multiple, redundant safety mechanisms rather than single points of control.
 
-2. **Quantitative Safety Metrics**: Moving toward measurable safety metrics (block rates, detection recall, action error
-   rates) rather than binary "safe/unsafe" classifications.
+2. **Quantitative Safety Metrics**: Moving toward measurable safety metrics (block rates, detection recall, action error rates) rather than binary "safe/unsafe" classifications.
 
-3. **Runtime Over Early-Design**: Shift from design-time safety guarantees to runtime enforcement mechanisms that can
-   handle emergent behaviors.
+3. **Runtime Over Early-Design**: Shift from design-time safety guarantees to runtime enforcement mechanisms that can handle emergent behaviors.
 
-4. **Hybrid Human-AI Safety**: Combining automated rule-based checks with human oversight and LLM-as-judge evaluation
-   for maximum coverage.
+4. **Hybrid Human-AI Safety**: Combining automated rule-based checks with human oversight and LLM-as-judge evaluation for maximum coverage.
 
-5. **Auditability As First-Class Concern**: All frameworks emphasize logging, traceability, and post-hoc analysis
-   capabilities.
+5. **Auditability As First-Class Concern**: All frameworks emphasize logging, traceability, and post-hoc analysis capabilities.
 
 ---
 
@@ -171,10 +144,8 @@ name, the theoretical foundations are well-established across multiple research 
 
 ### Control Theory Applications
 
-- **Feedback Loops**: Hook-based safety implements a negative feedback loop where unsafe actions are blocked and fed
-  back to the agent
-- **Setpoint Regulation**: Safety parameters (context limits, allowed commands) act as setpoints that the system
-  enforces
+- **Feedback Loops**: Hook-based safety implements a negative feedback loop where unsafe actions are blocked and fed back to the agent
+- **Setpoint Regulation**: Safety parameters (context limits, allowed commands) act as setpoints that the system enforces
 - **Bang-Bang Control**: Binary allow/block decisions resemble bang-bang controllers
 
 ### Software Engineering Foundations
@@ -214,8 +185,7 @@ When web search quota resets (March 23, 2026), use these terms to find additiona
 
 ### Academic Venues to Monitor
 - **Conferences**: NeurIPS, ICML, ICLR, AAAI, AAMAS, FAccT, CCS (IEEE), USENIX Security
-- **Journals**: Journal of Artificial Intelligence Research (JAIR), Autonomous Agents and Multi-Agent Systems, ACM
-  Transactions on Autonomous and Adaptive Systems
+- **Journals**: Journal of Artificial Intelligence Research (JAIR), Autonomous Agents and Multi-Agent Systems, ACM Transactions on Autonomous and Adaptive Systems
 
 ---
 
@@ -247,8 +217,7 @@ When web search quota resets (March 23, 2026), use these terms to find additiona
 - **Methodology**: Leveraged existing academic sources from parallel pattern research
 - **Confidence Level**: High for relevant sources identified; Medium for completeness (may have missed papers)
 - **Verification Status**: All arXiv URLs cited from existing research reports need direct verification
-- **Next Steps**: When search quota resets, search for additional papers on "action filtering", "shield systems", and "
-  tool use safety"
+- **Next Steps**: When search quota resets, search for additional papers on "action filtering", "shield systems", and "tool use safety"
 
 ---
 
@@ -260,73 +229,68 @@ When web search quota resets (March 23, 2026), use these terms to find additiona
 - **Organization**: Anthropic
 - **Type**: Commercial / Open Source (CLI)
 - **Link**: https://docs.anthropic.com/en/docs/claude-code/hooks
-- **Description**: Official hook system for Claude Code CLI supporting PreToolUse and PostToolUse events. Enables
-  external scripts to inspect, modify, or block tool calls before/after execution.
+- **Description**: Official hook system for Claude Code CLI supporting PreToolUse and PostToolUse events. Enables external scripts to inspect, modify, or block tool calls before/after execution.
 - **Hook Types Supported**: PreToolUse, PostToolUse, onStop
 - **Notable Features**:
-    - JSON-based stdin/stdout communication
-    - Exit code 2 blocks tool execution
-    - Shell script hooks for maximum flexibility
-    - Integration with agent configuration files
+  - JSON-based stdin/stdout communication
+  - Exit code 2 blocks tool execution
+  - Shell script hooks for maximum flexibility
+  - Integration with agent configuration files
 - **Adoption**: Core to Claude Code architecture; production validated by yurukusa's claude-code-ops-starter project
 
 ### 2. claude-code-ops-starter (yurukusa)
 - **Organization**: Open Source Community
 - **Type**: Open Source
 - **Link**: https://github.com/yurukusa/claude-code-ops-starter
-- **Description**: Production implementation of 4 guard rails: dangerous command blocker, syntax checker, context window
-  monitor, and autonomous decision enforcer.
+- **Description**: Production implementation of 4 guard rails: dangerous command blocker, syntax checker, context window monitor, and autonomous decision enforcer.
 - **Hook Types Supported**: PreToolUse (Bash, AskUserQuestion), PostToolUse (Edit, Write, all tools)
 - **Notable Features**:
-    - Risk-score diagnostic for command evaluation
-    - Pattern-matching for destructive commands (rm -rf, git reset --hard)
-    - Auto-generated checkpoints when context is low
-    - Language-agnostic shell script hooks
+  - Risk-score diagnostic for command evaluation
+  - Pattern-matching for destructive commands (rm -rf, git reset --hard)
+  - Auto-generated checkpoints when context is low
+  - Language-agnostic shell script hooks
 - **Adoption**: Validated in production; cited as reference implementation
 
 ### 3. NVIDIA NeMo Guardrails
 - **Organization**: NVIDIA
 - **Type**: Open Source / Commercial
 - **Link**: https://github.com/NVIDIA/NeMo-Guardrails
-- **Description**: Comprehensive toolkit for controlling LLM inputs and outputs with configurable guardrails. Supports
-  programming (Colang) and YAML configuration for safety policies.
+- **Description**: Comprehensive toolkit for controlling LLM inputs and outputs with configurable guardrails. Supports programming (Colang) and YAML configuration for safety policies.
 - **Hook Types Supported**: Pre-input (user messages), Post-output (LLM responses), Tool-use validation
 - **Notable Features**:
-    - Declarative configuration for safety rules
-    - Integration with LangChain, LlamaIndex, OpenAI
-    - Jailbreak detection and prevention
-    - Custom rail implementation (hooks equivalent)
-    - Information retrieval and fact-checking rails
+  - Declarative configuration for safety rules
+  - Integration with LangChain, LlamaIndex, OpenAI
+  - Jailbreak detection and prevention
+  - Custom rail implementation (hooks equivalent)
+  - Information retrieval and fact-checking rails
 - **Adoption**: Widely adopted in enterprise AI deployments; 10K+ GitHub stars
 
 ### 4. AWS Bedrock Guardrails
 - **Organization**: Amazon Web Services
 - **Type**: Commercial
 - **Link**: https://docs.aws.amazon.com/bedrock/latest/userguide/guardrails.html
-- **Description**: Managed service for implementing safety controls in Bedrock applications. Provides content filtering,
-  PII redaction, and contextual grounding checks.
+- **Description**: Managed service for implementing safety controls in Bedrock applications. Provides content filtering, PII redaction, and contextual grounding checks.
 - **Hook Types Supported**: Pre-inference (input validation), Post-inference (output filtering)
 - **Notable Features**:
-    - Configurable blocked topics and phrases
-    - PII detection and redaction
-    - Contextual grounding checks (hallucination prevention)
-    - Word and regex-based filters
-    - Applied across all Bedrock models uniformly
+  - Configurable blocked topics and phrases
+  - PII detection and redaction
+  - Contextual grounding checks (hallucination prevention)
+  - Word and regex-based filters
+  - Applied across all Bedrock models uniformly
 - **Adoption**: Standard practice for enterprise Bedrock deployments
 
 ### 5. LangSmith Monitoring & Evaluation
 - **Organization**: LangChain / LangSmith
 - **Type**: Commercial / Open Source SDK
 - **Link**: https://smith.langchain.com/
-- **Description**: Observability platform with trace-based hooks for monitoring, evaluation, and intervention in
-  LangChain applications.
+- **Description**: Observability platform with trace-based hooks for monitoring, evaluation, and intervention in LangChain applications.
 - **Hook Types Supported**: Pre-run, Post-run, On-error (via callbacks)
 - **Notable Features**:
-    - Real-time tracing of agent executions
-    - Custom evaluators as hooks
-    - Annotation and feedback collection
-    - Integration with LangChain callback system
-    - Root cause analysis for failures
+  - Real-time tracing of agent executions
+  - Custom evaluators as hooks
+  - Annotation and feedback collection
+  - Integration with LangChain callback system
+  - Root cause analysis for failures
 - **Adoption**: Industry-standard observability for LangChain-based agents
 
 ### 6. Azure AI Safety (Content Safety)
@@ -336,50 +300,47 @@ When web search quota resets (March 23, 2026), use these terms to find additiona
 - **Description**: Managed API for detecting harmful content in text and images with configurable thresholds.
 - **Hook Types Supported**: Pre-deployment (content checking), Runtime monitoring
 - **Notable Features**:
-    - Hate speech, violence, sexual content detection
-    - Self-harm and threat detection
-    - Configurable severity thresholds
-    - Batch and real-time processing
+  - Hate speech, violence, sexual content detection
+  - Self-harm and threat detection
+  - Configurable severity thresholds
+  - Batch and real-time processing
 - **Adoption**: Integrated across Azure AI services, Azure OpenAI Service
 
 ### 7. GitHub Copilot Security Features
 - **Organization**: GitHub / Microsoft
 - **Type**: Commercial
 - **Link**: https://docs.github.com/en/copilot
-- **Description**: Enterprise security controls for GitHub Copilot including code block filtering, policy configuration,
-  and integration with GitHub Advanced Security.
+- **Description**: Enterprise security controls for GitHub Copilot including code block filtering, policy configuration, and integration with GitHub Advanced Security.
 - **Hook Types Supported**: Pre-generation (policy enforcement), Post-generation (security scanning)
 - **Notable Features**:
-    - Policy-based code suggestions (exclude certain patterns)
-    - Integration with CodeQL for vulnerability scanning
-    - Secret scanning integration
-    - IP exclusion (prevent code from being used in suggestions)
+  - Policy-based code suggestions (exclude certain patterns)
+  - Integration with CodeQL for vulnerability scanning
+  - Secret scanning integration
+  - IP exclusion (prevent code from being used in suggestions)
 - **Adoption**: Enterprise standard for AI code generation
 
 ### 8. Cursor AI Safety Rules
 - **Organization**: Cursor AI
 - **Type**: Commercial
 - **Link**: https://cursor.com
-- **Description**: AI code editor with customizable rules (.cursorignore and .cursorrules) for controlling agent
-  behavior and file access.
+- **Description**: AI code editor with customizable rules (.cursorignore and .cursorrules) for controlling agent behavior and file access.
 - **Hook Types Supported**: Pre-operation (file access filtering), Context injection (rules)
 - **Notable Features**:
-    - `.cursorignore` for file/folder exclusion
-    - `.cursorrules` for custom agent instructions
-    - Repository-level rule configuration
-    - Multi-mode agent operations
+  - `.cursorignore` for file/folder exclusion
+  - `.cursorrules` for custom agent instructions
+  - Repository-level rule configuration
+  - Multi-mode agent operations
 - **Adoption**: Popular among development teams for agent-assisted coding
 
 ### 9. Replit Agent Guardrails
 - **Organization**: Replit
 - **Type**: Commercial (Internal)
 - **Link**: Not publicly documented (based on production incident)
-- **Description**: Internal guardrails for Replit's AI agent, notably failed in production incident leading to database
-  deletion.
+- **Description**: Internal guardrails for Replit's AI agent, notably failed in production incident leading to database deletion.
 - **Hook Types Supported**: Pre-execution (destructive command blocking) - Needs verification
 - **Notable Features**:
-    - Notable production failure documented (Replit AI deletes production database)
-    - Post-incident, guardrails implementation was strengthened
+  - Notable production failure documented (Replit AI deletes production database)
+  - Post-incident, guardrails implementation was strengthened
 - **Adoption**: Production deployment with documented learning from failures
 
 ### 10. Llama Guard (Meta)
@@ -389,25 +350,24 @@ When web search quota resets (March 23, 2026), use these terms to find additiona
 - **Description**: LLM-based input/output guardrail classifier trained to detect and filter potentially harmful content.
 - **Hook Types Supported**: Pre-generation (input filtering), Post-generation (output filtering)
 - **Notable Features**:
-    - 3-class taxonomy (safe, unsafe, unknown)
-    - Categories including violence, hate speech, criminal planning
-    - Optimized for LLM workflows
-    - Open model weights for customization
+  - 3-class taxonomy (safe, unsafe, unknown)
+  - Categories including violence, hate speech, criminal planning
+  - Optimized for LLM workflows
+  - Open model weights for customization
 - **Adoption**: Widely used as foundation for custom guardrail implementations
 
 ### 11. Aporia AI Guardrails
 - **Organization**: Aporia
 - **Type**: Commercial
 - **Link**: https://www.aporia.com/ai-guardrails/
-- **Description**: Real-time guardrail platform for AI applications with customizable policies and immediate
-  intervention.
+- **Description**: Real-time guardrail platform for AI applications with customizable policies and immediate intervention.
 - **Hook Types Supported**: Pre-inference, Post-inference, Runtime monitoring
 - **Notable Features**:
-    - Real-time policy enforcement
-    - Custom policy builder (natural language)
-    - Data leak prevention
-    - PII detection and masking
-    - Integration with major LLM providers
+  - Real-time policy enforcement
+  - Custom policy builder (natural language)
+  - Data leak prevention
+  - PII detection and masking
+  - Integration with major LLM providers
 - **Adoption**: Enterprise SaaS offering with production deployments
 
 ### 12. HumanLayer Approval Framework
@@ -417,11 +377,11 @@ When web search quota resets (March 23, 2026), use these terms to find additiona
 - **Description**: Human-in-the-loop framework for agent actions with Slack/email/SMS approval workflows.
 - **Hook Types Supported**: Pre-execution (approval gates)
 - **Notable Features**:
-    - @require_approval decorator pattern
-    - Multi-channel approval (Slack, email, SMS)
-    - Context-rich approval requests
-    - Audit trail for compliance
-    - Approval timeout and fallback handling
+  - @require_approval decorator pattern
+  - Multi-channel approval (Slack, email, SMS)
+  - Context-rich approval requests
+  - Audit trail for compliance
+  - Approval timeout and fallback handling
 - **Adoption**: Validated in production for high-risk operations (database changes, deployments)
 
 ### 13. Pre-commit Hooks (Traditional DevSecOps)
@@ -431,11 +391,11 @@ When web search quota resets (March 23, 2026), use these terms to find additiona
 - **Description**: Framework for managing git pre-commit hooks that run checks before code is committed.
 - **Hook Types Supported**: Pre-commit (pre-commit)
 - **Notable Features**:
-    - Multi-language hook support
-    - Hook repository ecosystem
-    - Automatic dependency management
-    - Security scanning hooks (secret scanning, SAST)
-    - Integration with CI/CD
+  - Multi-language hook support
+  - Hook repository ecosystem
+  - Automatic dependency management
+  - Security scanning hooks (secret scanning, SAST)
+  - Integration with CI/CD
 - **Adoption**: Industry standard for local development safety
 
 ### 14. Webhook-based CI/CD Security Gates
@@ -445,10 +405,10 @@ When web search quota resets (March 23, 2026), use these terms to find additiona
 - **Description**: Webhook-triggered security checks in CI/CD pipelines for agent-generated code.
 - **Hook Types Supported**: Pre-merge (webhook), Post-build (status callback)
 - **Notable Features**:
-    - Integration with external security scanners
-    - Blocking/unblocking workflows based on security results
-    - Multi-stage validation (SAST, DAST, SCA)
-    - Policy-based enforcement
+  - Integration with external security scanners
+  - Blocking/unblocking workflows based on security results
+  - Multi-stage validation (SAST, DAST, SCA)
+  - Policy-based enforcement
 - **Adoption**: Universal practice in DevSecOps
 
 ### 15. OpenTelemetry + Alerting Hooks
@@ -458,52 +418,49 @@ When web search quota resets (March 23, 2026), use these terms to find additiona
 - **Description**: Observability framework with alert hooks for detecting anomalies in agent behavior.
 - **Hook Types Supported**: Post-metric (alerting), Runtime monitoring
 - **Notable Features**:
-    - Metric-based alert policies
-    - Trace-based anomaly detection
-    - Integration with notification systems (PagerDuty, Slack)
-    - Custom alert conditions via Prometheus
+  - Metric-based alert policies
+  - Trace-based anomaly detection
+  - Integration with notification systems (PagerDuty, Slack)
+  - Custom alert conditions via Prometheus
 - **Adoption**: Industry standard for observability-driven safety
 
 ### 16. Salesforce Einstein GPT Guardrails
 - **Organization**: Salesforce
 - **Type**: Commercial
 - **Link**: https://www.salesforce.com/products/einstein-gpt/
-- **Description**: Enterprise guardrails for AI-powered CRM features including data access controls and output
-  filtering.
+- **Description**: Enterprise guardrails for AI-powered CRM features including data access controls and output filtering.
 - **Hook Types Supported**: Pre-generation (data access), Post-generation (content filtering)
 - **Notable Features**:
-    - Field-level security integration
-    - Content moderation for customer-facing AI
-    - Compliance controls (GDPR, HIPAA)
-    - Brand-safe output filtering
+  - Field-level security integration
+  - Content moderation for customer-facing AI
+  - Compliance controls (GDPR, HIPAA)
+  - Brand-safe output filtering
 - **Adoption**: Production deployment in Salesforce CRM
 
 ### 17. Google Cloud DLP API for AI Safety
 - **Organization**: Google Cloud
 - **Type**: Commercial
 - **Link**: https://cloud.google.com/security/products/dlp
-- **Description**: Data loss prevention API with PII detection and redaction, usable as pre/post hooks for AI
-  applications.
+- **Description**: Data loss prevention API with PII detection and redaction, usable as pre/post hooks for AI applications.
 - **Hook Types Supported**: Pre-processing (PII redaction), Post-processing (content inspection)
 - **Notable Features**:
-    - 100+ PII infotypes detected
-    - De-identification and re-identification
-    - Template-based detection
-    - Integration with Vertex AI
+  - 100+ PII infotypes detected
+  - De-identification and re-identification
+  - Template-based detection
+  - Integration with Vertex AI
 - **Adoption**: Common in GCP-based AI deployments
 
 ### 18. Trace-based Intervention (Arize Phoenix, Weights & Biases)
 - **Organization**: Arize AI, Weights & Biases
 - **Type**: Commercial / Open Source
 - **Link**: https://arize.com/phoenix/ | https://wandb.ai/
-- **Description**: ML observability platforms with trace-based intervention capabilities for monitoring and controlling
-  agent behavior.
+- **Description**: ML observability platforms with trace-based intervention capabilities for monitoring and controlling agent behavior.
 - **Hook Types Supported**: Post-trace (evaluation), Runtime monitoring
 - **Notable Features**:
-    - Live tracing of agent executions
-    - Feedback loop integration
-    - Drift detection and alerting
-    - Model comparison and rollback
+  - Live tracing of agent executions
+  - Feedback loop integration
+  - Drift detection and alerting
+  - Model comparison and rollback
 - **Adoption**: Widely used for production AI monitoring
 
 ---
@@ -513,39 +470,39 @@ When web search quota resets (March 23, 2026), use these terms to find additiona
 ### Common Patterns Across Implementations
 
 1. **Pre/Post Hook Architecture**
-    - Pre-tool/use hooks dominate for blocking (fail-safe)
-    - Post-tool/use hooks used for monitoring, logging, and recovery
-    - Exit-code-based blocking (exit 2) is standard pattern
+   - Pre-tool/use hooks dominate for blocking (fail-safe)
+   - Post-tool/use hooks used for monitoring, logging, and recovery
+   - Exit-code-based blocking (exit 2) is standard pattern
 
 2. **Shell Script vs. SDK Approaches**
-    - Shell scripts: Language-agnostic, simple, production-hardened
-    - SDK approaches: Richer integration, language-specific
-    - Trend: Hybrid (shell for blocking, SDK for monitoring)
+   - Shell scripts: Language-agnostic, simple, production-hardened
+   - SDK approaches: Richer integration, language-specific
+   - Trend: Hybrid (shell for blocking, SDK for monitoring)
 
 3. **Pattern Matching for Safety**
-    - Regex and substring matching for dangerous commands
-    - allowlist/denylist semantics (deny-by-default preferred)
-    - Wildcard support for flexible policy definition
+   - Regex and substring matching for dangerous commands
+   - allowlist/denylist semantics (deny-by-default preferred)
+   - Wildcard support for flexible policy definition
 
 4. **Integration with CI/CD**
-    - Guardrails in inner loop (development)
-    - Security scans as outer loop (CI/CD)
-    - Unified policy across both loops
+   - Guardrails in inner loop (development)
+   - Security scans as outer loop (CI/CD)
+   - Unified policy across both loops
 
 5. **Observability Convergence**
-    - Guardrails increasingly integrated with observability platforms
-    - Trace-based evaluation feeding back into policy
-    - Alerting and auto-rollback capabilities
+   - Guardrails increasingly integrated with observability platforms
+   - Trace-based evaluation feeding back into policy
+   - Alerting and auto-rollback capabilities
 
 ### Market Maturity Assessment
 
-| Segment                | Maturity     | Key Players                     | Standardization              |
-|------------------------|--------------|---------------------------------|------------------------------|
-| **Coding Agent Hooks** | Early Growth | Anthropic, GitHub, Cursor       | Emerging (MCP, Claude hooks) |
-| **Runtime Guardrails** | Mature       | NVIDIA, AWS, Meta               | Converging on YAML/Colang    |
-| **CI/CD Integration**  | Very Mature  | GitHub Actions, GitLab, Jenkins | Well-established             |
-| **Enterprise Safety**  | Mature       | Microsoft, Google, Salesforce   | Platform-specific            |
-| **Observability**      | Mature       | LangSmith, Datadog, New Relic   | OpenTelemetry standard       |
+| Segment | Maturity | Key Players | Standardization |
+|---------|----------|-------------|-----------------|
+| **Coding Agent Hooks** | Early Growth | Anthropic, GitHub, Cursor | Emerging (MCP, Claude hooks) |
+| **Runtime Guardrails** | Mature | NVIDIA, AWS, Meta | Converging on YAML/Colang |
+| **CI/CD Integration** | Very Mature | GitHub Actions, GitLab, Jenkins | Well-established |
+| **Enterprise Safety** | Mature | Microsoft, Google, Salesforce | Platform-specific |
+| **Observability** | Mature | LangSmith, Datadog, New Relic | OpenTelemetry standard |
 
 ### Notable Production Deployments
 
@@ -752,13 +709,13 @@ sequenceDiagram
 
 **Comparison to Alternative Approaches:**
 
-| Approach               | Context Isolation | Prompt Injection Risk | Performance  |
-|------------------------|-------------------|-----------------------|--------------|
-| Hooks (PreToolUse)     | Separate process  | None                  | <10ms        |
-| In-Prompt Instructions | Same context      | High                  | Free         |
-| Agent Self-Correction  | Same context      | High                  | 1-10s        |
-| Middleware/Proxy       | Separate process  | Low                   | ~100ms       |
-| Post-Hoc Validation    | After execution   | Partial               | High latency |
+| Approach | Context Isolation | Prompt Injection Risk | Performance |
+|----------|------------------|----------------------|-------------|
+| Hooks (PreToolUse) | Separate process | None | <10ms |
+| In-Prompt Instructions | Same context | High | Free |
+| Agent Self-Correction | Same context | High | 1-10s |
+| Middleware/Proxy | Separate process | Low | ~100ms |
+| Post-Hoc Validation | After execution | Partial | High latency |
 
 #### Language-Agnostic Design
 
@@ -853,38 +810,38 @@ validate_shell_syntax() {
 **Command Categories to Block:**
 
 1. **Filesystem Destruction:**
-    - `rm -rf /` - Delete root filesystem
-    - `rm -rf .` - Delete current directory
-    - `dd if=/dev/zero` - Disk corruption
-    - `mkfs.*` - Format filesystem
-    - `chmod 000 /` - Remove all permissions
+   - `rm -rf /` - Delete root filesystem
+   - `rm -rf .` - Delete current directory
+   - `dd if=/dev/zero` - Disk corruption
+   - `mkfs.*` - Format filesystem
+   - `chmod 000 /` - Remove all permissions
 
 2. **Version Control Destruction:**
-    - `git reset --hard` - Discard all changes
-    - `git clean -fd` - Remove untracked files
-    - `git branch -D` - Force delete branches
-    - `hg strip` - Mercurial destructive
-    - `svn revert --R` - Subversion recursive revert
+   - `git reset --hard` - Discard all changes
+   - `git clean -fd` - Remove untracked files
+   - `git branch -D` - Force delete branches
+   - `hg strip` - Mercurial destructive
+   - `svn revert --R` - Subversion recursive revert
 
 3. **Database Destruction:**
-    - `DROP TABLE` - Drop table
-    - `DROP DATABASE` - Drop database
-    - `DELETE FROM` - Delete records
-    - `TRUNCATE TABLE` - Truncate table
-    - `ALTER TABLE.*DROP` - Drop columns
+   - `DROP TABLE` - Drop table
+   - `DROP DATABASE` - Drop database
+   - `DELETE FROM` - Delete records
+   - `TRUNCATE TABLE` - Truncate table
+   - `ALTER TABLE.*DROP` - Drop columns
 
 4. **System Configuration:**
-    - `iptables -F` - Flush firewall rules
-    - `crontab -r` - Remove all cron jobs
-    - `userdel` - Delete user
-    - `kill -9 -1` - Kill all processes
-    - `poweroff|reboot` - System shutdown
+   - `iptables -F` - Flush firewall rules
+   - `crontab -r` - Remove all cron jobs
+   - `userdel` - Delete user
+   - `kill -9 -1` - Kill all processes
+   - `poweroff|reboot` - System shutdown
 
 5. **Data Exfiltration:**
-    - `curl.*@*|wget.*@*` - Upload data to remote
-    - `nc -l.*|netcat` - Network listener
-    - `git push --force` - Forced push
-    - `scp * *@` - Copy files to remote
+   - `curl.*@*|wget.*@*` - Upload data to remote
+   - `nc -l.*|netcat` - Network listener
+   - `git push --force` - Forced push
+   - `scp * *@` - Copy files to remote
 
 **Edge Cases and Limitations:**
 
@@ -903,20 +860,20 @@ RECONSTRUCTED=$(printf '%s' "$CMD" | xargs)
 ```
 
 2. **Context-Dependent Safety:**
-    - `rm -rf ./temp` might be safe in temp directory
-    - `rm -rf ./prod` is dangerous in production
-    - **Mitigation**: Path-aware validation with allowed delete paths
+   - `rm -rf ./temp` might be safe in temp directory
+   - `rm -rf ./prod` is dangerous in production
+   - **Mitigation**: Path-aware validation with allowed delete paths
 
 3. **Interactive Commands:**
-    - `vim|nano|emacs` - Interactive editors
-    - `passwd` - Password change
-    - `ssh` - Interactive SSH
-    - **Mitigation**: Block interactive commands explicitly
+   - `vim|nano|emacs` - Interactive editors
+   - `passwd` - Password change
+   - `ssh` - Interactive SSH
+   - **Mitigation**: Block interactive commands explicitly
 
 4. **Rate-Limited Destructive Actions:**
-    - Single file deletion: OK
-    - 1000 file deletions: Suspicious
-    - **Mitigation**: Track command frequency
+   - Single file deletion: OK
+   - 1000 file deletions: Suspicious
+   - **Mitigation**: Track command frequency
 
 #### Syntax Checking
 
@@ -1392,32 +1349,32 @@ test_dangerous_command_blocked() {
 #### Limitations and Attack Surfaces
 
 1. **Hook Script Tampering:**
-    - Risk: Agent or user modifies hook script
-    - Mitigation: Immutable hooks (`chattr +i` on Linux)
+   - Risk: Agent or user modifies hook script
+   - Mitigation: Immutable hooks (`chattr +i` on Linux)
 
 2. **Hook Registration Bypass:**
-    - Risk: Agent modifies settings to disable hooks
-    - Mitigation: Immutable configuration files
+   - Risk: Agent modifies settings to disable hooks
+   - Mitigation: Immutable configuration files
 
 3. **Indirect Command Execution:**
-    - Risk: Agent bypasses detection by building command dynamically
-    - Mitigation: Detect multi-step destructive patterns
+   - Risk: Agent bypasses detection by building command dynamically
+   - Mitigation: Detect multi-step destructive patterns
 
 4. **File-Based Data Exfiltration:**
-    - Risk: Agent writes sensitive data to files, then exfiltrates
-    - Mitigation: Egress hooks for git push, curl, scp
+   - Risk: Agent writes sensitive data to files, then exfiltrates
+   - Mitigation: Egress hooks for git push, curl, scp
 
 5. **Tool Input Validation Bypass:**
-    - Risk: Malformed JSON breaks hook parsing
-    - Mitigation: Robust JSON parsing and validation
+   - Risk: Malformed JSON breaks hook parsing
+   - Mitigation: Robust JSON parsing and validation
 
 6. **Race Conditions:**
-    - Risk: Time-of-check to time-of-use (TOCTOU) vulnerabilities
-    - Mitigation: Lock-based atomic operations
+   - Risk: Time-of-check to time-of-use (TOCTOU) vulnerabilities
+   - Mitigation: Lock-based atomic operations
 
 7. **False Sense of Security:**
-    - Risk: Hooks provide incomplete protection
-    - Mitigation: Defense in depth (combine with sandboxing, egress filtering, human oversight)
+   - Risk: Hooks provide incomplete protection
+   - Mitigation: Defense in depth (combine with sandboxing, egress filtering, human oversight)
 
 ### Real-World Failures
 
@@ -1515,33 +1472,33 @@ check_exfiltration_attempt() {
 **Common Patterns in Failures:**
 
 1. **Lack of Validation Layer:**
-    - Agent makes decisions in isolation
-    - No external safety checks before execution
-    - Single point of failure in model reasoning
+   - Agent makes decisions in isolation
+   - No external safety checks before execution
+   - Single point of failure in model reasoning
 
 2. **Context Blindness:**
-    - Agent doesn't distinguish production vs. test
-    - No awareness of irreversible consequences
-    - Missing environmental context
+   - Agent doesn't distinguish production vs. test
+   - No awareness of irreversible consequences
+   - Missing environmental context
 
 3. **Insufficient Human Oversight:**
-    - No approval gates for high-risk operations
-    - Automated actions without verification
-    - Missing audit trails
+   - No approval gates for high-risk operations
+   - Automated actions without verification
+   - Missing audit trails
 
 4. **Natural Language Vulnerabilities:**
-    - Prompt injection exploits language understanding
-    - Model can be persuaded to bypass safety
-    - Ambiguous instructions lead to unintended actions
+   - Prompt injection exploits language understanding
+   - Model can be persuaded to bypass safety
+   - Ambiguous instructions lead to unintended actions
 
 **How Hooks Address These Issues:**
 
-| Failure Pattern     | Hook-Based Solution                          |
-|---------------------|----------------------------------------------|
-| No validation layer | PreToolUse hooks validate before execution   |
-| Context blindness   | Environment-aware hooks check prod/test/dev  |
-| No human oversight  | Hooks require approval for dangerous actions |
-| Prompt injection    | Hooks process JSON, not natural language     |
+| Failure Pattern | Hook-Based Solution |
+|----------------|---------------------|
+| No validation layer | PreToolUse hooks validate before execution |
+| Context blindness | Environment-aware hooks check prod/test/dev |
+| No human oversight | Hooks require approval for dangerous actions |
+| Prompt injection | Hooks process JSON, not natural language |
 
 ### Performance Considerations
 
@@ -1761,34 +1718,34 @@ should_run_expensive_hook() {
 #### Key Technical Insights
 
 1. **Hook Architecture Provides Strong Security Properties:**
-    - Process isolation prevents prompt injection
-    - Deterministic shell scripts are auditable
-    - Event-driven design allows flexible composition
-    - Language-agnostic implementation works across frameworks
+   - Process isolation prevents prompt injection
+   - Deterministic shell scripts are auditable
+   - Event-driven design allows flexible composition
+   - Language-agnostic implementation works across frameworks
 
 2. **Four Core Guard Rails Address Major Failure Modes:**
-    - **Dangerous command blocker**: Prevents destructive operations
-    - **Syntax checker**: Catches errors early, prevents cascading failures
-    - **Context window monitor**: Prevents silent context overflow failures
-    - **Autonomous decision enforcer**: Prevents unattended agent hesitation
+   - **Dangerous command blocker**: Prevents destructive operations
+   - **Syntax checker**: Catches errors early, prevents cascading failures
+   - **Context window monitor**: Prevents silent context overflow failures
+   - **Autonomous decision enforcer**: Prevents unattended agent hesitation
 
 3. **Implementation Trade-offs:**
-    - Pattern matching is fast but incomplete (false negatives possible)
-    - Syntax checking adds latency but prevents wasted iterations
-    - Context monitoring via tool counting is approximate but practical
-    - Hook security depends on proper file permissions and immutable storage
+   - Pattern matching is fast but incomplete (false negatives possible)
+   - Syntax checking adds latency but prevents wasted iterations
+   - Context monitoring via tool counting is approximate but practical
+   - Hook security depends on proper file permissions and immutable storage
 
 4. **Performance Impact is Minimal:**
-    - Hooks add 1-5% overhead to typical agent loops
-    - Most expensive checks (syntax) run in <500ms
-    - Asynchronous processing can eliminate blocking
-    - Caching and incremental checking optimize hot paths
+   - Hooks add 1-5% overhead to typical agent loops
+   - Most expensive checks (syntax) run in <500ms
+   - Asynchronous processing can eliminate blocking
+   - Caching and incremental checking optimize hot paths
 
 5. **Defense in Depth is Essential:**
-    - Hooks alone cannot prevent all attacks
-    - Combine with sandboxing, egress filtering, and human oversight
-    - Regular testing with adversarial inputs
-    - Continuous monitoring for false negatives/positives
+   - Hooks alone cannot prevent all attacks
+   - Combine with sandboxing, egress filtering, and human oversight
+   - Regular testing with adversarial inputs
+   - Continuous monitoring for false negatives/positives
 
 #### Recommendations
 

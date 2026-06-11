@@ -28,16 +28,11 @@ updated_at: '2026-01-13'
 
 ## Problem
 
-Agents introduce **non-determinism**—the same input can produce different outputs. When agents do something sub-optimal,
-users flag it as a "bug" even if it's just prompt ambiguity. Debugging these issues requires tracing through complex
-multi-step workflows, but standard logging (CloudWatch, Lambda logs) is painful to navigate. Engineers need easy access
-to workflow execution details to debug quickly, or agents won't get adopted.
+Agents introduce **non-determinism**—the same input can produce different outputs. When agents do something sub-optimal, users flag it as a "bug" even if it's just prompt ambiguity. Debugging these issues requires tracing through complex multi-step workflows, but standard logging (CloudWatch, Lambda logs) is painful to navigate. Engineers need easy access to workflow execution details to debug quickly, or agents won't get adopted.
 
 ## Solution
 
-Integrate **LLM observability platforms** (Datadog LLM Observability, LangSmith, etc.) that provide **span-level tracing
-** of agent workflows. Instead of spelunking through raw logs, get a visual UI showing each step of the agent's
-execution.
+Integrate **LLM observability platforms** (Datadog LLM Observability, LangSmith, etc.) that provide **span-level tracing** of agent workflows. Instead of spelunking through raw logs, get a visual UI showing each step of the agent's execution.
 
 **Key capabilities:**
 
@@ -122,13 +117,10 @@ def run_agent(query):
 
 ## References
 
-* [Building an internal agent: Logging and debugability](https://lethain.com/agents-logging/) - Will Larson (Imprint,
-  2025)
+* [Building an internal agent: Logging and debugability](https://lethain.com/agents-logging/) - Will Larson (Imprint, 2025)
 * [Chain of Thought Monitoring](https://openai.com/research/thought-monitoring) - OpenAI Research (March 2025)
-* [ESAA: Event Sourcing for Autonomous Agents](https://arxiv.org/abs/2602.23193v1) - Elzo Brito dos Santos Filho et
-  al. (February 2026)
-* [Chain of Thought Monitorability: A Fragile Opportunity](https://arxiv.org/abs/2510.19476) - Korbak et al. (October
-  2025)
+* [ESAA: Event Sourcing for Autonomous Agents](https://arxiv.org/abs/2602.23193v1) - Elzo Brito dos Santos Filho et al. (February 2026)
+* [Chain of Thought Monitorability: A Fragile Opportunity](https://arxiv.org/abs/2510.19476) - Korbak et al. (October 2025)
 * Datadog LLM Observability documentation
 * LangSmith documentation
 * Related: Agent-First Tooling and Logging, Chain-of-Thought Monitoring & Interruption

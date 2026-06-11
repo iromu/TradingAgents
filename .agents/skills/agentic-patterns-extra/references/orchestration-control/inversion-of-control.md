@@ -22,21 +22,15 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-Prompt-as-puppeteer workflows force humans to micromanage each step, turning agents into expensive autocomplete tools.
-This limits throughput, creates brittle instructions that break on small context changes, and prevents agents from using
-their own planning capability.
+Prompt-as-puppeteer workflows force humans to micromanage each step, turning agents into expensive autocomplete tools. This limits throughput, creates brittle instructions that break on small context changes, and prevents agents from using their own planning capability.
 
 ## Solution
 
-Give the agent tools and a clear high-level objective, then let it own execution strategy inside explicit guardrails.
-Humans define intent, constraints, and review criteria; the agent decides sequencing, decomposition, and local recovery
-steps.
+Give the agent tools and a clear high-level objective, then let it own execution strategy inside explicit guardrails. Humans define intent, constraints, and review criteria; the agent decides sequencing, decomposition, and local recovery steps.
 
-This implements a three-layer architecture: Policy Layer (human-defined objectives and constraints), Control Layer (
-automated guardrail enforcement), and Execution Layer (agent-owned task decomposition and tool selection).
+This implements a three-layer architecture: Policy Layer (human-defined objectives and constraints), Control Layer (automated guardrail enforcement), and Execution Layer (agent-owned task decomposition and tool selection).
 
-This flips control from "human scripts every move" to "human sets policy, agent performs." The result is higher leverage
-while preserving oversight at critical checkpoints.
+This flips control from "human scripts every move" to "human sets policy, agent performs." The result is higher leverage while preserving oversight at critical checkpoints.
 
 ## Example (flow)
 
@@ -53,9 +47,7 @@ sequenceDiagram
 **Evidence Grade:** `high`
 
 **Most Valuable Findings:**
-
-- Academic validation from multiple 2025 papers (MI9 governance framework, Beurer-Kellner et al. security patterns)
-  confirms external control layers are essential for agent safety
+- Academic validation from multiple 2025 papers (MI9 governance framework, Beurer-Kellner et al. security patterns) confirms external control layers are essential for agent safety
 - Production implementations report 2-10x developer leverage gains through autonomous execution with guardrails
 
 ## How to use it

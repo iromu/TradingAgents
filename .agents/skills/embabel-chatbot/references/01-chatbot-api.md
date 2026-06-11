@@ -21,21 +21,21 @@ Configuration for how the LLM should respond. Set on `ChatSession` or per-reques
 
 ### Key Properties
 
-| Property           | Type                  | Default     | Description                                |
-|--------------------|-----------------------|-------------|--------------------------------------------|
-| `model`            | `String`              | from config | Model to use (e.g., "qwen-plus", "gpt-4o") |
-| `maxTokens`        | `Integer`             | from model  | Max tokens for the response                |
-| `temperature`      | `Double`              | 0.7         | Randomness: 0=deterministic, 1=creative    |
-| `topP`             | `Double`              | 1.0         | Nucleus sampling threshold                 |
-| `topK`             | `Integer`             | —           | Top-K sampling (model-dependent)           |
-| `presencePenalty`  | `Double`              | 0.0         | Penalize new tokens based on presence      |
-| `frequencyPenalty` | `Double`              | 0.0         | Penalize tokens based on frequency         |
-| `seed`             | `Long`                | —           | Seed for reproducible outputs              |
-| `stopSequences`    | `List<String>`        | —           | Sequences that stop generation             |
-| `responseFormat`   | `String`              | —           | "text" or "json"                           |
-| `thinking`         | `Boolean`             | false       | Enable reasoning/thinking mode             |
-| `thinkingBudget`   | `Integer`             | 1024        | Max tokens for thinking (if enabled)       |
-| `extraBody`        | `Map<String, Object>` | —           | Extra JSON body params for API             |
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `model` | `String` | from config | Model to use (e.g., "qwen-plus", "gpt-4o") |
+| `maxTokens` | `Integer` | from model | Max tokens for the response |
+| `temperature` | `Double` | 0.7 | Randomness: 0=deterministic, 1=creative |
+| `topP` | `Double` | 1.0 | Nucleus sampling threshold |
+| `topK` | `Integer` | — | Top-K sampling (model-dependent) |
+| `presencePenalty` | `Double` | 0.0 | Penalize new tokens based on presence |
+| `frequencyPenalty` | `Double` | 0.0 | Penalize tokens based on frequency |
+| `seed` | `Long` | — | Seed for reproducible outputs |
+| `stopSequences` | `List<String>` | — | Sequences that stop generation |
+| `responseFormat` | `String` | — | "text" or "json" |
+| `thinking` | `Boolean` | false | Enable reasoning/thinking mode |
+| `thinkingBudget` | `Integer` | 1024 | Max tokens for thinking (if enabled) |
+| `extraBody` | `Map<String, Object>` | — | Extra JSON body params for API |
 
 ### JSON Response Format
 

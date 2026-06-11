@@ -12,10 +12,7 @@
 
 ## Executive Summary
 
-The "Disposable Scaffolding Over Durable Features" pattern advocates treating most tooling and workflows built around AI
-models as temporary, lightweight scaffolding that should be easily discarded when new model capabilities render them
-obsolete. This pattern is based on "The Bitter Lesson" - that much complex scaffolding will eventually be absorbed into
-improved model capabilities.
+The "Disposable Scaffolding Over Durable Features" pattern advocates treating most tooling and workflows built around AI models as temporary, lightweight scaffolding that should be easily discarded when new model capabilities render them obsolete. This pattern is based on "The Bitter Lesson" - that much complex scaffolding will eventually be absorbed into improved model capabilities.
 
 **Key Findings:**
 - **Core Philosophy**: Separate durable business value from temporary model-specific workarounds
@@ -41,22 +38,21 @@ improved model capabilities.
 
 ### Core Concept
 
-The Disposable Scaffolding Over Durable Features pattern is an architectural philosophy for AI agent systems that
-explicitly distinguishes between:
+The Disposable Scaffolding Over Durable Features pattern is an architectural philosophy for AI agent systems that explicitly distinguishes between:
 
 1. **Durable Features**: Components providing unique business value that should be engineered for longevity
 2. **Disposable Scaffolding**: Temporary code and infrastructure compensating for current model limitations
 
 ### The Fundamental Separation
 
-| Dimension              | Durable Features                      | Disposable Scaffolding                 |
-|------------------------|---------------------------------------|----------------------------------------|
-| **Lifetime**           | Months to years                       | Days to months                         |
-| **Purpose**            | Unique business value                 | Compensating for model limitations     |
-| **Maintenance**        | Long-term investment                  | Expected to be discarded               |
-| **Complexity**         | As needed                             | Minimum viable                         |
-| **Examples**           | Domain knowledge, unique integrations | Context compression, custom toolchains |
-| **Evolution Strategy** | Continuous improvement                | Complete replacement                   |
+| Dimension | Durable Features | Disposable Scaffolding |
+|-----------|------------------|------------------------|
+| **Lifetime** | Months to years | Days to months |
+| **Purpose** | Unique business value | Compensating for model limitations |
+| **Maintenance** | Long-term investment | Expected to be discarded |
+| **Complexity** | As needed | Minimum viable |
+| **Examples** | Domain knowledge, unique integrations | Context compression, custom toolchains |
+| **Evolution Strategy** | Continuous improvement | Complete replacement |
 
 ### Design Principles
 
@@ -82,8 +78,7 @@ Before building complex tooling, ask: *"Will this be useful in 6 months when mod
 - **Authors**: IDC 2025 Conference
 - **arXiv ID**: 2505.03867v1
 - **Venue**: IDC 2025, Reykjavik, Iceland
-- **Key Finding**: Implements "supportive scaffolding mechanisms" for real-time ideation, code generation, debugging,
-  and asset creation
+- **Key Finding**: Implements "supportive scaffolding mechanisms" for real-time ideation, code generation, debugging, and asset creation
 - **Relevance**: Demonstrates AI scaffolding as temporary support structures in creative coding environments
 - **Link**: https://arxiv.org/abs/2505.03867v1
 
@@ -124,8 +119,7 @@ Before building complex tooling, ask: *"Will this be useful in 6 months when mod
 - **Authors**: Luca Beurer-Kellner et al. (DeepMind CaMeL)
 - **arXiv ID**: 2506.08837
 - **Focus**: Comprehensive framework for secure LLM agent execution through generated code
-- **Quote**: "Shifting from 'reasoning about actions' to 'compiling actions' into an inspectable artifact that can be
-  formally verified"
+- **Quote**: "Shifting from 'reasoning about actions' to 'compiling actions' into an inspectable artifact that can be formally verified"
 - **Relevance**: Demonstrates disposable code execution (ephemeral scripts) over durable tool interfaces
 - **Link**: https://arxiv.org/abs/2506.08837
 
@@ -153,8 +147,7 @@ Before building complex tooling, ask: *"Will this be useful in 6 months when mod
 - **Venue**: Artificial Intelligence, Vol. 42
 - **Focus**: Formal logical framework for mental states in artificial agents
 - **Quote**: "Intention is choice with commitment" - foundational for BDI architectures
-- **Relevance**: Provides theoretical foundation for understanding when to commit to durable features vs. maintain
-  flexible scaffolding
+- **Relevance**: Provides theoretical foundation for understanding when to commit to durable features vs. maintain flexible scaffolding
 - **Link**: https://doi.org/10.1016/0004-3702(90)90055-5
 
 ---
@@ -163,17 +156,12 @@ Before building complex tooling, ask: *"Will this be useful in 6 months when mod
 
 ### 1. Cloudflare - Code Mode Pattern
 
-**Implementation**: Cloudflare's Code Mode uses ephemeral V8 isolate execution for orchestrating multiple MCP tool
-calls.
+**Implementation**: Cloudflare's Code Mode uses ephemeral V8 isolate execution for orchestrating multiple MCP tool calls.
 
 **Key Features**:
-
-- **Ephemeral V8 Isolates**: Code executes in lightweight, secure sandboxes that die after execution ("write once,
-  vaporize immediately")
-- **Persistent Layer**: MCP servers handle durable concerns (credentials, rate limiting, webhook subscriptions,
-  connection pooling)
-- **Ephemeral Layer**: Code Mode handles temporary orchestration (multi-step workflows, data transformations, token
-  optimization)
+- **Ephemeral V8 Isolates**: Code executes in lightweight, secure sandboxes that die after execution ("write once, vaporize immediately")
+- **Persistent Layer**: MCP servers handle durable concerns (credentials, rate limiting, webhook subscriptions, connection pooling)
+- **Ephemeral Layer**: Code Mode handles temporary orchestration (multi-step workflows, data transformations, token optimization)
 
 **Technical Details**:
 - Schema discovery converts MCP tool schemas to TypeScript API interfaces
@@ -187,8 +175,7 @@ calls.
 
 ### 2. Cognition (Devin) - Isolated VM per RL Rollout
 
-**Implementation**: During reinforcement learning training, each rollout gets a dedicated isolated VM that's destroyed
-after completion.
+**Implementation**: During reinforcement learning training, each rollout gets a dedicated isolated VM that's destroyed after completion.
 
 **Key Features**:
 - **Rollout ID Tracking**: Each RL rollout receives unique ID mapped to dedicated VM
@@ -208,8 +195,7 @@ after completion.
 
 ### 3. Ramp - Custom Sandboxed Background Agent (Inspect)
 
-**Implementation**: Ramp built a custom background agent running in sandboxed environments using Modal for ephemeral,
-sandboxed dev environments.
+**Implementation**: Ramp built a custom background agent running in sandboxed environments using Modal for ephemeral, sandboxed dev environments.
 
 **Key Features**:
 - **Sandboxed Execution**: Uses infrastructure like Modal for ephemeral dev environments
@@ -219,8 +205,7 @@ sandboxed dev environments.
 
 **Technical Details**:
 - Agent runs with same context as developers: codebase, dependencies, dev tools
-- Two-instance kickoff pattern: Instance 1 (Scaffolding Agent) creates project skeleton, Instance 2 works on
-  implementation
+- Two-instance kickoff pattern: Instance 1 (Scaffolding Agent) creates project skeleton, Instance 2 works on implementation
 - 2-3 days of manual scaffolding reduced to 30 minutes
 
 **Source**: Ramp Engineering Blog - "Why We Built Our Own Background Agent"
@@ -229,8 +214,7 @@ sandboxed dev environments.
 
 ### 4. Testcontainers - Disposable Test Environments
 
-**Implementation**: Testcontainers provides disposable, lightweight instances of databases, message brokers, and other
-services for integration testing.
+**Implementation**: Testcontainers provides disposable, lightweight instances of databases, message brokers, and other services for integration testing.
 
 **Key Features**:
 - **Disposable Environments**: Each test gets fresh, isolated container instance
@@ -268,8 +252,7 @@ services for integration testing.
 
 ### 6. Bolt.new by StackBlitz - Browser-Based Disposable Environments
 
-**Implementation**: Browser-based development environment using WebContainers technology for zero-installation,
-ephemeral development.
+**Implementation**: Browser-based development environment using WebContainers technology for zero-installation, ephemeral development.
 
 **Key Features**:
 - **Zero Installation**: Works entirely in browser, no setup required
@@ -289,8 +272,7 @@ ephemeral development.
 
 ### 7. GitHub Actions - Ephemeral Runners
 
-**Implementation**: GitHub Actions supports ephemeral self-hosted runners that are automatically created and destroyed
-as needed.
+**Implementation**: GitHub Actions supports ephemeral self-hosted runners that are automatically created and destroyed as needed.
 
 **Key Features**:
 - **Automatic Scaling**: Runners created when jobs are queued, removed after jobs complete
@@ -309,8 +291,7 @@ as needed.
 
 ### 8. Modal - Serverless Ephemeral Compute
 
-**Implementation**: Modal provides serverless infrastructure for spinning up isolated containers that auto-destroy after
-execution.
+**Implementation**: Modal provides serverless infrastructure for spinning up isolated containers that auto-destroy after execution.
 
 **Key Features**:
 - **Fast Provisioning**: Containers spin up in seconds
@@ -330,8 +311,7 @@ execution.
 
 ### 9. v0.app (Vercel) - Ephemeral Full-Stack Generation
 
-**Implementation**: Natural language to full-stack application with one-click deployment and ephemeral preview
-environments.
+**Implementation**: Natural language to full-stack application with one-click deployment and ephemeral preview environments.
 
 **Key Features**:
 - **Instant Preview**: Real-time preview of generated applications
@@ -371,15 +351,15 @@ environments.
 
 ### Summary Table
 
-| Company/Project      | Pattern               | Ephemeral Component       | Durable Component         | Scale               |
-|----------------------|-----------------------|---------------------------|---------------------------|---------------------|
-| Cloudflare Code Mode | V8 Isolates           | Orchestration code        | MCP servers (credentials) | 10x token reduction |
-| Cognition (Devin)    | Isolated VMs          | Rollout VMs               | Production infrastructure | 500+ concurrent VMs |
-| Ramp Inspect         | Modal sandboxes       | Dev environments          | Codebase & tools          | 2-3 days → 30 min   |
-| Testcontainers       | Docker containers     | Test databases/services   | Test framework            | Per-test isolation  |
-| Cursor 2.0           | Git worktrees         | Parallel agent workspaces | Main codebase             | 8 parallel agents   |
-| Bolt.new             | WebContainers         | Browser dev environment   | StackBlitz platform       | 1M+ MAU             |
-| Modal                | Serverless containers | Function execution        | Modal platform            | Bursty traffic      |
+| Company/Project | Pattern | Ephemeral Component | Durable Component | Scale |
+|-----------------|---------|---------------------|-------------------|-------|
+| Cloudflare Code Mode | V8 Isolates | Orchestration code | MCP servers (credentials) | 10x token reduction |
+| Cognition (Devin) | Isolated VMs | Rollout VMs | Production infrastructure | 500+ concurrent VMs |
+| Ramp Inspect | Modal sandboxes | Dev environments | Codebase & tools | 2-3 days → 30 min |
+| Testcontainers | Docker containers | Test databases/services | Test framework | Per-test isolation |
+| Cursor 2.0 | Git worktrees | Parallel agent workspaces | Main codebase | 8 parallel agents |
+| Bolt.new | WebContainers | Browser dev environment | StackBlitz platform | 1M+ MAU |
+| Modal | Serverless containers | Function execution | Modal platform | Bursty traffic |
 
 ---
 
@@ -535,13 +515,13 @@ class ScaffoldingComponent:
 
 ### Common Technologies
 
-| Technology         | Startup Time | Isolation     | Use Case           | Disposal Mechanism      |
-|--------------------|--------------|---------------|--------------------|-------------------------|
-| Docker Containers  | 1-5s         | Process-level | Tool isolation     | Container stop + remove |
-| AWS Lambda         | <1s          | Execution env | Event-driven tasks | Function timeout        |
-| Cloudflare Workers | <100ms       | V8 isolate    | Edge logic         | Execution completion    |
-| E2B Sandboxes      | ~1s          | MicroVM       | Code execution     | Sandbox termination     |
-| Modal Functions    | <5s          | MicroVM       | ML workloads       | Function return         |
+| Technology | Startup Time | Isolation | Use Case | Disposal Mechanism |
+|------------|--------------|-----------|----------|-------------------|
+| Docker Containers | 1-5s | Process-level | Tool isolation | Container stop + remove |
+| AWS Lambda | <1s | Execution env | Event-driven tasks | Function timeout |
+| Cloudflare Workers | <100ms | V8 isolate | Edge logic | Execution completion |
+| E2B Sandboxes | ~1s | MicroVM | Code execution | Sandbox termination |
+| Modal Functions | <5s | MicroVM | ML workloads | Function return |
 
 ### Testing Strategies
 
@@ -581,13 +561,13 @@ class ScaffoldingTestSuite:
 
 ### Trade-offs and Considerations
 
-| Aspect             | Disposable Scaffolding Approach | Traditional Engineering     |
-|--------------------|---------------------------------|-----------------------------|
-| Development Speed  | Fast (simplest solution)        | Slower (robust design)      |
-| Code Quality       | Acceptable (temporary)          | High (maintainable)         |
-| Maintenance Burden | Low (planned disposal)          | High (long-term support)    |
-| Adaptability       | High (easy to replace)          | Low (rigid architecture)    |
-| Technical Debt     | Intentional, bounded            | Accumulates unintentionally |
+| Aspect | Disposable Scaffolding Approach | Traditional Engineering |
+|--------|----------------------------------|-------------------------|
+| Development Speed | Fast (simplest solution) | Slower (robust design) |
+| Code Quality | Acceptable (temporary) | High (maintainable) |
+| Maintenance Burden | Low (planned disposal) | High (long-term support) |
+| Adaptability | High (easy to replace) | Low (rigid architecture) |
+| Technical Debt | Intentional, bounded | Accumulates unintentionally |
 
 ### Anti-Patterns to Avoid
 
@@ -603,11 +583,8 @@ class ScaffoldingTestSuite:
 ### COMPLEMENTS
 
 #### Burn the Boats
-
-- **Relationship**: Both advocate for intentionally discarding or avoiding investment in features/workflows that will
-  become obsolete
-- **How they work together**: Disposable scaffolding provides the philosophy for building temporary solutions; Burn the
-  Boats provides the courage to actively kill working features
+- **Relationship**: Both advocate for intentionally discarding or avoiding investment in features/workflows that will become obsolete
+- **How they work together**: Disposable scaffolding provides the philosophy for building temporary solutions; Burn the Boats provides the courage to actively kill working features
 - **Key synergy**: Both reject "sunk cost fallacy" in AI development
 
 #### Factory over Assistant
@@ -621,13 +598,9 @@ class ScaffoldingTestSuite:
 ### CONFLICTS
 
 #### Compounding Engineering Pattern
-
-- **Relationship**: Fundamental tension - Compounding Engineering advocates codifying learnings into durable, reusable
-  artifacts
-- **Conflict**: Disposable scaffolding says "build temporary solutions"; Compounding Engineering says "build knowledge
-  that compounds"
-- **Resolution**: Some scaffolding should be durable (core domain knowledge), some disposable (model-specific
-  workarounds)
+- **Relationship**: Fundamental tension - Compounding Engineering advocates codifying learnings into durable, reusable artifacts
+- **Conflict**: Disposable scaffolding says "build temporary solutions"; Compounding Engineering says "build knowledge that compounds"
+- **Resolution**: Some scaffolding should be durable (core domain knowledge), some disposable (model-specific workarounds)
 
 #### Codebase Optimization for Agents
 - **Relationship**: Partial tension - Codebase optimization encourages permanent changes to support agents
@@ -671,14 +644,11 @@ class ScaffoldingTestSuite:
 
 **Problem**: Early 2024 models had 32k-100k context windows. Teams built complex context compression and RAG systems.
 
-**Disposable Scaffolding Approach**: Built minimal compression with explicit disposal trigger: "Remove when context
-window >= 200k"
+**Disposable Scaffolding Approach**: Built minimal compression with explicit disposal trigger: "Remove when context window >= 200k"
 
-**Outcome**: By late 2024, models had 200k+ context windows. The compression scaffolding was removed, saving maintenance
-overhead.
+**Outcome**: By late 2024, models had 200k+ context windows. The compression scaffolding was removed, saving maintenance overhead.
 
-**Lesson**: The compression system was valuable for 6 months, but treating it as durable would have wasted engineering
-resources.
+**Lesson**: The compression system was valuable for 6 months, but treating it as durable would have wasted engineering resources.
 
 ---
 
@@ -688,8 +658,7 @@ resources.
 
 **Disposable Scaffolding Approach**: Built simple orchestration with strategy pattern for easy replacement.
 
-**Outcome**: Newer models (Claude 3.5 Sonnet, GPT-4o) handle multi-step reasoning natively. Orchestration layer
-simplified significantly.
+**Outcome**: Newer models (Claude 3.5 Sonnet, GPT-4o) handle multi-step reasoning natively. Orchestration layer simplified significantly.
 
 **Lesson**: Tool orchestration scaffolding should be designed for easy removal, not treated as core infrastructure.
 
@@ -704,8 +673,7 @@ simplified significantly.
 - Instance 2 (Implementation Agent): Works on actual features - durable value
 - Used Modal sandboxes that auto-destroy after completion
 
-**Outcome**: Reduced scaffolding time from 2-3 days to 30 minutes. Scaffolding agent can be completely replaced as
-models improve.
+**Outcome**: Reduced scaffolding time from 2-3 days to 30 minutes. Scaffolding agent can be completely replaced as models improve.
 
 **Lesson**: Separate the scaffolding generation (disposable) from the actual feature implementation (durable).
 
@@ -715,44 +683,41 @@ models improve.
 
 ### Key Insights
 
-1. **The Bitter Lesson Applies**: Much complex AI scaffolding will be absorbed into improved model capabilities within
-   6-12 months.
+1. **The Bitter Lesson Applies**: Much complex AI scaffolding will be absorbed into improved model capabilities within 6-12 months.
 
 2. **Categorization is Critical**: Not everything should be disposable. Durable investments include:
-    - Unique business logic
-    - Domain expertise
-    - Customer-specific integrations
-    - Core value propositions
+   - Unique business logic
+   - Domain expertise
+   - Customer-specific integrations
+   - Core value propositions
 
 3. **Explicit Disposability**: Make temporary nature visible through:
-    - Clear naming conventions
-    - Documented disposal triggers
-    - Architectural separation
-    - Monitoring for removal eligibility
+   - Clear naming conventions
+   - Documented disposal triggers
+   - Architectural separation
+   - Monitoring for removal eligibility
 
-4. **Economic Framework**: Use the 6-month test and cost-benefit analysis to decide between durable vs. disposable
-   investments.
+4. **Economic Framework**: Use the 6-month test and cost-benefit analysis to decide between durable vs. disposable investments.
 
 ### Implementation Recommendations
 
 1. **Apply the 6-Month Test**: Before building complex tooling, ask if it will be useful in 6 months
 2. **Design for Disposal**: Build scaffolding that's easy to remove, not just minimal
 3. **Layer Your Approach**:
-    - Durable layer: Core value proposition, domain expertise
-    - Disposable layer: Model-specific optimizations, temporary workarounds
+   - Durable layer: Core value proposition, domain expertise
+   - Disposable layer: Model-specific optimizations, temporary workarounds
 4. **Monitor and Measure**: Track metrics to determine when scaffolding can be removed
-5. **Balance with Compounding Engineering**: Some knowledge should compound (patterns, standards), some should be
-   discarded (model workarounds)
+5. **Balance with Compounding Engineering**: Some knowledge should compound (patterns, standards), some should be discarded (model workarounds)
 
 ### Strategic Considerations
 
-| When to Use Disposable Scaffolding    | When to Invest in Durable Features |
-|---------------------------------------|------------------------------------|
-| Model-specific workarounds            | Unique business logic              |
-| Generic tasks (file editing, parsing) | Customer-specific integrations     |
-| Rapidly evolving capabilities         | Core value propositions            |
-| Compensation for current limitations  | Domain expertise                   |
-| Temporary optimizations               | Long-term competitive advantages   |
+| When to Use Disposable Scaffolding | When to Invest in Durable Features |
+|-------------------------------------|--------------------------------------|
+| Model-specific workarounds | Unique business logic |
+| Generic tasks (file editing, parsing) | Customer-specific integrations |
+| Rapidly evolving capabilities | Core value propositions |
+| Compensation for current limitations | Domain expertise |
+| Temporary optimizations | Long-term competitive advantages |
 
 ### Future Research
 

@@ -9,8 +9,7 @@
 
 ## Overview
 
-This pattern involves intelligently routing AI model requests based on budget constraints with hard cost caps - ensuring
-that spending never exceeds predefined limits regardless of other factors.
+This pattern involves intelligently routing AI model requests based on budget constraints with hard cost caps - ensuring that spending never exceeds predefined limits regardless of other factors.
 
 ## Research Areas
 
@@ -27,12 +26,10 @@ that spending never exceeds predefined limits regardless of other factors.
 - Establishes the foundational framework for **LLM cascading** as a cost optimization strategy
 - Demonstrates that querying different LLM APIs can differ in cost by **up to two orders of magnitude**
 - Introduces three core strategies: prompt adaptation, LLM approximation, and **LLM cascading**
-- **Results**: Can match GPT-4 performance while reducing costs by up to **98%**, or achieve 4% higher accuracy at the
-  same cost
+- **Results**: Can match GPT-4 performance while reducing costs by up to **98%**, or achieve 4% higher accuracy at the same cost
 - Provides the theoretical basis for budget-aware model selection through strategic routing
 
-**Relevance to Hard Cost Caps**: While primarily focused on cost reduction, establishes the cascade routing paradigm
-that can be combined with hard budget constraints.
+**Relevance to Hard Cost Caps**: While primarily focused on cost reduction, establishes the cascade routing paradigm that can be combined with hard budget constraints.
 
 ---
 
@@ -44,21 +41,19 @@ that can be combined with hard budget constraints.
 **Key Contributions**:
 - Implements **Service Level Agreement (SLA) aware routing** using Lagrangian Reinforcement Learning
 - Provides **multi-objective optimization** that allows operators to set:
-    - **Accuracy floors** (minimum quality thresholds)
-    - **Cost ceilings** (maximum spending limits)
+  - **Accuracy floors** (minimum quality thresholds)
+  - **Cost ceilings** (maximum spending limits)
 - Introduces **cost-adaptive routing** where model costs are treated as runtime inputs, not static parameters
 - Jointly optimizes accuracy, cost, and response time
 - Discusses **reasoning-aware routing** that extends optimization to select both models and allocate reasoning budgets
 
-**Relevance to Hard Cost Caps**: Directly addresses hard cost caps through "cost ceilings" in the SLA specification,
-using constrained reinforcement learning (Lagrangian methods) to enforce spending limits while maximizing performance.
+**Relevance to Hard Cost Caps**: Directly addresses hard cost caps through "cost ceilings" in the SLA specification, using constrained reinforcement learning (Lagrangian methods) to enforce spending limits while maximizing performance.
 
 ---
 
 #### 3. RouteLLM: Learning to Route LLMs with Preference Data (2024)
 
-**Authors**: Isaac Ong, Amjad Almahairi, Vincent Wu, Wei-Lin Chiang, Tianhao Wu, Joseph E. Gonzalez, M. Waleed Kadous,
-Ion Stoica
+**Authors**: Isaac Ong, Amjad Almahairi, Vincent Wu, Wei-Lin Chiang, Tianhao Wu, Joseph E. Gonzalez, M. Waleed Kadous, Ion Stoica
 **Institutions**: UC Berkeley, CMU, Stanford
 **Published**: ICLR 2024
 **arXiv**: [2406.18665](https://arxiv.org/abs/2406.18665)
@@ -67,14 +62,12 @@ Ion Stoica
 - Learns intelligent routing between "strong" (expensive) and "weak" (cheap) models based on **human preference data**
 - Uses **80k battle data from Chatbot Arena** for training
 - Implements three classifier architectures:
-    - **Matrix Factorization Method**: Uses recommendation system techniques to reveal hidden scoring functions
-    - **BERT Classifier**: Full-parameter fine-tuning for query routing decisions
-    - **Causal LLM Classifier**: Parameterized Llama 3 models with instruction-following to predict win rates
-- Cost-aware routing: predicts probability that stronger model outperforms weaker model, then uses **cost thresholds**
-  for routing decisions
+  - **Matrix Factorization Method**: Uses recommendation system techniques to reveal hidden scoring functions
+  - **BERT Classifier**: Full-parameter fine-tuning for query routing decisions
+  - **Causal LLM Classifier**: Parameterized Llama 3 models with instruction-following to predict win rates
+- Cost-aware routing: predicts probability that stronger model outperforms weaker model, then uses **cost thresholds** for routing decisions
 
-**Relevance to Hard Cost Caps**: Establishes threshold-based routing that can be adapted to enforce hard cost caps by
-adjusting routing thresholds based on remaining budget.
+**Relevance to Hard Cost Caps**: Establishes threshold-based routing that can be adapted to enforce hard cost caps by adjusting routing thresholds based on remaining budget.
 
 ---
 
@@ -96,8 +89,7 @@ adjusting routing thresholds based on remaining budget.
 - Addresses practical constraints and failure modes of learned routing
 - Focuses on the **cost-performance Pareto frontier**
 
-**Relevance to Hard Cost Caps**: Provides a production-ready framework for cost-aware routing with explicit cost
-penalties in the reward function, enabling enforcement of hard budget constraints through RL training.
+**Relevance to Hard Cost Caps**: Provides a production-ready framework for cost-aware routing with explicit cost penalties in the reward function, enabling enforcement of hard budget constraints through RL training.
 
 ---
 
@@ -112,14 +104,12 @@ penalties in the reward function, enabling enforcement of hard budget constraint
 - Introduces **token budget constraints** to optimize LLM inference
 - **Dynamically adjusts reasoning token quantities** based on question complexity
 - Two implementation approaches:
-    - **TALE-EP**: Estimation & Prompting (zero-shot prompting)
-    - **TALE-PT**: Post-Training approach
+  - **TALE-EP**: Estimation & Prompting (zero-shot prompting)
+  - **TALE-PT**: Post-Training approach
 - Results: Reduces Chain-of-Thought reasoning token costs while maintaining reasoning accuracy
-- Addresses **token elasticity**: the phenomenon where excessive budget constraints can paradoxically increase token
-  usage
+- Addresses **token elasticity**: the phenomenon where excessive budget constraints can paradoxically increase token usage
 
-**Relevance to Hard Cost Caps**: Provides techniques for enforcing hard token budget constraints during inference, with
-automatic fallback and degradation strategies when budgets are exceeded.
+**Relevance to Hard Cost Caps**: Provides techniques for enforcing hard token budget constraints during inference, with automatic fallback and degradation strategies when budgets are exceeded.
 
 ---
 
@@ -136,8 +126,7 @@ automatic fallback and degradation strategies when budgets are exceeded.
 - Evaluates performance-cost tradeoffs using **AUC metrics**
 - Generalizes single-round routing to multi-round cascading
 
-**Relevance to Hard Cost Caps**: Provides a unified framework for both routing and cascading under budget constraints,
-enabling more sophisticated budget enforcement across multiple routing decisions.
+**Relevance to Hard Cost Caps**: Provides a unified framework for both routing and cascading under budget constraints, enabling more sophisticated budget enforcement across multiple routing decisions.
 
 ---
 
@@ -152,11 +141,10 @@ enabling more sophisticated budget enforcement across multiple routing decisions
 - Addresses "exploration space collapse" in efficiency-oriented training
 - Implements **hierarchical budget exploration** strategies
 - Results:
-    - Up to **60.6% reduction** in average token usage
-    - **3.14% improvement** in accuracy across four reasoning benchmarks
+  - Up to **60.6% reduction** in average token usage
+  - **3.14% improvement** in accuracy across four reasoning benchmarks
 
-**Relevance to Hard Cost Caps**: Demonstrates that budget-aware training can actually improve both efficiency AND
-accuracy, providing strong evidence for the effectiveness of hard budget constraints.
+**Relevance to Hard Cost Caps**: Demonstrates that budget-aware training can actually improve both efficiency AND accuracy, providing strong evidence for the effectiveness of hard budget constraints.
 
 ### Industry Implementations
 
@@ -255,14 +243,14 @@ response = openai.ChatCompletion.create(...)
 
 #### Additional Notable Implementations
 
-| Platform                | Type        | Key Feature                    |
-|-------------------------|-------------|--------------------------------|
-| LLMRouter (UIUC)        | Open source | 16+ routing strategies         |
-| LangChain               | Framework   | Callback-based cost tracking   |
-| Anthropic Prompt Router | Service     | Sonnet/Haiku routing           |
-| CascadeFlow             | Open source | Cascading model selection      |
-| GitHub Models           | Enterprise  | Budget controls                |
-| BATS Framework          | Research    | Budget-aware test-time scaling |
+| Platform | Type | Key Feature |
+|----------|------|-------------|
+| LLMRouter (UIUC) | Open source | 16+ routing strategies |
+| LangChain | Framework | Callback-based cost tracking |
+| Anthropic Prompt Router | Service | Sonnet/Haiku routing |
+| CascadeFlow | Open source | Cascading model selection |
+| GitHub Models | Enterprise | Budget controls |
+| BATS Framework | Research | Budget-aware test-time scaling |
 
 **Common Implementation Patterns**:
 1. **Drop-in SDK Patching** - Automatic interception of API calls
@@ -282,10 +270,8 @@ response = openai.ChatCompletion.create(...)
 
 **1. Failover-Aware Model Fallback**
 - **Relationship**: Handles model unavailability and service failures in a routing context
-- **Complementarity**: While budget-aware routing handles cost constraints, failover-aware fallback handles reliability
-  constraints
-- **Synergy**: The failover pattern's intelligent error classification (billing, auth, rate_limit) aligns perfectly with
-  budget-aware routing's need to detect actual cost issues vs. transient failures
+- **Complementarity**: While budget-aware routing handles cost constraints, failover-aware fallback handles reliability constraints
+- **Synergy**: The failover pattern's intelligent error classification (billing, auth, rate_limit) aligns perfectly with budget-aware routing's need to detect actual cost issues vs. transient failures
 
 **2. Oracle and Worker Multi-Model Approach**
 - **Relationship**: Explicitly separates high-cost reasoning models from cost-effective execution models
@@ -304,8 +290,7 @@ response = openai.ChatCompletion.create(...)
 
 **5. Adaptive Sandbox Fan-Out Controller**
 - **Relationship**: Manages parallel execution with cost constraints
-- **Complementarity**: Enforces budget guardrails for parallel execution, complementing the per-request cost caps in
-  budget-aware routing
+- **Complementarity**: Enforces budget guardrails for parallel execution, complementing the per-request cost caps in budget-aware routing
 
 **6. LLM Observability**
 - **Relationship**: Provides visibility into model performance and costs
@@ -315,8 +300,7 @@ response = openai.ChatCompletion.create(...)
 
 **7. Action-Selector Pattern**
 - **Relationship**: Constrains agent actions to a pre-approved allowlist
-- **Complementarity**: While budget-aware routing constrains model selection, action-selector constrains the actions
-  that can be taken
+- **Complementarity**: While budget-aware routing constrains model selection, action-selector constrains the actions that can be taken
 - **Synergy**: Both use allowlist-based approaches to reduce risk (cost risk vs. security risk)
 
 **8. Context-Minimization Pattern**

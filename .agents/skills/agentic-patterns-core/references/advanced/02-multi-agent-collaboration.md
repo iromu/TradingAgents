@@ -1,8 +1,6 @@
 # Multi-Agent Collaboration Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -83,11 +81,8 @@ class Coordinator:
 ## Real-World Examples
 
 1. **News Production**: Gatherer → Fact Checker → Writer → Editor → SEO → Publisher
-2. **Investment Analysis**: Market Data → Fundamental Analysis → Technical Analysis → Risk Assessment → Report
-   Generator → Compliance
+2. **Investment Analysis**: Market Data → Fundamental Analysis → Technical Analysis → Risk Assessment → Report Generator → Compliance
 3. **E-commerce Launch**: Market Research → Product Description → Pricing → Inventory → Marketing → Customer Service
-4. **Legal Review**: Document Parser → Clause Analysis → Risk Identifier → Compliance Checker → Summary Generator →
-   Recommendation
+4. **Legal Review**: Document Parser → Clause Analysis → Risk Identifier → Compliance Checker → Summary Generator → Recommendation
 5. **Bug Resolution**: Bug Triage → Code Analysis → Solution Designer → Implementation → Testing → Documentation
-6. **Academic Review**: Literature Review → Methodology Critic → Statistical Validator → Writing Quality → Citation
-   Checker → Summary Writer
+6. **Academic Review**: Literature Review → Methodology Critic → Statistical Validator → Writing Quality → Citation Checker → Summary Writer

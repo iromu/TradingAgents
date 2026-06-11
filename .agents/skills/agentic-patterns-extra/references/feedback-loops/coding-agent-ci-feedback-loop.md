@@ -10,9 +10,7 @@ tags: [CI, coding-agent, asynchronous, test-driven, feedback]
 
 ## Problem
 
-When a coding agent tackles multi-file refactors or feature additions, running tests and waiting for test feedback *
-*synchronously** ties up compute and prevents the agent from working on parallel tasks. The agent cannot easily improve
-code if it must halt until the entire suite finishes.
+When a coding agent tackles multi-file refactors or feature additions, running tests and waiting for test feedback **synchronously** ties up compute and prevents the agent from working on parallel tasks. The agent cannot easily improve code if it must halt until the entire suite finishes.
 
 - Traditional CI loops block further edits; the agent "babysits" the build until tests pass.
 - Long test suites introduce idle periods, leading to underutilized GPUs and inflated RL training times.
@@ -22,18 +20,14 @@ code if it must halt until the entire suite finishes.
 Run the coding agent **asynchronously** against CI (local or remote), allowing it to:
 
 **1. Push a Branch & Trigger Tests**
-
-- When the agent proposes a patch, it commits to a branch and triggers the CI pipeline (e.g.,
-  `git push && github_action_run`).
+- When the agent proposes a patch, it commits to a branch and triggers the CI pipeline (e.g., `git push && github_action_run`).
 
 **2. Ingest Partial CI Feedback**
 - As tests begin, the agent periodically polls CI results.
 - **Failed Tests Partial Report:** Receive a small subset of failures (e.g., 10% of failures flagged first).
 
 **3. Iterative Patch Refinement**
-
-- Use CI outputs as **machine-readable feedback**: test failures, compilation errors, linting issues, type errors, and
-  security scan results.
+- Use CI outputs as **machine-readable feedback**: test failures, compilation errors, linting issues, type errors, and security scan results.
 - Agent autonomously applies fixes to specific files or functions without human intervention.
 - Enforce a **retry budget** (max attempts + runtime limits) to prevent infinite churn.
 
@@ -57,33 +51,28 @@ sequenceDiagram
 
 ## How to use it
 
-- **CI Integration:** Provide the agent with a CLI or API key to push branches and trigger tests (e.g., via GitHub
-  Actions or Jenkins).
-- **Error Parsing Modules:** Implement a small parser that translates CI logs into structured diagnostics (e.g.,
-  `{file: "auth.py", line: 42, error: "Expected status 200"}`).
+- **CI Integration:** Provide the agent with a CLI or API key to push branches and trigger tests (e.g., via GitHub Actions or Jenkins).
+- **Error Parsing Modules:** Implement a small parser that translates CI logs into structured diagnostics (e.g., `{file: "auth.py", line: 42, error: "Expected status 200"}`).
 - **Prioritized Test Runs:** When re-running, only run tests in files that were patched, to reduce CI time.
 - **Best Practices:**
-    - Use **draft PRs** by default for safety.
-    - Enable **partial feedback** ingestion to start fixing before full CI completes.
-    - Add **human-in-the-loop** for high-risk changes.
+  - Use **draft PRs** by default for safety.
+  - Enable **partial feedback** ingestion to start fixing before full CI completes.
+  - Add **human-in-the-loop** for high-risk changes.
 
 ## Trade-offs
 
 - **Pros:**
-    - **Compute Efficiency:** Overlaps code generation and test runs across multiple agents or branches.
-    - **Faster Iteration:** Agent spends less time waiting and more time generating code.
-    - **Autonomy:** Reduces need for human intervention until final green.
+  - **Compute Efficiency:** Overlaps code generation and test runs across multiple agents or branches.
+  - **Faster Iteration:** Agent spends less time waiting and more time generating code.
+  - **Autonomy:** Reduces need for human intervention until final green.
 - **Cons/Considerations:**
-    - **CI Flakiness:** Intermittent test failures can mislead the agent into unnecessary patches unless flakiness
-      detection is in place.
-    - **Security:** Agent requires permission to push and read CI logs, which may expose sensitive data if
-      misconfigured.
+  - **CI Flakiness:** Intermittent test failures can mislead the agent into unnecessary patches unless flakiness detection is in place.
+  - **Security:** Agent requires permission to push and read CI logs, which may expose sensitive data if misconfigured.
 
 ## References
 
 - Inspired by "Background Agent with CI Feedback" pattern, adapted for coding-specific workflows.
 - Will Brown's emphasis on **asynchronous pipelines** to avoid idle compute bubbles.
-- GitHub Agentic Workflows (Technical Preview 2026): Markdown-authored agents that auto-triage CI failures within GitHub
-  Actions.
+- GitHub Agentic Workflows (Technical Preview 2026): Markdown-authored agents that auto-triage CI failures within GitHub Actions.
 
 - Primary source: https://www.youtube.com/watch?v=Xkwok_XXQgw

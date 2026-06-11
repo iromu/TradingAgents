@@ -39,9 +39,7 @@ Traditional RAG approaches add complexity that may not be necessary with modern 
 
 ## Solution
 
-Replace vector search with **agentic search** using bash, grep, file traversal, and other command-line tools. Modern
-LLMs are skilled enough at using search tools iteratively to achieve comparable accuracy without the maintenance burden
-of vector indices.
+Replace vector search with **agentic search** using bash, grep, file traversal, and other command-line tools. Modern LLMs are skilled enough at using search tools iteratively to achieve comparable accuracy without the maintenance burden of vector indices.
 
 **Key approach:**
 
@@ -108,8 +106,6 @@ Claude Code initially used vector embeddings but switched to pure agentic search
 
 ## References
 
-* Cat Wu (Anthropic): "We did use vector embeddings initially. They're really tricky to maintain because you have to
-  continuously re-index... Claude is really good at agentic search. You can get to the same accuracy level with agentic
-  search and it's just a much cleaner deployment story."
+* Cat Wu (Anthropic): "We did use vector embeddings initially. They're really tricky to maintain because you have to continuously re-index... Claude is really good at agentic search. You can get to the same accuracy level with agentic search and it's just a much cleaner deployment story."
 * Cat Wu: "If you do want to bring semantic search to Claude Code, you can do so via an MCP tool."
 * [AI & I Podcast: How to Use Claude Code Like the People Who Built It](https://every.to/podcast/transcript-how-to-use-claude-code-like-the-people-who-built-it)

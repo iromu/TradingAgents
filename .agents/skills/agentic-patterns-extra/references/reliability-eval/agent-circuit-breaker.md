@@ -23,25 +23,19 @@ updated_at: "2026-03-26"
 
 ## Problem
 
-Agents that use external tools — APIs, databases, web scrapers, code executors — face a common failure mode: a tool
-endpoint becomes degraded or unavailable, and the agent **keeps calling it**, burning tokens on retries that will never
-succeed.
+Agents that use external tools — APIs, databases, web scrapers, code executors — face a common failure mode: a tool endpoint becomes degraded or unavailable, and the agent **keeps calling it**, burning tokens on retries that will never succeed.
 
 This creates three cascading problems:
 
-- **Token waste**: Each failed tool call costs input/output tokens, and the agent often generates lengthy retry
-  reasoning
+- **Token waste**: Each failed tool call costs input/output tokens, and the agent often generates lengthy retry reasoning
 - **Latency amplification**: Sequential retries on a dead endpoint add seconds or minutes with no progress
-- **Cascading failure**: If one tool is down (e.g., a search API), the agent may stall entirely instead of using
-  alternative approaches
+- **Cascading failure**: If one tool is down (e.g., a search API), the agent may stall entirely instead of using alternative approaches
 
-Unlike model-level failover (switching between GPT-4 and Claude when one provider is down), tool-level failures require
-a different strategy — the agent needs to learn, mid-session, that a specific tool is broken and **stop using it**.
+Unlike model-level failover (switching between GPT-4 and Claude when one provider is down), tool-level failures require a different strategy — the agent needs to learn, mid-session, that a specific tool is broken and **stop using it**.
 
 ## Solution
 
-Apply the classic Circuit Breaker pattern from distributed systems to agent tool invocations. The circuit breaker wraps
-each tool call and tracks failure rates, transitioning between three states:
+Apply the classic Circuit Breaker pattern from distributed systems to agent tool invocations. The circuit breaker wraps each tool call and tracks failure rates, transitioning between three states:
 
 ```mermaid
 stateDiagram-v2
@@ -54,11 +48,11 @@ stateDiagram-v2
 
 **States:**
 
-| State         | Behavior                                                                                             |
-|---------------|------------------------------------------------------------------------------------------------------|
-| **Closed**    | Tool calls pass through normally. Failures are counted.                                              |
-| **Open**      | Tool calls are **blocked immediately** — returns a cached error or fallback. No actual call is made. |
-| **Half-Open** | One probe call is allowed through. If it succeeds, reset to Closed. If it fails, return to Open.     |
+| State | Behavior |
+|-------|----------|
+| **Closed** | Tool calls pass through normally. Failures are counted. |
+| **Open** | Tool calls are **blocked immediately** — returns a cached error or fallback. No actual call is made. |
+| **Half-Open** | One probe call is allowed through. If it succeeds, reset to Closed. If it fails, return to Open. |
 
 **Core mechanism:**
 
@@ -103,12 +97,10 @@ class AgentCircuitBreaker:
 
 - **Evidence Grade:** `medium`
 - **Most Valuable Findings:**
-    - Circuit breakers are validated-in-production in microservice architectures (Netflix Hystrix, Resilience4j, Polly)
-      and the pattern translates directly to agent tool calls
-    - Production agent systems report 40-60% token savings when circuit breakers prevent retry loops on degraded tools
-    - Anthropic's agent reliability research emphasizes "fail fast" strategies over retry-heavy approaches
-- **Unverified / Unclear:** Optimal threshold and cooldown values for agent workloads vary significantly by tool type
-  and latency profile
+  - Circuit breakers are validated-in-production in microservice architectures (Netflix Hystrix, Resilience4j, Polly) and the pattern translates directly to agent tool calls
+  - Production agent systems report 40-60% token savings when circuit breakers prevent retry loops on degraded tools
+  - Anthropic's agent reliability research emphasizes "fail fast" strategies over retry-heavy approaches
+- **Unverified / Unclear:** Optimal threshold and cooldown values for agent workloads vary significantly by tool type and latency profile
 
 ## How to use it
 
@@ -122,12 +114,12 @@ class AgentCircuitBreaker:
 
 1. **Wrap each tool** in its own circuit breaker instance
 2. **Set thresholds** based on tool characteristics:
-    - Fast APIs (search, weather): threshold=3, cooldown=30s
-    - Slow tools (web scraping, compilation): threshold=2, cooldown=120s
+   - Fast APIs (search, weather): threshold=3, cooldown=30s
+   - Slow tools (web scraping, compilation): threshold=2, cooldown=120s
 3. **Define fallback behavior** when circuits open:
-    - Return cached/stale results if available
-    - Route to an alternative tool (e.g., switch search providers)
-    - Inform the agent that the tool is unavailable so it can adjust its plan
+   - Return cached/stale results if available
+   - Route to an alternative tool (e.g., switch search providers)
+   - Inform the agent that the tool is unavailable so it can adjust its plan
 4. **Log circuit state changes** for observability
 
 **Integration with agent loops:**
@@ -168,12 +160,10 @@ def execute_tool(tool_name, *args):
 ## References
 
 - [Martin Fowler: CircuitBreaker](https://martinfowler.com/bliki/CircuitBreaker.html) — canonical pattern description
-- [Release It! (Michael Nygard, 2007)](https://pragprog.com/titles/mnee2/release-it-second-edition/) — original
-  production pattern
+- [Release It! (Michael Nygard, 2007)](https://pragprog.com/titles/mnee2/release-it-second-edition/) — original production pattern
 - [Netflix Hystrix](https://github.com/Netflix/Hystrix) — production implementation at scale
 - [Resilience4j](https://resilience4j.readme.io/) — lightweight Java implementation
-- Related: [Failover-Aware Model Fallback](failover-aware-model-fallback.md) — handles model-provider failures (
-  complementary)
+- Related: [Failover-Aware Model Fallback](failover-aware-model-fallback.md) — handles model-provider failures (complementary)
 - Related: [Action Caching & Replay](action-caching-replay.md) — cached results can serve as circuit-open fallbacks
 
 ---

@@ -10,25 +10,21 @@ tags: [sdk, automation, ci/cd, programmatic access, scripting, api, headless age
 
 ## Problem
 
-Interactive terminal or chat interfaces are suitable for many agent tasks, but not for all. Integrating agent
-capabilities into automated workflows (e.g., CI/CD pipelines, scheduled jobs, batch processing) or building more complex
-applications on top of core agent functionalities requires a programmatic interface.
+Interactive terminal or chat interfaces are suitable for many agent tasks, but not for all. Integrating agent capabilities into automated workflows (e.g., CI/CD pipelines, scheduled jobs, batch processing) or building more complex applications on top of core agent functionalities requires a programmatic interface.
 
 ## Solution
 
-Provide a Software Development Kit (SDK) that exposes the agent's core functionalities for programmatic access. This SDK
-allows developers to:
+Provide a Software Development Kit (SDK) that exposes the agent's core functionalities for programmatic access. This SDK allows developers to:
 
-- Invoke agent actions (e.g., process a prompt, use a tool, access memory) from code (e.g., Python, TypeScript).
-- Configure agent behavior and tool access in a non-interactive manner.
-- Integrate agent logic into larger software systems.
-- Automate repetitive tasks that involve the agent.
-- Build custom user interfaces or applications powered by the agent's backend.
-- Control resource limits (token budgets, execution time, cost caps).
-- Implement fine-grained permission management and authorization scopes.
+-   Invoke agent actions (e.g., process a prompt, use a tool, access memory) from code (e.g., Python, TypeScript).
+-   Configure agent behavior and tool access in a non-interactive manner.
+-   Integrate agent logic into larger software systems.
+-   Automate repetitive tasks that involve the agent.
+-   Build custom user interfaces or applications powered by the agent's backend.
+-   Control resource limits (token budgets, execution time, cost caps).
+-   Implement fine-grained permission management and authorization scopes.
 
-The SDK typically includes libraries, command-line interfaces (CLIs) for scripting, and documentation for headless or
-embedded use of the agent.
+The SDK typically includes libraries, command-line interfaces (CLIs) for scripting, and documentation for headless or embedded use of the agent.
 
 ## Example (SDK integration)
 
@@ -82,16 +78,13 @@ $ claude -p "what did i do this week?" \
 
 ## Trade-offs
 
-* **Pros:** Enables automation and CI/CD integration; provides fine-grained control over permissions, resources, and
-  observability; supports batch processing and custom UIs.
-* **Cons:** Introduces integration coupling and environment-specific upkeep; loses conversational interactivity and
-  clarification; requires programmatic error handling with robust retry/fallback logic.
+* **Pros:** Enables automation and CI/CD integration; provides fine-grained control over permissions, resources, and observability; supports batch processing and custom UIs.
+* **Cons:** Introduces integration coupling and environment-specific upkeep; loses conversational interactivity and clarification; requires programmatic error handling with robust retry/fallback logic.
 
 ## References
 
-- Based on the description of the Claude Code SDK in "Mastering Claude Code: Boris Cherny's Guide & Cheatsheet," section
-  VI.
-- OpenAI Agents SDK (Swarm framework): https://github.com/openai/openai-agents-python
-- Google Agent Development Kit (ADK): https://github.com/google/adk-python
+-   Based on the description of the Claude Code SDK in "Mastering Claude Code: Boris Cherny's Guide & Cheatsheet," section VI.
+-   OpenAI Agents SDK (Swarm framework): https://github.com/openai/openai-agents-python
+-   Google Agent Development Kit (ADK): https://github.com/google/adk-python
 
 [Source](https://www.nibzard.com/claude-code)

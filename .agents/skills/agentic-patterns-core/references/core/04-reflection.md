@@ -1,8 +1,6 @@
 # Reflection Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -70,12 +68,8 @@ def reflect_generate(prompt, criteria, max_iterations=MAX_ITERATIONS):
 ## Real-World Examples
 
 1. **Technical Blog Post**: Draft → Technical review → Code validation → SEO check → Readability → Grammar polish
-2. **Contract Generation**: Draft terms → Legal compliance → Risk assessment → Clarity check → Customization → Final
-   review
-3. **Educational Content**: Create lesson → Pedagogical review → Factual verification → Age check → Engagement
-   assessment → Accessibility
-4. **API Documentation**: Generate docs → Technical review → Code testing → Completeness check → Clarity → Version
-   consistency
+2. **Contract Generation**: Draft terms → Legal compliance → Risk assessment → Clarity check → Customization → Final review
+3. **Educational Content**: Create lesson → Pedagogical review → Factual verification → Age check → Engagement assessment → Accessibility
+4. **API Documentation**: Generate docs → Technical review → Code testing → Completeness check → Clarity → Version consistency
 5. **Marketing Copy**: Generate copy → Brand voice check → Persuasiveness → Fact verification → SEO → A/B variants
-6. **Research Report**: Draft findings → Methodology critique → Statistical validation → Citation check → Logical flow →
-   Executive summary
+6. **Research Report**: Draft findings → Methodology critique → Statistical validation → Citation check → Logical flow → Executive summary

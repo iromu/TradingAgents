@@ -1,8 +1,6 @@
 # Human-in-the-Loop Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -77,12 +75,8 @@ def human_in_the_loop(ai_decision, confidence, threshold=0.9):
 ## Real-World Examples
 
 1. **Content Moderation**: AI flags → Human reviews → Complex cases escalated → Feedback trains AI → Fatigue monitoring
-2. **Loan Approval**: AI assesses risk → Human reviews borderline → Large loans manual → Explanations for denials →
-   Audit trail
-3. **Medical Imaging**: AI detects abnormalities → Radiologist confirms → Critical findings prioritized → Second
-   opinions → Continuous learning
-4. **Resume Screening**: AI filters → HR reviews shortlist → Diversity checks → Feedback improves screening → Human-led
-   interviews
+2. **Loan Approval**: AI assesses risk → Human reviews borderline → Large loans manual → Explanations for denials → Audit trail
+3. **Medical Imaging**: AI detects abnormalities → Radiologist confirms → Critical findings prioritized → Second opinions → Continuous learning
+4. **Resume Screening**: AI filters → HR reviews shortlist → Diversity checks → Feedback improves screening → Human-led interviews
 5. **Translation QC**: AI translates → Linguist reviews → Cultural checks → Terminology verification → Style consistency
-6. **Autonomous Vehicles**: AI handles normal → Remote operators edge cases → Safety driver takeover → Incident review →
-   Continuous improvement
+6. **Autonomous Vehicles**: AI handles normal → Remote operators edge cases → Safety driver takeover → Incident review → Continuous improvement

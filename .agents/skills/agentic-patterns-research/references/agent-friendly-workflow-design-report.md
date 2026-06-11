@@ -11,10 +11,7 @@
 
 ## Executive Summary
 
-This report compiles comprehensive research on **Agent-Friendly Workflow Design** patterns from major industry
-platforms, frameworks, and production deployments. The research spans coding agents (GitHub Copilot Workspace, Claude
-Code, Cursor AI), multi-agent orchestration frameworks (Microsoft Agent Framework, LangChain/LangGraph, OpenAI Swarm),
-and production deployment best practices.
+This report compiles comprehensive research on **Agent-Friendly Workflow Design** patterns from major industry platforms, frameworks, and production deployments. The research spans coding agents (GitHub Copilot Workspace, Claude Code, Cursor AI), multi-agent orchestration frameworks (Microsoft Agent Framework, LangChain/LangGraph, OpenAI Swarm), and production deployment best practices.
 
 ### Key Findings
 
@@ -36,18 +33,14 @@ and production deployment best practices.
 4. Implement comprehensive safety mechanisms
 5. Use hybrid workflow + agent architectures
 
-**Research Scope:** Industry implementations, case studies, and best practices gathered from platform documentation,
-engineering blogs, academic papers, and community resources (February 2026).
+**Research Scope:** Industry implementations, case studies, and best practices gathered from platform documentation, engineering blogs, academic papers, and community resources (February 2026).
 
 ---
 
 ## 1. Pattern Definition
 
 ### Core Concept
-
-Agent-Friendly Workflow Design involves consciously designing workflows, task structures, and human-agent interaction
-points to maximize AI agent effectiveness. The pattern emphasizes giving agents appropriate autonomy, clear goal
-definitions, and structured interfaces rather than micromanaging technical decisions.
+Agent-Friendly Workflow Design involves consciously designing workflows, task structures, and human-agent interaction points to maximize AI agent effectiveness. The pattern emphasizes giving agents appropriate autonomy, clear goal definitions, and structured interfaces rather than micromanaging technical decisions.
 
 ### Key Characteristics
 - **Clear Goal Definition**: High-level goals over prescriptive step-by-step instructions
@@ -70,20 +63,20 @@ definitions, and structured interfaces rather than micromanaging technical decis
 ### Active Research Threads
 
 1. **Academic Sources Research** (Agent: academic-sources)
-    - Goal: Find academic papers on workflow design for AI agents
-    - Status: Launching...
+   - Goal: Find academic papers on workflow design for AI agents
+   - Status: Launching...
 
 2. **Industry Implementation Research** (Agent: industry-impl)
-    - Goal: Document real-world implementations and case studies
-    - Status: Launching...
+   - Goal: Document real-world implementations and case studies
+   - Status: Launching...
 
 3. **Related Patterns Analysis** (Agent: related-patterns)
-    - Goal: Identify and analyze related patterns in this codebase
-    - Status: Launching...
+   - Goal: Identify and analyze related patterns in this codebase
+   - Status: Launching...
 
 4. **Source Deep Dive** (Agent: source-analysis)
-    - Goal: Analyze the original Nibzard article and related sources
-    - Status: Launching...
+   - Goal: Analyze the original Nibzard article and related sources
+   - Status: Launching...
 
 ---
 
@@ -114,8 +107,7 @@ definitions, and structured interfaces rather than micromanaging technical decis
 > "Deploy to Observe: Stop trying to perfect agents before launch—use production as the learning environment."
 > — Successful Production Teams (Clay, Vanta, LinkedIn, Cloudflare)
 
-> "Agent runs 200 steps over 2 minutes with no error logs—you need complete trace capture with state preservation at
-> each step."
+> "Agent runs 200 steps over 2 minutes with no error logs—you need complete trace capture with state preservation at each step."
 > — Observability Challenge Description
 
 > "Expanding from 1 to 5 agents doesn't increase complexity 4x, it explodes exponentially."
@@ -123,16 +115,14 @@ definitions, and structured interfaces rather than micromanaging technical decis
 
 #### GitHub Copilot Workspace
 
-GitHub Copilot Workspace represents a **collaborative approach** to agent workflow design, emphasizing continuous human
-oversight rather than full autonomy.
+GitHub Copilot Workspace represents a **collaborative approach** to agent workflow design, emphasizing continuous human oversight rather than full autonomy.
 
 **Key Design Philosophy:**
 > "We firmly believe that the combination of humans and AI always produces better results."
 
 **Workflow Characteristics:**
 - **Full Editability**: Every AI proposal—from plans to code—can be modified at any time
-- **Multi-stage Workflow**: Starts from GitHub Issue/PR → Analyzes codebase → Proposes solutions → Generates executable
-  code
+- **Multi-stage Workflow**: Starts from GitHub Issue/PR → Analyzes codebase → Proposes solutions → Generates executable code
 - **Continuous Feedback Loop**: Every part of the workflow is editable, regenerable, and undoable
 - **Parallel Exploration**: Developers can try multiple approaches simultaneously in different browser tabs
 - **Natural Language Editing**: Can adjust behavior, plans, or code using natural language at any step
@@ -195,8 +185,7 @@ Cursor implements **Human-in-the-Loop (HITL)** patterns for code modification wi
 
 #### Replit Agent
 
-While specific Replit documentation wasn't directly accessible in search results, the pattern is based on insights from
-Amjad Masad (Replit CEO) emphasizing **macro delegation with micro guidance**.
+While specific Replit documentation wasn't directly accessible in search results, the pattern is based on insights from Amjad Masad (Replit CEO) emphasizing **macro delegation with micro guidance**.
 
 **Core Principles:**
 - Give agents high-level goals
@@ -209,15 +198,14 @@ Amjad Masad (Replit CEO) emphasizing **macro delegation with micro guidance**.
 #### Handoff Pattern (OpenAI Swarm)
 
 **What is Handoff?**
-Handoff is a multi-agent design pattern where one agent transfers control and context to another agent
-seamlessly—similar to passing a baton in a relay race.
+Handoff is a multi-agent design pattern where one agent transfers control and context to another agent seamlessly—similar to passing a baton in a relay race.
 
 **Handoff vs Supervisor Mode:**
 
-| Pattern        | Core Characteristic                    | Analogy                                                           |
-|----------------|----------------------------------------|-------------------------------------------------------------------|
-| **Supervisor** | Centralized control, passive execution | "Boss assigns tasks, employees do the work"                       |
-| **Handoff**    | Decentralized, active relay            | "Employee A finishes and hands off to Employee B, no boss needed" |
+| Pattern | Core Characteristic | Analogy |
+|---------|---------------------|---------|
+| **Supervisor** | Centralized control, passive execution | "Boss assigns tasks, employees do the work" |
+| **Handoff** | Decentralized, active relay | "Employee A finishes and hands off to Employee B, no boss needed" |
 
 **When to Use Handoff:**
 - Dynamic, unpredictable workflows (e.g., customer service: product inquiry → complaint → refund)
@@ -239,8 +227,7 @@ GPT-4 → Handle disputes and dialogue (Disputes Agent)
 o3 mini → Accuracy-sensitive tasks (Refund eligibility check)
 ```
 
-**Key Insight:** Preserving full conversation history while swapping models, prompts, and tool definitions provides
-flexibility across scenarios.
+**Key Insight:** Preserving full conversation history while swapping models, prompts, and tool definitions provides flexibility across scenarios.
 
 **Sources:**
 - [OpenAI Swarm Documentation](https://github.com/openai/swarm)
@@ -315,8 +302,7 @@ triage_agent = Agent(
 - **79% of multi-agent system failures** come from specification and coordination layers
 - **41-86.7% of multi-agent systems** fail in production environments
 
-**Key Challenge:** Reliability is the #1 challenge in production agent systems (37.9% of practitioners), more than
-compliance or governance issues.
+**Key Challenge:** Reliability is the #1 challenge in production agent systems (37.9% of practitioners), more than compliance or governance issues.
 
 ### Case Study: Microsoft Azure SRE Team
 
@@ -335,8 +321,7 @@ compliance or governance issues.
 
 ### Successful Production Patterns
 
-Teams that successfully deploy reliable agents (Clay, Vanta, LinkedIn, Cloudflare) follow **Agent Engineering**
-discipline:
+Teams that successfully deploy reliable agents (Clay, Vanta, LinkedIn, Cloudflare) follow **Agent Engineering** discipline:
 
 #### The Build → Test → Ship → Observe → Refine Cycle
 
@@ -355,20 +340,20 @@ discipline:
 **Three Key Primitives:**
 
 1. **Run (Single Execution)**
-    - Captures individual LLM decision steps
-    - Records prompts, tools, context, and output
-    - Use cases: Debugging single decisions, evaluating specific behaviors
+   - Captures individual LLM decision steps
+   - Records prompts, tools, context, and output
+   - Use cases: Debugging single decisions, evaluating specific behaviors
 
 2. **Trace (Complete Execution Path)**
-    - End-to-end record of complete agent execution
-    - Contains inputs, tool calls, parameters, results
-    - Can reach hundreds of MB for complex agents
-    - Essential for debugging complete workflows
+   - End-to-end record of complete agent execution
+   - Contains inputs, tool calls, parameters, results
+   - Can reach hundreds of MB for complex agents
+   - Essential for debugging complete workflows
 
 3. **Thread (Conversation Session)**
-    - Combines multiple traces into complete session
-    - Maintains multi-round context and state evolution
-    - Critical for understanding temporal behavior changes
+   - Combines multiple traces into complete session
+   - Maintains multi-round context and state evolution
+   - Critical for understanding temporal behavior changes
 
 **Industry Adoption:**
 - **89%** of enterprises have implemented agent observability
@@ -385,20 +370,20 @@ discipline:
 **Core Safety Mechanisms:**
 
 1. **Tool Guardrails**
-    - Parameter allow/deny lists (block dangerous patterns like "rm -rf /")
-    - Regex filters and allowlists
-    - Human-in-the-loop approvals for high-stakes actions
+   - Parameter allow/deny lists (block dangerous patterns like "rm -rf /")
+   - Regex filters and allowlists
+   - Human-in-the-loop approvals for high-stakes actions
 
 2. **Output Validation**
-    - Schema enforcement (required JSON fields)
-    - Consistency filters against system truth
-    - LLM reviewer/evaluator for self-correction
+   - Schema enforcement (required JSON fields)
+   - Consistency filters against system truth
+   - LLM reviewer/evaluator for self-correction
 
 3. **Operational Safety**
-    - Rate limiting to prevent API quota exhaustion
-    - Circuit breakers for repeated failures
-    - Audit trails logging all operations
-    - Pattern detection for repeated failures
+   - Rate limiting to prevent API quota exhaustion
+   - Circuit breakers for repeated failures
+   - Audit trails logging all operations
+   - Pattern detection for repeated failures
 
 **Best Practices:**
 - Use low temperature (0-0.2) for deterministic function calling
@@ -570,10 +555,8 @@ discipline:
 
 ### Questions for Further Research
 
-- [ ] **Quantitative Impact**: What are measurable productivity gains from agent-friendly workflow design vs.
-  traditional approaches?
-- [ ] **Domain Specificity**: How do best practices vary across different domains (customer service, coding, data
-  analysis)?
+- [ ] **Quantitative Impact**: What are measurable productivity gains from agent-friendly workflow design vs. traditional approaches?
+- [ ] **Domain Specificity**: How do best practices vary across different domains (customer service, coding, data analysis)?
 - [ ] **Autonomy Calibration**: What are optimal autonomy levels for different task types and user expertise levels?
 - [ ] **Cost-Benefit Analysis**: At what point does multi-agent complexity justify the coordination overhead?
 - [ ] **Long-term Learning**: How do agent workflows evolve over months of production use?
@@ -636,23 +619,18 @@ discipline:
 - [Datadog AI Agent Monitoring](https://www.datadoghq.com/blog/ai-monitoring/)
 
 #### Safety & Reliability
-
-- [Tool Calling Safety Patterns](https://aws.amazon.com/blogs/machine-learning/tool-calling-safety-patterns/) (AWS ML
-  Blog)
+- [Tool Calling Safety Patterns](https://aws.amazon.com/blogs/machine-learning/tool-calling-safety-patterns/) (AWS ML Blog)
 - [Agent Safety Mechanisms](https://www.anthropic.com/index/safety-measures) (Anthropic)
 
 ### Academic & Research Sources
 
 #### Multi-Agent Systems
-
-- [Multi-Agent Collaboration: A Survey](https://www.sciencedirect.com/science/article/pii/S2949855425000516) (
-  ScienceDirect, 2025)
+- [Multi-Agent Collaboration: A Survey](https://www.sciencedirect.com/science/article/pii/S2949855425000516) (ScienceDirect, 2025)
 - [Handoff vs Supervisor Patterns](https://arxiv.org/abs/2410.12345) (arXiv, Oct 2024)
 
 #### Human-AI Collaboration
 - [Human-in-the-Loop AI Systems](https://dl.acm.org/doi/10.1145/1234567) (ACM, 2025)
-- [UX Patterns for Human-AI Partnership](https://learn.microsoft.com/zh-cn/community/content/best-practices-ai-ux) (
-  Microsoft)
+- [UX Patterns for Human-AI Partnership](https://learn.microsoft.com/zh-cn/community/content/best-practices-ai-ux) (Microsoft)
 
 ### Community Resources
 
@@ -668,16 +646,13 @@ discipline:
 
 - [Agent vs Workflow: Who is the Efficiency Revolution Protagonist?](https://www.woshipm.com/ai/6306330.html) (Dec 2025)
 - [From Prototype to Production: AI Agent Course](https://www.cloudskillsboost.google/paths/118) (Google, Dec 2025)
-- [Building Effective Agents - 7 Design Patterns](https://m.blog.csdn.net/huang9604/article/details/152119711) (CSDN,
-  2025)
+- [Building Effective Agents - 7 Design Patterns](https://m.blog.csdn.net/huang9604/article/details/152119711) (CSDN, 2025)
 
 ### Chinese-Language Resources (Translated Insights)
 
-- [Dify Workflow Guide: Deconstructing Andrew Ng's Agent Workflow Design](https://developer.baidu.com/article/detail.html?id=4341565) (
-  Baidu Developer, Oct 2025)
+- [Dify Workflow Guide: Deconstructing Andrew Ng's Agent Workflow Design](https://developer.baidu.com/article/detail.html?id=4341565) (Baidu Developer, Oct 2025)
 - [Agent & Workflow Technical Practice](https://cloud.tencent.com/developer/article/2577787) (Tencent Cloud, Oct 2025)
-- [Advanced Architecture Patterns for Agentic AI](https://blog.csdn.net/2501_91473346/article/details/150918931) (CSDN,
-  2025)
+- [Advanced Architecture Patterns for Agentic AI](https://blog.csdn.net/2501_91473346/article/details/150918931) (CSDN, 2025)
 
 ---
 
@@ -697,14 +672,14 @@ This report was compiled through systematic web research across:
 
 ### Key Statistics
 
-| Metric                                         | Value    |
-|------------------------------------------------|----------|
-| Organizations with agents in production        | 57%      |
-| Projects stuck in POC-to-production transition | 93%      |
-| Multi-agent system failure rate in production  | 41-86.7% |
-| Enterprises with agent observability           | 89%      |
-| Production systems with complete tracing       | 71.5%    |
-| Top challenge: Reliability                     | 37.9%    |
+| Metric | Value |
+|--------|-------|
+| Organizations with agents in production | 57% |
+| Projects stuck in POC-to-production transition | 93% |
+| Multi-agent system failure rate in production | 41-86.7% |
+| Enterprises with agent observability | 89% |
+| Production systems with complete tracing | 71.5% |
+| Top challenge: Reliability | 37.9% |
 
 ### Emerging Trends
 

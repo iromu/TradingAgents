@@ -2,12 +2,12 @@
 
 ## Planner Comparison
 
-| Planner            | Best For                                | Determinism | Algorithm                          |
-|--------------------|-----------------------------------------|-------------|------------------------------------|
-| **GOAP** (default) | Business processes with defined outputs | High        | A* search over goal states         |
-| **Utility**        | Exploration, event-driven systems       | Medium      | Highest net-value action picks     |
-| **Hybrid**         | Reducer pipelines                       | Medium-High | Utility picking + goal termination |
-| **Supervisor**     | Flexible multi-step workflows           | Low         | LLM-orchestrated composition       |
+| Planner | Best For | Determinism | Algorithm |
+|---------|----------|-------------|-----------|
+| **GOAP** (default) | Business processes with defined outputs | High | A* search over goal states |
+| **Utility** | Exploration, event-driven systems | Medium | Highest net-value action picks |
+| **Hybrid** | Reducer pipelines | Medium-High | Utility picking + goal termination |
+| **Supervisor** | Flexible multi-step workflows | Low | LLM-orchestrated composition |
 
 ## GOAP (Goal Oriented Action Planning)
 
@@ -122,18 +122,18 @@ public class MarketResearchAgent {
 Ask yourself:
 
 1. **Do I have well-defined goals with clear success conditions?**
-    - Yes → GOAP
-    - No → Utility or Supervisor
+   - Yes → GOAP
+   - No → Utility or Supervisor
 
 2. **Do I need deterministic, verifiable planning?**
-    - Yes → GOAP or Hybrid
-    - No → Supervisor
+   - Yes → GOAP or Hybrid
+   - No → Supervisor
 
 3. **Is this an event-driven system?**
-    - Yes → Utility
+   - Yes → Utility
 
 4. **Do I need the LLM to make orchestration decisions?**
-    - Yes → Supervisor
+   - Yes → Supervisor
 
 5. **Do I want iteration with a terminal condition?**
-    - Yes → Hybrid
+   - Yes → Hybrid

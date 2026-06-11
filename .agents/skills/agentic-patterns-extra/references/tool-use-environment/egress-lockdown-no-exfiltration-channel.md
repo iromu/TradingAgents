@@ -10,9 +10,7 @@ tags: [network-sandbox, exfiltration, outbound-controls, security]
 
 ## Problem
 
-Even with private-data access and untrusted inputs, attacks fail if the agent has **no way to transmit stolen data**.
-This pattern implements the Bell-LaPadula model's "no write down" property: high-privilege subjects cannot write to
-low-trust destinations. Many real-world fixes simply removed or filtered outbound channels.
+Even with private-data access and untrusted inputs, attacks fail if the agent has **no way to transmit stolen data**. This pattern implements the Bell-LaPadula model's "no write down" property: high-privilege subjects cannot write to low-trust destinations. Many real-world fixes simply removed or filtered outbound channels.
 
 ## Solution
 
@@ -45,8 +43,7 @@ RUN iptables -A OUTPUT -d api.mycompany.internal -j ACCEPT
 
 ## References
 
-* Multiple vendor post-mortems cited by Willison: Microsoft 365 Copilot, GitHub MCP, GitLab Duo Chatbot fixes all
-  disabled egress paths as the first patch.
+* Multiple vendor post-mortems cited by Willison: Microsoft 365 Copilot, GitHub MCP, GitLab Duo Chatbot fixes all disabled egress paths as the first patch.
 
 - Primary source: https://simonwillison.net/2025/Jun/16/lethal-trifecta/
 - Beurer-Kellner et al. (2025). "Design Patterns for Securing LLM Agents against Prompt Injections." arXiv:2506.08837.

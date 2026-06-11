@@ -10,31 +10,28 @@ tags: [reinforcement-learning, sample-efficiency, variance, data-quality, agent-
 
 ## Problem
 
-Not all training samples are equally valuable for reinforcement learning. This pattern builds on **Prioritized
-Experience Replay** (Schaul et al., 2016), which introduced TD-error-based sample prioritization for value learning.
+Not all training samples are equally valuable for reinforcement learning. This pattern builds on **Prioritized Experience Replay** (Schaul et al., 2016), which introduced TD-error-based sample prioritization for value learning.
 
 - **Zero-variance samples**: Model gets same score every time (always correct or always wrong) → no learning signal
 - **Wasted compute**: Training on samples where the model has no uncertainty wastes expensive RL exploration
 - **Poor data utilization**: With limited training budgets, you want to maximize learning from each sample
 - **Unclear training potential**: Hard to know if your dataset will support effective RL training
 
-When Theo ran baseline evaluations on the FinQA benchmark, he discovered that ~85% of samples had zero variance (model
-always got them right or always wrong), meaning only ~15% of samples could actually contribute to learning.
+When Theo ran baseline evaluations on the FinQA benchmark, he discovered that ~85% of samples had zero variance (model always got them right or always wrong), meaning only ~15% of samples could actually contribute to learning.
 
 ## Solution
 
-**Run multiple baseline evaluations per sample to identify variance, then prioritize high-variance samples for training.
-**
+**Run multiple baseline evaluations per sample to identify variance, then prioritize high-variance samples for training.**
 
 **The Variance Plot Methodology:**
 
 1. **Baseline Evaluation**: Run your base model 3-5 times on each sample
 2. **Visualize Variance**: Plot results to identify which samples have variance
 3. **Categorize Samples**:
-
+   
 - **Always correct** (variance = 0): Model already knows this
-    - **Always incorrect** (variance = 0): Model can't learn this (too hard or needs different approach)
-    - **Sometimes correct** (variance > 0): **Prime candidates for RL**
+   - **Always incorrect** (variance = 0): Model can't learn this (too hard or needs different approach)
+   - **Sometimes correct** (variance > 0): **Prime candidates for RL**
 4. **Focus Training**: Prioritize or exclusively use high-variance samples
 
 **Understanding the Variance Plot:**
@@ -342,8 +339,7 @@ The model improved toward the best-of-3 ceiling while also becoming more efficie
 
 - [OpenAI Build Hour: Agent RFT - Variance Analysis Demo (November 2025)](https://youtu.be/1s_7RMG4O4U)
 - [Prior RFT Build Hour with Prashant](https://www.youtube.com/openai-build-hours)
-- [Prioritized Experience Replay (Schaul et al., ICLR 2016)](https://arxiv.org/abs/1511.05952) - Foundation paper
-  introducing TD-error-based sample prioritization
+- [Prioritized Experience Replay (Schaul et al., ICLR 2016)](https://arxiv.org/abs/1511.05952) - Foundation paper introducing TD-error-based sample prioritization
 - Related patterns: Agent Reinforcement Fine-Tuning, Inference-Time Scaling
 
 ---

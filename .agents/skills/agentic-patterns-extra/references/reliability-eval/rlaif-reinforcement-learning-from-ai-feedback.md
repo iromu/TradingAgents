@@ -10,24 +10,18 @@ tags: [rlhf, rlaif, constitutional-ai, synthetic-data, feedback, alignment, eval
 
 ## Problem
 
-Traditional Reinforcement Learning from Human Feedback (RLHF) requires extensive human annotation for preference data,
-which is expensive (often $1+ per annotation), time-consuming, and difficult to scale. This creates a bottleneck in
-training aligned AI systems, especially when dealing with complex or specialized domains where human expertise is scarce
-or costly.
+Traditional Reinforcement Learning from Human Feedback (RLHF) requires extensive human annotation for preference data, which is expensive (often $1+ per annotation), time-consuming, and difficult to scale. This creates a bottleneck in training aligned AI systems, especially when dealing with complex or specialized domains where human expertise is scarce or costly.
 
 ## Solution
 
-RLAIF replaces human annotators with a supervisory AI model that generates preference labels, which train a reward model
-that optimizes the policy via PPO (or similar RL algorithms). The approach involves:
+RLAIF replaces human annotators with a supervisory AI model that generates preference labels, which train a reward model that optimizes the policy via PPO (or similar RL algorithms). The approach involves:
 
 1. **AI-Generated Critiques**: Use a language model to evaluate outputs based on a set of principles or constitution
-2. **Preference Data Generation**: Have the AI model compare pairs of responses and select the better one according to
-   specified criteria
+2. **Preference Data Generation**: Have the AI model compare pairs of responses and select the better one according to specified criteria
 3. **Synthetic Training Data**: Generate high-quality training examples using the AI's own capabilities
 4. **Constitutional Principles**: Guide the feedback process with explicit rules rather than implicit human preferences
 
-This technique forms the foundation of Constitutional AI. Most production systems use hybrid approaches combining
-RLAIF (for scale) with RLHF (for quality validation).
+This technique forms the foundation of Constitutional AI. Most production systems use hybrid approaches combining RLAIF (for scale) with RLHF (for quality validation).
 
 ## Example
 

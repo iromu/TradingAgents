@@ -1,8 +1,6 @@
 # Evaluation and Monitoring Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -88,15 +86,9 @@ def monitor_request(request, response):
 
 ## Real-World Examples
 
-1. **Recommendation Engine**: Click-through rate, conversion tracking, A/B test evaluation, latency monitoring, cost per
-   recommendation, drift detection
-2. **Customer Chatbot**: Resolution rate, satisfaction scores, response time, escalation rate, cost per interaction,
-   quality sampling
-3. **Trading System**: Trade execution, slippage tracking, risk compliance, latency measurements, P/L attribution,
-   regulatory audit logs
-4. **Content Moderation**: Precision/recall, false positive rates, processing time, human agreement, cost per
-   moderation, violation trends
-5. **Medical AI**: Diagnostic accuracy, false negative monitoring, time to diagnosis, clinician agreement, system
-   availability, patient outcomes
-6. **Code Generation**: Code quality metrics, compilation success, test pass rates, developer acceptance, generation
-   time, usage patterns
+1. **Recommendation Engine**: Click-through rate, conversion tracking, A/B test evaluation, latency monitoring, cost per recommendation, drift detection
+2. **Customer Chatbot**: Resolution rate, satisfaction scores, response time, escalation rate, cost per interaction, quality sampling
+3. **Trading System**: Trade execution, slippage tracking, risk compliance, latency measurements, P/L attribution, regulatory audit logs
+4. **Content Moderation**: Precision/recall, false positive rates, processing time, human agreement, cost per moderation, violation trends
+5. **Medical AI**: Diagnostic accuracy, false negative monitoring, time to diagnosis, clinician agreement, system availability, patient outcomes
+6. **Code Generation**: Code quality metrics, compilation success, test pass rates, developer acceptance, generation time, usage patterns

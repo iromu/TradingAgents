@@ -12,14 +12,10 @@
 
 ## Executive Summary
 
-The Dual-LLM pattern is an architectural approach in AI agent systems that uses two separate language models in
-coordinated roles to improve reliability, security, and output quality. This research analyzed the pattern's core
-concept, key variations, problems it solves, interaction mechanics, use cases, and related patterns.
+The Dual-LLM pattern is an architectural approach in AI agent systems that uses two separate language models in coordinated roles to improve reliability, security, and output quality. This research analyzed the pattern's core concept, key variations, problems it solves, interaction mechanics, use cases, and related patterns.
 
 **Key Findings:**
-
-- The pattern addresses multiple critical problems: security (prompt injection), reliability (single points of failure),
-  quality (errors/hallucinations), and cost (human evaluation)
+- The pattern addresses multiple critical problems: security (prompt injection), reliability (single points of failure), quality (errors/hallucinations), and cost (human evaluation)
 - Seven distinct variations identified, each optimized for different use cases
 - Strong validation in production at major tech companies (OpenAI, Anthropic, Sourcegraph)
 - Cost-benefit analysis shows 30-50% bug reduction and 90% cost reduction vs. human review
@@ -30,9 +26,7 @@ concept, key variations, problems it solves, interaction mechanics, use cases, a
 
 ### 1.1 What is the Dual-LLM Pattern?
 
-The **Dual-LLM Pattern** involves coordinating two separate language models with distinct roles and responsibilities to
-achieve goals that would be difficult or risky for a single model. Rather than using one monolithic agent, the pattern
-divides concerns between specialized models that interact through well-defined interfaces.
+The **Dual-LLM Pattern** involves coordinating two separate language models with distinct roles and responsibilities to achieve goals that would be difficult or risky for a single model. Rather than using one monolithic agent, the pattern divides concerns between specialized models that interact through well-defined interfaces.
 
 **Fundamental insight**: Separating concerns across two models creates:
 - **Clear trust boundaries** for security-sensitive operations
@@ -44,8 +38,7 @@ divides concerns between specialized models that interact through well-defined i
 
 Dual-LLM architectures share these characteristics:
 
-1. **Role Specialization**: Each LLM has a distinct role (e.g., planner/executor, critic/generator,
-   privileged/quarantined)
+1. **Role Specialization**: Each LLM has a distinct role (e.g., planner/executor, critic/generator, privileged/quarantined)
 2. **Defined Communication Protocol**: Models communicate through structured interfaces, not raw text
 3. **Isolation**: Each model operates in its own context with limited visibility into the other
 4. **Complementary Capabilities**: The two models together achieve more than either could alone
@@ -91,8 +84,7 @@ for call in plan:
     stash(result)                 # outputs isolated from planner
 ```
 
-**Use Cases**: Email-and-calendar bots, SQL assistants, code-review helpers where the action set is known but parameters
-vary
+**Use Cases**: Email-and-calendar bots, SQL assistants, code-review helpers where the action set is known but parameters vary
 
 **Status**: Documented as `patterns/plan-then-execute-pattern.md`
 
@@ -142,8 +134,7 @@ if review.has_critical_issues():
 
 **Roles:**
 - **Worker (Claude Sonnet 4)**: Fast, capable, cost-effective agent handling bulk tool use and code generation
-- **Oracle (OpenAI o3/Gemini 2.5 Pro)**: Powerful, expensive model reserved for high-level reasoning, architectural
-  planning, and debugging complex issues
+- **Oracle (OpenAI o3/Gemini 2.5 Pro)**: Powerful, expensive model reserved for high-level reasoning, architectural planning, and debugging complex issues
 
 **Communication**: Worker can explicitly request Oracle consultation when stuck
 
@@ -169,14 +160,10 @@ if review.has_critical_issues():
 **Purpose**: Specialized models for lifecycle phases
 
 **Roles:**
+- **Initializer Agent** (runs once at project start): Creates feature list, establishes progress tracking, sets up environment bootstrap, configures testing infrastructure
+- **Maintainer/Coding Agent** (runs in subsequent sessions): Executes session bootstrapping, works on one feature at a time, commits after verification
 
-- **Initializer Agent** (runs once at project start): Creates feature list, establishes progress tracking, sets up
-  environment bootstrap, configures testing infrastructure
-- **Maintainer/Coding Agent** (runs in subsequent sessions): Executes session bootstrapping, works on one feature at a
-  time, commits after verification
-
-**Use Cases**: Projects requiring many sessions to complete (days/weeks of agent work), complex applications with 50+
-discrete features
+**Use Cases**: Projects requiring many sessions to complete (days/weeks of agent work), complex applications with 50+ discrete features
 
 **Status**: Emerging pattern (Anthropic Engineering)
 
@@ -186,23 +173,19 @@ discrete features
 
 ### 3.1 Security: Prompt Injection and Privilege Escalation
 
-**Problem**: When a single model both reads untrusted content and controls high-privilege tools, a prompt injection can
-convert benign context into privileged actions.
+**Problem**: When a single model both reads untrusted content and controls high-privilege tools, a prompt injection can convert benign context into privileged actions.
 
-**Solution**: Privileged/Quarantined separation prevents raw untrusted text from entering high-authority reasoning
-paths.
+**Solution**: Privileged/Quarantined separation prevents raw untrusted text from entering high-authority reasoning paths.
 
 ### 3.2 Reliability: Single Points of Failure
 
-**Problem**: Single-agent decision making suffers from confirmation bias, limited perspectives, insufficient scrutiny,
-and unexamined assumptions.
+**Problem**: Single-agent decision making suffers from confirmation bias, limited perspectives, insufficient scrutiny, and unexamined assumptions.
 
 **Solution**: Opponent/Processor debate surfaces blind spots, biases, and alternatives through adversarial pressure.
 
 ### 3.3 Quality: Errors and Hallucinations
 
-**Problem**: AI-generated code or content may contain subtle bugs, security issues, or quality problems that are
-difficult for humans to catch.
+**Problem**: AI-generated code or content may contain subtle bugs, security issues, or quality problems that are difficult for humans to catch.
 
 **Solution**: Generator/Critic pairs provide automated review and iterative refinement.
 
@@ -210,8 +193,7 @@ difficult for humans to catch.
 
 ### 3.4 Control Flow Integrity
 
-**Problem**: When planning and execution are interleaved, untrusted tool outputs can influence which action is selected
-next, making the control flow attackable.
+**Problem**: When planning and execution are interleaved, untrusted tool outputs can influence which action is selected next, making the control flow attackable.
 
 **Solution**: Plan-then-execute freezes the action sequence before any untrusted data is processed.
 
@@ -251,13 +233,13 @@ Task -> Agent 1 (Propose) -> Agent 2 (Challenge) -> Debate -> Synthesis
 
 ### 4.2 Coordination Patterns
 
-| Pattern      | Type        | Description                                                        |
-|--------------|-------------|--------------------------------------------------------------------|
-| Sequential   | One-way     | One model's output becomes the other's input (Generator -> Critic) |
-| Parallel     | Independent | Both models work independently on the same task (Debate)           |
-| Hierarchical | Coordinated | One model coordinates others (Planner spawns workers)              |
-| On-Demand    | Dynamic     | Worker requests Oracle consultation only when needed               |
-| Recursive    | Structured  | Best-of-N delegation at each node of a hierarchy                   |
+| Pattern | Type | Description |
+|---------|------|-------------|
+| Sequential | One-way | One model's output becomes the other's input (Generator -> Critic) |
+| Parallel | Independent | Both models work independently on the same task (Debate) |
+| Hierarchical | Coordinated | One model coordinates others (Planner spawns workers) |
+| On-Demand | Dynamic | Worker requests Oracle consultation only when needed |
+| Recursive | Structured | Best-of-N delegation at each node of a hierarchy |
 
 ### 4.3 State Management
 
@@ -365,25 +347,25 @@ Task -> Agent 1 (Propose) -> Agent 2 (Challenge) -> Debate -> Synthesis
 ### 6.1 Failure Modes
 
 1. **Deadlock**: Agents cannot agree on a solution
-    - Mitigation: Timeout mechanisms, tie-breaking rules
+   - Mitigation: Timeout mechanisms, tie-breaking rules
 
 2. **Collusion**: Agents converge on suboptimal compromise
-    - Mitigation: Adversarial initial positions, diverse model selection
+   - Mitigation: Adversarial initial positions, diverse model selection
 
 3. **Context Drift**: Both agents develop shared misconceptions
-    - Mitigation: Fresh context injection, external validation
+   - Mitigation: Fresh context injection, external validation
 
 4. **Amplified Bias**: Same training data bias reinforced
-    - Mitigation: Use different models/architectures, adversarial training
+   - Mitigation: Use different models/architectures, adversarial training
 
 5. **Orchestration Complexity**: Debugging interactions between models
-    - Mitigation: Clear logging, structured communication protocols
+   - Mitigation: Clear logging, structured communication protocols
 
 6. **Cost Spiral**: Running multiple models simultaneously
-    - Mitigation: On-demand consultation, efficient model selection
+   - Mitigation: On-demand consultation, efficient model selection
 
 7. **Evaluation Collapse**: Self-critique fails (both models make same errors)
-    - Mitigation: Different architectures, human spot-checks
+   - Mitigation: Different architectures, human spot-checks
 
 ### 6.2 When NOT to Use Dual-LLM
 
@@ -413,12 +395,12 @@ Task -> Agent 1 (Propose) -> Agent 2 (Challenge) -> Debate -> Synthesis
 
 ### 7.2 Benefits Quantification
 
-| Benefit               | Metric         | Source                        |
-|-----------------------|----------------|-------------------------------|
-| Bug reduction         | 30-50%         | CriticGPT production data     |
+| Benefit | Metric | Source |
+|---------|--------|--------|
+| Bug reduction | 30-50% | CriticGPT production data |
 | Cost vs. human review | 100x reduction | RLAIF research ($0.01 vs $1+) |
-| Bias reduction        | 20-40%         | Adversarial debate studies    |
-| Cost vs. single model | 90% reduction  | Oracle-Worker pattern         |
+| Bias reduction | 20-40% | Adversarial debate studies |
+| Cost vs. single model | 90% reduction | Oracle-Worker pattern |
 
 ### 7.3 ROI Framework
 
@@ -504,16 +486,16 @@ Break-even transactions = Fixed costs / (Savings per transaction - Variable cost
 ### 10.1 Key Papers
 
 1. **Constitutional AI: Harmlessness from AI Feedback** (Anthropic, 2022)
-    - https://arxiv.org/abs/2212.08073
-    - Foundation for RLAIF and dual-model critique patterns
+   - https://arxiv.org/abs/2212.08073
+   - Foundation for RLAIF and dual-model critique patterns
 
 2. **Self-Taught Evaluators** (Meta AI, 2024)
-    - https://arxiv.org/abs/2408.02666
-    - Self-critique evaluator loop methodology
+   - https://arxiv.org/abs/2408.02666
+   - Self-critique evaluator loop methodology
 
 3. **CriticGPT** (OpenAI, July 2024)
-    - https://openai.com/research/criticgpt
-    - Production validation of generator/critic pattern
+   - https://openai.com/research/criticgpt
+   - Production validation of generator/critic pattern
 
 ### 10.2 Related Research
 
@@ -589,24 +571,24 @@ class OnDemandDualLLM:
 
 ### 12.1 Advantages
 
-| Benefit               | Description                                               |
-|-----------------------|-----------------------------------------------------------|
-| **Improved Security** | Clear trust boundaries prevent privilege escalation       |
-| **Better Quality**    | Critique and revision cycles catch errors                 |
-| **Reduced Bias**      | Adversarial perspectives surface assumptions              |
-| **Scalability**       | Parallel execution reduces latency for some patterns      |
-| **Cost Efficiency**   | AI evaluation cheaper than human review (100x)            |
-| **Reliability**       | Independent verification reduces single points of failure |
+| Benefit | Description |
+|---------|-------------|
+| **Improved Security** | Clear trust boundaries prevent privilege escalation |
+| **Better Quality** | Critique and revision cycles catch errors |
+| **Reduced Bias** | Adversarial perspectives surface assumptions |
+| **Scalability** | Parallel execution reduces latency for some patterns |
+| **Cost Efficiency** | AI evaluation cheaper than human review (100x) |
+| **Reliability** | Independent verification reduces single points of failure |
 
 ### 12.2 Disadvantages
 
-| Drawback                   | Mitigation                              |
-|----------------------------|-----------------------------------------|
-| **Increased Cost**         | Running multiple models simultaneously  | Use on-demand consultation, efficient model selection |
-| **Higher Latency**         | Sequential critique/revision takes time | Use parallel patterns when possible |
-| **Complexity**             | Orchestrating multiple models is harder | Use established frameworks, clear protocols |
-| **Debugging Difficulty**   | Issues arise from model interactions    | Structured logging, isolated testing |
-| **Potential for Conflict** | Models may deadlock or disagree         | Timeout mechanisms, tie-breaking rules |
+| Drawback | Mitigation |
+|----------|------------|
+| **Increased Cost** | Running multiple models simultaneously | Use on-demand consultation, efficient model selection |
+| **Higher Latency** | Sequential critique/revision takes time | Use parallel patterns when possible |
+| **Complexity** | Orchestrating multiple models is harder | Use established frameworks, clear protocols |
+| **Debugging Difficulty** | Issues arise from model interactions | Structured logging, isolated testing |
+| **Potential for Conflict** | Models may deadlock or disagree | Timeout mechanisms, tie-breaking rules |
 
 ---
 
@@ -629,8 +611,7 @@ class OnDemandDualLLM:
 
 ### 13.2 Implementation Guidance
 
-1. **Start with the right variation**: Match pattern to problem (security → Privileged/Quarantined, quality →
-   Generator/Critic)
+1. **Start with the right variation**: Match pattern to problem (security → Privileged/Quarantined, quality → Generator/Critic)
 2. **Define clear communication protocols**: Structured I/O, symbolic variables
 3. **Implement monitoring**: Track both models' performance and interaction quality
 4. **Have escape hatches**: Timeout mechanisms, human escalation paths
@@ -663,8 +644,7 @@ class OnDemandDualLLM:
 
 1. [Sourcegraph Multi-Model Presentation](https://youtu.be/hAEmt-FMyHA?si=6iKcGnTavdQlQKUZ)
 2. [Anthropic Engineering: Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)
-3. [Building an internal agent: Code-driven vs LLM-driven workflows](https://lethain.com/agents-coordinators/) - Will
-   Larson (Imprint, 2025)
+3. [Building an internal agent: Code-driven vs LLM-driven workflows](https://lethain.com/agents-coordinators/) - Will Larson (Imprint, 2025)
 
 ---
 
@@ -677,8 +657,7 @@ This report was compiled by a team of 4 parallel research agents:
 3. **Related Patterns Analysis** - Agent ID: a65a7eecb13fd8ce8
 4. **Use Cases Research** - Agent ID: a0b1c2e76a2bedd96
 
-**Note**: Some web searches were limited by API quota during this research. Industry implementation data was
-supplemented from existing pattern documentation in the codebase.
+**Note**: Some web searches were limited by API quota during this research. Industry implementation data was supplemented from existing pattern documentation in the codebase.
 
 ---
 

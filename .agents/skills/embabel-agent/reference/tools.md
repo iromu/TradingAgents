@@ -65,13 +65,11 @@ public String lookupCustomer(
 ```
 
 Set at invocation:
-
 ```java
 ProcessOptions.withToolCallContext(Map.of("tenantId", "acme", "authToken", "xyz"))
 ```
 
 Per-interaction:
-
 ```java
 context.ai().withDefaultLlm().withToolCallContext(Map.of("entityId", "123"))
 ```

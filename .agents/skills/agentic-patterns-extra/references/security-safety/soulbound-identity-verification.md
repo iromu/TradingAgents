@@ -10,14 +10,11 @@ tags: [identity, verification, trust, soulbound-token, blockchain, agent-identit
 
 ## Problem
 
-As autonomous agents interact across networks, verifying identity and detecting prompt/operator drift becomes difficult.
-Without durable identity and an immutable change history, agents can impersonate others or silently diverge from
-authorized configurations.
+As autonomous agents interact across networks, verifying identity and detecting prompt/operator drift becomes difficult. Without durable identity and an immutable change history, agents can impersonate others or silently diverge from authorized configurations.
 
 ## Solution
 
-Bind agent identity and mutable metadata to a non-transferable credential and record identity-bearing state transitions
-in a tamper-resistant log.
+Bind agent identity and mutable metadata to a non-transferable credential and record identity-bearing state transitions in a tamper-resistant log.
 
 **Pattern flow:**
 
@@ -38,10 +35,8 @@ graph TD
 ## Evidence
 
 - **Evidence Grade:** `medium`
-- **Most Valuable Findings:** Non-transferable credentials prevent credential theft and impersonation; hash-based state
-  commitments enable verifiable continuity checks without requiring identity disclosure.
-- **Unverified / Unclear:** Long-term operational costs and scalability across large agent fleets require further
-  production validation.
+- **Most Valuable Findings:** Non-transferable credentials prevent credential theft and impersonation; hash-based state commitments enable verifiable continuity checks without requiring identity disclosure.
+- **Unverified / Unclear:** Long-term operational costs and scalability across large agent fleets require further production validation.
 
 ## When to use
 
@@ -51,10 +46,8 @@ graph TD
 
 ## Trade-offs
 
-- **Pros:** Non-transferability prevents credential delegation and theft; tamper-resistant logging provides auditable
-  state history; enables verification without identity disclosure.
-- **Cons:** Requires external registry and append-only log infrastructure; hash commitments verify state integrity but
-  not semantic correctness; operational overhead for issuing/rotating credentials.
+- **Pros:** Non-transferability prevents credential delegation and theft; tamper-resistant logging provides auditable state history; enables verification without identity disclosure.
+- **Cons:** Requires external registry and append-only log infrastructure; hash commitments verify state integrity but not semantic correctness; operational overhead for issuing/rotating credentials.
 
 ## Known Implementations
 

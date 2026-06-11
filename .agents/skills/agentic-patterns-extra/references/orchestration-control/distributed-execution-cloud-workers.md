@@ -24,15 +24,11 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-Single-session AI agent execution cannot scale to meet enterprise team demands. Complex projects require multiple
-simultaneous code changes across different parts of the codebase, but coordinating multiple agents introduces challenges
-around communication, conflict resolution, merge coordination, and infrastructure management.
+Single-session AI agent execution cannot scale to meet enterprise team demands. Complex projects require multiple simultaneous code changes across different parts of the codebase, but coordinating multiple agents introduces challenges around communication, conflict resolution, merge coordination, and infrastructure management.
 
 ## Solution
 
-Implement a distributed execution framework that runs multiple Claude Code sessions in parallel using git worktrees and
-cloud-based worker infrastructure. This enables team-scale AI code generation with proper synchronization and conflict
-management.
+Implement a distributed execution framework that runs multiple Claude Code sessions in parallel using git worktrees and cloud-based worker infrastructure. This enables team-scale AI code generation with proper synchronization and conflict management.
 
 **Core architecture:**
 
@@ -119,24 +115,24 @@ graph TB
 **Example workflow (HumanLayer's CodeLayer):**
 
 1. **Task decomposition:**
-    - Break project into parallelizable units
-    - Assign each unit to worker session
-    - Define dependencies and ordering constraints
+   - Break project into parallelizable units
+   - Assign each unit to worker session
+   - Define dependencies and ordering constraints
 
 2. **Worker deployment:**
-    - Provision cloud workers (AWS, GCP, etc.)
-    - Initialize git worktrees for each worker
-    - Configure agent sessions with task contexts
+   - Provision cloud workers (AWS, GCP, etc.)
+   - Initialize git worktrees for each worker
+   - Configure agent sessions with task contexts
 
 3. **Parallel execution:**
-    - Workers execute independently
-    - Progress reported to central monitor
-    - Conflicts flagged for resolution
+   - Workers execute independently
+   - Progress reported to central monitor
+   - Conflicts flagged for resolution
 
 4. **Synchronization:**
-    - Coordinate merge order based on dependencies
-    - Resolve conflicts with human assistance when needed
-    - Integrate results into main branch
+   - Coordinate merge order based on dependencies
+   - Resolve conflicts with human assistance when needed
+   - Integrate results into main branch
 
 **Prerequisites:**
 
@@ -148,8 +144,7 @@ graph TB
 
 **Related patterns:**
 
-Extends [Sub-Agent Spawning](sub-agent-spawning.md) and [Swarm Migration Pattern](swarm-migration-pattern.md) to cloud
-infrastructure with team coordination.
+Extends [Sub-Agent Spawning](sub-agent-spawning.md) and [Swarm Migration Pattern](swarm-migration-pattern.md) to cloud infrastructure with team coordination.
 
 ## Trade-offs
 
@@ -172,11 +167,8 @@ infrastructure with team coordination.
 
 ## References
 
-- [Building Companies with Claude Code](https://claude.com/blog/building-companies-with-claude-code) - HumanLayer's
-  CodeLayer enables "teams run multiple Claude agent sessions in parallel"
+- [Building Companies with Claude Code](https://claude.com/blog/building-companies-with-claude-code) - HumanLayer's CodeLayer enables "teams run multiple Claude agent sessions in parallel"
 - [HumanLayer Documentation](https://docs.humanlayer.dev/) - Framework for human-in-the-loop agent coordination
-- Stone, P., & Veloso, M. (2000). Multiagent systems: A survey from a machine learning perspective. *Autonomous Robots*,
-  8(3), 345-383. DOI: 10.1023/A:1008930228068
+- Stone, P., & Veloso, M. (2000). Multiagent systems: A survey from a machine learning perspective. *Autonomous Robots*, 8(3), 345-383. DOI: 10.1023/A:1008930228068
 - Weiss, G. (Ed.). (2013). *Multiagent systems: a modern approach to distributed artificial intelligence*. MIT Press.
-- Related
-  patterns: [Sub-Agent Spawning](sub-agent-spawning.md), [Swarm Migration Pattern](swarm-migration-pattern.md), [Human-in-the-Loop Approval Framework](human-in-loop-approval-framework.md)
+- Related patterns: [Sub-Agent Spawning](sub-agent-spawning.md), [Swarm Migration Pattern](swarm-migration-pattern.md), [Human-in-the-Loop Approval Framework](human-in-loop-approval-framework.md)

@@ -10,9 +10,7 @@ tags: [code-review, verification, quality-assurance, multi-agent, trust]
 
 ## Problem
 
-As AI models generate increasing amounts of code, the bottleneck shifts from code generation to code verification and
-review. Ensuring AI-generated code is syntactically correct, semantically correct, and aligns with intended
-functionality becomes crucial and time-consuming.
+As AI models generate increasing amounts of code, the bottleneck shifts from code generation to code verification and review. Ensuring AI-generated code is syntactically correct, semantically correct, and aligns with intended functionality becomes crucial and time-consuming.
 
 ## Solution
 
@@ -26,8 +24,7 @@ Develop and employ AI-powered tools and processes for code review:
 ## Evidence
 
 - **Evidence Grade:** `emerging`
-- **Key Findings:** GPT-4o achieved 68.50% classification accuracy in code review tasks; AI assistants have increased PR
-  review time in heavily adopting teams due to volume of AI-generated changes
+- **Key Findings:** GPT-4o achieved 68.50% classification accuracy in code review tasks; AI assistants have increased PR review time in heavily adopting teams due to volume of AI-generated changes
 
 ## How to use it
 
@@ -37,14 +34,11 @@ Develop and employ AI-powered tools and processes for code review:
 
 ## Trade-offs
 
-* **Pros:** Reduces time on routine review, enables consistent enforcement of standards, can identify issues humans
-  miss.
-* **Cons:** Risk of hallucination, high false positive rates can lead to alert fatigue, increased PR review time in
-  AI-heavy teams.
+* **Pros:** Reduces time on routine review, enables consistent enforcement of standards, can identify issues humans miss.
+* **Cons:** Risk of hallucination, high false positive rates can lead to alert fatigue, increased PR review time in AI-heavy teams.
 
 ## References
 
-- Aman Sanger (Cursor) at 0:09:12: "We're going to need to figure out how to make it easier for people to review code,
-  how to be confident that the agent's making the changes that are not just correct..."
+- Aman Sanger (Cursor) at 0:09:12: "We're going to need to figure out how to make it easier for people to review code, how to be confident that the agent's making the changes that are not just correct..."
 - "Evaluating Large Language Models for Code Review" (arXiv 2505.20206, May 2025)
 - "Automated Code Review In Practice" (arXiv 2412.18531, December 2024)

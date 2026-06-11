@@ -10,8 +10,7 @@ tags: [graphrag, schema, multi-hop, retrieval, knowledge-graph]
 
 ## Problem
 
-Complex QA over private or domain-specific corpora often needs more structure than flat chunk retrieval, but naive
-GraphRAG systems still fail in predictable ways:
+Complex QA over private or domain-specific corpora often needs more structure than flat chunk retrieval, but naive GraphRAG systems still fail in predictable ways:
 - **Retrieval is too broad:** entity, relation, keyword, and summary nodes all compete during search
 - **Question decomposition is disconnected from storage:** planner doesn't know which entity types exist
 - **Domain transfer is expensive:** each new corpus needs hand-tuned ontology work
@@ -28,8 +27,7 @@ Treat the schema as the control surface for the entire GraphRAG pipeline:
 5. **Typed retrieval:** Filter/bias retrieval toward schema types before scoring
 6. **Parallel evidence gathering:** Run decomposed sub-questions concurrently, merge evidence
 
-**Key insight:** Reuse one schema across ingestion, planning, and retrieval so the system can ask better sub-questions,
-search a narrower part of the graph, and adapt to new domains without redesigning the whole stack.
+**Key insight:** Reuse one schema across ingestion, planning, and retrieval so the system can ask better sub-questions, search a narrower part of the graph, and adapt to new domains without redesigning the whole stack.
 
 ## Evidence
 
@@ -47,10 +45,8 @@ search a narrower part of the graph, and adapt to new domains without redesignin
 
 ## Trade-offs
 
-**Pros:** Improves retrieval precision, makes multi-hop questions easier, cleaner domain-transfer path, more
-interpretable reasoning traces.
-**Cons:** Requires upfront schema design and governance, bad schema choices can hide evidence, more moving parts than
-simple vector search.
+**Pros:** Improves retrieval precision, makes multi-hop questions easier, cleaner domain-transfer path, more interpretable reasoning traces.
+**Cons:** Requires upfront schema design and governance, bad schema choices can hide evidence, more moving parts than simple vector search.
 
 ## References
 

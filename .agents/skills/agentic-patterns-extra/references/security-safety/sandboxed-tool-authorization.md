@@ -21,13 +21,9 @@ Agents need a policy system that supports pattern matching, deny-by-default sema
 
 ## Solution
 
-Pattern-based policies with deny-by-default and inheritance. Tools are authorized by matching against compiled
-patterns (exact, regex, wildcard), with deny lists taking precedence over allow lists. Subagents inherit parent policies
-with additional restrictions, and profile-based tiers provide presets for common agent types.
+Pattern-based policies with deny-by-default and inheritance. Tools are authorized by matching against compiled patterns (exact, regex, wildcard), with deny lists taking precedence over allow lists. Subagents inherit parent policies with additional restrictions, and profile-based tiers provide presets for common agent types.
 
-This approach aligns with the academic Action Selector pattern (Beurer-Kellner et al., 2025), which treats the LLM as an
-instruction decoder rather than a live controller, validating tool parameters against strict schemas before execution
-and preventing tool outputs from re-entering the selector prompt without additional validation.
+This approach aligns with the academic Action Selector pattern (Beurer-Kellner et al., 2025), which treats the LLM as an instruction decoder rather than a live controller, validating tool parameters against strict schemas before execution and preventing tool outputs from re-entering the selector prompt without additional validation.
 
 **Core concepts:**
 
@@ -200,13 +196,10 @@ function resolveEffectiveToolPolicy(params: {
 
 **Pitfalls to avoid:**
 
-- **Overly broad patterns**: Wildcard patterns like `*` can inadvertently grant excessive permissions. Prefer specific
-  patterns.
+- **Overly broad patterns**: Wildcard patterns like `*` can inadvertently grant excessive permissions. Prefer specific patterns.
 - **Missing deny precedence**: Always evaluate deny before allow; otherwise, allow rules can bypass security intent.
-- **Forgetting related tools**: If `exec` is allowed, remember that `apply_patch` should also be permitted (it's a file
-  operation).
-- **Inheritance confusion**: Subagent policies add restrictions on top of parent policies; they don't replace them
-  entirely.
+- **Forgetting related tools**: If `exec` is allowed, remember that `apply_patch` should also be permitted (it's a file operation).
+- **Inheritance confusion**: Subagent policies add restrictions on top of parent policies; they don't replace them entirely.
 
 ## Trade-offs
 
@@ -223,20 +216,13 @@ function resolveEffectiveToolPolicy(params: {
 - **Pattern complexity**: Regex-like patterns can be confusing; errors in pattern syntax may grant unintended access.
 - **Policy explosion**: Many agents with different policies can be difficult to manage and audit.
 - **Evaluation order**: Deny-before-allow precedence must be consistently applied; bugs can cause security issues.
-- **Related tool ambiguity**: Deciding which tools are "related" (e.g., `exec` → `apply_patch`) is subjective and may
-  not cover all cases.
+- **Related tool ambiguity**: Deciding which tools are "related" (e.g., `exec` → `apply_patch`) is subjective and may not cover all cases.
 
 ## References
 
-- [Clawdbot tool-policy.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/tool-policy.ts) - Policy
-  resolution
-- [Clawdbot pi-tools.policy.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/pi-tools.policy.ts) - Policy
-  enforcement
-- [Clawdbot sandbox policies](https://github.com/clawdbot/clawdbot/tree/main/src/agents/sandbox) - Sandbox-specific
-  policies
-- Beurer-Kellner et al. (2025). "Design Patterns for Securing LLM Agents against Prompt Injections." arXiv:2506.08837 -
-  Action Selector pattern academic foundation
-- [Model Context Protocol](https://modelcontextprotocol.io) - Production standard for tool authorization (Anthropic,
-  2025)
-- Related: [Egress Lockdown (No-Exfiltration Channel)](/patterns/egress-lockdown-no-exfiltration-channel) for security
-  patterns
+- [Clawdbot tool-policy.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/tool-policy.ts) - Policy resolution
+- [Clawdbot pi-tools.policy.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/pi-tools.policy.ts) - Policy enforcement
+- [Clawdbot sandbox policies](https://github.com/clawdbot/clawdbot/tree/main/src/agents/sandbox) - Sandbox-specific policies
+- Beurer-Kellner et al. (2025). "Design Patterns for Securing LLM Agents against Prompt Injections." arXiv:2506.08837 - Action Selector pattern academic foundation
+- [Model Context Protocol](https://modelcontextprotocol.io) - Production standard for tool authorization (Anthropic, 2025)
+- Related: [Egress Lockdown (No-Exfiltration Channel)](/patterns/egress-lockdown-no-exfiltration-channel) for security patterns

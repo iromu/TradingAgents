@@ -11,12 +11,7 @@
 
 ## Abstract
 
-Agent-first tooling and logging is an established design philosophy (as of 2026) that prioritizes machine-readability
-over human ergonomics when building tools and infrastructure for AI agents. This pattern addresses the fundamental
-mismatch between traditional human-centric developer tools and the needs of AI agents, which require structured,
-unambiguous, and verbose output formats for reliable operation. The ecosystem has matured significantly with the Model
-Context Protocol (MCP) as the de facto standard, a thriving agent skills marketplace, and production-validated
-observability platforms.
+Agent-first tooling and logging is an established design philosophy (as of 2026) that prioritizes machine-readability over human ergonomics when building tools and infrastructure for AI agents. This pattern addresses the fundamental mismatch between traditional human-centric developer tools and the needs of AI agents, which require structured, unambiguous, and verbose output formats for reliable operation. The ecosystem has matured significantly with the Model Context Protocol (MCP) as the de facto standard, a thriving agent skills marketplace, and production-validated observability platforms.
 
 ---
 
@@ -24,70 +19,70 @@ observability platforms.
 
 ### Primary Sources
 
-| Source                           | Type                   | Author/Origin | Date/Period                         |
-|----------------------------------|------------------------|---------------|-------------------------------------|
-| Sourcegraph (Thorsten Ball)      | Interview/Conference   | Thorsten Ball | 2024-2025                           |
-| LangChain 1.0 Documentation      | Framework Docs         | LangChain     | Sept-Nov 2025                       |
-| Model Context Protocol (MCP)     | Protocol Specification | Anthropic     | Nov 2024 (donated to AAIF Dec 2025) |
-| Anthropic Tool Design Principles | Documentation          | Anthropic     | 2024-2025                           |
-| Cloudflare Code Mode             | Blog Post              | Kenton Varda  | 2025                                |
-| Imprint Engineering Blog         | Production Patterns    | Will Larson   | 2025                                |
+| Source | Type | Author/Origin | Date/Period |
+|--------|------|---------------|-------------|
+| Sourcegraph (Thorsten Ball) | Interview/Conference | Thorsten Ball | 2024-2025 |
+| LangChain 1.0 Documentation | Framework Docs | LangChain | Sept-Nov 2025 |
+| Model Context Protocol (MCP) | Protocol Specification | Anthropic | Nov 2024 (donated to AAIF Dec 2025) |
+| Anthropic Tool Design Principles | Documentation | Anthropic | 2024-2025 |
+| Cloudflare Code Mode | Blog Post | Kenton Varda | 2025 |
+| Imprint Engineering Blog | Production Patterns | Will Larson | 2025 |
 
 ### Academic & Research Papers
 
-| Source           | Title/Topic                                    | Venue                 | Date          |
-|------------------|------------------------------------------------|-----------------------|---------------|
-| arXiv:2501.06322 | Multi-Agent Collaboration Mechanisms: A Survey | Tran et al.           | 2025          |
-| arXiv:2401.07324 | Small LLMs Are Weak Tool Learners              | Shen et al.           | 2024          |
-| arXiv:2401.06201 | EasyTool: Concise Tool Instruction             |                       | 2024          |
-| arXiv:2506.08837 | CaMeL: Code-Augmented Language Model           |                       | June 2025     |
-| arXiv:2602.23193 | ESAA: Event Sourcing for Autonomous Agents     |                       | February 2026 |
-| arXiv:2506.18096 | Deep Research Agents                           |                       | June 2025     |
-| arXiv:2505.18705 | AI-Researcher                                  |                       | May 2025      |
-| arXiv:2402.11651 | Learning From Failure                          | Wang et al.           | 2024          |
-| arXiv:2506.08837 | Design Patterns for Securing LLM Agents        | Beurer-Kellner et al. | 2025          |
-| ReAct            | Synergizing Reasoning and Acting               | ICLR 2023             | Yao et al.    |
-| AgentOps Survey  | AgentOps categorization and challenges         | arXiv                 | August 2025   |
+| Source | Title/Topic | Venue | Date |
+|--------|-------------|------|------|
+| arXiv:2501.06322 | Multi-Agent Collaboration Mechanisms: A Survey | Tran et al. | 2025 |
+| arXiv:2401.07324 | Small LLMs Are Weak Tool Learners | Shen et al. | 2024 |
+| arXiv:2401.06201 | EasyTool: Concise Tool Instruction |  | 2024 |
+| arXiv:2506.08837 | CaMeL: Code-Augmented Language Model |  | June 2025 |
+| arXiv:2602.23193 | ESAA: Event Sourcing for Autonomous Agents |  | February 2026 |
+| arXiv:2506.18096 | Deep Research Agents |  | June 2025 |
+| arXiv:2505.18705 | AI-Researcher |  | May 2025 |
+| arXiv:2402.11651 | Learning From Failure | Wang et al. | 2024 |
+| arXiv:2506.08837 | Design Patterns for Securing LLM Agents | Beurer-Kellner et al. | 2025 |
+| ReAct | Synergizing Reasoning and Acting | ICLR 2023 | Yao et al. |
+| AgentOps Survey | AgentOps categorization and challenges | arXiv | August 2025 |
 
 ### Industry Blog Posts & Articles
 
-| Source                | Title                                                  | Platform         | Date          |
-|-----------------------|--------------------------------------------------------|------------------|---------------|
-| Cloudflare Blog       | "Code Mode: the better way to use MCP"                 | Kenton Varda     | 2025          |
-| Anthropic Engineering | "Code Execution with MCP"                              |                  | December 2024 |
-| Imprint Blog          | "Building an internal agent: Logging and debugability" | Will Larson      | 2025          |
-| Ramp Engineering      | "Why We Built Our Own Background Agent"                |                  | 2025          |
-| Together AI Blog      | "AI Agents to Automate Complex Engineering Tasks"      |                  | 2025          |
-| 多Agent上生产的第一课         | 日志、轨迹、回放与责任归因                                          | Aliyun Developer | 2025          |
-| AI Agent开发遇到大麻烦       | 运行10分钟出错，根本找不到问题在哪                                     | Toutiao          | 2025          |
-| 24/7运行AI Agent三个月     | 我踩过的坑都在这了                                              | 163.com          | 2025          |
+| Source | Title | Platform | Date |
+|--------|-------|----------|------|
+| Cloudflare Blog | "Code Mode: the better way to use MCP" | Kenton Varda | 2025 |
+| Anthropic Engineering | "Code Execution with MCP" |  | December 2024 |
+| Imprint Blog | "Building an internal agent: Logging and debugability" | Will Larson | 2025 |
+| Ramp Engineering | "Why We Built Our Own Background Agent" |  | 2025 |
+| Together AI Blog | "AI Agents to Automate Complex Engineering Tasks" |  | 2025 |
+| 多Agent上生产的第一课 | 日志、轨迹、回放与责任归因 | Aliyun Developer | 2025 |
+| AI Agent开发遇到大麻烦 | 运行10分钟出错，根本找不到问题在哪 | Toutiao | 2025 |
+| 24/7运行AI Agent三个月 | 我踩过的坑都在这了 | 163.com | 2025 |
 
 ### Tool Libraries & Frameworks
 
-| Tool/Library                     | Description                               | GitHub Stars | Language          |
-|----------------------------------|-------------------------------------------|--------------|-------------------|
-| anthropics/skills                | Official Anthropic Skills Repository      | 45.9k        | TypeScript        |
-| Composio                         | 1000+ tool integrations for AI Agents     | 26.9k        | Python/TypeScript |
-| LangChain/LangGraph              | Agent framework with structured output    | 100k+        | Python/JS         |
-| LlamaIndex                       | RAG + Agent framework                     | 37k+         | Python/JS         |
-| Vercel AI SDK                    | TypeScript-first with Zod validation      | 11k+         | TypeScript        |
-| obra/superpowers                 | Community Skills Collection (20+ skills)  | 22.1k        | TypeScript        |
-| ComposioHQ/awesome-claude-skills | Curated skills for Claude                 | 19.2k        |                   |
-| Letta (formerly MemGPT)          | Agent memory framework with .af format    | 19k+         | Python            |
-| Arize Phoenix                    | Open-source LLM observability             | 7.8k+        | Python            |
-| Weights & Biases Weave           | ML experiment + LLM traces                | 9.4k+        | Python            |
-| Zep                              | Temporal knowledge graph for agent memory | 3.7k+        | Python            |
+| Tool/Library | Description | GitHub Stars | Language |
+|--------------|-------------|--------------|----------|
+| anthropics/skills | Official Anthropic Skills Repository | 45.9k | TypeScript |
+| Composio | 1000+ tool integrations for AI Agents | 26.9k | Python/TypeScript |
+| LangChain/LangGraph | Agent framework with structured output | 100k+ | Python/JS |
+| LlamaIndex | RAG + Agent framework | 37k+ | Python/JS |
+| Vercel AI SDK | TypeScript-first with Zod validation | 11k+ | TypeScript |
+| obra/superpowers | Community Skills Collection (20+ skills) | 22.1k | TypeScript |
+| ComposioHQ/awesome-claude-skills | Curated skills for Claude | 19.2k |  |
+| Letta (formerly MemGPT) | Agent memory framework with .af format | 19k+ | Python |
+| Arize Phoenix | Open-source LLM observability | 7.8k+ | Python |
+| Weights & Biases Weave | ML experiment + LLM traces | 9.4k+ | Python |
+| Zep | Temporal knowledge graph for agent memory | 3.7k+ | Python |
 
 ### Observability Platforms
 
-| Platform                  | Type                       | License/Pricing              | Key Features               |
-|---------------------------|----------------------------|------------------------------|----------------------------|
-| Langfuse                  | Open-source                | MIT (Free: 50K events/month) | Self-hosted unlimited      |
-| LangSmith                 | LangChain-native           | Commercial                   | LangChain integration      |
-| Arize Phoenix             | Open-source + Enterprise   | Apache 2.0                   | LLM tracing, ML monitoring |
-| AgentOps                  | Multi-agent optimization   | Commercial                   | Agent-specific metrics     |
-| Weights & Biases (Weave)  | ML experiment + LLM traces | Commercial                   | ML experiment tracking     |
-| Datadog LLM Observability | Enterprise                 | Commercial                   | Span-level tracing         |
+| Platform | Type | License/Pricing | Key Features |
+|----------|------|-----------------|--------------|
+| Langfuse | Open-source | MIT (Free: 50K events/month) | Self-hosted unlimited |
+| LangSmith | LangChain-native | Commercial | LangChain integration |
+| Arize Phoenix | Open-source + Enterprise | Apache 2.0 | LLM tracing, ML monitoring |
+| AgentOps | Multi-agent optimization | Commercial | Agent-specific metrics |
+| Weights & Biases (Weave) | ML experiment + LLM traces | Commercial | ML experiment tracking |
+| Datadog LLM Observability | Enterprise | Commercial | Span-level tracing |
 
 ---
 
@@ -192,19 +187,19 @@ Recommended JSON log format for agent-first logging:
 
 ### Core Log Data Elements
 
-| Field          | Purpose                          | Example                |
-|----------------|----------------------------------|------------------------|
-| `timestamp`    | When the action occurred         | ISO 8601 format        |
-| `agent_id`     | Which agent performed the action | Unique identifier      |
-| `step_id`      | Current decision step            | Sequential number      |
-| `state`        | Environment state summary        | JSON object            |
-| `observation`  | Information the agent perceived  | String or JSON         |
-| `thought`      | Reasoning/planning content       | String (for debugging) |
-| `action`       | Action executed                  | Function name          |
-| `action_input` | Action input parameters          | JSON object            |
-| `result`       | Execution result                 | JSON object            |
-| `latency_ms`   | Execution time                   | Number                 |
-| `success`      | Whether it succeeded             | Boolean                |
+| Field | Purpose | Example |
+|-------|---------|---------|
+| `timestamp` | When the action occurred | ISO 8601 format |
+| `agent_id` | Which agent performed the action | Unique identifier |
+| `step_id` | Current decision step | Sequential number |
+| `state` | Environment state summary | JSON object |
+| `observation` | Information the agent perceived | String or JSON |
+| `thought` | Reasoning/planning content | String (for debugging) |
+| `action` | Action executed | Function name |
+| `action_input` | Action input parameters | JSON object |
+| `result` | Execution result | JSON object |
+| `latency_ms` | Execution time | Number |
+| `success` | Whether it succeeded | Boolean |
 
 ### Tool Schema Design (OpenAI Function Calling Pattern)
 
@@ -289,9 +284,7 @@ skill-name/
 **Tools**: LangSmith, Langfuse, Arize Phoenix, Datadog LLM Observability
 
 **Quote (Will Larson, Imprint 2025):**
-> "Agents introduce non-determinism—the same input can produce different outputs. When agents do something sub-optimal,
-> users flag it as a 'bug' even if it's just prompt ambiguity. Debugging these issues requires tracing through complex
-> multi-step workflows."
+> "Agents introduce non-determinism—the same input can produce different outputs. When agents do something sub-optimal, users flag it as a 'bug' even if it's just prompt ambiguity. Debugging these issues requires tracing through complex multi-step workflows."
 
 ### 2. Tool Authorization Management
 
@@ -314,10 +307,7 @@ skill-name/
 - JSONL format with temporal indexing
 
 **Quote (Thorsten Ball, Sourcegraph):**
-> "What we've seen people now do is well instead of having the client log and having the browser log and having the
-> database log, let's have one unified log because then it's easier for the agent to just look at this log... You can just
-> have like JSON line outputs and whatnot because the agent can understand it much better than a human can... This is not
-> made for human consumption anymore. How can we optimize this for agent consumption?"
+> "What we've seen people now do is well instead of having the client log and having the browser log and having the database log, let's have one unified log because then it's easier for the agent to just look at this log... You can just have like JSON line outputs and whatnot because the agent can understand it much better than a human can... This is not made for human consumption anymore. How can we optimize this for agent consumption?"
 
 ### 4. Code-First Tool Interface (Cloudflare Code Mode)
 
@@ -338,16 +328,16 @@ skill-name/
 
 ### Major Production Implementations
 
-| Company                      | Agent-First Optimization          | Key Innovation                             |
-|------------------------------|-----------------------------------|--------------------------------------------|
-| **Sourcegraph**              | Unified Logging Pattern           | Single log stream, JSONL output            |
-| **Cursor AI**                | @Codebase Annotation System       | Multi-file editing, background agent       |
-| **GitHub Copilot Workspace** | @workspace Feature                | Repository-level understanding             |
-| **Anthropic Claude Code**    | CLAUDE.md Standard                | Project-specific onboarding                |
-| **Together AI**              | Autonomous Workflow Architecture  | Containerized execution, tmux coordination |
-| **Cognition/Devon**          | Isolated VM per RL rollout        | Full VM isolation, 500+ parallel           |
-| **Ramp**                     | Custom sandboxed background agent | Real-time WebSocket streaming              |
-| **Cloudflare**               | Code Mode MCP Tool Interface      | V8 isolate execution, 75x token reduction  |
+| Company | Agent-First Optimization | Key Innovation |
+|---------|-------------------------|----------------|
+| **Sourcegraph** | Unified Logging Pattern | Single log stream, JSONL output |
+| **Cursor AI** | @Codebase Annotation System | Multi-file editing, background agent |
+| **GitHub Copilot Workspace** | @workspace Feature | Repository-level understanding |
+| **Anthropic Claude Code** | CLAUDE.md Standard | Project-specific onboarding |
+| **Together AI** | Autonomous Workflow Architecture | Containerized execution, tmux coordination |
+| **Cognition/Devon** | Isolated VM per RL rollout | Full VM isolation, 500+ parallel |
+| **Ramp** | Custom sandboxed background agent | Real-time WebSocket streaming |
+| **Cloudflare** | Code Mode MCP Tool Interface | V8 isolate execution, 75x token reduction |
 
 ### Observability Evolution
 
@@ -359,15 +349,15 @@ skill-name/
 
 ## Related Patterns
 
-| Pattern                        | Relationship                                            |
-|--------------------------------|---------------------------------------------------------|
-| Action Caching & Replay        | Trace replay enables re-running from failure points     |
-| Agent-Driven Research          | Observability enables agent self-analysis               |
-| Agent-Friendly Workflow Design | Complementary pattern for workflow-level design         |
-| Code-Then-Execute              | Structured logging enables safe code execution patterns |
-| Hook-Based Safety Guardrails   | Logging captures all hook executions for audit          |
-| Code-Over-API Pattern          | Natural extension for complex workflows                 |
-| Code-First Tool Interface      | Alternative to direct MCP calls for efficiency          |
+| Pattern | Relationship |
+|---------|--------------|
+| Action Caching & Replay | Trace replay enables re-running from failure points |
+| Agent-Driven Research | Observability enables agent self-analysis |
+| Agent-Friendly Workflow Design | Complementary pattern for workflow-level design |
+| Code-Then-Execute | Structured logging enables safe code execution patterns |
+| Hook-Based Safety Guardrails | Logging captures all hook executions for audit |
+| Code-Over-API Pattern | Natural extension for complex workflows |
+| Code-First Tool Interface | Alternative to direct MCP calls for efficiency |
 
 ---
 
@@ -418,18 +408,13 @@ The industry has settled on maintaining both interfaces:
 
 ### Primary Quotes
 
-> "What we've seen people now do is well instead of having the client log and having the browser log and having the
-> database log, let's have one unified log because then it's easier for the agent to just look at this log... You can just
-> have like JSON line outputs and whatnot because the agent can understand it much better than a human can... This is not
-> made for human consumption anymore. How can we optimize this for agent consumption?"
+> "What we've seen people now do is well instead of having the client log and having the browser log and having the database log, let's have one unified log because then it's easier for the agent to just look at this log... You can just have like JSON line outputs and whatnot because the agent can understand it much better than a human can... This is not made for human consumption anymore. How can we optimize this for agent consumption?"
 > — Thorsten Ball, Sourcegraph
 
 > "LLMs are better at writing code to call MCP, than at calling MCP directly."
 > — Kenton Varda, Cloudflare
 
-> "Agents introduce non-determinism—the same input can produce different outputs. When agents do something sub-optimal,
-> users flag it as a 'bug' even if it's just prompt ambiguity. Debugging these issues requires tracing through complex
-> multi-step workflows."
+> "Agents introduce non-determinism—the same input can produce different outputs. When agents do something sub-optimal, users flag it as a 'bug' even if it's just prompt ambiguity. Debugging these issues requires tracing through complex multi-step workflows."
 > — Will Larson, Imprint
 
 ### Key URLs
@@ -479,12 +464,12 @@ The industry has settled on maintaining both interfaces:
 
 ## Key Individuals
 
-| Person                      | Role            | Contribution                                 |
-|-----------------------------|-----------------|----------------------------------------------|
-| **Thorsten Ball**           | Sourcegraph     | Unified logging pattern pioneer              |
-| **Will Larson**             | Imprint         | Production agent observability patterns      |
-| **Kenton Varda**            | Cloudflare      | Code Mode MCP Tool Interface                 |
-| **Nikola Balic (@nibzard)** | AMP Maintainer  | Skills ecosystem, CLI-first patterns         |
-| **Amp (Nicolay)**           | MCP Integration | Lazy-loading MCP tools (91% token reduction) |
+| Person | Role | Contribution |
+|--------|------|--------------|
+| **Thorsten Ball** | Sourcegraph | Unified logging pattern pioneer |
+| **Will Larson** | Imprint | Production agent observability patterns |
+| **Kenton Varda** | Cloudflare | Code Mode MCP Tool Interface |
+| **Nikola Balic (@nibzard)** | AMP Maintainer | Skills ecosystem, CLI-first patterns |
+| **Amp (Nicolay)** | MCP Integration | Lazy-loading MCP tools (91% token reduction) |
 
 ---

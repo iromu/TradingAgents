@@ -11,36 +11,26 @@ tags: [credentials, oauth, token-sync, keychain, cli-integration, auth-reuse]
 
 ## Problem
 
-Users manage AI API credentials across multiple tools—CLIs (Claude Code, Codex CLI), web portals, and local development
-environments. Manually re-entering credentials for each tool is friction-prone and leads to:
+Users manage AI API credentials across multiple tools—CLIs (Claude Code, Codex CLI), web portals, and local development environments. Manually re-entering credentials for each tool is friction-prone and leads to:
 
 - **Stale tokens**: OAuth refresh tokens expire, causing authentication failures
 - **Inconsistent state**: Credentials updated in one tool don't propagate to others
 - **Token-only drift**: Some tools support OAuth refresh; others store static tokens that expire
 
-Agents need automatic credential synchronization to reduce authentication friction while maintaining security (no
-plaintext storage, proper expiry handling).
+Agents need automatic credential synchronization to reduce authentication friction while maintaining security (no plaintext storage, proper expiry handling).
 
 ## Solution
 
-Cross-credential-source synchronization with near-expiry detection, type-aware upgrades, and duplicate detection. The
-system reads credentials from external tool stores (keychain, config files) and syncs them into the agent's credential
-store, with intelligent merging and freshness tracking.
+Cross-credential-source synchronization with near-expiry detection, type-aware upgrades, and duplicate detection. The system reads credentials from external tool stores (keychain, config files) and syncs them into the agent's credential store, with intelligent merging and freshness tracking.
 
 **Core concepts:**
 
-- **Source plugins**: Each external tool (Claude CLI, Codex CLI, Qwen Portal) implements a credential reader that
-  accesses its secure storage (keychain, encrypted config).
-- **Near-expiry detection**: Credentials within ~10 minutes of expiration trigger proactive refresh, preventing auth
-  failures during active sessions.
-- **Type-aware upgrades**: OAuth credentials are preferred over token-only credentials. When sync detects an OAuth
-  credential for a profile that previously had a token-only credential, it upgrades to enable auto-refresh.
-- **Duplicate detection**: Compares credential values (access tokens, refresh tokens) to avoid creating duplicate
-  profiles for the same underlying account.
-- **TTL-based caching**: External reads are cached (~15 minutes) to avoid excessive keychain access while maintaining
-  freshness.
-- **Immutable profile IDs**: Each external source maps to a fixed profile ID (e.g., `anthropic:claude-cli`,
-  `openai-codex:codex-cli`), allowing stable references across sync cycles.
+- **Source plugins**: Each external tool (Claude CLI, Codex CLI, Qwen Portal) implements a credential reader that accesses its secure storage (keychain, encrypted config).
+- **Near-expiry detection**: Credentials within ~10 minutes of expiration trigger proactive refresh, preventing auth failures during active sessions.
+- **Type-aware upgrades**: OAuth credentials are preferred over token-only credentials. When sync detects an OAuth credential for a profile that previously had a token-only credential, it upgrades to enable auto-refresh.
+- **Duplicate detection**: Compares credential values (access tokens, refresh tokens) to avoid creating duplicate profiles for the same underlying account.
+- **TTL-based caching**: External reads are cached (~15 minutes) to avoid excessive keychain access while maintaining freshness.
+- **Immutable profile IDs**: Each external source maps to a fixed profile ID (e.g., `anthropic:claude-cli`, `openai-codex:codex-cli`), allowing stable references across sync cycles.
 
 **Implementation sketch:**
 
@@ -115,26 +105,19 @@ if (existing?.type === "oauth" && claudeCreds.type === "token") {
 
 ## How to use it
 
-1. **Identify credential sources**: Map external tools that store credentials for the same providers (Anthropic, OpenAI,
-   etc.).
-2. **Implement credential readers**: For each source, write a function that reads credentials from its secure store (
-   keychain, config file).
-3. **Define profile IDs**: Assign stable compound IDs to each external source (e.g., `anthropic:claude-cli`,
-   `openai-codex:codex-cli`).
-4. **Sync on startup and timer**: Run sync when the agent starts and periodically (e.g., every hour) to refresh
-   near-expiry credentials.
+1. **Identify credential sources**: Map external tools that store credentials for the same providers (Anthropic, OpenAI, etc.).
+2. **Implement credential readers**: For each source, write a function that reads credentials from its secure store (keychain, config file).
+3. **Define profile IDs**: Assign stable compound IDs to each external source (e.g., `anthropic:claude-cli`, `openai-codex:codex-cli`).
+4. **Sync on startup and timer**: Run sync when the agent starts and periodically (e.g., every hour) to refresh near-expiry credentials.
 5. **Handle upgrade paths**: When OAuth becomes available for a token-only profile, upgrade automatically.
 6. **Detect duplicates**: Before creating a new profile, check for existing profiles with the same credential values.
 
 **Pitfalls to avoid:**
 
-- **Excessive keychain reads**: Cache external reads (~15 minutes) to avoid triggering OS security prompts too
-  frequently.
+- **Excessive keychain reads**: Cache external reads (~15 minutes) to avoid triggering OS security prompts too frequently.
 - **Missing expiry handling**: Some credentials don't carry expiry (Codex CLI). Use file mtime as a heuristic.
-- **OAuth downgrade risk**: Never replace OAuth credentials with token-only credentials; this loses auto-refresh
-  capability.
-- **Race conditions**: Multiple syncs running concurrently can overwrite credentials. Use file locks with exponential
-  backoff.
+- **OAuth downgrade risk**: Never replace OAuth credentials with token-only credentials; this loses auto-refresh capability.
+- **Race conditions**: Multiple syncs running concurrently can overwrite credentials. Use file locks with exponential backoff.
 
 ## Trade-offs
 
@@ -154,13 +137,9 @@ if (existing?.type === "oauth" && claudeCreds.type === "token") {
 
 ## References
 
-- [Clawdbot external-cli-sync.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/auth-profiles/external-cli-sync.ts) -
-  Sync logic
-- [Clawdbot CLI credential readers](https://github.com/clawdbot/clawdbot/blob/main/src/agents/cli-credentials.ts) -
-  Keychain access
-- [Clawdbot credential types](https://github.com/clawdbot/clawdbot/blob/main/src/agents/auth-profiles/types.ts) - Type
-  definitions
+- [Clawdbot external-cli-sync.ts](https://github.com/clawdbot/clawdbot/blob/main/src/agents/auth-profiles/external-cli-sync.ts) - Sync logic
+- [Clawdbot CLI credential readers](https://github.com/clawdbot/clawdbot/blob/main/src/agents/cli-credentials.ts) - Keychain access
+- [Clawdbot credential types](https://github.com/clawdbot/clawdbot/blob/main/src/agents/auth-profiles/types.ts) - Type definitions
 - RFC 6749: [OAuth 2.0 Authorization Framework](https://datatracker.ietf.org/doc/html/rfc6749) - Refresh token semantics
-- RFC 6819: [OAuth 2.0 Security Best Current Practice](https://datatracker.ietf.org/doc/html/rfc6819) - Token expiry
-  handling
+- RFC 6819: [OAuth 2.0 Security Best Current Practice](https://datatracker.ietf.org/doc/html/rfc6819) - Token expiry handling
 - Related: [PII Tokenization](/patterns/pii-tokenization) for credential security patterns

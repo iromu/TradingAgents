@@ -10,23 +10,16 @@ tags: [vm-isolation, rl-rollout, sandbox, security, runtime-isolation, wasm]
 
 ## Problem
 
-When deploying new reinforcement learning policies or model updates in production, there is significant risk of
-unexpected behavior. A misconfigured or poorly trained policy can execute arbitrary code, make unauthorized API calls,
-or corrupt data. Running new policies in the same environment as stable ones creates blast radius that can affect the
-entire system.
+When deploying new reinforcement learning policies or model updates in production, there is significant risk of unexpected behavior. A misconfigured or poorly trained policy can execute arbitrary code, make unauthorized API calls, or corrupt data. Running new policies in the same environment as stable ones creates blast radius that can affect the entire system.
 
 ## Solution
 
-Run each RL policy rollout in an isolated virtual machine or sandbox environment. The VM provides a clean execution
-boundary with its own filesystem, network, and resource limits. The policy can only interact with the outside world
-through well-defined, audited interfaces.
+Run each RL policy rollout in an isolated virtual machine or sandbox environment. The VM provides a clean execution boundary with its own filesystem, network, and resource limits. The policy can only interact with the outside world through well-defined, audited interfaces.
 
 **Core components:**
 
-- **VM isolation**: Each policy runs in a separate lightweight VM (e.g., WebAssembly, Firecracker microVM) with its own
-  memory space and resource limits.
-- **Controlled interfaces**: Policies can only communicate through predefined channels (e.g., a message queue, a
-  specific API endpoint).
+- **VM isolation**: Each policy runs in a separate lightweight VM (e.g., WebAssembly, Firecracker microVM) with its own memory space and resource limits.
+- **Controlled interfaces**: Policies can only communicate through predefined channels (e.g., a message queue, a specific API endpoint).
 - **Resource caps**: CPU, memory, and network usage are bounded to prevent resource exhaustion.
 - **Audit logging**: All actions taken by the policy are logged for post-deployment analysis.
 - **Kill switch**: The parent system can terminate the VM immediately if the policy exhibits dangerous behavior.
@@ -74,16 +67,16 @@ class VMSandbox:
 ## Trade-offs
 
 - **Pros:**
-    - Complete isolation prevents policy failures from affecting the host system.
-    - Resource limits prevent denial-of-service scenarios.
-    - Audit logging enables post-incident analysis.
-    - Kill switch provides immediate response to dangerous behavior.
+  - Complete isolation prevents policy failures from affecting the host system.
+  - Resource limits prevent denial-of-service scenarios.
+  - Audit logging enables post-incident analysis.
+  - Kill switch provides immediate response to dangerous behavior.
 
 - **Cons:**
-    - VM overhead adds latency to policy execution.
-    - Managing multiple VMs increases operational complexity.
-    - Policies cannot directly access host resources (may require workarounds for legitimate needs).
-    - VM creation and teardown adds time to deployment pipelines.
+  - VM overhead adds latency to policy execution.
+  - Managing multiple VMs increases operational complexity.
+  - Policies cannot directly access host resources (may require workarounds for legitimate needs).
+  - VM creation and teardown adds time to deployment pipelines.
 
 ## References
 

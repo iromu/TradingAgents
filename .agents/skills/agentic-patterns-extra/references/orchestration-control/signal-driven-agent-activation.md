@@ -17,20 +17,15 @@ tags:
 
 ## Problem
 
-Most agent workflows are **command-driven**: a user types a prompt, the agent acts. This creates a bottleneck — the
-agent only works when someone tells it to.
+Most agent workflows are **command-driven**: a user types a prompt, the agent acts. This creates a bottleneck — the agent only works when someone tells it to.
 
-In domains like sales, security, DevOps, and finance, the right moment to act is determined by **external signals** (a
-prospect visits a pricing page, a CVE drops, a deployment fails, a stock hits a threshold). By the time a human notices
-and prompts the agent, the window has often closed.
+In domains like sales, security, DevOps, and finance, the right moment to act is determined by **external signals** (a prospect visits a pricing page, a CVE drops, a deployment fails, a stock hits a threshold). By the time a human notices and prompts the agent, the window has often closed.
 
-Polling dashboards or relying on human triage doesn't scale. The agent needs a mechanism to **watch for signals and
-self-activate** when conditions are met.
+Polling dashboards or relying on human triage doesn't scale. The agent needs a mechanism to **watch for signals and self-activate** when conditions are met.
 
 ## Solution
 
-Decouple agent activation from user commands by introducing a **signal layer** between external data sources and agent
-workflows.
+Decouple agent activation from user commands by introducing a **signal layer** between external data sources and agent workflows.
 
 The pattern has three components:
 
@@ -46,8 +41,7 @@ $ signal-watch --source webhook --filter "event=page_visit AND page=/pricing" \
 {"type":"intent","source":"web","entity":"acme-corp","score":82}
 ```
 
-Signal sources can be webhooks, RSS feeds, API polling, log tails, or message queues. The collector normalizes them into
-a common event schema.
+Signal sources can be webhooks, RSS feeds, API polling, log tails, or message queues. The collector normalizes them into a common event schema.
 
 ### 2. Activation Rules
 
@@ -71,8 +65,7 @@ rules:
     cooldown: 7d
 ```
 
-Rules include **cooldown periods** to prevent repeated activation on the same entity, and **condition filters** to set
-activation thresholds.
+Rules include **cooldown periods** to prevent repeated activation on the same entity, and **condition filters** to set activation thresholds.
 
 ### 3. Workflow Dispatch
 
@@ -104,12 +97,9 @@ The agent has full autonomy within the workflow scope but cannot exceed it — a
 
 ## Evidence
 
-- **Event-driven architectures** are well-established in distributed systems (AWS EventBridge, Kafka). This pattern
-  applies the same principle to agent activation.
-- **Security orchestration (SOAR)** platforms like Splunk SOAR and Palo Alto XSOAR use signal-driven playbook activation
-  as their core mechanism.
-- **Sales engagement platforms** increasingly use intent signals (6sense, Bombora) to trigger automated sequences,
-  validating the signal-to-action pipeline in production.
+- **Event-driven architectures** are well-established in distributed systems (AWS EventBridge, Kafka). This pattern applies the same principle to agent activation.
+- **Security orchestration (SOAR)** platforms like Splunk SOAR and Palo Alto XSOAR use signal-driven playbook activation as their core mechanism.
+- **Sales engagement platforms** increasingly use intent signals (6sense, Bombora) to trigger automated sequences, validating the signal-to-action pipeline in production.
 
 ## How to use it
 

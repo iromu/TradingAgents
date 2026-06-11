@@ -1,8 +1,6 @@
 # Prompt Chaining Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -62,8 +60,7 @@ chain = [
 ## Real-World Examples
 
 1. **Legal Document Analysis**: Extract clauses → Identify risks → Compare templates → Generate summary
-2. **E-commerce Descriptions**: Extract features → Research competitors → Generate SEO copy → Create variations →
-   Validate brand compliance
+2. **E-commerce Descriptions**: Extract features → Research competitors → Generate SEO copy → Create variations → Validate brand compliance
 3. **Academic Research**: Parse question → Search papers → Summarize findings → Identify gaps → Generate review
 4. **Bug Analysis**: Parse logs → Identify components → Search KB → Generate solutions → Create report
 5. **Financial Reports**: Collect data → Analyze → Identify trends → Generate narrative → Format compliance report

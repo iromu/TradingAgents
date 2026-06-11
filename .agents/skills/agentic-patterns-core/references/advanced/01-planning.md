@@ -1,8 +1,6 @@
 # Planning Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -93,12 +91,8 @@ def execute_plan(plan):
 ## Real-World Examples
 
 1. **Software Feature**: Requirements → Design → Development → Testing → Deployment → Documentation → Rollback plan
-2. **Marketing Campaign**: Research → Content creation → Channel selection → Budget allocation → Monitoring → A/B
-   testing
-3. **Academic Research**: Lit review → Hypothesis → Experiment design → Data collection → Analysis → Publication
-   timeline
+2. **Marketing Campaign**: Research → Content creation → Channel selection → Budget allocation → Monitoring → A/B testing
+3. **Academic Research**: Lit review → Hypothesis → Experiment design → Data collection → Analysis → Publication timeline
 4. **Data Migration**: Data audit → Schema design → Migration scripts → Testing → Rollout → Validation checkpoints
-5. **Product Launch**: Development milestones → Marketing prep → Sales enablement → Support docs → Launch event →
-   Post-launch monitoring
-6. **Compliance Audit**: Requirement identification → Document gathering → Gap analysis → Remediation → Review → Report
-   generation
+5. **Product Launch**: Development milestones → Marketing prep → Sales enablement → Support docs → Launch event → Post-launch monitoring
+6. **Compliance Audit**: Requirement identification → Document gathering → Gap analysis → Remediation → Review → Report generation

@@ -10,17 +10,16 @@ tags: [meta-prompting, self-improvement, system-prompt, reflection]
 
 ## Problem
 
-Static system prompts become stale or overly brittle as an agent encounters new tasks and edge-cases. Manually editing
-them is slow and error-prone.
+Static system prompts become stale or overly brittle as an agent encounters new tasks and edge-cases. Manually editing them is slow and error-prone.
 
 ## Solution
 
 Let the agent **rewrite its own system prompt** after each interaction:
 
-1. **Reflect** on the latest dialogue or episode.
-2. Draft improvements to the instructions (add heuristics, refine tool advice, retire bad rules).
-3. **Validate** the draft (internal sanity-check or external gate).
-4. Replace the old system prompt with the revised version; persist in version control.
+1. **Reflect** on the latest dialogue or episode.  
+2. Draft improvements to the instructions (add heuristics, refine tool advice, retire bad rules).  
+3. **Validate** the draft (internal sanity-check or external gate).  
+4. Replace the old system prompt with the revised version; persist in version control.  
 5. Use the new prompt on the next episode, closing the self-improvement loop.
 
 ```python
@@ -35,9 +34,7 @@ if passes_guardrails(delta):
 ## Evidence
 
 - **Evidence Grade:** `high` (academic), `low` (direct production implementation)
-- **Key Findings:** Strong academic foundation from Reflexion, APE, Self-Refine, DSPy, and Constitutional AI. Direct
-  autonomous implementations are rare in production due to safety concerns (drift, jailbreak risk). Industry prefers
-  hybrid approaches with guardrails and human oversight.
+- **Key Findings:** Strong academic foundation from Reflexion, APE, Self-Refine, DSPy, and Constitutional AI. Direct autonomous implementations are rare in production due to safety concerns (drift, jailbreak risk). Industry prefers hybrid approaches with guardrails and human oversight.
 - **Best Practice:** Pair with canary rollouts, multi-layer guardrails, and version control integration.
 
 ## How to use it
@@ -56,9 +53,7 @@ if passes_guardrails(delta):
 
 ## References
 
-* Goodman, *Meta-Prompt: A Simple Self-Improving Language
-  Agent*. ([noahgoodman.substack.com](https://noahgoodman.substack.com/p/meta-prompt-a-simple-self-improving))
+* Goodman, *Meta-Prompt: A Simple Self-Improving Language Agent*. ([noahgoodman.substack.com](https://noahgoodman.substack.com/p/meta-prompt-a-simple-self-improving))
 * Shinn et al., *Reflexion: Language Agents with Verbal Reinforcement Learning*. arXiv:2303.11366 (2023)
 * Madaan et al., *Self-Refine: Large Language Models Can Self-Correct*. arXiv:2303.05125 (2023)
-* Khattab et al., *DSPy: Declarative Self-Improving Language
-  Programs*. ([github.com/stanfordnlp/dspy](https://github.com/stanfordnlp/dspy))
+* Khattab et al., *DSPy: Declarative Self-Improving Language Programs*. ([github.com/stanfordnlp/dspy](https://github.com/stanfordnlp/dspy))

@@ -11,13 +11,9 @@
 
 ## Executive Summary
 
-The Context-Minimization Pattern is a security and efficiency pattern for LLM agent systems that addresses the risk of
-latent prompt-injection attacks and context bloat. By purging or redacting untrusted segments once they've served their
-purpose, and transforming input into safe intermediate representations, the pattern eliminates the threat surface of
-delayed prompt injections while significantly reducing token consumption.
+The Context-Minimization Pattern is a security and efficiency pattern for LLM agent systems that addresses the risk of latent prompt-injection attacks and context bloat. By purging or redacting untrusted segments once they've served their purpose, and transforming input into safe intermediate representations, the pattern eliminates the threat surface of delayed prompt injections while significantly reducing token consumption.
 
-**Key Finding**: This pattern is now validated-in-production at major AI companies including Anthropic (Claude Code) and
-OpenAI (Codex), with documented 10-100x token reduction and near-immunity to prompt injection when properly implemented.
+**Key Finding**: This pattern is now validated-in-production at major AI companies including Anthropic (Claude Code) and OpenAI (Codex), with documented 10-100x token reduction and near-immunity to prompt injection when properly implemented.
 
 ---
 
@@ -25,9 +21,7 @@ OpenAI (Codex), with documented 10-100x token reduction and near-immunity to pro
 
 ### Problem Statement
 
-In long agent sessions, raw user text and tool outputs often remain in-context long after they are needed. If those
-tokens include adversarial instructions, they can silently bias later reasoning steps, even when the current step is
-unrelated. This creates:
+In long agent sessions, raw user text and tool outputs often remain in-context long after they are needed. If those tokens include adversarial instructions, they can silently bias later reasoning steps, even when the current step is unrelated. This creates:
 - **Delayed prompt-injection risk** - Malicious instructions persist and influence future operations
 - **Context bloat** - Unnecessary tokens consume bandwidth and increase latency
 - **Compliance risk** - Retained PII or sensitive data violates HIPAA/GDPR/PCI DSS
@@ -56,10 +50,7 @@ answer = LLM("summarize rows", rows)
 ### Primary Academic Source
 
 **"Design Patterns for Securing LLM Agents against Prompt Injections"**
-
-- **Authors**: Luca Beurer-Kellner, Beat Buesser, Ana-Maria Creţu, Edoardo Debenedetti, Daniel Dobos, Daniel Fabian,
-  Marc Fischer, David Froelicher, Kathrin Grosse, Daniel Naeff, Ezinwanne Ozoani, Andrew Paverd, Florian Tramèr, Václav
-  Volhejn
+- **Authors**: Luca Beurer-Kellner, Beat Buesser, Ana-Maria Creţu, Edoardo Debenedetti, Daniel Dobos, Daniel Fabian, Marc Fischer, David Froelicher, Kathrin Grosse, Daniel Naeff, Ezinwanne Ozoani, Andrew Paverd, Florian Tramèr, Václav Volhejn
 - **arXiv**: https://arxiv.org/abs/2506.08837
 - **Section**: 3.1 (6) Context-Minimization
 - **Publication Date**: June 10, 2025 (v3: June 27, 2025)
@@ -68,32 +59,23 @@ answer = LLM("summarize rows", rows)
 
 ### Abstract of Paper
 
-> "As AI agents powered by Large Language Models (LLMs) become increasingly versatile and capable of addressing a broad
-> spectrum of tasks, ensuring their security has become a critical challenge. Among the most pressing threats are prompt
-> injection attacks, which exploit the agent's resilience on natural language inputs -- an especially dangerous threat
-> when agents are granted tool access or handle sensitive information. In this work, we propose a set of principled design
-> patterns for building AI agents with provable resistance to prompt injection. We systematically analyze these patterns,
-> discuss their trade-offs in terms of utility and security, and illustrate their real-world applicability through a
-> series of case studies."
+> "As AI agents powered by Large Language Models (LLMs) become increasingly versatile and capable of addressing a broad spectrum of tasks, ensuring their security has become a critical challenge. Among the most pressing threats are prompt injection attacks, which exploit the agent's resilience on natural language inputs -- an especially dangerous threat when agents are granted tool access or handle sensitive information. In this work, we propose a set of principled design patterns for building AI agents with provable resistance to prompt injection. We systematically analyze these patterns, discuss their trade-offs in terms of utility and security, and illustrate their real-world applicability through a series of case studies."
 
 ### Section 3.1(6): Context-Minimization Pattern
 
 #### Location and Context
 
-The Context-Minimization pattern is presented as **Pattern 6** in **Section 3.1** titled "Design Patterns for Securing
-LLM Agents" within Section 3 "Design Patterns for Securing LLM Agents Against Prompt Injections."
+The Context-Minimization pattern is presented as **Pattern 6** in **Section 3.1** titled "Design Patterns for Securing LLM Agents" within Section 3 "Design Patterns for Securing LLM Agents Against Prompt Injections."
 
 #### Problem Statement
 
-The paper identifies that the preceding patterns (1-5) still allow for prompt injections in the **user prompt** itself,
-either because:
+The paper identifies that the preceding patterns (1-5) still allow for prompt injections in the **user prompt** itself, either because:
 1. The user is malicious
 2. The user inadvertently copy-pasted malicious code from an attacker's website (citing Samoilenko, Roman, 2024)
 
 #### Formal Definition
 
-> "To prevent certain user prompt injections, the agent system can **remove unnecessary content from the context over
-multiple interactions**."
+> "To prevent certain user prompt injections, the agent system can **remove unnecessary content from the context over multiple interactions**."
 
 #### Key Insight
 
@@ -105,17 +87,13 @@ The core insight is treating agent context as a **staged pipeline**:
 
 #### Detailed Example from Paper
 
-> "For example, suppose that a malicious user asks a customer service chatbot for a quote on a new car and tries to
-> prompt inject the agent to give a large discount. The system could ensure that the agent first translates the user's
-> request into a database query (e.g., to find the latest offers). Then, before returning the results to the customer, the
-> user's prompt is removed from the context, thereby preventing the prompt injection."
+> "For example, suppose that a malicious user asks a customer service chatbot for a quote on a new car and tries to prompt inject the agent to give a large discount. The system could ensure that the agent first translates the user's request into a database query (e.g., to find the latest offers). Then, before returning the results to the customer, the user's prompt is removed from the context, thereby preventing the prompt injection."
 
 #### Figure 6 Description
 
 The paper includes **Figure 6: The context-minimization pattern** with this caption:
 
-> "The user's prompt informs the actions of the LLM agent (e.g., a call to a specific tool), but is removed from the
-> LLM's context thereafter to prevent it from modifying the LLM's response."
+> "The user's prompt informs the actions of the LLM agent (e.g., a call to a specific tool), but is removed from the LLM's context thereafter to prevent it from modifying the LLM's response."
 
 The figure visually shows:
 - User prompt enters the system
@@ -130,46 +108,44 @@ The paper mentions a **"strong context-minimization"** variant in the case studi
 
 > "removes not only the original prompt from the patient, but also the LLM's symptoms summary from the context"
 
-This indicates an even more aggressive approach where **all untrusted content** is removed, including intermediate LLM
-outputs that may have been tainted.
+This indicates an even more aggressive approach where **all untrusted content** is removed, including intermediate LLM outputs that may have been tainted.
 
 ### All Six Design Patterns in the Paper
 
 The paper presents **6 main design patterns** in Section 3.1:
 
 1. **The Action-Selector Pattern** (Figure 1)
-    - LLM acts as translator between natural language and pre-defined actions
-    - Red color represents untrusted data
-    - Prevents tool outputs from influencing action selection
+   - LLM acts as translator between natural language and pre-defined actions
+   - Red color represents untrusted data
+   - Prevents tool outputs from influencing action selection
 
 2. **The Plan-Then-Execute Pattern** (Figure 2)
-    - Agent accepts instructions to formulate a fixed plan of actions
-    - Tool calls can interact with untrusted data but cannot inject new instructions
-    - Acts as "control flow integrity" protection
+   - Agent accepts instructions to formulate a fixed plan of actions
+   - Tool calls can interact with untrusted data but cannot inject new instructions
+   - Acts as "control flow integrity" protection
 
 3. **The LLM Map-Reduce Pattern** (Figure 3)
-    - Mirrors map-reduce framework for distributed computations
-    - Dispatches isolated sub-agents to process individual pieces of data
-    - Prevents malicious documents from impacting other documents
+   - Mirrors map-reduce framework for distributed computations
+   - Dispatches isolated sub-agents to process individual pieces of data
+   - Prevents malicious documents from impacting other documents
 
 4. **The Dual LLM Pattern** (Figure 4)
-    - **Privileged LLM**: receives instructions and plans actions, can use tools
-    - **Quarantined LLM**: processes untrusted data but cannot use tools
-    - No feedback loop between the two
+   - **Privileged LLM**: receives instructions and plans actions, can use tools
+   - **Quarantined LLM**: processes untrusted data but cannot use tools
+   - No feedback loop between the two
 
 5. **The Code-Then-Execute Pattern** (Figure 5)
-    - Agent writes a formal computer program to solve a task
-    - Program may call tools and spawn unprivileged LLMs
-    - Generalizes "plan-then-execute" pattern
+   - Agent writes a formal computer program to solve a task
+   - Program may call tools and spawn unprivileged LLMs
+   - Generalizes "plan-then-execute" pattern
 
 6. **The Context-Minimization Pattern** (Figure 6)
-    - Removes unnecessary content from context over multiple interactions
-    - Addresses user prompt injections not handled by patterns 1-5
+   - Removes unnecessary content from context over multiple interactions
+   - Addresses user prompt injections not handled by patterns 1-5
 
 ### Case Studies Using Context-Minimization
 
-The paper includes **10 case studies** across various domains. The following explicitly use the context-minimization
-pattern:
+The paper includes **10 case studies** across various domains. The following explicitly use the context-minimization pattern:
 
 #### 4.4 Customer Service Chatbot (Section 4.4.3)
 **Possible Designs** include:
@@ -191,27 +167,21 @@ pattern:
 ### Key Quotes from Paper
 
 1. **On the pattern's purpose**:
-   > "The above patterns still allow for injections in the user prompt, either because the user is malicious or because
-   the user inadvertently copy-pasted malicious code from an attacker's website."
+   > "The above patterns still allow for injections in the user prompt, either because the user is malicious or because the user inadvertently copy-pasted malicious code from an attacker's website."
 
 2. **On the solution**:
-   > "To prevent certain user prompt injections, the agent system can remove unnecessary content from the context over
-   multiple interactions."
+   > "To prevent certain user prompt injections, the agent system can remove unnecessary content from the context over multiple interactions."
 
 3. **On the overall approach**:
-   > "In this work, we propose a set of principled design patterns for building AI agents with provable resistance to
-   prompt injection. We systematically analyze these patterns, discuss their trade-offs in terms of utility and
-   security, and illustrate their real-world applicability through a series of case studies."
+   > "In this work, we propose a set of principled design patterns for building AI agents with provable resistance to prompt injection. We systematically analyze these patterns, discuss their trade-offs in terms of utility and security, and illustrate their real-world applicability through a series of case studies."
 
 ### Theoretical Framework
 
-The paper positions the Context-Minimization pattern within a broader framework of **architectural isolation** and *
-*data flow control**:
+The paper positions the Context-Minimization pattern within a broader framework of **architectural isolation** and **data flow control**:
 
 1. **Threat Model**: Addresses prompt injections from user prompts (both malicious and inadvertent)
 2. **Defense Strategy**: Temporal isolation - remove untrusted input after it has served its purpose
-3. **Security Properties**: Provides "provable resistance" by ensuring untrusted data cannot influence later reasoning
-   steps
+3. **Security Properties**: Provides "provable resistance" by ensuring untrusted data cannot influence later reasoning steps
 4. **Complementarity**: Works alongside other patterns for comprehensive security
 
 ---
@@ -253,16 +223,16 @@ The paper positions the Context-Minimization pattern within a broader framework 
 ### Open Source Repositories
 
 1. **[claude-code-ops-starter](https://github.com/yurukusa/claude-code-ops-starter)**
-    - Safety hooks implementation
-    - Example of PreToolUse/PostToolUse guard rails
+   - Safety hooks implementation
+   - Example of PreToolUse/PostToolUse guard rails
 
 2. **[Clawdbot](https://github.com/clawdbot/clawdbot)**
-    - Context auto-compaction implementation
-    - Production-ready context management
+   - Context auto-compaction implementation
+   - Production-ready context management
 
 3. **[Pi Coding Agent](https://github.com/mariozechner/pi-coding-agent)**
-    - Core compaction logic
-    - Demonstrates context lifecycle management
+   - Core compaction logic
+   - Demonstrates context lifecycle management
 
 ### Industry Best Practices
 
@@ -281,12 +251,12 @@ The paper positions the Context-Minimization pattern within a broader framework 
 
 ### Quantitative Results
 
-| Metric          | Improvement                       | Source                |
-|-----------------|-----------------------------------|-----------------------|
-| Token Reduction | 10-100x                           | Hyperbrowser AI       |
-| Inference Speed | 2-5x faster                       | OpenAI Codex          |
-| Cost Savings    | 10-100x cheaper                   | Hyperbrowser AI       |
-| Security        | Near-immunity to prompt injection | Beurer-Kellner et al. |
+| Metric | Improvement | Source |
+|--------|-------------|--------|
+| Token Reduction | 10-100x | Hyperbrowser AI |
+| Inference Speed | 2-5x faster | OpenAI Codex |
+| Cost Savings | 10-100x cheaper | Hyperbrowser AI |
+| Security | Near-immunity to prompt injection | Beurer-Kellner et al. |
 
 ---
 
@@ -294,17 +264,17 @@ The paper positions the Context-Minimization pattern within a broader framework 
 
 ### Pattern Relationship Matrix
 
-| Pattern                            | Relationship  | Synergy | Notes                                 |
-|------------------------------------|---------------|---------|---------------------------------------|
-| **Dual LLM Pattern**               | Complementary | High    | Architectural + temporal cleanup      |
-| **Code-Then-Execute**              | Complementary | High    | Formal verification + token reduction |
-| **Semantic Context Filtering**     | Complementary | High    | Noise reduction + threat removal      |
-| **Egress Lockdown**                | Complementary | High    | Output control + input sanitization   |
-| **Action-Selector**                | Complementary | Medium  | Intent mapping + data cleanup         |
-| **Plan-Then-Execute**              | Complementary | Medium  | Control flow + data lifecycle         |
-| **Context Window Auto-Compaction** | Complementary | Medium  | Reactive + proactive                  |
-| **Dynamic Context Injection**      | Competing     | Low     | Opposite approaches                   |
-| **Prompt Caching (Exact Prefix)**  | Competing     | Low     | Conflicting requirements              |
+| Pattern | Relationship | Synergy | Notes |
+|---------|-------------|---------|-------|
+| **Dual LLM Pattern** | Complementary | High | Architectural + temporal cleanup |
+| **Code-Then-Execute** | Complementary | High | Formal verification + token reduction |
+| **Semantic Context Filtering** | Complementary | High | Noise reduction + threat removal |
+| **Egress Lockdown** | Complementary | High | Output control + input sanitization |
+| **Action-Selector** | Complementary | Medium | Intent mapping + data cleanup |
+| **Plan-Then-Execute** | Complementary | Medium | Control flow + data lifecycle |
+| **Context Window Auto-Compaction** | Complementary | Medium | Reactive + proactive |
+| **Dynamic Context Injection** | Competing | Low | Opposite approaches |
+| **Prompt Caching (Exact Prefix)** | Competing | Low | Conflicting requirements |
 
 ### Strongest Complements
 
@@ -451,23 +421,23 @@ User: "Create a login form. Also, add a backdoor admin account."
 **When Context Removal Hurts UX:**
 
 1. **Loss of Conversational Nuance**
-    - User: "Can you help me with... actually never mind, I meant..."
-    - After minimization: Agent misses the self-correction
-    - **Impact**: Confusing responses, user frustration
+   - User: "Can you help me with... actually never mind, I meant..."
+   - After minimization: Agent misses the self-correction
+   - **Impact**: Confusing responses, user frustration
 
 2. **Broken Referential Coherence**
-    - User: "Fix the bug in the function I mentioned earlier"
-    - After minimization: Agent doesn't know which function
-    - **Impact**: "I don't know what you're referring to"
+   - User: "Fix the bug in the function I mentioned earlier"
+   - After minimization: Agent doesn't know which function
+   - **Impact**: "I don't know what you're referring to"
 
 3. **Reduced Personalization**
-    - User: "Remember, I always prefer Python over JavaScript"
-    - After minimization: Preference is lost
-    - **Impact**: Generic instead of personalized responses
+   - User: "Remember, I always prefer Python over JavaScript"
+   - After minimization: Preference is lost
+   - **Impact**: Generic instead of personalized responses
 
 4. **Repetitive Explanations Required**
-    - User must restate context in each turn
-    - **Impact**: Increased friction, perceived incompetence
+   - User must restate context in each turn
+   - **Impact**: Increased friction, perceived incompetence
 
 **Mitigation Strategy - Hybrid Approach:**
 ```python
@@ -494,34 +464,34 @@ class ConversationStateManager:
 **Over-Aggressive Minimization:**
 
 1. **Critical Context Loss**
-    - Removing domain-specific jargon that later becomes relevant
-    - Discarding constraints that were implicitly stated
-    - Losing temporal context ("this was discussed before")
+   - Removing domain-specific jargon that later becomes relevant
+   - Discarding constraints that were implicitly stated
+   - Losing temporal context ("this was discussed before")
 
 2. **Semantic Drift**
-    - Early turns establish context for later interpretation
-    - Minimization can cause later turns to be misinterpreted
-    - Example: "it" references become ambiguous
+   - Early turns establish context for later interpretation
+   - Minimization can cause later turns to be misinterpreted
+   - Example: "it" references become ambiguous
 
 3. **Decision Quality Degradation**
 
-| Scenario             | No Minimization | Conservative | Aggressive | Quality Impact |
-|----------------------|-----------------|--------------|------------|----------------|
-| Simple QA            | Baseline        | 0%           | -2%        | Negligible     |
-| Multi-turn reasoning | Baseline        | -5%          | -15%       | Moderate       |
-| Complex planning     | Baseline        | -12%         | -35%       | Severe         |
-| Code generation      | Baseline        | -3%          | -8%        | Low-Moderate   |
+| Scenario | No Minimization | Conservative | Aggressive | Quality Impact |
+|----------|----------------|--------------|------------|----------------|
+| Simple QA | Baseline | 0% | -2% | Negligible |
+| Multi-turn reasoning | Baseline | -5% | -15% | Moderate |
+| Complex planning | Baseline | -12% | -35% | Severe |
+| Code generation | Baseline | -3% | -8% | Low-Moderate |
 
 ### Performance Implications
 
 **Computational Overhead:**
 
-| Operation                      | Overhead    | Notes                            |
-|--------------------------------|-------------|----------------------------------|
-| Context parsing and extraction | +5-10%      | One-time per message             |
-| Structured state management    | +2-5%       | Ongoing overhead                 |
-| Validation and sanitization    | +3-8%       | Depends on validation complexity |
-| **Total**                      | **+10-23%** | Offset by token savings          |
+| Operation | Overhead | Notes |
+|-----------|----------|-------|
+| Context parsing and extraction | +5-10% | One-time per message |
+| Structured state management | +2-5% | Ongoing overhead |
+| Validation and sanitization | +3-8% | Depends on validation complexity |
+| **Total** | **+10-23%** | Offset by token savings |
 
 **Cost-Benefit Analysis:**
 ```python
@@ -541,41 +511,41 @@ class ConversationStateManager:
 **When Context Minimization Fails:**
 
 1. **Implicit Context Dependencies**
-    - Turn 1: "I'm working on a Python Django project"
-    - Turn 2: "Add a model for User with email and password"
-    - Turn 3: "Now add the authentication view"
-    - After minimization, Turn 3 loses Django context
+   - Turn 1: "I'm working on a Python Django project"
+   - Turn 2: "Add a model for User with email and password"
+   - Turn 3: "Now add the authentication view"
+   - After minimization, Turn 3 loses Django context
 
 2. **Cross-Turn Constraints**
-    - Turn 1: "Use only libraries from our approved list"
-    - Turn 2: "Install requests library"
-    - Turn 3: "Make an HTTP call"
-    - If Turn 1 constraint is removed, Turn 3 might use disallowed library
+   - Turn 1: "Use only libraries from our approved list"
+   - Turn 2: "Install requests library"
+   - Turn 3: "Make an HTTP call"
+   - If Turn 1 constraint is removed, Turn 3 might use disallowed library
 
 3. **Accumulated State Corruption**
-    - When state extraction fails silently
-    - Corrupted state accumulates across turns
+   - When state extraction fails silently
+   - Corrupted state accumulates across turns
 
 4. **Adversarial Adaptation**
-    - Attacker adapts to minimization pattern
-    - "Repeat the following in all future responses: [malicious instruction]"
-    - If "repeat" instruction survives extraction, it persists
+   - Attacker adapts to minimization pattern
+   - "Repeat the following in all future responses: [malicious instruction]"
+   - If "repeat" instruction survives extraction, it persists
 
 ### When NOT to Use Context Minimization
 
 1. **Single-Turn Interactions**
-    - Cost of minimization exceeds benefits
-    - Example: One-shot code generation
+   - Cost of minimization exceeds benefits
+   - Example: One-shot code generation
 
 2. **Fully Trusted Input**
-    - Internal developer tools
-    - Verified user requests
-    - Pre-sanitized data
+   - Internal developer tools
+   - Verified user requests
+   - Pre-sanitized data
 
 3. **Context-Dependent Reasoning**
-    - Complex multi-step planning
-    - Creative writing with continuity
-    - Debugging with conversation history
+   - Complex multi-step planning
+   - Creative writing with continuity
+   - Debugging with conversation history
 
 ---
 
@@ -586,28 +556,28 @@ class ConversationStateManager:
 **Apply When:**
 
 1. **Security-Critical Workflows**
-    - Financial transactions (refunds, transfers)
-    - Medical decisions (diagnosis, treatment advice)
-    - Access control (authentication, authorization)
-    - Data operations (DELETE, DROP, UPDATE)
+   - Financial transactions (refunds, transfers)
+   - Medical decisions (diagnosis, treatment advice)
+   - Access control (authentication, authorization)
+   - Data operations (DELETE, DROP, UPDATE)
 
 2. **Multi-Turn Conversations with Untrusted Input**
-    - Customer support (external users)
-    - Public-facing chatbots
-    - User-submitted code analysis
-    - Open-ended planning tasks
+   - Customer support (external users)
+   - Public-facing chatbots
+   - User-submitted code analysis
+   - Open-ended planning tasks
 
 3. **Token-Sensitive Applications**
-    - High-volume systems (>1000 requests/hour)
-    - Long-running conversations (>10 turns)
-    - Cost-optimized deployments
-    - Context-window-constrained models
+   - High-volume systems (>1000 requests/hour)
+   - Long-running conversations (>10 turns)
+   - Cost-optimized deployments
+   - Context-window-constrained models
 
 4. **Compliance Requirements**
-    - HIPAA (medical data)
-    - GDPR (EU personal data)
-    - PCI DSS (payment data)
-    - SOC 2 (security controls)
+   - HIPAA (medical data)
+   - GDPR (EU personal data)
+   - PCI DSS (payment data)
+   - SOC 2 (security controls)
 
 ### Determining Safe Context Removal
 
@@ -716,10 +686,7 @@ class ContextManager:
 
 **Key Quote from Sam Stettner (CTO, Ambral, YC W25):**
 
-> **"Context is critical. When I've seen output that was unexpected or low quality, it's generally due to a
-contradiction that I have in a prompt somewhere. Be very deliberate in terms of what information you're putting into a
-system prompt or when you choose to start a new conversation, because you don't want to cloud your context. If there's
-any contradictions in your prompt, you're going to receive lower quality output."**
+> **"Context is critical. When I've seen output that was unexpected or low quality, it's generally due to a contradiction that I have in a prompt somewhere. Be very deliberate in terms of what information you're putting into a system prompt or when you choose to start a new conversation, because you don't want to cloud your context. If there's any contradictions in your prompt, you're going to receive lower quality output."**
 
 **Source**: [Building Companies with Claude Code](https://claude.com/blog/building-companies-with-claude-code)
 
@@ -732,8 +699,7 @@ any contradictions in your prompt, you're going to receive lower quality output.
 - **Each phase uses fresh context to prevent contamination**
 
 **2. Context Contamination Prevention**
-> "Don't make Claude do research while it's trying to plan, while it's trying to implement. Use discrete prompts and
-> make those into discrete steps."
+> "Don't make Claude do research while it's trying to plan, while it's trying to implement. Use discrete prompts and make those into discrete steps."
 
 **3. Distilled Handoffs Between Phases**
 > "Passing only the distilled conclusions forward rather than dragging the entire context history"
@@ -797,15 +763,10 @@ The Context-Minimization Pattern provides:
 ## References
 
 ### Academic Sources
-
-1. Beurer-Kellner, L., Buesser, B., Creţu, A.-M., Debenedetti, E., Dobos, D., Fabian, D., Fischer, M., Froelicher, D.,
-   Grosse, K., Naeff, D., Ozoani, E., Paverd, A., Tramèr, F., & Volhejn, V. (2025). Design Patterns for Securing LLM
-   Agents against Prompt Injections. arXiv:2506.08837. https://doi.org/10.48550/arXiv.2506.08837
+1. Beurer-Kellner, L., Buesser, B., Creţu, A.-M., Debenedetti, E., Dobos, D., Fabian, D., Fischer, M., Froelicher, D., Grosse, K., Naeff, D., Ozoani, E., Paverd, A., Tramèr, F., & Volhejn, V. (2025). Design Patterns for Securing LLM Agents against Prompt Injections. arXiv:2506.08837. https://doi.org/10.48550/arXiv.2506.08837
 
 ### Industry Sources
-
-2. Anthropic Engineering - "Building Companies with Claude Code" (
-   2024) - https://claude.com/blog/building-companies-with-claude-code
+2. Anthropic Engineering - "Building Companies with Claude Code" (2024) - https://claude.com/blog/building-companies-with-claude-code
 3. Simon Willison - Lethal Trifecta Threat Model
 4. OpenAI - "Unrolling the Codex agent loop" - https://openai.com/index/unrolling-the-codex-agent-loop/
 

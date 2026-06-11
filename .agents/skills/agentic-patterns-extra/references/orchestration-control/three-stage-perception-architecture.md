@@ -10,37 +10,33 @@ tags: [architecture, perception, processing, action, pipeline, modular-design]
 
 ## Problem
 
-Complex AI agents often struggle with unstructured inputs and need a systematic way to process information before taking
-action. Without a clear separation of concerns, agents can become monolithic and difficult to debug, extend, or
-optimize. Additionally, mixing perception, processing, and action logic makes it hard to swap out components or scale
-different parts of the system independently.
+Complex AI agents often struggle with unstructured inputs and need a systematic way to process information before taking action. Without a clear separation of concerns, agents can become monolithic and difficult to debug, extend, or optimize. Additionally, mixing perception, processing, and action logic makes it hard to swap out components or scale different parts of the system independently.
 
 ## Solution
 
 Implement a three-stage pipeline architecture that cleanly separates an agent's workflow into distinct phases:
 
 1. **Perception Stage**: Handles all input gathering and normalization
-    - Receives raw inputs (text, images, audio, structured data)
-    - Performs initial processing (OCR, speech-to-text, format conversion)
-    - Normalizes data into a common internal representation
+   - Receives raw inputs (text, images, audio, structured data)
+   - Performs initial processing (OCR, speech-to-text, format conversion)
+   - Normalizes data into a common internal representation
 
 2. **Processing Stage**: Performs reasoning and decision-making
-    - Analyzes normalized inputs using appropriate models
-    - Applies business logic and reasoning
-    - Makes decisions about what actions to take
-    - Can involve multiple sub-agents or reasoning steps
+   - Analyzes normalized inputs using appropriate models
+   - Applies business logic and reasoning
+   - Makes decisions about what actions to take
+   - Can involve multiple sub-agents or reasoning steps
 
 3. **Action Stage**: Executes decisions in the environment
-    - Translates decisions into concrete actions
-    - Interfaces with external systems and APIs
-    - Handles error recovery and retries
-    - Reports results back to the system
+   - Translates decisions into concrete actions
+   - Interfaces with external systems and APIs
+   - Handles error recovery and retries
+   - Reports results back to the system
 
 ## Evidence
 
 - **Evidence Grade:** `high`
-- **Academic foundations:** 50+ years in robotics (Sense-Plan-Act), cognitive science (Newell & Simon's information
-  processing theory), and control theory
+- **Academic foundations:** 50+ years in robotics (Sense-Plan-Act), cognitive science (Newell & Simon's information processing theory), and control theory
 - **Production validation:** Used at scale by Anthropic (Claude Code), Cursor, LangChain, OpenHands, AutoGen, and CrewAI
 - **Key research:** ReAct pattern (Yao et al. 2022, 4,500+ citations), ToolFormer (Schick et al. 2023, 2,000+ citations)
 
@@ -205,8 +201,7 @@ flowchart LR
 ## References
 
 - Yao, S., et al. (2022). "ReAct: Synergizing Reasoning and Acting in Language Models." arXiv:2210.03629. [ICLR 2023]
-- Schick, T., et al. (2023). "ToolFormer: Language Models Can Teach Themselves to Use Tools." arXiv:
-  2302.04761. [ICLR 2024]
+- Schick, T., et al. (2023). "ToolFormer: Language Models Can Teach Themselves to Use Tools." arXiv:2302.04761. [ICLR 2024]
 - Newell, A., & Simon, H. A. (1972). "Human Problem Solving." Prentice-Hall
 - Brooks, R. A. (1986). "A robust layered control system for a mobile robot." IEEE Journal of Robotics and Automation
 - [Software Architecture Patterns](https://www.oreilly.com/library/view/software-architecture-patterns/9781491971437/)

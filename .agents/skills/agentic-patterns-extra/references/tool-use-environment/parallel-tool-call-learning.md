@@ -43,13 +43,11 @@ Sequential (slow):
 Total: 7 seconds
 ```
 
-Cognition observed this with Devon: the baseline model would make 8-10 sequential tool calls during file planning,
-taking significant time even though many calls could have run in parallel.
+Cognition observed this with Devon: the baseline model would make 8-10 sequential tool calls during file planning, taking significant time even though many calls could have run in parallel.
 
 ## Solution
 
-**Use Agent RFT to teach the model to parallelize independent tool calls, dramatically reducing latency when tool
-execution is faster than inference.**
+**Use Agent RFT to teach the model to parallelize independent tool calls, dramatically reducing latency when tool execution is faster than inference.**
 
 **How Models Learn Parallelization:**
 
@@ -283,9 +281,7 @@ Total: 3-4 rounds (50% reduction in back-and-forth)
 
 **Sam's Observation:**
 
-> "We noticed that the model starts learning how to do a lot of parallel tool calls. The first action that the model
-> does, it will kick off like eight different things... and then following on it will independently explore all of those
-> things by again running more parallel tool calls."
+> "We noticed that the model starts learning how to do a lot of parallel tool calls. The first action that the model does, it will kick off like eight different things... and then following on it will independently explore all of those things by again running more parallel tool calls."
 
 **Additional Validation: Ambience Healthcare**
 
@@ -298,41 +294,41 @@ Total: 3-4 rounds (50% reduction in back-and-forth)
 **High Impact Scenarios:**
 
 1. **Tool execution << Inference time**
-    - If tools return in 100ms but inference takes 2s, parallelization saves multiple inference rounds
-    - Example: API calls, database queries, file reads
+   - If tools return in 100ms but inference takes 2s, parallelization saves multiple inference rounds
+   - Example: API calls, database queries, file reads
 
 2. **Independent information gathering**
-    - Multiple search queries
-    - Reading multiple files
-    - Checking multiple conditions
+   - Multiple search queries
+   - Reading multiple files
+   - Checking multiple conditions
 
 3. **Broad exploration phases**
-    - Initial reconnaissance (find all Python files, check all tests, etc.)
-    - Multi-source research (check docs, code, tests simultaneously)
+   - Initial reconnaissance (find all Python files, check all tests, etc.)
+   - Multi-source research (check docs, code, tests simultaneously)
 
 **Low Impact Scenarios:**
 
 1. **Sequential dependencies**
-    - Must read file A to know which file B to read
-    - Each tool result determines next action
+   - Must read file A to know which file B to read
+   - Each tool result determines next action
 
 2. **Tool execution >> Inference time**
-    - If each tool takes 10s and inference takes 1s, parallelization saves less
-    - Example: Heavy computation, large file processing
+   - If each tool takes 10s and inference takes 1s, parallelization saves less
+   - Example: Heavy computation, large file processing
 
 3. **Rate-limited APIs**
-    - External APIs that throttle concurrent requests
-    - Parallel calls just hit rate limits
+   - External APIs that throttle concurrent requests
+   - Parallel calls just hit rate limits
 
 ## Comparison with Explicit Parallelization
 
-| Approach           | Agent RFT Learning        | Manual Programming         |
-|--------------------|---------------------------|----------------------------|
-| **Implementation** | Emerges from training     | Explicit parallel tool API |
-| **Flexibility**    | Adapts to task            | Fixed strategy             |
-| **Dependencies**   | Learns safe patterns      | Must hand-code logic       |
-| **Optimization**   | Optimizes for your tools  | Generic parallelization    |
-| **Maintenance**    | Automatic with retraining | Manual updates             |
+| Approach | Agent RFT Learning | Manual Programming |
+|----------|-------------------|-------------------|
+| **Implementation** | Emerges from training | Explicit parallel tool API |
+| **Flexibility** | Adapts to task | Fixed strategy |
+| **Dependencies** | Learns safe patterns | Must hand-code logic |
+| **Optimization** | Optimizes for your tools | Generic parallelization |
+| **Maintenance** | Automatic with retraining | Manual updates |
 
 ```mermaid
 graph TD
@@ -393,7 +389,5 @@ graph TD
 
 ### Academic Foundations
 
-- Schick et al. [ToolFormer: Language Models Can Teach Themselves to Use Tools](https://arxiv.org/abs/2302.04761) (ACL,
-  2023)
-- Yao et al. [ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629) (NeurIPS,
-  2022)
+- Schick et al. [ToolFormer: Language Models Can Teach Themselves to Use Tools](https://arxiv.org/abs/2302.04761) (ACL, 2023)
+- Yao et al. [ReAct: Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629) (NeurIPS, 2022)

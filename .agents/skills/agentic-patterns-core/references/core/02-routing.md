@@ -1,8 +1,6 @@
 # Routing Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -62,13 +60,8 @@ router = {
 
 ## Real-World Examples
 
-1. **AI Customer Service**: Technical → Tech Support, Billing → Finance, Product → Sales, Complaints → Escalation,
-   General → FAQ
-2. **Content Platform**: Blog → Long-form Writer, Social → Short-form, Tech Docs → Technical Writer, Marketing →
-   Copywriter, Translations → Localization
-3. **Code Assistant**: Bug fixes → Debugging Agent, New features → Development Agent, Refactoring → Code Quality Agent,
-   Testing → Test Generation Agent, Docs → Documentation Agent
-4. **Financial Services**: Trading → Trading Agent, Risk → Risk Analysis Agent, Compliance → Compliance Agent,
-   Reporting → Report Generation Agent, Fraud → Security Agent
-5. **Education**: Math → Reasoning Agent, Language → Tutor Agent, Science → Science Expert, History → Research Agent,
-   Planning → Learning Strategy Agent
+1. **AI Customer Service**: Technical → Tech Support, Billing → Finance, Product → Sales, Complaints → Escalation, General → FAQ
+2. **Content Platform**: Blog → Long-form Writer, Social → Short-form, Tech Docs → Technical Writer, Marketing → Copywriter, Translations → Localization
+3. **Code Assistant**: Bug fixes → Debugging Agent, New features → Development Agent, Refactoring → Code Quality Agent, Testing → Test Generation Agent, Docs → Documentation Agent
+4. **Financial Services**: Trading → Trading Agent, Risk → Risk Analysis Agent, Compliance → Compliance Agent, Reporting → Report Generation Agent, Fraud → Security Agent
+5. **Education**: Math → Reasoning Agent, Language → Tutor Agent, Science → Science Expert, History → Research Agent, Planning → Learning Strategy Agent

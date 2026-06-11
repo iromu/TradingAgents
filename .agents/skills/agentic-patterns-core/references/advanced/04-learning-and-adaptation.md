@@ -1,8 +1,6 @@
 # Learning and Adaptation Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -94,15 +92,9 @@ class LearningAgent:
 
 ## Real-World Examples
 
-1. **Customer Chatbot**: Learns from agent takeovers → Adapts responses from satisfaction scores → Updates FAQ from
-   resolutions → Improves intent classification → Personalizes tone
-2. **Code Review**: Learns from accepted/rejected suggestions → Adapts to team standards → Improves from developer
-   feedback → Updates from merged PRs → Learns project conventions
-3. **Content Writing**: Learns from editor corrections → Adapts to brand voice → Improves SEO from performance → Updates
-   style from engagement → Personalizes for content types
-4. **Financial Advisory**: Learns from investment outcomes → Adapts to market conditions → Improves from historical
-   data → Updates risk models → Personalizes per client
-5. **Medical Diagnosis**: Learns from confirmed diagnoses → Adapts to local patterns → Improves from physician
-   corrections → Updates from research → Personalizes demographics
-6. **E-commerce Recommendations**: Learns from purchase behavior → Adapts to seasonal trends → Improves from
-   return/review data → Updates from browsing → Personalizes shoppers
+1. **Customer Chatbot**: Learns from agent takeovers → Adapts responses from satisfaction scores → Updates FAQ from resolutions → Improves intent classification → Personalizes tone
+2. **Code Review**: Learns from accepted/rejected suggestions → Adapts to team standards → Improves from developer feedback → Updates from merged PRs → Learns project conventions
+3. **Content Writing**: Learns from editor corrections → Adapts to brand voice → Improves SEO from performance → Updates style from engagement → Personalizes for content types
+4. **Financial Advisory**: Learns from investment outcomes → Adapts to market conditions → Improves from historical data → Updates risk models → Personalizes per client
+5. **Medical Diagnosis**: Learns from confirmed diagnoses → Adapts to local patterns → Improves from physician corrections → Updates from research → Personalizes demographics
+6. **E-commerce Recommendations**: Learns from purchase behavior → Adapts to seasonal trends → Improves from return/review data → Updates from browsing → Personalizes shoppers

@@ -290,15 +290,15 @@ See `references/03-rag-architecture.md` for the full RAG API.
 
 ## Reference Files
 
-| File                                  | Content                                                                                                         |
-|---------------------------------------|-----------------------------------------------------------------------------------------------------------------|
-| `references/01-chatbot-api.md`        | ChatbotBuilder, ChatOptions, ChatSession, ChatClient, ChatMemory, ChatExtension, ChatActions, ChatConfiguration |
-| `references/02-chat-history-store.md` | ChatHistoryStore, InMemoryChatHistoryStore, persistence to databases                                            |
-| `references/03-rag-architecture.md`   | RAGBuilder, RAGSource, FilterBuilder, Filter, PromptTemplate                                                    |
-| `references/04-guardrails.md`         | Guardrails, prompt injection, jailbreak detection, content moderation                                           |
-| `references/05-reasoning.md`          | Reasoning, thinking, thinking budget, model reasoning support                                                   |
-| `references/06-chatbot-patterns.md`   | Complete chatbot building guide, chatbot.yaml, ragbot.jinja                                                     |
-| `references/07-structured-output.md`  | Structured output, JSON mode, model capabilities                                                                |
+| File | Content |
+|------|---------|
+| `references/01-chatbot-api.md` | ChatbotBuilder, ChatOptions, ChatSession, ChatClient, ChatMemory, ChatExtension, ChatActions, ChatConfiguration |
+| `references/02-chat-history-store.md` | ChatHistoryStore, InMemoryChatHistoryStore, persistence to databases |
+| `references/03-rag-architecture.md` | RAGBuilder, RAGSource, FilterBuilder, Filter, PromptTemplate |
+| `references/04-guardrails.md` | Guardrails, prompt injection, jailbreak detection, content moderation |
+| `references/05-reasoning.md` | Reasoning, thinking, thinking budget, model reasoning support |
+| `references/06-chatbot-patterns.md` | Complete chatbot building guide, chatbot.yaml, ragbot.jinja |
+| `references/07-structured-output.md` | Structured output, JSON mode, model capabilities |
 
 ## Pitfalls
 

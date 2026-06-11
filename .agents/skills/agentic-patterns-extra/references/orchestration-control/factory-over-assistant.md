@@ -16,14 +16,11 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-The "assistant" model—working one-on-one with an agent in a sidebar, watching it work, ping-ponging back and
-forth—limits productivity and scalability. As models become more autonomous and capable, the human becomes the
-bottleneck as the feedback loop. You can only run one agent at a time when you're watching it in a sidebar.
+The "assistant" model—working one-on-one with an agent in a sidebar, watching it work, ping-ponging back and forth—limits productivity and scalability. As models become more autonomous and capable, the human becomes the bottleneck as the feedback loop. You can only run one agent at a time when you're watching it in a sidebar.
 
 ## Solution
 
-Shift from the **assistant model** to the **factory model**: spawn multiple autonomous agents that work in parallel,
-check on them periodically, and focus your time on higher-level orchestration rather than being the feedback loop.
+Shift from the **assistant model** to the **factory model**: spawn multiple autonomous agents that work in parallel, check on them periodically, and focus your time on higher-level orchestration rather than being the feedback loop.
 
 **The factory mindset:**
 - Send off multiple agents to work on different tasks
@@ -58,11 +55,11 @@ graph TD
 
 **The evolution:**
 
-| Stage       | Model     | Human Role                         | Agent Behavior                          |
-|-------------|-----------|------------------------------------|-----------------------------------------|
-| **Past**    | Assistant | Watch everything, provide feedback | Frequent check-ins, interactive         |
-| **Present** | Hybrid    | Set up automated loops             | Mixed interactive and autonomous        |
-| **Future**  | Factory   | Orchestrate and review             | Fully autonomous, minimal human contact |
+| Stage | Model | Human Role | Agent Behavior |
+|-------|-------|------------|----------------|
+| **Past** | Assistant | Watch everything, provide feedback | Frequent check-ins, interactive |
+| **Present** | Hybrid | Set up automated loops | Mixed interactive and autonomous |
+| **Future** | Factory | Orchestrate and review | Fully autonomous, minimal human contact |
 
 ## How to use it
 
@@ -127,10 +124,8 @@ user → spawn(agent1) + spawn(agent2) + spawn(agent3)
 
 ## References
 
-* [Raising an Agent Episode 9: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=2wjnV6F2arc) -
-  AMP (Thorsten Ball, Quinn Slack, 2025)
+* [Raising an Agent Episode 9: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=2wjnV6F2arc) - AMP (Thorsten Ball, Quinn Slack, 2025)
 * [Communicative Agents for Software Development (OpenDevin)](https://arxiv.org/abs/2407.16819) - Wang et al., 2024
-* [AutoGen: Enabling Multi-Agent LLM Applications](https://arxiv.org/abs/2308.08160) - Duan et al. (Microsoft Research),
-  2023
+* [AutoGen: Enabling Multi-Agent LLM Applications](https://arxiv.org/abs/2308.08160) - Duan et al. (Microsoft Research), 2023
 
 ---

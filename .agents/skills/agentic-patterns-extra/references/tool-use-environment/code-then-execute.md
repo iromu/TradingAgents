@@ -16,13 +16,11 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-Agents that execute commands or actions directly without first generating explicit code can make mistakes that are hard
-to debug, review, or reproduce. Direct execution bypasses the safety net of code review.
+Agents that execute commands or actions directly without first generating explicit code can make mistakes that are hard to debug, review, or reproduce. Direct execution bypasses the safety net of code review.
 
 ## Solution
 
-Require agents to **generate code first** (scripts, commands, configurations) and **then execute** that code. This
-ensures every action is explicit, reviewable, and reproducible.
+Require agents to **generate code first** (scripts, commands, configurations) and **then execute** that code. This ensures every action is explicit, reviewable, and reproducible.
 
 **Flow:**
 

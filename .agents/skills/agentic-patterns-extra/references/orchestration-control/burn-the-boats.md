@@ -10,26 +10,17 @@ tags: [feature-killing, forced-evolution, courage, focus, self-destruct, obsoles
 
 ## Problem
 
-In fast-moving AI development, holding onto features or workflows that are "working fine" prevents teams from fully
-embracing new paradigms. The comfort of existing functionality becomes an anchor that holds back innovation—even when
-you know the old approach is obsolete.
+In fast-moving AI development, holding onto features or workflows that are "working fine" prevents teams from fully embracing new paradigms. The comfort of existing functionality becomes an anchor that holds back innovation—even when you know the old approach is obsolete.
 
 ## Solution
 
-**Burn the boats: intentionally kill features and workflows** to force evolution and prevent being stuck on old
-paradigms. Set hard deadlines for feature removal to create urgency and commitment to the new way.
+**Burn the boats: intentionally kill features and workflows** to force evolution and prevent being stuck on old paradigms. Set hard deadlines for feature removal to create urgency and commitment to the new way.
 
-**Historical context:** The earliest documented instance is Xiang Yu (207 BC) at the Battle of Julu, who sank boats and
-broke cauldrons (破釜沉舟) to force victory against superior Qin forces. The phrase is popularly associated with Hernán
-Cortés (1519 AD), who destroyed his ships upon arriving in Mexico, eliminating any possibility of retreat.
+**Historical context:** The earliest documented instance is Xiang Yu (207 BC) at the Battle of Julu, who sank boats and broke cauldrons (破釜沉舟) to force victory against superior Qin forces. The phrase is popularly associated with Hernán Cortés (1519 AD), who destroyed his ships upon arriving in Mexico, eliminating any possibility of retreat.
 
-**Academic foundation:** Thomas Schelling's *The Strategy of Conflict* (1960) formalized this as "credible commitment"
-—restricting options makes threats believable and creates strategic commitment.
+**Academic foundation:** Thomas Schelling's *The Strategy of Conflict* (1960) formalized this as "credible commitment"—restricting options makes threats believable and creates strategic commitment.
 
-**In AI product development:** This means removing features that still work—features users still love—to prevent being
-stuck on the wrong trajectory. Note: Production AI systems typically reject "no fallback" approaches in favor of bounded
-autonomy with human oversight. This pattern is most relevant as a product/organizational strategy, not a technical agent
-safety pattern.
+**In AI product development:** This means removing features that still work—features users still love—to prevent being stuck on the wrong trajectory. Note: Production AI systems typically reject "no fallback" approaches in favor of bounded autonomy with human oversight. This pattern is most relevant as a product/organizational strategy, not a technical agent safety pattern.
 
 ```mermaid
 graph LR
@@ -55,13 +46,11 @@ graph LR
 
 AMP announced they're killing their VS Code extension (and Cursor support) in ~60 days:
 
-> "We will be killing our editor extension, the AMP VS Code extension and cursor and so on. We're going to be killing
-> it. We're going to be killing it because we think it's no longer the future. We think the sidebar is dead."
+> "We will be killing our editor extension, the AMP VS Code extension and cursor and so on. We're going to be killing it. We're going to be killing it because we think it's no longer the future. We think the sidebar is dead."
 
 **Why not just deprioritize it?**
 
-> "It's just a focus thing for us. We can't do that without taking our eye off the thing that you all think is 100 times
-> more important."
+> "It's just a focus thing for us. We can't do that without taking our eye off the thing that you all think is 100 times more important."
 
 If you keep the old feature around:
 - Users will keep using it
@@ -103,18 +92,15 @@ feature_kill_plan:
 
 From AMP's announcement:
 
-> "We might make it so we just delete this entire directory in our source tree and we're getting together in Singapore
-> in a few weeks and just rewrite it from scratch."
+> "We might make it so we just delete this entire directory in our source tree and we're getting together in Singapore in a few weeks and just rewrite it from scratch."
 
-> "We have to totally reearn all of the usage of AMP today, all of the revenue that we're doing, all the customers we
-> have... every 3 months."
+> "We have to totally reearn all of the usage of AMP today, all of the revenue that we're doing, all the customers we have... every 3 months."
 
 **4. Accept user churn:**
 
 Some users will leave. That's OK. You're selecting for the frontier:
 
-> "Our user base will start to become selected not for as it is today the people that are building on the frontier...
-> but our user base will be selected for the laggers and that will make it even harder for us to change."
+> "Our user base will start to become selected not for as it is today the people that are building on the frontier... but our user base will be selected for the laggers and that will make it even harder for us to change."
 
 ## Trade-offs
 
@@ -149,24 +135,18 @@ This creates urgency and inevitability. Users can't ignore it.
 - The new way is unproven and risky
 - Your team isn't aligned on the change
 - Killing it would destroy the business
-- **Agent safety**: Giving agents irreversible operations with broad permissions ("God Agent" anti-pattern) creates
-  catastrophic risk from prompt injection, context overflow, or cascading errors
+- **Agent safety**: Giving agents irreversible operations with broad permissions ("God Agent" anti-pattern) creates catastrophic risk from prompt injection, context overflow, or cascading errors
 
 **Related principle: Re-earn revenue every quarter**
 
-> "All of the usage of AMP today, all of the revenue that we're doing, all the customers we have, we have to totally
-> reearn that like every 3 months. The product is going to look different. You're going to use it for different things in
-> different ways. You're going to pay us for different things."
+> "All of the usage of AMP today, all of the revenue that we're doing, all the customers we have, we have to totally reearn that like every 3 months. The product is going to look different. You're going to use it for different things in different ways. You're going to pay us for different things."
 
 Burning boats is part of this mindset: nothing is sacred, everything must be re-earned.
 
 ## References
 
-* [Raising an Agent Episode 10: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=4rx36wc9ugw) -
-  AMP (Thorsten Ball, Quinn Slack, 2025)
+* [Raising an Agent Episode 10: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=4rx36wc9ugw) - AMP (Thorsten Ball, Quinn Slack, 2025)
 * Thomas Schelling, *The Strategy of Conflict* (1960) - Foundational work on credible commitment
 * Cohen & Levesque, "Intention is Choice with Commitment" (1990) - Formal framework for AI agent commitment
-* [Measuring Agents in Production (UC Berkeley, 2025)](https://arxiv.org/html/2512.04123v1) - Industry rejects "no
-  fallback" for bounded autonomy
-*
-Related: [Disposable Scaffolding Over Durable Features](disposable-scaffolding-over-durable-features.md), [Factory over Assistant](factory-over-assistant.md)
+* [Measuring Agents in Production (UC Berkeley, 2025)](https://arxiv.org/html/2512.04123v1) - Industry rejects "no fallback" for bounded autonomy
+* Related: [Disposable Scaffolding Over Durable Features](disposable-scaffolding-over-durable-features.md), [Factory over Assistant](factory-over-assistant.md)

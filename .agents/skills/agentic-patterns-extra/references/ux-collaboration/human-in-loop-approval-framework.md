@@ -25,15 +25,11 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-Autonomous AI agents need to execute high-risk or irreversible operations (database modifications, production
-deployments, system configurations, API calls) but allowing unsupervised execution creates unacceptable safety and
-compliance risks. Blocking all such operations defeats the purpose of agent automation.
+Autonomous AI agents need to execute high-risk or irreversible operations (database modifications, production deployments, system configurations, API calls) but allowing unsupervised execution creates unacceptable safety and compliance risks. Blocking all such operations defeats the purpose of agent automation.
 
 ## Solution
 
-Systematically insert human approval gates for designated high-risk functions while maintaining agent autonomy for safe
-operations. Create lightweight feedback loops that enable time-sensitive human decisions without blocking the entire
-agent workflow.
+Systematically insert human approval gates for designated high-risk functions while maintaining agent autonomy for safe operations. Create lightweight feedback loops that enable time-sensitive human decisions without blocking the entire agent workflow.
 
 **Core components:**
 
@@ -153,8 +149,7 @@ def risky_operation(state):
 
 ## References
 
-- [Building Companies with Claude Code](https://claude.com/blog/building-companies-with-claude-code) - HumanLayer's core
-  product
+- [Building Companies with Claude Code](https://claude.com/blog/building-companies-with-claude-code) - HumanLayer's core product
 - [HumanLayer Documentation](https://docs.humanlayer.dev/)
 - [12-Factor Agents](https://github.com/humanlayer/12-factor-agents)
 - [Design Patterns for Securing LLM Agents](https://arxiv.org/abs/2506.08837) (Beurer-Kellner et al., ETH Zurich, 2025)

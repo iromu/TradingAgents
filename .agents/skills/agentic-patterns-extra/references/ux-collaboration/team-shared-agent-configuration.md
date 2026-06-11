@@ -38,8 +38,7 @@ When each engineer configures their AI agent independently:
 
 ## Solution
 
-**Check agent configuration into version control** as part of the repository. Treat `settings.json` (or equivalent) as
-code—reviewable, shareable, and versioned alongside your project.
+**Check agent configuration into version control** as part of the repository. Treat `settings.json` (or equivalent) as code—reviewable, shareable, and versioned alongside your project.
 
 **Key configuration elements:**
 
@@ -130,9 +129,7 @@ Most platforms merge layered configs with local overrides taking precedence.
 
 **Benefits observed in enterprise deployments (from transcript):**
 
-> "Companies that have really big deployments of Claude Code... have settings.json that you check into the code base...
-> you can use this to pre-allow certain commands so you don't get permission prompted every time. And also to block
-> certain commands... and share it with the whole team so everyone gets to use it." —Boris Cherny
+> "Companies that have really big deployments of Claude Code... have settings.json that you check into the code base... you can use this to pre-allow certain commands so you don't get permission prompted every time. And also to block certain commands... and share it with the whole team so everyone gets to use it." —Boris Cherny
 
 ## Trade-offs
 
@@ -164,10 +161,6 @@ Most platforms merge layered configs with local overrides taking precedence.
 
 ## References
 
-* Boris Cherny: "Companies that have really big deployments of Claude Code... having settings.json that you check into
-  the code base is really important because you can use this to pre-allow certain commands so you don't get permission
-  prompted every time. And also to block certain commands... and this way as an engineer I don't get prompted and I can
-  check this in and share it with the whole team so everyone gets to use it."
+* Boris Cherny: "Companies that have really big deployments of Claude Code... having settings.json that you check into the code base is really important because you can use this to pre-allow certain commands so you don't get permission prompted every time. And also to block certain commands... and this way as an engineer I don't get prompted and I can check this in and share it with the whole team so everyone gets to use it."
 * [AI & I Podcast: How to Use Claude Code Like the People Who Built It](https://every.to/podcast/transcript-how-to-use-claude-code-like-the-people-who-built-it)
-* Alazawi et al. (2021). "Infrastructure as Code: A Systematic Mapping Study". IEEE Access. — Academic foundation for
-  treating configuration as version-controlled code with emphasis on repeatability and collaborative review.
+* Alazawi et al. (2021). "Infrastructure as Code: A Systematic Mapping Study". IEEE Access. — Academic foundation for treating configuration as version-controlled code with emphasis on repeatability and collaborative review.

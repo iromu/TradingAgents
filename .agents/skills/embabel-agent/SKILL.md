@@ -1,14 +1,12 @@
 ---
 name: embabel-agent
-description: Build agentic AI applications on the JVM with Embabel — a Spring-based framework for creating agents that mix LLM interactions with code, planning, and domain models. Use this skill when building agents with @Agent or @Agentic annotations, authoring @Action/@Condition/@AchievesGoal methods, configuring GOAP or Utility AI planning, writing tests with FakePromptRunner or EmbabelMockitoIntegrationTest, setting up @LlmTool or @Tool on domain objects, using @State for state-based workflows, implementing agentic tools (SimpleAgenticTool, PlaybookTool, StateMachineTool), configuring Subagent handoffs, mixing LLM models, or configuring Embabel's execution modes (SIMPLE/CONCURRENT) and autonomy (CLOSED/OPEN). Also trigger for Embabel application.yml configuration, Spring Boot integration with AI agents, setting up MCP tool groups, configuring ToolCallContext, writing PromptRunner calls, working with structured prompts or Jinja templates, implementing custom LLM providers (LlmMessageSender, EmbeddingService), using WaitFor for human-in-the-loop, scaffolding a new Embabel project with scripts/project-creator.sh, or when the user mentions Embabel, Rod Johnson's agent framework, JVM-based agentic flows, DICE, project-creator, or the Embabel documentation server.
+description: >-
+  Build agentic AI applications on the JVM with Embabel — a Spring-based framework by Rod Johnson for creating agents that mix LLM interactions with code, domain models, and non-LLM planning algorithms (GOAP, Utility AI, Hybrid, Supervisor). Use this skill whenever the user asks about Embabel agent development, agent annotations (@Agent, @Agentic, @Action, @Condition, @AchievesGoal, @State, @EmbabelComponent), agentic tool design (@LlmTool, @Tool, ToolCallContext, tool groups, subagent handoffs), planning configuration, testing with FakePromptRunner or EmbabelMockitoIntegrationTest, LLM provider setup, execution modes (SIMPLE/CONCURRENT), autonomy modes (CLOSED/OPEN), state-based workflows, human-in-the-loop patterns, or project scaffolding with project-creator.sh. Also trigger when the user mentions Embabel, DICE framework, Rod Johnson's agent framework, JVM-based agentic flows, or building agents with Spring Boot and LLMs.
 ---
 
 # Embabel Agent Framework
 
-This skill helps you build agentic AI applications on the JVM using the **Embabel framework** — a Spring-based framework
-for authoring agentic flows that seamlessly mix LLM-prompted interactions with code and domain models. Created by Rod
-Johnson (creator of Spring), it supports intelligent path-finding towards goals using non-LLM AI planning algorithms (
-GOAP, Utility AI, Hybrid, Supervisor).
+This skill helps you build agentic AI applications on the JVM using the **Embabel framework** — a Spring-based framework for authoring agentic flows that seamlessly mix LLM-prompted interactions with code and domain models. Created by Rod Johnson (creator of Spring), it supports intelligent path-finding towards goals using non-LLM AI planning algorithms (GOAP, Utility AI, Hybrid, Supervisor).
 
 ## Output Quality
 
@@ -18,10 +16,8 @@ When producing code or documentation:
 - **Include complete code** — Full classes with imports, domain models, and all annotations, not partial examples
 - **Show the "why"** — Explain design decisions (why this planner, why this temperature, why this execution mode)
 - **Include configuration** — Always show the full `application.yml` block with all relevant settings
-- **Provide testing** — Include unit tests with FakePromptRunner AND integration tests with
-  EmbabelMockitoIntegrationTest
-- **Use latest API patterns** — `LlmOptions.withModel()`, `context.ai().withLlm().creating().fromPrompt()`, `.withId()`,
-  `withExample()`
+- **Provide testing** — Include unit tests with FakePromptRunner AND integration tests with EmbabelMockitoIntegrationTest
+- **Use latest API patterns** — `LlmOptions.withModel()`, `context.ai().withLlm().creating().fromPrompt()`, `.withId()`, `withExample()`
 
 ## Core Concepts
 
@@ -34,8 +30,7 @@ Every Embabel agent is built from these building blocks:
 - **Blackboard** — Shared memory where actions add results and read inputs by type.
 - **Plan** — Dynamically generated sequence of actions. The planner recomputes after each action (OODA loop).
 
-> **Key insight:** Application developers rarely interact with the blackboard directly. Most pre/post conditions are
-> inferred from data flow in method signatures.
+> **Key insight:** Application developers rarely interact with the blackboard directly. Most pre/post conditions are inferred from data flow in method signatures.
 
 ## Getting Started
 
@@ -50,13 +45,11 @@ Every Embabel agent is built from these building blocks:
 ```
 
 Available starters:
-
 - `embabel-agent-starter` — Basic agent platform
 - `embabel-agent-starter-shell` — Interactive CLI
 - `embabel-agent-starter-mcp` — MCP server
 
 Add Embabel repository for snapshots:
-
 ```xml
 <repository>
     <id>embabel-snapshots</id>
@@ -76,11 +69,9 @@ scripts/project-creator.sh --lang java --name my-agent
 scripts/project-creator.sh --lang kotlin --name research-agent --package com.acme.research
 ```
 
-The script clones the appropriate template repo and configures the project. It requires `uvx` (Python package manager)
-and `git`.
+The script clones the appropriate template repo and configures the project. It requires `uvx` (Python package manager) and `git`.
 
 Alternatively, clone templates directly:
-
 - [Java Template](https://github.com/embabel/java-agent-template) — Clone and customize
 - [Kotlin Template](https://github.com/embabel/kotlin-agent-template) — Clone and customize
 
@@ -94,17 +85,17 @@ GEMINI_API_KEY=your_key_here
 
 ### LLM Provider Dependencies
 
-| Provider      | Dependency                           | Default LLM              |
-|---------------|--------------------------------------|--------------------------|
-| OpenAI        | `embabel-agent-starter-openai`       | gpt-4o                   |
-| Anthropic     | `embabel-agent-starter-anthropic`    | claude-sonnet-4-20250514 |
-| Google Gemini | `embabel-agent-starter-gemini`       | gemini-2.5-flash         |
-| Google GenAI  | `embabel-agent-starter-google-genai` | gemini-3.5-flash         |
-| DeepSeek      | `embabel-agent-starter-deepseek`     | deepseek-chat            |
-| Mistral       | `embabel-agent-starter-mistral-ai`   | mistral-large            |
-| LM Studio     | `embabel-agent-starter-lmstudio`     | local model              |
-| Ollama        | `embabel-agent-starter-ollama`       | llama3.3                 |
-| OCI           | `embabel-agent-starter-oci-genai`    | oci-genai                |
+| Provider | Dependency | Default LLM |
+|----------|-----------|-------------|
+| OpenAI | `embabel-agent-starter-openai` | gpt-4o |
+| Anthropic | `embabel-agent-starter-anthropic` | claude-sonnet-4-20250514 |
+| Google Gemini | `embabel-agent-starter-gemini` | gemini-2.5-flash |
+| Google GenAI | `embabel-agent-starter-google-genai` | gemini-3.5-flash |
+| DeepSeek | `embabel-agent-starter-deepseek` | deepseek-chat |
+| Mistral | `embabel-agent-starter-mistral-ai` | mistral-large |
+| LM Studio | `embabel-agent-starter-lmstudio` | local model |
+| Ollama | `embabel-agent-starter-ollama` | llama3.3 |
+| OCI | `embabel-agent-starter-oci-genai` | oci-genai |
 
 ## Agent Authoring Patterns
 
@@ -150,8 +141,7 @@ public class WriteAndReviewAgent {
 public class ReportAgent { ... }
 ```
 
-Both are Spring beans. `@Agentic` agents are auto-registered and picked up by the platform's agent scanning (enabled by
-default via `embabel.agent.platform.scanning.annotation`).
+Both are Spring beans. `@Agentic` agents are auto-registered and picked up by the platform's agent scanning (enabled by default via `embabel.agent.platform.scanning.annotation`).
 
 #### @EmbabelComponent — Action Container (Not an Agent)
 
@@ -182,7 +172,6 @@ public FlightInfo searchFlights(Destination dest, Ai ai) { ... }
 ```
 
 Key attributes:
-
 - **pre/post** — Additional conditions beyond input types (SpEL or method names)
 - **canRerun** — Can the action run again? Defaults to false.
 - **readOnly** — No external side effects (useful for learning/catchup modes)
@@ -365,12 +354,12 @@ context.ai().withDefaultLlm()
 
 ## Planning Algorithms
 
-| Planner            | Best For                                | Determinism | Algorithm                          |
-|--------------------|-----------------------------------------|-------------|------------------------------------|
-| **GOAP** (default) | Business processes with defined outputs | High        | A* search over goal states         |
-| **Utility**        | Exploration, event-driven systems       | Medium      | Highest net-value action picks     |
-| **Hybrid**         | Reducer pipelines                       | Medium-High | Utility picking + goal termination |
-| **Supervisor**     | Flexible multi-step workflows           | Low         | LLM-orchestrated composition       |
+| Planner | Best For | Determinism | Algorithm |
+|---------|----------|-------------|-----------|
+| **GOAP** (default) | Business processes with defined outputs | High | A* search over goal states |
+| **Utility** | Exploration, event-driven systems | Medium | Highest net-value action picks |
+| **Hybrid** | Reducer pipelines | Medium-High | Utility picking + goal termination |
+| **Supervisor** | Flexible multi-step workflows | Low | LLM-orchestrated composition |
 
 Set via `@Agent(planner = PlannerType.XXX)` or `ProcessOptions(plannerType = PlannerType.XXX)`.
 
@@ -409,19 +398,19 @@ See `reference/states.md` for detailed state patterns.
 
 ### Process Execution (SIMPLE vs CONCURRENT)
 
-| Mode                 | Behavior                               | When to Use                             |
-|----------------------|----------------------------------------|-----------------------------------------|
-| **SIMPLE** (default) | Sequential: one action at a time       | Most agents; predictable; easy to debug |
-| **CONCURRENT**       | All achievable actions run in parallel | Independent sub-tasks; fan-out/fan-in   |
+| Mode | Behavior | When to Use |
+|------|----------|-------------|
+| **SIMPLE** (default) | Sequential: one action at a time | Most agents; predictable; easy to debug |
+| **CONCURRENT** | All achievable actions run in parallel | Independent sub-tasks; fan-out/fan-in |
 
 Set: `embabel.agent.platform.process-type: CONCURRENT`
 
 ### Autonomy (Closed vs Open Mode)
 
-| Mode       | Behavior                                         | When to Use             |
-|------------|--------------------------------------------------|-------------------------|
-| **Closed** | LLM picks one agent; agent runs in isolation     | Strict agent boundaries |
-| **Open**   | LLM picks goal; assembles agent from all actions | Maximum flexibility     |
+| Mode | Behavior | When to Use |
+|------|----------|-------------|
+| **Closed** | LLM picks one agent; agent runs in isolation | Strict agent boundaries |
+| **Open** | LLM picks goal; assembles agent from all actions | Maximum flexibility |
 
 ```java
 // Closed
@@ -487,18 +476,18 @@ public record InjectedComponent(Ai ai) {
 
 ### PromptRunner Methods
 
-| Method                                     | Purpose                                                 |
-|--------------------------------------------|---------------------------------------------------------|
-| `createObject(prompt, Class<T>)`           | Create typed object (throws on failure, triggers retry) |
-| `createObjectIfPossible(prompt, Class<T>)` | Try to create, return null on failure                   |
-| `generateText(prompt)`                     | Simple text response                                    |
-| `withLlm(LlmOptions)`                      | Set LLM config                                          |
-| `withToolGroup(String)`                    | Add tool group                                          |
-| `withToolObject(obj)`                      | Add domain object with @Tool methods                    |
-| `withId("id")`                             | Tag interaction for test verification                   |
-| `withExample(text, obj)`                   | Few-shot example                                        |
-| `withPromptContributor(pc)`                | Add prompt content                                      |
-| `rendering("template-name")`               | Use Jinja template                                      |
+| Method | Purpose |
+|--------|---------|
+| `createObject(prompt, Class<T>)` | Create typed object (throws on failure, triggers retry) |
+| `createObjectIfPossible(prompt, Class<T>)` | Try to create, return null on failure |
+| `generateText(prompt)` | Simple text response |
+| `withLlm(LlmOptions)` | Set LLM config |
+| `withToolGroup(String)` | Add tool group |
+| `withToolObject(obj)` | Add domain object with @Tool methods |
+| `withId("id")` | Tag interaction for test verification |
+| `withExample(text, obj)` | Few-shot example |
+| `withPromptContributor(pc)` | Add prompt content |
+| `rendering("template-name")` | Use Jinja template |
 
 ### Vision Support
 
@@ -592,8 +581,7 @@ embabel:
         enabled: true
 ```
 
-> **Important:** When producing configuration examples, always include the complete `embabel:` block with models,
-> planner settings, execution mode, logging, and tool configuration — not just a snippet.
+> **Important:** When producing configuration examples, always include the complete `embabel:` block with models, planner settings, execution mode, logging, and tool configuration — not just a snippet.
 
 See `reference/configuration.md` for full property reference and provider-specific config.
 
@@ -693,20 +681,17 @@ scripts/project-creator.sh --name my-agent --package com.example.myagent
 ```
 
 The script:
-
 - Clones the Embabel project-creator tool
 - Fetches the Java or Kotlin template repository
 - Generates a complete project with Maven/Gradle, Spring Boot, and Embabel dependencies
 - Sets up the `WriteAndReviewAgent` example
 
 After scaffolding, the user can:
-
 - Run the shell: `./mvnw spring-boot:run` (or `./gradlew bootRun`)
 - Customize the agent in the generated code
 - Add more agents, tools, and planners as needed
 
-> **When to use:** New projects, quick prototypes, or when the user says "create a new Embabel project", "scaffold an
-> Embabel app", or "generate an Embabel template".
+> **When to use:** New projects, quick prototypes, or when the user says "create a new Embabel project", "scaffold an Embabel app", or "generate an Embabel template".
 
 ## Common Pitfalls
 
@@ -717,7 +702,6 @@ After scaffolding, the user can:
 5. **Ignoring tool loop iterations** — Default is 20; increase for complex multi-step agents
 6. **Not setting model per-action** — Using the default model for everything wastes money or sacrifices quality
 7. **Forgetting `.withId()` on LLM calls** — Makes test verification harder and debugging opaque
-8. **Using non-static inner classes for @State** — Causes serialization/persistence issues; use records (Java) or
-   top-level classes (Kotlin)
+8. **Using non-static inner classes for @State** — Causes serialization/persistence issues; use records (Java) or top-level classes (Kotlin)
 9. **Not using `clearBlackboard = true` for looping states** — Planner sees output type already exists and skips
 10. **Allowing LLMs to call sensitive methods** — Always gate with `@Tool`/`@LlmTool`; unannotated methods stay hidden

@@ -36,8 +36,7 @@ Large-scale code migrations are time-consuming when done sequentially:
 
 ## Solution
 
-Use a **swarm architecture** where the main agent orchestrates 10-20 parallel subagents working simultaneously on
-independent chunks of the migration.
+Use a **swarm architecture** where the main agent orchestrates 10-20 parallel subagents working simultaneously on independent chunks of the migration.
 
 **Pattern:**
 
@@ -120,10 +119,8 @@ for batch in batches:
 
 ## References
 
-* Boris Cherny: "The common use case is code migration. The main agent makes a big to-do list for everything and map
-  reduces over a bunch of subagents. Start 10 agents and go 10 at a time."
+* Boris Cherny: "The common use case is code migration. The main agent makes a big to-do list for everything and map reduces over a bunch of subagents. Start 10 agents and go 10 at a time."
 * [AI & I Podcast: How to Use Claude Code Like the People Who Built It](https://every.to/podcast/transcript-how-to-use-claude-code-like-the-people-who-built-it)
-* [Cursor Blog: Scaling Agents](https://cursor.com/blog/scaling-agents) — Production use with hundreds of concurrent
-  agents
+* [Cursor Blog: Scaling Agents](https://cursor.com/blog/scaling-agents) — Production use with hundreds of concurrent agents
 
 ---

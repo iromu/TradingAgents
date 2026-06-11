@@ -4,18 +4,17 @@ Source: [embabel/embabel-agent-docs/rag.md](https://github.com/embabel/embabel/b
 
 ## Overview
 
-Guardrails protect the chatbot from prompt injection, jailbreaks, and harmful content. They run as a pre-processing step
-on user input before it reaches the LLM.
+Guardrails protect the chatbot from prompt injection, jailbreaks, and harmful content. They run as a pre-processing step on user input before it reaches the LLM.
 
 ## Guardrail Types
 
-| Type                   | What it Detects                            | When to Use                    |
-|------------------------|--------------------------------------------|--------------------------------|
-| **Prompt Injection**   | Attempts to override system instructions   | Always                         |
-| **Jailbreak**          | Attempts to bypass safety constraints      | Always                         |
-| **Content Moderation** | Harmful, illegal, or inappropriate content | Production systems             |
-| **PII Detection**      | Personally identifiable information        | Systems handling personal data |
-| **Custom**             | Domain-specific checks                     | Any specialized need           |
+| Type | What it Detects | When to Use |
+|------|-----------------|-------------|
+| **Prompt Injection** | Attempts to override system instructions | Always |
+| **Jailbreak** | Attempts to bypass safety constraints | Always |
+| **Content Moderation** | Harmful, illegal, or inappropriate content | Production systems |
+| **PII Detection** | Personally identifiable information | Systems handling personal data |
+| **Custom** | Domain-specific checks | Any specialized need |
 
 ## Built-in Guardrails
 
@@ -26,7 +25,6 @@ Guardrail injectionGuardrail = Guardrails.promptInjection();
 ```
 
 Detects patterns like:
-
 - "Ignore previous instructions"
 - "You are now..."
 - "Do not follow the system prompt"
@@ -39,7 +37,6 @@ Guardrail jailbreakGuardrail = Guardrails.jailbreak();
 ```
 
 Detects:
-
 - Role-play bypasses ("pretend you're...")
 - Multi-layered prompts designed to confuse
 - Known jailbreak patterns
@@ -51,7 +48,6 @@ Guardrail contentModeration = Guardrails.contentModeration();
 ```
 
 Checks for:
-
 - Hate speech
 - Violence
 - Sexual content

@@ -10,24 +10,18 @@ tags: [planning, control-flow-integrity, prompt-injection]
 
 ## Problem
 
-When planning and execution are interleaved in one loop, untrusted tool outputs can influence which action is selected
-next. That makes the control flow itself attackable: a malicious intermediate result can redirect the agent into unsafe
-tools or unauthorized operations.
+When planning and execution are interleaved in one loop, untrusted tool outputs can influence which action is selected next. That makes the control flow itself attackable: a malicious intermediate result can redirect the agent into unsafe tools or unauthorized operations.
 
 ## Solution
 
 Split reasoning into two phases:
 
-1. **Plan phase** – LLM generates a *fixed* sequence of tool calls **before** it sees any untrusted data.
-2. **Execution phase** – Controller runs that exact sequence. Tool outputs may shape *parameters*, but **cannot change
-   which tools run**.
+1. **Plan phase** – LLM generates a *fixed* sequence of tool calls **before** it sees any untrusted data.  
+2. **Execution phase** – Controller runs that exact sequence. Tool outputs may shape *parameters*, but **cannot change which tools run**.
 
-This separates strategic decisions from data-dependent execution. The planner commits to a bounded action graph up
-front, and the executor enforces that graph deterministically, which preserves flexibility on arguments while protecting
-control-flow integrity.
+This separates strategic decisions from data-dependent execution. The planner commits to a bounded action graph up front, and the executor enforces that graph deterministically, which preserves flexibility on arguments while protecting control-flow integrity.
 
-**Benefits**: Planning before execution improves task completion rates by 40-70% and reduces hallucinations by ~60% (
-Parisien et al., 2024).
+**Benefits**: Planning before execution improves task completion rates by 40-70% and reduces hallucinations by ~60% (Parisien et al., 2024).
 
 ```pseudo
 plan = LLM.make_plan(prompt)      # frozen list of calls
@@ -38,8 +32,7 @@ for call in plan:
 
 ## How to use it
 
-Great for email-and-calendar bots, SQL assistants, code-review helpers—any task where the action set is known but
-parameters vary.
+Great for email-and-calendar bots, SQL assistants, code-review helpers—any task where the action set is known but parameters vary.
 
 ### Claude Code Plan Mode
 
@@ -60,12 +53,9 @@ Claude Code implements this pattern through "plan mode" which shifts the agent i
 
 The threshold of what requires planning changes with each model generation:
 
-> "The boundary changes with every model in a surprising way. Newer models are more intelligent, so the boundary of what
-> you need plan mode for got pushed out a little bit. Before you used to need to plan, now you don't." —Boris Cherny (
-> Anthropic)
+> "The boundary changes with every model in a surprising way. Newer models are more intelligent, so the boundary of what you need plan mode for got pushed out a little bit. Before you used to need to plan, now you don't." —Boris Cherny (Anthropic)
 
-This means simpler tasks that once required planning can now be one-shot with more capable models (e.g., Sonnet 4.5 vs.
-Opus 4.1).
+This means simpler tasks that once required planning can now be one-shot with more capable models (e.g., Sonnet 4.5 vs. Opus 4.1).
 
 ### LangChain Plan-and-Execute
 
@@ -88,10 +78,7 @@ agent = PlanAndExecute(
 ## References
 
 * Beurer-Kellner et al. (2025), §3.1 (2) Plan-Then-Execute.
-* Parisien et al. (2024), "Deliberation Before Action: Language Models with Tool Use" – planning improves tool use
-  accuracy from 72% to 94%.
-* Boris Cherny (Anthropic): "Plan mode... you kind of have to understand the limits and where you get in the loop. Plan
-  mode can 2-3x success rates pretty easily if you align on the plan first."
-* Boris Cherny: "The boundary changes with every model... newer models are more intelligent so the boundary of what you
-  need plan mode for got pushed out."
+* Parisien et al. (2024), "Deliberation Before Action: Language Models with Tool Use" – planning improves tool use accuracy from 72% to 94%.
+* Boris Cherny (Anthropic): "Plan mode... you kind of have to understand the limits and where you get in the loop. Plan mode can 2-3x success rates pretty easily if you align on the plan first."
+* Boris Cherny: "The boundary changes with every model... newer models are more intelligent so the boundary of what you need plan mode for got pushed out."
 * [AI & I Podcast: How to Use Claude Code Like the People Who Built It](https://every.to/podcast/transcript-how-to-use-claude-code-like-the-people-who-built-it)

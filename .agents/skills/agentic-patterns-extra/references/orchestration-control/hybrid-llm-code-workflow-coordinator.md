@@ -26,18 +26,13 @@ updated_at: '2026-01-13'
 
 ## Problem
 
-LLM-driven workflows are **non-deterministic**—even well-crafted prompts can produce unpredictable results. For some
-tasks (e.g., adding emoji to Slack messages based on PR status), occasional errors are unacceptable. But LLM workflows
-are fast to prototype and work well for many cases. You need both: **flexibility when experimenting** and **determinism
-when it matters**.
+LLM-driven workflows are **non-deterministic**—even well-crafted prompts can produce unpredictable results. For some tasks (e.g., adding emoji to Slack messages based on PR status), occasional errors are unacceptable. But LLM workflows are fast to prototype and work well for many cases. You need both: **flexibility when experimenting** and **determinism when it matters**.
 
 ## Solution
 
-Support both LLM-driven and code-driven workflows via a **configurable coordinator** parameter. Start with LLM for rapid
-prototyping, then migrate to code when you need determinism.
+Support both LLM-driven and code-driven workflows via a **configurable coordinator** parameter. Start with LLM for rapid prototyping, then migrate to code when you need determinism.
 
-This pattern builds on the neuro-symbolic AI principle that combining neural reasoning (LLMs) with symbolic
-computation (code) produces more reliable systems than either approach alone.
+This pattern builds on the neuro-symbolic AI principle that combining neural reasoning (LLMs) with symbolic computation (code) produces more reliable systems than either approach alone.
 
 **Coordinator configuration:**
 
@@ -122,12 +117,12 @@ def handler(trigger, tools, virtual_files, subagent):
 
 **When to use each:**
 
-| Use **LLM-driven** when...            | Use **Code-driven** when... |
-|---------------------------------------|-----------------------------|
-| Prototyping new workflow              | Errors are unacceptable     |
-| Logic may change frequently           | Determinism required        |
-| Happy to tolerate occasional failures | Workflow is stable          |
-| Fast iteration matters                | Need code review process    |
+| Use **LLM-driven** when... | Use **Code-driven** when... |
+|----------------------------|----------------------------|
+| Prototyping new workflow | Errors are unacceptable |
+| Logic may change frequently | Determinism required |
+| Happy to tolerate occasional failures | Workflow is stable |
+| Fast iteration matters | Need code review process |
 
 **Migration path:**
 
@@ -142,8 +137,7 @@ def handler(trigger, tools, virtual_files, subagent):
 **Pros:**
 
 - **Best of both worlds**: LLM flexibility when prototyping, code determinism when mature
-- **Token efficiency**: Code-first processing reduces token usage by 75-99% for data-heavy tasks (Anthropic
-  Code-Over-API, 2024)
+- **Token efficiency**: Code-first processing reduces token usage by 75-99% for data-heavy tasks (Anthropic Code-Over-API, 2024)
 - **Easy migration**: One-shot rewrite from prompt → script
 - **Same capabilities**: Scripts have access to all tools, can still use LLM via subagent
 - **Code review**: Critical workflows go through standard review process
@@ -162,9 +156,7 @@ def handler(trigger, tools, virtual_files, subagent):
 
 ## References
 
-* [Building an internal agent: Code-driven vs LLM-driven workflows](https://lethain.com/agents-coordinators/) - Will
-  Larson (Imprint, 2025)
+* [Building an internal agent: Code-driven vs LLM-driven workflows](https://lethain.com/agents-coordinators/) - Will Larson (Imprint, 2025)
 * [PAL: Program-Aided Language Models](https://arxiv.org/abs/2211.10435) - Gao et al. (ICLR 2023)
-* [Code execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp) - Anthropic Engineering (
-  2024)
+* [Code execution with MCP](https://www.anthropic.com/engineering/code-execution-with-mcp) - Anthropic Engineering (2024)
 * Related: Code Mode MCP Tool Interface, Deterministic Security Scanning Build Loop

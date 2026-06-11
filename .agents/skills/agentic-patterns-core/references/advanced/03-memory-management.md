@@ -1,8 +1,6 @@
 # Memory Management Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -82,15 +80,9 @@ class AgentMemory:
 
 ## Real-World Examples
 
-1. **Customer Support**: Short-term (current conversation) → Episodic (past tickets) → Long-term (preferences and
-   history)
-2. **Shopping Assistant**: Short-term (current session) → Episodic (past purchases) → Long-term (style preferences and
-   sizes)
-3. **Code Assistant**: Short-term (current session) → Episodic (recent fixes) → Long-term (project architecture and
-   conventions)
-4. **Medical Bot**: Short-term (current symptoms) → Episodic (recent appointments) → Long-term (medical history and
-   allergies)
-5. **Educational Tutor**: Short-term (current lesson) → Episodic (recent quiz results) → Long-term (learning style and
-   pace)
-6. **Project Manager**: Short-term (current task) → Episodic (recent meetings) → Long-term (project goals and
-   constraints)
+1. **Customer Support**: Short-term (current conversation) → Episodic (past tickets) → Long-term (preferences and history)
+2. **Shopping Assistant**: Short-term (current session) → Episodic (past purchases) → Long-term (style preferences and sizes)
+3. **Code Assistant**: Short-term (current session) → Episodic (recent fixes) → Long-term (project architecture and conventions)
+4. **Medical Bot**: Short-term (current symptoms) → Episodic (recent appointments) → Long-term (medical history and allergies)
+5. **Educational Tutor**: Short-term (current lesson) → Episodic (recent quiz results) → Long-term (learning style and pace)
+6. **Project Manager**: Short-term (current task) → Episodic (recent meetings) → Long-term (project goals and constraints)

@@ -16,10 +16,7 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-Agent systems often route every request to the strongest model by default, which quietly inflates cost and reduces
-throughput under load. Soft budget guidance in prompts is not enough because model selection happens in control code,
-not language outputs. Teams need deterministic guardrails that preserve quality for hard tasks while preventing runaway
-token spend for routine work.
+Agent systems often route every request to the strongest model by default, which quietly inflates cost and reduces throughput under load. Soft budget guidance in prompts is not enough because model selection happens in control code, not language outputs. Teams need deterministic guardrails that preserve quality for hard tasks while preventing runaway token spend for routine work.
 
 ## Solution
 
@@ -38,8 +35,7 @@ Typical flow:
 4. Enforce a hard cap before each model/tool step.
 5. Escalate only when objective signals justify the extra cost.
 
-**Cascade routing**: Try the cheapest adequate model first; if quality gates fail, escalate to stronger models. Learned
-routing policies trained on human preference data can improve selection accuracy while respecting budget constraints.
+**Cascade routing**: Try the cheapest adequate model first; if quality gates fail, escalate to stronger models. Learned routing policies trained on human preference data can improve selection accuracy while respecting budget constraints.
 
 ```pseudo
 budget = policy.max_cost(task_type, user_tier)

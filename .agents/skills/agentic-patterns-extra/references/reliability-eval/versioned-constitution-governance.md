@@ -10,9 +10,7 @@ tags: [constitution, alignment, governance, signed-commits, policy, rlaif, criti
 
 ## Problem
 
-When agents can modify policy/constitution text, safety regressions can be introduced gradually and go unnoticed.
-Without versioning, signatures, and policy review gates, teams cannot prove who changed what, why it changed, or whether
-critical safeguards were weakened.
+When agents can modify policy/constitution text, safety regressions can be introduced gradually and go unnoticed. Without versioning, signatures, and policy review gates, teams cannot prove who changed what, why it changed, or whether critical safeguards were weakened.
 
 ## Solution
 
@@ -24,14 +22,12 @@ Store the constitution in a **version-controlled, signed repository**:
 - The agent can *propose* changes, but a gatekeeper merges them.
 - Use semantic versioning: MAJOR for core safety principle changes, MINOR for additions, PATCH for clarifications.
 
-Combine policy-as-code with release discipline: every constitutional change is diffable, reviewable, and test-gated
-before activation. This gives governance history, rollback capability, and auditable control over alignment policy
-evolution.
+Combine policy-as-code with release discipline: every constitutional change is diffable, reviewable, and test-gated before activation. This gives governance history, rollback capability, and auditable control over alignment policy evolution.
 
 ## How to use it
 
-- Require `git commit -S` or similar.
-- Run diff-based linting to flag deletions of critical rules.
+- Require `git commit -S` or similar.  
+- Run diff-based linting to flag deletions of critical rules.  
 - Expose constitution `HEAD` as read-only context in every agent episode.
 
 ## Trade-offs

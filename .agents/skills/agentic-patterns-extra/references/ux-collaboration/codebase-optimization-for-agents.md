@@ -11,25 +11,19 @@ tags: [agent-first, human-dx, regression, optimization, tooling, codebase-design
 
 ## Problem
 
-When introducing AI agents to a codebase, there's a natural tendency to preserve the human developer experience (DX).
-However, this limits agent effectiveness because the codebase remains optimized for humans, not for the AI workers who
-will increasingly operate autonomously.
+When introducing AI agents to a codebase, there's a natural tendency to preserve the human developer experience (DX). However, this limits agent effectiveness because the codebase remains optimized for humans, not for the AI workers who will increasingly operate autonomously.
 
-A related problem: even good models struggle without clear feedback loops. When an agent can't verify its changes work,
-it fails not because of capability limits but because the codebase isn't "welded" to the agent.
+A related problem: even good models struggle without clear feedback loops. When an agent can't verify its changes work, it fails not because of capability limits but because the codebase isn't "welded" to the agent.
 
 ## Solution
 
-**Optimize the codebase for agents first, humans second.** Accept that tooling, workflows, and even the editor
-experience may regress for humans in order to unlock dramatically better agent performance.
+**Optimize the codebase for agents first, humans second.** Accept that tooling, workflows, and even the editor experience may regress for humans in order to unlock dramatically better agent performance.
 
-**The counterintuitive insight:** Once you embrace agent-optimized workflows, you'll use the human-centric tools (like
-VS Code) less anyway, so regressing them doesn't matter as much.
+**The counterintuitive insight:** Once you embrace agent-optimized workflows, you'll use the human-centric tools (like VS Code) less anyway, so regressing them doesn't matter as much.
 
 **Real example from AMP:**
 
-The team built Zveltch (Zig implementation of spelt-check) to make spell-check fast for agents. This actually made the
-VS Code experience worse for humans. They had a difficult decision: preserve human DX or optimize for agents?
+The team built Zveltch (Zig implementation of spelt-check) to make spell-check fast for agents. This actually made the VS Code experience worse for humans. They had a difficult decision: preserve human DX or optimize for agents?
 
 They ultimately chose to optimize for agents, leading to a "snowball effect":
 - Agent tooling gets better
@@ -64,15 +58,11 @@ The metaphor of welding means creating tight, automated feedback loops so the ag
 - Get clear signals about success/failure
 - Iterate without human intervention
 
-> "You want to weld the agent to the codebase. You want to make sure that the agent, when you combine it with your
-> codebase, knows exactly how to verify its changes and get feedback and make sure that what it did actually works."
+> "You want to weld the agent to the codebase. You want to make sure that the agent, when you combine it with your codebase, knows exactly how to verify its changes and get feedback and make sure that what it did actually works."
 
 Practical examples:
-
-- **Terminal emulator with screenshot flag**: Added `--capture-to` flag so agent could take screenshots and verify
-  rendering fixes
-- **CLI data-only output**: Created new subcommand that outputs raw data (no UI formatting) so agent can parse results
-  programmatically
+- **Terminal emulator with screenshot flag**: Added `--capture-to` flag so agent could take screenshots and verify rendering fixes
+- **CLI data-only output**: Created new subcommand that outputs raw data (no UI formatting) so agent can parse results programmatically
 - **Test commands**: Single-command test execution (`pnpm test`) with cached results
 
 ## How to use it
@@ -95,8 +85,7 @@ Practical examples:
 - Minimal verbose output
 ```
 
-**Established examples:** Modern CLIs universally support JSON output for agent consumption—GitHub CLI (`--json`),
-kubectl (`-o json`), AWS CLI (`--output json`), Terraform (`output -json`).
+**Established examples:** Modern CLIs universally support JSON output for agent consumption—GitHub CLI (`--json`), kubectl (`-o json`), AWS CLI (`--output json`), Terraform (`output -json`).
 
 **2. Documentation and knowledge**
 
@@ -146,30 +135,29 @@ Create `AGENTS.md` or similar documentation that explains:
 - What feedback mechanisms to use
 - Special considerations for automated interaction
 
-**Related pattern:** `CLAUDE.md` (Anthropic) is emerging as a complementary standard for agent guidance with
-project-specific instructions and tooling conventions.
+**Related pattern:** `CLAUDE.md` (Anthropic) is emerging as a complementary standard for agent guidance with project-specific instructions and tooling conventions.
 
 **The "Agent-Native Codebase" Checklist (2026 version of Joel Spolsky's test):**
 
-| Joel's Test (2004)                      | Agent Test (2026)                          |
-|-----------------------------------------|--------------------------------------------|
+| Joel's Test (2004) | Agent Test (2026) |
+|-------------------|-------------------|
 | Can somebody ship something on day one? | Can an agent ship something in 10 minutes? |
-| One-command dev environment setup       | One-command test/verify cycle              |
-| Easy to push to production              | Easy for agent to deploy and verify        |
-| Easy to review code                     | Easy for agent to self-verify              |
-| CI runs tests                           | CI provides machine-readable feedback      |
-| Good documentation                      | AGENTS.md with workflow instructions       |
+| One-command dev environment setup | One-command test/verify cycle |
+| Easy to push to production | Easy for agent to deploy and verify |
+| Easy to review code | Easy for agent to self-verify |
+| CI runs tests | CI provides machine-readable feedback |
+| Good documentation | AGENTS.md with workflow instructions |
 
 **Decision framework:**
 
 When faced with a choice between human and agent optimization:
 
-| Question                                   | If Yes →            | If No →             |
-|--------------------------------------------|---------------------|---------------------|
-| Do humans use this daily?                  | Consider hybrid     | Optimize for agents |
-| Will agents use this 10x more than humans? | Optimize for agents | Preserve human DX   |
-| Is this a core developer workflow?         | Hybrid approach     | Agent-first         |
-| Does this require human judgment?          | Human-first         | Agent-first         |
+| Question | If Yes → | If No → |
+|----------|----------|---------|
+| Do humans use this daily? | Consider hybrid | Optimize for agents |
+| Will agents use this 10x more than humans? | Optimize for agents | Preserve human DX |
+| Is this a core developer workflow? | Hybrid approach | Agent-first |
+| Does this require human judgment? | Human-first | Agent-first |
 
 **The snowball effect in action:**
 
@@ -198,8 +186,7 @@ When faced with a choice between human and agent optimization:
 
 **The psychological shift:**
 
-> "Agents are not a confirmation that these complex build tools and reproducible builds will win. Like, it's just I, you
-> know, like I think they they're really good at using dumb tools, you know, like you don't need heavy crazy tools"
+> "Agents are not a confirmation that these complex build tools and reproducible builds will win. Like, it's just I, you know, like I think they they're really good at using dumb tools, you know, like you don't need heavy crazy tools"
 
 Agents excel with simple, reliable, dumb tools. Complex tools designed for humans often add unnecessary overhead.
 
@@ -219,10 +206,7 @@ Agents excel with simple, reliable, dumb tools. Complex tools designed for human
 
 ## References
 
-* [Raising an Agent Episode 9: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=2wjnV6F2arc) -
-  AMP (Thorsten Ball, Quinn Slack, 2025)
-* [Raising an Agent Episode 10: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=4rx36wc9ugw) -
-  AMP (Thorsten Ball, Quinn Slack, 2025)
-* [ESAA: Event Sourcing for Autonomous Agents](https://arxiv.org/abs/2602.23193v1) - Elzo Brito dos Santos Filho (arXiv
-  2026-02) — validates unified logging pattern
+* [Raising an Agent Episode 9: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=2wjnV6F2arc) - AMP (Thorsten Ball, Quinn Slack, 2025)
+* [Raising an Agent Episode 10: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=4rx36wc9ugw) - AMP (Thorsten Ball, Quinn Slack, 2025)
+* [ESAA: Event Sourcing for Autonomous Agents](https://arxiv.org/abs/2602.23193v1) - Elzo Brito dos Santos Filho (arXiv 2026-02) — validates unified logging pattern
 * Related: [Skill Library Evolution](skill-library-evolution.md), [Factory over Assistant](factory-over-assistant.md)

@@ -37,9 +37,7 @@ The gap between theoretical agent capabilities and practical reliability creates
 
 ## Solution
 
-Design agent systems to start with low-complexity, high-reliability tasks and progressively unlock more complex
-capabilities as models improve and trust is established. Match task complexity to current model capabilities rather than
-building to theoretical potential.
+Design agent systems to start with low-complexity, high-reliability tasks and progressively unlock more complex capabilities as models improve and trust is established. Match task complexity to current model capabilities rather than building to theoretical potential.
 
 **Core principles:**
 
@@ -248,17 +246,10 @@ class AgentCapabilities {
 
 ## References
 
-- [Vercel: What We Learned Building Agents](https://vercel.com/blog/what-we-learned-building-agents-at-vercel) - "Start
-  with low-cognitive-load automation, then evolve as capabilities mature"
-- [Anthropic: Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) - Task complexity
-  and model capability matching
-- [OpenAI: GPT Best Practices](https://platform.openai.com/docs/guides/prompt-engineering) - Matching task complexity to
-  model strengths
-- Bengio et al. ["Curriculum Learning"](https://www.icml.cc/2009/papers/54.pdf) (ICML 2009) - Easy-to-hard training
-  improves generalization
-- Vygotsky, L. S. ["Mind in Society"](https://books.google.com/books?id=c3lAAAAAIAAJ) (1978) - Zone of Proximal
-  Development: optimal learning at 70-90% success rate
-- Wood, Bruner, Ross ["The role of tutoring in problem solving"](https://doi.org/10.1111/j.1469-7610.1976.tb00381.x) (
-  1976) - Scaffolding theory: temporary support that fades with competence
-- Related
-  patterns: [Progressive Autonomy with Model Evolution](progressive-autonomy-with-model-evolution.md), [Human-in-the-Loop Approval Framework](human-in-loop-approval-framework.md), [Spectrum of Control / Blended Initiative](spectrum-of-control-blended-initiative.md)
+- [Vercel: What We Learned Building Agents](https://vercel.com/blog/what-we-learned-building-agents-at-vercel) - "Start with low-cognitive-load automation, then evolve as capabilities mature"
+- [Anthropic: Building Effective Agents](https://www.anthropic.com/research/building-effective-agents) - Task complexity and model capability matching
+- [OpenAI: GPT Best Practices](https://platform.openai.com/docs/guides/prompt-engineering) - Matching task complexity to model strengths
+- Bengio et al. ["Curriculum Learning"](https://www.icml.cc/2009/papers/54.pdf) (ICML 2009) - Easy-to-hard training improves generalization
+- Vygotsky, L. S. ["Mind in Society"](https://books.google.com/books?id=c3lAAAAAIAAJ) (1978) - Zone of Proximal Development: optimal learning at 70-90% success rate
+- Wood, Bruner, Ross ["The role of tutoring in problem solving"](https://doi.org/10.1111/j.1469-7610.1976.tb00381.x) (1976) - Scaffolding theory: temporary support that fades with competence
+- Related patterns: [Progressive Autonomy with Model Evolution](progressive-autonomy-with-model-evolution.md), [Human-in-the-Loop Approval Framework](human-in-loop-approval-framework.md), [Spectrum of Control / Blended Initiative](spectrum-of-control-blended-initiative.md)

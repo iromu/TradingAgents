@@ -85,7 +85,7 @@ public class MyChatbot {
 
 ```java
 public class ChatbotApp {
-    static void main(String[] args) {
+    public static void main(String[] args) {
         MyChatbot factory = new MyChatbot();
         Chatbot chatbot = factory.build();
 

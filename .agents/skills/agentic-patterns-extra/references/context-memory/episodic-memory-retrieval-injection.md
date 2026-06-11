@@ -10,9 +10,7 @@ tags: [episodic-memory, vector-store, multi-session, state-persistence, retrieva
 
 ## Problem
 
-Stateless request handling causes agents to repeatedly rediscover decisions, constraints, and prior failures. Over
-multi-session workflows this leads to redundant work, inconsistent behavior, and shallow planning because each turn
-lacks durable historical context.
+Stateless request handling causes agents to repeatedly rediscover decisions, constraints, and prior failures. Over multi-session workflows this leads to redundant work, inconsistent behavior, and shallow planning because each turn lacks durable historical context.
 
 ## Solution
 
@@ -21,19 +19,17 @@ Add a **vector-backed episodic memory store**:
 2. On new tasks, embed the prompt, retrieve top-k similar memories, and inject as *hints* in the context.
 3. Apply TTL or decay scoring to prune stale memories.
 
-Design memory writes as structured records (decision, evidence, outcome, confidence) rather than raw transcripts.
-Structured memory reduces repetitive outputs and improves reasoning (ParamMem 2026).
+Design memory writes as structured records (decision, evidence, outcome, confidence) rather than raw transcripts. Structured memory reduces repetitive outputs and improves reasoning (ParamMem 2026).
 
-**Evidence:** Episodic memory with self-reflection achieved 91% pass@1 on HumanEval vs 80% baseline (Reflexion, NeurIPS
-2023).
+**Evidence:** Episodic memory with self-reflection achieved 91% pass@1 on HumanEval vs 80% baseline (Reflexion, NeurIPS 2023).
 
 ## Evidence
 
 - **Evidence Grade:** `validated-in-production`
 - **Key Findings:**
-    - Cursor "10x-MCP" persistent memory layer
-    - Windsurf Memories docs
-    - Reflexion achieved 91% pass@1 on HumanEval with episodic memory
+  - Cursor "10x-MCP" persistent memory layer
+  - Windsurf Memories docs
+  - Reflexion achieved 91% pass@1 on HumanEval with episodic memory
 
 ## How to use it
 

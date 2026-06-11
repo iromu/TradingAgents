@@ -44,7 +44,6 @@ Profile structure typically includes: Project Goals, Preferences, Communication 
 ## References
 
 * Based on personal bot WHO_AM_I system
-* [Generative Agents: Interactive Simulacra of Human Behavior](https://arxiv.org/abs/2304.03442) - Park et al. (
-  Stanford, 2023)
+* [Generative Agents: Interactive Simulacra of Human Behavior](https://arxiv.org/abs/2304.03442) - Park et al. (Stanford, 2023)
 * [MemGPT: Towards LLMs as Operating Systems](https://arxiv.org/abs/2310.08560) - Packer et al. (UC Berkeley, 2023)
 * [Claude Code Hooks Documentation](https://docs.anthropic.com/en/docs/claude-code/hooks)

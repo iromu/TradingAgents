@@ -78,13 +78,13 @@ cons, and real-world examples.
 
 Map the user's problem to one of the five categories:
 
-| Category         | Covers                                                                        |
-|------------------|-------------------------------------------------------------------------------|
-| **Core**         | Basic building blocks — chaining, routing, parallelization, reflection, tools |
-| **Advanced**     | Coordination & intelligence — planning, multi-agent, memory, learning, MCP    |
-| **System**       | Reliability & integration — goals, exceptions, HITL, RAG, A2A                 |
-| **Optimization** | Efficiency & safety — resource-aware, reasoning, guardrails, evaluation       |
-| **Strategic**    | Decision-making — prioritization, exploration                                 |
+| Category | Covers |
+|----------|--------|
+| **Core** | Basic building blocks — chaining, routing, parallelization, reflection, tools |
+| **Advanced** | Coordination & intelligence — planning, multi-agent, memory, learning, MCP |
+| **System** | Reliability & integration — goals, exceptions, HITL, RAG, A2A |
+| **Optimization** | Efficiency & safety — resource-aware, reasoning, guardrails, evaluation |
+| **Strategic** | Decision-making — prioritization, exploration |
 
 ### Step 2: Match to the Right Pattern
 
@@ -111,66 +111,66 @@ can make an informed decision. Common cross-cutting concerns:
 
 Patterns rarely work in isolation. Common effective combinations:
 
-| Combination                          | Purpose                                      |
-|--------------------------------------|----------------------------------------------|
-| **Prompt Chaining + Reflection**     | High-quality output with self-improvement    |
-| **Routing + Tool Use**               | Direct requests to specialized tools         |
-| **Planning + Multi-Agent**           | Coordinate complex multi-step projects       |
-| **Memory + Learning**                | Persistent knowledge that improves over time |
-| **RAG + Reflection**                 | Grounded responses with quality improvement  |
-| **Guardrails + Evaluation**          | Safe operation with continuous monitoring    |
-| **Parallelization + Resource-Aware** | Fast processing with cost optimization       |
-| **Reasoning + Reflection**           | Deep analysis with iterative refinement      |
-| **HITL + Exception Handling**        | Graceful degradation with human oversight    |
-| **Goal Setting + Prioritization**    | Objective-driven task management             |
+| Combination | Purpose |
+|-------------|---------|
+| **Prompt Chaining + Reflection** | High-quality output with self-improvement |
+| **Routing + Tool Use** | Direct requests to specialized tools |
+| **Planning + Multi-Agent** | Coordinate complex multi-step projects |
+| **Memory + Learning** | Persistent knowledge that improves over time |
+| **RAG + Reflection** | Grounded responses with quality improvement |
+| **Guardrails + Evaluation** | Safe operation with continuous monitoring |
+| **Parallelization + Resource-Aware** | Fast processing with cost optimization |
+| **Reasoning + Reflection** | Deep analysis with iterative refinement |
+| **HITL + Exception Handling** | Graceful degradation with human oversight |
+| **Goal Setting + Prioritization** | Objective-driven task management |
 
 ## Pattern Quick Reference
 
 ### Core Patterns
 
-| # | Pattern                                                  | One-Liner                                 |
-|---|----------------------------------------------------------|-------------------------------------------|
+| # | Pattern | One-Liner |
+|---|---------|-----------|
 | 1 | [Prompt Chaining](references/core/01-prompt-chaining.md) | Break complex tasks into sequential steps |
-| 2 | [Routing](references/core/02-routing.md)                 | Direct requests to the right handler      |
-| 3 | [Parallelization](references/core/03-parallelization.md) | Run independent tasks simultaneously      |
-| 4 | [Reflection](references/core/04-reflection.md)           | Self-evaluate and improve iteratively     |
-| 5 | [Tool Use](references/core/05-tool-use.md)               | Integrate external capabilities           |
+| 2 | [Routing](references/core/02-routing.md) | Direct requests to the right handler |
+| 3 | [Parallelization](references/core/03-parallelization.md) | Run independent tasks simultaneously |
+| 4 | [Reflection](references/core/04-reflection.md) | Self-evaluate and improve iteratively |
+| 5 | [Tool Use](references/core/05-tool-use.md) | Integrate external capabilities |
 
 ### Advanced Patterns
 
-| #  | Pattern                                                                          | One-Liner                                  |
-|----|----------------------------------------------------------------------------------|--------------------------------------------|
-| 6  | [Planning](references/advanced/01-planning.md)                                   | Strategic task decomposition               |
-| 7  | [Multi-Agent Collaboration](references/advanced/02-multi-agent-collaboration.md) | Coordinate multiple specialized agents     |
-| 8  | [Memory Management](references/advanced/03-memory-management.md)                 | Store and retrieve context across sessions |
-| 9  | [Learning and Adaptation](references/advanced/04-learning-and-adaptation.md)     | Improve performance over time              |
-| 10 | [Model Context Protocol](references/advanced/05-model-context-protocol.md)       | Standardized agent communication           |
+| # | Pattern | One-Liner |
+|---|---------|-----------|
+| 6 | [Planning](references/advanced/01-planning.md) | Strategic task decomposition |
+| 7 | [Multi-Agent Collaboration](references/advanced/02-multi-agent-collaboration.md) | Coordinate multiple specialized agents |
+| 8 | [Memory Management](references/advanced/03-memory-management.md) | Store and retrieve context across sessions |
+| 9 | [Learning and Adaptation](references/advanced/04-learning-and-adaptation.md) | Improve performance over time |
+| 10 | [Model Context Protocol](references/advanced/05-model-context-protocol.md) | Standardized agent communication |
 
 ### System Patterns
 
-| #  | Pattern                                                                                    | One-Liner                         |
-|----|--------------------------------------------------------------------------------------------|-----------------------------------|
-| 11 | [Goal Setting and Monitoring](references/system/01-goal-setting-and-monitoring.md)         | Track objectives with KPIs        |
-| 12 | [Exception Handling and Recovery](references/system/02-exception-handling-and-recovery.md) | Graceful error management         |
-| 13 | [Human-in-the-Loop](references/system/03-human-in-the-loop.md)                             | Incorporate human feedback        |
-| 14 | [Knowledge Retrieval (RAG)](references/system/04-knowledge-retrieval-rag.md)               | Access external knowledge sources |
-| 15 | [Inter-Agent Communication (A2A)](references/system/05-inter-agent-communication-a2a.md)   | Agent-to-agent messaging          |
+| # | Pattern | One-Liner |
+|---|---------|-----------|
+| 11 | [Goal Setting and Monitoring](references/system/01-goal-setting-and-monitoring.md) | Track objectives with KPIs |
+| 12 | [Exception Handling and Recovery](references/system/02-exception-handling-and-recovery.md) | Graceful error management |
+| 13 | [Human-in-the-Loop](references/system/03-human-in-the-loop.md) | Incorporate human feedback |
+| 14 | [Knowledge Retrieval (RAG)](references/system/04-knowledge-retrieval-rag.md) | Access external knowledge sources |
+| 15 | [Inter-Agent Communication (A2A)](references/system/05-inter-agent-communication-a2a.md) | Agent-to-agent messaging |
 
 ### Optimization Patterns
 
-| #  | Pattern                                                                                  | One-Liner                      |
-|----|------------------------------------------------------------------------------------------|--------------------------------|
-| 16 | [Resource-Aware Optimization](references/optimization/01-resource-aware-optimization.md) | Efficient resource usage       |
-| 17 | [Reasoning Techniques](references/optimization/02-reasoning-techniques.md)               | Structured thinking approaches |
-| 18 | [Guardrails/Safety](references/optimization/03-guardrails-safety-patterns.md)            | Ensure safe operations         |
-| 19 | [Evaluation and Monitoring](references/optimization/04-evaluation-and-monitoring.md)     | Performance tracking           |
+| # | Pattern | One-Liner |
+|---|---------|-----------|
+| 16 | [Resource-Aware Optimization](references/optimization/01-resource-aware-optimization.md) | Efficient resource usage |
+| 17 | [Reasoning Techniques](references/optimization/02-reasoning-techniques.md) | Structured thinking approaches |
+| 18 | [Guardrails/Safety](references/optimization/03-guardrails-safety-patterns.md) | Ensure safe operations |
+| 19 | [Evaluation and Monitoring](references/optimization/04-evaluation-and-monitoring.md) | Performance tracking |
 
 ### Strategic Patterns
 
-| #  | Pattern                                                                           | One-Liner              |
-|----|-----------------------------------------------------------------------------------|------------------------|
-| 20 | [Prioritization](references/strategic/01-prioritization.md)                       | Manage task importance |
-| 21 | [Exploration and Discovery](references/strategic/02-exploration-and-discovery.md) | Find new solutions     |
+| # | Pattern | One-Liner |
+|---|---------|-----------|
+| 20 | [Prioritization](references/strategic/01-prioritization.md) | Manage task importance |
+| 21 | [Exploration and Discovery](references/strategic/02-exploration-and-discovery.md) | Find new solutions |
 
 ## Implementation Checklist
 

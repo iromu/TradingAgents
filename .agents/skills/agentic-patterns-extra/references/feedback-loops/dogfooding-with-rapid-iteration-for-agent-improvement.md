@@ -10,13 +10,11 @@ tags: [dogfooding, rapid-iteration, feedback-loop, internal-testing, agent-impro
 
 ## Problem
 
-Developing effective AI agents requires understanding real-world usage and quickly identifying areas for improvement.
-External feedback loops can be slow, and simulated environments may not capture all nuances.
+Developing effective AI agents requires understanding real-world usage and quickly identifying areas for improvement. External feedback loops can be slow, and simulated environments may not capture all nuances.
 
 ## Solution
 
-The development team extensively uses their own AI agent product ("dogfooding") for their daily software development
-tasks. This provides:
+The development team extensively uses their own AI agent product ("dogfooding") for their daily software development tasks. This provides:
 
 1. **Direct, Immediate Feedback** — Developers encounter the agent's strengths and weaknesses firsthand
 2. **Real-World Problem Solving** — The agent is tested on actual, complex development problems
@@ -28,10 +26,8 @@ tasks. This provides:
 
 - **Evidence Grade:** `validated-in-production`
 - **Key Findings:**
-    - Cursor: "That's how we're able to move really quickly and building new features and then throwing away things that
-      clearly don't work"
-    - Anthropic: "Internally over 70 or 80 percent of ants use Claude Code every day... we get a post every five
-      minutes"
+  - Cursor: "That's how we're able to move really quickly and building new features and then throwing away things that clearly don't work"
+  - Anthropic: "Internally over 70 or 80 percent of ants use Claude Code every day... we get a post every five minutes"
 
 ## How to use it
 
@@ -43,8 +39,7 @@ tasks. This provides:
 
 ## Trade-offs
 
-* **Pros:** Real-world problem solving, rapid feature validation, quick pivots, reduced risk of shipping unwanted
-  features.
+* **Pros:** Real-world problem solving, rapid feature validation, quick pivots, reduced risk of shipping unwanted features.
 * **Cons:** Requires high internal adoption to be effective, internal users may not represent all customer segments.
 
 ## References

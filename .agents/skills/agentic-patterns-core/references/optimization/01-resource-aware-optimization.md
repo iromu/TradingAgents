@@ -1,8 +1,6 @@
 # Resource-Aware Optimization Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -84,15 +82,9 @@ def route_task(task, budget=None):
 
 ## Real-World Examples
 
-1. **Customer Support**: Simple FAQs use lightweight models, complex issues use advanced models, cache common responses,
-   prioritize premium customers
-2. **Content Generation**: Short posts use fast models, long articles use quality models, reuse templates, batch similar
-   requests, monitor cost per piece
-3. **Code Assistant**: Syntax fixes use simple models, architecture design uses advanced models, cache common patterns,
-   prioritize by project importance
-4. **Translation Platform**: Common languages use basic models, rare languages use specialized models, cache frequent
-   translations, batch document processing
-5. **Data Analysis**: Simple aggregations use basic compute, complex ML uses premium resources, cache intermediate
-   results, schedule heavy jobs off-peak
-6. **Education Platform**: Basic Q&A uses lightweight models, complex tutoring uses advanced models, cache common
-   explanations, allocate by subscription tier
+1. **Customer Support**: Simple FAQs use lightweight models, complex issues use advanced models, cache common responses, prioritize premium customers
+2. **Content Generation**: Short posts use fast models, long articles use quality models, reuse templates, batch similar requests, monitor cost per piece
+3. **Code Assistant**: Syntax fixes use simple models, architecture design uses advanced models, cache common patterns, prioritize by project importance
+4. **Translation Platform**: Common languages use basic models, rare languages use specialized models, cache frequent translations, batch document processing
+5. **Data Analysis**: Simple aggregations use basic compute, complex ML uses premium resources, cache intermediate results, schedule heavy jobs off-peak
+6. **Education Platform**: Basic Q&A uses lightweight models, complex tutoring uses advanced models, cache common explanations, allocate by subscription tier

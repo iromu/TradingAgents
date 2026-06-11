@@ -12,15 +12,9 @@
 
 ## Executive Summary
 
-**Factory over Assistant** is a paradigm-shifting pattern that advocates moving from interactive, sidebar-based agent
-workflows (assistant model) to autonomous, parallel agent spawning architectures (factory model). The pattern originates
-from the AMP (Anthropic) team's experience, particularly articulated in the "Raising an Agent" podcast episodes 9 and
-10.
+**Factory over Assistant** is a paradigm-shifting pattern that advocates moving from interactive, sidebar-based agent workflows (assistant model) to autonomous, parallel agent spawning architectures (factory model). The pattern originates from the AMP (Anthropic) team's experience, particularly articulated in the "Raising an Agent" podcast episodes 9 and 10.
 
-**Key Finding:** The assistant model—working one-on-one with an agent in a sidebar, watching it work, ping-ponging back
-and forth—limits productivity and scalability. As models become more autonomous and capable, the human becomes the
-bottleneck as the feedback loop. The factory model enables spawning multiple autonomous agents that work in parallel,
-with periodic check-ins rather than continuous supervision.
+**Key Finding:** The assistant model—working one-on-one with an agent in a sidebar, watching it work, ping-ponging back and forth—limits productivity and scalability. As models become more autonomous and capable, the human becomes the bottleneck as the feedback loop. The factory model enables spawning multiple autonomous agents that work in parallel, with periodic check-ins rather than continuous supervision.
 
 **Status Assessment:** The pattern is "emerging" but rapidly moving toward "validated-in-production" based on:
 - Strong theoretical foundations
@@ -50,11 +44,11 @@ Shift from the **assistant model** to the **factory model**:
 
 ### Core Evolution
 
-| Stage       | Model     | Human Role                         | Agent Behavior                          |
-|-------------|-----------|------------------------------------|-----------------------------------------|
-| **Past**    | Assistant | Watch everything, provide feedback | Frequent check-ins, interactive         |
-| **Present** | Hybrid    | Set up automated loops             | Mixed interactive and autonomous        |
-| **Future**  | Factory   | Orchestrate and review             | Fully autonomous, minimal human contact |
+| Stage | Model | Human Role | Agent Behavior |
+|-------|-------|------------|----------------|
+| **Past** | Assistant | Watch everything, provide feedback | Frequent check-ins, interactive |
+| **Present** | Hybrid | Set up automated loops | Mixed interactive and autonomous |
+| **Future** | Factory | Orchestrate and review | Fully autonomous, minimal human contact |
 
 ---
 
@@ -65,45 +59,45 @@ Shift from the **assistant model** to the **factory model**:
 The factory-over-assistant pattern is supported by extensive academic research on multi-agent systems:
 
 1. **OpenDevin (2024)** - "Communicative Agents for Software Development"
-    - arXiv: [arxiv.org/abs/2407.16819](https://arxiv.org/abs/2407.16819)
-    - Multi-agent system with supervisor architecture
-    - Autonomous task execution with parallel agent coordination
-    - **Connection:** Direct implementation of factory pattern with multiple specialized agents
+   - arXiv: [arxiv.org/abs/2407.16819](https://arxiv.org/abs/2407.16819)
+   - Multi-agent system with supervisor architecture
+   - Autonomous task execution with parallel agent coordination
+   - **Connection:** Direct implementation of factory pattern with multiple specialized agents
 
 2. **AutoGen (2023)** - Microsoft Research
-    - arXiv: [arxiv.org/abs/2308.08160](https://arxiv.org/abs/2308.08160)
-    - Multi-agent conversations and supervisor patterns
-    - Autonomous agent orchestration framework
-    - **Connection:** Framework for building agent factories vs single assistant
+   - arXiv: [arxiv.org/abs/2308.08160](https://arxiv.org/abs/2308.08160)
+   - Multi-agent conversations and supervisor patterns
+   - Autonomous agent orchestration framework
+   - **Connection:** Framework for building agent factories vs single assistant
 
 3. **CAMEL (2023)** - "Communicative Agents for Mind Exploration"
-    - arXiv: [arxiv.org/abs/2303.17760](https://arxiv.org/abs/2303.17760)
-    - Role-playing agent systems
-    - Cooperative agent factories
-    - **Connection:** Parallel autonomous agent execution patterns
+   - arXiv: [arxiv.org/abs/2303.17760](https://arxiv.org/abs/2303.17760)
+   - Role-playing agent systems
+   - Cooperative agent factories
+   - **Connection:** Parallel autonomous agent execution patterns
 
 ### Human-in-the-Loop vs Autonomous Workflows
 
 4. **ChatDev (2023)**
-    - arXiv: [arxiv.org/abs/2307.07924](https://arxiv.org/abs/2307.07924)
-    - Minimal human intervention, autonomous multi-agent factory
-    - **Connection:** Factory pattern emphasizing autonomous execution over assistant interaction
+   - arXiv: [arxiv.org/abs/2307.07924](https://arxiv.org/abs/2307.07924)
+   - Minimal human intervention, autonomous multi-agent factory
+   - **Connection:** Factory pattern emphasizing autonomous execution over assistant interaction
 
 5. **MetaGPT (2023)**
-    - arXiv: [arxiv.org/abs/2308.00352](https://arxiv.org/abs/2308.00352)
-    - Standard operating procedures, one-line prompt triggers complex workflows
-    - **Connection:** Factory pattern where human provides high-level input, system runs autonomously
+   - arXiv: [arxiv.org/abs/2308.00352](https://arxiv.org/abs/2308.00352)
+   - Standard operating procedures, one-line prompt triggers complex workflows
+   - **Connection:** Factory pattern where human provides high-level input, system runs autonomously
 
 ### Parallel Execution Architectures
 
 6. **AgentVerse (2023)**
-    - arXiv: [arxiv.org/abs/2308.11468](https://arxiv.org/abs/2308.11468)
-    - Parallel task solving, specialized agent roles
-    - **Connection:** Factory pattern with parallel execution of specialized agents
+   - arXiv: [arxiv.org/abs/2308.11468](https://arxiv.org/abs/2308.11468)
+   - Parallel task solving, specialized agent roles
+   - **Connection:** Factory pattern with parallel execution of specialized agents
 
 7. **TaskWeaver (2023)** - Microsoft Research
-    - Code generation, asynchronous execution
-    - **Connection:** Factory pattern emphasizing background autonomous execution
+   - Code generation, asynchronous execution
+   - **Connection:** Factory pattern emphasizing background autonomous execution
 
 ---
 
@@ -126,8 +120,7 @@ amp run --background "task description" --max-time 3600
 ```
 
 **Public Statement (Thorsten Ball, Quinn Slack, 2025):**
-> "For the 1% of developers that want to be most ahead... they only need to do the last 20% of their work in the editor.
-> And we think we can get that to 10% or 1% or something."
+> "For the 1% of developers that want to be most ahead... they only need to do the last 20% of their work in the editor. And we think we can get that to 10% or 1% or something."
 
 #### 2. Anthropic Claude Code
 **Status:** Production-validated with heavy usage
@@ -138,9 +131,7 @@ amp run --background "task description" --max-time 3600
 - Map-reduce execution for codebase migrations
 
 **Case Study (Boris Cherny, Anthropic):**
-> "The common use case is code migration... The main agent makes a big to-do list for everything and map reduces over a
-> bunch of subagents. You instruct Claude like start 10 agents and then just go 10 at a time and just migrate all the
-> stuff over."
+> "The common use case is code migration... The main agent makes a big to-do list for everything and map reduces over a bunch of subagents. You instruct Claude like start 10 agents and then just go 10 at a time and just migrate all the stuff over."
 
 **Measured Results:**
 - 10x+ speedup on framework migrations
@@ -184,53 +175,51 @@ amp run --background "task description" --max-time 3600
 **Factory-over-assistant cannot function without these patterns:**
 
 1. **Agent Modes by Model Personality**
-    - Provides framework for selecting appropriate models (GPT-5.2 "Deep Mode" for autonomous work)
-    - **Relationship:** Critical enabler - factory relies on using models that can work autonomously for 45+ minutes
-    - **Source:** Same AMP podcast series
+   - Provides framework for selecting appropriate models (GPT-5.2 "Deep Mode" for autonomous work)
+   - **Relationship:** Critical enabler - factory relies on using models that can work autonomously for 45+ minutes
+   - **Source:** Same AMP podcast series
 
 2. **Rich Feedback Loops > Perfect Prompts**
-    - Replaces human as feedback mechanism with automated loops
-    - **Relationship:** Critical dependency - factory requires agents to self-correct via test failures, compiler
-      errors, linter output
-    - **Without this:** Factory agents cannot work autonomously
+   - Replaces human as feedback mechanism with automated loops
+   - **Relationship:** Critical dependency - factory requires agents to self-correct via test failures, compiler errors, linter output
+   - **Without this:** Factory agents cannot work autonomously
 
 ### Implementation Patterns
 
 3. **Asynchronous Coding Agent Pipeline**
-    - Provides systems architecture for running multiple agents in parallel
-    - **Relationship:** Infrastructure enabler - queue management, resource utilization
-    - **Overlap:** Both emphasize parallelization and eliminating bottlenecks
+   - Provides systems architecture for running multiple agents in parallel
+   - **Relationship:** Infrastructure enabler - queue management, resource utilization
+   - **Overlap:** Both emphasize parallelization and eliminating bottlenecks
 
 4. **Autonomous Workflow Agent Architecture**
-    - Concrete implementation for individual agents managing long-running workflows
-    - **Relationship:** Extension - provides the "how" for factory's "what"
-    - **Features:** Containerized execution, tmux session management, error recovery
+   - Concrete implementation for individual agents managing long-running workflows
+   - **Relationship:** Extension - provides the "how" for factory's "what"
+   - **Features:** Containerized execution, tmux session management, error recovery
 
 5. **CLI-Native Agent Orchestration**
-    - Primary interface for factory-over-assistant
-    - **Relationship:** Interface enabler - CLI-driven vs sidebar-driven
-    - **Key connection:** Factory explicitly mentions AMP killing VS Code extension because "CLI is the future"
+   - Primary interface for factory-over-assistant
+   - **Relationship:** Interface enabler - CLI-driven vs sidebar-driven
+   - **Key connection:** Factory explicitly mentions AMP killing VS Code extension because "CLI is the future"
 
 6. **Agent SDK for Programmatic Control**
-    - Programmable interface for spawning and monitoring agents
-    - **Relationship:** Tooling enabler - scriptable agent spawning vs interactive chat
+   - Programmable interface for spawning and monitoring agents
+   - **Relationship:** Tooling enabler - scriptable agent spawning vs interactive chat
 
 7. **Continuous Autonomous Task Loop**
-    - Code-level implementation of factory model
-    - **Relationship:** Concrete implementation - handles task selection, execution, completion without human
-      intervention
+   - Code-level implementation of factory model
+   - **Relationship:** Concrete implementation - handles task selection, execution, completion without human intervention
 
 ### Scale Extensions
 
 8. **Distributed Execution with Cloud Workers**
-    - Factory-over-assistant at team/enterprise scale
-    - **Relationship:** Scale extension - adds synchronization and conflict management
+   - Factory-over-assistant at team/enterprise scale
+   - **Relationship:** Scale extension - adds synchronization and conflict management
 
 ### Enabler Patterns
 
 9. **Progressive Autonomy with Model Evolution**
-    - Explains why factory-over-assistant is increasingly viable
-    - **Relationship:** Feasibility enabler - as models improve, they need less hand-holding
+   - Explains why factory-over-assistant is increasingly viable
+   - **Relationship:** Feasibility enabler - as models improve, they need less hand-holding
 
 ### Contradictory Patterns
 
@@ -240,8 +229,7 @@ Patterns that represent valid use cases where assistant model remains superior:
 - **Agent-Assisted Scaffolding** - Interactive collaboration for exploratory work
 - **Agent-Powered Codebase Q&A/Onboarding** - Inherently interactive use case
 
-**Resolution:** These serve different phases - factory for well-defined execution tasks, assistant for
-exploratory/learning work
+**Resolution:** These serve different phases - factory for well-defined execution tasks, assistant for exploratory/learning work
 
 ---
 
@@ -387,23 +375,23 @@ graph TD
 
 ### Pros
 
-| Benefit                          | Impact | Evidence                                  |
-|----------------------------------|--------|-------------------------------------------|
-| **Massive parallelization**      | High   | 10+ agents simultaneously (Anthropic)     |
-| **Better use of human time**     | High   | Orchestration vs. watching                |
-| **Scales with model capability** | High   | GPT-5.2 can work 45+ minutes autonomously |
-| **Reduced latency**              | Medium | Don't wait for each step                  |
-| **Higher throughput**            | High   | Multiple tasks completed in parallel      |
+| Benefit | Impact | Evidence |
+|---------|--------|----------|
+| **Massive parallelization** | High | 10+ agents simultaneously (Anthropic) |
+| **Better use of human time** | High | Orchestration vs. watching |
+| **Scales with model capability** | High | GPT-5.2 can work 45+ minutes autonomously |
+| **Reduced latency** | Medium | Don't wait for each step |
+| **Higher throughput** | High | Multiple tasks completed in parallel |
 
 ### Cons
 
-| Drawback                                            | Mitigation                                            |
-|-----------------------------------------------------|-------------------------------------------------------|
-| **Loss of control** - Can't steer in real-time      | Clear task specification; hybrid for exploratory work |
-| **Delayed feedback** - Issues found 30-60 min later | Robust automated feedback loops                       |
-| **Setup overhead** - Requires automation            | Invest in CI/CD, skills, linters                      |
-| **Harder to debug** - Less visibility               | Observability platforms, structured logging           |
-| **Tooling requirements** - Need monitoring          | Background agent systems, dashboarding                |
+| Drawback | Mitigation |
+|----------|------------|
+| **Loss of control** - Can't steer in real-time | Clear task specification; hybrid for exploratory work |
+| **Delayed feedback** - Issues found 30-60 min later | Robust automated feedback loops |
+| **Setup overhead** - Requires automation | Invest in CI/CD, skills, linters |
+| **Harder to debug** - Less visibility | Observability platforms, structured logging |
+| **Tooling requirements** - Need monitoring | Background agent systems, dashboarding |
 
 ### When Factory Doesn't Work
 
@@ -496,14 +484,14 @@ user → spawn(agent1) + spawn(agent2) + spawn(agent3)
 
 ## Pattern Status Assessment
 
-| Criterion                      | Status   | Evidence                                        |
-|--------------------------------|----------|-------------------------------------------------|
-| **Theoretical Foundation**     | Strong   | Multiple academic papers on multi-agent systems |
-| **Production Implementations** | Strong   | AMP, Anthropic, GitHub, Cursor, OpenHands       |
-| **Case Studies**               | Strong   | Multiple with 10x+ speedups                     |
-| **Tooling Support**            | Strong   | CLI, SDK, observability platforms               |
-| **Community Adoption**         | Emerging | Growing rapidly                                 |
-| **Documentation**              | Emerging | Pattern documented, industry reports emerging   |
+| Criterion | Status | Evidence |
+|-----------|--------|----------|
+| **Theoretical Foundation** | Strong | Multiple academic papers on multi-agent systems |
+| **Production Implementations** | Strong | AMP, Anthropic, GitHub, Cursor, OpenHands |
+| **Case Studies** | Strong | Multiple with 10x+ speedups |
+| **Tooling Support** | Strong | CLI, SDK, observability platforms |
+| **Community Adoption** | Emerging | Growing rapidly |
+| **Documentation** | Emerging | Pattern documented, industry reports emerging |
 
 **Recommendation:** Consider upgrading pattern status from "emerging" to "validated-in-production"
 
@@ -511,35 +499,25 @@ user → spawn(agent1) + spawn(agent2) + spawn(agent3)
 
 ## Key Insights
 
-1. **Factory-over-assistant is not a standalone pattern** - It sits at the center of a constellation of related patterns
-   providing prerequisites, implementations, interfaces, and scaling strategies.
+1. **Factory-over-assistant is not a standalone pattern** - It sits at the center of a constellation of related patterns providing prerequisites, implementations, interfaces, and scaling strategies.
 
-2. **Strong synergy with Agent Modes by Model Personality** - These two patterns from the same source (AMP) are mutually
-   reinforcing. Factory relies on using appropriate models (GPT-5.2 "Deep Mode") for autonomous work.
+2. **Strong synergy with Agent Modes by Model Personality** - These two patterns from the same source (AMP) are mutually reinforcing. Factory relies on using appropriate models (GPT-5.2 "Deep Mode") for autonomous work.
 
-3. **Rich Feedback Loops is the critical dependency** - Without automated feedback loops replacing the human, the
-   factory model cannot work effectively.
+3. **Rich Feedback Loops is the critical dependency** - Without automated feedback loops replacing the human, the factory model cannot work effectively.
 
-4. **Multiple implementation paths** - The factory concept can be implemented via Continuous Autonomous Task Loop (
-   simple), Custom Sandboxed Background Agent (enterprise), or Autonomous Workflow Agent Architecture (complex
-   workflows).
+4. **Multiple implementation paths** - The factory concept can be implemented via Continuous Autonomous Task Loop (simple), Custom Sandboxed Background Agent (enterprise), or Autonomous Workflow Agent Architecture (complex workflows).
 
-5. **Natural contradictions with interactive patterns** - Patterns like Agent-Assisted Scaffolding and Agent-Powered Q&A
-   represent valid use cases where the assistant model remains superior.
+5. **Natural contradictions with interactive patterns** - Patterns like Agent-Assisted Scaffolding and Agent-Powered Q&A represent valid use cases where the assistant model remains superior.
 
-6. **The "last 20%" principle** - The factory model doesn't eliminate the editor; it reduces it to the final integration
-   work. For frontier developers, this may be as little as 1-10% of their time.
+6. **The "last 20%" principle** - The factory model doesn't eliminate the editor; it reduces it to the final integration work. For frontier developers, this may be as little as 1-10% of their time.
 
 ---
 
 ## References
 
 ### Primary Sources
-
-- [Raising an Agent Episode 9: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=2wjnV6F2arc) -
-  AMP (Thorsten Ball, Quinn Slack, 2025)
-- [Raising an Agent Episode 10: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=4rx36wc9ugw) -
-  AMP (Thorsten Ball, Quinn Slack, 2025)
+- [Raising an Agent Episode 9: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=2wjnV6F2arc) - AMP (Thorsten Ball, Quinn Slack, 2025)
+- [Raising an Agent Episode 10: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=4rx36wc9ugw) - AMP (Thorsten Ball, Quinn Slack, 2025)
 
 ### Academic Papers
 - OpenDevin: [arxiv.org/abs/2407.16819](https://arxiv.org/abs/2407.16819)

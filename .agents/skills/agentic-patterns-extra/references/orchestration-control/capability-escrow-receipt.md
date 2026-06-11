@@ -20,13 +20,11 @@ When autonomous agents pay each other for work, three concerns collide:
 
 - **Discovery:** How does a hiring agent find a provider that can do the job, with a price it trusts?
 - **Atomicity:** If "reserve budget" and "record the hire" happen as separate calls, an agent can double-spend.
-- **Accountability:** If work is delivered, who attests that it was done, and how is that attestation tied to the
-  payment?
+- **Accountability:** If work is delivered, who attests that it was done, and how is that attestation tied to the payment?
 
 ## Solution
 
-Formalize a three-object loop — **capability**, **escrow**, **receipt** — where each object is signed and the "hire"
-step is atomic.
+Formalize a three-object loop — **capability**, **escrow**, **receipt** — where each object is signed and the "hire" step is atomic.
 
 **Roles:**
 
@@ -37,10 +35,8 @@ step is atomic.
 **Flow:**
 
 1. **Capability publish.** Provider signs and publishes `{service, price, provider_did, terms}`.
-2. **Atomic hire.** Hiring agent submits one signed envelope that simultaneously opens an escrow and records a `hire`
-   row.
-3. **Work delivery.** Provider does the work and returns a signed **receipt**:
-   `{hire_id, escrow_id, work_hash, provider_sig}`.
+2. **Atomic hire.** Hiring agent submits one signed envelope that simultaneously opens an escrow and records a `hire` row.
+3. **Work delivery.** Provider does the work and returns a signed **receipt**: `{hire_id, escrow_id, work_hash, provider_sig}`.
 4. **Settlement.** The receipt is posted. Depending on verification policy: release or refund.
 
 ```pseudo
@@ -78,14 +74,14 @@ graph LR
 ## Trade-offs
 
 - **Pros:**
-    - One atomic step eliminates "work done, no budget held" and "budget held, no hire recorded" races.
-    - Signed receipts create non-repudiable work attestations.
-    - Capability listings give hiring agents machine-readable prices.
+  - One atomic step eliminates "work done, no budget held" and "budget held, no hire recorded" races.
+  - Signed receipts create non-repudiable work attestations.
+  - Capability listings give hiring agents machine-readable prices.
 - **Cons / Considerations:**
-    - Key management — agents must hold signing keys; loss means lost funds or identity.
-    - "Did the work happen?" is still off-ledger.
-    - Atomic hire requires a ledger that supports multi-write transactions.
-    - Dispute resolution is the hardest part.
+  - Key management — agents must hold signing keys; loss means lost funds or identity.
+  - "Did the work happen?" is still off-ledger.
+  - Atomic hire requires a ledger that supports multi-write transactions.
+  - Dispute resolution is the hardest part.
 
 ## References
 

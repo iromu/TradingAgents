@@ -10,8 +10,7 @@ tags: [web-search, serp-api, citations, parallel-agents, query-translation, oper
 
 ## Problem
 
-Traditional LLMs have a training cutoff date, meaning they don't know recent facts or real-time information. Simply
-connecting a model to a search API isn't enough - the model needs to:
+Traditional LLMs have a training cutoff date, meaning they don't know recent facts or real-time information. Simply connecting a model to a search API isn't enough - the model needs to:
 
 - Decide when searching is necessary versus using internal knowledge
 - Translate conversational context into effective search queries
@@ -21,29 +20,27 @@ connecting a model to a search API isn't enough - the model needs to:
 
 ## Solution
 
-Implement an iterative web search agent loop where a coordinating agent manages multiple parallel worker agents to
-comprehensively research a topic.
+Implement an iterative web search agent loop where a coordinating agent manages multiple parallel worker agents to comprehensively research a topic.
 
 **Core components:**
 
-1. **Search Decision Layer**: A trained classifier that determines when web search is appropriate (using SFT, RLHF, or
-   RL training)
+1. **Search Decision Layer**: A trained classifier that determines when web search is appropriate (using SFT, RLHF, or RL training)
 
 2. **Query Translation**: Convert conversational context into effective search queries and operators:
-    - Keyword extraction (SERP APIs have 32 keyword limits)
-    - Domain-specific searches (e.g., only instagram.com, only Reddit)
-    - Temporal operators (e.g., results from last 3 months)
-    - Query rewriting: Converting natural language to standardized semantic expressions
+   - Keyword extraction (SERP APIs have 32 keyword limits)
+   - Domain-specific searches (e.g., only instagram.com, only Reddit)
+   - Temporal operators (e.g., results from last 3 months)
+   - Query rewriting: Converting natural language to standardized semantic expressions
 
 3. **Parallel Worker Agent Spawning**: The coordinating agent creates multiple specialized worker agents that:
-    - Search different domains/angles simultaneously
-    - Use different operators and query variations
-    - Aggregate results back to the coordinator
+   - Search different domains/angles simultaneously
+   - Use different operators and query variations
+   - Aggregate results back to the coordinator
 
 4. **Iterative Refinement**: Based on initial results, the coordinator:
-    - Identifies new questions raised by the findings
-    - Spawns additional workers with more specific searches
-    - Repeats until satisfied with result quality
+   - Identifies new questions raised by the findings
+   - Spawns additional workers with more specific searches
+   - Repeats until satisfied with result quality
 
 5. **Citation & Indexing**: Maintain an ephemeral index per search session with proper source attribution
 
@@ -81,10 +78,8 @@ flowchart TD
 
 **Implementation considerations:**
 
-- **SERP API limitations**: Current SERP APIs (Google, Bing, DuckDuckGo) are optimized for humans, not AI. They curate
-  top 10 results rather than providing breadth/diversity
-- **Caching strategy**: For performance, consider maintaining a cached web index for quick retrieval, using SERP APIs
-  primarily for URL discovery and then pulling content directly
+- **SERP API limitations**: Current SERP APIs (Google, Bing, DuckDuckGo) are optimized for humans, not AI. They curate top 10 results rather than providing breadth/diversity
+- **Caching strategy**: For performance, consider maintaining a cached web index for quick retrieval, using SERP APIs primarily for URL discovery and then pulling content directly
 - **Operator support**: Some SERP APIs have deprecated advanced operators, limiting refinement capabilities
 - **Parallelization**: Web search is easily parallelizable - spawn multiple workers for speed
 

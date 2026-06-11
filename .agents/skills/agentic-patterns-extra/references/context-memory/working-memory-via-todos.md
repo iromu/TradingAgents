@@ -26,11 +26,9 @@ This leads to redundant work, forgotten tasks, and confused users.
 
 ## Solution
 
-Use `TodoWrite` (or equivalent state externalization) to maintain explicit working memory throughout the session. This
-serves as both agent and user visibility into session state.
+Use `TodoWrite` (or equivalent state externalization) to maintain explicit working memory throughout the session. This serves as both agent and user visibility into session state.
 
-**Theoretical foundation:** Externalizes working memory per Baddeley's episodic buffer model and Miller's 7±2 capacity
-limit—humans and LLMs both struggle to track more than a handful of items internally.
+**Theoretical foundation:** Externalizes working memory per Baddeley's episodic buffer model and Miller's 7±2 capacity limit—humans and LLMs both struggle to track more than a handful of items internally.
 
 **What to track:**
 
@@ -41,12 +39,12 @@ limit—humans and LLMs both struggle to track more than a handful of items inte
 
 **Usage patterns from data:**
 
-| Project                  | TodoWrite Uses | Session Quality                    |
-|--------------------------|----------------|------------------------------------|
-| nibzard-web              | 52             | High (8 positive, 2 corrections)   |
-| awesome-agentic-patterns | 60             | Medium (1 positive, 5 corrections) |
-| marginshot               | 36             | No feedback captured               |
-| 2025-intro-swe           | 0              | Simple work, no need               |
+| Project | TodoWrite Uses | Session Quality |
+|---------|---------------|-----------------|
+| nibzard-web | 52 | High (8 positive, 2 corrections) |
+| awesome-agentic-patterns | 60 | Medium (1 positive, 5 corrections) |
+| marginshot | 36 | No feedback captured |
+| 2025-intro-swe | 0 | Simple work, no need |
 
 **Key insights:**
 
@@ -143,12 +141,9 @@ stateDiagram-v2
 
 ## References
 
-* [SKILLS-AGENTIC-LESSONS.md](https://github.com/nibzard/SKILLS-AGENTIC-LESSONS) - Skills based on lessons learned from
-  analyzing 88 real-world Claude conversation sessions
-* Related
-  patterns: [Proactive Agent State Externalization](proactive-agent-state-externalization.md), [Task List Pattern](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/task-lists)
-* Baddeley, A. (2000). "The Episodic Buffer: A New Component of Working Memory?" *Trends in Cognitive Sciences*, 4(11),
-  417-423.
+* [SKILLS-AGENTIC-LESSONS.md](https://github.com/nibzard/SKILLS-AGENTIC-LESSONS) - Skills based on lessons learned from analyzing 88 real-world Claude conversation sessions
+* Related patterns: [Proactive Agent State Externalization](proactive-agent-state-externalization.md), [Task List Pattern](https://docs.anthropic.com/en/docs/build-with-claude/prompt-engineering/task-lists)
+* Baddeley, A. (2000). "The Episodic Buffer: A New Component of Working Memory?" *Trends in Cognitive Sciences*, 4(11), 417-423.
 * Miller, G. A. (1956). "The Magical Number Seven, Plus or Minus Two." *Psychological Review*, 63(2), 81-97.
 
 ---

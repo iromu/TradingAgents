@@ -17,12 +17,12 @@ public class MyAgentApplication {
 
 ### Default LLM and Roles
 
-| Property                                 | Type                | Default        | Description                      |
-|------------------------------------------|---------------------|----------------|----------------------------------|
-| `embabel.models.default-llm`             | String              | `gpt-4.1-mini` | Default LLM name                 |
-| `embabel.models.default-embedding-model` | String              | `null`         | Default embedding model          |
-| `embabel.models.llms`                    | Map<String, String> | `{}`           | Map of role to LLM name          |
-| `embabel.models.embedding-services`      | Map<String, String> | `{}`           | Map of role to embedding service |
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.models.default-llm` | String | `gpt-4.1-mini` | Default LLM name |
+| `embabel.models.default-embedding-model` | String | `null` | Default embedding model |
+| `embabel.models.llms` | Map<String, String> | `{}` | Map of role to LLM name |
+| `embabel.models.embedding-services` | Map<String, String> | `{}` | Map of role to embedding service |
 
 ```yaml
 embabel:
@@ -40,79 +40,79 @@ embabel:
 
 ### Platform Configuration
 
-| Property                             | Type   | Default                          | Description                 |
-|--------------------------------------|--------|----------------------------------|-----------------------------|
-| `embabel.agent.platform.name`        | String | `embabel-default`                | Core platform identity name |
-| `embabel.agent.platform.description` | String | `Embabel Default Agent Platform` | Platform description        |
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.agent.platform.name` | String | `embabel-default` | Core platform identity name |
+| `embabel.agent.platform.description` | String | `Embabel Default Agent Platform` | Platform description |
 
 ### Logging Personality
 
-| Property                            | Type   | Default  | Description             |
-|-------------------------------------|--------|----------|-------------------------|
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
 | `embabel.agent.logging.personality` | String | _(none)_ | Themed logging messages |
 
 Available values: `starwars`, `severance`, `colossus`, `hitchhiker`, `montypython`
 
 ### Agent Scanning
 
-| Property                                     | Type    | Default | Description                                      |
-|----------------------------------------------|---------|---------|--------------------------------------------------|
-| `embabel.agent.platform.scanning.annotation` | Boolean | `true`  | Auto-register beans with `@Agent` and `@Agentic` |
-| `embabel.agent.platform.scanning.bean`       | Boolean | `false` | Auto-register Spring beans of type `Agent`       |
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.agent.platform.scanning.annotation` | Boolean | `true` | Auto-register beans with `@Agent` and `@Agentic` |
+| `embabel.agent.platform.scanning.bean` | Boolean | `false` | Auto-register Spring beans of type `Agent` |
 
 ### Tool Loop
 
-| Property                                                       | Type     | Default   | Description                                         |
-|----------------------------------------------------------------|----------|-----------|-----------------------------------------------------|
-| `embabel.agent.platform.toolloop.type`                         | String   | `default` | `default` (sequential) or `parallel` (experimental) |
-| `embabel.agent.platform.toolloop.max-iterations`               | Int      | `20`      | Max tool loop iterations                            |
-| `embabel.agent.platform.toolloop.parallel.per-tool-timeout`    | Duration | `30s`     | Timeout per tool in parallel mode                   |
-| `embabel.agent.platform.toolloop.parallel.batch-timeout`       | Duration | `60s`     | Timeout for entire batch in parallel mode           |
-| `embabel.agent.platform.toolloop.empty-response.max-retries`   | Int      | `0`       | Max retries for empty responses (weak models)       |
-| `embabel.agent.platform.toolloop.empty-response.nudge-message` | String   | _(none)_  | Message appended when LLM goes silent               |
-| `embabel.agent.platform.toolloop.tool-not-found.max-retries`   | Int      | `3`       | Max retries when LLM calls unknown tool name        |
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.agent.platform.toolloop.type` | String | `default` | `default` (sequential) or `parallel` (experimental) |
+| `embabel.agent.platform.toolloop.max-iterations` | Int | `20` | Max tool loop iterations |
+| `embabel.agent.platform.toolloop.parallel.per-tool-timeout` | Duration | `30s` | Timeout per tool in parallel mode |
+| `embabel.agent.platform.toolloop.parallel.batch-timeout` | Duration | `60s` | Timeout for entire batch in parallel mode |
+| `embabel.agent.platform.toolloop.empty-response.max-retries` | Int | `0` | Max retries for empty responses (weak models) |
+| `embabel.agent.platform.toolloop.empty-response.nudge-message` | String | _(none)_ | Message appended when LLM goes silent |
+| `embabel.agent.platform.toolloop.tool-not-found.max-retries` | Int | `3` | Max retries when LLM calls unknown tool name |
 
 ### Execution Mode
 
-| Property                              | Type   | Default  | Description                                              |
-|---------------------------------------|--------|----------|----------------------------------------------------------|
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
 | `embabel.agent.platform.process-type` | String | `SIMPLE` | `SIMPLE` (sequential) or `CONCURRENT` (parallel actions) |
 
 ### Autonomy
 
-| Property                                                   | Type   | Default | Description                               |
-|------------------------------------------------------------|--------|---------|-------------------------------------------|
-| `embabel.agent.platform.autonomy.agent-confidence-cut-off` | Double | `0.6`   | Confidence threshold for agent operations |
-| `embabel.agent.platform.autonomy.goal-confidence-cut-off`  | Double | `0.6`   | Confidence threshold for goal achievement |
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.agent.platform.autonomy.agent-confidence-cut-off` | Double | `0.6` | Confidence threshold for agent operations |
+| `embabel.agent.platform.autonomy.goal-confidence-cut-off` | Double | `0.6` | Confidence threshold for goal achievement |
 
 ### HTTP Client
 
 Add `embabel-agent-netty-client-autoconfigure` for Netty:
 
-| Property                                             | Type     | Default | Description        |
-|------------------------------------------------------|----------|---------|--------------------|
-| `embabel.agent.platform.http-client.connect-timeout` | Duration | `25s`   | Connection timeout |
-| `embabel.agent.platform.http-client.read-timeout`    | Duration | `1m`    | Read timeout       |
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.agent.platform.http-client.connect-timeout` | Duration | `25s` | Connection timeout |
+| `embabel.agent.platform.http-client.read-timeout` | Duration | `1m` | Read timeout |
 
 ### REST Endpoints
 
-| Property                                             | Type    | Default | Description                   |
-|------------------------------------------------------|---------|---------|-------------------------------|
-| `embabel.agent.platform.rest.process-status-enabled` | Boolean | `true`  | `GET /api/v1/process/{id}`    |
-| `embabel.agent.platform.rest.process-kill-enabled`   | Boolean | `true`  | `DELETE /api/v1/process/{id}` |
-| `embabel.agent.platform.rest.process-events-enabled` | Boolean | `true`  | `GET /events/process/{id}`    |
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.agent.platform.rest.process-status-enabled` | Boolean | `true` | `GET /api/v1/process/{id}` |
+| `embabel.agent.platform.rest.process-kill-enabled` | Boolean | `true` | `DELETE /api/v1/process/{id}` |
+| `embabel.agent.platform.rest.process-events-enabled` | Boolean | `true` | `GET /events/process/{id}` |
 
 ### Process Repository
 
-| Property                                                | Type | Default | Description                  |
-|---------------------------------------------------------|------|---------|------------------------------|
-| `embabel.agent.platform.process-repository.window-size` | Int  | `1000`  | Max processes kept in memory |
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.agent.platform.process-repository.window-size` | Int | `1000` | Max processes kept in memory |
 
 ### Test Configuration
 
-| Property                                | Type    | Default | Description                  |
-|-----------------------------------------|---------|---------|------------------------------|
-| `embabel.agent.platform.test.mock-mode` | Boolean | `true`  | Enable mock mode for testing |
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.agent.platform.test.mock-mode` | Boolean | `true` | Enable mock mode for testing |
 
 ## LLM Provider Configuration
 
@@ -125,7 +125,6 @@ embabel:
 ```
 
 Environment variables:
-
 - `OPENAI_API_KEY` (required)
 - `OPENAI_BASE_URL` (optional, for Azure)
 
@@ -154,7 +153,6 @@ embabel:
 ```
 
 Environment variables:
-
 - `ANTHROPIC_API_KEY` (required)
 - `ANTHROPIC_BASE_URL` (optional)
 
@@ -169,7 +167,6 @@ embabel:
 ```
 
 Environment variables:
-
 - `GEMINI_API_KEY` (required)
 
 Add: `embabel-agent-starter-gemini`
@@ -202,8 +199,7 @@ Add: `embabel-agent-starter-deepseek`
 
 Add: `embabel-agent-starter-oci-genai`
 
-Defaults to `~/.oci/config` with profile `DEFAULT`. Supports `INSTANCE_PRINCIPAL`, `RESOURCE_PRINCIPAL`,
-`WORKLOAD_IDENTITY`, `SESSION_TOKEN`, and `SIMPLE` authentication.
+Defaults to `~/.oci/config` with profile `DEFAULT`. Supports `INSTANCE_PRINCIPAL`, `RESOURCE_PRINCIPAL`, `WORKLOAD_IDENTITY`, `SESSION_TOKEN`, and `SIMPLE` authentication.
 
 ### Mistral AI
 
@@ -237,8 +233,7 @@ embabel:
 
 Add: `embabel-agent-starter-ollama`
 
-Or use the OpenAI-compatible API: add `embabel-agent-starter-openai-custom` with
-`OPENAI_CUSTOM_BASE_URL=http://localhost:11434/v1`.
+Or use the OpenAI-compatible API: add `embabel-agent-starter-openai-custom` with `OPENAI_CUSTOM_BASE_URL=http://localhost:11434/v1`.
 
 ## LlmOptions (Per-Call Configuration)
 
@@ -252,7 +247,6 @@ var options = LlmOptions.withModel("gpt-4o")
 ```
 
 Key methods:
-
 - `withModel(String)` — specific model name
 - `withRole(String)` — role defined in config (e.g., `#best`)
 - `withTemperature(Double)` — 0.0–1.0
@@ -272,8 +266,7 @@ var caching = AnthropicCachingConfig.builder()
     .build();
 ```
 
-Cache reads cost 90% less than regular tokens. Minimum size: 1024 tokens (older models) or 4096 tokens (Claude Sonnet
-4.5+).
+Cache reads cost 90% less than regular tokens. Minimum size: 1024 tokens (older models) or 4096 tokens (Claude Sonnet 4.5+).
 
 ## Custom LLM Integration
 

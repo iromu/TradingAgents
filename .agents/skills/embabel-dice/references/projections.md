@@ -1,7 +1,6 @@
 # DICE Projections — Reference Guide
 
-Projections materialize high-confidence propositions to typed backends. They are materialized views of the proposition
-store.
+Projections materialize high-confidence propositions to typed backends. They are materialized views of the proposition store.
 
 ## Table of Contents
 
@@ -16,13 +15,13 @@ store.
 
 ## Projection Types
 
-| Projection | Backend        | Use Case                              |
-|------------|----------------|---------------------------------------|
-| **Vector** | Vector store   | Semantic retrieval                    |
-| **Neo4j**  | Graph database | Graph traversal, relationship queries |
-| **Prolog** | Prolog engine  | Inference, rules                      |
-| **Memory** | Agent context  | Agentic recall (Memory facade)        |
-| **Oracle** | NL QA          | Natural language question answering   |
+| Projection | Backend | Use Case |
+|------------|---------|----------|
+| **Vector** | Vector store | Semantic retrieval |
+| **Neo4j** | Graph database | Graph traversal, relationship queries |
+| **Prolog** | Prolog engine | Inference, rules |
+| **Memory** | Agent context | Agentic recall (Memory facade) |
+| **Oracle** | NL QA | Natural language question answering |
 
 ## Vector Projection
 
@@ -35,8 +34,7 @@ GraphProjector vectorProjector(VectorStore vectorStore) {
 }
 ```
 
-**When to use:** When you need to find semantically similar propositions, e.g., "find all facts about the user's
-preferences."
+**When to use:** When you need to find semantically similar propositions, e.g., "find all facts about the user's preferences."
 
 **Dependencies:** `embabel-dice-vector`
 
@@ -65,11 +63,11 @@ GraphProjector graphProjector() {
 
 The `Relations` configuration maps knowledge types to relationship labels:
 
-| Knowledge Type | Relationships             |
-|----------------|---------------------------|
-| `SEMANTIC`     | `is-a`, `related-to`      |
-| `EPISODIC`     | `occurred-at`, `involved` |
-| `PROCEDURAL`   | `uses`, `requires`        |
+| Knowledge Type | Relationships |
+|----------------|---------------|
+| `SEMANTIC` | `is-a`, `related-to` |
+| `EPISODIC` | `occurred-at`, `involved` |
+| `PROCEDURAL` | `uses`, `requires` |
 
 ## Prolog Projection
 
@@ -97,8 +95,7 @@ GraphProjector memoryProjector() {
 }
 ```
 
-**When to use:** When agents need to recall propositions during conversation. This is the projection used by the
-`Memory` facade for agentic recall.
+**When to use:** When agents need to recall propositions during conversation. This is the projection used by the `Memory` facade for agentic recall.
 
 **Dependencies:** `embabel-dice-agent`
 
@@ -119,10 +116,10 @@ GraphProjector oracleProjector(OracleService oracleService) {
 
 Controls which propositions get projected.
 
-| Policy                          | Behavior                                                    |
-|---------------------------------|-------------------------------------------------------------|
-| `LenientProjectionPolicy`       | Projects propositions with any confidence                   |
-| `StrictProjectionPolicy`        | Only projects propositions above a confidence threshold     |
+| Policy | Behavior |
+|--------|----------|
+| `LenientProjectionPolicy` | Projects propositions with any confidence |
+| `StrictProjectionPolicy` | Only projects propositions above a confidence threshold |
 | `KnowledgeTypeProjectionPolicy` | Projects based on knowledge type (SEMANTIC, EPISODIC, etc.) |
 
 ```java
@@ -153,9 +150,6 @@ dice:
 
 ## Common Pitfalls
 
-1. **Not configuring projection policies** — Without a policy, all propositions project regardless of confidence. Use
-   `StrictProjectionPolicy` in production.
-2. **Missing dependencies** — Each projection type requires its corresponding module (`embabel-dice-neo4j`,
-   `embabel-dice-vector`, etc.).
-3. **Not matching relations to knowledge types** — The `Relations` configuration should map relationship labels to the
-   knowledge types you actually use.
+1. **Not configuring projection policies** — Without a policy, all propositions project regardless of confidence. Use `StrictProjectionPolicy` in production.
+2. **Missing dependencies** — Each projection type requires its corresponding module (`embabel-dice-neo4j`, `embabel-dice-vector`, etc.).
+3. **Not matching relations to knowledge types** — The `Relations` configuration should map relationship labels to the knowledge types you actually use.

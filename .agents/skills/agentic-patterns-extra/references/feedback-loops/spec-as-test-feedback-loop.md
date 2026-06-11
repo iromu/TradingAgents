@@ -10,17 +10,16 @@ tags: [validation, drift-detection, continuous-testing]
 
 ## Problem
 
-Even in spec-first projects, implementations can drift as code evolves and the spec changes (or vice-versa). Silent
-divergence erodes trust.
+Even in spec-first projects, implementations can drift as code evolves and the spec changes (or vice-versa). Silent divergence erodes trust.
 
 ## Solution
 
 Generate **executable assertions** directly from the spec (e.g., unit or integration tests) and let the agent:
 
-- Watch for any spec or code commit.
-- Auto-regenerate test suite from latest spec snapshot.
+- Watch for any spec or code commit.  
+- Auto-regenerate test suite from latest spec snapshot.  
 - Run tests; if failures appear, open an *agent-authored* PR that either:
-
+    
 - updates code to match spec, or
     - flags unclear spec segments for human review.
 
@@ -36,22 +35,22 @@ This creates a continuous feedback loop ensuring specification and implementatio
 
 - **Evidence Grade:** `medium`
 - **Most Valuable Findings:**
-    - Production use at Anthropic (Constitutional AI), OpenAI (Evals), and LangChain
-    - Academic foundations in QuickCheck (property-based testing) and Design by Contract
-    - Effective when combined with Feature List as Immutable Contract
+  - Production use at Anthropic (Constitutional AI), OpenAI (Evals), and LangChain
+  - Academic foundations in QuickCheck (property-based testing) and Design by Contract
+  - Effective when combined with Feature List as Immutable Contract
 - **Unverified:** Long-term impact on agent quality scores; most implementations are recent (2022-2024)
 
 ## Trade-offs
 
 - **Pros:**
-    - Catches drift early; prevents silent spec-implementation divergence
-    - Immune to "pass by deletion" when combined with immutable feature lists
-    - Provides measurable progress metrics (X/Y features passing)
-    - Survives session boundaries; test state persists across context loss
+  - Catches drift early; prevents silent spec-implementation divergence
+  - Immune to "pass by deletion" when combined with immutable feature lists
+  - Provides measurable progress metrics (X/Y features passing)
+  - Survives session boundaries; test state persists across context loss
 - **Cons:**
-    - Heavy CI usage; false positives if spec wording is ambiguous
-    - Upfront spec investment required; overhead exceeds benefit for small/one-off tasks
-    - Test explosion risk without intelligent selection; spec churn creates test churn
+  - Heavy CI usage; false positives if spec wording is ambiguous
+  - Upfront spec investment required; overhead exceeds benefit for small/one-off tasks
+  - Test explosion risk without intelligent selection; spec churn creates test churn
 
 ## How to use it
 
@@ -62,8 +61,7 @@ This creates a continuous feedback loop ensuring specification and implementatio
 ## References
 
 - Primary source: http://jorypestorious.com/blog/ai-engineer-spec/
-- Anthropic
-  Engineering: [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)
+- Anthropic Engineering: [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)
 - OpenAI Evals: https://github.com/openai/evals
 - QuickCheck (Claessen & Hughes, ICFP 2000) - property-based testing foundation
 - Constitutional AI (Bai et al., Anthropic 2022) - principles as specifications

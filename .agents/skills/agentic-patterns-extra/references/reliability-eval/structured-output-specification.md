@@ -25,8 +25,7 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-Free-form agent outputs are difficult to validate, parse, and integrate with downstream systems. When agents return
-unstructured text, you face:
+Free-form agent outputs are difficult to validate, parse, and integrate with downstream systems. When agents return unstructured text, you face:
 
 - Unpredictable output formats requiring complex parsing
 - Difficult validation and error handling
@@ -34,14 +33,11 @@ unstructured text, you face:
 - Inconsistent categorization and classification
 - Manual post-processing to extract structured data
 
-This makes it nearly impossible to build reliable multi-step workflows where one agent's output feeds into another
-system or agent.
+This makes it nearly impossible to build reliable multi-step workflows where one agent's output feeds into another system or agent.
 
 ## Solution
 
-Constrain agent outputs using deterministic schemas that enforce structured, machine-readable results. Instead of
-allowing free-form text responses, specify exact output formats using type systems, JSON schemas, or framework-specific
-structured output APIs.
+Constrain agent outputs using deterministic schemas that enforce structured, machine-readable results. Instead of allowing free-form text responses, specify exact output formats using type systems, JSON schemas, or framework-specific structured output APIs.
 
 **Core approach:**
 

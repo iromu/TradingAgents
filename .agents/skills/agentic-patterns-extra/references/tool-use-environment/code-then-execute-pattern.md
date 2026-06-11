@@ -10,10 +10,7 @@ tags: [dsl, sandbox, program-synthesis, auditability]
 
 ## Problem
 
-Free-form plan-and-act loops are difficult to audit because critical control decisions stay implicit in natural-language
-reasoning. In security-sensitive workflows, teams need verifiable guarantees that tainted inputs cannot flow into
-dangerous sinks (for example, external messages, payments, or destructive commands). Plain-text plans are too weak for
-formal validation.
+Free-form plan-and-act loops are difficult to audit because critical control decisions stay implicit in natural-language reasoning. In security-sensitive workflows, teams need verifiable guarantees that tainted inputs cannot flow into dangerous sinks (for example, external messages, payments, or destructive commands). Plain-text plans are too weak for formal validation.
 
 ## Solution
 
@@ -23,12 +20,9 @@ Have the LLM output a **sandboxed program or DSL script**:
 2. Static checker/Taint engine verifies flows (e.g., no tainted var to `send_email.recipient`).
 3. Interpreter runs the code in a locked sandbox.
 
-The key shift is to move from "reasoning about actions" to "compiling actions" into an inspectable artifact. Once
-actions are code, policy engines and static analyzers can enforce data-flow rules before execution.
+The key shift is to move from "reasoning about actions" to "compiling actions" into an inspectable artifact. Once actions are code, policy engines and static analyzers can enforce data-flow rules before execution.
 
-This pattern also serves a complementary purpose: **token optimization**. When tool calls execute within the sandbox
-rather than through special tokens, only condensed results return to the LLM context, reducing token usage for
-data-heavy workflows by 75-99% in production deployments.
+This pattern also serves a complementary purpose: **token optimization**. When tool calls execute within the sandbox rather than through special tokens, only condensed results return to the LLM context, reducing token usage for data-heavy workflows by 75-99% in production deployments.
 
 ```dsl
 x = calendar.read(today)
@@ -38,9 +32,7 @@ email.write(to="john@acme.com", body=y)
 
 ## How to use it
 
-Use this for complex multi-step agents such as SQL copilots, software-engineering bots, and workflow automators where
-auditability matters. Start with a small DSL and explicit forbidden flows, then expand language features as checks
-mature.
+Use this for complex multi-step agents such as SQL copilots, software-engineering bots, and workflow automators where auditability matters. Start with a small DSL and explicit forbidden flows, then expand language features as checks mature.
 
 ## Trade-offs
 

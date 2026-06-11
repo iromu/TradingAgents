@@ -6,8 +6,7 @@
 Source → IncrementalAnalyzer → PropositionPipeline → Repository
 ```
 
-The pipeline is the core of DICE. It processes text sources, extracts propositions, resolves entities, revises existing
-propositions, and stores results.
+The pipeline is the core of DICE. It processes text sources, extracts propositions, resolves entities, revises existing propositions, and stores results.
 
 ## Core Components
 
@@ -37,7 +36,6 @@ PropositionExtractor propositionExtractor(Ai ai, LlmOptions llmOptions) {
 ```
 
 Key configuration:
-
 - **withLlm** — LLM options (model, temperature, etc.)
 - **withAi** — Ai instance for LLM interaction
 - **withPropositionRepository** — Repository for context-aware extraction
@@ -178,8 +176,7 @@ PropositionResult result = pipeline.processOnce(
 );
 ```
 
-Uses hash-based deduplication to prevent reprocessing identical content. The `historyStore` tracks which content has
-been processed.
+Uses hash-based deduplication to prevent reprocessing identical content. The `historyStore` tracks which content has been processed.
 
 ### Incremental Processing
 
@@ -216,7 +213,6 @@ SourceAnalysisContext context = SourceAnalysisContext.builder()
 ```
 
 Key context properties:
-
 - **contextId** — Scopes propositions to a user/session
 - **entityResolver** — Resolves entity mentions to canonical entities
 - **schema** — DataDictionary for type validation
@@ -245,8 +241,7 @@ public void onDocumentProcessed(DocumentProcessedEvent event) {
 
 ## Common Pitfalls
 
-1. **Not calling persist()** — process() returns results but doesn't auto-persist. Call
-   `result.persist(repository, entityRepository)`.
+1. **Not calling persist()** — process() returns results but doesn't auto-persist. Call `result.persist(repository, entityRepository)`.
 2. **Not providing an entity resolver** — Without one, entity mentions create new entities every time.
 3. **Not scoping by contextId** — Without context scoping, propositions from different users mix together.
 4. **Using LOOSE schema adherence** — Allows arbitrary proposition structures. Use STRICT for production.

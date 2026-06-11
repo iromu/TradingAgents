@@ -10,19 +10,14 @@ tags: [context-runtime, caching, tool-normalization, session-scoped]
 
 ## Problem
 
-Coding agents read the same files and command outputs many times per session. Each hop typically pastes full text into
-the model context, so cost and latency grow with repetition and verbosity even when the underlying artifact has not
-changed.
+Coding agents read the same files and command outputs many times per session. Each hop typically pastes full text into the model context, so cost and latency grow with repetition and verbosity even when the underlying artifact has not changed.
 
 ## Solution
 
-Introduce a **context runtime** alongside the agent—commonly as an MCP server—that owns how workspace state enters the
-model:
+Introduce a **context runtime** alongside the agent—commonly as an MCP server—that owns how workspace state enters the model:
 
-1. **Session-scoped cache** for read operations with cheap revalidation (e.g., file mtime) so identical reads collapse
-   to small cache hits
-2. **Structured read modes** (dependency maps, signatures, diffs, task-filtered excerpts) so the agent requests the
-   smallest representation that supports the next decision
+1. **Session-scoped cache** for read operations with cheap revalidation (e.g., file mtime) so identical reads collapse to small cache hits
+2. **Structured read modes** (dependency maps, signatures, diffs, task-filtered excerpts) so the agent requests the smallest representation that supports the next decision
 3. **Normalized tool channels** so shell and search results pass through compressing adapters where patterns are stable
 
 ## Evidence
@@ -39,13 +34,11 @@ model:
 
 ## Trade-offs
 
-**Pros:** Fewer redundant tokens on repeated exploration, easier enforcement of "structure-first" context, centralized
-policy.
+**Pros:** Fewer redundant tokens on repeated exploration, easier enforcement of "structure-first" context, centralized policy.
 **Cons:** Additional moving parts, cache staleness risk, host integration work.
 
 ## References
 
 - lean-ctx (Apache-2.0 reference implementation): https://github.com/yvgude/lean-ctx
 - Model Context Protocol specification: https://modelcontextprotocol.io/
--
-Related: [MCP Pattern Injection](../tool-use-environment/mcp-pattern-injection.md), [Context-Minimization Pattern](context-minimization-pattern.md)
+- Related: [MCP Pattern Injection](../tool-use-environment/mcp-pattern-injection.md), [Context-Minimization Pattern](context-minimization-pattern.md)

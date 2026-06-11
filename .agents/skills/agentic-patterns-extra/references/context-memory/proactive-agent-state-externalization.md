@@ -10,8 +10,7 @@ tags: [state-management, self-documentation, hybrid-memory, progressive-state]
 
 ## Problem
 
-Modern models like Claude Sonnet 4.5 proactively attempt to externalize their state by writing summaries and notes (
-e.g., `CHANGELOG.md`, `SUMMARY.md`) to the file system without explicit prompting. However:
+Modern models like Claude Sonnet 4.5 proactively attempt to externalize their state by writing summaries and notes (e.g., `CHANGELOG.md`, `SUMMARY.md`) to the file system without explicit prompting. However:
 - Self-generated notes are often incomplete or miss crucial context
 - Models may spend more tokens on documentation than actual problem-solving
 - Performance can degrade when agents rely exclusively on their own summaries
@@ -40,23 +39,20 @@ Implement structured approaches to leverage and enhance the model's natural tend
 
 - **Evidence Grade:** `emerging`
 - **Key Findings:**
-    - Cognition AI's Devin demonstrated proactive state externalization to `SUMMARY.md`/`CHANGELOG.md`
-    - Claude Sonnet 4.5 exhibits the same behavior natively
-    - Behavior may represent a natural pattern for agent-to-agent communication
+  - Cognition AI's Devin demonstrated proactive state externalization to `SUMMARY.md`/`CHANGELOG.md`
+  - Claude Sonnet 4.5 exhibits the same behavior natively
+  - Behavior may represent a natural pattern for agent-to-agent communication
 
 ## How to use it
 
-- Best applied in long-running development sessions, research/analysis spanning multiple sessions, and subagent
-  coordination scenarios.
+- Best applied in long-running development sessions, research/analysis spanning multiple sessions, and subagent coordination scenarios.
 - Monitor self-documentation quality and supplement with external memory systems when agent notes prove insufficient.
 - Include instructions for when/how to update the state document.
 
 ## Trade-offs
 
-* **Pros:** Leverages natural model behavior; enables better session continuity; facilitates subagent communication;
-  creates audit trails
-* **Cons:** May consume tokens on documentation over progress; requires validation overhead; risk of incomplete
-  self-assessment
+* **Pros:** Leverages natural model behavior; enables better session continuity; facilitates subagent communication; creates audit trails
+* **Cons:** May consume tokens on documentation over progress; requires validation overhead; risk of incomplete self-assessment
 
 ## References
 

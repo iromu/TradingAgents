@@ -83,8 +83,7 @@ Enforce through prompt instructions:
 **Two implementation variations:**
 
 - **Static list**: Features hardcoded at compile time (maximum security, requires redeploy to change)
-- **Dynamic-but-immutable**: Features loaded at startup then frozen (config changes via restart, used by
-  LangChain/CrewAI)
+- **Dynamic-but-immutable**: Features loaded at startup then frozen (config changes via restart, used by LangChain/CrewAI)
 
 **3. Verification Requirements**
 
@@ -159,11 +158,11 @@ CRITICAL RULES:
 
 **Security implications:**
 
-| Guaranteed by Immutable Contract     | Not Guaranteed (requires additional patterns) |
-|--------------------------------------|-----------------------------------------------|
-| No unauthorized tool access          | Prompt injection in parameters                |
-| Predictable attack surface           | Authorization bypass                          |
-| Schema validation prevents injection | Output exfiltration                           |
+| Guaranteed by Immutable Contract | Not Guaranteed (requires additional patterns) |
+|----------------------------------|----------------------------------------------|
+| No unauthorized tool access | Prompt injection in parameters |
+| Predictable attack surface | Authorization bypass |
+| Schema validation prevents injection | Output exfiltration |
 
 **When to use:**
 
@@ -183,8 +182,6 @@ CRITICAL RULES:
 
 * [Anthropic Engineering: Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)
 * [Action-Selector Pattern (Beurer-Kellner et al., 2025)](https://arxiv.org/abs/2506.08837)
-* Related: [Initializer-Maintainer Dual Agent Architecture](initializer-maintainer-dual-agent.md) — extends this pattern
-  with two-agent lifecycle
+* Related: [Initializer-Maintainer Dual Agent Architecture](initializer-maintainer-dual-agent.md) — extends this pattern with two-agent lifecycle
 * Related: [Action-Selector Pattern](action-selector-pattern.md) — alternative approach using allowlists
-* Related: [Sandboxed Tool Authorization](sandboxed-tool-authorization.md) — complementary pattern for capability
-  restriction
+* Related: [Sandboxed Tool Authorization](sandboxed-tool-authorization.md) — complementary pattern for capability restriction

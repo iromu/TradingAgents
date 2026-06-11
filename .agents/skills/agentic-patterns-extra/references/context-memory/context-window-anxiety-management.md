@@ -17,9 +17,7 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-Models like Claude Sonnet 4.5 exhibit "context anxiety"—they become aware of approaching context window limits and
-proactively summarize progress or make decisive moves to close tasks, even when sufficient context remains. This leads
-to:
+Models like Claude Sonnet 4.5 exhibit "context anxiety"—they become aware of approaching context window limits and proactively summarize progress or make decisive moves to close tasks, even when sufficient context remains. This leads to:
 
 - Premature task completion and shortcuts
 - Incomplete work despite having adequate context
@@ -71,8 +69,7 @@ Apply when using models that exhibit context awareness and anxiety behaviors:
 - **Research Tasks**: Multi-step analysis requiring sustained attention
 - **Complex Planning**: Tasks needing thorough exploration before conclusions
 
-Monitor for signs of context anxiety: sudden summarization, rushed decisions, or explicit mentions of "running out of
-space."
+Monitor for signs of context anxiety: sudden summarization, rushed decisions, or explicit mentions of "running out of space."
 
 ## Trade-offs
 
@@ -81,9 +78,7 @@ space."
 
 ## References
 
-* [Cognition AI: Devin & Claude Sonnet 4.5 - Lessons and Challenges](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges) (
-  September 2025)
-* [Cognition AI: Announcing Devin Agent Preview with Sonnet 4.5](https://cognition.ai/blog/devin-agent-preview-sonnet-4-5) (
-  September 2025)
+* [Cognition AI: Devin & Claude Sonnet 4.5 - Lessons and Challenges](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges) (September 2025)
+* [Cognition AI: Announcing Devin Agent Preview with Sonnet 4.5](https://cognition.ai/blog/devin-agent-preview-sonnet-4-5) (September 2025)
 
 ---

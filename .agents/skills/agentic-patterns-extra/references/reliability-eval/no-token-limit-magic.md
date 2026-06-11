@@ -10,25 +10,19 @@ tags: [performance, cost, experimentation]
 
 ## Problem
 
-Teams often optimize token spend too early, forcing prompts and context windows into tight constraints before they
-understand what high-quality behavior looks like. Early compression hides failure modes, reduces reasoning depth, and
-can lock in mediocre workflows that are cheap but unreliable.
+Teams often optimize token spend too early, forcing prompts and context windows into tight constraints before they understand what high-quality behavior looks like. Early compression hides failure modes, reduces reasoning depth, and can lock in mediocre workflows that are cheap but unreliable.
 
 ## Solution
 
-During discovery and prototyping, relax hard token limits and optimize for learning velocity. Allow richer context,
-deeper deliberation, and multiple critique passes to discover what a strong solution path actually requires. After the
-behavior is stable, measure where context can be compressed without degrading outcomes.
+During discovery and prototyping, relax hard token limits and optimize for learning velocity. Allow richer context, deeper deliberation, and multiple critique passes to discover what a strong solution path actually requires. After the behavior is stable, measure where context can be compressed without degrading outcomes.
 
 This pattern treats cost optimization as a second phase, not the first objective.
 
 ## Evidence
 
 - **Evidence Grade:** `medium`
-- **Multiple critique passes improve output quality** (Wang et al. 2022, Shinn et al. 2023): Self-consistency sampling
-  and self-reflection loops significantly improve reasoning, but require generous token budgets.
-- **Premature optimization creates technical debt** (Sculley et al. 2015): Early optimization decisions in ML systems
-  create long-term maintenance burdens—supports deferring token optimization.
+- **Multiple critique passes improve output quality** (Wang et al. 2022, Shinn et al. 2023): Self-consistency sampling and self-reflection loops significantly improve reasoning, but require generous token budgets.
+- **Premature optimization creates technical debt** (Sculley et al. 2015): Early optimization decisions in ML systems create long-term maintenance burdens—supports deferring token optimization.
 - **Unverified:** Direct quantitative studies comparing early vs late token optimization timing.
 
 ## Example (token budget approach)

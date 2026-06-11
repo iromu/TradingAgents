@@ -114,17 +114,17 @@ flowchart TD
 ## Trade-offs
 
 * **Pros:**
-    - **Deep integration** with company-specific tools and workflows
-    - **Model flexibility** - not locked into one provider
-    - **Real-time visibility** into agent progress and intermediate steps
-    - **Same context as developers** - agent works in identical environment
-    - **Custom feedback loops** tailored to your stack
+  - **Deep integration** with company-specific tools and workflows
+  - **Model flexibility** - not locked into one provider
+  - **Real-time visibility** into agent progress and intermediate steps
+  - **Same context as developers** - agent works in identical environment
+  - **Custom feedback loops** tailored to your stack
 
 * **Cons:**
-    - **Engineering overhead** - requires building and maintaining infrastructure
-    - **Security considerations** - agent needs access to repos, credentials
-    - **Ongoing maintenance** - unlike SaaS solutions, you own the ops burden
-    - **Requires devops expertise** - sandbox management, websocket scaling
+  - **Engineering overhead** - requires building and maintaining infrastructure
+  - **Security considerations** - agent needs access to repos, credentials
+  - **Ongoing maintenance** - unlike SaaS solutions, you own the ops burden
+  - **Requires devops expertise** - sandbox management, websocket scaling
 
 ## References
 

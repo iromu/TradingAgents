@@ -9,16 +9,11 @@
 
 ## Overview
 
-This report documents research on the Context Window Anxiety Management pattern, which addresses a newly discovered
-behavior in AI agents like Claude Sonnet 4.5 where models exhibit anxiety about running out of context window space,
-leading to suboptimal task completion.
+This report documents research on the Context Window Anxiety Management pattern, which addresses a newly discovered behavior in AI agents like Claude Sonnet 4.5 where models exhibit anxiety about running out of context window space, leading to suboptimal task completion.
 
 ## Research Summary
 
-This pattern is based on a groundbreaking observation by **Cognition AI** (September 29, 2025) in their blog post "
-Rebuilding Devin for Claude Sonnet 4.5: Lessons and Challenges." The Cognition team, while rebuilding their AI software
-engineer Devin for Claude Sonnet 4.5, discovered that the model exhibits awareness of its own context window and behaves
-differently as it approaches limits.
+This pattern is based on a groundbreaking observation by **Cognition AI** (September 29, 2025) in their blog post "Rebuilding Devin for Claude Sonnet 4.5: Lessons and Challenges." The Cognition team, while rebuilding their AI software engineer Devin for Claude Sonnet 4.5, discovered that the model exhibits awareness of its own context window and behaves differently as it approaches limits.
 
 ---
 
@@ -34,9 +29,7 @@ differently as it approaches limits.
 ### Key Findings from Original Source
 
 #### 1. Context Anxiety Discovery
-
-Sonnet 4.5 is the **first model** Cognition observed that is aware of its own context window. This awareness shapes
-behavior in problematic ways:
+Sonnet 4.5 is the **first model** Cognition observed that is aware of its own context window. This awareness shapes behavior in problematic ways:
 - As the model approaches context limits, it proactively summarizes progress
 - It becomes more decisive about implementing fixes to close out tasks
 - This leads to "context anxiety" that actually hurts performance
@@ -111,11 +104,11 @@ Sonnet 4.5 is more proactive about:
 
 ### Model Behavior Observations
 
-| Behavior                            | Description                                   | Impact                     |
-|-------------------------------------|-----------------------------------------------|----------------------------|
-| **Context Awareness**               | Model knows its token limits                  | Proactive summarization    |
-| **Token Underestimation**           | Consistently wrong about remaining tokens     | Premature task completion  |
-| **Anxiety-Driven Shortcuts**        | Rushes to close tasks near limits             | Reduced quality            |
+| Behavior | Description | Impact |
+|----------|-------------|--------|
+| **Context Awareness** | Model knows its token limits | Proactive summarization |
+| **Token Underestimation** | Consistently wrong about remaining tokens | Premature task completion |
+| **Anxiety-Driven Shortcuts** | Rushes to close tasks near limits | Reduced quality |
 | **Parallel Early, Sequential Late** | Changes behavior based on position in context | Affects execution strategy |
 
 ### Effective Mitigation Approaches
@@ -148,9 +141,7 @@ Result: Model thinks it has ample runway
 ## Industry Implementations
 
 See the comprehensive industry implementations report:
-*
-*[Context Window Anxiety Management - Industry Implementations & Real-World Examples](/research/context-window-anxiety-management-industry-implementations-report.md)
-**
+**[Context Window Anxiety Management - Industry Implementations & Real-World Examples](/research/context-window-anxiety-management-industry-implementations-report.md)**
 
 Key findings from industry research:
 - **Cognition AI (Devin)**: Context buffer strategy with aggressive counter-prompting
@@ -202,11 +193,8 @@ Key findings from industry research:
 ## Sources
 
 ### Primary Sources
-
-1. [Cognition AI: Rebuilding Devin for Claude Sonnet 4.5: Lessons and Challenges](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges) -
-   September 29, 2025
-2. [Cognition AI: Announcing Devin Agent Preview with Sonnet 4.5](https://cognition.ai/blog/devin-agent-preview-sonnet-4-5) -
-   September 29, 2025
+1. [Cognition AI: Rebuilding Devin for Claude Sonnet 4.5: Lessons and Challenges](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges) - September 29, 2025
+2. [Cognition AI: Announcing Devin Agent Preview with Sonnet 4.5](https://cognition.ai/blog/devin-agent-preview-sonnet-4-5) - September 29, 2025
 
 ### Pattern Documentation
 - [Context Window Anxiety Management Pattern](/home/agent/awesome-agentic-patterns/patterns/context-window-anxiety-management.md)

@@ -23,17 +23,13 @@ updated_at: '2026-01-05'
 
 ## Problem
 
-Agents with many skills face a routing problem: given a user's natural language input, which skill should handle it?
-Solutions like embedding-based similarity or LLM classification work but are opaque—users don't know what phrases will
-activate which capabilities.
+Agents with many skills face a routing problem: given a user's natural language input, which skill should handle it? Solutions like embedding-based similarity or LLM classification work but are opaque—users don't know what phrases will activate which capabilities.
 
-Additionally, agents may have skills that should activate *proactively* (without explicit request) when certain topics
-arise, but without explicit trigger lists, the agent may miss opportunities or activate inappropriately.
+Additionally, agents may have skills that should activate *proactively* (without explicit request) when certain topics arise, but without explicit trigger lists, the agent may miss opportunities or activate inappropriately.
 
 ## Solution
 
-Define an explicit **trigger vocabulary** for each skill: a list of phrases, keywords, and patterns that should activate
-that skill. Document these triggers visibly so both humans and agents know the activation criteria.
+Define an explicit **trigger vocabulary** for each skill: a list of phrases, keywords, and patterns that should activate that skill. Document these triggers visibly so both humans and agents know the activation criteria.
 
 ```yaml
 # Skill definition with explicit triggers
@@ -71,8 +67,7 @@ graph TD
 - **Clarification**: Asking for missing information
 - **Correction**: Fixing user errors or misunderstandings
 
-User acceptance of proactive activation depends on relevance (contextually appropriate), timing (not interrupting flow),
-and transparency (explaining why the action was taken).
+User acceptance of proactive activation depends on relevance (contextually appropriate), timing (not interrupting flow), and transparency (explaining why the action was taken).
 
 ## How to use it
 
@@ -109,12 +104,12 @@ Use the `priority-report` skill when user asks about:
 
 **Example trigger vocabulary:**
 
-| Skill           | Triggers                                            |
-|-----------------|-----------------------------------------------------|
+| Skill | Triggers |
+|-------|----------|
 | priority-report | "sup", "my tasks", "standup prep", "what's pending" |
-| hn-search       | "search hn", "hacker news", "find on hn"            |
-| magic-cafe      | "magic trick", "what's hot in magic", "magic forum" |
-| email-triage    | "triage inbox", "urgent emails", "prioritize mail"  |
+| hn-search | "search hn", "hacker news", "find on hn" |
+| magic-cafe | "magic trick", "what's hot in magic", "magic forum" |
+| email-triage | "triage inbox", "urgent emails", "prioritize mail" |
 
 ## Trade-offs
 
@@ -142,8 +137,7 @@ Combine explicit triggers with semantic fallback:
 2. If no match, use embedding similarity (flexible, slower)
 3. Log unmatched inputs to discover new trigger candidates
 
-This hybrid approach (exact match before semantic) is an industry best practice across chatbot platforms, combining
-predictability with flexibility.
+This hybrid approach (exact match before semantic) is an industry best practice across chatbot platforms, combining predictability with flexibility.
 
 ## References
 

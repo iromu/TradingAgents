@@ -4,9 +4,7 @@ Source: [embabel/embabel-agent-docs/chatbots.md](https://github.com/embabel/emba
 
 ## Overview
 
-`ChatHistoryStore` provides persistent storage for conversation history. The default `InMemoryChatHistoryStore` keeps
-messages in memory only — they're lost when the process restarts. For persistence across restarts, implement a custom
-store.
+`ChatHistoryStore` provides persistent storage for conversation history. The default `InMemoryChatHistoryStore` keeps messages in memory only — they're lost when the process restarts. For persistence across restarts, implement a custom store.
 
 ## ChatHistory
 

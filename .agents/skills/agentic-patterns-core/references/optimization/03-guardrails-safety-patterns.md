@@ -1,8 +1,6 @@
 # Guardrails/Safety Pattern
 
-**Source:
-** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT
-License
+**Source:** [promptadvisers/agentic-design-patterns-docs](https://github.com/promptadvisers/agentic-design-patterns-docs) — MIT License
 
 ## Pattern
 
@@ -80,15 +78,9 @@ def apply_guardrails(input_text, output_text, user_role):
 
 ## Real-World Examples
 
-1. **Social Media**: Hate speech detection → PII redaction → Misinformation flagging → Violence blocking → Copyright
-   detection → Appeal process
-2. **Healthcare Chatbot**: Medical disclaimers → Emergency detection → Drug interaction warnings → Privacy protection →
-   Scope enforcement → Professional referral
-3. **Financial Advisory**: Investment risk warnings → Regulatory compliance → Insider trading prevention → Client
-   suitability → Market manipulation detection → Audit trail
-4. **Education AI**: Age-appropriate filtering → Academic integrity → Bullying prevention → Personal info protection →
-   Topic blocking → Parent/teacher overrides
-5. **Enterprise AI**: Data classification → Access control → Confidentiality → Compliance checking → Security threat
-   detection → Activity logging
-6. **Content Generation**: Copyright prevention → Trademark protection → Defamation blocking → Bias detection →
-   Fact-checking → Quality standards
+1. **Social Media**: Hate speech detection → PII redaction → Misinformation flagging → Violence blocking → Copyright detection → Appeal process
+2. **Healthcare Chatbot**: Medical disclaimers → Emergency detection → Drug interaction warnings → Privacy protection → Scope enforcement → Professional referral
+3. **Financial Advisory**: Investment risk warnings → Regulatory compliance → Insider trading prevention → Client suitability → Market manipulation detection → Audit trail
+4. **Education AI**: Age-appropriate filtering → Academic integrity → Bullying prevention → Personal info protection → Topic blocking → Parent/teacher overrides
+5. **Enterprise AI**: Data classification → Access control → Confidentiality → Compliance checking → Security threat detection → Activity logging
+6. **Content Generation**: Copyright prevention → Trademark protection → Defamation blocking → Bias detection → Fact-checking → Quality standards

@@ -10,27 +10,17 @@ tags: [service-discovery, agent-infrastructure, llms-txt, machine-readable, api-
 
 ## Problem
 
-Before an agent can use an API, it needs to know what the API offers. Today, agents typically learn about available
-services through hardcoded tool lists in their system prompt, runtime exploration of tool catalogs, or human-written
-documentation that must be parsed and interpreted. None of these scale well when agents need to interact with unfamiliar
-platforms that expose many services. The agent either wastes context window on a full catalog it may not need, or has no
-way to learn about the platform at all without human intervention.
+Before an agent can use an API, it needs to know what the API offers. Today, agents typically learn about available services through hardcoded tool lists in their system prompt, runtime exploration of tool catalogs, or human-written documentation that must be parsed and interpreted. None of these scale well when agents need to interact with unfamiliar platforms that expose many services. The agent either wastes context window on a full catalog it may not need, or has no way to learn about the platform at all without human intervention.
 
 ## Solution
 
-Serve a static, machine-readable manifest at a well-known URL that describes the platform's capabilities, available
-services, authentication requirements, and usage constraints. The manifest is fetched once, parsed cheaply, and gives
-the agent enough information to decide which services to invoke -- without runtime tool-call overhead or human curation.
+Serve a static, machine-readable manifest at a well-known URL that describes the platform's capabilities, available services, authentication requirements, and usage constraints. The manifest is fetched once, parsed cheaply, and gives the agent enough information to decide which services to invoke -- without runtime tool-call overhead or human curation.
 
 Two complementary formats have emerged:
 
-1. **`llms.txt`** (convention from [llmstxt.org](https://llmstxt.org)): A plain-text or markdown file served at
-   `/llms.txt` that provides a human-and-machine-readable summary of what the site offers to LLMs. Analogous to
-   `robots.txt` for crawlers, but inverted: it describes what is *available* rather than what is *restricted*.
+1. **`llms.txt`** (convention from [llmstxt.org](https://llmstxt.org)): A plain-text or markdown file served at `/llms.txt` that provides a human-and-machine-readable summary of what the site offers to LLMs. Analogous to `robots.txt` for crawlers, but inverted: it describes what is *available* rather than what is *restricted*.
 
-2. **`agent.json`** / **`ai-plugin.json`**: A structured JSON manifest (served at the root or `/.well-known/`) that
-   declares service endpoints, authentication schemes, rate limits, and capability metadata in a schema agents can parse
-   deterministically.
+2. **`agent.json`** / **`ai-plugin.json`**: A structured JSON manifest (served at the root or `/.well-known/`) that declares service endpoints, authentication schemes, rate limits, and capability metadata in a schema agents can parse deterministically.
 
 ```json
 // Example agent.json
@@ -100,10 +90,8 @@ The agent workflow becomes:
 
 **Relationship to other patterns:**
 
-- Complements [Progressive Tool Discovery](progressive-tool-discovery.md): static manifests provide the initial catalog;
-  progressive discovery handles runtime detail-loading
-- Complements [LLM-Friendly API Design](llm-friendly-api-design.md): manifests describe the interface; LLM-friendly
-  design governs how endpoints behave
+- Complements [Progressive Tool Discovery](progressive-tool-discovery.md): static manifests provide the initial catalog; progressive discovery handles runtime detail-loading
+- Complements [LLM-Friendly API Design](llm-friendly-api-design.md): manifests describe the interface; LLM-friendly design governs how endpoints behave
 
 ## Trade-offs
 
@@ -119,15 +107,12 @@ The agent workflow becomes:
 
 - No established universal standard yet (multiple competing formats)
 - Static manifests can drift from actual API state if not kept in sync
-- Only describes *what* is available, not *how* to use each endpoint in detail (still need OpenAPI or MCP for full
-  schemas)
+- Only describes *what* is available, not *how* to use each endpoint in detail (still need OpenAPI or MCP for full schemas)
 - May expose surface area to adversarial agents if not paired with proper auth
 
 ## References
 
 - llmstxt.org: Community specification for `llms.txt` convention: https://llmstxt.org
-- OpenAI ChatGPT Plugins manifest specification (
-  `ai-plugin.json`): https://platform.openai.com/docs/plugins/getting-started/plugin-manifest
+- OpenAI ChatGPT Plugins manifest specification (`ai-plugin.json`): https://platform.openai.com/docs/plugins/getting-started/plugin-manifest
 - Anthropic Model Context Protocol: Complementary runtime tool protocol: https://modelcontextprotocol.io
-- `robots.txt` (RFC 9309): The original well-known convention file that inspired this
-  pattern: https://www.rfc-editor.org/rfc/rfc9309
+- `robots.txt` (RFC 9309): The original well-known convention file that inspired this pattern: https://www.rfc-editor.org/rfc/rfc9309

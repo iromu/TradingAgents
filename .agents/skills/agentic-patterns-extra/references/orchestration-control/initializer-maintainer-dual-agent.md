@@ -12,12 +12,9 @@ tags: [long-running-agents, session-handoff, lifecycle-specialization, project-b
 
 Long-running agent projects face distinct failure modes at different lifecycle stages:
 
-- **Project initialization** requires comprehensive setup: environment configuration, feature specification, test
-  infrastructure, and progress tracking systems
-- **Incremental development** requires reading prior context, selecting the next task, implementing, and
-  verifying—repeatedly across many sessions
-- Single-agent approaches either over-engineer each session (wasting setup time) or under-invest in foundations (leading
-  to drift and confusion)
+- **Project initialization** requires comprehensive setup: environment configuration, feature specification, test infrastructure, and progress tracking systems
+- **Incremental development** requires reading prior context, selecting the next task, implementing, and verifying—repeatedly across many sessions
+- Single-agent approaches either over-engineer each session (wasting setup time) or under-invest in foundations (leading to drift and confusion)
 - Session boundaries create context loss, causing agents to restart from scratch or lose track of project state
 
 ## Solution
@@ -35,11 +32,11 @@ Implement a two-agent architecture with lifecycle-specialized responsibilities:
 **2. Maintainer/Coding Agent** (runs in subsequent sessions):
 
 - Executes session bootstrapping ritual:
-    1. Verify working directory (`pwd`)
-    2. Read git logs and progress files
-    3. Read feature list and select next incomplete feature
-    4. Run bootstrap script to start services
-    5. Run existing tests before implementing new features
+  1. Verify working directory (`pwd`)
+  2. Read git logs and progress files
+  3. Read feature list and select next incomplete feature
+  4. Run bootstrap script to start services
+  5. Run existing tests before implementing new features
 - Works on one feature at a time
 - Commits after each verified feature
 - Updates progress artifacts
@@ -84,15 +81,15 @@ sequenceDiagram
 **Implementation steps:**
 
 1. **Design the Initializer prompt**: Focus on comprehensive upfront planning
-    - Feature list with detailed acceptance criteria
-    - Environment setup automation
-    - Progress tracking file structure
+   - Feature list with detailed acceptance criteria
+   - Environment setup automation
+   - Progress tracking file structure
 
 2. **Design the Coding Agent prompt**: Focus on incremental progress
-    - Session bootstrapping ritual (read context first)
-    - Single-feature focus
-    - Mandatory testing before marking complete
-    - Commit discipline
+   - Session bootstrapping ritual (read context first)
+   - Single-feature focus
+   - Mandatory testing before marking complete
+   - Commit discipline
 
 3. **Define the handoff artifacts**:
    ```

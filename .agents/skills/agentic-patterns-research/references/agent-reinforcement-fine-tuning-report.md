@@ -12,19 +12,14 @@
 
 ## Executive Summary
 
-Agent Reinforcement Fine-Tuning (Agent RFT) is an emerging pattern for training language model agents end-to-end using
-reinforcement learning with custom reward signals and real tool interactions. This approach bridges the gap between base
-model capabilities and specialized agentic tasks by:
+Agent Reinforcement Fine-Tuning (Agent RFT) is an emerging pattern for training language model agents end-to-end using reinforcement learning with custom reward signals and real tool interactions. This approach bridges the gap between base model capabilities and specialized agentic tasks by:
 
-1. **Online environment interaction** - Agents call real tool endpoints during training, learning from actual responses
-   rather than static demonstrations
+1. **Online environment interaction** - Agents call real tool endpoints during training, learning from actual responses rather than static demonstrations
 2. **Custom reward functions** - Flexible grader endpoints define task-specific success criteria
 3. **Multi-step optimization** - Models learn to reason across tool call sequences, not just produce final outputs
 4. **Sample efficiency** - Strong results with 100-1000 training samples vs millions for pre-training
 
-The pattern builds on established RLHF research (PPO, DPO, GRPO) but extends it to agentic settings with tool use,
-process supervision, and environment interaction. Real-world implementations show 20-70% performance improvements and
-40-50% latency reductions across coding, healthcare, finance, and hardware domains.
+The pattern builds on established RLHF research (PPO, DPO, GRPO) but extends it to agentic settings with tool use, process supervision, and environment interaction. Real-world implementations show 20-70% performance improvements and 40-50% latency reductions across coding, healthcare, finance, and hardware domains.
 
 ---
 
@@ -43,13 +38,10 @@ process supervision, and environment interaction. Real-world implementations sho
 
 ### Current Definition
 
-**Agent Reinforcement Fine-Tuning (Agent RFT)** trains the model weights end-to-end on agentic tasks by allowing the
-model to:
+**Agent Reinforcement Fine-Tuning (Agent RFT)** trains the model weights end-to-end on agentic tasks by allowing the model to:
 
-1. **Explore via actual tool calls**: During training rollouts, the agent calls your real tool endpoints, learning from
-   actual responses
-2. **Receive custom reward signals**: You define what "good" looks like via flexible graders (model-based,
-   endpoint-based, or string-based)
+1. **Explore via actual tool calls**: During training rollouts, the agent calls your real tool endpoints, learning from actual responses
+2. **Receive custom reward signals**: You define what "good" looks like via flexible graders (model-based, endpoint-based, or string-based)
 3. **Learn multi-step reasoning**: The agent learns to reason across tool outputs in the context window
 4. **Optimize for your metrics**: Reduce tool calls, improve accuracy, or balance both based on your reward function
 
@@ -71,123 +63,91 @@ model to:
 
 ## Academic Foundations
 
-Agent Reinforcement Fine-Tuning (Agent RFT) builds upon several established research areas in reinforcement learning,
-language model alignment, and agentic AI.
+Agent Reinforcement Fine-Tuning (Agent RFT) builds upon several established research areas in reinforcement learning, language model alignment, and agentic AI.
 
 ### Foundational RLHF and Preference Learning
 
 **RLHF Core Literature:**
 
-- **PPO for Language Models** - Proximal Policy Optimization (PPO) from Schulman et al. (2017) became the de facto
-  algorithm for RLHF in language models. The paper "Secrets of RLHF in Large Language Models Part I:
-  PPO" ([arXiv:2307.04964](https://arxiv.org/abs/2307.04964), 2023) provides comprehensive implementation details.
+- **PPO for Language Models** - Proximal Policy Optimization (PPO) from Schulman et al. (2017) became the de facto algorithm for RLHF in language models. The paper "Secrets of RLHF in Large Language Models Part I: PPO" ([arXiv:2307.04964](https://arxiv.org/abs/2307.04964), 2023) provides comprehensive implementation details.
 
-- **Direct Preference Optimization (DPO)** - "Direct Preference Optimization: Your Language Model is Secretly a Reward
-  Model" ([arXiv:2305.18290](https://arxiv.org/abs/2305.18290), Rafailov et al., 2023, NeurIPS) eliminates the need for
-  explicit reward modeling by using a classification-style loss.
+- **Direct Preference Optimization (DPO)** - "Direct Preference Optimization: Your Language Model is Secretly a Reward Model" ([arXiv:2305.18290](https://arxiv.org/abs/2305.18290), Rafailov et al., 2023, NeurIPS) eliminates the need for explicit reward modeling by using a classification-style loss.
 
-- **Group Relative Policy Optimization (GRPO)** - Introduced in "DeepSeekMath: Pushing the Limits of Mathematical
-  Reasoning in Open Language Models" ([arXiv:2402.03300](https://arxiv.org/abs/2402.03300), Shao et al., 2024) as a
-  memory-efficient alternative to PPO that eliminates the critic model.
+- **Group Relative Policy Optimization (GRPO)** - Introduced in "DeepSeekMath: Pushing the Limits of Mathematical Reasoning in Open Language Models" ([arXiv:2402.03300](https://arxiv.org/abs/2402.03300), Shao et al., 2024) as a memory-efficient alternative to PPO that eliminates the critic model.
 
 ### AI Feedback and Constitutional AI
 
 **Constitutional AI and RLAIF:**
 
-- **Constitutional AI: Harmlessness from AI Feedback** ([arXiv:2212.08073](https://arxiv.org/abs/2212.08073), Bai et
-  al., 2022) - The foundational paper introducing AI feedback as an alternative to human feedback for alignment.
+- **Constitutional AI: Harmlessness from AI Feedback** ([arXiv:2212.08073](https://arxiv.org/abs/2212.08073), Bai et al., 2022) - The foundational paper introducing AI feedback as an alternative to human feedback for alignment.
 
-- **RLAIF: Scaling Reinforcement Learning from Human Feedback with AI Feedback
-  ** ([arXiv:2309.00267](https://arxiv.org/abs/2309.00267), Lee et al., 2023) - Demonstrates using AI models to generate
-  preference data at scale.
+- **RLAIF: Scaling Reinforcement Learning from Human Feedback with AI Feedback** ([arXiv:2309.00267](https://arxiv.org/abs/2309.00267), Lee et al., 2023) - Demonstrates using AI models to generate preference data at scale.
 
 ### Tool Use and Environment Interaction
 
 **Tool-Augmented Language Models:**
 
-- **ReAct: Synergizing Reasoning and Acting in Language Models** ([arXiv:2210.03629](https://arxiv.org/abs/2210.03629),
-  Yao et al., ICLR 2023) - Established the Thought → Action → Observation paradigm for agentic behavior.
+- **ReAct: Synergizing Reasoning and Acting in Language Models** ([arXiv:2210.03629](https://arxiv.org/abs/2210.03629), Yao et al., ICLR 2023) - Established the Thought → Action → Observation paradigm for agentic behavior.
 
-- **Toolformer: Language Models Can Teach Themselves to Use Tools
-  ** ([arXiv:2302.04761](https://arxiv.org/abs/2302.04761), Schick et al., ICLR 2024) - Self-supervised approach to
-  learning tool use without manual annotation.
+- **Toolformer: Language Models Can Teach Themselves to Use Tools** ([arXiv:2302.04761](https://arxiv.org/abs/2302.04761), Schick et al., ICLR 2024) - Self-supervised approach to learning tool use without manual annotation.
 
-- **Gorilla: Large Language Model Connected with Massive APIs** ([arXiv:2305.15334](https://arxiv.org/abs/2305.15334),
-  Patil et al., 2023) - Fine-tuned approach for accurate API calling with document retrieval integration.
+- **Gorilla: Large Language Model Connected with Massive APIs** ([arXiv:2305.15334](https://arxiv.org/abs/2305.15334), Patil et al., 2023) - Fine-tuned approach for accurate API calling with document retrieval integration.
 
 ### Reward Modeling and Process Supervision
 
 **Process Reward Models:**
 
-- **Process-Based Reward Models for Large Language Models** (Lightman et al., NeurIPS 2023) - Introduced intermediate
-  step supervision for complex reasoning tasks.
+- **Process-Based Reward Models for Large Language Models** (Lightman et al., NeurIPS 2023) - Introduced intermediate step supervision for complex reasoning tasks.
 
-- **Exploring Reasoning Reward Model for Agents** ([arXiv:2601.22154](https://arxiv.org/abs/2601.22154), 2025) -
-  Adaptive reasoning via difficulty-aware token-level entropy shaping.
+- **Exploring Reasoning Reward Model for Agents** ([arXiv:2601.22154](https://arxiv.org/abs/2601.22154), 2025) - Adaptive reasoning via difficulty-aware token-level entropy shaping.
 
-- **RM-R1: Reward Modeling as Reasoning** ([arXiv:2505.02387](https://arxiv.org/abs/2505.02387), Chen et al., 2025) -
-  Formulates reward modeling itself as a reasoning task.
+- **RM-R1: Reward Modeling as Reasoning** ([arXiv:2505.02387](https://arxiv.org/abs/2505.02387), Chen et al., 2025) - Formulates reward modeling itself as a reasoning task.
 
 ### Verbal Reinforcement Learning
 
 **Reflexion Framework:**
 
-- **Reflexion: Language Agents with Verbal Reinforcement Learning
-  ** ([arXiv:2303.11366](https://arxiv.org/abs/2303.11366), Shinn et al., NeurIPS 2023) - Transfers policy optimization
-  from parameter space to context space using episodic memory and self-reflection. Achieved 91% pass@1 on HumanEval vs.
-  GPT-4's 80%.
+- **Reflexion: Language Agents with Verbal Reinforcement Learning** ([arXiv:2303.11366](https://arxiv.org/abs/2303.11366), Shinn et al., NeurIPS 2023) - Transfers policy optimization from parameter space to context space using episodic memory and self-reflection. Achieved 91% pass@1 on HumanEval vs. GPT-4's 80%.
 
 ### Agentic RL Survey and Frameworks
 
 **Recent Comprehensive Surveys:**
 
-- **The Landscape of Agentic Reinforcement Learning for LLMs: A Survey
-  ** ([arXiv:2509.02547](https://arxiv.org/abs/2509.02547), 2025) - Framework for "Agentic RL" distinguishing it from
-  conventional LLM-RL through POMDPs and temporally extended decision-making.
+- **The Landscape of Agentic Reinforcement Learning for LLMs: A Survey** ([arXiv:2509.02547](https://arxiv.org/abs/2509.02547), 2025) - Framework for "Agentic RL" distinguishing it from conventional LLM-RL through POMDPs and temporally extended decision-making.
 
-- **Scaling Environments for LLM Agents in the Era of Learning from Interaction: A Survey** (2025) - Introduces the
-  Generation-Execution-Feedback (GEF) cycle framework.
+- **Scaling Environments for LLM Agents in the Era of Learning from Interaction: A Survey** (2025) - Introduces the Generation-Execution-Feedback (GEF) cycle framework.
 
-- **A Survey of Self-Evolving Agents** ([arXiv:2507.21046](https://arxiv.org/abs/2507.21046), 2025) - Covers "What to
-  evolve", "When to evolve", "How to evolve" with focus on self-improvement.
+- **A Survey of Self-Evolving Agents** ([arXiv:2507.21046](https://arxiv.org/abs/2507.21046), 2025) - Covers "What to evolve", "When to evolve", "How to evolve" with focus on self-improvement.
 
 ### Memory and Runtime Learning
 
 **Memory Reinforcement Learning:**
 
-- **Self-Evolving Agents via Runtime Reinforcement Learning on Episodic Memory
-  ** ([arXiv:2601.03192](https://arxiv.org/html/2601.03192v1), Zhang et al., 2025) - MemRL adds learned utility scores
-  to episodic memory for value-aware retrieval without model modification.
+- **Self-Evolving Agents via Runtime Reinforcement Learning on Episodic Memory** ([arXiv:2601.03192](https://arxiv.org/html/2601.03192v1), Zhang et al., 2025) - MemRL adds learned utility scores to episodic memory for value-aware retrieval without model modification.
 
 ### Connection to Agent RFT
 
 **How Agent RFT Relates to Established Methods:**
 
-1. **Environment-Based RL** - Unlike standard RLHF which uses static preference data, Agent RFT is an "online" method
-   that interacts with dynamic environments via tool endpoints, aligning with the "Agentic RL" paradigm described in
-   recent surveys.
+1. **Environment-Based RL** - Unlike standard RLHF which uses static preference data, Agent RFT is an "online" method that interacts with dynamic environments via tool endpoints, aligning with the "Agentic RL" paradigm described in recent surveys.
 
-2. **Custom Reward Functions** - Agent RFT's grader endpoint design relates to process reward models (PRMs) and outcome
-   reward models, but allows for arbitrary business logic rather than just correctness scoring.
+2. **Custom Reward Functions** - Agent RFT's grader endpoint design relates to process reward models (PRMs) and outcome reward models, but allows for arbitrary business logic rather than just correctness scoring.
 
-3. **Multi-Step Optimization** - Training on multi-step tool call traces distinguishes Agent RFT from single-turn RLHF
-   and connects to process supervision approaches.
+3. **Multi-Step Optimization** - Training on multi-step tool call traces distinguishes Agent RFT from single-turn RLHF and connects to process supervision approaches.
 
-4. **Model-Based Graders** - Using LLMs as graders connects to RLAIF and Constitutional AI literature on AI-generated
-   feedback.
+4. **Model-Based Graders** - Using LLMs as graders connects to RLAIF and Constitutional AI literature on AI-generated feedback.
 
-5. **Policy Optimization** - Agent RFT likely uses variants of PPO, GRPO, or related policy optimization methods under
-   the hood.
+5. **Policy Optimization** - Agent RFT likely uses variants of PPO, GRPO, or related policy optimization methods under the hood.
 
 ### Key Terminology Mapping
 
-| Academic/Research Term | Industry/Product Term    | Pattern Context                 |
-|------------------------|--------------------------|---------------------------------|
-| Rollouts               | Episodes or Trajectories | Training sequences              |
-| Grader                 | Reward Model             | Evaluation function             |
-| Compute Multiplier     | Exploration factor       | Number of sampled trajectories  |
-| Tool endpoints         | Environment              | Action space with external APIs |
-| Credit Assignment      | Reward Attribution       | Multi-step learning             |
+| Academic/Research Term | Industry/Product Term | Pattern Context |
+|------------------------|----------------------|-----------------|
+| Rollouts | Episodes or Trajectories | Training sequences |
+| Grader | Reward Model | Evaluation function |
+| Compute Multiplier | Exploration factor | Number of sampled trajectories |
+| Tool endpoints | Environment | Action space with external APIs |
+| Credit Assignment | Reward Attribution | Multi-step learning |
 
 ---
 
@@ -350,15 +310,14 @@ def evaluate_rollout(data: dict) -> float:
 
 ### Fine-Tuning Hyperparameters
 
-**Note:** The `compute_multiplier` parameter mentioned in the pattern file does not appear to be a valid hyperparameter
-in OpenAI's current fine-tuning API documentation. The standard parameters are:
+**Note:** The `compute_multiplier` parameter mentioned in the pattern file does not appear to be a valid hyperparameter in OpenAI's current fine-tuning API documentation. The standard parameters are:
 
-| Parameter                  | Type    | Description                                           | Recommended Range                        |
-|----------------------------|---------|-------------------------------------------------------|------------------------------------------|
-| `batch_size`               | Integer | Number of training examples per forward/backward pass | Auto (default ~0.2% of dataset, max 256) |
-| `learning_rate_multiplier` | Number  | Fine-tuning learning rate = base rate × multiplier    | 0.02 - 0.2                               |
-| `n_epochs`                 | Integer | Number of full cycles through training dataset        | Auto (default: 3-4)                      |
-| `seed`                     | Integer | Controls job reproducibility                          | Any integer                              |
+| Parameter | Type | Description | Recommended Range |
+|-----------|------|-------------|-------------------|
+| `batch_size` | Integer | Number of training examples per forward/backward pass | Auto (default ~0.2% of dataset, max 256) |
+| `learning_rate_multiplier` | Number | Fine-tuning learning rate = base rate × multiplier | 0.02 - 0.2 |
+| `n_epochs` | Integer | Number of full cycles through training dataset | Auto (default: 3-4) |
+| `seed` | Integer | Controls job reproducibility | Any integer |
 
 **Example API Call:**
 ```python
@@ -416,8 +375,7 @@ For complex tasks, use multi-dimensional scoring with Multi-Grader configuration
 
 ### Infrastructure Requirements for Bursty Traffic
 
-AI Agent infrastructure must handle "thundering herd" patterns where single goals recursively expand into thousands of
-sub-tasks.
+AI Agent infrastructure must handle "thundering herd" patterns where single goals recursively expand into thousands of sub-tasks.
 
 **Key Challenges:**
 1. **Scalability vs. Stability**: Task durations vary dramatically (5-10 minutes to 3-4 hours)
@@ -442,8 +400,8 @@ sub-tasks.
 - Must follow OpenAI reinforcement fine-tuning format
 - JSONL format (one JSON object per line)
 - JSON structure containing:
-    - `messages`: Array of dialogue turns with roles (system, user, assistant)
-    - Optional metadata like `reference_answer`
+  - `messages`: Array of dialogue turns with roles (system, user, assistant)
+  - Optional metadata like `reference_answer`
 
 **Current Limitations:**
 - Text-only (no multimodal inputs: images, audio, video) - *Needs verification*
@@ -459,18 +417,13 @@ sub-tasks.
 
 ### Areas Requiring Verification
 
-1. **RFT-Specific Hyperparameters**: The standard fine-tuning API parameters may differ from Agent RFT-specific
-   parameters. Official documentation for Agent RFT hyperparameters should be consulted.
+1. **RFT-Specific Hyperparameters**: The standard fine-tuning API parameters may differ from Agent RFT-specific parameters. Official documentation for Agent RFT hyperparameters should be consulted.
 
-2. **Exact Grader Endpoint Schema**: The request/response schemas shown are synthesized examples. The official API
-   contract should be verified against OpenAI's latest Agent RFT documentation.
+2. **Exact Grader Endpoint Schema**: The request/response schemas shown are synthesized examples. The official API contract should be verified against OpenAI's latest Agent RFT documentation.
 
-3. **Infrastructure Requirements**: The bursty traffic patterns are described in general agent infrastructure
-   literature. Specific requirements for Agent RFT workloads (grader endpoint QPS, timeout limits, retry policies) need
-   verification.
+3. **Infrastructure Requirements**: The bursty traffic patterns are described in general agent infrastructure literature. Specific requirements for Agent RFT workloads (grader endpoint QPS, timeout limits, retry policies) need verification.
 
-4. **Reward Signal Integration**: The exact mechanism for how grader scores are converted to reinforcement learning
-   gradients is not fully documented in publicly available sources.
+4. **Reward Signal Integration**: The exact mechanism for how grader scores are converted to reinforcement learning gradients is not fully documented in publicly available sources.
 
 5. **Model Availability**: GPT-5 RFT availability status (private beta as of October 2025) may have changed.
 
@@ -480,59 +433,48 @@ sub-tasks.
 
 ### Documented Case Studies from Pattern File
 
-The pattern file documents four case studies. Note: While company capabilities were verified through public sources,
-specific Agent RFT implementation details and quantitative results could not be independently verified through public
-documentation.
+The pattern file documents four case studies. Note: While company capabilities were verified through public sources, specific Agent RFT implementation details and quantitative results could not be independently verified through public documentation.
 
 #### Cognition (Devon AI) - File Planning Agent
 - **Task**: File planning agent to identify which files to edit for code changes
 - **Tools**: `read_file`, `shell` (grep, find commands)
 - **Reported Results**:
-    - 50% reduction in planning time (8-10 tool calls reduced to 4 tool calls)
-    - Learned to parallelize tool calls automatically
-    - Improved F1 score on file identification
-- **Additional Context**: Research confirmed Devon's architecture includes planning capabilities, CLI tools, code
-  editor, and browser access. The SWE-bench benchmark shows Devin solving 13.86% of issues end-to-end, significantly
-  exceeding previous baselines.
+  - 50% reduction in planning time (8-10 tool calls reduced to 4 tool calls)
+  - Learned to parallelize tool calls automatically
+  - Improved F1 score on file identification
+- **Additional Context**: Research confirmed Devon's architecture includes planning capabilities, CLI tools, code editor, and browser access. The SWE-bench benchmark shows Devin solving 13.86% of issues end-to-end, significantly exceeding previous baselines.
 
 #### Ambience Healthcare - ICD-10 Medical Coding
 - **Task**: Medical coding from clinical transcripts using ICD-10 codes
 - **Tools**: Semantic search over 70,000+ medical codes
 - **Reported Results**:
-    - F1 score improvement: 0.52 → 0.57 (+9.6%, significant given ~0.75 human ceiling)
-    - 18% latency reduction
-    - 50% reduction in samples exceeding latency threshold
-- **Verification**: Research confirmed ICD-10-CM contains over 70,000 codes and multi-agent AI systems are actively
-  being developed for medical coding using semantic search techniques.
+  - F1 score improvement: 0.52 → 0.57 (+9.6%, significant given ~0.75 human ceiling)
+  - 18% latency reduction
+  - 50% reduction in samples exceeding latency threshold
+- **Verification**: Research confirmed ICD-10-CM contains over 70,000 codes and multi-agent AI systems are actively being developed for medical coding using semantic search techniques.
 
 #### Rogo Finance - Financial Reasoning and Summarization
 - **Task**: Financial document analysis and summarization from SEC filings and financial reports
 - **Tools**: Document retrieval, financial analysis tools
 - **Reported Results**:
-    - 21% ML performance improvement
-    - Reduced hallucinations and missing citations
-    - Required hardening grader against reward hacking
-- **Company Verification**: Rogo Technologies is an AI platform for investment banking that automates financial document
-  analysis, with clients including Lazard, Moelis & Company, and J.P. Morgan. The company reached $750M valuation after
-  Sequoia Capital investment. Research did not find specific public documentation of their Agent RFT implementation.
+  - 21% ML performance improvement
+  - Reduced hallucinations and missing citations
+  - Required hardening grader against reward hacking
+- **Company Verification**: Rogo Technologies is an AI platform for investment banking that automates financial document analysis, with clients including Lazard, Moelis & Company, and J.P. Morgan. The company reached $750M valuation after Sequoia Capital investment. Research did not find specific public documentation of their Agent RFT implementation.
 
 #### Modular (Mojo GPU Kernels) - Code Generation for New Hardware
 - **Task**: Write performant GPU kernels for new hardware architectures
 - **Tools**: Compiler, kernel execution environment
 - **Reported Results**:
-    - 72% improvement in correct + performant kernels
-    - Only 100 PyTorch prompts needed (highly sample efficient)
-    - No code examples required in training data
-- **Related Research**: Found related work in AI-generated GPU kernels including KernelBench (Stanford), GEAK
-  framework (AMD), and DR. KERNEL (HKUST), though specific Modular Mojo Agent RFT implementation details were not
-  publicly documented.
+  - 72% improvement in correct + performant kernels
+  - Only 100 PyTorch prompts needed (highly sample efficient)
+  - No code examples required in training data
+- **Related Research**: Found related work in AI-generated GPU kernels including KernelBench (Stanford), GEAK framework (AMD), and DR. KERNEL (HKUST), though specific Modular Mojo Agent RFT implementation details were not publicly documented.
 
 ### Additional Implementations Found
 
 #### FinQA Benchmark Applications
-
-Multiple sources reference FinQA (financial question answering) as a demonstration task for Agent RFT, though specific
-company implementations beyond the pattern file were not detailed in public sources.
+Multiple sources reference FinQA (financial question answering) as a demonstration task for Agent RFT, though specific company implementations beyond the pattern file were not detailed in public sources.
 
 #### OpenAI Internal Use Cases
 OpenAI has demonstrated Agent RFT on:
@@ -579,16 +521,16 @@ OpenAI has demonstrated Agent RFT on:
 
 ### Quantitative Results Summary
 
-| Implementation            | Metric                       | Improvement                   |
-|---------------------------|------------------------------|-------------------------------|
-| Cognition (File Planning) | Tool Calls                   | 50% reduction (8-10 → 4)      |
-| Ambience Healthcare       | F1 Score                     | 0.52 → 0.57 (+9.6%)           |
-| Ambience Healthcare       | Latency                      | 18% reduction                 |
-| Ambience Healthcare       | Latency Threshold Exceedance | 50% reduction                 |
-| Rogo Finance              | ML Performance               | 21% improvement               |
-| Modular (GPU Kernels)     | Correct + Performant Kernels | 72% improvement               |
-| Modular (GPU Kernels)     | Training Samples Required    | 100 (highly sample efficient) |
-| ReTool (AIME Benchmark)   | Accuracy                     | 72.5% with 32B model          |
+| Implementation | Metric | Improvement |
+|----------------|--------|-------------|
+| Cognition (File Planning) | Tool Calls | 50% reduction (8-10 → 4) |
+| Ambience Healthcare | F1 Score | 0.52 → 0.57 (+9.6%) |
+| Ambience Healthcare | Latency | 18% reduction |
+| Ambience Healthcare | Latency Threshold Exceedance | 50% reduction |
+| Rogo Finance | ML Performance | 21% improvement |
+| Modular (GPU Kernels) | Correct + Performant Kernels | 72% improvement |
+| Modular (GPU Kernels) | Training Samples Required | 100 (highly sample efficient) |
+| ReTool (AIME Benchmark) | Accuracy | 72.5% with 32B model |
 
 ### Implementation Insights
 
@@ -641,21 +583,15 @@ From reward hacking research, effective graders should:
 
 ### Areas Requiring Verification
 
-1. **Specific case study results** for Cognition, Ambience Healthcare, Rogo Finance, and Modular - while the companies
-   and their general AI capabilities were confirmed, specific Agent RFT implementation details and quantitative results
-   were not found in public documentation
+1. **Specific case study results** for Cognition, Ambience Healthcare, Rogo Finance, and Modular - while the companies and their general AI capabilities were confirmed, specific Agent RFT implementation details and quantitative results were not found in public documentation
 
-2. **Detailed grader endpoint API specifications** - while Azure OpenAI documentation mentions grader validation
-   endpoints, complete API documentation for custom grader implementations was limited
+2. **Detailed grader endpoint API specifications** - while Azure OpenAI documentation mentions grader validation endpoints, complete API documentation for custom grader implementations was limited
 
-3. **Compute multiplier hyperparameter** - the specific role and tuning of this parameter in Agent RFT was not
-   documented in publicly available sources
+3. **Compute multiplier hyperparameter** - the specific role and tuning of this parameter in Agent RFT was not documented in publicly available sources
 
-4. **OpenAI model support timeline** - while o4-mini RFT availability was confirmed, GPT-5 RFT private beta details
-   could not be independently verified
+4. **OpenAI model support timeline** - while o4-mini RFT availability was confirmed, GPT-5 RFT private beta details could not be independently verified
 
-5. **Specific "Will Brown" attribution** - the OpenAI Build Hour research did not confirm a person by this name
-   associated with the Agent RFT presentation
+5. **Specific "Will Brown" attribution** - the OpenAI Build Hour research did not confirm a person by this name associated with the Agent RFT presentation
 
 ---
 
@@ -664,162 +600,108 @@ From reward hacking research, effective graders should:
 ### Core Reinforcement Learning Patterns
 
 **RLAIF (Reinforcement Learning from AI Feedback)**
-
-- **Description**: Uses AI models to generate preference feedback and evaluation data, reducing annotation costs
-  from $1+ to <$0.01 per sample. Forms foundation of Constitutional AI with constitution-based principles guiding
-  feedback.
-- **Relationship to Agent RFT**: **Complementary pattern** - RLAIF provides the reward signal generation methodology,
-  while Agent RFT provides the end-to-end training framework for tool-using agents.
-- **Terminology Mapping**: RLAIF focuses on *feedback generation* (preference data, critique generation), while Agent
-  RFT focuses on *multi-step agent training* with real tool calls.
-- **Key Difference**: RLAIF is typically used for alignment and preference optimization, while Agent RFT optimizes
-  agentic behaviors including tool use, reasoning chains, and efficiency.
+- **Description**: Uses AI models to generate preference feedback and evaluation data, reducing annotation costs from $1+ to <$0.01 per sample. Forms foundation of Constitutional AI with constitution-based principles guiding feedback.
+- **Relationship to Agent RFT**: **Complementary pattern** - RLAIF provides the reward signal generation methodology, while Agent RFT provides the end-to-end training framework for tool-using agents.
+- **Terminology Mapping**: RLAIF focuses on *feedback generation* (preference data, critique generation), while Agent RFT focuses on *multi-step agent training* with real tool calls.
+- **Key Difference**: RLAIF is typically used for alignment and preference optimization, while Agent RFT optimizes agentic behaviors including tool use, reasoning chains, and efficiency.
 
 **Tool Use Incentivization via Reward Shaping**
-
-- **Description**: Provides dense, shaped rewards for intermediate tool invocations (compile, lint, test) to encourage
-  agents to use tools rather than just "thinking" tokens.
-- **Relationship to Agent RFT**: **Sub-pattern of Agent RFT** - This is a specific reward engineering technique used
-  within Agent RFT training to shape agent behavior.
-- **Terminology**: "Reward shaping" is classical RL terminology; "turn-level credit assignment" is used in multi-agent
-  settings.
-- **Reference**: Based on Prime Intellect's work on "Reinforcing Multi-Turn Reasoning in LLM Agents via Turn-Level
-  Credit Assignment."
+- **Description**: Provides dense, shaped rewards for intermediate tool invocations (compile, lint, test) to encourage agents to use tools rather than just "thinking" tokens.
+- **Relationship to Agent RFT**: **Sub-pattern of Agent RFT** - This is a specific reward engineering technique used within Agent RFT training to shape agent behavior.
+- **Terminology**: "Reward shaping" is classical RL terminology; "turn-level credit assignment" is used in multi-agent settings.
+- **Reference**: Based on Prime Intellect's work on "Reinforcing Multi-Turn Reasoning in LLM Agents via Turn-Level Credit Assignment."
 
 **Inference-Healed Code Review Reward**
-
-- **Description**: Uses a code-review critic that decomposes quality into subcriteria (correctness, style, performance,
-  security) with internal CoT reasoning for explainable reward signals.
-- **Relationship to Agent RFT**: **Grader pattern** - This is a specific grader/reward model design that can be used
-  within Agent RFT as the evaluation endpoint.
-- **Terminology Mapping**: "Inference healing" refers to the internal CoT reasoning that allows the reward model to
-  explain and adjust its scoring.
+- **Description**: Uses a code-review critic that decomposes quality into subcriteria (correctness, style, performance, security) with internal CoT reasoning for explainable reward signals.
+- **Relationship to Agent RFT**: **Grader pattern** - This is a specific grader/reward model design that can be used within Agent RFT as the evaluation endpoint.
+- **Terminology Mapping**: "Inference healing" refers to the internal CoT reasoning that allows the reward model to explain and adjust its scoring.
 - **Academic vs Industry**: Similar to "Criterion-Led Reward Models" (DeepMind, April 2025).
 
 ### Supporting Patterns
 
 **Variance-Based RL Sample Selection**
-
-- **Description**: Identifies high-variance samples (sometimes correct, sometimes wrong) to focus training on samples
-  that actually contribute to learning. Found ~85% of samples have zero variance.
-- **Relationship to Agent RFT**: **Data optimization pattern** - Used before/during Agent RFT training to select the
-  most valuable training samples.
+- **Description**: Identifies high-variance samples (sometimes correct, sometimes wrong) to focus training on samples that actually contribute to learning. Found ~85% of samples have zero variance.
+- **Relationship to Agent RFT**: **Data optimization pattern** - Used before/during Agent RFT training to select the most valuable training samples.
 - **Key Insight**: Only 15-30% high-variance samples are typically trainable; the rest are already learned or too hard.
 
 **Isolated VM per RL Rollout**
-
-- **Description**: Spins up isolated virtual machines for each RL rollout to prevent cross-contamination between
-  simultaneous training runs.
-- **Relationship to Agent RFT**: **Infrastructure pattern** - Critical for safe Agent RFT training, especially with
-  destructive tools (shell access, file operations).
+- **Description**: Spins up isolated virtual machines for each RL rollout to prevent cross-contamination between simultaneous training runs.
+- **Relationship to Agent RFT**: **Infrastructure pattern** - Critical for safe Agent RFT training, especially with destructive tools (shell access, file operations).
 - **Real-world example**: Cognition/Devon uses this for file planning agent training with 500+ simultaneous VMs.
 
 **Anti-Reward-Hacking Grader Design**
-
-- **Description**: Designs reward functions resistant to gaming through multi-criteria evaluation, violation detection,
-  and iterative hardening.
-- **Relationship to Agent RFT**: **Defensive pattern** - Essential for Agent RFT to prevent models from exploiting
-  grader weaknesses instead of learning actual task performance.
-- **Real-world example**: Rogo Finance achieved 100% validation reward initially due to grader gaming, required
-  hardening to get real 21% performance improvement.
+- **Description**: Designs reward functions resistant to gaming through multi-criteria evaluation, violation detection, and iterative hardening.
+- **Relationship to Agent RFT**: **Defensive pattern** - Essential for Agent RFT to prevent models from exploiting grader weaknesses instead of learning actual task performance.
+- **Real-world example**: Rogo Finance achieved 100% validation reward initially due to grader gaming, required hardening to get real 21% performance improvement.
 
 **Parallel Tool Call Learning**
-
-- **Description**: Teaches models to parallelize independent tool calls through RL exploration, reducing latency 40-50%
-  when applicable.
-- **Relationship to Agent RFT**: **Learned behavior pattern** - Emerges naturally from Agent RFT training; models
-  discover parallelization patterns during exploration.
+- **Description**: Teaches models to parallelize independent tool calls through RL exploration, reducing latency 40-50% when applicable.
+- **Relationship to Agent RFT**: **Learned behavior pattern** - Emerges naturally from Agent RFT training; models discover parallelization patterns during exploration.
 - **Real-world example**: Cognition/Devon reduced planning from 8-10 sequential tool calls to 4 parallel rounds.
 
 **Memory Reinforcement Learning (MemRL)**
-
-- **Description**: Adds learned "utility scores" to episodic memory so agents learn which memories actually lead to
-  success without modifying model weights.
-- **Relationship to Agent RFT**: **Alternative approach** - MemRL achieves runtime learning without weight updates;
-  Agent RFT modifies weights for permanent learning.
-- **Key Distinction**: MemRL = frozen LLM + evolving memory utilities; Agent RFT = updated LLM weights + optional
-  memory.
+- **Description**: Adds learned "utility scores" to episodic memory so agents learn which memories actually lead to success without modifying model weights.
+- **Relationship to Agent RFT**: **Alternative approach** - MemRL achieves runtime learning without weight updates; Agent RFT modifies weights for permanent learning.
+- **Key Distinction**: MemRL = frozen LLM + evolving memory utilities; Agent RFT = updated LLM weights + optional memory.
 
 ### Evaluation and Feedback Patterns
 
 **CriticGPT-Style Code Review**
-
-- **Description**: Deploy specialized AI models trained for code critique to identify bugs, security vulnerabilities,
-  and quality issues.
-- **Relationship to Agent RFT**: **Evaluation infrastructure** - Can serve as the grader/reward model in Agent RFT
-  training for coding tasks.
+- **Description**: Deploy specialized AI models trained for code critique to identify bugs, security vulnerabilities, and quality issues.
+- **Relationship to Agent RFT**: **Evaluation infrastructure** - Can serve as the grader/reward model in Agent RFT training for coding tasks.
 
 **Self-Critique Evaluator Loop**
-
-- **Description**: Train self-taught evaluators that bootstrap from synthetic data, generating and judging their own
-  outputs.
-- **Relationship to Agent RFT**: **Grader training pattern** - Provides methodology for creating the grader models used
-  in Agent RFT.
+- **Description**: Train self-taught evaluators that bootstrap from synthetic data, generating and judging their own outputs.
+- **Relationship to Agent RFT**: **Grader training pattern** - Provides methodology for creating the grader models used in Agent RFT.
 
 **Reflection Loop**
 - **Description**: After generating draft, run self-evaluation pass and feed critique into revision attempt.
-- **Relationship to Agent RFT**: **Inference-time pattern** - Reflection happens during inference; Agent RFT trains the
-  model to internalize this behavior.
+- **Relationship to Agent RFT**: **Inference-time pattern** - Reflection happens during inference; Agent RFT trains the model to internalize this behavior.
 
 **Rich Feedback Loops > Perfect Prompts**
-
-- **Description**: Expose iterative, machine-readable feedback (compiler errors, test failures) after every tool call
-  for self-debugging.
-- **Relationship to Agent RFT**: **Complementary** - Rich feedback provides signals during inference; Agent RFT trains
-  the model to better utilize these signals.
+- **Description**: Expose iterative, machine-readable feedback (compiler errors, test failures) after every tool call for self-debugging.
+- **Relationship to Agent RFT**: **Complementary** - Rich feedback provides signals during inference; Agent RFT trains the model to better utilize these signals.
 
 **Schema Validation Retry with Cross-Step Learning**
-
-- **Description**: Multi-step retry with detailed error feedback and cross-step error accumulation for structured output
-  validation.
-- **Relationship to Agent RFT**: **Retry pattern** - Operates at inference time; Agent RFT could train models to reduce
-  schema violations.
+- **Description**: Multi-step retry with detailed error feedback and cross-step error accumulation for structured output validation.
+- **Relationship to Agent RFT**: **Retry pattern** - Operates at inference time; Agent RFT could train models to reduce schema violations.
 
 ### Development and Research Patterns
 
 **Shipping as Research**
 - **Description**: Treat shipping as research to learn what works rather than waiting for certainty before release.
-- **Relationship to Agent RFT**: **Development philosophy** - Agent RFT itself is an experimental technique requiring
-  rapid iteration and validation.
+- **Relationship to Agent RFT**: **Development philosophy** - Agent RFT itself is an experimental technique requiring rapid iteration and validation.
 
 **Dogfooding with Rapid Iteration for Agent Improvement**
-
-- **Description**: Development team extensively uses their own AI agent product for daily tasks, creating tight feedback
-  loop.
-- **Relationship to Agent RFT**: **Validation approach** - Dogfooding provides real-world data for Agent RFT training
-  and evaluation.
+- **Description**: Development team extensively uses their own AI agent product for daily tasks, creating tight feedback loop.
+- **Relationship to Agent RFT**: **Validation approach** - Dogfooding provides real-world data for Agent RFT training and evaluation.
 
 **Workflow Evals with Mocked Tools**
-
-- **Description**: Test complete agent workflows with mocked tools and dual evaluation criteria (objective tool usage,
-  subjective quality).
+- **Description**: Test complete agent workflows with mocked tools and dual evaluation criteria (objective tool usage, subjective quality).
 - **Relationship to Agent RFT**: **Validation pattern** - Used to evaluate agents before/after Agent RFT training.
 
 **Action Caching & Replay Pattern**
-
-- **Description**: Record every action during execution with precise metadata for deterministic replay without LLM
-  calls.
+- **Description**: Record every action during execution with precise metadata for deterministic replay without LLM calls.
 - **Relationship to Agent RFT**: **Testing infrastructure** - Enables regression testing of Agent RFT-trained models.
 
 **Explicit Posterior-Sampling Planner**
 - **Description**: Embeds full RL algorithm (PSRL) inside LLM's reasoning for principled exploration/exploitation.
-- **Relationship to Agent RFT**: **Algorithmic alternative** - PSRL runs at inference time; Agent RFT trains weights
-  offline.
+- **Relationship to Agent RFT**: **Algorithmic alternative** - PSRL runs at inference time; Agent RFT trains weights offline.
 
 ### Terminology Mapping Table
 
-| Academic/Research Term       | Industry/Product Term    | Pattern Context              |
-|------------------------------|--------------------------|------------------------------|
-| RLAIF                        | AI Feedback              | Reward signal generation     |
-| Reward shaping               | Tool use incentivization | Intermediate rewards         |
-| Turn-level credit assignment | Multi-turn RL            | Multi-step reasoning credit  |
-| Constitutional AI            | Principle-based feedback | Guided preference generation |
-| Critic models                | Reviewer/Judge models    | Evaluation and grading       |
-| Inference healing            | CoT explanation          | Explainable rewards          |
-| Posterior sampling           | Exploration strategy     | RL algorithm selection       |
-| Preference optimization      | Reward maximization      | Training objective           |
-| Credit assignment            | Reward attribution       | Multi-step learning          |
-| Exploration-exploitation     | Try vs. reuse            | Agent behavior               |
+| Academic/Research Term | Industry/Product Term | Pattern Context |
+|------------------------|----------------------|-----------------|
+| RLAIF | AI Feedback | Reward signal generation |
+| Reward shaping | Tool use incentivization | Intermediate rewards |
+| Turn-level credit assignment | Multi-turn RL | Multi-step reasoning credit |
+| Constitutional AI | Principle-based feedback | Guided preference generation |
+| Critic models | Reviewer/Judge models | Evaluation and grading |
+| Inference healing | CoT explanation | Explainable rewards |
+| Posterior sampling | Exploration strategy | RL algorithm selection |
+| Preference optimization | Reward maximization | Training objective |
+| Credit assignment | Reward attribution | Multi-step learning |
+| Exploration-exploitation | Try vs. reuse | Agent behavior |
 
 ### Pattern Relationships Summary
 
@@ -854,8 +736,7 @@ From reward hacking research, effective graders should:
 
 ### Resolved Through Research
 
-- [x] Academic papers that formalize this approach - Found connections to RLHF, RLAIF, GRPO, ReAct, Toolformer,
-  Reflexion
+- [x] Academic papers that formalize this approach - Found connections to RLHF, RLAIF, GRPO, ReAct, Toolformer, Reflexion
 - [x] Open-source implementations beyond OpenAI - Found ASearcher, ReTool, OTC, Tool-R1
 - [x] Comparison with other RL fine-tuning methods - Documented relationships with RLHF, RLAIF, MemRL
 - [x] Detailed grader design patterns - Found best practices and anti-patterns
@@ -898,21 +779,16 @@ Agent Reinforcement Fine-Tuning represents a significant evolution in training a
 3. **Multi-step optimization** across tool call sequences
 4. **Sample-efficient learning** requiring only 100-1000 examples
 
-Agent RFT bridges the gap between general-purpose language models and specialized agentic tasks. The pattern builds on
-well-established RL research (RLHF, RLAIF, GRPO) while extending it to handle the unique challenges of agentic behavior:
-tool use, multi-step reasoning, and environment interaction.
+Agent RFT bridges the gap between general-purpose language models and specialized agentic tasks. The pattern builds on well-established RL research (RLHF, RLAIF, GRPO) while extending it to handle the unique challenges of agentic behavior: tool use, multi-step reasoning, and environment interaction.
 
 Real-world implementations demonstrate compelling results across diverse domains:
 - **20-70% performance improvements** on specialized tasks
 - **40-50% latency reductions** through learned tool call optimization
 - **High sample efficiency** with strong results from 100 examples
 
-The pattern integrates naturally with complementary patterns including RLAIF for reward generation, variance-based
-sample selection for data optimization, and isolated VM rollouts for safe training. Alternative approaches like MemRL
-offer runtime learning without weight updates for different use cases.
+The pattern integrates naturally with complementary patterns including RLAIF for reward generation, variance-based sample selection for data optimization, and isolated VM rollouts for safe training. Alternative approaches like MemRL offer runtime learning without weight updates for different use cases.
 
-Key areas for further research include formal verification of case study results, standardized evaluation metrics, and
-systematic comparison with alternative approaches like MemRL and inference-time RL algorithms.
+Key areas for further research include formal verification of case study results, standardized evaluation metrics, and systematic comparison with alternative approaches like MemRL and inference-time RL algorithms.
 
 ---
 
