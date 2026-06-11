@@ -1,0 +1,1 @@
+/home/wantez/source/github/github/awesome-copilot/agents/gem-implementer.agent.md

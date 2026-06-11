@@ -1,5 +1,13 @@
 # Multi-Database Configuration Reference
 
+## Table of Contents
+
+1. [Supported Databases](#supported-databases)
+2. [Connection Configuration](#connection-configuration)
+3. [Cypher Dialects](#cypher-dialects)
+4. [Database-Specific Notes](#database-specific-notes)
+5. [Testing](#testing)
+
 ## Supported Databases
 
 | Database | Version | Dialect |
@@ -148,5 +156,6 @@ fun teardown() {
 
 ## See Also
 
+- [SKILL.md](../SKILL.md) — Core Drivine4j concepts, setup, and quick examples
 - [PersistenceManager reference](persistence-manager.md) — low-level Cypher API
 - [GraphObjectManager reference](graph-object-manager.md) — high-level annotated model API

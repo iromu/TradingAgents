@@ -41,7 +41,13 @@
       "source": "iromu/awesome-qwen",
       "sourceType": "github",
       "skillPath": "skills/embabel-drivine4j/SKILL.md",
-      "computedHash": "1cf3a4f16eebe93f1ffcf43526efa7c7a0f0506e7bc9892ea981f30c6ce2e1ff"
+      "computedHash": "880a200270512e8ef0fb63d77ab98d7aa51b869b088d1e55fe163868d6579e35"
+    },
+    "git-wiki": {
+      "source": "yysun/awesome-agent-world",
+      "sourceType": "github",
+      "skillPath": "skills/git-wiki/SKILL.md",
+      "computedHash": "7a0c766675ee104158a9957ed185731411446b5b2e00ef475581b7b8aa9a6349"
     }
   }
 }

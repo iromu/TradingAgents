@@ -1,5 +1,22 @@
 # GraphObjectManager — High-Level Annotated Model API Reference
 
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Annotations](#annotations)
+   - [@NodeFragment](#nodefragment)
+   - [@GraphView](#graphview)
+   - [@Root](#root)
+   - [@GraphRelationship](#graphrelationship)
+   - [@RelationshipFragment](#relationshipfragment)
+   - [@GraphPath](#graphpath)
+   - [@Count / @Aggregate](#count--aggregate)
+   - [@Default / @EmptyWhenAbsent](#default--emptywhenabsent)
+3. [Type-Safe DSL](#type-safe-dsl)
+4. [Loading and Saving](#loading-and-saving)
+5. [Polymorphic Relationships](#polymorphic-relationships)
+6. [Recursive Relationships](#recursive-relationships)
+
 ## Overview
 
 `GraphObjectManager` provides a high-level API for working with graph-mapped objects using annotated models. It generates efficient Cypher queries automatically and provides a type-safe DSL for filtering and ordering.
@@ -294,5 +311,6 @@ data class LocationHierarchy(
 
 ## See Also
 
+- [SKILL.md](../SKILL.md) — Core Drivine4j concepts, setup, and quick examples
 - [PersistenceManager reference](persistence-manager.md) — low-level Cypher API
 - [Multi-database configuration](multi-db.md) — dialects and connection setup

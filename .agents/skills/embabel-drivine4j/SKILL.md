@@ -1,14 +1,30 @@
 ---
 name: embabel-drivine4j
-description: Build type-safe graph database clients with Drivine4j for Neo4j, FalkorDB, Amazon Neptune, and Memgraph. Use this skill whenever the user wants to set up a graph database client with Drivine4j, create annotated graph models with @GraphView and @NodeFragment, write low-level Cypher queries with PersistenceManager, use the high-level GraphObjectManager API with type-safe DSL, configure multi-database connections, or integrate Drivine4j with DICE knowledge graphs or Embabel agents. Also use when the user mentions Drivine4j, graph database in Java/Kotlin, Cypher queries, Neo4j client, graph mapping, @GraphView, @NodeFragment, @RelationshipFragment, or composition over inheritance for graph data.
+description: >-
+  Build type-safe graph database clients with Drivine4j for Neo4j, FalkorDB, Amazon Neptune, and Memgraph.
+  Use when the user wants to set up a Drivine4j client, create annotated graph models, write Cypher queries,
+  configure graph database connections, or integrate Drivine4j with DICE knowledge graphs.
+  Also trigger on mentions of Drivine4j, graph database in Java/Kotlin, or Cypher queries.
 ---
 
 # Drivine4j — Type-Safe Graph Database Client
 
-A graph database client library for Java and Kotlin supporting **Neo4j**, **FalkorDB**, **Amazon Neptune**, and **Memgraph** with two approaches to graph mapping:
+A graph database client library for Java and Kotlin supporting **Neo4j**, **FalkorDB**, **Amazon Neptune**, and **Memgraph** with two complementary APIs:
 
-1. **PersistenceManager** — low-level API with manual Cypher queries (full control)
-2. **GraphObjectManager** — high-level API with annotated models and type-safe DSL (convenience)
+| API | Level | Cypher | Best for |
+|-----|-------|--------|----------|
+| **PersistenceManager** | Low-level | Manual, full control | Complex queries, migrations, graph algorithms |
+| **GraphObjectManager** | High-level | Auto-generated from annotations | CRUD, domain models, type-safe DSL |
+
+## Output Quality
+
+When producing code or documentation:
+
+- **Be comprehensive** — Provide complete, working examples with full imports and annotations, not partial snippets
+- **Show composition** — Demonstrate `@GraphView` composition patterns (not monolithic models)
+- **Include configuration** — Always show the `DataSourceMap` bean setup alongside repository code
+- **Use correct API** — PersistenceManager for manual Cypher; GraphObjectManager for annotated models. Do not mix them inappropriately.
+- **Reference the right doc** — Point to `references/graph-object-manager.md` for annotation details and DSL operators; `references/persistence-manager.md` for batch/transaction patterns; `references/multi-db.md` for dialects and multi-database setup
 
 ## Philosophy: Composition Over Inheritance
 
@@ -28,7 +44,7 @@ Behind the scenes, Drivine generates efficient Cypher. Composition lets you mix 
 ## Requirements
 
 - **Java 21+**
-- **Kotlin 2.2.0+** for GraphObjectManager API (requires context parameters)
+- **Kotlin 2.2.0+** for GraphObjectManager API (requires `-Xcontext-parameters`)
 - Any Kotlin version for PersistenceManager API
 
 ## Installation
@@ -41,9 +57,9 @@ dependencies {
 }
 ```
 
-### Code Generation for Type-Safe DSL
+### Code Generation for Type-Safe DSL (GraphObjectManager only)
 
-If you want the type-safe query DSL (auto-generated from `@GraphView` classes):
+If you want the type-safe query DSL auto-generated from `@GraphView` classes:
 
 ```kotlin
 plugins {
@@ -62,6 +78,8 @@ dependencies {
     ksp("org.drivine:drivine4j-codegen:0.0.30")
 }
 ```
+
+> **Pitfall:** Without `-Xcontext-parameters` and the KSP dependency, the type-safe DSL will not generate. The `@GraphView` annotations still work, but DSL methods like `where { ... }` won't be available.
 
 ## Configuration
 
@@ -83,28 +101,24 @@ class AppConfig {
 }
 ```
 
-See `references/multi-db.md` for multi-database configuration, dialects, and FalkorDB/Neptune/Memgraph setup.
+See `references/multi-db.md` for multi-database connections, FalkorDB/Neptune/Memgraph setup, and Cypher dialect configuration.
 
-## Two APIs
+## Choose Your API
 
-| Aspect | PersistenceManager | GraphObjectManager |
-|--------|--------------------|--------------------|
-| Level | Low-level | High-level |
-| Cypher | Manual, full control | Auto-generated from annotations |
-| Best for | Complex queries, migrations | CRUD, domain models, type-safe DSL |
-| Annotations | Not required | `@NodeFragment`, `@GraphView`, `@GraphRelationship` |
-| Code gen | Not needed | Optional KSP for type-safe DSL |
+### Use PersistenceManager when:
+- You need full Cypher control (complex graph algorithms, custom queries)
+- You're running migrations or one-off data operations
+- You're working with an existing Cypher codebase
 
-### When to use which
+### Use GraphObjectManager when:
+- You have a stable domain model and want annotation-driven CRUD
+- You want type-safe filtering and ordering via DSL
+- You need dirty tracking for efficient updates
+- You want cascade save/delete of related objects
 
-- **PersistenceManager** when you need full Cypher control, complex graph algorithms, or one-off queries
-- **GraphObjectManager** when you have a stable domain model and want type-safe, annotation-driven CRUD with dirty tracking
+## PersistenceManager — Quick Start
 
-## PersistenceManager — Low-Level Cypher API
-
-Use `PersistenceManager` when you need explicit Cypher queries.
-
-### Basic Query
+Inject via qualifier and execute manual Cypher:
 
 ```kotlin
 @Component
@@ -120,41 +134,17 @@ class PersonRepository @Autowired constructor(
                 .transform(Person::class.java)
         )
     }
-
-    @Transactional
-    fun create(person: Person): Person {
-        return manager.getOne(
-            QuerySpecification
-                .withStatement("CREATE (p:Person) SET p = \$props RETURN properties(p)")
-                .bindObject("props", person)
-                .transform(Person::class.java)
-        )
-    }
 }
 ```
 
-### RETURN Clause Best Practices
+**Key rules:**
+- Always wrap multiple RETURN values in a single map: `RETURN { name: a.name, age: a.age } AS result`
+- Use `@Transactional` for write operations
+- See `references/persistence-manager.md` for batch operations, transaction management, and custom result transformation
 
-Always return a **single map** or **scalar value** — never multiple columns:
+## GraphObjectManager — Quick Start
 
-```cypher
--- CORRECT: Single map
-RETURN { name: a.name, age: a.age, title: b.title } AS result
-
--- CORRECT: Single property map
-RETURN properties(p)
-
--- WRONG: Multiple columns
-MATCH (a:Actor), (b:Director) RETURN a.name, b.name
-```
-
-See `references/persistence-manager.md` for advanced patterns: batch operations, transaction management, and result transformation.
-
-## GraphObjectManager — High-Level Annotated Model API
-
-`GraphObjectManager` generates Cypher from annotated models and provides a type-safe DSL for filtering and ordering.
-
-### NodeFragment — Mapping Nodes
+### Define annotated models
 
 ```kotlin
 @NodeFragment
@@ -163,86 +153,16 @@ data class Person(
     val name: String,
     val bio: String?
 )
-```
 
-**Defaults for missing properties:**
-
-```kotlin
-@NodeFragment(labels = ["User"])
-data class UserNode(
-    @NodeId val id: String,
-    @Default val roles: List<String> = emptyList(),  // missing/null → []
-    @Default val status: String = "active",          // missing/null → "active"
-    @EmptyWhenAbsent val tags: List<String>,         // missing/null → []
-)
-```
-
-- **`@Default`** — falls back to the property's declared default value
-- **`@EmptyWhenAbsent`** — maps absent/null collections/maps to empty (no default needed)
-
-### RelationshipFragment — Capturing Edge Properties
-
-```kotlin
-@RelationshipFragment
-data class WorkHistory(
-    val startDate: LocalDate,  // Property on the edge
-    val role: String,           // Property on the edge
-    val target: Organization    // Target node
-)
-```
-
-### GraphView — Composing Views
-
-A `@GraphView` composes multiple fragments and relationships into a single query result:
-
-```kotlin
 @GraphView
 data class PersonCareer(
-    @Root val person: Person,  // Root fragment
+    @Root val person: Person,
     @GraphRelationship(type = "WORKS_FOR")
     val employmentHistory: List<WorkHistory>
 )
 ```
 
-### Advanced GraphView Features
-
-**Recursive relationships** (hierarchies, ontologies):
-
-```kotlin
-@GraphView
-data class LocationHierarchy(
-    val location: Location,
-    @GraphRelationship(type = "HAS_LOCATION", direction = Direction.OUTGOING, maxDepth = 3)
-    val subLocations: List<LocationHierarchy>  // Self-referential
-)
-```
-
-**Path traversal** (skip intermediary nodes):
-
-```kotlin
-@GraphView
-data class ActorDirectors(
-    @Root val actor: Actor,
-    @GraphPath([
-        Hop("ACTED_IN",    Direction.OUTGOING, label = "Movie"),  // through Movie
-        Hop("DIRECTED_BY", Direction.OUTGOING),                   // to Director
-    ])
-    val directors: List<Director>
-)
-```
-
-**Aggregates** (count & summarize without loading):
-
-```kotlin
-@GraphView
-data class ActorStats(
-    @Root val actor: Actor,
-    @Count("ACTED_IN")                                              val movieCount: Long,
-    @Aggregate(AggregateFunction.AVG, type = "RATED", property = "score") val avgRating: Double,
-)
-```
-
-### Loading, Filtering, and Saving
+### Load, filter, and save
 
 ```kotlin
 // Load all / by ID / count
@@ -255,14 +175,6 @@ graphObjectManager.loadAll<PersonCareer> {
     where { person.bio contains "Lead" }
 }
 
-// Multiple conditions (AND)
-graphObjectManager.loadAll<PersonCareer> {
-    where {
-        person.name eq "Alice"
-        person.bio.isNotNull()
-    }
-}
-
 // OR conditions
 graphObjectManager.loadAll<PersonCareer> {
     where {
@@ -273,43 +185,19 @@ graphObjectManager.loadAll<PersonCareer> {
     }
 }
 
-// Ordering
-graphObjectManager.loadAll<PersonCareer> {
-    orderBy { person.name.asc() }
-}
-
-// Saving with dirty tracking
+// Save with dirty tracking
 val person = graphObjectManager.loadOrThrow<PersonCareer>(uuid)
 val updated = person.copy(person = person.person.copy(bio = "Updated bio"))
 graphObjectManager.save(updated)  // Only dirty fields written
 ```
 
-### CASCADE Policies
+**Key rules:**
+- Exactly one `@Root` per `@GraphView`
+- `@NodeId` must be `String` or `UUID`
+- Dirty tracking only works on objects loaded within the same manager context
+- Use `@GraphRelationship(cascade = ...)` to control save/delete behavior of related objects
 
-| Policy | Behavior |
-|--------|----------|
-| `NONE` (default) | Only deletes the relationship, leaves target nodes intact |
-| `DELETE_ORPHAN` | Deletes relationship and target only if no other relationships exist to the target |
-| `DELETE_ALL` | Always deletes both the relationship and target nodes (destructive) |
-
-### Polymorphic Relationships
-
-```kotlin
-@NodeFragment(labels = ["WebUser"])
-sealed class WebUser {
-    abstract val uuid: UUID
-    abstract val displayName: String
-}
-
-@NodeFragment(labels = ["WebUser", "Anonymous"])
-data class AnonymousWebUser(
-    override val uuid: UUID,
-    override val displayName: String,
-    val anonymousToken: String
-)
-```
-
-See `references/graph-object-manager.md` for the full API reference including all annotations, DSL operators, and advanced patterns.
+See `references/graph-object-manager.md` for the full annotation reference, DSL operators, polymorphic relationships, recursive hierarchies, and cascade policies.
 
 ## Integration with DICE and Embabel Agents
 
@@ -324,8 +212,17 @@ See the DICE skill for how propositions project to Neo4j and how agents consume 
 
 ## Common Pitfalls
 
-- **Multiple RETURN columns** — Always wrap multiple values in a single map (`RETURN { ... } AS result`)
-- **Missing `-Xcontext-parameters`** — GraphObjectManager with KSP requires this compiler flag or the DSL won't generate
-- **Kotlin version mismatch** — GraphObjectManager needs Kotlin 2.2.0+; PersistenceManager works with any Kotlin version
-- **Dirty tracking on detached objects** — `GraphObjectManager.save()` only works on objects loaded within the same manager context
-- **Cypher dialect mismatch** — Ensure the dialect matches your database version (e.g., `NEO4J_4` vs `NEO4J_5`); see `references/multi-db.md`
+| Pitfall | Fix |
+|---------|-----|
+| Multiple RETURN columns in Cypher | Wrap in single map: `RETURN { ... } AS result` |
+| Missing `-Xcontext-parameters` compiler flag | Add to `freeCompilerArgs` when using GraphObjectManager DSL |
+| Kotlin version < 2.2.0 with GraphObjectManager | Use PersistenceManager, or upgrade Kotlin |
+| Dirty tracking on detached objects | Load within the same manager context before saving |
+| Using `@RelationshipCascadeType` for cascade | Always use `@GraphRelationship(cascade = ...)` — the other annotation does not work |
+| Cypher dialect mismatch | Ensure dialect matches database version (NEO4J_4 vs NEO4J_5); see `references/multi-db.md` |
+
+## See Also
+
+- [PersistenceManager reference](references/persistence-manager.md) — low-level Cypher API, batch operations, transactions, result transformation
+- [GraphObjectManager reference](references/graph-object-manager.md) — full annotation reference, DSL operators, cascade policies, polymorphic/recursive relationships
+- [Multi-database configuration](references/multi-db.md) — connection setup, dialects, FalkorDB/Neptune/Memgraph, testing with Testcontainers

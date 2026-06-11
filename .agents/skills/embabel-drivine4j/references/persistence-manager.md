@@ -1,5 +1,15 @@
 # PersistenceManager — Low-Level Cypher API Reference
 
+## Table of Contents
+
+1. [Overview](#overview)
+2. [Core Types](#core-types)
+3. [Transaction Management](#transaction-management)
+4. [Batch Operations](#batch-operations)
+5. [Result Transformation](#result-transformation)
+6. [Cypher Dialects](#cypher-dialects)
+7. [RETURN Clause Rules](#return-clause-rules)
+
 ## Overview
 
 `PersistenceManager` is Drivine4j's low-level API for executing manual Cypher queries. It gives full control over query construction, parameter binding, and result transformation.
@@ -142,5 +152,6 @@ MATCH (a:Actor), (b:Director) RETURN a.name, b.name
 
 ## See Also
 
+- [SKILL.md](../SKILL.md) — Core Drivine4j concepts, setup, and quick examples
 - [GraphObjectManager reference](graph-object-manager.md) — high-level annotated model API
 - [Multi-database configuration](multi-db.md) — dialects and connection setup
