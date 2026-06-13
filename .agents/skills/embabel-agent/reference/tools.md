@@ -209,12 +209,55 @@ context.ai().withDefaultLlm()
     .fromPrompt("Create a weather and news report");
 ```
 
+## Subagent: Agent Handoffs
+
+```java
+var subagent = Subagent.ofClass(PerformanceFinder.class)
+    .consuming(WorksToFind.class);
+
+context.ai().withDefaultLlm()
+    .withTool(subagent)
+    .creating(Concert.class)
+    .fromPrompt("Find performances and assemble a concert");
+```
+
+The subagent shares the parent's blackboard context.
+
+## Agentic Tools
+
+### SimpleAgenticTool: Flat Tool Orchestration
+
+```java
+var agenticTool = SimpleAgenticTool.builder()
+    .withLlm(LlmOptions.withModel("gpt-4o"))
+    .withTools(searchTool, analyzeTool, summarizeTool)
+    .build();
+```
+
+### PlaybookTool: Progressive Unlocking
+
+```java
+var playbook = PlaybookTool.builder()
+    .withTools(searchTool)
+    .withTools(analyzeTool, PlaybookCondition.prerequisite("search"))
+    .build();
+```
+
+### StateMachineTool: State-Based Availability
+
+```java
+var sm = StateMachineTool.builder(OrderState.class)
+    .withTool(createTool, OrderState.DRAFT)
+    .withTool(confirmTool, OrderState.DRAFT, OrderState.CONFIRMED)
+    .build();
+```
+
 ## Key Points
 
 - `@LlmTool` methods can be on any class — stateful domain objects are common
 - Tool groups provide indirection; configure in YAML or `@Configuration`
 - `ToolCallContext` passes infrastructure metadata invisible to the LLM
-- Subagents let the LLM invoke other agents as tools
-- Agentic tools let an LLM orchestrate sub-tools within a single tool call
+- Subagents let the LLM invoke other agents as tools, sharing blackboard context
+- Agentic tools (Simple, Playbook, StateMachine) let an LLM orchestrate sub-tools
 - Domain tools expose `@Tool` methods on objects the LLM works with
 - Tool chaining dynamically exposes tools from returned artifacts

@@ -59,8 +59,6 @@ dependencies {
 
 ### Code Generation for Type-Safe DSL (GraphObjectManager only)
 
-If you want the type-safe query DSL auto-generated from `@GraphView` classes:
-
 ```kotlin
 plugins {
     id("com.google.devtools.ksp") version "2.2.20-2.0.4"
@@ -173,16 +171,6 @@ graphObjectManager.count(Issue::class.java)
 // Type-safe DSL filtering
 graphObjectManager.loadAll<PersonCareer> {
     where { person.bio contains "Lead" }
-}
-
-// OR conditions
-graphObjectManager.loadAll<PersonCareer> {
-    where {
-        anyOf {
-            person.name eq "Alice"
-            person.name eq "Bob"
-        }
-    }
 }
 
 // Save with dirty tracking

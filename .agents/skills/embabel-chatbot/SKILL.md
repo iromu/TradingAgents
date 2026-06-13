@@ -31,9 +31,9 @@ Build production-ready agentic chatbots with RAG using the [Embabel](https://git
 </dependency>
 ```
 
-## Step 1: Build a Basic Chatbot
+## Quick Start
 
-Start with the simplest possible chatbot:
+Here's the minimal chatbot that works out of the box:
 
 ```java
 import com.embabel.chatbot.builder.ChatbotBuilder;
@@ -41,264 +41,40 @@ import com.embabel.chatbot.session.ChatSession;
 import com.embabel.chatbot.memory.InMemoryChatMemory;
 import com.embabel.chatbot.options.ChatOptions;
 
-// Build the chat memory
 var chatMemory = InMemoryChatMemory.builder().build();
-
-// Build the chat session
-var chatSession = ChatSession.builder()
-    .chatMemory(chatMemory)
-    .build();
-
-// Configure options
+var chatSession = ChatSession.builder().chatMemory(chatMemory).build();
 var chatOptions = ChatOptions.builder()
     .model("qwen-plus")
     .maxTokens(2048)
     .temperature(0.7)
     .build();
 
-// Build the chatbot
 var chatbot = ChatbotBuilder.builder()
     .chatMemory(chatMemory)
     .chatSession(chatSession)
     .chatOptions(chatOptions)
     .build();
 
-// Chat!
 String response = chatbot.chat("What is RAG?");
 System.out.println(response);
 ```
 
-## Step 2: Add RAG (Retrieval-Augmented Generation)
+That's it — you have a working chatbot. Everything else is opt-in.
 
-Give your chatbot access to external knowledge:
+## What to Add Next
 
-```java
-import com.embabel.rag.builder.RagBuilder;
-import com.embabel.rag.source.FileRagSource;
-import com.embabel.rag.filter.FilterBuilder;
-import com.embabel.rag.template.PromptTemplate;
+| Need | What to do | Learn more |
+|------|-----------|------------|
+| **External knowledge** | Add RAG with document sources | [RAG Architecture](references/03-rag-architecture.md) |
+| **Safety** | Add guardrails against injection/jailbreaks | [Guardrails](references/04-guardrails.md) |
+| **Deep reasoning** | Enable thinking mode | [Reasoning](references/05-reasoning.md) |
+| **Machine-readable output** | Force JSON responses | [Structured Output](references/07-structured-output.md) |
+| **Pre-processing** | Add custom chat extensions | [Chatbot API](references/01-chatbot-api.md) → ChatExtension |
+| **Tool calling** | Register actions/functions | [Chatbot API](references/01-chatbot-api.md) → ChatActions |
+| **Persistence** | Store chat history in a DB | [Chat History Store](references/02-chat-history-store.md) |
+| **Config-driven** | Use `chatbot.yaml` | [Chatbot Patterns](references/06-chatbot-patterns.md) |
 
-// Define document sources
-var fileSource = FileRagSource.builder()
-    .directory(Paths.get("/path/to/documents"))
-    .fileExtensions(List.of(".pdf", ".txt", ".md"))
-    .build();
-
-// Build RAG system
-var rag = RagBuilder.builder()
-    .ragSources(List.of(fileSource))
-    .filterBuilder(FilterBuilder.builder().build())
-    .build();
-
-// Add RAG to the chatbot
-var chatbot = ChatbotBuilder.builder()
-    .chatMemory(chatMemory)
-    .chatSession(chatSession)
-    .chatOptions(chatOptions)
-    .rag(rag)
-    .build();
-```
-
-Now when users ask questions, the chatbot retrieves relevant documents and answers based on them.
-
-## Step 3: Add Guardrails
-
-Protect against prompt injection, jailbreaks, and harmful content:
-
-```java
-import com.embabel.chatbot.guardrails.Guardrails;
-
-var guardrails = Guardrails.builder()
-    .addPromptInjectionGuard()
-    .addJailbreakGuard()
-    .addContentModerationGuard()
-    .build();
-
-var chatbot = ChatbotBuilder.builder()
-    .chatMemory(chatMemory)
-    .chatSession(chatSession)
-    .chatOptions(chatOptions)
-    .guardrails(guardrails)
-    .build();
-```
-
-## Step 4: Enable Reasoning (Thinking Mode)
-
-For complex reasoning tasks, enable the model's thinking capability:
-
-```java
-var chatOptions = ChatOptions.builder()
-    .model("qwen-plus")
-    .thinking(true)
-    .thinkingBudget(2048)
-    .build();
-```
-
-## Step 5: Structured Output
-
-Force JSON responses for programmatic consumption:
-
-```java
-var chatOptions = ChatOptions.builder()
-    .responseFormat("json")
-    .build();
-
-String jsonResponse = chatClient.chat(chatSession, "List the top 3 features as JSON", chatOptions);
-// Parse the JSON response with your preferred library
-```
-
-## Step 6: Custom Chat Extension
-
-Add pre-processing logic that runs before every LLM call:
-
-```java
-import com.embabel.chatbot.extension.ChatExtension;
-import com.embabel.chatbot.message.ChatMessage;
-
-public class MyChatExtension implements ChatExtension {
-    @Override
-    public List<ChatMessage> apply(List<ChatMessage> messages, ChatOptions options) {
-        // Add system context, rewrite messages, inject metadata
-        return messages;
-    }
-}
-
-var chatbot = ChatbotBuilder.builder()
-    .chatMemory(chatMemory)
-    .chatSession(chatSession)
-    .chatOptions(chatOptions)
-    .chatExtension(new MyChatExtension())
-    .build();
-```
-
-## Step 7: Chat Actions (Tool Calling)
-
-Let the chatbot call external tools and functions:
-
-```java
-import com.embabel.chatbot.actions.ChatActions;
-
-var chatActions = ChatActions.builder()
-    .register("search", (session, args) -> {
-        String query = (String) args.get("query");
-        return searchService.search(query);
-    })
-    .register("calculate", (session, args) -> {
-        String expression = (String) args.get("expression");
-        return calculator.eval(expression);
-    })
-    .build();
-
-var chatbot = ChatbotBuilder.builder()
-    .chatMemory(chatMemory)
-    .chatSession(chatSession)
-    .chatOptions(chatOptions)
-    .chatActions(chatActions)
-    .build();
-```
-
-## Step 8: Persist Chat History
-
-Store conversations in a database for continuity across restarts:
-
-```java
-import com.embabel.chatbot.store.ChatHistoryStore;
-
-// Use a custom store
-var chatHistoryStore = new PostgresChatHistoryStore(jdbcTemplate);
-
-var chatMemory = InMemoryChatMemory.builder()
-    .chatHistoryStore(chatHistoryStore)
-    .build();
-```
-
-See `references/02-chat-history-store.md` for the full store API and a PostgreSQL example.
-
-## Step 9: Configure with YAML (Optional)
-
-For configuration-driven chatbots, use `chatbot.yaml`:
-
-```yaml
-chatbot:
-  model: qwen-plus
-  maxTokens: 2048
-  temperature: 0.7
-  rag:
-    sources:
-      - type: file
-        directory: ./documents
-        fileExtensions: [".pdf", ".txt", ".md"]
-  guardrails:
-    - type: promptInjection
-    - type: jailbreak
-  thinking:
-    enabled: true
-    budget: 1024
-  memory:
-    type: inMemory
-    maxMessages: 50
-```
-
-## Step 10: Advanced RAG — Filters and Prompt Templates
-
-### Filtered RAG
-
-Retrieve only relevant documents:
-
-```java
-import com.embabel.rag.filter.Filter;
-
-Filter filter = FilterBuilder.builder()
-    .addFilter("source", "products.pdf")
-    .addSimilarityFilter("pricing", 0.7)
-    .build();
-
-var rag = RagBuilder.builder()
-    .ragSources(List.of(fileSource))
-    .filterBuilder(FilterBuilder.builder().build())
-    .build();
-```
-
-### Custom Prompt Templates
-
-Control exactly how the RAG prompt is constructed:
-
-```java
-import com.embabel.rag.template.PromptTemplate;
-
-var promptTemplate = PromptTemplate.builder()
-    .template("""
-        Context:
-        {% for source in sources %}
-        [Source: {{ source.metadata.source }}]
-        {{ source.content }}
-        {% endfor %}
-
-        Question: {{ question }}
-
-        Answer based on the context above:
-        """)
-    .build();
-
-var rag = RagBuilder.builder()
-    .ragSources(List.of(fileSource))
-    .promptTemplate(promptTemplate)
-    .build();
-```
-
-See `references/03-rag-architecture.md` for the full RAG API.
-
-## Reference Files
-
-| File | Content |
-|------|---------|
-| `references/01-chatbot-api.md` | ChatbotBuilder, ChatOptions, ChatSession, ChatClient, ChatMemory, ChatExtension, ChatActions, ChatConfiguration |
-| `references/02-chat-history-store.md` | ChatHistoryStore, InMemoryChatHistoryStore, persistence to databases |
-| `references/03-rag-architecture.md` | RAGBuilder, RAGSource, FilterBuilder, Filter, PromptTemplate |
-| `references/04-guardrails.md` | Guardrails, prompt injection, jailbreak detection, content moderation |
-| `references/05-reasoning.md` | Reasoning, thinking, thinking budget, model reasoning support |
-| `references/06-chatbot-patterns.md` | Complete chatbot building guide, chatbot.yaml, ragbot.jinja |
-| `references/07-structured-output.md` | Structured output, JSON mode, model capabilities |
+Each reference file has full API details, code examples, and usage patterns.
 
 ## Pitfalls
 
@@ -311,13 +87,12 @@ See `references/03-rag-architecture.md` for the full RAG API.
 
 ## Checklist
 
-- [ ] Basic chatbot works (Step 1)
-- [ ] RAG sources configured (Step 2)
-- [ ] Guardrails added (Step 3)
-- [ ] Reasoning enabled if needed (Step 4)
-- [ ] Structured output if needed (Step 5)
-- [ ] Chat extension for pre-processing (Step 6)
-- [ ] Chat actions for tool calling (Step 7)
-- [ ] Chat history persisted (Step 8)
-- [ ] RAG filtered and prompt templates customized (Step 10)
+- [ ] Basic chatbot works (see Quick Start above)
+- [ ] RAG sources configured (see [RAG Architecture](references/03-rag-architecture.md))
+- [ ] Guardrails added (see [Guardrails](references/04-guardrails.md))
+- [ ] Reasoning enabled if needed (see [Reasoning](references/05-reasoning.md))
+- [ ] Structured output if needed (see [Structured Output](references/07-structured-output.md))
+- [ ] Chat extension for pre-processing (see [Chatbot API](references/01-chatbot-api.md))
+- [ ] Chat actions for tool calling (see [Chatbot API](references/01-chatbot-api.md))
+- [ ] Chat history persisted (see [Chat History Store](references/02-chat-history-store.md))
 - [ ] Tested with real documents and user queries

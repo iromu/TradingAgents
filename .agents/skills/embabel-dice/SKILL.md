@@ -7,17 +7,6 @@ description: Build proposition-based knowledge graphs that give AI agents struct
 
 Build proposition-based knowledge graphs that give agents structured, confidence-weighted memory. DICE (Domain-Integrated Context Engineering) extends context engineering by emphasizing the importance of a domain model to structure context, and considering LLM outputs as well as inputs.
 
-## Output Quality
-
-When producing code or documentation:
-
-- **Be comprehensive** — Provide complete, multi-section outputs with thorough explanations
-- **Include full pipeline setup** — Show the complete builder chain (extractor → reviser → filter → pipeline)
-- **Show schema design** — Include full DataDictionary with DynamicType definitions and validation rules
-- **Include configuration** — Show full `application.yml` blocks with DICE-specific properties
-- **Provide querying examples** — Show PropositionQuery patterns for different use cases
-- **Use latest API patterns** — Builder-style configuration, ContextId-based scoping, Memory facade
-
 ## Core Concepts
 
 DICE is built on a proposition-based architecture inspired by the General User Models (GUM) research from Stanford/Microsoft.
@@ -27,15 +16,6 @@ Input → Pipeline → Propositions (System of Record) → Projections
 ```
 
 **Propositions** are confidence-weighted natural language statements. They are the system of record. Multiple observations accumulate evidence, and high-confidence propositions project to typed backends.
-
-**Projections** (materialized views):
-| Projection | Backend | Use Case |
-|------------|---------|----------|
-| **Vector** | Vector store | Semantic retrieval |
-| **Neo4j** | Graph database | Graph traversal, relationship queries |
-| **Prolog** | Prolog engine | Inference, rules |
-| **Memory** | Agent context | Agentic recall (Memory facade) |
-| **Oracle** | NL QA | Natural language question answering |
 
 **Knowledge Types** (`KnowledgeType`):
 - `SEMANTIC` — General facts and knowledge
@@ -68,13 +48,9 @@ Key properties in `application.yml`:
 
 ```yaml
 dice:
-  security:
-    api-key:
-      enabled: false
-      keys: []
-      header-name: X-API-Key
-      path-patterns:
-        - /api/v1/**
+  memory:
+    min-confidence: 0.5
+    default-limit: 10
   resolver:
     in-memory:
       max-distance-ratio: 0.2
@@ -82,16 +58,11 @@ dice:
       min-part-length: 4
     escalating:
       heuristic-only: false
-  memory:
-    min-confidence: 0.5
-    default-limit: 10
 ```
 
-## Schema Design
+## Step 1 — Define a Schema
 
 DICE uses a `DataDictionary` with `DynamicType` definitions to define the structure of the knowledge graph.
-
-### Defining Types with Validation
 
 ```java
 DynamicType personType = DynamicType.builder("Person")
@@ -104,52 +75,19 @@ DynamicType personType = DynamicType.builder("Person")
                 new NoVagueReferences(),
                 new LengthConstraint(150)
             ))
-            .build(),
-        ValidatedPropertyDefinition.builder()
-            .name("department")
-            .validationRules(List.of(new MinWordCount(1)))
             .build()
     ))
-    .parents(List.of())
     .creationPermitted(true)
     .build();
 
-DynamicType companyType = DynamicType.builder("Company")
-    .description("A business organization")
-    .ownProperties(List.of(
-        ValidatedPropertyDefinition.builder()
-            .name("name")
-            .validationRules(List.of(
-                new NotBlank(),
-                new NoVagueReferences(),
-                new LengthConstraint(150)
-            ))
-            .build()
-    ))
-    .parents(List.of())
-    .creationPermitted(true)
-    .build();
-
-DataDictionary schema = DataDictionary.fromDomainTypes("my-schema", List.of(personType, companyType));
+DataDictionary schema = DataDictionary.fromDomainTypes("my-schema", List.of(personType));
 ```
 
-### Mention Validation Rules
+> **Why:** Without a schema, the pipeline accepts any proposition structure. Always define types with validation rules. See `references/entity-resolution.md` for mention validation rules.
 
-| Rule | Description |
-|------|-------------|
-| `NotBlank` | Rejects empty/whitespace mentions |
-| `NoVagueReferences()` | Rejects demonstratives like "this company" |
-| `LengthConstraint(max)` | Enforces maximum length |
-| `MinWordCount(min)` | Requires minimum word count |
-| `PatternConstraint(regex)` | Enforces regex pattern |
-| `AllOf(rules...)` | Compose — all rules must pass |
-| `AnyOf(rules...)` | Compose — any rule must pass |
+## Step 2 — Build the Pipeline
 
-## Proposition Pipeline
-
-The pipeline is the core of DICE. It extracts, resolves, revises, and stores propositions.
-
-### Building a Pipeline
+The pipeline extracts, resolves, revises, and stores propositions.
 
 ```java
 @Bean
@@ -167,7 +105,7 @@ PropositionPipeline propositionPipeline(
 }
 ```
 
-### Proposition Extractor (LLM-Powered)
+### Configure the Extractor
 
 ```java
 @Bean
@@ -182,7 +120,7 @@ PropositionExtractor propositionExtractor(Ai ai, LlmOptions llmOptions) {
 }
 ```
 
-### Proposition Reviser
+### Configure the Reviser
 
 ```java
 @Bean
@@ -195,130 +133,65 @@ PropositionReviser propositionReviser(Ai ai, LlmOptions llmOptions) {
 }
 ```
 
-### Processing Text
+> **Why:** Use `SchemaAdherence.STRICT` in production. `LOOSE` allows the LLM to create arbitrary proposition structures. See `references/pipeline.md` for full extractor/reviser details.
+
+## Step 3 — Set Up Entity Resolution
+
+Entity resolution maps mentions to canonical entities, preventing duplicates.
+
+```java
+@Bean
+EntityResolver entityResolver(EntityRepository entityRepository, Ai ai, LlmOptions llmOptions) {
+    var bakeoff = LlmCandidateBakeoff.builder()
+        .withAi(ai)
+        .withLlm(llmOptions)
+        .withPromptMode(PromptMode.COMPACT)
+        .build();
+    return EscalatingEntityResolver.builder()
+        .withRepository(entityRepository)
+        .withCandidateBakeoff(bakeoff)
+        .build();
+}
+```
+
+> **Recommended:** `EscalatingEntityResolver` with `LlmCandidateBakeoff` — uses heuristics first, falls back to LLM when uncertain. See `references/entity-resolution.md` for resolver types, candidate searchers, and resolution outcomes.
+
+## Step 4 — Process Text
 
 ```java
 // One-shot ingestion (with deduplication)
 var historyStore = new InMemoryChunkHistoryStore();
 var result = pipeline.processOnce(
-    text,
-    "source-id-123",
-    context,
-    historyStore
+    text, "source-id-123", context, historyStore
 );
 
 // Batch processing (no deduplication)
 var results = pipeline.process(chunks, context);
+
+// Persist results
+result.persist(propositionRepository, entityRepository);
 ```
 
-## Content Deduplication
+> **Why:** Always use deduplication for production. Without `processOnce` or a `ChunkHistoryStore`, identical content is reprocessed. See `references/pipeline.md` for incremental analysis and custom content hashing.
 
-DICE prevents reprocessing identical content through hash-based deduplication.
-
-### One-Shot Ingestion
+## Step 5 — Query Propositions
 
 ```java
-var historyStore = new InMemoryChunkHistoryStore();
+// By context
+var props = repository.query(PropositionQuery.forContextId(contextId));
 
-// processOnce returns null if content was already seen
-var result = pipeline.processOnce(
-    documentText,
-    "doc-123",
-    context,
-    historyStore
+// High-importance only
+var critical = repository.query(
+    PropositionQuery.forContextId(contextId).withMinImportance(0.8).orderedByImportance()
 );
 
-if (result == null) {
-    // Content was already processed — skip
-    return;
-}
-```
-
-### Custom Content Hashing
-
-```java
-ContentHasher normalizingHasher = text -> {
-    String normalized = text.trim().replaceAll("\\s+", " ");
-    return Sha256ContentHasher.hash(normalized);
-};
-
-var historyStore = new InMemoryChunkHistoryStore(normalizingHasher);
-```
-
-### Incremental Analysis
-
-For streaming or windowed analysis:
-
-```java
-@Bean
-IncrementalAnalyzer<String, PropositionResult> incrementalAnalyzer(
-        PropositionExtractor extractor,
-        PropositionReviser reviser,
-        PropositionRepository repository) {
-
-    return AbstractIncrementalAnalyzer.<String, PropositionResult>builder()
-        .withExtractor(extractor)
-        .withRevision(reviser, repository)
-        .withWindowConfig(WindowConfig.builder()
-            .windowSize(20)
-            .overlapSize(5)
-            .build())
-        .build();
-}
-```
-
-## Entity Resolution
-
-Entity resolution maps mentions to canonical entities, preventing duplicates. See `references/entity-resolution.md` for full details on resolver types, candidate searchers, and bakeoff configuration.
-
-**Recommended:** `EscalatingEntityResolver` with `LlmCandidateBakeoff` — uses heuristics first, falls back to LLM when uncertain.
-
-```java
-@Bean
-EntityResolver entityResolver(EntityRepository entityRepository, Ai ai, LlmOptions llmOptions) {
-    var bakeoff = LlmCandidateBakeoff.builder().withAi(ai).withLlm(llmOptions).withPromptMode(PromptMode.COMPACT).build();
-    return EscalatingEntityResolver.builder().withRepository(entityRepository).withCandidateBakeoff(bakeoff).build();
-}
-```
-
-**Resolution outcomes:** `NewEntity` (no match), `ExistingEntity` (match found), `ReferenceOnlyEntity` (known entity), `VetoedEntity` (non-creatable type).
-
-**Entity extraction** (standalone, without proposition pipeline):
-```java
-var results = EntityPipeline.builder().withExtractor(extractor).build().process(chunks, context);
-```
-
-## Proposition Querying
-
-Query propositions by context, entity, confidence, or importance:
-
-```java
-// Query by context
-var contextProps = repository.query(
-    PropositionQuery.forContextId(contextId)
-);
-
-// High-importance facts only
-var criticalFacts = repository.query(
-    PropositionQuery.forContextId(contextId)
-        .withMinImportance(0.8)
-        .orderedByImportance()
-);
-
-// Query by entity
+// By entity
 var aliceProps = repository.query(
-    PropositionQuery.forContextId(contextId)
-        .mentioningEntity("alice-123")
-);
-
-// Query by multiple entities
-var either = repository.query(
-    PropositionQuery.forContextId(contextId)
-        .mentioningAnyEntity("alice-123", "bob-456")
+    PropositionQuery.forContextId(contextId).mentioningEntity("alice-123")
 );
 
 // With confidence threshold
-var confidentFacts = repository.query(
+var confident = repository.query(
     PropositionQuery.forContextId(contextId)
         .withMinEffectiveConfidence(0.7)
         .orderedByEffectiveConfidence()
@@ -326,9 +199,9 @@ var confidentFacts = repository.query(
 );
 ```
 
-## Memory — Agentic Recall
+## Step 6 — Enable Agentic Recall (Memory Facade)
 
-The `Memory` facade provides agents access to DICE knowledge. See `references/memory.md` for eager search patterns, context scoping, and configuration.
+The `Memory` facade provides agents access to DICE knowledge.
 
 ```java
 var memory = Memory.forContext(contextId)
@@ -343,32 +216,14 @@ var memory = Memory.forContext(contextId)
 ai.withReferences(memory).respond(prompt);
 ```
 
-**Key settings:** `withMinConfidence` (default 0.5), `withDefaultLimit` (default 10), `withTopic`, `withEagerSearchAbout`, `narrowedBy`.
+> **Key settings:** `withMinConfidence` (default 0.5), `withDefaultLimit` (default 10), `withEagerSearchAbout`. Always scope by `ContextId`. See `references/memory.md` for eager search patterns and full agent integration examples.
 
-## Memory Maintenance
+## Step 7 — Project to Backends
 
-Automatically maintain the knowledge graph — retire low-confidence propositions, create abstractions:
-
-```java
-@Bean
-MemoryMaintenanceOrchestrator memoryMaintenanceOrchestrator(
-        PropositionRepository repository, MemoryConsolidator consolidator, PropositionAbstractor abstractor) {
-    return MemoryMaintenanceOrchestrator.builder()
-        .withRepository(repository).withConsolidator(consolidator).withAbstractor(abstractor)
-        .withAbstractionThreshold(5).withAbstractionTargetCount(3)
-        .withRetireBelow(0.1).withRetireDecayK(2.0).build();
-}
-// Usage
-memoryMaintenanceOrchestrator.maintain(contextId, sessionProps);
-```
-
-## Projections
-
-Projections materialize propositions to typed backends. See `references/projections.md` for full setup details on Vector, Neo4j, Prolog, Memory, and Oracle projections.
-
-### Relation-Based Graph Projection (Neo4j)
+Projections materialize propositions to typed backends.
 
 ```java
+// Neo4j graph projection
 @Bean
 GraphProjector graphProjector() {
     return RelationBasedGraphProjector.builder()
@@ -379,65 +234,54 @@ GraphProjector graphProjector() {
         .withPolicy(new LenientProjectionPolicy())
         .build();
 }
-```
 
-### Prolog Projection
-
-```java
-@Bean
-GraphProjector prologProjector(PrologEngine prologEngine) {
-    return new PrologProjector(prologEngine, prologSchema);
-}
-```
-
-### Memory Projection
-
-```java
+// Memory projection (for agentic recall)
 @Bean
 GraphProjector memoryProjector() {
     return DefaultMemoryProjector.DEFAULT;
 }
 ```
 
-## Integration with Embabel Agents
+> **Projection backends:** Vector (semantic retrieval), Neo4j (graph traversal), Prolog (inference), Memory (agentic recall), Oracle (NL QA). See `references/projections.md` for full setup on each backend.
 
-DICE integrates with Embabel agents through the `Memory` facade and `LlmReference` interface:
+## Step 8 — Maintain the Knowledge Graph
+
+Automatically maintain — retire low-confidence propositions, create abstractions:
 
 ```java
-@Agent
-public class KnowledgeAgent {
-
-    @Action
-    public Answer queryKnowledge(UserQuestion question, OperationContext context) {
-        var memory = Memory.forContext(question.contextId())
-            .withRepository(propositionRepository)
-            .withProjector(memoryProjector)
-            .withEagerSearchAbout(question.text(), 5);
-
-        return context.ai()
-            .withReferences(memory)
-            .creating(Answer.class)
-            .fromPrompt("Answer based on known facts: " + question.text());
-    }
+@Bean
+MemoryMaintenanceOrchestrator memoryMaintenanceOrchestrator(
+        PropositionRepository repository, MemoryConsolidator consolidator, PropositionAbstractor abstractor) {
+    return MemoryMaintenanceOrchestrator.builder()
+        .withRepository(repository)
+        .withConsolidator(consolidator)
+        .withAbstractor(abstractor)
+        .withAbstractionThreshold(5)
+        .withAbstractionTargetCount(3)
+        .withRetireBelow(0.1)
+        .withRetireDecayK(2.0)
+        .build();
 }
+// Usage
+memoryMaintenanceOrchestrator.maintain(contextId, sessionProps);
 ```
 
 ## Common Pitfalls
 
-1. **Not setting a schema** — Without a DataDictionary, the pipeline accepts any proposition structure. Always define types with validation rules.
-2. **Skipping entity resolution** — Without an EntityResolver, the same entity mentioned differently creates duplicates. Use `EscalatingEntityResolver` with `LlmCandidateBakeoff`.
-3. **Not using deduplication** — Without `processOnce` or a `ChunkHistoryStore`, identical content is reprocessed. Always use deduplication for production.
-4. **Ignoring mention filters** — Without `SchemaValidatedMentionFilter`, low-quality mentions pollute the knowledge graph. Always validate.
-5. **Not scoping by ContextId** — Without context scoping, propositions from different users/sessions mix together. Always use `ContextId`.
-6. **Not configuring memory eager search** — Without `withEagerSearchAbout`, the agent must search on every turn. Preload context for better latency.
-7. **Not maintaining the knowledge graph** — Over time, low-confidence propositions accumulate. Run `MemoryMaintenanceOrchestrator` periodically.
-8. **Using SchemaAdherence.LOOSE in production** — Loose adherence allows the LLM to create arbitrary proposition structures. Use `STRICT` for schema compliance.
-9. **Not setting min-confidence on Memory** — Without `withMinConfidence`, low-quality propositions flood the agent's context. Set an appropriate threshold.
-10. **Forgetting to persist results** — `processOnce` and `process` return results but don't auto-persist. Call `result.persist(repository, entityRepository)` or configure auto-persist.
+1. **Not setting a schema** — Always define `DataDictionary` types with validation rules.
+2. **Skipping entity resolution** — Use `EscalatingEntityResolver` with `LlmCandidateBakeoff`.
+3. **Not using deduplication** — Always use `processOnce` with a `ChunkHistoryStore` for production.
+4. **Ignoring mention filters** — Always use `SchemaValidatedMentionFilter` to validate.
+5. **Not scoping by ContextId** — Without context scoping, propositions from different users/sessions mix.
+6. **Not configuring memory eager search** — Preload context with `withEagerSearchAbout` for better latency.
+7. **Not maintaining the knowledge graph** — Run `MemoryMaintenanceOrchestrator` periodically to retire low-confidence propositions.
+8. **Using `SchemaAdherence.LOOSE` in production** — Use `STRICT` for schema compliance.
+9. **Not setting min-confidence on Memory** — Without `withMinConfidence`, low-quality propositions flood the agent's context.
+10. **Forgetting to persist results** — Call `result.persist(repository, entityRepository)` or configure auto-persist.
 
 ## Reference Files
 
-- `references/pipeline.md` — Proposition pipeline architecture, extractor/reviser templates, deduplication, incremental analysis
+- `references/pipeline.md` — Pipeline architecture, extractor/reviser templates, deduplication, incremental analysis
 - `references/projections.md` — Projection backends (Vector, Neo4j, Prolog, Memory, Oracle) setup and configuration
 - `references/entity-resolution.md` — Entity resolver types, candidate searchers, bakeoff configuration, resolution outcomes
 - `references/memory.md` — Memory facade, eager search patterns, context scoping, integration with LLM calls

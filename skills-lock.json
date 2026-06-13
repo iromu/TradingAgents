@@ -23,25 +23,25 @@
       "source": "iromu/awesome-qwen",
       "sourceType": "github",
       "skillPath": "skills/embabel-agent/SKILL.md",
-      "computedHash": "11c9a1a63d139a6a3ff1212a7049e462c91eaa017a8a9fcc02a11c9bcdb25d5f"
+      "computedHash": "2bfd7e3567ebfb5dc6275c7caf176539ea83399ff71137c8a6c4b8602e91ca44"
     },
     "embabel-chatbot": {
       "source": "iromu/awesome-qwen",
       "sourceType": "github",
       "skillPath": "skills/embabel-chatbot/SKILL.md",
-      "computedHash": "3201e417279b0f165c0dd4ffb09c90ab9ad17c6409aafc451460a0b07f687d3a"
+      "computedHash": "59f7ca66863440af3055ac0564fafc1327095623746a9502a811376b5c46fb10"
     },
     "embabel-dice": {
       "source": "iromu/awesome-qwen",
       "sourceType": "github",
       "skillPath": "skills/embabel-dice/SKILL.md",
-      "computedHash": "7e202f5e61b309728806942978e75665fe01902b9744ddcba7a10b7b0ccbb175"
+      "computedHash": "67003f582964967e68711f4f0eb8891102fdc60a7d3f9e58cf034128e8d07bc2"
     },
     "embabel-drivine4j": {
       "source": "iromu/awesome-qwen",
       "sourceType": "github",
       "skillPath": "skills/embabel-drivine4j/SKILL.md",
-      "computedHash": "880a200270512e8ef0fb63d77ab98d7aa51b869b088d1e55fe163868d6579e35"
+      "computedHash": "a44c3aeb99662c71b471deb8fb32de5a655be83864af8412b9d1b9680ca6c9ef"
     },
     "git-wiki": {
       "source": "yysun/awesome-agent-world",
