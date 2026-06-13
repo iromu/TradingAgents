@@ -3,7 +3,7 @@ title: "Gekko Project Wiki"
 type: "index"
 status: "active"
 language: "default"
-last_commit: "b992def03feac39f3ebcade5435b230f1d33eccc"
+last_commit: "f41770ef0d59b84808c7fecf5ff54893231dfe2a"
 updated_at: "2026-06-13"
 ---
 
@@ -54,12 +54,13 @@ See `[[trading-workflow]]` for the full step-by-step flow.
 | Main agent logic | `[[trader-agent]]` |
 | Agent configuration | `[[agent-configuration]]` |
 | Market data tools | `[[market-data-tools]]` |
+| Custom indicators | `[[technical-indicators]]` |
 | Data sources | `[[data-sources]]` |
 | Investment debate | `[[investment-debate]]` |
 | Risk debate | `[[risk-debate]]` |
 | Human-in-the-loop | `[[human-in-the-loop]]` |
 | Caching layer | `[[file-cache]]` |
-| Custom indicators | `[[technical-indicators]]` |
+| Test coverage | `[[test-coverage]]` |
 
 ## What should I avoid breaking?
 
@@ -77,5 +78,6 @@ See `[[trading-workflow]]` for the full step-by-step flow.
 - **Market tools:** `src/main/java/com/embabel/gekko/tools/MarketDataTools.java`
 - **HITL:** `src/main/java/com/embabel/gekko/htmx/HitlService.java`, `src/main/java/com/embabel/gekko/htmx/HitlAgenticEventListener.java`
 - **Caching:** `src/main/java/com/embabel/gekko/util/FileCache.java`
+- **Utilities:** `[[date-utils]]`, `[[indicator-mapper]]`
 - **UI:** `src/main/resources/templates/` (Thymeleaf templates)
 - **Prompts:** `src/main/resources/prompts/` (Jinja templates)

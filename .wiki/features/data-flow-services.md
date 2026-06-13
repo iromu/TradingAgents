@@ -9,7 +9,8 @@ source_paths:
   - "src/main/java/com/embabel/gekko/dataflows/VendorRouter.java"
   - "src/main/java/com/embabel/gekko/tools/FundamentalDataTools.java"
   - "src/main/java/com/embabel/gekko/tools/NewsDataTools.java"
-updated_at: "2026-06-11"
+  - "src/main/java/com/embabel/gekko/tools/MarketDataTools.java"
+updated_at: "2026-06-13"
 ---
 
 # Data Flow Services
@@ -51,13 +52,8 @@ The data layer fetches stock market data from external APIs and caches results l
 
 - **`FundamentalDataTools`** — Exposes financial data methods as LLM tools (callable by agent prompts)
 - **`NewsDataTools`** — Exposes news and sentiment methods as LLM tools
-- **`MarketDataTools`** — Exposes stock data and technical indicator methods as LLM tools
+- **`MarketDataTools`** — Exposes stock data and technical indicator methods as LLM tools → `[[market-data-tools]]`
 
 ## Cache Behavior
 
-All data service methods use file-based caching:
-1. Check if a cached JSON file exists
-2. If yes, return the cached response
-3. If no, call the API, save the response, then return it
-
-This reduces API costs and speeds up repeated runs.
+All data service methods use file-based caching → `[[file-cache]]`.
