@@ -12,8 +12,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
-import java.util.Optional;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 @Slf4j
@@ -22,6 +24,8 @@ public class FileCache {
 
     private final File baseDir;
     private final ObjectMapper mapper;
+    /** Per-key locks to prevent concurrent duplicate computation. */
+    private final Map<String, Object> lockMap = new ConcurrentHashMap<>();
 
     public FileCache() {
         this.baseDir = new File("data/llm/cache");
@@ -30,6 +34,35 @@ public class FileCache {
         this.mapper = new ObjectMapper()
                 .enable(SerializationFeature.INDENT_OUTPUT)
                 .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES);
+    }
+
+    /**
+     * Sanitizes a cache key to prevent path traversal attacks.
+     * Strips path separators, null bytes, and other dangerous characters.
+     */
+    private String sanitizeKey(String key) {
+        if (key == null || key.isBlank()) {
+            throw new IllegalArgumentException("Cache key must not be null or blank");
+        }
+        // Strip path traversal sequences and dangerous characters
+        String sanitized = key
+                .replace("..", "")
+                .replace("/", "")
+                .replace("\\", "")
+                .replace("\0", "")
+                .replace(";", "")
+                .replace("&", "")
+                .replace("|", "")
+                .replace("*", "")
+                .replace("?", "")
+                .replace("<", "")
+                .replace(">", "")
+                .replace("'", "")
+                .replace("\"", "");
+        if (sanitized.isBlank()) {
+            throw new IllegalArgumentException("Cache key must not be empty after sanitization");
+        }
+        return sanitized;
     }
 
     private String hashKey(String key) {
@@ -46,35 +79,71 @@ public class FileCache {
     }
 
     private File fileForKey(String key, String extension) {
-        return new File(baseDir, key.toUpperCase() + extension);
+        String sanitized = sanitizeKey(key);
+        String hashed = hashKey(sanitized);
+        return new File(baseDir, hashed + extension);
     }
 
-    public <T> Optional<T> get(String key, Class<T> clazz) {
+    /**
+     * Get a cached value by key, or return null if not found.
+     */
+    public <T> T get(String key, Class<T> clazz) {
         File jsonFile = fileForKey(key, ".json");
         File mdFile = fileForKey(key, ".md");
 
         try {
             if (jsonFile.exists()) {
-                return Optional.of(mapper.readValue(jsonFile, clazz));
+                return mapper.readValue(jsonFile, clazz);
             } else if (mdFile.exists()) {
                 String content = Files.readString(mdFile.toPath(), StandardCharsets.UTF_8);
-                return Optional.of(clazz.cast(content));
+                return clazz.cast(content);
             }
         } catch (IOException ex) {
             log.error("Failed to read cache for key {}: {}", key, ex.getMessage(), ex);
         }
 
-        return Optional.empty();
+        return null;
     }
 
+    /**
+     * Get a cached value by key, or compute and save it using the supplier.
+     * Uses per-key locking to prevent concurrent duplicate computation.
+     * Both threads requesting the same key will compute exactly once.
+     * Different keys compute independently.
+     */
     public <T> T getOrCompute(String key, Class<T> clazz, Supplier<T> supplier) {
-        return get(key, clazz).orElseGet(() -> {
-            T value = supplier.get();
-            save(key, value);
-            return value;
-        });
+        // Fast path: check cache without locking
+        T cached = get(key, clazz);
+        if (cached != null) {
+            return cached;
+        }
+
+        // Per-key locking: get or create a lock object for this key
+        Object lock = lockMap.computeIfAbsent(key, k -> new Object());
+
+        synchronized (lock) {
+            // Double-check after acquiring lock (another thread may have computed)
+            cached = get(key, clazz);
+            if (cached != null) {
+                return cached;
+            }
+
+            try {
+                T value = supplier.get();
+                save(key, value);
+                return value;
+            } finally {
+                // Clean up the per-key lock after successful computation
+                // to allow new keys to be computed in the future
+                lockMap.remove(key, lock);
+            }
+        }
     }
 
+    /**
+     * Save a value to the cache. Uses atomic write (temp file + rename)
+     * to prevent partial read corruption.
+     */
     public void save(String key, Object value) {
         try {
             if (value instanceof TraderAgent.Report report) {
@@ -86,15 +155,23 @@ public class FileCache {
                 mapper.writeValue(fileForKey(key, ".json"), value);
             }
         } catch (IOException e) {
-            log.error("Failed to save cache for key {}: {}", key, e.getMessage(), e);
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to save cache for key " + key + ": " + e.getMessage(), e);
         }
     }
 
-    private void saveMarkdown(String key, String markdown) throws IOException {
+    private void saveMarkdown(String key, String markdown) throws RuntimeException {
         File mdFile = fileForKey(key, ".md");
-        try (FileWriter fw = new FileWriter(mdFile, StandardCharsets.UTF_8)) {
+        File tempFile = new File(mdFile.getParentFile(), mdFile.getName() + ".tmp");
+        try (FileWriter fw = new FileWriter(tempFile, StandardCharsets.UTF_8)) {
             fw.write(markdown);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to write cache for key " + key + ": " + e.getMessage(), e);
+        }
+        // Atomic rename: temp file → final file
+        try {
+            Files.move(tempFile.toPath(), mdFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            log.error("Failed to atomically save cache for key {}: {}", key, e.getMessage(), e);
         }
     }
 }

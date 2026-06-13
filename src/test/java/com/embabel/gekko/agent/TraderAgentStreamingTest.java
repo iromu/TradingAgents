@@ -70,7 +70,7 @@ class TraderAgentStreamingTest {
             if (quoteStart >= 0 && quoteEnd > quoteStart) {
                 String extracted = content.substring(quoteStart + 1, quoteEnd).trim();
                 if (!extracted.isEmpty()) {
-                    return new Ticker(extracted);
+                    return new Ticker(extracted, "");
                 }
             }
         }
@@ -81,10 +81,10 @@ class TraderAgentStreamingTest {
             if (prevQuote >= 0) {
                 String extracted = content.substring(prevQuote + 1, lastQuoteStart).trim();
                 if (!extracted.isEmpty()) {
-                    return new Ticker(extracted);
+                    return new Ticker(extracted, "");
                 }
             }
         }
-        return new Ticker(content);
+        return new Ticker(content, "");
     }
 }

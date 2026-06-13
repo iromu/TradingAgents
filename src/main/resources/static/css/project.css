@@ -48,3 +48,120 @@
     font-weight: bold;
 }
 
+/* =======================
+   Human-in-the-Loop (HITL)
+   ======================= */
+
+.error-box {
+    background: #1a0505;
+    border: 1px solid #ef4444;
+    border-radius: 8px;
+    padding: 16px;
+    margin-bottom: 24px;
+}
+
+.error-box h3 {
+    color: #ef4444;
+    margin-top: 0;
+}
+
+.error-box code {
+    background: #0a0a0a;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', monospace;
+    color: #fca5a5;
+}
+
+.error-message {
+    background: #0a0a0a;
+    padding: 12px;
+    border-radius: 6px;
+    font-family: 'Courier New', monospace;
+    font-size: 0.9rem;
+    color: #fca5a5;
+    white-space: pre-wrap;
+    max-height: 200px;
+    overflow-y: auto;
+    margin: 12px 0;
+}
+
+.error-time {
+    color: #9ca3af;
+    font-size: 0.85rem;
+    margin-bottom: 0;
+}
+
+.hitl-form {
+    background: #0f172a;
+    border: 1px solid #334155;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 24px;
+}
+
+.hitl-form h3 {
+    color: #fbbf24;
+    margin-top: 0;
+}
+
+.hitl-form .form-group {
+    margin-bottom: 16px;
+}
+
+.hitl-form label {
+    display: block;
+    color: #e2e8f0;
+    font-weight: 500;
+    margin-bottom: 6px;
+}
+
+.hitl-form textarea {
+    width: 100%;
+    background: #0a0a0a;
+    border: 1px solid #334155;
+    border-radius: 6px;
+    color: #e2e8f0;
+    padding: 10px;
+    font-size: 0.95rem;
+    resize: vertical;
+    transition: border-color 0.2s;
+}
+
+.hitl-form textarea:focus {
+    outline: none;
+    border-color: #3b82f6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.3);
+}
+
+.form-actions {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.cancel-btn {
+    color: #9ca3af;
+    text-decoration: none;
+    padding: 12px 18px;
+    border: 1px solid #374151;
+    border-radius: 8px;
+    transition: all 0.2s;
+}
+
+.cancel-btn:hover {
+    color: #fff;
+    border-color: #6b7280;
+    background: #1f2937;
+}
+
+.hitl-status .info-text {
+    color: #94a3b8;
+    font-size: 0.85rem;
+    background: #0f172a;
+    padding: 12px;
+    border-radius: 6px;
+    border-left: 3px solid #3b82f6;
+}
+

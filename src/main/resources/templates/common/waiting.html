@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title th:text="${pageTitle} ?: 'Waiting'">Waiting</title>
+    <link rel="stylesheet" th:href="@{/css/project.css}" />
+    <style>
+        .waiting-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+        }
+        .waiting-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .waiting-header h2 {
+            color: #f0c040;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .waiting-header p {
+            color: #aaa;
+            font-size: 0.95rem;
+        }
+        .waiting-form {
+            background: #1a1a2e;
+            border: 1px solid #333;
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+        }
+        .waiting-form h3 {
+            color: #e0e0e0;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        .form-group label {
+            display: block;
+            color: #ccc;
+            font-size: 0.9rem;
+            margin-bottom: 0.5rem;
+        }
+        .form-group textarea,
+        .form-group input[type="text"] {
+            width: 100%;
+            padding: 0.75rem;
+            background: #0f0f23;
+            border: 1px solid #444;
+            border-radius: 4px;
+            color: #e0e0e0;
+            font-size: 0.95rem;
+            font-family: inherit;
+            box-sizing: border-box;
+        }
+        .form-group textarea {
+            min-height: 100px;
+            resize: vertical;
+        }
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .checkbox-group input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #4CAF50;
+        }
+        .checkbox-group label {
+            color: #ccc;
+            font-size: 0.95rem;
+            margin-bottom: 0;
+        }
+        .form-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: flex-end;
+            margin-top: 1.5rem;
+        }
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 4px;
+            font-size: 0.95rem;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .btn-approve {
+            background: #4CAF50;
+            color: white;
+        }
+        .btn-approve:hover {
+            background: #45a049;
+        }
+        .btn-submit {
+            background: #2196F3;
+            color: white;
+        }
+        .btn-submit:hover {
+            background: #1976D2;
+        }
+        .btn-cancel {
+            background: #555;
+            color: #ccc;
+        }
+        .btn-cancel:hover {
+            background: #666;
+        }
+        .debate-preview {
+            background: #0f0f23;
+            border: 1px solid #333;
+            border-radius: 4px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .debate-preview h4 {
+            color: #aaa;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
+        }
+        .debate-entry {
+            padding: 0.75rem 0;
+            border-bottom: 1px solid #222;
+        }
+        .debate-entry:last-child {
+            border-bottom: none;
+        }
+        .debate-turn {
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.25rem;
+        }
+        .debate-turn.bull {
+            color: #4CAF50;
+        }
+        .debate-turn.bear {
+            color: #f44336;
+        }
+        .debate-text {
+            color: #ccc;
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        .sse-status {
+            text-align: center;
+            color: #888;
+            font-size: 0.85rem;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+<div class="waiting-container">
+    <div class="waiting-header">
+        <h2>Review Required</h2>
+        <p>The investment debate is complete. Please review the debate and provide your feedback before the final plan is generated.</p>
+    </div>
+
+    <!-- Debate preview -->
+    <div class="waiting-form">
+        <h3>Investment Debate</h3>
+        <div class="debate-preview">
+            <h4>Debate History</h4>
+            <div th:each="turn : ${debateHistory}">
+                <div class="debate-entry">
+                    <div class="debate-turn" th:classappend="${turn.bull} ? 'bull' : 'bear'" th:text="${turn.bull} ? 'Bull' : 'Bear'">Turn</div>
+                    <div class="debate-text" th:text="${turn.text}">Content</div>
+                </div>
+            </div>
+            <div th:if="${#lists.isEmpty(debateHistory)}" class="debate-entry">
+                <div class="debate-text" style="color: #888; font-style: italic;">No debate history available.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- HITL Form -->
+    <form th:action="@{/status/{processId}/waitfor(processId=${processId})}" method="post" class="waiting-form">
+        <h3>Your Feedback</h3>
+
+        <div class="form-group">
+            <label for="feedback">Feedback / Instructions (optional)</label>
+            <textarea id="feedback" name="feedback" maxlength="1000" placeholder="Provide feedback, corrections, or additional instructions for the investment plan..."></textarea>
+        </div>
+
+        <div class="form-group">
+            <div class="checkbox-group">
+                <input type="checkbox" id="approved" name="approved" checked />
+                <label for="approved">Approve and proceed with generating the final investment plan</label>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a th:href="@{/}" class="btn btn-cancel">Cancel</a>
+            <button type="submit" class="btn btn-submit">Submit Feedback</button>
+        </div>
+    </form>
+
+    <div class="sse-status">
+        <p>Waiting for your input. Submit the form to continue.</p>
+    </div>
+</div>
+</body>
+</html>

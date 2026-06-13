@@ -1,0 +1,55 @@
+<html xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{common/layout :: layout(~{::title}, ~{::section})}">
+<head>
+    <title>Human Review Required</title>
+</head>
+<body>
+<section>
+    <h2>⚠️ Agent Error — Human Review Required</h2>
+
+    <div class="error-box">
+        <h3>Process Failed</h3>
+        <p><strong>Process ID:</strong> <code th:text="${hitlSession.processId}">N/A</code></p>
+        <p><strong>Agent:</strong> <span th:text="${hitlSession.agentName}">N/A</span></p>
+        <div class="error-message" th:text="${hitlSession.errorMessage}">Error details not available.</div>
+        <p class="error-time" th:text="${#temporals.format(hitlSession.occurredAt, 'yyyy-MM-dd HH:mm:ss')}">N/A</p>
+    </div>
+
+    <div class="hitl-form">
+        <h3>Provide Feedback to Retry</h3>
+        <p>
+            The agent encountered an error during execution. You can provide additional context or instructions
+            to help the agent retry successfully.
+        </p>
+
+        <form th:action="@{/status/{processId}/resubmit(processId=${hitlSession.processId})}" method="post">
+            <input type="hidden" name="processId" th:value="${hitlSession.processId}" />
+
+            <div class="form-group">
+                <label for="userInput">Additional Input (e.g., corrected ticker, alternative query)</label>
+                <textarea id="userInput" name="userInput" rows="3" cols="40"
+                          placeholder="e.g., Try ticker: AAPL instead"></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="feedback">Feedback / Instructions for the Agent</label>
+                <textarea id="feedback" name="feedback" rows="4" cols="40"
+                          placeholder="e.g., The previous attempt failed because... Please try again with..."></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="submit-btn">Resubmit with Feedback</button>
+                <a href="/" class="cancel-btn">Cancel — Return Home</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="hitl-status">
+        <p class="info-text">
+            ℹ️ The agent will restart with your feedback incorporated into the next attempt.
+            The original process will remain in a failed state.
+        </p>
+    </div>
+</section>
+</body>
+</html>

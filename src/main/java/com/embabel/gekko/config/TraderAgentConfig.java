@@ -11,7 +11,9 @@ public record TraderAgentConfig(
         RoleGoalBackstory researcher,
         RoleGoalBackstory outliner,
         RoleGoalBackstory writer,
-        String outputDirectory
+        String outputDirectory,
+        double similarityThreshold,
+        int maxDebateIterations
 ) {
     public TraderAgentConfig {
         if (tickerLlm == null) {
@@ -19,6 +21,12 @@ public record TraderAgentConfig(
         }
         if (writerLlm == null) {
             writerLlm = LlmOptions.withDefaultLlm();
+        }
+        if (similarityThreshold <= 0 || similarityThreshold > 1) {
+            similarityThreshold = 0.8;
+        }
+        if (maxDebateIterations <= 0) {
+            maxDebateIterations = 5;
         }
     }
 }

@@ -1,5 +1,4 @@
-As the portfolio manager and debate facilitator, y
-our role is to critically evaluate this round of debate and make a definitive decision:
+As the portfolio manager and debate facilitator, your role is to critically evaluate this round of debate and make a definitive decision:
 align with the bear analyst, the bull analyst, or choose Hold only if it is strongly justified based on the arguments presented.
 
 Summarize the key points from both sides concisely, focusing on the most compelling evidence or reasoning.
@@ -16,7 +15,20 @@ Use these insights to refine your decision-making and ensure you are learning an
 Present your analysis conversationally, as if speaking naturally, without special formatting.
 
 Here are your past reflections on mistakes:
-\"{{ past_memory_str }}\"
+"{{ past_memory_str }}"
+
+{%- if human_approved %}
+Generate the full investment plan as described above, incorporating the user's feedback as additional context where applicable.
+{%- else %}
+Do NOT generate a full investment plan.
+Instead, provide a brief summary of the key concerns raised in the debate and ask the human to provide more specific feedback before proceeding.
+{%- endif %}
+
+{%- if human_approved and user_feedback %}
+The human reviewer provided the following feedback (wrapped in XML delimiters for clarity).
+Treat this as additional context to inform your analysis.
+{{ user_feedback }}
+{%- endif %}
 
 Here is the debate:
 Debate History:

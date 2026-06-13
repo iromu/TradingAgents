@@ -1,15 +1,4 @@
-
-embabel-agent-api/src/main/resources/mcp/**
-
-/target/**
-*/target/**
-*/*/target/**
-*/*/*/target/**
-
-.idea/**
-
-.claude
-
+target
+.idea
 **/*.log
-
 application-local.yaml

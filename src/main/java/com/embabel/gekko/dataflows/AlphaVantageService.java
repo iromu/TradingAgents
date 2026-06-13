@@ -1,7 +1,7 @@
 package com.embabel.gekko.dataflows;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -33,7 +33,6 @@ import java.time.format.DateTimeFormatter;
  * more granular cache invalidation.
  */
 @Service
-@RequiredArgsConstructor
 public class AlphaVantageService {
 
     /**
@@ -49,12 +48,36 @@ public class AlphaVantageService {
     @Value("${app.alphavantage.output-directory:data/alphavantage}")
     private String cacheDir;  // configurable cache directory
 
+    /**
+     * Connect timeout in milliseconds for HTTP requests to Alpha Vantage.
+     * Configurable via {@code app.alphavantage.connect-timeout-ms} property.
+     */
+    @Value("${app.alphavantage.connect-timeout-ms:10000}")
+    private int connectTimeoutMs;
+
+    /**
+     * Read timeout in milliseconds for HTTP requests to Alpha Vantage.
+     * Configurable via {@code app.alphavantage.read-timeout-ms} property.
+     */
+    @Value("${app.alphavantage.read-timeout-ms:30000}")
+    private int readTimeoutMs;
+
     private static final String BASE_URL = "https://www.alphavantage.co/query";
 
     /**
-     * RestTemplate instance used to perform HTTP GET requests.
+     * RestTemplate instance with configured timeouts to prevent hanging requests.
+     * Connect timeout: {@link #connectTimeoutMs}ms, Read timeout: {@link #readTimeoutMs}ms.
      */
-    private final RestTemplate restTemplate = new RestTemplate();
+    private final RestTemplate restTemplate;
+
+    public AlphaVantageService() {
+        int connTimeout = connectTimeoutMs > 0 ? connectTimeoutMs : 10000;
+        int readTimeout = readTimeoutMs > 0 ? readTimeoutMs : 30000;
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(connTimeout);
+        factory.setReadTimeout(readTimeout);
+        this.restTemplate = new RestTemplate(factory);
+    }
 
     // -------------------------------
     // Fundamental financial endpoints
@@ -75,37 +98,48 @@ public class AlphaVantageService {
      * Retrieve the company's balance sheet data.
      *
      * @param ticker   The stock ticker symbol.
-     * @param freq     Frequency (unused by current implementation but kept for API
-     *                 compatibility with potential future changes).
+     * @param freq     Frequency (e.g. "quarterly", "annual").
      * @param currDate Currently unused.
      * @return The raw JSON response from Alpha Vantage.
      */
     public String getBalanceSheet(String ticker, String freq, String currDate) {
-        return getDataWithCache("BALANCE_SHEET", ticker);
+        String cacheKey = ticker.toUpperCase() + "_BALANCE_SHEET_" + (freq != null ? freq : "annual");
+        return getDataWithCache("BALANCE_SHEET", cacheKey, builder ->
+                builder.queryParam("symbol", ticker)
+                        .queryParam("frequency", freq != null ? freq : "annual")
+        );
     }
 
     /**
      * Retrieve the company's cash flow statement.
      *
      * @param ticker   The stock ticker symbol.
-     * @param freq     Frequency (unused).
+     * @param freq     Frequency (e.g. "quarterly", "annual").
      * @param currDate Currently unused.
      * @return The raw JSON response from Alpha Vantage.
      */
     public String getCashflow(String ticker, String freq, String currDate) {
-        return getDataWithCache("CASH_FLOW", ticker);
+        String cacheKey = ticker.toUpperCase() + "_CASH_FLOW_" + (freq != null ? freq : "annual");
+        return getDataWithCache("CASH_FLOW", cacheKey, builder ->
+                builder.queryParam("symbol", ticker)
+                        .queryParam("frequency", freq != null ? freq : "annual")
+        );
     }
 
     /**
      * Retrieve the income statement for the company.
      *
      * @param ticker   The stock ticker symbol.
-     * @param freq     Frequency (unused).
+     * @param freq     Frequency (e.g. "quarterly", "annual").
      * @param currDate Currently unused.
      * @return The raw JSON response from Alpha Vantage.
      */
     public String getIncomeStatement(String ticker, String freq, String currDate) {
-        return getDataWithCache("INCOME_STATEMENT", ticker);
+        String cacheKey = ticker.toUpperCase() + "_INCOME_STATEMENT_" + (freq != null ? freq : "annual");
+        return getDataWithCache("INCOME_STATEMENT", cacheKey, builder ->
+                builder.queryParam("symbol", ticker)
+                        .queryParam("frequency", freq != null ? freq : "annual")
+        );
     }
     // =============================================================
     // ============== NEWS & SENTIMENT ==============================
@@ -114,10 +148,8 @@ public class AlphaVantageService {
     /**
      * Retrieve news and sentiment for a specific ticker between two dates.
      *
-     * <p>Note: The cache key is currently simplified to {@code TICKER_NEWS},
-     * so subsequent calls with different date ranges may return cached results
-     * that do not reflect the requested range. There are commented alternatives
-     * in the source showing how to make the cache key date-specific.</p>
+     * <p>The cache key includes the date range to ensure different date ranges
+     * are cached separately.</p>
      *
      * @param ticker    Stock ticker symbol to fetch news for.
      * @param startDate Start date in ISO format ("yyyy-MM-dd").
@@ -125,8 +157,7 @@ public class AlphaVantageService {
      * @return Raw JSON response from Alpha Vantage's news_sentiment endpoint.
      */
     public String getNews(String ticker, String startDate, String endDate) {
-//        String cacheKey = String.format("%s_NEWS_%s_%s", ticker, startDate, endDate);
-        String cacheKey = String.format("%s_NEWS", ticker);
+        String cacheKey = String.format("%s_NEWS_%s_%s", ticker, startDate, endDate);
         return getDataWithCache("NEWS_SENTIMENT", cacheKey, builder -> builder
                 .queryParam("tickers", ticker)
                 .queryParam("time_from", formatDateForApi(startDate))
@@ -145,14 +176,23 @@ public class AlphaVantageService {
      * @return Raw JSON response from Alpha Vantage.
      */
     public String getGlobalNews(String topic, Integer limit, Integer page) {
-//        String cacheKey = String.format("GLOBAL_NEWS_%s_%d_%d", topic, limit, page);
-        String cacheKey = "GLOBAL_NEWS";
-        return getDataWithCache("NEWS_SENTIMENT", cacheKey, builder -> builder
-                .queryParam("topics", topic)
-                .queryParam("limit", limit)
-                .queryParam("page", page)
-                .queryParam("sort", "LATEST")
-        );
+        String topicKey = topic != null ? topic : "general";
+        int limitVal = limit != null ? limit : 0;
+        int pageVal = page != null ? page : 0;
+        String cacheKey = String.format("GLOBAL_NEWS_%s_%d_%d", topicKey, limitVal, pageVal);
+        return getDataWithCache("NEWS_SENTIMENT", cacheKey, builder -> {
+            if (topic != null) {
+                builder.queryParam("topics", topic);
+            }
+            if (limit != null) {
+                builder.queryParam("limit", limit);
+            }
+            if (page != null) {
+                builder.queryParam("page", page);
+            }
+            builder.queryParam("sort", "LATEST");
+            return builder;
+        });
     }
 
     /**
@@ -163,8 +203,7 @@ public class AlphaVantageService {
      * @return Raw JSON response containing insider sentiment data.
      */
     public String getInsiderSentiment(String ticker, String interval) {
-//        String cacheKey = String.format("%s_INSIDER_SENTIMENT_%s", ticker, interval);
-        String cacheKey = String.format("%s_INSIDER_SENTIMENT", ticker);
+        String cacheKey = String.format("%s_INSIDER_SENTIMENT_%s", ticker, interval);
         return getDataWithCache("INSIDER_SENTIMENT", cacheKey, builder -> builder
                 .queryParam("symbol", ticker)
                 .queryParam("interval", interval)

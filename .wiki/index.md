@@ -3,8 +3,8 @@ title: "Gekko Project Wiki"
 type: "index"
 status: "active"
 language: "default"
-last_commit: "8695eacc8bbd6683a9bf630232e52f1e3b54b168"
-updated_at: "2026-06-11"
+last_commit: "1b60aaa0b81251794d5e8868af485bbea2f2b0da"
+updated_at: "2026-06-13"
 ---
 
 # Gekko: Multi-Agent Trading Research Platform

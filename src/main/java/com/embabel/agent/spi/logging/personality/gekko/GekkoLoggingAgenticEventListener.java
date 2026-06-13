@@ -7,9 +7,11 @@ import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
 @Component
+@Order(200)
 @Profile("gekko")
 public class GekkoLoggingAgenticEventListener extends LoggingAgenticEventListener {
 
