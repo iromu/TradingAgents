@@ -40,8 +40,10 @@ The `TraderAgent` is the main orchestrator. It's a single class with ~20 `@Actio
 
 | Dependency | Type | Purpose |
 |-----------|------|---------|
+| `marketDataTools` | `MarketDataTools` | LLM tools for stock data and indicators |
 | `fundamentalDataTools` | `FundamentalDataTools` | LLM tools for financial data |
 | `newsDataTools` | `NewsDataTools` | LLM tools for news data |
+| `riskDebateService` | `RiskDebateService` | Risk assessment debate |
 | `cache` | `FileCache` | Disk-based caching layer |
 | `config` | `TraderAgentConfig` | Configuration (LLM options, etc.) |
 | `bullAgent` | `BullResearcher` | Bull argument agent |
@@ -52,10 +54,10 @@ The `TraderAgent` is the main orchestrator. It's a single class with ~20 `@Actio
 
 | Resource | Location |
 |----------|----------|
-| `promptFundamentalsAnalyst` | `classpath:prompts/analysts/FundamentalsAnalyst.txt` |
-| `promptMarketAnalyst` | `classpath:prompts/analysts/MarketAnalyst.txt` |
-| `promptNewsAnalyst` | `classpath:prompts/analysts/NewsAnalyst.txt` |
-| `promptSocialMediaAnalyst` | `classpath:prompts/analysts/SocialMediaAnalyst.txt` |
+| `promptFundamentalsAnalyst` | `classpath:prompts/analysts/FundamentalsAnalyst.jinja` |
+| `promptMarketAnalyst` | `classpath:prompts/analysts/MarketAnalyst.jinja` |
+| `promptNewsAnalyst` | `classpath:prompts/analysts/NewsAnalyst.jinja` |
+| `promptSocialMediaAnalyst` | `classpath:prompts/analysts/SocialMediaAnalyst.jinja` |
 
 ## Streaming Support
 

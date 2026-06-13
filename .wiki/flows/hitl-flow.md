@@ -78,9 +78,18 @@ When an agent process enters the `FAILED` state (e.g., LLM error, network failur
 | File | Role |
 |------|------|
 | `HitlAgenticEventListener` | Listens for process failures |
-| `HitlService` | Manages HITL sessions |
+| `HitlService` | Manages HITL sessions with TTL-based cleanup |
+| `HitlConfig` | Creates the `HitlService` bean (24h TTL) |
 | `ProcessStatusController.resubmit()` | POST handler for failure recovery |
 | `hitl.html` | Thymeleaf template for the form |
+
+### Session Management
+
+`HitlService` uses a 24-hour TTL:
+- Sessions older than 24 hours are automatically cleaned up every 5 minutes
+- Uses `ConcurrentHashMap` for thread-safe session storage
+- `computeIfAbsent()` prevents duplicate session creation
+- `compute()` prevents concurrent update overwrites
 
 ## Security
 

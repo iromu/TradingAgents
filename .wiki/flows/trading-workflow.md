@@ -72,7 +72,16 @@ After the debate, the process enters a WAITING state:
 - **User actions:** Provide feedback, approve or reject
 - **Record:** `InvestmentReviewFeedback(feedback, approved)`
 
-### 7. Final Investment Plan
+### 7. Risk Assessment
+
+A risk debate runs to evaluate the plan from multiple risk perspectives:
+
+- **Service:** `RiskDebateService`
+- **Agents:** Aggressive, Conservative, Neutral debaters (3 rounds)
+- **Output:** `RiskAssessment(RiskLevel, reasoning)`
+- **Risk levels:** RISKY, NEUTRAL, CONSERVATIVE
+
+### 8. Final Investment Plan
 
 If approved, the ResearchManager generates the final plan:
 
@@ -80,7 +89,7 @@ If approved, the ResearchManager generates the final plan:
 - **Output:** `InvestmentPlan` with the final recommendation
 - **UI:** `plan.html` or `plan-review.html` displays the plan
 
-### 8. Logging
+### 9. Logging
 
 The full state is logged as JSON for later analysis and reflection.
 

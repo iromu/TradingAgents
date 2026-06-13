@@ -3,7 +3,7 @@ title: "Gekko Project Wiki"
 type: "index"
 status: "active"
 language: "default"
-last_commit: "1b60aaa0b81251794d5e8868af485bbea2f2b0da"
+last_commit: "b992def03feac39f3ebcade5435b230f1d33eccc"
 updated_at: "2026-06-13"
 ---
 
@@ -53,8 +53,9 @@ See `[[trading-workflow]]` for the full step-by-step flow.
 |------|------|
 | Main agent logic | `[[trader-agent]]` |
 | Agent configuration | `[[agent-configuration]]` |
+| Market data tools | `[[market-data-tools]]` |
 | Data sources | `[[data-sources]]` |
-| Debate flow | `[[investment-debate]]` |
+| Investment debate | `[[investment-debate]]` |
 | Risk debate | `[[risk-debate]]` |
 | Human-in-the-loop | `[[human-in-the-loop]]` |
 | Caching layer | `[[file-cache]]` |
@@ -70,7 +71,11 @@ See `[[trading-workflow]]` for the full step-by-step flow.
 ## Where do I look first?
 
 - **Agent code:** `src/main/java/com/embabel/gekko/agent/TraderAgent.java`
+- **Risk debate:** `src/main/java/com/embabel/gekko/agent/RiskDebateService.java`
 - **Config:** `src/main/java/com/embabel/gekko/config/TraderAgentConfig.java`
 - **Data layer:** `src/main/java/com/embabel/gekko/dataflows/AlphaVantageService.java`, `src/main/java/com/embabel/gekko/dataflows/YFinService.java`
+- **Market tools:** `src/main/java/com/embabel/gekko/tools/MarketDataTools.java`
+- **HITL:** `src/main/java/com/embabel/gekko/htmx/HitlService.java`, `src/main/java/com/embabel/gekko/htmx/HitlAgenticEventListener.java`
+- **Caching:** `src/main/java/com/embabel/gekko/util/FileCache.java`
 - **UI:** `src/main/resources/templates/` (Thymeleaf templates)
 - **Prompts:** `src/main/resources/prompts/` (Jinja templates)

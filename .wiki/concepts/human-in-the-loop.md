@@ -45,21 +45,21 @@ After the Bull/Bear debate completes but before generating the final plan:
 
 ## Implementation
 
-Gekko uses Embabel's native `WaitFor` mechanism:
+Gekko uses two HITL mechanisms:
+
+### Embabel's Native WaitFor
 
 - `WaitFor.formSubmission(title, FeedbackClass)` — creates a form from a Java record
 - The process enters `WAITING` state
 - A form is auto-generated from the record's fields
 - User submits the form → process resumes with feedback bound to the blackboard
 
-## Failure Recovery
+### Custom Failure Recovery
 
-If an agent process fails unexpectedly (network error, LLM timeout), Gekko has a fallback HITL mechanism:
-
-- `HitlAgenticEventListener` catches failures
-- User is shown a form to provide feedback
-- A new process is created with feedback injected
-- This is a **recovery** mechanism, not a deliberate checkpoint
+- `HitlService` manages HITL sessions with a 24-hour TTL
+- `HitlAgenticEventListener` catches process failures and creates sessions
+- User provides feedback → a new process is created with feedback injected
+- Sessions auto-expire after 24 hours
 
 ## Security
 

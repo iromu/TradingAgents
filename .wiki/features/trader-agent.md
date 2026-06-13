@@ -28,16 +28,17 @@ The TraderAgent is a **workflow orchestrator** — it doesn't make decisions its
 |--------|-------------|
 | `tickerFromForm()` | Validates and sanitizes user ticker input |
 | `generateFundamentalsReport()` | Pulls financial statements via `FundamentalDataTools` |
-| `generateMarketReport()` | Gets stock price + technical indicators |
+| `generateMarketReport()` | Gets stock price + technical indicators via `MarketDataTools` |
 | `generateNewsReport()` | Fetches news with sentiment scores |
 | `generateSocialMediaReport()` | Gets social sentiment data |
 | `prepareDebateBriefs()` | Distills 4 analyst reports into 4 briefs |
-| `debateInvestment()` | Runs Bull→Bear debate (2 rounds) |
+| `debateInvestment()` | Runs Bull→Bear debate (up to `maxDebateIterations`) |
 | `waitForReview()` | HITL checkpoint before final plan |
 | `researchManager()` | Generates final investment plan |
 | `generateResearchPlan()` | Creates a research plan for user review |
 | `waitForPlanApproval()` | HITL checkpoint before full execution |
 | `executeFullResearch()` | Runs the complete pipeline after approval |
+| `assessRisk()` | Runs risk debate via `RiskDebateService` |
 
 ## Data Flow
 
@@ -70,19 +71,32 @@ The agent uses Jinja templates for its LLM prompts:
 
 | Prompt | File |
 |--------|------|
-| Fundamentals Analyst | `prompts/analysts/FundamentalsAnalyst.txt` |
-| Market Analyst | `prompts/analysts/MarketAnalyst.txt` |
-| News Analyst | `prompts/analysts/NewsAnalyst.txt` |
-| Social Media Analyst | `prompts/analysts/SocialMediaAnalyst.txt` |
+| Fundamentals Analyst | `prompts/analysts/FundamentalsAnalyst.jinja` |
+| Market Analyst | `prompts/analysts/MarketAnalyst.jinja` |
+| News Analyst | `prompts/analysts/NewsAnalyst.jinja` |
+| Social Media Analyst | `prompts/analysts/SocialMediaAnalyst.jinja` |
 | Debate Distiller | `prompts/debate/Distiller.jinja` |
 | Research Manager | `prompts/managers/ResearchManager.jinja` |
+| Risk Manager | `prompts/managers/RiskManager.jinja` |
 | Trader | `prompts/trader/Trader.jinja` |
+| Aggressive Debator | `prompts/risk/AggressiveDebator.jinja` |
+| Conservative Debator | `prompts/risk/ConservativeDebator.jinja` |
+| Neutral Debator | `prompts/risk/NeutralDebator.jinja` |
 
 ## Sub-Agents
 
-The TraderAgent injects and calls two sub-agent classes:
+The TraderAgent injects and calls sub-agent classes:
 
 - **`BullResearcher`** — Argues in favor of the investment
 - **`BearResearcher`** — Argues against the investment
+- **`RiskDebateService`** — Runs risk debate between Aggressive, Conservative, and Neutral debaters
 
-Both use the same `argue()` method with different role prompts.
+## Dependencies
+
+| Dependency | Role |
+|------------|------|
+| `MarketDataTools` | Provides stock data and technical indicators |
+| `FundamentalDataTools` | Provides financial statement data |
+| `NewsDataTools` | Provides news data |
+| `RiskDebateService` | Runs the risk assessment debate |
+| `TemplateRenderer` | Renders Jinja prompt templates |

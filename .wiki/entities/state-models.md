@@ -67,6 +67,23 @@ record PlanApproval(String feedback, boolean approved)
 ```
 - Used in the research plan approval HITL checkpoint
 
+## Risk Assessment
+
+### RiskAssessment
+```java
+record RiskAssessment(RiskLevel level, String reasoning)
+```
+- `level` — the overall risk level
+- `reasoning` — the LLM's explanation for the risk assessment
+
+### RiskLevel
+```java
+enum RiskLevel { RISKY, NEUTRAL, CONSERVATIVE }
+```
+- **RISKY** — Aggressive stance, high risk tolerance
+- **NEUTRAL** — Balanced assessment
+- **CONSERVATIVE** — Cautious stance, low risk tolerance
+
 ## Report Interface
 
 All analyst reports implement `TraderAgent.Report`:

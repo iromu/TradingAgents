@@ -27,7 +27,9 @@ public record TraderAgentConfig(
     RoleGoalBackstory researcher,
     RoleGoalBackstory outliner,
     RoleGoalBackstory writer,
-    String outputDirectory
+    String outputDirectory,
+    double similarityThreshold,
+    int maxDebateIterations
 )
 ```
 
@@ -42,6 +44,8 @@ public record TraderAgentConfig(
 | `app.llm-options.outliner` | `RoleGoalBackstory` | (configurable) | Personality for outliners |
 | `app.llm-options.writer` | `RoleGoalBackstory` | (configurable) | Personality for writers |
 | `app.llm-options.output-directory` | `String` | (configurable) | Where to save outputs |
+| `app.llm-options.similarity-threshold` | `double` | 0.8 | Threshold for debate convergence |
+| `app.llm-options.max-debate-iterations` | `int` | 5 | Max rounds for investment debate |
 
 ## LLM Options
 

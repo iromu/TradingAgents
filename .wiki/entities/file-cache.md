@@ -17,15 +17,15 @@ updated_at: "2026-06-11"
 
 Cache files are stored in `data/llm/cache/` relative to the project root.
 
-## How It Works
+## Key Handling
 
-### Key Sanitization
+### Sanitization
 
-Cache keys are sanitized to prevent path traversal:
+Cache keys are sanitized to prevent path traversal and injection:
 - Removes `..`, `/`, `\`, null bytes, and shell metacharacters (`;`, `&`, `|`, `*`, `?`, `<`, `>`, `'`, `"`)
 - If the key is empty after sanitization, an exception is thrown
 
-### Key Hashing
+### Hashing
 
 Sanitized keys are hashed using SHA-256. The hash is used as the filename:
 ```
@@ -35,26 +35,24 @@ data/llm/cache/<sha256_hash>.md
 
 This prevents filename collisions and keeps filenames deterministic.
 
-### Read/Write Pattern
+## Read/Write Pattern
 
 **Read:**
-1. Acquire read lock
-2. Check if `.json` file exists → deserialize
-3. Check if `.md` file exists → read as string
-4. Return null if neither exists
+1. Check if `.json` file exists → deserialize
+2. Check if `.md` file exists → read as string
+3. Return null if neither exists
 
 **Write:**
-1. Acquire write lock
-2. If value is a `Report`, save both JSON and Markdown
-3. If value is a String, save as Markdown
-4. Otherwise, save as JSON
+1. If value is a `Report`, save both JSON and Markdown
+2. If value is a String, save as Markdown
+3. Otherwise, save as JSON
 
-### Thread Safety
+## Thread Safety
 
-Uses `ReentrantReadWriteLock`:
-- Read lock for cache lookups (multiple readers can run concurrently)
-- Write lock for cache saves (exclusive access)
-- Double-checked locking in `getOrCompute()` to avoid redundant computation
+Uses per-key locking via `ConcurrentHashMap<String, Object>`:
+- Each unique cache key gets its own lock object
+- Prevents concurrent duplicate computation — two threads requesting the same key compute exactly once
+- Multiple readers can proceed concurrently (no explicit read lock needed for file reads)
 
 ## Usage Pattern
 
@@ -66,6 +64,10 @@ Ticker ticker = cache.getOrCompute("AAPL_ticker", Ticker.class, () -> {
 });
 ```
 
-## Known Issues
+## API
 
-See `[[risks/filecache-race]]` for details on a known race condition in `getOrCompute()`.
+| Method | Returns | Description |
+|--------|---------|-------------|
+| `get(key, clazz)` | `T` (null if missing) | Get cached value by key |
+| `getOrCompute(key, clazz, supplier)` | `T` | Get or compute with per-key locking |
+| `save(key, value)` | void | Save a value to cache |

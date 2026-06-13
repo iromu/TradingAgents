@@ -51,6 +51,7 @@ The data layer fetches stock market data from external APIs and caches results l
 
 - **`FundamentalDataTools`** — Exposes financial data methods as LLM tools (callable by agent prompts)
 - **`NewsDataTools`** — Exposes news and sentiment methods as LLM tools
+- **`MarketDataTools`** — Exposes stock data and technical indicator methods as LLM tools
 
 ## Cache Behavior
 
