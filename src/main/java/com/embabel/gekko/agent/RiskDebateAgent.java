@@ -78,7 +78,7 @@ public class RiskDebateAgent {
         for (int round = 0; round < MAX_RISK_DEBATE_ROUNDS; round++) {
             // Aggressive speaks (Python: round-robin via latest_speaker, starts with Aggressive)
             currentAggressive = aggressiveDebator.argue(
-                    "Invest",
+                    traderProposal,
                     briefs.marketBrief(),
                     briefs.socialBrief(),
                     briefs.newsBrief(),
@@ -93,7 +93,7 @@ public class RiskDebateAgent {
 
             // Conservative speaks
             currentConservative = conservativeDebator.argue(
-                    "Invest",
+                    traderProposal,
                     briefs.marketBrief(),
                     briefs.socialBrief(),
                     briefs.newsBrief(),
@@ -108,7 +108,7 @@ public class RiskDebateAgent {
 
             // Neutral speaks
             currentNeutral = neutralDebator.argue(
-                    "Invest",
+                    traderProposal,
                     briefs.marketBrief(),
                     briefs.socialBrief(),
                     briefs.newsBrief(),
@@ -134,14 +134,14 @@ public class RiskDebateAgent {
                 + "\n\n--- NEUTRAL ---\n\n"
                 + String.join("\n\n--- NEUTRAL ---\n\n", neutralResponses);
 
-        return judgeRisk(ticker.content(), allResponses, actionContext);
+        return judgeRisk(ticker.content(), allResponses, traderProposal, actionContext);
     }
 
-    private RiskAssessment judgeRisk(String ticker, String debateOutput, ActionContext actionContext) {
+    private RiskAssessment judgeRisk(String ticker, String debateOutput, String traderProposal, ActionContext actionContext) {
         var model = Map.<String, Object>ofEntries(
                 Map.entry("ticker", ticker.toUpperCase()),
                 Map.entry("history", debateOutput),
-                Map.entry("trader_decision", "Invest"),
+                Map.entry("trader_decision", traderProposal),
                 Map.entry("past_memory_str", AgentUtils.NO_PAST_MEMORY)
         );
 
