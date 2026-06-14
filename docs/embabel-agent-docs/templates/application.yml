@@ -1,0 +1,125 @@
+---
+name: embabel-application-yml-template
+description: Application.yml configuration template for Embabel Agent projects
+---
+
+# Application.yml Configuration Template
+
+This template shows all major Embabel configuration sections.
+
+```yaml
+embabel:
+  # ==========================================
+  # Model Configuration
+  # ==========================================
+  models:
+    # Default LLM used when no specific model is configured
+    default-llm: gpt-4.1-mini
+    
+    # Role-based model selection - assign specific models to roles
+    llms:
+      cheapest: gpt-4o-mini
+      best: gpt-4o
+      reasoning: o1-preview
+      
+    # Default embedding model
+    default-embedding-model: text-embedding-3-small
+    
+    # Role-based embedding services
+    embedding-services:
+      fast: text-embedding-3-small
+      accurate: text-embedding-3-large
+
+  # ==========================================
+  # Agent Platform Configuration
+  # ==========================================
+  agent:
+    platform:
+      name: my-agent-platform
+      description: My Embabel Agent Platform
+      
+      # Execution mode: SIMPLE (sequential) or CONCURRENT (parallel)
+      process-type: SIMPLE
+      
+      # ==========================================
+      # Tool Loop Configuration
+      # ==========================================
+      toolloop:
+        max-iterations: 20
+        type: default  # or "parallel"
+        empty-response:
+          max-retries: 0  # 0 = default (exit with blank content), >0 = RetryWithFeedbackPolicy
+          nudge-message: "Please take one concrete action."
+        parallel:
+          per-tool-timeout: 30s
+          batch-timeout: 60s
+      
+      # ==========================================
+      # Autonomy Configuration
+      # ==========================================
+      autonomy:
+        agent-confidence-cut-off: 0.6
+        goal-confidence-cut-off: 0.6
+      
+      # ==========================================
+      # Logging Configuration
+      # ==========================================
+      logging:
+        personality: starwars  # starwars, severance, colossus, hitchhiker, montypython
+        include-plan: true
+        level: INFO
+      
+      # ==========================================
+      # REST Endpoints
+      # ==========================================
+      rest:
+        enabled: true
+        process-status-enabled: true
+        process-kill-enabled: true
+        process-events-enabled: true
+      
+      # ==========================================
+      # HTTP Client Configuration
+      # ==========================================
+      http-client:
+        connect-timeout: 25s
+        read-timeout: 1m
+      
+      # ==========================================
+      # SSE Configuration
+      # ==========================================
+      sse:
+        max-buffer-size: 100
+        max-process-buffers: 1000
+      
+      # ==========================================
+      # Process Repository
+      # ==========================================
+      process-repository:
+        window-size: 1000
+      
+      # ==========================================
+      # Scanning Configuration
+      # ==========================================
+      scanning:
+        annotation: true  # Auto-register beans with @Agent and @Agentic
+        bean: false       # Auto-register as agents Spring beans of type Agent
+
+# ==========================================
+# LLM Provider Configuration (example)
+# ==========================================
+# embabel:
+#   agent:
+#     platform:
+#       models:
+#         openai:
+#           max-attempts: 10
+#           backoff-millis: 5000
+#           backoff-multiplier: 5.0
+#           backoff-max-interval: 180000
+#         anthropic:
+#           max-attempts: 10
+#           backoff-millis: 5000
+#           backoff-multiplier: 5.0
+#           backoff-max-interval: 180000
+```
