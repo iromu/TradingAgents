@@ -1,0 +1,189 @@
+{
+  "status": "completed",
+  "task_id": "improve-reliability-agent-quality-tests",
+  "verdict": "warning",
+  "confidence": 0.92,
+  "summary": {
+    "blocking_count": 3,
+    "warning_count": 5,
+    "suggestion_count": 4
+  },
+  "findings": [
+    {
+      "severity": "blocking",
+      "category": "cache_key_bug",
+      "description": "Financial statement methods (getBalanceSheet, getCashflow, getIncomeStatement, getFundamentals) ignore the 'freq' parameter in cache keys. All quarterly and annual calls share the same cache entry, serving stale/wrong data. This is a pre-existing bug that the design explicitly says was 'audited' (task 1.3) but the implementation does not fix it.",
+      "location": "AlphaVantageService.java:85-100 (getDataWithCache(String, String) overload)",
+      "recommendation": "Add freq to cache key: String.format(\"%s_%s_%s\", symbol.toUpperCase(), function, freq != null ? freq : \"default\"). Alternatively, make the customizer lambda responsible for contributing to the cache key.",
+      "alternative": "Use a cache key builder pattern where the UrlBuilderCustomizer also returns a cache key fragment, centralizing the key construction at the call site."
+    },
+    {
+      "severity": "blocking",
+      "category": "cache_key_bug",
+      "description": "getGlobalNews does not handle null parameters. When topic is null, the cache key becomes 'GLOBAL_NEWS_null_0_0' (since null Integer defaults to 0 via String.format), and the API query param 'topics' is set to null. This creates a cached 'null topic' response that could incorrectly serve as a cache hit for subsequent calls with actual topics.",
+      "location": "AlphaVantageService.java:122-128",
+      "recommendation": "Handle nulls explicitly: use 'all' or 'general' as default for topic, 0 as default for limit/page, and only add query params when non-null. Sanitize the cache key: String.format(\"GLOBAL_NEWS_%s_%d_%d\", topic != null ? topic : \"all\", limit != null ? limit : 0, page != null ? page : 0).",
+      "alternative": "Add a null-safe cache key builder that converts nulls to sentinel values before formatting."
+    },
+    {
+      "severity": "blocking",
+      "category": "risk_debate_parsing",
+      "description": "parseRiskAssessment() uses keyword matching on the raw LLM output to infer RiskLevel. The RiskManager prompt asks for a 'Buy/Sell/Hold' recommendation — the method tries to map 'buy' → RISKY and 'sell' → CONSERVATIVE via keyword heuristics. This is fragile: an LLM might say 'I recommend buying this stock' without using the word 'risk' or 'aggressive', causing the method to fall through to NEUTRAL. Conversely, a 'sell' recommendation with 'cautious' in the text could be about market conditions, not stock risk.",
+      "location": "RiskDebateService.java:89-100",
+      "recommendation": "Ask the RiskManager prompt to output a structured JSON or YAML with a 'risk_level' field (RISKY/NEUTRAL/CONSERVATIVE) and a 'reasoning' field. Parse the structured output instead of doing keyword matching. Alternatively, use a dedicated LLM call to classify the risk level from the debate output.",
+      "alternative": "Prompt the RiskManager to explicitly output 'Risk Level: RISKY' or 'Risk Level: CONSERVATIVE' in a parseable format and use regex extraction."
+    },
+    {
+      "severity": "warning",
+      "category": "FileCache_lock_cleanup",
+      "description": "The lock cleanup in the finally block (lockMap.remove(key, lock)) means that after a failed computation, the lock is removed and the next call will recompute from scratch. If the supplier consistently fails, every call will re-attempt. This is correct behavior for exception safety, but the design doc says 'write to temp file, then rename atomically' as a mitigation — that's only implemented for .md files, not .json files. The .json save path (in save()) has no atomic write protection.",
+      "location": "FileCache.java:126-130 (finally block); FileCache.java:137-141 (save method)",
+      "recommendation": "Add atomic write for .json files too: write to a temp file first, then rename. This prevents partial reads if the process crashes mid-write.",
+      "alternative": "Use a separate write lock (ReentrantLock) for the save path and keep the compute lock only for the read-check-compute path."
+    },
+    {
+      "severity": "warning",
+      "category": "FileCache_memory",
+      "description": "The lockMap grows unbounded. Locks are removed after computation (success or failure), but if the application runs for a long time with many unique cache keys, the lockMap can grow large. While each entry is just an Object reference, this is still a potential memory leak in long-running processes.",
+      "location": "FileCache.java:28",
+      "recommendation": "Use a bounded map (e.g., Guava Cache or Caffeine) with eviction for the lockMap, or periodically clean up stale entries.",
+      "alternative": "Accept the risk — in practice, the number of unique cache keys is bounded by the number of unique ticker+method combinations, which is small."
+    },
+    {
+      "severity": "warning",
+      "category": "debate_iteration_count",
+      "description": "The count variable is incremented twice per iteration (once for bull, once for bear), so count reaches 2*iteration_number. The convergence check compares bullHistory[size-2] vs bullHistory[size-1], which is correct. However, the logging line uses `count` after incrementing for bear, so the logged iteration number is off by one relative to the actual debate round. The max iterations check (state.count() >= config.maxDebateIterations()) means the loop runs for count values 1,2,3,4,5 — but with 2 increments per iteration, that's 2.5 debate rounds, not 5.",
+      "location": "TraderAgent.java:372-405 (debateInvestment method)",
+      "recommendation": "Track iteration count separately from the per-turn count. Use an explicit `iteration` variable incremented once per bull+bear pair.",
+      "alternative": "Change maxDebateIterations to mean 'max turns' (each bull or bear) instead of 'max rounds' (bull+bear pair), and document this clearly."
+    },
+    {
+      "severity": "warning",
+      "category": "debate_null_handling",
+      "description": "computeSimilarity does not handle null input strings. If bullAgent.argue() or bearAgent.argue() returns null (e.g., due to LLM failure), the bigrams() method will throw NPE on normalized.length(). The debateInvestment method also does not check for null responses before adding them to history.",
+      "location": "TraderAgent.java:420-428 (computeSimilarity); TraderAgent.java:384-394 (debateInvestment)",
+      "recommendation": "Add null checks in computeSimilarity (return 0.0 for null inputs) and in debateInvestment (treat null responses as empty strings or fail fast with a descriptive exception).",
+      "alternative": "Have the bull/bear agents never return null — wrap their output in a non-null default."
+    },
+    {
+      "severity": "warning",
+      "category": "prompt_typo",
+      "description": "The file 'AggresiveDebator.jinja' has a typo — 'Aggresive' is missing the second 's'. This appears in RiskDebateService.java line 42 (@Value annotation) and on disk. While functionally correct, this is a maintenance hazard that will confuse future developers.",
+      "location": "RiskDebateService.java:42; src/main/resources/prompts/risk/AggresiveDebator.jinja",
+      "recommendation": "Rename the file to 'AggressiveDebator.jinja' and update the @Value reference.",
+      "alternative": "Leave as-is if renaming would break git history tracking of the file."
+    },
+    {
+      "severity": "suggestion",
+      "category": "test_coverage",
+      "description": "AlphaVantageServiceTest tests are assertion-free — they only verify that methods don't throw exceptions. There are no tests that actually verify cache key differences (e.g., that different date ranges produce different cache files on disk, or that the same parameters produce cache hits). The FileCacheTest concurrent tests are excellent but the AlphaVantageService tests don't verify the actual caching behavior.",
+      "location": "AlphaVantageServiceTest.java (all tests)",
+      "recommendation": "Add tests that verify: (1) calling with same params returns cached content, (2) calling with different params does NOT return cached content, (3) cache files are created with expected names.",
+      "alternative": "At minimum, add a test that verifies getGlobalNews with null topic doesn't throw — this is the most likely failure mode."
+    },
+    {
+      "severity": "suggestion",
+      "category": "test_coverage",
+      "description": "No tests exist for computeSimilarity, the debate convergence logic, or the risk debate parsing. The tasks.md lists tests for 'debate stops when responses are identical' but the actual test file (TraderAgentCoreTest.java) does not appear to contain these — only 8 test files exist and none are named for debate convergence.",
+      "location": "openspec/changes/improve-reliability-agent-quality-tests/tasks.md (task 4.7-4.8)",
+      "recommendation": "Add unit tests for computeSimilarity with known inputs (identical strings → 1.0, completely different strings → ~0.0, partial overlap → expected value).",
+      "alternative": "Add a dedicated DebateConvergenceTest class."
+    },
+    {
+      "severity": "suggestion",
+      "category": "edge_case",
+      "description": "The RiskAssessment record constructor validates that reasoning is not blank. If the LLM returns an empty response or whitespace-only text, parseRiskAssessment will produce a RiskAssessment with an empty reasoning string, and the constructor will throw. This will crash the risk debate sub-process silently.",
+      "location": "RiskAssessment.java:11-13; RiskDebateService.java:95",
+      "recommendation": "Add a fallback in parseRiskAssessment: if reasoning is blank after truncation, set it to 'LLM returned empty response' or similar.",
+      "alternative": "Have the RiskManager prompt guarantee non-empty output by including explicit output format instructions."
+    }
+  ],
+  "what_works": [
+    "FileCache per-key locking with double-check pattern is a correct and well-understood approach. The concurrent tests are thorough and demonstrate the fix works.",
+    "Debate convergence using Jaccard similarity on bigrams is a sensible, low-dependency choice. The configurable threshold and max iteration fallback provide good safety nets.",
+    "MarketDataTools correctly wraps YFinService with @Tool annotations, and the method signatures match what the MarketAnalyst prompt expects (get_stock_data, get_indicators).",
+    "Prompt file unification (.txt → .jinja) is clean — no .txt files remain on disk, and all references are updated.",
+    "RestTemplate timeout configuration is properly parameterized with sensible defaults and application property injection.",
+    "The risk debate integration point (between investment debate and HITL checkpoint) is logically sound — risk assessment before final plan makes sense.",
+    "The ResearchManager template correctly handles the human_approved flag and user_feedback injection with null safety."
+  ],
+  "learnings": {
+    "patterns": [
+      {
+        "name": "Per-key locking with ConcurrentHashMap.computeIfAbsent",
+        "description": "Using computeIfAbsent to lazily create per-key lock objects, then synchronized on those objects, is a clean pattern for avoiding global locks while preventing duplicate computation.",
+        "confidence": 0.95
+      },
+      {
+        "name": "Cache key construction via customizer lambda",
+        "description": "The UrlBuilderCustomizer pattern separates query param construction from cache key construction, but this separation is the root cause of the freq parameter being ignored — the customizer only builds the URL, not the cache key.",
+        "confidence": 0.9
+      },
+      {
+        "name": "LLM output parsing via keyword heuristics is fragile",
+        "description": "Using contains() checks on raw LLM text to infer structured data (RiskLevel) is unreliable. Structured output formats (JSON/YAML) or dedicated classification calls are more robust.",
+        "confidence": 0.85
+      }
+    ],
+    "gotchas": [
+      "String.format with null Integer values converts them to '0' via toString(), not 'null' — this means getGlobalNews(null, null, null) produces cache key 'GLOBAL_NEWS_null_0_0' which silently masks the null parameters.",
+      "The count variable in debateInvestment increments twice per iteration (bull + bear), making the max iteration semantics ambiguous — does maxDebateIterations=5 mean 5 rounds or 10 turns?",
+      "The FileCache lock cleanup in finally means failed computations release the lock, allowing retries — this is correct for exception safety but means transient failures will be retried on every call."
+    ],
+    "facts": [
+      {
+        "statement": "AlphaVantageService has 8 public methods; 4 of them (getBalanceSheet, getCashflow, getIncomeStatement, getFundamentals) ignore the 'freq' parameter in cache keys.",
+        "category": "cache"
+      },
+      {
+        "statement": "The RiskManager.jinja prompt asks for a Buy/Sell/Hold recommendation, not a RiskLevel enum — the mapping is done post-hoc via keyword matching.",
+        "category": "risk_debate"
+      },
+      {
+        "statement": "The debate convergence check only looks at bull history, not bear history — this is intentional but asymmetric.",
+        "category": "debate"
+      },
+      {
+        "statement": "Atomic write (temp file + rename) is only implemented for .md cache files, not .json cache files.",
+        "category": "filecache"
+      }
+    ],
+    "failure_modes": [
+      {
+        "scenario": "Financial statement API returns different data for quarterly vs annual, but cache key is the same",
+        "symptoms": ["First call with quarterly freq caches result", "Second call with annual freq returns cached quarterly data", "Investment decisions based on wrong frequency data"],
+        "mitigation": "Include freq in cache key; add integration test that verifies different freq values produce different cache files"
+      },
+      {
+        "scenario": "LLM returns empty or unexpected text for risk debate",
+        "symptoms": ["parseRiskAssessment produces empty reasoning", "RiskAssessment constructor throws IllegalArgumentException", "Risk debate sub-process fails"],
+        "mitigation": "Add null/blank check in parseRiskAssessment; provide default reasoning text"
+      },
+      {
+        "scenario": "getGlobalNews called with null topic",
+        "symptoms": ["Cache key contains 'null' string", "API query param 'topics' is null", "Cached response for 'null' topic serves to subsequent non-null calls"],
+        "mitigation": "Sanitize null parameters before cache key construction; use sentinel values"
+      }
+    ],
+    "decisions": [
+      {
+        "decision": "Use Jaccard bigram similarity instead of semantic embeddings for debate convergence",
+        "rationale": ["No new dependencies", "Deterministic and fast", "Max iteration bound provides safety net"]
+      },
+      {
+        "decision": "Wire up risk debate instead of deleting dead code",
+        "rationale": ["Existing prompts are well-structured", "Risk assessment adds valuable dimension", "Lower effort than rewriting"]
+      },
+      {
+        "decision": "Use synchronized per-key locks instead of ReentrantReadWriteLock",
+        "rationale": ["Simpler code", "Well-understood pattern", "Per-key granularity avoids global bottleneck"]
+      }
+    ],
+    "conventions": [
+      "Cache keys are constructed via String.format with uppercase prefixes (e.g., 'AAPL_OVERVIEW', 'GLOBAL_NEWS_{topic}_{limit}_{page}')",
+      "LLM roles use CHEAPEST_ROLE for analyst generation, BEST_ROLE for research manager",
+      "Prompt files use .jinja extension and are loaded via Spring @Value classpath: references",
+      "Tool methods use @Tool annotation with name and description parameters"
+    ]
+  }
+}

@@ -1,0 +1,525 @@
+plan_id: "plan-comprehensive-testing"
+objective: "Create comprehensive unit tests (FakePromptRunner) and integration tests (EmbabelMockitoIntegrationTest) for ALL agent actions that call LLMs in the TradingAgents project. Cover 16 LLM-calling actions across TraderAgent, BullResearcher, BearResearcher, and RiskDebateService."
+created_at: "2026-06-13T00:00:00Z"
+created_by: "planner"
+status: "pending"
+research_confidence: "high"
+plan_metrics:
+  wave_1_task_count: 5
+  total_dependencies: 0
+  risk_score: "low"
+tldr: "13 new test files (8 unit + 5 integration) covering all 16 LLM-calling actions. Wave 1: complex unit tests with mocking. Wave 2: simple unit tests + existing test cleanup. Wave 3: integration tests. All tests use FakePromptRunner (unit) or EmbabelMockitoIntegrationTest (integration)."
+pre_mortem:
+  overall_risk_level: "low"
+  critical_failure_modes:
+    - scenario: "FakePromptRunner API changes in embabel-agent-test snapshot"
+      likelihood: "medium"
+      impact: "high"
+      mitigation: "Pin test dependency version; verify API surface before implementation"
+    - scenario: "Integration tests require Spring context that fails to start"
+      likelihood: "medium"
+      impact: "high"
+      mitigation: "Start with simplest integration test; verify Spring Boot test autoconfig"
+    - scenario: "ToolObject mocking (FundamentalDataTools, etc.) is complex"
+      likelihood: "high"
+      impact: "medium"
+      mitigation: "Use FakePromptRunner for tool-calling actions; mock tools in integration tests"
+  assumptions:
+    - "FakePromptRunner.create() provides context.expectResponse() and context.promptRunner()"
+    - "EmbabelMockitoIntegrationTest provides whenCreateObject/verifyCreateObjectMatching"
+    - "Existing test patterns (TraderAgentCoreTest, etc.) can coexist with new tests"
+    - "All existing tests pass before adding new ones"
+gaps:
+  - description: "The exact API surface of embabel-agent-test 0.5.0-SNAPSHOT is not fully verified. The skill docs describe patterns but the actual classes/methods may differ."
+    refinement_requests:
+      - query: "FakePromptRunner getLlmInvocations expectResponse"
+        source_hint: "embabel-agent-test Javadoc or source"
+      - query: "EmbabelMockitoIntegrationTest whenCreateObject verifyCreateObjectMatching"
+        source_hint: "embabel-agent-test Javadoc or source"
+implementation_specification:
+  code_structure: "New test files go in src/test/java/com/embabel/gekko/agent/ (unit tests) and src/test/java/com/embabel/gekko/agent/integration/ (integration tests). Existing tests in src/test/java/com/embabel/gekko/agent/researchers/ are preserved and enhanced."
+  affected_areas:
+    - "src/test/java/com/embabel/gekko/agent/"
+    - "src/test/java/com/embabel/gekko/agent/integration/ (new directory)"
+    - "src/test/java/com/embabel/gekko/agent/researchers/"
+  component_details:
+    - component: "TraderAgent unit tests"
+      responsibility: "Test LLM-calling actions with FakePromptRunner"
+      interfaces:
+        - "FakeOperationContext"
+        - "FakePromptRunner"
+      dependencies:
+
+    - component: "Researcher unit tests"
+      responsibility: "Test BullResearcher.argue() and BearResearcher.argue()"
+      interfaces:
+        - "ActionContext"
+        - "FakePromptRunner"
+      dependencies:
+
+    - component: "RiskDebateService unit tests"
+      responsibility: "Test risk debate with mocked LLM calls"
+      interfaces:
+        - "ActionContext"
+        - "FakePromptRunner"
+      dependencies:
+
+    - component: "Integration tests"
+      responsibility: "Full workflow tests under Spring Boot context"
+      interfaces:
+        - "EmbabelMockitoIntegrationTest"
+        - "whenCreateObject"
+        - "verifyCreateObjectMatching"
+      dependencies:
+        - "unit tests for patterns"
+tasks:
+  - id: "task-01-trader-agent-unit"
+    title: "TraderAgent LLM-calling actions unit tests with FakePromptRunner"
+    description: |
+      Create TraderAgentLLMTest.java with 5-7 test methods covering the 5 report-generating actions that use streamWithTemplate. Each test uses FakeOperationContext.create(), sets context.expectResponse(), verifies prompt content, LLM role (CHEAPEST), and interaction IDs.
+      
+      Actions covered:
+      - tickerFromUserInput (CHEAPEST, id=extractTicker)
+      - generateFundamentalsReport (CHEAPEST, id=generateFundamentalsReport, withToolObject)
+      - generateMarketReport (CHEAPEST, id=generateMarketReport)
+      - generateNewsReport (CHEAPEST, id=generateNewsReport, withToolObject)
+      - generateSocialMediaReport (CHEAPEST, id=generateSocialMediaReport, withToolObject)
+      
+      Test methods:
+      1. tickerFromUserInput_callsLLMWithCheapestModel - verify CHEAPEST_ROLE, id=extractTicker, prompt contains user input
+      2. tickerFromUserInput_parsesJSONResponse - verify parseTicker handles {content:AAPL}
+      3. tickerFromUserInput_rejectsBlankInput - verify IllegalArgumentException
+      4. generateFundamentalsReport_callsLLMWithTools - verify CHEAPEST_ROLE, id=generateFundamentalsReport, withToolObject present, prompt contains ticker
+      5. generateMarketReport_callsLLM - verify CHEAPEST_ROLE, id=generateMarketReport, prompt contains ticker
+      6. generateNewsReport_callsLLMWithNewsTools - verify CHEAPEST_ROLE, id=generateNewsReport, withToolObject present
+      7. generateSocialMediaReport_callsLLM - verify CHEAPEST_ROLE, id=generateSocialMediaReport, withToolObject present
+    wave: 1
+    agent: "debugger"
+    priority: "high"
+    status: "pending"
+    estimated_effort: "large"
+    estimated_files: 1
+    estimated_lines: 200
+    focus_area: "unit-testing"
+    verification:
+      - "mvn test -Dtest=TraderAgentLLMTest"
+      - "All 7 tests pass"
+    acceptance_criteria:
+      - "File: src/test/java/com/embabel/gekko/agent/TraderAgentLLMTest.java"
+      - "5-7 test methods"
+      - "Uses FakeOperationContext.create() and FakePromptRunner"
+      - "Verifies LLM role, interaction IDs, prompt content"
+      - "Tests tickerFromUserInput, generateFundamentalsReport, generateMarketReport, generateNewsReport, generateSocialMediaReport"
+    success_criteria:
+      - "test_results.failed === 0"
+      - "All interaction IDs verified"
+    failure_modes:
+      - scenario: "streamWithTemplate private method is hard to test directly"
+        likelihood: "high"
+        impact: "medium"
+        mitigation: "Test via public action methods; verify FakePromptRunner captured the call"
+      - scenario: "ToolObject mocking is complex"
+        likelihood: "medium"
+        impact: "medium"
+        mitigation: "Verify withToolObject was called; do not need to mock tool responses for unit tests"
+    implementation_handoff:
+      do_not_reinvestigate:
+        - "FakeOperationContext.create() API"
+        - "context.expectResponse(T) pattern"
+        - "context.promptRunner().getLlmInvocations()"
+      target_files:
+        - "src/test/java/com/embabel/gekko/agent/TraderAgentLLMTest.java"
+      acceptance_checks:
+        - "Each test verifies LLM role is CHEAPEST_ROLE"
+        - "Each test verifies interaction ID matches the action"
+        - "Each test verifies prompt contains ticker content"
+  - id: "task-02-debate-briefs-unit"
+    title: "prepareDebateBriefs unit tests with FakePromptRunner"
+    description: |
+      Create DebateBriefsUnitTest.java with 4-5 test methods covering prepareDebateBriefs which calls 4x LLM distill actions. Each test uses FakeOperationContext.create() and verifies 4 LLM invocations with CHEAPEST_ROLE and ids like distillBrief_fundamentals.
+      
+      Test methods:
+      1. prepareDebateBriefs_calls4DistillLLMs - verify 4 LLM invocations with CHEAPEST_ROLE
+      2. prepareDebateBriefs_distillBriefIds - verify ids: distillBrief_fundamentals, distillBrief_market, distillBrief_news, distillBrief_social_media
+      3. prepareDebateBriefs_promptContainsReportContent - verify each distill prompt contains report content
+      4. prepareDebateBriefs_validation_throwsOnNullFundamentals - verify IllegalArgumentException
+      5. prepareDebateBriefs_validation_throwsOnBlankMarket - verify IllegalArgumentException
+    wave: 1
+    agent: "debugger"
+    priority: "high"
+    status: "pending"
+    estimated_effort: "medium"
+    estimated_files: 1
+    estimated_lines: 120
+    focus_area: "unit-testing"
+    verification:
+      - "mvn test -Dtest=DebateBriefsUnitTest"
+      - "All 4-5 tests pass"
+    acceptance_criteria:
+      - "File: src/test/java/com/embabel/gekko/agent/DebateBriefsUnitTest.java"
+      - "4-5 test methods"
+      - "Verifies 4 LLM invocations with CHEAPEST_ROLE"
+      - "Verifies distillBrief_* interaction IDs"
+      - "Verifies validation throws"
+    success_criteria:
+      - "test_results.failed === 0"
+      - "Exactly 4 LLM invocations verified per successful call"
+    failure_modes:
+      - scenario: "Multiple LLM invocations in one action means order matters"
+        likelihood: "medium"
+        impact: "medium"
+        mitigation: "Verify invocations[0..3] in order: fundamentals, market, news, social"
+  - id: "task-03-researcher-unit"
+    title: "BullResearcher and BearResearcher unit tests with FakePromptRunner"
+    description: |
+      Create ResearcherLLMTest.java with 4-5 test methods covering the argue() methods of both BullResearcher and BearResearcher. Each test uses FakeOperationContext.create() and verifies LLM calls with BEST_ROLE.
+      
+      Test methods:
+      1. bullResearcher_argue_callsLLMWithBestModel - verify BEST_ROLE, id=bullResearcher, prompt contains briefs
+      2. bullResearcher_argue_includesHistory - verify prompt contains history and current_response
+      3. bearResearcher_argue_callsLLMWithBestModel - verify BEST_ROLE, id=bearResearcher, prompt contains briefs
+      4. bearResearcher_argue_includesHistory - verify prompt contains history and current_response
+      5. bothResearchers_useDifferentIds - verify bullResearcher and bearResearcher have distinct IDs
+    wave: 1
+    agent: "debugger"
+    priority: "high"
+    status: "pending"
+    estimated_effort: "small"
+    estimated_files: 1
+    estimated_lines: 100
+    focus_area: "unit-testing"
+    verification:
+      - "mvn test -Dtest=ResearcherLLMTest"
+      - "All 4-5 tests pass"
+    acceptance_criteria:
+      - "File: src/test/java/com/embabel/gekko/agent/ResearcherLLMTest.java"
+      - "4-5 test methods"
+      - "Verifies BEST_ROLE for both researchers"
+      - "Verifies distinct interaction IDs"
+      - "Verifies prompt content includes briefs and history"
+    success_criteria:
+      - "test_results.failed === 0"
+      - "Both researchers use BEST_ROLE"
+    failure_modes:
+      - scenario: "ActionContext is needed for argue() - must create properly"
+        likelihood: "medium"
+        impact: "medium"
+        mitigation: "Use FakeOperationContext.create() and getActionContext()"
+  - id: "task-04-risk-debate-unit"
+    title: "RiskDebateService unit tests with FakePromptRunner"
+    description: |
+      Create RiskDebateServiceUnitTest.java with 4-5 test methods covering the risk debate flow: 3 rounds of 3 debaters + 1 judge = 10 LLM calls. Also tests parseRiskAssessment (pure logic).
+      
+      Test methods:
+      1. runRiskDebate_calls10LLMs - verify 10 LLM invocations (3 rounds x 3 debaters + 1 judge)
+      2. runRiskDebate_riskDebatorId - verify id=riskDebator for debater calls
+      3. runRiskDebate_riskJudgeId - verify id=riskJudge for judge call
+      4. parseRiskAssessment_detectsRisky - verify RISKY level from buy risk aggressive
+      5. parseRiskAssessment_detectsConservative - verify CONSERVATIVE level from sell cautious
+      6. parseRiskAssessment_defaultsToNeutral - verify NEUTRAL from non-matching text
+    wave: 1
+    agent: "debugger"
+    priority: "high"
+    status: "pending"
+    estimated_effort: "medium"
+    estimated_files: 1
+    estimated_lines: 130
+    focus_area: "unit-testing"
+    verification:
+      - "mvn test -Dtest=RiskDebateServiceUnitTest"
+      - "All 4-6 tests pass"
+    acceptance_criteria:
+      - "File: src/test/java/com/embabel/gekko/agent/RiskDebateServiceUnitTest.java"
+      - "4-6 test methods"
+      - "Verifies 10 LLM invocations for full risk debate"
+      - "Verifies riskDebator and riskJudge interaction IDs"
+      - "Verifies parseRiskAssessment logic for all 3 risk levels"
+    success_criteria:
+      - "test_results.failed === 0"
+      - "parseRiskAssessment handles all 3 levels correctly"
+    failure_modes:
+      - scenario: "RiskDebateService uses ActionContext not OperationContext"
+        likelihood: "medium"
+        impact: "medium"
+        mitigation: "Use FakeOperationContext.create().asActionContext() or equivalent"
+  - id: "task-05-research-manager-unit"
+    title: "researchManager and generateResearchPlan unit tests with FakePromptRunner"
+    description: |
+      Create ResearchManagerUnitTest.java with 3-4 test methods covering the research manager actions that use BEST_ROLE and the ResearchManager template.
+      
+      Test methods:
+      1. researchManager_callsLLMWithBestModel - verify BEST_ROLE, id=researchManager, prompt contains debate history
+      2. researchManager_includesRiskAssessment - verify model includes risk_level and risk_reasoning
+      3. researchManager_includesUserFeedback - verify model includes sanitized user feedback
+      4. generateResearchPlan_callsLLMWithBestModel - verify BEST_ROLE, id=generateResearchPlan, human_approved=false
+    wave: 1
+    agent: "debugger"
+    priority: "high"
+    status: "pending"
+    estimated_effort: "small"
+    estimated_files: 1
+    estimated_lines: 100
+    focus_area: "unit-testing"
+    verification:
+      - "mvn test -Dtest=ResearchManagerUnitTest"
+      - "All 3-4 tests pass"
+    acceptance_criteria:
+      - "File: src/test/java/com/embabel/gekko/agent/ResearchManagerUnitTest.java"
+      - "3-4 test methods"
+      - "Verifies BEST_ROLE for research manager actions"
+      - "Verifies interaction IDs"
+      - "Verifies model content (risk, feedback, history)"
+    success_criteria:
+      - "test_results.failed === 0"
+      - "All model fields verified"
+  - id: "task-06-pure-logic-tests"
+    title: "Pure logic tests - sanitizeForPrompt and computeSimilarity"
+    description: |
+      Create PureLogicTest.java with 5-6 test methods covering the pure logic methods in TraderAgent that do not call LLMs. These complement existing tests in TraderAgentCoreTest.java.
+      
+      Test methods:
+      1. sanitizeForPrompt_stripsJinjaSyntax - verify {{ }}, {% %} are replaced
+      2. sanitizeForPrompt_stripsMarkdownFences - verify ``` is replaced
+      3. sanitizeForPrompt_stripsControlChars - verify NUL, BEL, BS are stripped
+      4. sanitizeForPrompt_wrapsInXml - verify output wrapped in <user_feedback>
+      5. sanitizeForPrompt_truncatesLongInput - verify 1000 char limit
+      6. computeSimilarity_edgeCases - verify null, empty, single-char behavior
+    wave: 2
+    agent: "implementer"
+    priority: "medium"
+    status: "pending"
+    estimated_effort: "small"
+    estimated_files: 1
+    estimated_lines: 80
+    focus_area: "unit-testing"
+    verification:
+      - "mvn test -Dtest=PureLogicTest"
+      - "All 5-6 tests pass"
+    acceptance_criteria:
+      - "File: src/test/java/com/embabel/gekko/agent/PureLogicTest.java"
+      - "5-6 test methods"
+      - "Tests sanitizeForPrompt security features"
+      - "Tests computeSimilarity edge cases"
+    success_criteria:
+      - "test_results.failed === 0"
+      - "All security sanitization verified"
+  - id: "task-07-existing-tests-cleanup"
+    title: "Existing tests - verify and enhance"
+    description: |
+      Review and enhance existing tests to ensure they use proper patterns. Focus on BullResearcherTest.java and BearResearcherTest.java which only test DebateBriefs structure but do not test the LLM-calling argue() method.
+      
+      Actions:
+      1. Verify existing tests still pass after adding new tests
+      2. Enhance BullResearcherTest.java to add 2-3 tests for argue() method structure
+      3. Enhance BearResearcherTest.java to add 2-3 tests for argue() method structure
+      4. Verify TraderAgentCoreTest.java, DebateBriefsTest.java, TraderAgentStreamingTest.java, TraderAgentTickerValidationTest.java are complete and use proper JUnit patterns
+    wave: 2
+    agent: "implementer"
+    priority: "medium"
+    status: "pending"
+    estimated_effort: "small"
+    estimated_files: 2
+    estimated_lines: 50
+    focus_area: "unit-testing"
+    verification:
+      - "mvn test"
+      - "All existing tests still pass"
+      - "New tests added to BullResearcherTest and BearResearcherTest"
+    acceptance_criteria:
+      - "BullResearcherTest.java has 5-6 test methods (3 existing + 2-3 new)"
+      - "BearResearcherTest.java has 5-6 test methods (3 existing + 2-3 new)"
+      - "All existing tests pass"
+    success_criteria:
+      - "test_results.failed === 0"
+      - "No existing test behavior changed"
+  - id: "task-08-debate-investment-unit"
+    title: "debateInvestment unit tests with FakePromptRunner"
+    description: |
+      Create DebateInvestmentUnitTest.java with 3-4 test methods covering the debateInvestment action which is a RepeatUntil subprocess calling bullAgent.argue() and bearAgent.argue() alternately.
+      
+      Test methods:
+      1. debateInvestment_callsBullThenBearAlternately - verify alternating bull/bear LLM calls
+      2. debateInvestment_stopsAtMaxIterations - verify stops when count >= config.maxDebateIterations
+      3. debateInvestment_stopsOnConvergence - verify stops when bull similarity >= threshold
+      4. debateInvestment_returnsInvestmentDebateState - verify returned state has history, counts
+    wave: 2
+    agent: "debugger"
+    priority: "medium"
+    status: "pending"
+    estimated_effort: "large"
+    estimated_files: 1
+    estimated_lines: 150
+    focus_area: "unit-testing"
+    verification:
+      - "mvn test -Dtest=DebateInvestmentUnitTest"
+      - "All 3-4 tests pass"
+    acceptance_criteria:
+      - "File: src/test/java/com/embabel/gekko/agent/DebateInvestmentUnitTest.java"
+      - "3-4 test methods"
+      - "Verifies alternating bull/bear calls"
+      - "Verifies convergence and max iteration stopping"
+      - "Verifies returned state structure"
+    success_criteria:
+      - "test_results.failed === 0"
+      - "Convergence logic verified"
+    failure_modes:
+      - scenario: "RepeatUntilBuilder is complex to mock"
+        likelihood: "high"
+        impact: "high"
+        mitigation: "Use FakeOperationContext as ActionContext; mock bullAgent and bearAgent"
+      - scenario: "Cache.getOrCompute interferes with test"
+        likelihood: "medium"
+        impact: "medium"
+        mitigation: "Pass null cache or use a no-op cache implementation"
+  - id: "task-09-report-gen-integration"
+    title: "Report generators integration tests with EmbabelMockitoIntegrationTest"
+    description: |
+      Create ReportGeneratorIntegrationTest.java with 4-5 test methods covering the report generation actions under Spring Boot context. Uses EmbabelMockitoIntegrationTest with whenCreateObject/verifyCreateObjectMatching.
+      
+      Test methods:
+      1. generateFundamentalsReport_returnsReport - stub LLM response, verify FundamentalsReport returned
+      2. generateMarketReport_returnsReport - stub LLM response, verify MarketReport returned
+      3. generateNewsReport_returnsReport - stub LLM response, verify NewsReport returned
+      4. generateSocialMediaReport_returnsReport - stub LLM response, verify SocialMediaReport returned
+      5. reportGenerators_useCheapestModel - verify CHEAPEST_ROLE in verifyCreateObjectMatching
+    wave: 3
+    agent: "implementer"
+    priority: "high"
+    status: "pending"
+    estimated_effort: "medium"
+    estimated_files: 1
+    estimated_lines: 120
+    focus_area: "integration-testing"
+    verification:
+      - "mvn test -Dtest=ReportGeneratorIntegrationTest"
+      - "All 4-5 tests pass"
+    acceptance_criteria:
+      - "File: src/test/java/com/embabel/gekko/agent/integration/ReportGeneratorIntegrationTest.java"
+      - "4-5 test methods"
+      - "Extends EmbabelMockitoIntegrationTest"
+      - "Uses whenCreateObject to stub responses"
+      - "Uses verifyCreateObjectMatching to verify LLM calls"
+    success_criteria:
+      - "test_results.failed === 0"
+      - "Spring context starts successfully"
+    failure_modes:
+      - scenario: "Spring context fails to start without real DB/API"
+        likelihood: "medium"
+        impact: "high"
+        mitigation: "Use @SpringBootTest with @MockBean for external dependencies"
+  - id: "task-10-researcher-integration"
+    title: "BullResearcher and BearResearcher integration tests with EmbabelMockitoIntegrationTest"
+    description: |
+      Create ResearcherIntegrationTest.java with 3-4 test methods covering the argue() methods under Spring Boot context.
+      
+      Test methods:
+      1. bullResearcher_argue_returnsResponse - stub LLM, verify non-empty String returned
+      2. bearResearcher_argue_returnsResponse - stub LLM, verify non-empty String returned
+      3. researchers_useBestModel - verify BEST_ROLE in verifyCreateObjectMatching
+      4. researchers_promptContainsBriefs - verify prompt contains fundamentalsBrief, marketBrief, etc.
+    wave: 3
+    agent: "implementer"
+    priority: "high"
+    status: "pending"
+    estimated_files: 1
+    estimated_lines: 100
+    focus_area: "integration-testing"
+    verification:
+      - "mvn test -Dtest=ResearcherIntegrationTest"
+      - "All 3-4 tests pass"
+    acceptance_criteria:
+      - "File: src/test/java/com/embabel/gekko/agent/integration/ResearcherIntegrationTest.java"
+      - "3-4 test methods"
+      - "Extends EmbabelMockitoIntegrationTest"
+      - "Verifies BEST_ROLE for both researchers"
+      - "Verifies prompt content includes briefs"
+    success_criteria:
+      - "test_results.failed === 0"
+      - "Both researchers return non-empty responses"
+  - id: "task-11-risk-debate-integration"
+    title: "RiskDebateService integration tests with EmbabelMockitoIntegrationTest"
+    description: |
+      Create RiskDebateServiceIntegrationTest.java with 3-4 test methods covering the full risk debate flow under Spring Boot context.
+      
+      Test methods:
+      1. runRiskDebate_returnsRiskAssessment - stub all LLM calls, verify RiskAssessment returned
+      2. runRiskDebate_riskDebatorCalls - verify 9 debator calls (3 rounds x 3 debaters)
+      3. runRiskDebate_riskJudgeCall - verify 1 judge call
+      4. parseRiskAssessment_integration - verify full pipeline produces correct risk level
+    wave: 3
+    agent: "implementer"
+    priority: "high"
+    status: "pending"
+    estimated_files: 1
+    estimated_lines: 130
+    focus_area: "integration-testing"
+    verification:
+      - "mvn test -Dtest=RiskDebateServiceIntegrationTest"
+      - "All 3-4 tests pass"
+    acceptance_criteria:
+      - "File: src/test/java/com/embabel/gekko/agent/integration/RiskDebateServiceIntegrationTest.java"
+      - "3-4 test methods"
+      - "Extends EmbabelMockitoIntegrationTest"
+      - "Verifies 9 debator + 1 judge LLM calls"
+      - "Verifies RiskAssessment output"
+    success_criteria:
+      - "test_results.failed === 0"
+      - "Full risk debate pipeline verified"
+  - id: "task-12-full-pipeline-integration"
+    title: "executeFullResearch integration test with EmbabelMockitoIntegrationTest"
+    description: |
+      Create FullPipelineIntegrationTest.java with 2-3 test methods covering the full research pipeline (executeFullResearch) which orchestrates all report generators, debate briefs, debate, risk debate, HITL review, and research manager.
+      
+      Test methods:
+      1. executeFullResearch_returnsInvestmentPlan - stub all LLM calls, verify InvestmentPlan returned
+      2. executeFullResearch_callSequence - verify correct order: reports to briefs to debate to risk to researchManager
+      3. executeFullResearch_includesRiskAssessment - verify InvestmentDebateState includes RiskAssessment
+    wave: 3
+    agent: "implementer"
+    priority: "high"
+    status: "pending"
+    estimated_files: 1
+    estimated_lines: 150
+    focus_area: "integration-testing"
+    verification:
+      - "mvn test -Dtest=FullPipelineIntegrationTest"
+      - "All 2-3 tests pass"
+    acceptance_criteria:
+      - "File: src/test/java/com/embabel/gekko/agent/integration/FullPipelineIntegrationTest.java"
+      - "2-3 test methods"
+      - "Extends EmbabelMockitoIntegrationTest"
+      - "Verifies full pipeline call sequence"
+      - "Verifies InvestmentPlan output"
+    success_criteria:
+      - "test_results.failed === 0"
+      - "Full pipeline verified end-to-end"
+  - id: "task-13-verification"
+    title: "Verify all tests pass with mvn verify"
+    description: |
+      Run mvn verify to ensure all new and existing tests pass. Fix any failures. This is the final quality gate.
+      
+      Actions:
+      1. Run mvn verify
+      2. Fix any compilation errors
+      3. Fix any test failures
+      4. Verify test coverage is acceptable
+    wave: 3
+    agent: "debugger"
+    priority: "high"
+    status: "pending"
+    estimated_effort: "medium"
+    estimated_files: 0
+    estimated_lines: 0
+    focus_area: "verification"
+    verification:
+      - "mvn verify"
+      - "All tests pass"
+      - "No compilation errors"
+    acceptance_criteria:
+      - "mvn verify exits with 0"
+      - "All new test files compile and pass"
+      - "All existing tests still pass"
+    success_criteria:
+      - "test_results.failed === 0"
+      - "mvn verify succeeds"
+contracts:

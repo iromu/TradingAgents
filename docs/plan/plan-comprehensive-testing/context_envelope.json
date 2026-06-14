@@ -1,0 +1,398 @@
+{
+  "context_envelope": {
+    "meta": {
+      "plan_id": "plan-comprehensive-testing",
+      "created_at": "2026-06-13T00:00:00Z",
+      "last_updated": "2026-06-13T00:00:00Z",
+      "version": 1,
+      "previous_version_fields_changed": [],
+      "source": ["codebase_analysis", "skill_docs", "existing_tests"]
+    },
+    "scope": {
+      "purpose": [
+        "Add comprehensive unit tests (FakePromptRunner) and integration tests (EmbabelMockitoIntegrationTest) for all LLM-calling agent actions.",
+        "Cover 16 LLM-calling actions across TraderAgent, BullResearcher, BearResearcher, and RiskDebateService.",
+        "Help agents avoid re-discovery by documenting all LLM call patterns, interaction IDs, and model roles."
+      ],
+      "applies_to": ["TradingAgents LLM-calling actions"],
+      "non_goals": [
+        "Testing external API clients (VendorRouter, YFinService)",
+        "Testing web controllers (TradingHtmxController)",
+        "Testing pure data models (FundamentalsReport, etc.)",
+        "Testing WaitFor/HITL behavior (no LLM)"
+      ]
+    },
+    "project_summary": {
+      "business_domain": "Multi-agent trading research platform",
+      "primary_users": ["Traders", "Investment analysts"],
+      "key_features": [
+        "Multi-analyst report generation (fundamentals, market, news, social media)",
+        "Bull/bear debate with convergence detection",
+        "Risk debate with aggressive/conservative/neutral debaters",
+        "Human-in-the-loop review checkpoints",
+        "Final investment plan generation"
+      ],
+      "current_phase": "Testing expansion — adding comprehensive test coverage"
+    },
+    "tech_stack": [
+      {
+        "name": "Spring Boot",
+        "version": "3.5.13",
+        "usage_context": "Application framework",
+        "config_files": ["pom.xml"]
+      },
+      {
+        "name": "Embabel",
+        "version": "0.5.0-SNAPSHOT",
+        "usage_context": "Agent framework — @Agent, @Action, FakeOperationContext, EmbabelMockitoIntegrationTest",
+        "config_files": ["pom.xml"]
+      },
+      {
+        "name": "Java",
+        "version": "25",
+        "usage_context": "Language",
+        "config_files": []
+      },
+      {
+        "name": "JUnit 5",
+        "version": "via spring-boot-starter-test",
+        "usage_context": "Test framework",
+        "config_files": ["pom.xml"]
+      },
+      {
+        "name": "Mockito",
+        "version": "via spring-boot-starter-test",
+        "usage_context": "Mocking framework",
+        "config_files": ["pom.xml"]
+      },
+      {
+        "name": "OpenAI-compatible LLM",
+        "version": "LiteLLM at http://spark.local:4000",
+        "usage_context": "LLM endpoint",
+        "config_files": ["src/main/resources/application.yaml"]
+      }
+    ],
+    "conventions": [
+      "All LLM-calling actions use .withId(\"interaction-id\") for test traceability",
+      "CHEAPEST_ROLE for report generation, distillation, risk debate",
+      "BEST_ROLE for debate, research manager, research plan",
+      "streamWithTemplate() for streaming LLM calls with Jinja templates",
+      "createObject() for structured LLM output",
+      "Cache via FileCache.getOrCompute() for deduplication",
+      "Test files: unit tests in agent/, integration tests in agent/integration/"
+    ],
+    "constraints": {
+      "hard": [
+        "Never skip .withId() on LLM calls — required for test verification",
+        "FakePromptRunner API may differ from skill docs (0.5.0-SNAPSHOT)",
+        "Integration tests require Spring Boot context to start",
+        "ToolObject mocking is complex — prefer FakePromptRunner for tool-calling actions"
+      ],
+      "soft": [
+        "Each test file should have 3-7 test methods",
+        "Unit tests use FakePromptRunner; integration tests use EmbabelMockitoIntegrationTest",
+        "Group related actions in one test file"
+      ],
+      "compatibility": [
+        "Existing tests in TraderAgentCoreTest.java, DebateBriefsTest.java, etc. must continue to pass",
+        "BullResearcherTest.java and BearResearcherTest.java in researchers/ subdirectory must continue to pass"
+      ],
+      "security_requirements": [
+        "sanitizeForPrompt must strip Jinja syntax, markdown fences, control chars",
+        "User feedback wrapped in <user_feedback> XML delimiters"
+      ]
+    },
+    "architecture_snapshot": {
+      "key_dirs": {
+        "src/main/java/com/embabel/gekko/agent/": ["TraderAgent.java", "RiskDebateService.java", "RiskAssessment.java", "RiskLevel.java"],
+        "src/main/java/com/embabel/gekko/agent/researchers/": ["BullResearcher.java", "BearResearcher.java"],
+        "src/main/java/com/embabel/gekko/tools/": ["FundamentalDataTools.java", "MarketDataTools.java", "NewsDataTools.java"],
+        "src/test/java/com/embabel/gekko/agent/": ["TraderAgentCoreTest.java", "DebateBriefsTest.java", "TraderAgentStreamingTest.java", "TraderAgentTickerValidationTest.java"],
+        "src/test/java/com/embabel/gekko/agent/researchers/": ["BullResearcherTest.java", "BearResearcherTest.java"],
+        "src/main/resources/prompts/": ["analysts/*.jinja", "debate/Distiller.jinja", "managers/*.jinja", "researchers/*.jinja", "risk/*.jinja"]
+      },
+      "patterns": [
+        "LLM call → PromptRunner.withLlmByRole(role).withId(id).createObject(String.class, model)",
+        "Streaming LLM call → streamWithTemplate(runner, templateName, model)",
+        "LLM with tools → .withToolObject(toolInstance)",
+        "Debate loop → RepeatUntilBuilder.asSubProcess()",
+        "Risk debate → 3 rounds of 3 debaters + 1 judge = 10 LLM calls",
+        "Cache → FileCache.getOrCompute(key, Type, supplier)"
+      ],
+      "key_components": [
+        {
+          "name": "TraderAgent",
+          "location": "src/main/java/com/embabel/gekko/agent/TraderAgent.java",
+          "responsibility": ["Main orchestrator: report generation, debate, risk, research plan"],
+          "confidence": 1.0
+        },
+        {
+          "name": "RiskDebateService",
+          "location": "src/main/java/com/embabel/gekko/agent/RiskDebateService.java",
+          "responsibility": ["Multi-agent risk debate: 3 debaters + 1 judge"],
+          "confidence": 1.0
+        },
+        {
+          "name": "BullResearcher",
+          "location": "src/main/java/com/embabel/gekko/agent/researchers/BullResearcher.java",
+          "responsibility": ["Bull-side argument generation"],
+          "confidence": 1.0
+        },
+        {
+          "name": "BearResearcher",
+          "location": "src/main/java/com/embabel/gekko/agent/researchers/BearResearcher.java",
+          "responsibility": ["Bear-side argument generation"],
+          "confidence": 1.0
+        },
+        {
+          "name": "FundamentalDataTools",
+          "location": "src/main/java/com/embabel/gekko/tools/FundamentalDataTools.java",
+          "responsibility": ["LLM tool: get_fundamentals, get_balance_sheet, get_cashflow, get_income_statement"],
+          "confidence": 1.0
+        },
+        {
+          "name": "MarketDataTools",
+          "location": "src/main/java/com/embabel/gekko/tools/MarketDataTools.java",
+          "responsibility": ["LLM tool: get_stock_data, get_indicators"],
+          "confidence": 1.0
+        },
+        {
+          "name": "NewsDataTools",
+          "location": "src/main/java/com/embabel/gekko/tools/NewsDataTools.java",
+          "responsibility": ["LLM tool: get_news, get_global_news, get_insider_sentiment, get_insider_transactions"],
+          "confidence": 1.0
+        }
+      ]
+    },
+    "quality_metrics": {
+      "test_coverage_overall": 0.05,
+      "test_coverage_by_component": [
+        { "component": "TraderAgent pure logic", "coverage": 0.8 },
+        { "component": "TraderAgent LLM-calling actions", "coverage": 0.0 },
+        { "component": "BullResearcher", "coverage": 0.0 },
+        { "component": "BearResearcher", "coverage": 0.0 },
+        { "component": "RiskDebateService", "coverage": 0.0 }
+      ],
+      "known_test_gaps": [
+        "No unit tests for any LLM-calling action",
+        "No integration tests exist",
+        "BullResearcherTest and BearResearcherTest only test DebateBriefs structure, not argue()",
+        "computeSimilarity has tests but sanitizeForPrompt has none",
+        "RiskDebateService has zero tests"
+      ],
+      "cyclomatic_complexity_avg": 2.5,
+      "code_duplication_percent": 5.0
+    },
+    "data_model": {
+      "core_entities": [
+        {
+          "name": "Ticker",
+          "fields": [
+            { "name": "content", "type": "String", "constraints": ["non-blank", "alphanumeric + dots"] },
+            { "name": "feedback", "type": "String", "constraints": ["optional"] }
+          ],
+          "relationships": ["Input to all report generators"]
+        },
+        {
+          "name": "DebateBriefs",
+          "fields": [
+            { "name": "fundamentalsBrief", "type": "String" },
+            { "name": "marketBrief", "type": "String" },
+            { "name": "newsBrief", "type": "String" },
+            { "name": "socialBrief", "type": "String" }
+          ],
+          "relationships": ["Output of prepareDebateBriefs, input to debate"]
+        },
+        {
+          "name": "InvestmentDebateState",
+          "fields": [
+            { "name": "history", "type": "List<String>" },
+            { "name": "bullHistory", "type": "List<String>" },
+            { "name": "bearHistory", "type": "List<String>" },
+            { "name": "currentResponse", "type": "String" },
+            { "name": "count", "type": "int" },
+            { "name": "briefs", "type": "DebateBriefs" },
+            { "name": "riskAssessment", "type": "RiskAssessment" }
+          ],
+          "relationships": ["Output of debateInvestment, input to risk debate and research manager"]
+        },
+        {
+          "name": "RiskAssessment",
+          "fields": [
+            { "name": "level", "type": "RiskLevel" },
+            { "name": "reasoning", "type": "String" }
+          ],
+          "relationships": ["Output of risk debate"]
+        },
+        {
+          "name": "InvestmentPlan",
+          "fields": [
+            { "name": "judgeDecision", "type": "String" },
+            { "name": "investmentDebateState", "type": "InvestmentDebateState" }
+          ],
+          "relationships": ["Final output of full pipeline"]
+        }
+      ]
+    },
+    "research_digest": {
+      "relevant_files": [
+        {
+          "path": "src/main/java/com/embabel/gekko/agent/TraderAgent.java",
+          "purpose": ["Main agent orchestrator with 10+ LLM-calling actions"],
+          "why_relevant": ["All report generation, debate, risk, and research plan logic"],
+          "security_sensitivity": "internal",
+          "contains_secrets": false,
+          "reliability": "codebase",
+          "confidence": 1.0
+        },
+        {
+          "path": "src/main/java/com/embabel/gekko/agent/RiskDebateService.java",
+          "purpose": ["Risk debate: 3 debaters + 1 judge"],
+          "why_relevant": ["10 LLM calls per full risk debate"],
+          "security_sensitivity": "internal",
+          "contains_secrets": false,
+          "reliability": "codebase",
+          "confidence": 1.0
+        },
+        {
+          "path": "src/main/java/com/embabel/gekko/agent/researchers/BullResearcher.java",
+          "purpose": ["Bull-side argument generation"],
+          "why_relevant": ["1 LLM call per argue() invocation"],
+          "security_sensitivity": "internal",
+          "contains_secrets": false,
+          "reliability": "codebase",
+          "confidence": 1.0
+        },
+        {
+          "path": "src/main/java/com/embabel/gekko/agent/researchers/BearResearcher.java",
+          "purpose": ["Bear-side argument generation"],
+          "why_relevant": ["1 LLM call per argue() invocation"],
+          "security_sensitivity": "internal",
+          "contains_secrets": false,
+          "reliability": "codebase",
+          "confidence": 1.0
+        },
+        {
+          "path": ".qwen/skills/embabel-agent/reference/testing.md",
+          "purpose": ["Testing patterns: FakePromptRunner, EmbabelMockitoIntegrationTest"],
+          "why_relevant": ["Source of truth for test API patterns"],
+          "security_sensitivity": "none",
+          "contains_secrets": false,
+          "reliability": "docs",
+          "confidence": 0.9
+        },
+        {
+          "path": "pom.xml",
+          "purpose": ["Dependency declarations"],
+          "why_relevant": ["embabel-agent-test 0.5.0-SNAPSHOT in test scope"],
+          "security_sensitivity": "none",
+          "contains_secrets": false,
+          "reliability": "codebase",
+          "confidence": 1.0
+        }
+      ],
+      "patterns_found": [
+        {
+          "name": "streamWithTemplate",
+          "category": "LLM calling pattern",
+          "confidence": 1.0,
+          "source": "codebase_analysis",
+          "example_location": ["TraderAgent.java:248, 268, 289, 310, 363, 531, 543, 570, 700"]
+        },
+        {
+          "name": "createObject with model",
+          "category": "LLM calling pattern",
+          "confidence": 1.0,
+          "source": "codebase_analysis",
+          "example_location": ["BullResearcher.java:25", "BearResearcher.java:25", "RiskDebateService.java:140"]
+        },
+        {
+          "name": "RepeatUntilBuilder subprocess",
+          "category": "Workflow pattern",
+          "confidence": 1.0,
+          "source": "codebase_analysis",
+          "example_location": ["TraderAgent.java:375"]
+        },
+        {
+          "name": "FileCache deduplication",
+          "category": "Caching pattern",
+          "confidence": 1.0,
+          "source": "codebase_analysis",
+          "example_location": ["TraderAgent.java:185, 243, 263, 284, 305, 355, 390, 400"]
+        }
+      ],
+      "dependencies": {
+        "internal": ["FundamentalDataTools", "MarketDataTools", "NewsDataTools", "FileCache", "TemplateRenderer", "TraderAgentConfig"],
+        "external": ["OpenAI-compatible LLM (LiteLLM)", "Yahoo Finance", "Alpha Vantage"]
+      },
+      "gotchas": [
+        { "text": "streamWithTemplate is a private method — test via public actions, not directly", "confidence": 0.9 },
+        { "text": "debateInvestment uses RepeatUntilBuilder.asSubProcess() — complex to mock, may need agent mock injection", "confidence": 0.8 },
+        { "text": "RiskDebateService uses ActionContext not OperationContext — different test setup", "confidence": 0.8 },
+        { "text": "ToolObject mocking in unit tests is complex — consider skipping tool response verification", "confidence": 0.7 },
+        { "text": "embabel-agent-test 0.5.0-SNAPSHOT API may differ from skill docs", "confidence": 0.6 }
+      ],
+      "open_questions": [
+        {
+          "question": "What is the exact API surface of FakePromptRunner in 0.5.0-SNAPSHOT?",
+          "context": "Skill docs describe patterns but actual methods may differ",
+          "type": "research",
+          "affects": ["All unit tests"]
+        },
+        {
+          "question": "How to mock ToolObject in FakePromptRunner tests?",
+          "context": "FundamentalDataTools, NewsDataTools are injected via constructor",
+          "type": "research",
+          "affects": ["TraderAgentLLMTest"]
+        }
+      ]
+    },
+    "prior_decisions": [
+      {
+        "decision": "Use FakePromptRunner for unit tests, EmbabelMockitoIntegrationTest for integration tests",
+        "rationale": ["Embabel skill docs recommend this split", "FakePromptRunner is lighter for isolated testing"],
+        "evidence": [".qwen/skills/embabel-agent/reference/testing.md"],
+        "confidence": 0.95,
+        "linked_constraints": ["Never skip .withId() on LLM calls"],
+        "linked_patterns": ["streamWithTemplate", "createObject with model"]
+      },
+      {
+        "decision": "Group related actions in single test files",
+        "rationale": ["Easier to maintain", "Related actions share test setup"],
+        "evidence": ["Existing test organization"],
+        "confidence": 0.9
+      }
+    ],
+    "evidence_map": [
+      {
+        "claim": "TraderAgent has 10+ LLM-calling actions",
+        "evidence_paths": ["src/main/java/com/embabel/gekko/agent/TraderAgent.java"]
+      },
+      {
+        "claim": "RiskDebateService makes 10 LLM calls per full debate",
+        "evidence_paths": ["src/main/java/com/embabel/gekko/agent/RiskDebateService.java"]
+      },
+      {
+        "claim": "No existing tests cover LLM-calling actions",
+        "evidence_paths": ["src/test/java/com/embabel/gekko/agent/TraderAgentCoreTest.java", "src/test/java/com/embabel/gekko/agent/researchers/BullResearcherTest.java"]
+      }
+    ],
+    "reuse_notes": {
+      "do_not_re_read": [
+        "pom.xml (already read)",
+        ".qwen/skills/embabel-agent/reference/testing.md (already read)"
+      ],
+      "safe_to_assume": [
+        "FakeOperationContext.create() returns a context with FakePromptRunner",
+        "context.expectResponse(T) pre-loads response for next LLM call",
+        "context.promptRunner().getLlmInvocations() returns list of LLM invocations",
+        "EmbabelMockitoIntegrationTest provides whenCreateObject/verifyCreateObjectMatching"
+      ],
+      "verify_before_use": [
+        "FakePromptRunner exact API surface (0.5.0-SNAPSHOT)",
+        "EmbabelMockitoIntegrationTest exact API surface",
+        "How to mock ToolObject in tests"
+      ]
+    }
+  }
+}
