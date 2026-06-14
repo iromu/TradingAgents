@@ -6,21 +6,30 @@ import com.embabel.agent.api.annotation.Agent;
 import com.embabel.agent.api.common.ActionContext;
 import com.embabel.agent.api.common.OperationContext;
 import com.embabel.agent.core.hitl.WaitFor;
+import com.embabel.gekko.domain.Analysts.FundamentalsReport;
+import com.embabel.gekko.domain.Analysts.MarketReport;
+import com.embabel.gekko.domain.Analysts.NewsReport;
+import com.embabel.gekko.domain.Analysts.SocialMediaReport;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.AgentUtils;
 import com.embabel.gekko.util.FileCache;
-import com.embabel.gekko.web.TradingHtmxController.TickerForm;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
-import org.springframework.beans.factory.ObjectProvider;
-
 import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
+import static com.embabel.common.ai.model.ModelProvider.CHEAPEST_ROLE;
 
+/**
+ * Trading Orchestrator — accepts ticker input, generates research plan,
+ * runs HITL approval, then delegates to DebateAgent for the full research workflow.
+ *
+ * Mirrors the Python TradingAgents entry point that kicks off the full agent pipeline.
+ */
 @Agent(description = "Trading Orchestrator — accepts ticker input, generates research plan, runs HITL approval, delegates to DebateAgent")
 @Component
 @RegisterReflectionForBinding({
@@ -47,20 +56,16 @@ public class OrchestratorAgent {
     }
 
     @Action(description = "Convert form input to Ticker object")
-    public ResearchTypes.Ticker tickerFromForm(TickerForm form, OperationContext context) {
-        String content = form.getContent().trim();
+    public ResearchTypes.Ticker tickerFromForm(String tickerInput, OperationContext context) {
+        String content = tickerInput.trim();
         if (content.isBlank()) {
             throw new IllegalArgumentException("Ticker must not be blank");
         }
         String sanitized = content.toUpperCase();
         if (!sanitized.matches("^[A-Z0-9.]+$")) {
-            throw new IllegalArgumentException("Invalid ticker format: " + content);
+            throw new IllegalArgumentException("Invalid ticker format: " + tickerInput);
         }
-        return context.ai()
-                .withLlmByRole(TICKER_MODEL)
-                .withId("tickerFromForm")
-                .creating(ResearchTypes.Ticker.class)
-                .fromPrompt("Extract ticker from: " + sanitized);
+        return new ResearchTypes.Ticker(sanitized, "");
     }
 
     @Action(description = "Generate a research plan for the given ticker")

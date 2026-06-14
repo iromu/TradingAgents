@@ -4,9 +4,11 @@ import com.embabel.agent.api.annotation.AchievesGoal;
 import com.embabel.agent.api.annotation.Action;
 import com.embabel.agent.api.annotation.Agent;
 import com.embabel.agent.api.common.ActionContext;
+import com.embabel.gekko.agent.risk.AggressiveDebator;
+import com.embabel.gekko.agent.risk.ConservativeDebator;
+import com.embabel.gekko.agent.risk.NeutralDebator;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.AgentUtils;
-import com.embabel.gekko.util.FileCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
@@ -16,9 +18,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static com.embabel.common.ai.model.ModelProvider.CHEAPEST_ROLE;
+import org.springframework.beans.factory.ObjectProvider;
 
-@Agent(description = "Risk Debate Agent — runs 3-round structured risk debate (bull → bear → judge)")
+import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
+
+/**
+ * Risk Debate Agent — runs a 3-round structured risk debate with 3 debators
+ * (Aggressive, Conservative, Neutral) in round-robin order, then judges the debate.
+ * Mirrors Python's risk management team with round-robin turn-order via latest_speaker.
+ */
+@Agent(description = "Risk Debate Agent — runs 3-round structured risk debate (aggressive → conservative → neutral → judge)")
 @Component
 @RegisterReflectionForBinding({RiskAssessment.class, RiskAssessmentOutput.class, RiskLevel.class})
 @RequiredArgsConstructor
@@ -27,80 +36,105 @@ public class RiskDebateAgent {
 
     private static final int MAX_RISK_DEBATE_ROUNDS = 3;
 
-    private final FileCache cache;
+    private final ObjectProvider<AggressiveDebator> aggressiveDebatorProvider;
+    private final ObjectProvider<ConservativeDebator> conservativeDebatorProvider;
+    private final ObjectProvider<NeutralDebator> neutralDebatorProvider;
 
-    @Action(description = "Assess risk via 3-round structured debate")
+    private AggressiveDebator getAggressiveDebator() {
+        return aggressiveDebatorProvider.getObject();
+    }
+
+    private ConservativeDebator getConservativeDebator() {
+        return conservativeDebatorProvider.getObject();
+    }
+
+    private NeutralDebator getNeutralDebator() {
+        return neutralDebatorProvider.getObject();
+    }
+
+    @Action(description = "Assess risk via 3-round structured debate with 3 debators")
     @AchievesGoal(description = "Produce risk assessment")
-    public RiskAssessment assessRisk(ResearchTypes.Ticker ticker, ResearchTypes.DebateBriefs briefs, ResearchTypes.InvestmentDebateState debateState, ActionContext actionContext) {
-        List<String> riskyResponses = new ArrayList<>();
-        List<String> neutralResponses = new ArrayList<>();
-        List<String> conservativeResponses = new ArrayList<>();
+    public RiskAssessment assessRisk(
+            ResearchTypes.Ticker ticker,
+            ResearchTypes.DebateBriefs briefs,
+            ResearchTypes.InvestmentDebateState debateState,
+            String traderProposal,
+            ActionContext actionContext
+    ) {
+        var aggressiveDebator = getAggressiveDebator();
+        var conservativeDebator = getConservativeDebator();
+        var neutralDebator = getNeutralDebator();
 
-        String prevSafe = "No response yet.";
-        String prevNeutral = "No response yet.";
+        List<String> aggressiveResponses = new ArrayList<>();
+        List<String> conservativeResponses = new ArrayList<>();
+        List<String> neutralResponses = new ArrayList<>();
+
+        String currentAggressive = "";
+        String currentConservative = "";
+        String currentNeutral = "";
+
+        String history = debateState.history() != null ? String.join("\n", debateState.history()) : "";
 
         for (int round = 0; round < MAX_RISK_DEBATE_ROUNDS; round++) {
-            String riskyResponse = promptDebator(actionContext, "risk/AggressiveDebator", Map.of(
-                    "trader_decision", "Invest",
-                    "market_research_report", briefs.marketBrief(),
-                    "sentiment_report", briefs.socialBrief(),
-                    "news_report", briefs.newsBrief(),
-                    "fundamentals_report", briefs.fundamentalsBrief(),
-                    "history", debateState.history() != null ? String.join("\n", debateState.history()) : "",
-                    "current_safe_response", prevSafe,
-                    "current_neutral_response", prevNeutral
-            ));
-            riskyResponses.add(riskyResponse);
+            // Aggressive speaks (Python: round-robin via latest_speaker, starts with Aggressive)
+            currentAggressive = aggressiveDebator.argue(
+                    "Invest",
+                    briefs.marketBrief(),
+                    briefs.socialBrief(),
+                    briefs.newsBrief(),
+                    briefs.fundamentalsBrief(),
+                    history,
+                    currentConservative,
+                    currentNeutral,
+                    actionContext
+            );
+            history += "\n" + currentAggressive;
+            aggressiveResponses.add(currentAggressive);
 
-            String conservativeResponse = promptDebator(actionContext, "risk/ConservativeDebator", Map.of(
-                    "trader_decision", "Invest",
-                    "market_research_report", briefs.marketBrief(),
-                    "sentiment_report", briefs.socialBrief(),
-                    "news_report", briefs.newsBrief(),
-                    "fundamentals_report", briefs.fundamentalsBrief(),
-                    "history", debateState.history() != null ? String.join("\n", debateState.history()) : "",
-                    "current_risky_response", riskyResponse,
-                    "current_neutral_response", prevNeutral
-            ));
-            conservativeResponses.add(conservativeResponse);
+            // Conservative speaks
+            currentConservative = conservativeDebator.argue(
+                    "Invest",
+                    briefs.marketBrief(),
+                    briefs.socialBrief(),
+                    briefs.newsBrief(),
+                    briefs.fundamentalsBrief(),
+                    history,
+                    currentAggressive,
+                    currentNeutral,
+                    actionContext
+            );
+            history += "\n" + currentConservative;
+            conservativeResponses.add(currentConservative);
 
-            String neutralResponse = promptDebator(actionContext, "risk/NeutralDebator", Map.of(
-                    "trader_decision", "Invest",
-                    "market_research_report", briefs.marketBrief(),
-                    "sentiment_report", briefs.socialBrief(),
-                    "news_report", briefs.newsBrief(),
-                    "fundamentals_report", briefs.fundamentalsBrief(),
-                    "history", debateState.history() != null ? String.join("\n", debateState.history()) : "",
-                    "current_risky_response", riskyResponse,
-                    "current_safe_response", conservativeResponse
-            ));
-            neutralResponses.add(neutralResponse);
+            // Neutral speaks
+            currentNeutral = neutralDebator.argue(
+                    "Invest",
+                    briefs.marketBrief(),
+                    briefs.socialBrief(),
+                    briefs.newsBrief(),
+                    briefs.fundamentalsBrief(),
+                    history,
+                    currentAggressive,
+                    currentConservative,
+                    actionContext
+            );
+            history += "\n" + currentNeutral;
+            neutralResponses.add(currentNeutral);
 
-            log.info("Risk debate round {} complete: risky={}, neutral={}, conservative={}",
+            log.info("Risk debate round {} complete: aggressive={}, conservative={}, neutral={}",
                     round + 1,
-                    shortPreview(riskyResponse),
-                    shortPreview(neutralResponse),
-                    shortPreview(conservativeResponse));
-
-            prevSafe = conservativeResponse;
-            prevNeutral = neutralResponse;
+                    shortPreview(currentAggressive),
+                    shortPreview(currentConservative),
+                    shortPreview(currentNeutral));
         }
 
-        String allResponses = String.join("\n\n--- RISKY ---\n\n", riskyResponses)
+        String allResponses = String.join("\n\n--- AGGRESSIVE ---\n\n", aggressiveResponses)
                 + "\n\n--- CONSERVATIVE ---\n\n"
                 + String.join("\n\n--- CONSERVATIVE ---\n\n", conservativeResponses)
                 + "\n\n--- NEUTRAL ---\n\n"
                 + String.join("\n\n--- NEUTRAL ---\n\n", neutralResponses);
 
         return judgeRisk(ticker.content(), allResponses, actionContext);
-    }
-
-    private String promptDebator(ActionContext actionContext, String templateName, Map<String, Object> model) {
-        return actionContext.ai()
-                .withLlmByRole(CHEAPEST_ROLE)
-                .withId("riskDebator")
-                .withTemplate(templateName)
-                .createObject(String.class, model);
     }
 
     private RiskAssessment judgeRisk(String ticker, String debateOutput, ActionContext actionContext) {
@@ -113,7 +147,7 @@ public class RiskDebateAgent {
 
         try {
             var output = actionContext.ai()
-                    .withLlmByRole(CHEAPEST_ROLE)
+                    .withLlmByRole(BEST_ROLE)
                     .withId("riskJudge")
                     .withTemplate("managers/RiskManager")
                     .createObject(RiskAssessmentOutput.class, model);
@@ -121,7 +155,7 @@ public class RiskDebateAgent {
         } catch (Exception e) {
             log.warn("Structured risk assessment failed, falling back to string parsing: {}", e.getMessage());
             var fallbackResult = actionContext.ai()
-                    .withLlmByRole(CHEAPEST_ROLE)
+                    .withLlmByRole(BEST_ROLE)
                     .withId("riskJudge")
                     .withTemplate("managers/RiskManager")
                     .createObject(String.class, model);

@@ -11,23 +11,36 @@ import com.embabel.gekko.domain.Analysts.MarketReport;
 import com.embabel.gekko.domain.Analysts.NewsReport;
 import com.embabel.gekko.domain.Analysts.SocialMediaReport;
 import com.embabel.gekko.domain.ResearchTypes;
-import com.embabel.gekko.util.FileCache;
 import com.embabel.gekko.util.AgentUtils;
+import com.embabel.gekko.util.FileCache;
 import com.embabel.common.textio.template.TemplateRenderer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import org.springframework.beans.factory.ObjectProvider;
-
 import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
 import static com.embabel.common.ai.model.ModelProvider.CHEAPEST_ROLE;
 
-@Agent(description = "Debate Agent — generates analyst reports, runs debate loop, risk debate, HITL review, and final plan")
+/**
+ * Debate Agent — orchestrates the full research workflow:
+ * 1. Generate 4 analyst reports (fundamentals, market, news, social media)
+ * 2. Distill reports into debate briefs
+ * 3. Run bull/bear debate loop (DebateLoopAgent sub-process)
+ * 4. Research Manager produces investment plan
+ * 5. Trader produces transaction proposal
+ * 6. Risk Debate Agent assesses risk (sub-process)
+ * 7. Portfolio Manager produces final decision
+ * 8. HITL review
+ * 9. Final investment plan
+ *
+ * Mirrors the Python TradingAgents pipeline architecture.
+ */
+@Agent(description = "Debate Agent — orchestrates full research workflow: reports, debate, risk, portfolio decision")
 @Component
 @RegisterReflectionForBinding({
         FundamentalsReport.class,
@@ -36,9 +49,8 @@ import static com.embabel.common.ai.model.ModelProvider.CHEAPEST_ROLE;
         SocialMediaReport.class,
         ResearchTypes.DebateBriefs.class,
         ResearchTypes.InvestmentDebateState.class,
-        RiskAssessment.class,
-        ResearchTypes.InvestmentReviewFeedback.class,
-        ResearchTypes.InvestmentPlan.class
+        ResearchTypes.InvestmentPlan.class,
+        ResearchTypes.InvestmentReviewFeedback.class
 })
 @RequiredArgsConstructor
 @Slf4j
@@ -47,14 +59,24 @@ public class DebateAgent {
     private final FileCache cache;
     private final TemplateRenderer templateRenderer;
     private final ObjectProvider<com.embabel.agent.core.Agent> debateLoopAgentProvider;
-    private final ObjectProvider<com.embabel.agent.core.Agent> riskDebateAgentProvider;
+    private final ObjectProvider<RiskDebateAgent> riskDebateAgentProvider;
+    private final ObjectProvider<Trader> traderProvider;
+    private final ObjectProvider<PortfolioManager> portfolioManagerProvider;
 
     private com.embabel.agent.core.Agent getDebateLoopAgent() {
         return debateLoopAgentProvider.getObject();
     }
 
-    private com.embabel.agent.core.Agent getRiskDebateAgent() {
+    private RiskDebateAgent getRiskDebateAgent() {
         return riskDebateAgentProvider.getObject();
+    }
+
+    private Trader getTrader() {
+        return traderProvider.getObject();
+    }
+
+    private PortfolioManager getPortfolioManager() {
+        return portfolioManagerProvider.getObject();
     }
 
     @Action(description = "Generate fundamentals report from ticker")
@@ -126,21 +148,8 @@ public class DebateAgent {
             SocialMediaReport social,
             ActionContext actionContext
     ) {
-        if (ticker.content() == null || ticker.content().isBlank()) {
-            throw new IllegalArgumentException("Ticker must not be blank");
-        }
-        if (fundamentals.content() == null || fundamentals.content().isBlank()) {
-            throw new IllegalArgumentException("Fundamentals report must not be null or blank");
-        }
-        if (market.content() == null || market.content().isBlank()) {
-            throw new IllegalArgumentException("Market report must not be null or blank");
-        }
-        if (news.content() == null || news.content().isBlank()) {
-            throw new IllegalArgumentException("News report must not be null or blank");
-        }
-        if (social.content() == null || social.content().isBlank()) {
-            throw new IllegalArgumentException("Social media report must not be null or blank");
-        }
+        validateReports(ticker, fundamentals, market, news, social);
+
         String key = ticker.content() + "_briefs";
         return cache.getOrCompute(key, ResearchTypes.DebateBriefs.class, () -> {
             String fb = distill("FUNDAMENTALS", fundamentals.content(), ticker, actionContext);
@@ -154,14 +163,39 @@ public class DebateAgent {
         });
     }
 
-    @Action(description = "Run iterative bull/bear debate loop via DebateLoopAgent")
+    @Action(description = "Run iterative bull/bear debate loop via DebateLoopAgent sub-process")
     public ResearchTypes.InvestmentDebateState runDebate(ResearchTypes.Ticker ticker, ResearchTypes.DebateBriefs briefs, ActionContext actionContext) {
         return actionContext.asSubProcess(ResearchTypes.InvestmentDebateState.class, getDebateLoopAgent());
     }
 
-    @Action(description = "Run 3-round risk debate via RiskDebateAgent")
-    public RiskAssessment runRiskDebate(ResearchTypes.Ticker ticker, ResearchTypes.DebateBriefs briefs, ResearchTypes.InvestmentDebateState state, ActionContext actionContext) {
-        return actionContext.asSubProcess(RiskAssessment.class, getRiskDebateAgent());
+    @Action(description = "Produce trader proposal from research plan")
+    public String runTrader(ResearchTypes.Ticker ticker, String researchPlan, ActionContext actionContext) {
+        return getTrader().traderProposal(ticker, researchPlan, actionContext);
+    }
+
+    @Action(description = "Run 3-round risk debate via RiskDebateAgent sub-process")
+    public RiskAssessment runRiskDebate(
+            ResearchTypes.Ticker ticker,
+            ResearchTypes.DebateBriefs briefs,
+            ResearchTypes.InvestmentDebateState state,
+            String traderProposal,
+            ActionContext actionContext
+    ) {
+        return getRiskDebateAgent().assessRisk(ticker, briefs, state, traderProposal, actionContext);
+    }
+
+    @Action(description = "Produce final portfolio decision from risk debate, research plan, and trader proposal")
+    public String runPortfolioManager(
+            ResearchTypes.Ticker ticker,
+            String researchPlan,
+            String traderProposal,
+            ResearchTypes.InvestmentDebateState debateState,
+            RiskAssessment riskAssessment,
+            ActionContext actionContext
+    ) {
+        return getPortfolioManager().portfolioDecision(
+                ticker, debateState, researchPlan, traderProposal, riskAssessment, actionContext
+        );
     }
 
     @Action(description = "Wait for user review after debate completes")
@@ -179,6 +213,7 @@ public class DebateAgent {
             ResearchTypes.InvestmentDebateState state,
             RiskAssessment riskAssessment,
             ResearchTypes.InvestmentReviewFeedback feedback,
+            String portfolioDecision,
             OperationContext context
     ) {
         String key = ticker.content() + "_research_manager";
@@ -193,6 +228,7 @@ public class DebateAgent {
                     ? sanitizeForPrompt(feedback.feedback())
                     : null);
             model.put("ticker", ticker.content());
+            model.put("portfolio_decision", portfolioDecision);
 
             String result = context.ai()
                     .withLlmByRole(BEST_ROLE)
@@ -201,6 +237,29 @@ public class DebateAgent {
                     .createObject(String.class, model);
             return new ResearchTypes.InvestmentPlan(result, state);
         });
+    }
+
+    private void validateReports(
+            ResearchTypes.Ticker ticker,
+            FundamentalsReport fundamentals,
+            MarketReport market,
+            NewsReport news,
+            SocialMediaReport social) {
+        if (ticker.content() == null || ticker.content().isBlank()) {
+            throw new IllegalArgumentException("Ticker must not be blank");
+        }
+        if (fundamentals.content() == null || fundamentals.content().isBlank()) {
+            throw new IllegalArgumentException("Fundamentals report must not be null or blank");
+        }
+        if (market.content() == null || market.content().isBlank()) {
+            throw new IllegalArgumentException("Market report must not be null or blank");
+        }
+        if (news.content() == null || news.content().isBlank()) {
+            throw new IllegalArgumentException("News report must not be null or blank");
+        }
+        if (social.content() == null || social.content().isBlank()) {
+            throw new IllegalArgumentException("Social media report must not be null or blank");
+        }
     }
 
     private String distill(String reportType, String content, ResearchTypes.Ticker ticker, ActionContext ctx) {

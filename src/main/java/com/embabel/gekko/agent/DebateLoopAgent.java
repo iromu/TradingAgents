@@ -72,7 +72,8 @@ public class DebateLoopAgent {
                                 last.count() / 2, similarity, config.similarityThreshold());
                     }
 
-                    return new ResearchTypes.InvestmentDebateState(history, bullHistory, bearHistory, bearResponse, count, briefs, null);
+                    return new ResearchTypes.InvestmentDebateState(history, bullHistory, bearHistory, bearResponse, count, briefs, null,
+                            "", "", "", "", "");
                 })
                 .until(ctx -> {
                     ResearchTypes.InvestmentDebateState last = ctx.lastAttempt();
