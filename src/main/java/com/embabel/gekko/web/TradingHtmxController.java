@@ -6,17 +6,15 @@ import com.embabel.agent.core.Budget;
 import com.embabel.agent.core.ProcessOptions;
 import com.embabel.agent.core.AgentProcessStatusCode;
 import com.embabel.agent.core.Verbosity;
-import com.embabel.agent.core.hitl.Awaitable;
-import com.embabel.agent.core.hitl.FormBindingRequest;
 import com.embabel.agent.core.hitl.FormResponse;
-import com.embabel.gekko.agent.TraderAgent.ResearchPlan;
+import com.embabel.gekko.agent.OrchestratorAgent;
 import com.embabel.gekko.htmx.GenericProcessingValues;
+import com.embabel.gekko.util.AgentUtils;
 import com.embabel.ux.form.Form;
 import com.embabel.ux.form.FormSubmission;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,12 +26,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
 @Controller
-@RequestMapping({"/", "/travel/journey"})
+@RequestMapping({"/", "/research"})
 public class TradingHtmxController {
 
     private static final Logger logger = LoggerFactory.getLogger(TradingHtmxController.class);
@@ -63,20 +60,11 @@ public class TradingHtmxController {
 
     @SuppressWarnings("SameReturnValue")
     @PostMapping("/plan")
-    public String planJourney(
+    public String planResearch(
             @ModelAttribute TickerForm form,
             Model model
     ) {
-
-        var agent = agentPlatform.agents()
-                .stream()
-                .filter(a -> a.getName().toLowerCase().contains("trader"))
-                .findFirst()
-                .orElseThrow(() ->
-                        new IllegalStateException(
-                                "No trading agent found. Please ensure the tripper agent is registered."
-                        )
-                );
+        var agent = AgentUtils.findAgent(agentPlatform, OrchestratorAgent.class);
 
         var agentProcess = agentPlatform.createAgentProcessFrom(
                 agent,
@@ -91,9 +79,9 @@ public class TradingHtmxController {
 
         new GenericProcessingValues(
                 agentProcess,
-                "Planning your journey",
+                "Planning your research",
                 form.content,
-                "travelPlan",
+                "researchPlan",
                 "plan"
         ).addToModel(model);
 
@@ -101,12 +89,6 @@ public class TradingHtmxController {
 
         // Check if the process has already entered WAITING state (plan generated, awaiting approval)
         // The process may have transitioned quickly through RUNNING → WAITING
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException ignored) {
-            Thread.currentThread().interrupt();
-        }
-
         AgentProcess process = agentPlatform.getAgentProcess(agentProcess.getId());
         if (process != null && process.getStatus() == AgentProcessStatusCode.WAITING) {
             // Redirect to plan review page
@@ -118,9 +100,9 @@ public class TradingHtmxController {
 
         new GenericProcessingValues(
                 agentProcess,
-                "Planning your journey",
+                "Planning your research",
                 form.content,
-                "travelPlan",
+                "researchPlan",
                 "plan"
         ).addToModel(model);
 
@@ -148,8 +130,8 @@ public class TradingHtmxController {
             return "redirect:/plan/status/" + processId;
         }
 
-        // Extract the plan content from the blackboard FormBindingRequest
-        String planContent = extractPlanContent(process);
+        // Extract the plan content from the blackboard
+        String planContent = AgentUtils.extractPlanContent(process);
         if (planContent == null || planContent.isEmpty()) {
             redirectAttrs.addFlashAttribute("error", "Plan not yet available. Please wait.");
             return "redirect:/plan/status/" + processId;
@@ -180,28 +162,16 @@ public class TradingHtmxController {
             return "redirect:/";
         }
 
-        synchronized (process) {
+        synchronized (AgentUtils.getProcessLock(processId)) {
             // Check process is still WAITING — prevent duplicate submissions
             if (process.getStatus() != AgentProcessStatusCode.WAITING) {
                 redirectAttrs.addFlashAttribute("error", "Process is no longer in WAITING state.");
                 return "redirect:/plan/review/" + processId;
             }
 
-            // Find the FormBindingRequest on the blackboard
-            @SuppressWarnings("unchecked")
-            List<FormBindingRequest<?>> requests = (List) process.getBlackboard().getObjects()
-                    .stream()
-                    .filter(FormBindingRequest.class::isInstance)
-                    .map(o -> (FormBindingRequest<?>) o)
-                    .toList();
-
-            if (requests.isEmpty()) {
-                redirectAttrs.addFlashAttribute("error", "No WaitFor form found for this process.");
-                return "redirect:/plan/review/" + processId;
-            }
-
-            FormBindingRequest<?> request = requests.get(0);
-            Form form = (Form) request.getPayload();
+            var formRequest = AgentUtils.findWaitForForm(process)
+                    .orElseThrow(() -> new IllegalStateException("No WaitFor form found for this process."));
+            var form = (Form) formRequest.getPayload();
 
             // Build the form submission values map
             // The form has fields: approved (boolean) and feedback (String)
@@ -211,16 +181,16 @@ public class TradingHtmxController {
             FormSubmission submission = new FormSubmission(form.getId().toString(), values, submissionId, java.time.Instant.now());
 
             // Create the form response
-            FormResponse response = new FormResponse(
+            var response = new FormResponse(
                     UUID.randomUUID().toString(),
-                    request.getId().toString(),
+                    formRequest.getId().toString(),
                     submission,
                     false,
                     java.time.Instant.now()
             );
 
             // Process the form response — this binds the result to the blackboard
-            request.onResponse(response, process);
+            formRequest.onResponse(response, process);
 
             // Resume the process
             try {
@@ -272,26 +242,5 @@ public class TradingHtmxController {
         ).addToModel(model);
 
         return "common/processing";
-    }
-
-    /**
-     * Extract the research plan content from the blackboard.
-     * Uses the same pattern as ProcessStatusController.renderWaitingForm.
-     */
-    private String extractPlanContent(AgentProcess process) {
-        try {
-            var blackboard = process.getBlackboard();
-            if (blackboard == null) {
-                return null;
-            }
-            List<ResearchPlan> plans = blackboard.objectsOfType(ResearchPlan.class);
-            if (!plans.isEmpty()) {
-                return plans.get(0).content();
-            }
-            return null;
-        } catch (Exception e) {
-            logger.warn("Failed to extract plan content from blackboard: {}", e.getMessage());
-            return null;
-        }
     }
 }

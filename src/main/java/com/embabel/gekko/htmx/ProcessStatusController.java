@@ -14,7 +14,7 @@ import com.embabel.ux.form.Control;
 import com.embabel.ux.form.Form;
 import com.embabel.ux.form.FormSubmission;
 import com.embabel.ux.form.SimpleFormGenerator;
-import com.embabel.gekko.agent.TraderAgent;
+import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.htmx.GenericProcessingValues;
 import com.embabel.gekko.htmx.HitlService.HitlSession;
 import com.embabel.gekko.web.TradingHtmxController.TickerForm;
@@ -204,12 +204,12 @@ public class ProcessStatusController {
         }
 
         model.addAttribute("processId", agentProcess.getId());
-        model.addAttribute("pageTitle", "Planning your journey (retry)");
+        model.addAttribute("pageTitle", "Planning your research (retry)");
         new GenericProcessingValues(
                 agentProcess,
-                "Planning your journey (retry)",
+                "Planning your research (retry)",
                 userInput,
-                "travelPlan",
+                "researchPlan",
                 "plan"
         ).addToModel(model);
 
@@ -236,10 +236,10 @@ public class ProcessStatusController {
         }
 
         // Use bullHistory and bearHistory directly instead of reconstructing from the flat history list
-        List<TraderAgent.InvestmentDebateState> debateStates = blackboard.objectsOfType(TraderAgent.InvestmentDebateState.class);
+        List<ResearchTypes.InvestmentDebateState> debateStates = blackboard.objectsOfType(ResearchTypes.InvestmentDebateState.class);
         List<Map<String, Object>> debateHistory = new ArrayList<>();
         if (!debateStates.isEmpty()) {
-            TraderAgent.InvestmentDebateState state = debateStates.get(0);
+            ResearchTypes.InvestmentDebateState state = debateStates.get(0);
             List<String> bullHistory = state.bullHistory();
             List<String> bearHistory = state.bearHistory();
             int maxTurns = Math.max(bullHistory.size(), bearHistory.size());

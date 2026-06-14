@@ -12,13 +12,17 @@ import com.embabel.gekko.domain.Analysts.NewsReport;
 import com.embabel.gekko.domain.Analysts.SocialMediaReport;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.util.AgentUtils;
 import com.embabel.common.textio.template.TemplateRenderer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.stereotype.Component;
 
+import java.util.LinkedHashMap;
 import java.util.Map;
+
+import org.springframework.beans.factory.ObjectProvider;
 
 import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
 import static com.embabel.common.ai.model.ModelProvider.CHEAPEST_ROLE;
@@ -42,8 +46,16 @@ public class DebateAgent {
 
     private final FileCache cache;
     private final TemplateRenderer templateRenderer;
-    private final com.embabel.agent.core.Agent debateLoopAgent;
-    private final com.embabel.agent.core.Agent riskDebateAgent;
+    private final ObjectProvider<com.embabel.agent.core.Agent> debateLoopAgentProvider;
+    private final ObjectProvider<com.embabel.agent.core.Agent> riskDebateAgentProvider;
+
+    private com.embabel.agent.core.Agent getDebateLoopAgent() {
+        return debateLoopAgentProvider.getObject();
+    }
+
+    private com.embabel.agent.core.Agent getRiskDebateAgent() {
+        return riskDebateAgentProvider.getObject();
+    }
 
     @Action(description = "Generate fundamentals report from ticker")
     public FundamentalsReport generateFundamentalsReport(ResearchTypes.Ticker ticker, OperationContext context) {
@@ -144,12 +156,12 @@ public class DebateAgent {
 
     @Action(description = "Run iterative bull/bear debate loop via DebateLoopAgent")
     public ResearchTypes.InvestmentDebateState runDebate(ResearchTypes.Ticker ticker, ResearchTypes.DebateBriefs briefs, ActionContext actionContext) {
-        return actionContext.asSubProcess(ResearchTypes.InvestmentDebateState.class, debateLoopAgent);
+        return actionContext.asSubProcess(ResearchTypes.InvestmentDebateState.class, getDebateLoopAgent());
     }
 
     @Action(description = "Run 3-round risk debate via RiskDebateAgent")
     public RiskAssessment runRiskDebate(ResearchTypes.Ticker ticker, ResearchTypes.DebateBriefs briefs, ResearchTypes.InvestmentDebateState state, ActionContext actionContext) {
-        return actionContext.asSubProcess(RiskAssessment.class, riskDebateAgent);
+        return actionContext.asSubProcess(RiskAssessment.class, getRiskDebateAgent());
     }
 
     @Action(description = "Wait for user review after debate completes")
@@ -160,31 +172,33 @@ public class DebateAgent {
         );
     }
 
-    @Action(description = "Generate final investment plan from debate state and user feedback")
+    @Action(description = "Generate final investment plan from debate state, risk assessment, and user feedback")
     @AchievesGoal(description = "Generate final investment plan")
     public ResearchTypes.InvestmentPlan researchManager(
             ResearchTypes.Ticker ticker,
             ResearchTypes.InvestmentDebateState state,
+            RiskAssessment riskAssessment,
             ResearchTypes.InvestmentReviewFeedback feedback,
             OperationContext context
     ) {
         String key = ticker.content() + "_research_manager";
         return cache.getOrCompute(key, ResearchTypes.InvestmentPlan.class, () -> {
+            var model = new LinkedHashMap<String, Object>();
+            model.put("past_memory_str", AgentUtils.NO_PAST_MEMORY);
+            model.put("history", String.join("\n", state.history()));
+            model.put("risk_level", riskAssessment != null ? riskAssessment.level().name() : null);
+            model.put("risk_reasoning", riskAssessment != null ? riskAssessment.reasoning() : null);
+            model.put("human_approved", feedback != null && feedback.approved());
+            model.put("user_feedback", feedback != null && feedback.approved() && feedback.feedback() != null && !feedback.feedback().isBlank()
+                    ? sanitizeForPrompt(feedback.feedback())
+                    : null);
+            model.put("ticker", ticker.content());
+
             String result = context.ai()
                     .withLlmByRole(BEST_ROLE)
                     .withId("researchManager")
                     .withTemplate("managers/ResearchManager")
-                    .createObject(String.class, Map.of(
-                            "past_memory_str", "No past memories found.",
-                            "history", String.join("\n", state.history()),
-                            "risk_level", state.riskAssessment() != null ? state.riskAssessment().level().name() : null,
-                            "risk_reasoning", state.riskAssessment() != null ? state.riskAssessment().reasoning() : null,
-                            "human_approved", feedback != null && feedback.approved(),
-                            "user_feedback", feedback != null && feedback.approved() && feedback.feedback() != null && !feedback.feedback().isBlank()
-                                    ? sanitizeForPrompt(feedback.feedback())
-                                    : null,
-                            "ticker", ticker.content()
-                    ));
+                    .createObject(String.class, model);
             return new ResearchTypes.InvestmentPlan(result, state);
         });
     }
@@ -206,11 +220,18 @@ public class DebateAgent {
             return "";
         }
         String sanitized = input
+                // Block complete Jinja variable expressions: {{ ... }}
                 .replaceAll("(?s)\\{\\{.*?\\}\\}", "[BLOCKED_TEMPLATE]")
+                // Block complete Jinja statement expressions: {% ... %}
                 .replaceAll("(?s)\\{%.*?%\\}", "[BLOCKED_TEMPLATE]")
-                .replaceAll("(?s)\\{\\{.*", "[BLOCKED_TEMPLATE]")
-                .replaceAll("(?s)\\{%.*", "[BLOCKED_TEMPLATE]")
-                .replaceAll("(?s)```.*?", "[BLOCKED_CODE]");
+                // Block unclosed Jinja variable: {{ without matching }}
+                .replaceAll("(?s)\\{\\{[^}]*$", "[BLOCKED_TEMPLATE]")
+                // Block unclosed Jinja statement: {% without matching %}
+                .replaceAll("(?s)\\{%[^%]*$", "[BLOCKED_TEMPLATE]")
+                // Block markdown code fences (triple backtick blocks)
+                .replaceAll("(?s)```[\\s\\S]*?```", "[BLOCKED_CODE]")
+                // Block unclosed code fence
+                .replaceAll("(?s)```.*$", "[BLOCKED_CODE]");
 
         StringBuilder sb = new StringBuilder(sanitized.length());
         for (int i = 0; i < sanitized.length(); i++) {

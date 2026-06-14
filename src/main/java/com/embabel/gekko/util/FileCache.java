@@ -1,6 +1,6 @@
 package com.embabel.gekko.util;
 
-import com.embabel.gekko.agent.TraderAgent;
+import com.embabel.gekko.domain.ResearchTypes;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -146,7 +146,7 @@ public class FileCache {
      */
     public void save(String key, Object value) {
         try {
-            if (value instanceof TraderAgent.Report report) {
+            if (value instanceof ResearchTypes.Report report) {
                 mapper.writeValue(fileForKey(key, ".json"), value);
                 saveMarkdown(key, report.content());
             } else if (value instanceof String string) {

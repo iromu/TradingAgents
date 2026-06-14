@@ -1,7 +1,7 @@
 package com.embabel.gekko.agent;
 
-import com.embabel.gekko.agent.TraderAgent.DebateBriefs;
-import com.embabel.gekko.agent.TraderAgent.Ticker;
+import com.embabel.gekko.domain.ResearchTypes.DebateBriefs;
+import com.embabel.gekko.domain.ResearchTypes.Ticker;
 import com.embabel.gekko.domain.Analysts.FundamentalsReport;
 import com.embabel.gekko.domain.Analysts.MarketReport;
 import com.embabel.gekko.domain.Analysts.NewsReport;
@@ -11,13 +11,13 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for prepareDebateBriefs validation using pure logic tests.
- * Verifies validation throws IllegalArgumentException on null/blank reports.
+ * Unit tests for DebateBriefs validation using pure logic tests.
+ * Verifies DebateBriefs record construction and content() method.
  */
 class DebateBriefsUnitTest {
 
     @Test
-    void prepareDebateBriefs_validAllReports() {
+    void debateBriefs_validAllReports() {
         var briefs = new DebateBriefs("fundamentals", "market", "news", "social");
         assertNotNull(briefs);
         assertEquals("fundamentals", briefs.fundamentalsBrief());
@@ -27,7 +27,7 @@ class DebateBriefsUnitTest {
     }
 
     @Test
-    void prepareDebateBriefs_throwsOnNullFundamentals() {
+    void debateBriefs_throwsOnNullFundamentals() {
         FundamentalsReport nullReport = null;
         assertThrows(IllegalArgumentException.class, () -> {
             if (nullReport == null || nullReport.content() == null || nullReport.content().isBlank()) {
@@ -37,7 +37,7 @@ class DebateBriefsUnitTest {
     }
 
     @Test
-    void prepareDebateBriefs_throwsOnBlankFundamentals() {
+    void debateBriefs_throwsOnBlankFundamentals() {
         assertThrows(IllegalArgumentException.class, () -> {
             var content = "   ";
             if (content == null || content.isBlank()) {
@@ -47,7 +47,7 @@ class DebateBriefsUnitTest {
     }
 
     @Test
-    void prepareDebateBriefs_throwsOnNullMarket() {
+    void debateBriefs_throwsOnNullMarket() {
         MarketReport nullReport = null;
         assertThrows(IllegalArgumentException.class, () -> {
             if (nullReport == null || nullReport.content() == null || nullReport.content().isBlank()) {
@@ -57,7 +57,7 @@ class DebateBriefsUnitTest {
     }
 
     @Test
-    void prepareDebateBriefs_throwsOnBlankMarket() {
+    void debateBriefs_throwsOnBlankMarket() {
         assertThrows(IllegalArgumentException.class, () -> {
             var content = "  ";
             if (content == null || content.isBlank()) {
@@ -78,5 +78,12 @@ class DebateBriefsUnitTest {
         assertTrue(content.contains("M content"));
         assertTrue(content.contains("N content"));
         assertTrue(content.contains("S content"));
+    }
+
+    @Test
+    void ticker_record_valid() {
+        var ticker = new Ticker("AAPL", "");
+        assertEquals("AAPL", ticker.content());
+        assertEquals("", ticker.feedback());
     }
 }

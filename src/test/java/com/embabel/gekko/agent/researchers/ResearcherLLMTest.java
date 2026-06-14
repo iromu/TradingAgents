@@ -1,7 +1,7 @@
 package com.embabel.gekko.agent.researchers;
 
 import com.embabel.gekko.agent.FakeActionContext;
-import com.embabel.gekko.agent.TraderAgent.DebateBriefs;
+import com.embabel.gekko.domain.ResearchTypes;
 import org.junit.jupiter.api.Test;
 
 import java.util.Collections;
@@ -21,7 +21,7 @@ class ResearcherLLMTest {
         var context = fake.getActionContext();
         var delegate = fake.getDelegate();
         delegate.expectResponse("# Bull Analyst\nBull argument about revenue growth.");
-        var briefs = new DebateBriefs(
+        var briefs = new ResearchTypes.DebateBriefs(
                 "Revenue grew 15% YoY.",
                 "Bullish breakout above 200-day MA.",
                 "Positive product launch news.",
@@ -43,7 +43,7 @@ class ResearcherLLMTest {
         var context = fake.getActionContext();
         var delegate = fake.getDelegate();
         delegate.expectResponse("# Bear Analyst\nBear argument about valuation concerns.");
-        var briefs = new DebateBriefs(
+        var briefs = new ResearchTypes.DebateBriefs(
                 "Revenue growth slowing.",
                 "Bearish divergence below support.",
                 "Negative regulatory news.",
@@ -65,7 +65,7 @@ class ResearcherLLMTest {
         var context = fake.getActionContext();
         var delegate = fake.getDelegate();
         delegate.expectResponse("# Bull Analyst\nBull argument.");
-        var briefs = new DebateBriefs(
+        var briefs = new ResearchTypes.DebateBriefs(
                 "Fundamentals: Revenue grew 15% YoY.",
                 "Market: Bullish breakout.",
                 "News: Positive product launch.",
@@ -87,7 +87,7 @@ class ResearcherLLMTest {
         var context = fake.getActionContext();
         var delegate = fake.getDelegate();
         delegate.expectResponse("# Bear Analyst\nBear argument.");
-        var briefs = new DebateBriefs(
+        var briefs = new ResearchTypes.DebateBriefs(
                 "Fundamentals: Revenue growth slowing.",
                 "Market: Bearish divergence.",
                 "News: Negative regulatory news.",
@@ -109,7 +109,7 @@ class ResearcherLLMTest {
         var context = fake.getActionContext();
         var delegate = fake.getDelegate();
         delegate.expectResponse("# Bull Analyst\nBull response with history.");
-        var briefs = new DebateBriefs("F", "M", "N", "S");
+        var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
         var history = List.of(
                 "# Bear Analyst\nPrevious bear argument about valuation."
         );

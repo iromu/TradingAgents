@@ -19,6 +19,9 @@ public final class AgentUtils {
 
     private static final Logger log = LoggerFactory.getLogger(AgentUtils.class);
 
+    /** Default value for past_memory_str in LLM prompt models. */
+    public static final String NO_PAST_MEMORY = "No past memories found.";
+
     private AgentUtils() {}
 
     /**
@@ -35,14 +38,17 @@ public final class AgentUtils {
     }
 
     /**
-     * Find the first agent matching the given class in the platform.
+     * Find the first agent matching the given class name in the platform.
      */
-    public static Agent findAgent(AgentPlatform platform, Class<? extends Agent> clazz) {
+    public static Agent findAgent(AgentPlatform platform, Class<?> clazz) {
+        String expectedName = clazz.getSimpleName();
         return platform.agents()
                 .stream()
-                .filter(clazz::isInstance)
+                .filter(a -> a.getName().equals(expectedName))
                 .findFirst()
-                .orElseThrow(() -> new IllegalStateException("No " + clazz.getSimpleName() + " found. Please ensure it is registered."));
+                .orElseThrow(() -> new IllegalStateException(
+                        "No " + expectedName + " found. Please ensure it is registered."
+                ));
     }
 
     /**

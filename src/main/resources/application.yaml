@@ -17,7 +17,8 @@ embabel:
             base-url: ${OPENAI_BASE_URL:http://spark.local:4000}
             models: ${OPENAI_MODEL:Qwen3.6-35B-A3B}
       scanning:
-        bean: false
+        annotation: true
+        bean: true
 
 spring.profiles.active: base,app,observability,local
 logging:

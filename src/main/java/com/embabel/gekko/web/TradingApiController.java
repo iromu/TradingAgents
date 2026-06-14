@@ -8,7 +8,9 @@ import com.embabel.agent.core.ProcessOptions;
 import com.embabel.agent.core.Verbosity;
 import com.embabel.agent.core.hitl.FormBindingRequest;
 import com.embabel.agent.core.hitl.FormResponse;
+import com.embabel.gekko.agent.OrchestratorAgent;
 import com.embabel.gekko.domain.ResearchTypes;
+import com.embabel.gekko.util.AgentUtils;
 import com.embabel.ux.form.Form;
 import com.embabel.ux.form.FormSubmission;
 import org.slf4j.Logger;
@@ -20,12 +22,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -45,46 +45,28 @@ public class TradingApiController {
         this.agentPlatform = agentPlatform;
     }
 
-    /* =======================
-       POST /api/plan — Start research
-       ======================= */
-
     @PostMapping("/plan")
     public ResponseEntity<Map<String, Object>> planResearch(@RequestBody TickerRequest request) {
         var ticker = new ResearchTypes.Ticker(request.ticker(), request.feedback() != null ? request.feedback() : "");
-
-        var agent = agentPlatform.agents()
-                .stream()
-                .filter(a -> a.getName().toLowerCase().contains("orchestrator"))
-                .findFirst()
-                .orElseThrow(() ->
-                        new IllegalStateException("No orchestrator agent found. Please ensure the orchestrator agent is registered.")
-                );
-
+        var agent = AgentUtils.findAgent(agentPlatform, OrchestratorAgent.class);
         var agentProcess = agentPlatform.createAgentProcessFrom(
                 agent,
-                ProcessOptions.DEFAULT
-                        .withVerbosity(new Verbosity(true, true))
-                        .withBudget(new Budget().withTokens(16384)),
+                ProcessOptions.DEFAULT.withVerbosity(new Verbosity(true, true)).withBudget(new Budget().withTokens(16384)),
                 ticker
         );
 
         agentPlatform.start(agentProcess);
-
-        // Check if process is already WAITING (plan generated, awaiting approval)
-        AgentProcess process = agentPlatform.getAgentProcess(agentProcess.getId());
+        var process = agentPlatform.getAgentProcess(agentProcess.getId());
 
         if (process != null && process.getStatus() == AgentProcessStatusCode.WAITING) {
-            String planContent = extractPlanContent(process);
             return ResponseEntity.ok(Map.of(
                     "processId", agentProcess.getId(),
                     "status", "WAITING",
-                    "plan", planContent != null ? planContent : "",
+                    "plan", AgentUtils.extractPlanContent(process),
                     "message", "Research plan generated. Please review and approve."
             ));
         }
 
-        // Still running — return process ID for polling
         return ResponseEntity.ok(Map.of(
                 "processId", agentProcess.getId(),
                 "status", "RUNNING",
@@ -92,93 +74,64 @@ public class TradingApiController {
         ));
     }
 
-    /* =======================
-       GET /api/plan/{processId}/status — Poll process status
-       ======================= */
-
     @GetMapping("/plan/{processId}/status")
     public ResponseEntity<Map<String, Object>> getPlanStatus(@PathVariable String processId) {
-        AgentProcess process = agentPlatform.getAgentProcess(processId);
+        var process = agentPlatform.getAgentProcess(processId);
         if (process == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("error", "Process not found: " + processId));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Process not found: " + processId));
         }
 
-        Map<String, Object> response = new HashMap<>();
+        var response = new HashMap<String, Object>();
         response.put("processId", processId);
         response.put("status", process.getStatus().name());
+        response.put("message", statusMessage(process));
 
         if (process.getStatus() == AgentProcessStatusCode.WAITING) {
-            String planContent = extractPlanContent(process);
-            response.put("plan", planContent != null ? planContent : "");
-            response.put("message", "Plan generated. Submit approval to continue.");
-        } else if (process.getStatus() == AgentProcessStatusCode.COMPLETED) {
-            String investmentPlan = extractInvestmentPlan(process);
-            response.put("investmentPlan", investmentPlan != null ? investmentPlan : "");
-            response.put("message", "Research complete.");
-        } else {
-            response.put("message", "Process is " + process.getStatus().name().toLowerCase() + ".");
+            var waitingMap = new HashMap<String, Object>(response);
+            waitingMap.put("plan", AgentUtils.extractPlanContent(process));
+            waitingMap.put("message", "Plan generated. Submit approval to continue.");
+            return ResponseEntity.ok(waitingMap);
         }
-
+        if (process.getStatus() == AgentProcessStatusCode.COMPLETED) {
+            var completedMap = new HashMap<String, Object>(response);
+            completedMap.put("investmentPlan", AgentUtils.extractInvestmentPlan(process));
+            completedMap.put("message", "Research complete.");
+            return ResponseEntity.ok(completedMap);
+        }
         return ResponseEntity.ok(response);
     }
-
-    /* =======================
-       POST /api/plan/{processId}/approve — Approve plan
-       ======================= */
 
     @PostMapping("/plan/{processId}/approve")
     public ResponseEntity<Map<String, Object>> approvePlan(
             @PathVariable String processId,
             @RequestBody ApprovalRequest request
     ) {
-        AgentProcess process = agentPlatform.getAgentProcess(processId);
+        var process = agentPlatform.getAgentProcess(processId);
         if (process == null) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(Map.of("error", "Process not found: " + processId));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Process not found: " + processId));
         }
 
-        synchronized (process) {
+        synchronized (AgentUtils.getProcessLock(processId)) {
             if (process.getStatus() != AgentProcessStatusCode.WAITING) {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST)
                         .body(Map.of("error", "Process is no longer in WAITING state. Current: " + process.getStatus()));
             }
 
-            // Find the WaitFor form on the blackboard
-            @SuppressWarnings("unchecked")
-            List<FormBindingRequest<?>> requests = (List) process.getBlackboard().getObjects()
-                    .stream()
-                    .filter(FormBindingRequest.class::isInstance)
-                    .map(o -> (FormBindingRequest<?>) o)
-                    .toList();
+            var formRequest = AgentUtils.findWaitForForm(process)
+                    .orElseThrow(() -> new IllegalStateException("No WaitFor form found for this process."));
 
-            if (requests.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Map.of("error", "No WaitFor form found for this process."));
-            }
-
-            FormBindingRequest<?> formBindingRequest = requests.get(0);
-            Form form = (Form) formBindingRequest.getPayload();
-
-            Map<String, Object> values = Map.of(
-                    "approved", request.approved(),
-                    "feedback", request.feedback() != null ? request.feedback() : ""
-            );
-
-            String submissionId = UUID.randomUUID().toString();
-            FormSubmission submission = new FormSubmission(
-                    form.getId().toString(), values, submissionId, java.time.Instant.now()
-            );
-
-            FormResponse response = new FormResponse(
+            var form = (Form) formRequest.getPayload();
+            var submission = new FormSubmission(
+                    form.getId().toString(),
+                    Map.of("approved", request.approved(), "feedback", request.feedback() != null ? request.feedback() : ""),
                     UUID.randomUUID().toString(),
-                    formBindingRequest.getId().toString(),
-                    submission,
-                    false,
                     java.time.Instant.now()
             );
+            var response = new FormResponse(
+                    UUID.randomUUID().toString(), formRequest.getId().toString(), submission, false, java.time.Instant.now()
+            );
 
-            formBindingRequest.onResponse(response, process);
+            formRequest.onResponse(response, process);
 
             try {
                 agentPlatform.start(process);
@@ -196,41 +149,13 @@ public class TradingApiController {
         ));
     }
 
-    /* =======================
-       Helpers
-       ======================= */
-
-    private String extractPlanContent(AgentProcess process) {
-        try {
-            var blackboard = process.getBlackboard();
-            if (blackboard == null) return null;
-            List<ResearchTypes.ResearchPlan> plans = blackboard.objectsOfType(ResearchTypes.ResearchPlan.class);
-            if (!plans.isEmpty()) {
-                return plans.get(0).content();
-            }
-        } catch (Exception e) {
-            logger.warn("Failed to extract plan content: {}", e.getMessage());
-        }
-        return null;
+    private String statusMessage(AgentProcess process) {
+        return switch (process.getStatus()) {
+            case WAITING -> "Plan generated. Submit approval to continue.";
+            case COMPLETED -> "Research complete.";
+            default -> "Process is " + process.getStatus().name().toLowerCase() + ".";
+        };
     }
-
-    private String extractInvestmentPlan(AgentProcess process) {
-        try {
-            var blackboard = process.getBlackboard();
-            if (blackboard == null) return null;
-            List<ResearchTypes.InvestmentPlan> plans = blackboard.objectsOfType(ResearchTypes.InvestmentPlan.class);
-            if (!plans.isEmpty()) {
-                return plans.get(0).content();
-            }
-        } catch (Exception e) {
-            logger.warn("Failed to extract investment plan: {}", e.getMessage());
-        }
-        return null;
-    }
-
-    /* =======================
-       Request DTOs
-       ======================= */
 
     public static record TickerRequest(String ticker, String feedback) {}
 

@@ -1,8 +1,8 @@
 package com.embabel.gekko.agent.researchers;
 
 import com.embabel.agent.api.common.ActionContext;
-import com.embabel.gekko.agent.TraderAgent;
-import com.embabel.gekko.agent.TraderAgent.DebateBriefs;
+import com.embabel.gekko.domain.ResearchTypes;
+import com.embabel.gekko.util.AgentUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,7 +16,7 @@ import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
 public class BearResearcher {
 
     public String argue(
-            DebateBriefs briefs,
+            ResearchTypes.DebateBriefs briefs,
             List<String> history,
             ActionContext actionContext
     ) {
@@ -33,7 +33,7 @@ public class BearResearcher {
                         "socialBrief", briefs.socialBrief(),
                         "history", history.isEmpty() ? "No history yet." : String.join("\n", history),
                         "current_response", previousResponse,
-                        "past_memory_str", TraderAgent.NO_PAST_MEMORIES_FOUND
+                        "past_memory_str", AgentUtils.NO_PAST_MEMORY
                 ));
     }
 }

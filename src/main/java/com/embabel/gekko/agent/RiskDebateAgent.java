@@ -5,6 +5,7 @@ import com.embabel.agent.api.annotation.Action;
 import com.embabel.agent.api.annotation.Agent;
 import com.embabel.agent.api.common.ActionContext;
 import com.embabel.gekko.domain.ResearchTypes;
+import com.embabel.gekko.util.AgentUtils;
 import com.embabel.gekko.util.FileCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -19,7 +20,7 @@ import static com.embabel.common.ai.model.ModelProvider.CHEAPEST_ROLE;
 
 @Agent(description = "Risk Debate Agent — runs 3-round structured risk debate (bull → bear → judge)")
 @Component
-@RegisterReflectionForBinding({RiskAssessment.class, RiskLevel.class})
+@RegisterReflectionForBinding({RiskAssessment.class, RiskAssessmentOutput.class, RiskLevel.class})
 @RequiredArgsConstructor
 @Slf4j
 public class RiskDebateAgent {
@@ -95,55 +96,76 @@ public class RiskDebateAgent {
     }
 
     private String promptDebator(ActionContext actionContext, String templateName, Map<String, Object> model) {
-        try {
-            return actionContext.ai()
-                    .withLlmByRole(CHEAPEST_ROLE)
-                    .withId("riskDebator")
-                    .withTemplate(templateName)
-                    .createObject(String.class, model);
-        } catch (Exception e) {
-            log.warn("Risk debator prompt failed: {}", e.getMessage());
-            return "Error: " + e.getMessage();
-        }
+        return actionContext.ai()
+                .withLlmByRole(CHEAPEST_ROLE)
+                .withId("riskDebator")
+                .withTemplate(templateName)
+                .createObject(String.class, model);
     }
 
     private RiskAssessment judgeRisk(String ticker, String debateOutput, ActionContext actionContext) {
-        String result = actionContext.ai()
-                .withLlmByRole(CHEAPEST_ROLE)
-                .withId("riskJudge")
-                .withTemplate("managers/RiskManager")
-                .createObject(String.class, Map.of(
-                        "ticker", ticker.toUpperCase(),
-                        "history", debateOutput,
-                        "trader_decision", "Invest",
-                        "past_memory_str", "No past memories found."
-                ));
+        var model = Map.<String, Object>ofEntries(
+                Map.entry("ticker", ticker.toUpperCase()),
+                Map.entry("history", debateOutput),
+                Map.entry("trader_decision", "Invest"),
+                Map.entry("past_memory_str", AgentUtils.NO_PAST_MEMORY)
+        );
 
-        return parseRiskAssessment(result);
+        try {
+            var output = actionContext.ai()
+                    .withLlmByRole(CHEAPEST_ROLE)
+                    .withId("riskJudge")
+                    .withTemplate("managers/RiskManager")
+                    .createObject(RiskAssessmentOutput.class, model);
+            return new RiskAssessment(output.riskLevel(), output.reasoning());
+        } catch (Exception e) {
+            log.warn("Structured risk assessment failed, falling back to string parsing: {}", e.getMessage());
+            var fallbackResult = actionContext.ai()
+                    .withLlmByRole(CHEAPEST_ROLE)
+                    .withId("riskJudge")
+                    .withTemplate("managers/RiskManager")
+                    .createObject(String.class, model);
+            return parseRiskAssessmentFallback(fallbackResult);
+        }
     }
 
-    private RiskAssessment parseRiskAssessment(String result) {
-        if (result == null || result.isBlank()) {
+    /**
+     * Fallback parser for when structured output is unavailable.
+     * Heuristic keyword matching on the LLM's free-text response.
+     */
+    private RiskAssessment parseRiskAssessmentFallback(String debateOutput) {
+        if (debateOutput == null || debateOutput.isBlank()) {
             return new RiskAssessment(RiskLevel.NEUTRAL, "LLM returned empty result — defaulting to NEUTRAL");
         }
 
-        String lower = result.toLowerCase();
-        RiskLevel level;
-
-        if (lower.contains("buy") && (lower.contains("risk") || lower.contains("bold") || lower.contains("aggressive") || lower.contains("high"))) {
-            level = RiskLevel.RISKY;
-        } else if (lower.contains("sell") || lower.contains("avoid") || lower.contains("cautious") || lower.contains("conservative") || lower.contains("safe")) {
-            level = RiskLevel.CONSERVATIVE;
-        } else {
-            level = RiskLevel.NEUTRAL;
-        }
-
-        String reasoning = result;
-        if (reasoning.length() > 200) {
-            reasoning = reasoning.substring(0, 200) + "...";
-        }
+        var lower = debateOutput.toLowerCase();
+        var level = classifyRisk(lower);
+        var reasoning = truncate(debateOutput, 200);
 
         return new RiskAssessment(level, reasoning);
+    }
+
+    private RiskLevel classifyRisk(String lower) {
+        if (lower.contains("buy") && riskWords(lower)) {
+            return RiskLevel.RISKY;
+        }
+        if (sellWords(lower)) {
+            return RiskLevel.CONSERVATIVE;
+        }
+        return RiskLevel.NEUTRAL;
+    }
+
+    private boolean riskWords(String s) {
+        return s.contains("risk") || s.contains("bold") || s.contains("aggressive") || s.contains("high");
+    }
+
+    private boolean sellWords(String s) {
+        return s.contains("sell") || s.contains("avoid") || s.contains("cautious")
+                || s.contains("conservative") || s.contains("safe");
+    }
+
+    private String truncate(String s, int max) {
+        return s.length() > max ? s.substring(0, max) + "..." : s;
     }
 
     private String shortPreview(String s) {
