@@ -3,8 +3,8 @@ title: "Gekko Project Wiki"
 type: "index"
 status: "active"
 language: "default"
-last_commit: "f41770ef0d59b84808c7fecf5ff54893231dfe2a"
-updated_at: "2026-06-13"
+last_commit: "f38f648d1f4359b9c5b0bfc23d662fadbb5427a9"
+updated_at: "2026-06-14"
 ---
 
 # Gekko: Multi-Agent Trading Research Platform
@@ -81,3 +81,16 @@ See `[[trading-workflow]]` for the full step-by-step flow.
 - **Utilities:** `[[date-utils]]`, `[[indicator-mapper]]`
 - **UI:** `src/main/resources/templates/` (Thymeleaf templates)
 - **Prompts:** `src/main/resources/prompts/` (Jinja templates)
+
+## Embabel Framework Documentation
+
+Distilled wiki pages covering the Embabel agent framework the project is built on:
+
+| Page | Content |
+|------|---------|
+| `[[embabel-agent-framework]]` | Core concepts: agents, tools, MCP, DICE, planning strategies, key APIs |
+| `[[embabel-tools-subagents]]` | Tool instances, tool groups, subagents, agentic tools, decoration pattern |
+| `[[embabel-planning-strategies]]` | GOAP, Utility AI, Hybrid, Supervisor planners in detail |
+| `[[embabel-testing]]` | FakePromptRunner, EmbabelMockitoIntegrationTest, unit and integration testing |
+
+Raw source docs are in `docs/embabel-agent-docs/` (from [docs.embabel.com](https://docs.embabel.com)).
