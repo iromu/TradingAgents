@@ -1,6 +1,7 @@
 package com.embabel.gekko.agent;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -10,7 +11,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class RiskDebateServiceUnitTest {
 
     private RiskDebateAgent createAgent() {
-        return new RiskDebateAgent(null);
+        return new RiskDebateAgent(
+                Mockito.mock(org.springframework.beans.factory.ObjectProvider.class),
+                Mockito.mock(org.springframework.beans.factory.ObjectProvider.class),
+                Mockito.mock(org.springframework.beans.factory.ObjectProvider.class)
+        );
     }
 
     @Test

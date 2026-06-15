@@ -43,18 +43,14 @@ class OrchestratorAgentLLMTest {
 
     @Test
     void tickerFromForm_usesCorrectRoleAndId() {
-        // Arrange
-        ctx.expectResponse(new ResearchTypes.Ticker("AAPL", ""));
-
-        // Act
+        // Act — tickerFromForm no longer calls LLM, just validates and returns
         ResearchTypes.Ticker result = agent.tickerFromForm(new TickerForm("AAPL", ""), ctx);
 
         // Assert
         assertEquals("AAPL", result.content());
+        // No LLM call — ticker extraction is deterministic
         List<LlmInvocation> invocations = promptRunner.getLlmInvocations();
-        assertEquals(1, invocations.size());
-        var inv = invocations.get(0);
-        assertEquals("tickerFromForm", inv.getInteraction().getId());
+        assertEquals(0, invocations.size());
     }
 
     @Test
@@ -73,10 +69,7 @@ class OrchestratorAgentLLMTest {
 
     @Test
     void tickerFromForm_convertsToUpperCase() {
-        // Arrange
-        ctx.expectResponse(new ResearchTypes.Ticker("AAPL", ""));
-
-        // Act
+        // Act — no LLM call needed, just string manipulation
         ResearchTypes.Ticker result = agent.tickerFromForm(new TickerForm("aapl", ""), ctx);
 
         // Assert

@@ -1,46 +1,54 @@
 package com.embabel.gekko.agent;
 
-import com.embabel.gekko.agent.FakeActionContext;
+import com.embabel.gekko.agent.risk.AggressiveDebator;
+import com.embabel.gekko.agent.risk.ConservativeDebator;
+import com.embabel.gekko.agent.risk.NeutralDebator;
 import com.embabel.gekko.domain.ResearchTypes;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 
 import java.util.Collections;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.when;
 
-/**
- * Unit tests for RiskDebateAgent.assessRisk using FakePromptRunner.
- * Verifies 10 LLM invocations (3 rounds x 3 debators + 1 judge) with correct IDs.
- */
 class RiskDebateServiceLLMTest {
 
     private RiskDebateAgent createAgent() {
-        return new RiskDebateAgent(null);
-    }
+        var aggressive = Mockito.mock(AggressiveDebator.class);
+        var conservative = Mockito.mock(ConservativeDebator.class);
+        var neutral = Mockito.mock(NeutralDebator.class);
+        when(aggressive.argue(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(),
+                Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any()))
+                .thenReturn("Aggressive argument");
+        when(conservative.argue(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(),
+                Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any()))
+                .thenReturn("Conservative argument");
+        when(neutral.argue(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(),
+                Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any()))
+                .thenReturn("Neutral argument");
+        when(aggressive.argue(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
+                Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
+                Mockito.anyString(), Mockito.anyString(), Mockito.any()))
+                .thenReturn("Aggressive argument");
+        when(conservative.argue(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
+                Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
+                Mockito.anyString(), Mockito.anyString(), Mockito.any()))
+                .thenReturn("Conservative argument");
+        when(neutral.argue(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
+                Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
+                Mockito.anyString(), Mockito.anyString(), Mockito.any()))
+                .thenReturn("Neutral argument");
 
-    @Test
-    void assessRisk_10LLMCallsVerified() {
-        var fake = FakeActionContext.create();
-        var context = fake.getActionContext();
-        var delegate = fake.getDelegate();
-        for (int i = 0; i < 9; i++) {
-            delegate.expectResponse("NEUTRAL");
-        }
-        // 10th response for structured judge output
-        delegate.expectResponse(new RiskAssessmentOutput(RiskLevel.NEUTRAL, "NEUTRAL"));
-        var ticker = new ResearchTypes.Ticker("AAPL", "");
-        var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
-        var debateState = new ResearchTypes.InvestmentDebateState(
-                List.of("history"), List.of(), List.of(), "", 0, briefs, null
-        );
-        createAgent().assessRisk(ticker, briefs, debateState, context);
-        var invocations = delegate.getPromptRunner().getLlmInvocations();
-        assertEquals(10, invocations.size());
-        for (int i = 0; i < 9; i++) {
-            assertEquals("riskDebator", invocations.get(i).getInteraction().getId());
-        }
-        assertEquals("riskJudge", invocations.get(9).getInteraction().getId());
+        var aggressiveProvider = Mockito.mock(org.springframework.beans.factory.ObjectProvider.class);
+        var conservativeProvider = Mockito.mock(org.springframework.beans.factory.ObjectProvider.class);
+        var neutralProvider = Mockito.mock(org.springframework.beans.factory.ObjectProvider.class);
+        when(aggressiveProvider.getObject()).thenReturn(aggressive);
+        when(conservativeProvider.getObject()).thenReturn(conservative);
+        when(neutralProvider.getObject()).thenReturn(neutral);
+
+        return new RiskDebateAgent(aggressiveProvider, conservativeProvider, neutralProvider);
     }
 
     @Test
@@ -54,9 +62,10 @@ class RiskDebateServiceLLMTest {
         var ticker = new ResearchTypes.Ticker("TSLA", "");
         var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
         var debateState = new ResearchTypes.InvestmentDebateState(
-                List.of(), List.of(), List.of(), "", 0, briefs, null
+                List.of(), List.of(), List.of(), "", 0, briefs, null,
+                "", "", "", "", ""
         );
-        var result = createAgent().assessRisk(ticker, briefs, debateState, context);
+        var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertEquals(RiskLevel.RISKY, result.level());
     }
 
@@ -71,9 +80,10 @@ class RiskDebateServiceLLMTest {
         var ticker = new ResearchTypes.Ticker("KO", "");
         var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
         var debateState = new ResearchTypes.InvestmentDebateState(
-                List.of(), List.of(), List.of(), "", 0, briefs, null
+                List.of(), List.of(), List.of(), "", 0, briefs, null,
+                "", "", "", "", ""
         );
-        var result = createAgent().assessRisk(ticker, briefs, debateState, context);
+        var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertEquals(RiskLevel.CONSERVATIVE, result.level());
     }
 
@@ -88,9 +98,10 @@ class RiskDebateServiceLLMTest {
         var ticker = new ResearchTypes.Ticker("JNJ", "");
         var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
         var debateState = new ResearchTypes.InvestmentDebateState(
-                List.of(), List.of(), List.of(), "", 0, briefs, null
+                List.of(), List.of(), List.of(), "", 0, briefs, null,
+                "", "", "", "", ""
         );
-        var result = createAgent().assessRisk(ticker, briefs, debateState, context);
+        var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertEquals(RiskLevel.NEUTRAL, result.level());
     }
 
@@ -105,12 +116,10 @@ class RiskDebateServiceLLMTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
         var debateState = new ResearchTypes.InvestmentDebateState(
-                Collections.emptyList(),
-                Collections.emptyList(),
-                Collections.emptyList(),
-                "", 0, briefs, null
+                Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
+                "", 0, briefs, null, "", "", "", "", ""
         );
-        var result = createAgent().assessRisk(ticker, briefs, debateState, context);
+        var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertNotNull(result);
         assertEquals(RiskLevel.NEUTRAL, result.level());
     }
@@ -126,30 +135,10 @@ class RiskDebateServiceLLMTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var briefs = new ResearchTypes.DebateBriefs("", "", "", "");
         var debateState = new ResearchTypes.InvestmentDebateState(
-                List.of(), List.of(), List.of(), "", 0, briefs, null
+                List.of(), List.of(), List.of(), "", 0, briefs, null,
+                "", "", "", "", ""
         );
-        var result = createAgent().assessRisk(ticker, briefs, debateState, context);
+        var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertNotNull(result);
-    }
-
-    @Test
-    void assessRisk_allInvocationsRecordedOnSameRunner() {
-        var fake = FakeActionContext.create();
-        var context = fake.getActionContext();
-        var delegate = fake.getDelegate();
-        for (int i = 0; i < 9; i++) {
-            delegate.expectResponse("NEUTRAL");
-        }
-        delegate.expectResponse(new RiskAssessmentOutput(RiskLevel.NEUTRAL, "NEUTRAL"));
-        var ticker = new ResearchTypes.Ticker("AAPL", "");
-        var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
-        var debateState = new ResearchTypes.InvestmentDebateState(
-                List.of(), List.of(), List.of(), "", 0, briefs, null
-        );
-        var promptRunner = delegate.getPromptRunner();
-        createAgent().assessRisk(ticker, briefs, debateState, context);
-        var invocations = promptRunner.getLlmInvocations();
-        assertEquals(10, invocations.size());
-        assertSame(invocations, delegate.getLlmInvocations());
     }
 }
