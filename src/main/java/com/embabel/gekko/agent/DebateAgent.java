@@ -11,6 +11,7 @@ import com.embabel.gekko.domain.Analysts.MarketReport;
 import com.embabel.gekko.domain.Analysts.NewsReport;
 import com.embabel.gekko.domain.Analysts.SocialMediaReport;
 import com.embabel.gekko.domain.ResearchTypes;
+import com.embabel.gekko.agent.managers.PortfolioManager;
 import com.embabel.gekko.util.AgentUtils;
 import com.embabel.gekko.util.FileCache;
 import com.embabel.common.textio.template.TemplateRenderer;

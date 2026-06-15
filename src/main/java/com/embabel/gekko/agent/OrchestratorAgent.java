@@ -56,14 +56,14 @@ public class OrchestratorAgent {
     }
 
     @Action(description = "Convert form input to Ticker object")
-    public ResearchTypes.Ticker tickerFromForm(String tickerInput, OperationContext context) {
-        String content = tickerInput.trim();
+    public ResearchTypes.Ticker tickerFromForm(com.embabel.gekko.web.TradingHtmxController.TickerForm form, OperationContext context) {
+        String content = form.getContent().trim();
         if (content.isBlank()) {
             throw new IllegalArgumentException("Ticker must not be blank");
         }
         String sanitized = content.toUpperCase();
         if (!sanitized.matches("^[A-Z0-9.]+$")) {
-            throw new IllegalArgumentException("Invalid ticker format: " + tickerInput);
+            throw new IllegalArgumentException("Invalid ticker format: " + content);
         }
         return new ResearchTypes.Ticker(sanitized, "");
     }
