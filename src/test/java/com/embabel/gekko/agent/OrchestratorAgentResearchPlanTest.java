@@ -2,7 +2,9 @@ package com.embabel.gekko.agent;
 
 import com.embabel.agent.test.unit.FakeOperationContext;
 import com.embabel.agent.test.unit.FakePromptRunner;
+import com.embabel.gekko.agent.identity.InstrumentIdentityAgent;
 import com.embabel.gekko.config.TraderAgentConfig;
+import com.embabel.gekko.dataflows.YFinService;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.FileCache;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,6 +23,7 @@ class OrchestratorAgentResearchPlanTest {
     private FakeOperationContext ctx;
     private FakePromptRunner promptRunner;
     private OrchestratorAgent agent;
+    private InstrumentIdentityAgent identityAgent;
 
     /**
      * Creates a FileCache backed by a unique temp directory.
@@ -43,9 +46,15 @@ class OrchestratorAgentResearchPlanTest {
     void setUp() {
         ctx = FakeOperationContext.create();
         promptRunner = ctx.getPromptRunner();
+        FileCache testCache = createCache();
+        YFinService yFinService = new YFinService();
+        identityAgent = new InstrumentIdentityAgent(yFinService, testCache);
         agent = new OrchestratorAgent(
-                createCache(),
-                null // debateAgentProvider — not needed for generateResearchPlan
+                testCache,
+                identityAgent,
+                null, // memoryAgent — not needed for generateResearchPlan
+                null, // checkpointAgent — not needed for generateResearchPlan
+                null  // debateAgentProvider — not needed for generateResearchPlan
         );
     }
 
@@ -56,7 +65,7 @@ class OrchestratorAgentResearchPlanTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
 
         // Act
-        var result = agent.generateResearchPlan(ticker, ctx);
+        var result = agent.generateResearchPlan(ticker, null, ctx);
 
         // Assert
         var invocations = promptRunner.getLlmInvocations();
@@ -71,7 +80,7 @@ class OrchestratorAgentResearchPlanTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
 
         // Act
-        agent.generateResearchPlan(ticker, ctx);
+        agent.generateResearchPlan(ticker, null, ctx);
 
         // Assert
         assertEquals("generateResearchPlan", promptRunner.getLlmInvocations().get(0).getInteraction().getId());
@@ -84,7 +93,7 @@ class OrchestratorAgentResearchPlanTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
 
         // Act
-        var result = agent.generateResearchPlan(ticker, ctx);
+        var result = agent.generateResearchPlan(ticker, null, ctx);
 
         // Assert
         assertNotNull(result);
@@ -98,11 +107,11 @@ class OrchestratorAgentResearchPlanTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
 
         // Act — first call
-        var result1 = agent.generateResearchPlan(ticker, ctx);
+        var result1 = agent.generateResearchPlan(ticker, null, ctx);
 
         // Act — second call (should hit cache)
         ctx.expectResponse("Should not reach here.");
-        var result2 = agent.generateResearchPlan(ticker, ctx);
+        var result2 = agent.generateResearchPlan(ticker, null, ctx);
 
         // Assert — only 1 LLM call (second hit cache)
         var invocations = promptRunner.getLlmInvocations();
@@ -119,9 +128,9 @@ class OrchestratorAgentResearchPlanTest {
         var ticker2 = new ResearchTypes.Ticker("MSFT", "");
 
         // Act — two different tickers, each makes its own LLM call
-        var result1 = agent.generateResearchPlan(ticker1, ctx);
+        var result1 = agent.generateResearchPlan(ticker1, null, ctx);
         ctx.expectResponse("MSFT plan.");
-        var result2 = agent.generateResearchPlan(ticker2, ctx);
+        var result2 = agent.generateResearchPlan(ticker2, null, ctx);
 
         // Assert — 2 LLM calls (different cache keys)
         var invocations = promptRunner.getLlmInvocations();
@@ -137,7 +146,7 @@ class OrchestratorAgentResearchPlanTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
 
         // Act
-        agent.generateResearchPlan(ticker, ctx);
+        agent.generateResearchPlan(ticker, null, ctx);
 
         // Assert
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
@@ -152,7 +161,7 @@ class OrchestratorAgentResearchPlanTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
 
         // Act
-        agent.generateResearchPlan(ticker, ctx);
+        agent.generateResearchPlan(ticker, null, ctx);
 
         // Assert — verify the LLM call was made
         var invocations = promptRunner.getLlmInvocations();
@@ -166,7 +175,7 @@ class OrchestratorAgentResearchPlanTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
 
         // Act
-        agent.generateResearchPlan(ticker, ctx);
+        agent.generateResearchPlan(ticker, null, ctx);
 
         // Assert — verify the LLM call was made
         var invocations = promptRunner.getLlmInvocations();
@@ -180,7 +189,7 @@ class OrchestratorAgentResearchPlanTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
 
         // Act
-        agent.generateResearchPlan(ticker, ctx);
+        agent.generateResearchPlan(ticker, null, ctx);
 
         // Assert — verify the LLM call was made
         var invocations = promptRunner.getLlmInvocations();
@@ -194,7 +203,7 @@ class OrchestratorAgentResearchPlanTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
 
         // Act
-        agent.generateResearchPlan(ticker, ctx);
+        agent.generateResearchPlan(ticker, null, ctx);
 
         // Assert — verify the LLM call was made
         var invocations = promptRunner.getLlmInvocations();

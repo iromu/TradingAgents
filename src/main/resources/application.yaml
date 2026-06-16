@@ -20,6 +20,29 @@ embabel:
         annotation: true
         bean: true
 
+app:
+  memory:
+    log-path: ~/.tradingagents/memory/trading_memory.md
+    log-max-entries: 0
+  checkpoint:
+    enabled: false
+    dir: data/checkpoints
+  fred:
+    api-key: ${FRED_API_KEY:}
+    enabled: true
+  polymarket:
+    enabled: true
+  llm-options:
+    provider: openai-compat
+    best-model: ${OPENAI_MODEL:Qwen3.6-35B-A3B}
+    cheapest-model: ${OPENAI_MODEL:Qwen3.6-35B-A3B}
+    anthropic:
+      effort: high
+    google:
+      thinking-level: high
+    openai:
+      reasoning-effort: high
+
 spring.profiles.active: base,app,observability,local
 logging:
   level:

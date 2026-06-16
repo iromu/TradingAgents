@@ -12,6 +12,7 @@ import com.embabel.gekko.domain.Analysts.NewsReport;
 import com.embabel.gekko.domain.Analysts.SocialMediaReport;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.agent.managers.PortfolioManager;
+import com.embabel.gekko.agent.memory.DecisionMemoryAgent;
 import com.embabel.gekko.util.AgentUtils;
 import com.embabel.gekko.util.FileCache;
 import com.embabel.common.textio.template.TemplateRenderer;
@@ -59,6 +60,7 @@ public class DebateAgent {
 
     private final FileCache cache;
     private final TemplateRenderer templateRenderer;
+    private final DecisionMemoryAgent memoryAgent;
     private final ObjectProvider<com.embabel.agent.core.Agent> debateLoopAgentProvider;
     private final ObjectProvider<RiskDebateAgent> riskDebateAgentProvider;
     private final ObjectProvider<Trader> traderProvider;
@@ -238,6 +240,66 @@ public class DebateAgent {
                     .createObject(String.class, model);
             return new ResearchTypes.InvestmentPlan(result, state);
         });
+    }
+
+    @Action(description = "Store the final decision to memory for future learning")
+    public void storeFinalDecision(
+            ResearchTypes.Ticker ticker,
+            ResearchTypes.InvestmentPlan plan,
+            String tradeDate
+    ) {
+        if (plan == null || plan.judgeDecision().isBlank()) {
+            log.warn("No investment plan to store for {}", ticker.content());
+            return;
+        }
+        try {
+            String content = plan.judgeDecision();
+            String rating = extractRating(content);
+            String summary = extractSummary(content);
+            String thesis = extractThesis(content);
+
+            memoryAgent.storeDecision(
+                    ticker.content(),
+                    tradeDate,
+                    rating,
+                    summary,
+                    thesis
+            );
+            log.info("Stored final decision for {} on {}", ticker.content(), tradeDate);
+        } catch (Exception e) {
+            log.error("Failed to store decision for {}: {}", ticker.content(), e.getMessage());
+        }
+    }
+
+    private String extractRating(String content) {
+        String lower = content.toLowerCase();
+        if (lower.contains("buy")) return "Buy";
+        if (lower.contains("sell")) return "Sell";
+        if (lower.contains("overweight")) return "Overweight";
+        if (lower.contains("underweight")) return "Underweight";
+        return "Hold";
+    }
+
+    private String extractSummary(String content) {
+        int firstPeriod = content.indexOf(".\n");
+        if (firstPeriod < 0) firstPeriod = content.indexOf(". ");
+        if (firstPeriod < 0 || firstPeriod > 500) {
+            return content.length() > 500 ? content.substring(0, 500) : content;
+        }
+        return content.substring(0, firstPeriod + 1);
+    }
+
+    private String extractThesis(String content) {
+        int thesisIdx = content.toLowerCase().indexOf("thesis");
+        if (thesisIdx < 0) thesisIdx = content.toLowerCase().indexOf("rationale");
+        if (thesisIdx < 0 || thesisIdx > content.length() / 2) {
+            return content.length() > 300 ? content.substring(0, 300) : content;
+        }
+        int end = content.indexOf("\n\n", thesisIdx);
+        if (end < 0 || end - thesisIdx > 500) {
+            return content.substring(thesisIdx, Math.min(thesisIdx + 500, content.length()));
+        }
+        return content.substring(thesisIdx, end);
     }
 
     private void validateReports(

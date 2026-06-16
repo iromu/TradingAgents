@@ -6,6 +6,10 @@ import com.embabel.agent.api.annotation.Agent;
 import com.embabel.agent.api.common.ActionContext;
 import com.embabel.agent.api.common.OperationContext;
 import com.embabel.agent.core.hitl.WaitFor;
+import com.embabel.gekko.agent.identity.InstrumentContext;
+import com.embabel.gekko.agent.identity.InstrumentIdentityAgent;
+import com.embabel.gekko.agent.checkpoint.CheckpointAgent;
+import com.embabel.gekko.agent.memory.DecisionMemoryAgent;
 import com.embabel.gekko.domain.Analysts.FundamentalsReport;
 import com.embabel.gekko.domain.Analysts.MarketReport;
 import com.embabel.gekko.domain.Analysts.NewsReport;
@@ -36,7 +40,8 @@ import static com.embabel.common.ai.model.ModelProvider.CHEAPEST_ROLE;
         ResearchTypes.Ticker.class,
         ResearchTypes.PlanApproval.class,
         ResearchTypes.ResearchPlan.class,
-        ResearchTypes.InvestmentPlan.class
+        ResearchTypes.InvestmentPlan.class,
+        InstrumentContext.class
 })
 @RequiredArgsConstructor
 @Slf4j
@@ -45,6 +50,9 @@ public class OrchestratorAgent {
     public static final String TICKER_MODEL = BEST_ROLE;
 
     private final FileCache cache;
+    private final InstrumentIdentityAgent identityAgent;
+    private final DecisionMemoryAgent memoryAgent;
+    private final CheckpointAgent checkpointAgent;
     private final ObjectProvider<com.embabel.agent.core.Agent> debateAgentProvider;
 
     private com.embabel.agent.core.Agent getDebateAgent() {
@@ -68,16 +76,37 @@ public class OrchestratorAgent {
         return new ResearchTypes.Ticker(sanitized, "");
     }
 
+    @Action(description = "Resolve ticker to real company identity (name, sector, industry, exchange)")
+    public InstrumentContext resolveIdentity(ResearchTypes.Ticker ticker, OperationContext context) {
+        InstrumentContext contextResult = identityAgent.resolveIdentity(ticker);
+        if (contextResult != null) {
+            log.info("Instrument identity resolved: {} → {}", ticker.content(), contextResult.companyName());
+        } else {
+            log.warn("Instrument identity resolution failed for {}, continuing without context", ticker.content());
+        }
+        return contextResult;
+    }
+
     @Action(description = "Generate a research plan for the given ticker")
-    public ResearchTypes.ResearchPlan generateResearchPlan(ResearchTypes.Ticker ticker, OperationContext context) {
+    public ResearchTypes.ResearchPlan generateResearchPlan(
+            ResearchTypes.Ticker ticker,
+            InstrumentContext instrumentContext,
+            OperationContext context) {
         String key = ticker.content() + "_research_plan";
         return cache.getOrCompute(key, ResearchTypes.ResearchPlan.class, () -> {
             Map<String, Object> model = new java.util.HashMap<>();
-            model.put("past_memory_str", AgentUtils.NO_PAST_MEMORY);
+            String pastContext = generatePastContext(ticker);
+            model.put("past_memory_str", pastContext);
             model.put("history", "");
             model.put("human_approved", false);
             model.put("user_feedback", "");
             model.put("ticker", ticker.content());
+            if (instrumentContext != null) {
+                model.put("companyName", instrumentContext.companyName());
+                model.put("sector", instrumentContext.sector());
+                model.put("industry", instrumentContext.industry());
+                model.put("exchange", instrumentContext.exchange());
+            }
             String result = context.ai()
                     .withLlmByRole(BEST_ROLE)
                     .withId("generateResearchPlan")
@@ -93,6 +122,31 @@ public class OrchestratorAgent {
                 "Review the research plan below and provide feedback, or approve to execute the full research workflow.",
                 ResearchTypes.PlanApproval.class
         );
+    }
+
+    @Action(description = "Resolve any pending decisions for this ticker from previous runs")
+    public void resolvePendingDecisions(ResearchTypes.Ticker ticker, String tradeDate) {
+        try {
+            memoryAgent.resolvePending(ticker.content(), tradeDate, null);
+            log.info("Resolved pending decisions for {}", ticker.content());
+        } catch (Exception e) {
+            log.error("Failed to resolve pending decisions for {}: {}", ticker.content(), e.getMessage());
+        }
+    }
+
+    @Action(description = "Generate past context from decision memory for injection into PM prompt")
+    public String generatePastContext(ResearchTypes.Ticker ticker) {
+        try {
+            String context = memoryAgent.generatePastContext(ticker.content());
+            if (context != null && !context.isBlank()) {
+                log.info("Generated past context for {} ({} chars)", ticker.content(), context.length());
+                return context;
+            }
+            return AgentUtils.NO_PAST_MEMORY;
+        } catch (Exception e) {
+            log.error("Failed to generate past context for {}: {}", ticker.content(), e.getMessage());
+            return AgentUtils.NO_PAST_MEMORY;
+        }
     }
 
     @Action(description = "Delegate to DebateAgent for full research workflow")

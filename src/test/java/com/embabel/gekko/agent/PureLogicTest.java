@@ -16,6 +16,7 @@ class PureLogicTest {
         return new DebateAgent(
                 new FileCache(),
                 null, // TemplateRenderer not needed for sanitizeForPrompt
+                null, // DecisionMemoryAgent not needed for sanitizeForPrompt
                 null, // ObjectProvider for DebateLoopAgent not needed
                 null, // ObjectProvider for RiskDebateAgent not needed
                 null, // ObjectProvider for Trader not needed

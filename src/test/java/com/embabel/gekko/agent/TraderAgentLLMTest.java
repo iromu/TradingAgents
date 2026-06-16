@@ -3,8 +3,11 @@ package com.embabel.gekko.agent;
 import com.embabel.agent.test.unit.FakeOperationContext;
 import com.embabel.agent.test.unit.FakePromptRunner;
 import com.embabel.agent.test.unit.LlmInvocation;
+import com.embabel.gekko.agent.identity.InstrumentIdentityAgent;
 import com.embabel.gekko.config.TraderAgentConfig;
+import com.embabel.gekko.dataflows.YFinService;
 import com.embabel.gekko.domain.ResearchTypes;
+import com.embabel.gekko.util.FileCache;
 import com.embabel.gekko.web.TradingHtmxController.TickerForm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,14 +31,16 @@ class OrchestratorAgentLLMTest {
         ctx = FakeOperationContext.create();
         promptRunner = ctx.getPromptRunner();
 
-        TraderAgentConfig config = new TraderAgentConfig(
-                null, null, 4, null, null, null,
-                "/tmp", 0.8, 5
-        );
+        FileCache cache = new FileCache();
+        YFinService yFinService = new YFinService();
+        InstrumentIdentityAgent identityAgent = new InstrumentIdentityAgent(yFinService, cache);
 
         agent = new OrchestratorAgent(
-                new com.embabel.gekko.util.FileCache(),
-                null
+                cache,
+                identityAgent,
+                null, // memoryAgent
+                null, // checkpointAgent
+                null  // debateAgentProvider
         );
     }
 

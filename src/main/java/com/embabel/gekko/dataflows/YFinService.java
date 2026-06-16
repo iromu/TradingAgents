@@ -35,6 +35,14 @@ public class YFinService {
     private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     /**
+     * Fetch basic company info for a ticker from Yahoo Finance.
+     * Returns null if the ticker is not found or info is unavailable.
+     */
+    public yahoofinance.Stock getTickerInfo(String ticker) throws Exception {
+        return yahoofinance.YahooFinance.get(ticker.toUpperCase());
+    }
+
+    /**
      * Fetch online historical OHLCV via YahooFinance and return CSV string.
      * Dates format: yyyy-MM-dd
      */
