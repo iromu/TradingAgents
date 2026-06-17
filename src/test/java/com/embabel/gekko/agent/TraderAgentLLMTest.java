@@ -3,6 +3,7 @@ package com.embabel.gekko.agent;
 import com.embabel.agent.test.unit.FakeOperationContext;
 import com.embabel.agent.test.unit.FakePromptRunner;
 import com.embabel.agent.test.unit.LlmInvocation;
+import com.embabel.gekko.agent.identity.InstrumentContextPromptContributor;
 import com.embabel.gekko.agent.identity.InstrumentIdentityAgent;
 import com.embabel.gekko.config.TraderAgentConfig;
 import com.embabel.gekko.dataflows.YFinService;
@@ -40,6 +41,7 @@ class OrchestratorAgentLLMTest {
                 identityAgent,
                 null, // memoryAgent
                 null, // checkpointAgent
+                new InstrumentContextPromptContributor(), // instrumentContextContributor
                 null  // debateAgentProvider
         );
     }

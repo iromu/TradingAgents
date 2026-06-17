@@ -16,8 +16,18 @@ public record TraderAgentConfig(
         RoleGoalBackstory writer,
         String outputDirectory,
         double similarityThreshold,
-        int maxDebateIterations
+        int maxDebateIterations,
+        String provider,
+        String bestModel,
+        String cheapestModel,
+        AnthropicProviderConfig anthropic,
+        GoogleProviderConfig google,
+        OpenAiProviderConfig openai
 ) {
+    public record AnthropicProviderConfig(String effort) {}
+    public record GoogleProviderConfig(String thinkingLevel) {}
+    public record OpenAiProviderConfig(String reasoningEffort) {}
+
     private static final Logger log = LoggerFactory.getLogger(TraderAgentConfig.class);
     public TraderAgentConfig {
         if (tickerLlm == null) {

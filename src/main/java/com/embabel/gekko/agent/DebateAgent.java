@@ -238,7 +238,16 @@ public class DebateAgent {
                     .withId("researchManager")
                     .withTemplate("managers/ResearchManager")
                     .createObject(String.class, model);
-            return new ResearchTypes.InvestmentPlan(result, state);
+            var plan = new ResearchTypes.InvestmentPlan(result, state);
+
+            // Store decision to memory after plan is generated
+            try {
+                storeFinalDecision(ticker, plan, "auto");
+            } catch (Exception e) {
+                log.warn("Failed to store decision to memory: {}", e.getMessage());
+            }
+
+            return plan;
         });
     }
 

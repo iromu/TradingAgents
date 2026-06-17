@@ -103,14 +103,14 @@ class CheckpointStoreTest {
         store.saveCheckpoint("AAPL", "2026-01-15", "researchPlan", Map.of("plan", "test"));
         assertTrue(store.hasCheckpoint("AAPL"));
 
-        store.deleteCheckpoint("AAPL");
+        store.deleteCheckpoint("AAPL", "2026-01-15");
 
         assertFalse(store.hasCheckpoint("AAPL"));
     }
 
     @Test
     void deleteCheckpoint_noOpWhenNoFile() {
-        assertDoesNotThrow(() -> store.deleteCheckpoint("NONEXISTENT"));
+        assertDoesNotThrow(() -> store.deleteCheckpoint("NONEXISTENT", "2026-01-15"));
     }
 
     // --- atomic write ---

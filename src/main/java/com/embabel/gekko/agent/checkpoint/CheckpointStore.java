@@ -146,12 +146,12 @@ public class CheckpointStore {
     /**
      * Delete the checkpoint file for a ticker.
      */
-    public void deleteCheckpoint(String ticker) {
+    public void deleteCheckpoint(String ticker, String tradeDate) {
         try {
             Path path = checkpointPath(ticker);
             if (Files.exists(path)) {
                 Files.delete(path);
-                log.info("Deleted checkpoint for {}", ticker);
+                log.info("Deleted checkpoint for {} on {}", ticker, tradeDate);
             }
         } catch (IOException e) {
             log.error("Failed to delete checkpoint for {}: {}", ticker, e.getMessage());

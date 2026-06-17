@@ -70,8 +70,8 @@ public class CheckpointAgent {
     public void clearCheckpoint(String ticker, String tradeDate) {
         if (!checkpointEnabled) return;
         try {
-            store.deleteCheckpoint(ticker);
-            log.info("Cleared checkpoint for {}", ticker);
+            store.deleteCheckpoint(ticker, tradeDate);
+            log.info("Cleared checkpoint for {} on {}", ticker, tradeDate);
         } catch (Exception e) {
             log.error("Failed to clear checkpoint for {}: {}", ticker, e.getMessage());
         }

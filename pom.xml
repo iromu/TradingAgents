@@ -57,6 +57,24 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- embabel-agent-starter-google and embabel-agent-starter-azure are declared in openspec
+             but not yet published to the Embabel repository. Uncomment when available. -->
+        <!--
+        <dependency>
+            <groupId>com.embabel.agent</groupId>
+            <artifactId>embabel-agent-starter-google</artifactId>
+            <version>${embabel-agent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.embabel.agent</groupId>
+            <artifactId>embabel-agent-starter-azure</artifactId>
+            <version>${embabel-agent.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        -->
+
         <dependency>
             <groupId>com.embabel.agent</groupId>
             <artifactId>embabel-agent-starter-webmvc</artifactId>

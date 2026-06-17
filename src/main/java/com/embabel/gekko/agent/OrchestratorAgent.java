@@ -7,6 +7,7 @@ import com.embabel.agent.api.common.ActionContext;
 import com.embabel.agent.api.common.OperationContext;
 import com.embabel.agent.core.hitl.WaitFor;
 import com.embabel.gekko.agent.identity.InstrumentContext;
+import com.embabel.gekko.agent.identity.InstrumentContextPromptContributor;
 import com.embabel.gekko.agent.identity.InstrumentIdentityAgent;
 import com.embabel.gekko.agent.checkpoint.CheckpointAgent;
 import com.embabel.gekko.agent.memory.DecisionMemoryAgent;
@@ -53,6 +54,7 @@ public class OrchestratorAgent {
     private final InstrumentIdentityAgent identityAgent;
     private final DecisionMemoryAgent memoryAgent;
     private final CheckpointAgent checkpointAgent;
+    private final InstrumentContextPromptContributor instrumentContextContributor;
     private final ObjectProvider<com.embabel.agent.core.Agent> debateAgentProvider;
 
     private com.embabel.agent.core.Agent getDebateAgent() {
@@ -81,8 +83,10 @@ public class OrchestratorAgent {
         InstrumentContext contextResult = identityAgent.resolveIdentity(ticker);
         if (contextResult != null) {
             log.info("Instrument identity resolved: {} → {}", ticker.content(), contextResult.companyName());
+            instrumentContextContributor.setContext(contextResult);
         } else {
             log.warn("Instrument identity resolution failed for {}, continuing without context", ticker.content());
+            instrumentContextContributor.setContext(null);
         }
         return contextResult;
     }

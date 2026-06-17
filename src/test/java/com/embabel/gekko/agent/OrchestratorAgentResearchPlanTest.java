@@ -2,6 +2,7 @@ package com.embabel.gekko.agent;
 
 import com.embabel.agent.test.unit.FakeOperationContext;
 import com.embabel.agent.test.unit.FakePromptRunner;
+import com.embabel.gekko.agent.identity.InstrumentContextPromptContributor;
 import com.embabel.gekko.agent.identity.InstrumentIdentityAgent;
 import com.embabel.gekko.config.TraderAgentConfig;
 import com.embabel.gekko.dataflows.YFinService;
@@ -54,6 +55,7 @@ class OrchestratorAgentResearchPlanTest {
                 identityAgent,
                 null, // memoryAgent — not needed for generateResearchPlan
                 null, // checkpointAgent — not needed for generateResearchPlan
+                new InstrumentContextPromptContributor(), // instrumentContextContributor
                 null  // debateAgentProvider — not needed for generateResearchPlan
         );
     }

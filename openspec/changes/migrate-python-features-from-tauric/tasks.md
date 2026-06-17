@@ -263,6 +263,13 @@
 - [x] 6.2.1 Run `./mvnw compile` to verify no compilation errors
 - [x] 6.2.2 Run `./mvnw verify` to confirm build passes
 - [x] 6.2.3 Fix any test failures
+  - Fixed: InstrumentContextPromptContributor missing @Component
+  - Fixed: OrchestratorAgent missing InstrumentContextPromptContributor field
+  - Fixed: DebateAgent.storeFinalDecision called inside researchManager
+  - Fixed: CheckpointStore.deleteCheckpoint signature (added tradeDate)
+  - Fixed: TraderAgentConfig missing provider/model config fields
+  - Fixed: All test files updated for new record constructors
+  - 340 tests pass, 0 failures
 
 ### 6.3 Documentation
 - [x] 6.3.1 Update `AGENTS.md` with new features

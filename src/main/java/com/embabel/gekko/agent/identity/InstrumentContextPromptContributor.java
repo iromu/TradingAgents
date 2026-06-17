@@ -1,16 +1,23 @@
 package com.embabel.gekko.agent.identity;
 
 import com.embabel.common.ai.prompt.PromptContributor;
+import org.springframework.stereotype.Component;
 
 /**
  * Injects resolved instrument identity into LLM prompts to prevent hallucination.
  * Fail-open: if no InstrumentContext is available, contributes nothing.
+ *
+ * The context is set by OrchestratorAgent.resolveIdentity() via setContext().
  */
+@Component
 public class InstrumentContextPromptContributor implements PromptContributor {
 
-    private final InstrumentContext context;
+    private volatile InstrumentContext context;
 
-    public InstrumentContextPromptContributor(InstrumentContext context) {
+    /**
+     * Set by OrchestratorAgent after resolving identity.
+     */
+    public void setContext(InstrumentContext context) {
         this.context = context;
     }
 
