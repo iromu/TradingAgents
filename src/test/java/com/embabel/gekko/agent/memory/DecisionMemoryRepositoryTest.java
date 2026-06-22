@@ -40,9 +40,10 @@ class DecisionMemoryRepositoryTest {
 
         String content = readLog(repo);
         assertTrue(content.contains("[2026-01-15 | AAPL | Buy | pending]"));
-        assertTrue(content.contains("**Rating**: Buy"));
-        assertTrue(content.contains("**Executive Summary**: Strong fundamentals"));
-        assertTrue(content.contains("**Investment Thesis**: Growth thesis"));
+        assertTrue(content.contains("DECISION: AAPL"));
+        assertTrue(content.contains("RATING: Buy"));
+        assertTrue(content.contains("DATE: 2026-01-15"));
+        assertTrue(content.contains("ALPHA: Growth thesis"));
         assertTrue(content.contains("<!-- ENTRY_END -->"));
     }
 
@@ -70,7 +71,9 @@ class DecisionMemoryRepositoryTest {
         assertEquals("AAPL", entries.get(0).ticker());
         assertEquals("2026-01-15", entries.get(0).tradeDate());
         assertEquals("Buy", entries.get(0).rating());
-        assertEquals("Strong fundamentals", entries.get(0).executiveSummary());
+        // New Python-compatible format doesn't have executive summary field
+        assertEquals("N/A", entries.get(0).executiveSummary());
+        assertEquals("Growth thesis", entries.get(0).investmentThesis());
     }
 
     @Test
@@ -404,7 +407,8 @@ class DecisionMemoryRepositoryTest {
 
         String content = readLog(repo);
         for (int i = 0; i < 5; i++) {
-            assertTrue(content.contains("Summary " + i));
+            // New format includes thesis in ALPHA field
+            assertTrue(content.contains("Thesis " + i));
         }
     }
 

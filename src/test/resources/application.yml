@@ -1,0 +1,17 @@
+spring:
+  main:
+    web-application-type: none
+
+embabel:
+  agent:
+    platform:
+      models:
+        anthropic:
+          api-key: dummy-key-for-tests
+        openai:
+          api-key: dummy-key-for-tests
+
+app:
+  checkpoint:
+    enabled: false
+    dir: target/test-checkpoints

@@ -41,7 +41,7 @@ public class DecisionMemoryRepository {
             Pattern.CASE_INSENSITIVE
     );
     private static final Pattern DECISION_BLOCK_RE = Pattern.compile(
-            "DECISION:\\s*\\n\\*\\*Rating\\*\\*:\\s*(.+?)\\s*\\n\\n\\*\\*Executive Summary\\*\\*:\\s*(.+?)\\s*\\n\\n\\*\\*Investment Thesis\\*\\*:\\s*(.+?)(?=\\n\\n<!--|\\Z)",
+            "DECISION:\\s*(.+?)\\s*\\nRATING:\\s*(.+?)\\s*\\nDATE:\\s*(.+?)\\s*\\nRETURNS:\\s*\\nALPHA:\\s*(.+?)(?=\\s*<!--|\\Z)",
             Pattern.DOTALL
     );
     private static final Pattern REFLECTION_BLOCK_RE = Pattern.compile(
@@ -92,18 +92,16 @@ public class DecisionMemoryRepository {
         return """
                 [%s | %s | %s | pending]
 
-                DECISION:
-                **Rating**: %s
-
-                **Executive Summary**: %s
-
-                **Investment Thesis**: %s
-
-                %s
+                DECISION: %s
+                RATING: %s
+                DATE: %s
+                RETURNS:
+                ALPHA: %s
+                <!-- ENTRY_END -->
                 """.formatted(
                 tradeDate, ticker, rating,
-                rating, executiveSummary, investmentThesis,
-                ENTRY_SEPARATOR
+                ticker, rating, tradeDate,
+                investmentThesis
         );
     }
 
@@ -205,9 +203,8 @@ public class DecisionMemoryRepository {
                     String investmentThesis = "N/A";
 
                     if (decisionMatcher.find()) {
-                        rating = decisionMatcher.group(1).trim();
-                        executiveSummary = decisionMatcher.group(2).trim();
-                        investmentThesis = decisionMatcher.group(3).trim();
+                        rating = decisionMatcher.group(2).trim();
+                        investmentThesis = decisionMatcher.group(4).trim();
                     }
 
                     results.add(new PendingDecision(

@@ -43,11 +43,17 @@ class CheckpointResumeIntegrationTest {
         // Verify checkpoint was saved
         assertTrue(store.hasCheckpoint("AAPL"));
 
-        // Restore the checkpoint (returns Map, not CheckpointEntry)
-        var restored = agent.restoreCheckpoint("AAPL", "2026-06-15");
+        // Restore the checkpoint — returns the phases map
+        var phases = agent.restoreCheckpoint("AAPL", "2026-06-15");
 
-        assertNotNull(restored);
-        assertEquals("Buy AAPL on dip", restored.get("plan"));
+        assertNotNull(phases);
+        // Phases map contains phase names as keys, each containing {blackboard: {...}}
+        @SuppressWarnings("unchecked")
+        var researchPlanPhase = (Map<String, Object>) phases.get("researchPlan");
+        assertNotNull(researchPlanPhase);
+        @SuppressWarnings("unchecked")
+        var blackboard = (Map<String, Object>) researchPlanPhase.get("blackboard");
+        assertEquals("Buy AAPL on dip", blackboard.get("plan"));
     }
 
     @Test
@@ -63,12 +69,22 @@ class CheckpointResumeIntegrationTest {
         agent.saveCheckpoint("MSFT", "2026-06-15", "debateBriefs",
                 Map.of("briefs", "Complete"));
 
-        var restored = agent.restoreCheckpoint("MSFT", "2026-06-15");
+        var phases = agent.restoreCheckpoint("MSFT", "2026-06-15");
 
-        assertNotNull(restored);
-        // The merged data should contain both phases
-        assertTrue(restored.containsKey("plan"));
-        assertTrue(restored.containsKey("briefs"));
+        assertNotNull(phases);
+        // Both phases should be present in the phases map
+        assertTrue(phases.containsKey("researchPlan"));
+        assertTrue(phases.containsKey("debateBriefs"));
+        @SuppressWarnings("unchecked")
+        var researchPlanPhase = (Map<String, Object>) phases.get("researchPlan");
+        @SuppressWarnings("unchecked")
+        var debateBriefsPhase = (Map<String, Object>) phases.get("debateBriefs");
+        @SuppressWarnings("unchecked")
+        var researchPlanBB = (Map<String, Object>) researchPlanPhase.get("blackboard");
+        @SuppressWarnings("unchecked")
+        var debateBriefsBB = (Map<String, Object>) debateBriefsPhase.get("blackboard");
+        assertEquals("Initial plan", researchPlanBB.get("plan"));
+        assertEquals("Complete", debateBriefsBB.get("briefs"));
     }
 
     @Test

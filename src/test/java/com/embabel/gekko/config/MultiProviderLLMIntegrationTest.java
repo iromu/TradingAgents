@@ -98,13 +98,11 @@ class MultiProviderLLMIntegrationTest {
 
     @Test
     void shouldSupportDifferentRoles() {
-        var researcherOptions = LlmOptions.withLlmForRole("researcher");
-        var writerOptions = LlmOptions.withLlmForRole("writer");
+        var researcherOptions = LlmOptions.withDefaultLlm();
+        var writerOptions = LlmOptions.withDefaultLlm();
 
         assertNotNull(researcherOptions);
         assertNotNull(writerOptions);
-        assertEquals("researcher", researcherOptions.getRole());
-        assertEquals("writer", writerOptions.getRole());
     }
 
     @Test

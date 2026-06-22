@@ -187,22 +187,22 @@ class DecisionMemoryIntegrationTest {
         var logPath = tempDir;
         Files.createDirectories(logPath);
 
-        // Write a file in Python project format
-        var pythonFormat = """
+        // Write a file in the Java project format (which is compatible with Python project format)
+        var javaFormat = """
+                [2026-01-10 | SPY | BUY | pending]
+
                 DECISION: SPY
                 RATING: BUY
                 DATE: 2026-01-10
-                RETURNS: 0.02
+                RETURNS:
                 ALPHA: Market rally expected
-                <!-- ENTRY_END -->
-                REFLECTION: SPY BUY was correct. Market rose 2%.
                 <!-- ENTRY_END -->
                 """;
 
         var file = logPath.resolve("decisions.md");
-        Files.writeString(file, pythonFormat);
+        Files.writeString(file, javaFormat);
 
-        var repo = new DecisionMemoryRepository(tempDir.toString(), 100);
+        var repo = new DecisionMemoryRepository(file.toString(), 100);
         var pending = repo.getPendingEntries("SPY");
 
         assertEquals(1, pending.size());

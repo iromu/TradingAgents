@@ -49,7 +49,8 @@ class DecisionMemoryAgentTest {
         var entries = repository.getPendingEntries("AAPL");
         assertEquals(1, entries.size());
         assertEquals("Buy", entries.get(0).rating());
-        assertEquals("Strong fundamentals", entries.get(0).executiveSummary());
+        // New Python-compatible format: investment thesis is in ALPHA, executiveSummary is N/A
+        assertEquals("Growth thesis", entries.get(0).investmentThesis());
     }
 
     @Test
