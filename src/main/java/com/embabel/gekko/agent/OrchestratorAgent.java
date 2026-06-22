@@ -98,19 +98,8 @@ public class OrchestratorAgent {
             OperationContext context) {
         String key = ticker.content() + "_research_plan";
         return cache.getOrCompute(key, ResearchTypes.ResearchPlan.class, () -> {
-            Map<String, Object> model = new java.util.HashMap<>();
-            String pastContext = generatePastContext(ticker);
-            model.put("past_memory_str", pastContext);
-            model.put("history", "");
-            model.put("human_approved", false);
-            model.put("user_feedback", "");
-            model.put("ticker", ticker.content());
-            if (instrumentContext != null) {
-                model.put("companyName", instrumentContext.companyName());
-                model.put("sector", instrumentContext.sector());
-                model.put("industry", instrumentContext.industry());
-                model.put("exchange", instrumentContext.exchange());
-            }
+            var model = buildResearchPlanModel(ticker, instrumentContext);
+
             String result = context.ai()
                     .withLlmByRole(BEST_ROLE)
                     .withId("generateResearchPlan")
@@ -118,6 +107,25 @@ public class OrchestratorAgent {
                     .createObject(String.class, model);
             return new ResearchTypes.ResearchPlan(result);
         });
+    }
+
+    private Map<String, Object> buildResearchPlanModel(
+            ResearchTypes.Ticker ticker,
+            InstrumentContext instrumentContext
+    ) {
+        var model = new java.util.HashMap<String, Object>();
+        model.put("past_memory_str", generatePastContext(ticker));
+        model.put("history", "");
+        model.put("human_approved", false);
+        model.put("user_feedback", "");
+        model.put("ticker", ticker.content());
+        if (instrumentContext != null) {
+            model.put("companyName", instrumentContext.companyName());
+            model.put("sector", instrumentContext.sector());
+            model.put("industry", instrumentContext.industry());
+            model.put("exchange", instrumentContext.exchange());
+        }
+        return model;
     }
 
     @Action(description = "Wait for user to review and approve the research plan")

@@ -7,16 +7,15 @@ import com.embabel.agent.core.AgentProcessStatusCode;
 import com.embabel.agent.core.Budget;
 import com.embabel.agent.core.ProcessOptions;
 import com.embabel.agent.core.Verbosity;
-import com.embabel.agent.core.hitl.Awaitable;
 import com.embabel.agent.core.hitl.FormBindingRequest;
 import com.embabel.agent.core.hitl.FormResponse;
 import com.embabel.ux.form.Control;
 import com.embabel.ux.form.Form;
 import com.embabel.ux.form.FormSubmission;
-import com.embabel.ux.form.SimpleFormGenerator;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.htmx.GenericProcessingValues;
 import com.embabel.gekko.htmx.HitlService.HitlSession;
+import com.embabel.gekko.util.AgentUtils;
 import com.embabel.gekko.web.TradingHtmxController.TickerForm;
 
 import org.slf4j.Logger;
@@ -71,7 +70,7 @@ public class ProcessStatusController {
             @RequestParam String successView,
             Model model
     ) {
-
+        AgentUtils.validateProcessId(processId);
         var agentProcess = agentPlatform.getAgentProcess(processId);
         if (agentProcess == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Process not found");
@@ -152,6 +151,7 @@ public class ProcessStatusController {
             @RequestParam(required = false, defaultValue = "") String feedback,
             Model model
     ) {
+        AgentUtils.validateProcessId(processId);
         // Check if already resolved — prevent duplicate resubmissions
         // Synchronized with updateSession to prevent race conditions
         AgentProcess agentProcess;
@@ -302,6 +302,7 @@ public class ProcessStatusController {
             @RequestParam(required = false, defaultValue = "false") boolean approved,
             Model model
     ) {
+        AgentUtils.validateProcessId(processId);
         AgentProcess agentProcess = agentPlatform.getAgentProcess(processId);
         if (agentProcess == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Process not found");

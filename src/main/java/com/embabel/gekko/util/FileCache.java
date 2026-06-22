@@ -14,6 +14,7 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
@@ -73,8 +74,8 @@ public class FileCache {
             StringBuilder sb = new StringBuilder();
             for (byte b : hashed) sb.append(String.format("%02x", b));
             return sb.toString();
-        } catch (Exception e) {
-            throw new RuntimeException(e);
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException("SHA-256 algorithm not available", e);
         }
     }
 
@@ -132,6 +133,11 @@ public class FileCache {
                 T value = supplier.get();
                 save(key, value);
                 return value;
+            } catch (RuntimeException e) {
+                if (e.getCause() instanceof IOException) {
+                    log.warn("Failed to save cache for key {} after successful computation: {}", key, e.getMessage());
+                }
+                throw e;
             } finally {
                 // Clean up the per-key lock after successful computation
                 // to allow new keys to be computed in the future

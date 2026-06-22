@@ -37,6 +37,7 @@ public class HitlService implements DisposableBean {
     }
 
     private final Map<String, HitlSession> sessions = new ConcurrentHashMap<>();
+    private final Map<String, Object> sessionLocks = new ConcurrentHashMap<>();
     private final ScheduledExecutorService cleanupScheduler = Executors.newSingleThreadScheduledExecutor();
     private final Duration sessionTtl;
 
@@ -104,25 +105,29 @@ public class HitlService implements DisposableBean {
 
     /**
      * Update a session with user input, feedback, and the new process ID.
-     * Synchronized to ensure atomic read-modify-write — prevents concurrent updates from silently overwriting.
+     * Per-session locking to avoid global serialization.
      */
-    public synchronized HitlSession updateSession(String processId, String userInput, String feedback, String newProcessId) {
-        HitlSession session = sessions.get(processId);
-        if (session == null) {
-            throw new IllegalArgumentException("No HITL session found for process: " + processId);
+    public HitlSession updateSession(String processId, String userInput, String feedback, String newProcessId) {
+        Object lock = sessionLocks.computeIfAbsent(processId, k -> new Object());
+        synchronized (lock) {
+            HitlSession session = sessions.get(processId);
+            if (session == null) {
+                throw new IllegalArgumentException("No HITL session found for process: " + processId);
+            }
+            HitlSession updated = new HitlSession(
+                    newProcessId,
+                    session.agentName(),
+                    session.errorMessage(),
+                    session.occurredAt(),
+                    userInput,
+                    feedback,
+                    true
+            );
+            sessions.remove(processId);
+            sessions.put(newProcessId, updated);
+            sessionLocks.remove(processId, lock);
+            return updated;
         }
-        HitlSession updated = new HitlSession(
-                newProcessId,
-                session.agentName(),
-                session.errorMessage(),
-                session.occurredAt(),
-                userInput,
-                feedback,
-                true
-        );
-        sessions.remove(processId);
-        sessions.put(newProcessId, updated);
-        return updated;
     }
 
     /**

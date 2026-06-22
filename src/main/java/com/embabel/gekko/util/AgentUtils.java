@@ -3,12 +3,20 @@ package com.embabel.gekko.util;
 import com.embabel.agent.core.Agent;
 import com.embabel.agent.core.AgentPlatform;
 import com.embabel.agent.core.AgentProcess;
+import com.embabel.agent.core.hitl.FormBindingRequest;
+import com.embabel.agent.core.hitl.FormResponse;
 import com.embabel.gekko.domain.ResearchTypes;
+import com.embabel.ux.form.Form;
+import com.embabel.ux.form.FormSubmission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -86,16 +94,65 @@ public final class AgentUtils {
     }
 
     /**
+     * Validate a process ID as a valid UUID.
+     * Extracted from TradingHtmxController and ProcessStatusController.
+     */
+    public static void validateProcessId(String processId) {
+        try {
+            UUID.fromString(processId);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid process ID: " + processId);
+        }
+    }
+
+    /**
+     * Submit a WaitFor form and resume the agent process.
+     * Returns the resumed process, or null if submission failed.
+     */
+    public static AgentProcess submitWaitForForm(
+            AgentProcess process,
+            AgentPlatform platform,
+            Map<String, Object> values,
+            String logPrefix
+    ) {
+        var formRequest = findWaitForForm(process)
+                .orElseThrow(() -> new IllegalStateException("No WaitFor form found for this process."));
+        var form = (Form) formRequest.getPayload();
+
+        String submissionId = UUID.randomUUID().toString();
+        FormSubmission submission = new FormSubmission(form.getId().toString(), values, submissionId, java.time.Instant.now());
+
+        var response = new FormResponse(
+                UUID.randomUUID().toString(),
+                formRequest.getId().toString(),
+                submission,
+                false,
+                java.time.Instant.now()
+        );
+
+        formRequest.onResponse(response, process);
+
+        try {
+            platform.start(process);
+            return process;
+        } catch (Exception e) {
+            log.error("{}: {}", logPrefix, e.getMessage());
+            return null;
+        }
+    }
+
+    /**
      * Extract the WaitFor form binding request from a process blackboard.
      * Returns empty if no form is found.
      */
-    @SuppressWarnings("unchecked")
-    public static java.util.Optional<com.embabel.agent.core.hitl.FormBindingRequest<?>> findWaitForForm(AgentProcess process) {
-        var requests = process.getBlackboard().getObjects()
+    public static Optional<FormBindingRequest<?>> findWaitForForm(AgentProcess process) {
+        var blackboard = process.getBlackboard();
+        if (blackboard == null) return Optional.empty();
+        var requests = blackboard.getObjects()
                 .stream()
-                .filter(com.embabel.agent.core.hitl.FormBindingRequest.class::isInstance)
-                .map(o -> (com.embabel.agent.core.hitl.FormBindingRequest<?>) o)
+                .filter(FormBindingRequest.class::isInstance)
+                .map(o -> (FormBindingRequest<?>) o)
                 .toList();
-        return requests.isEmpty() ? java.util.Optional.empty() : java.util.Optional.of(requests.get(0));
+        return requests.isEmpty() ? Optional.empty() : Optional.of(requests.get(0));
     }
 }

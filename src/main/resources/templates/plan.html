@@ -41,7 +41,7 @@
                 </a>
             </div>
 
-            <div th:utext="${travelPlan.proposal.plan}" style="margin-bottom: 1rem;"></div>
+            <div th:text="${travelPlan.proposal.plan}" style="margin-bottom: 1rem;"></div>
             <h3>Stays</h3>
             <ul style="margin-bottom: 1rem;">
                 <li th:each="stay : ${travelPlan.stays}" style="margin-bottom: 0.5rem;">

@@ -9,11 +9,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.time.Duration;
-
 /**
  * Resolves a ticker symbol to its real company identity (name, sector, industry, exchange)
- * to prevent LLM hallucination. Uses Yahoo Finance for data and FileCache for LRU caching.
+ * to prevent LLM hallucination. Uses Yahoo Finance for data and FileCache for caching.
  */
 @Agent(description = "Resolves ticker to real company identity to prevent LLM hallucination")
 @Component
@@ -22,7 +20,6 @@ import java.time.Duration;
 public class InstrumentIdentityAgent {
 
     private static final String CACHE_PREFIX = "identity:";
-    private static final Duration CACHE_TTL = Duration.ofHours(24);
 
     private final YFinService yFinService;
     private final FileCache fileCache;

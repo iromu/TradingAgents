@@ -1,5 +1,6 @@
 package com.embabel.gekko.dataflows;
 
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
@@ -77,6 +78,14 @@ public class AlphaVantageService {
         factory.setConnectTimeout(connTimeout);
         factory.setReadTimeout(readTimeout);
         this.restTemplate = new RestTemplate(factory);
+    }
+
+    @PostConstruct
+    void validateApiKey() {
+        if ("dummy_key".equals(apiKey)) {
+            throw new IllegalStateException(
+                    "Alpha Vantage API key is not configured. Set 'app.alphavantage.api-key' in application configuration.");
+        }
     }
 
     // -------------------------------

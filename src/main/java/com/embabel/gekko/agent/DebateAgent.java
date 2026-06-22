@@ -22,8 +22,9 @@ import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedHashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.LinkedHashMap;
 
 import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
 import static com.embabel.common.ai.model.ModelProvider.CHEAPEST_ROLE;
@@ -221,17 +222,7 @@ public class DebateAgent {
     ) {
         String key = ticker.content() + "_research_manager";
         return cache.getOrCompute(key, ResearchTypes.InvestmentPlan.class, () -> {
-            var model = new LinkedHashMap<String, Object>();
-            model.put("past_memory_str", AgentUtils.NO_PAST_MEMORY);
-            model.put("history", String.join("\n", state.history()));
-            model.put("risk_level", riskAssessment != null ? riskAssessment.level().name() : null);
-            model.put("risk_reasoning", riskAssessment != null ? riskAssessment.reasoning() : null);
-            model.put("human_approved", feedback != null && feedback.approved());
-            model.put("user_feedback", feedback != null && feedback.approved() && feedback.feedback() != null && !feedback.feedback().isBlank()
-                    ? sanitizeForPrompt(feedback.feedback())
-                    : null);
-            model.put("ticker", ticker.content());
-            model.put("portfolio_decision", portfolioDecision);
+            var model = buildResearchManagerModel(ticker, state, riskAssessment, feedback, portfolioDecision);
 
             String result = context.ai()
                     .withLlmByRole(BEST_ROLE)
@@ -249,6 +240,27 @@ public class DebateAgent {
 
             return plan;
         });
+    }
+
+    private Map<String, Object> buildResearchManagerModel(
+            ResearchTypes.Ticker ticker,
+            ResearchTypes.InvestmentDebateState state,
+            RiskAssessment riskAssessment,
+            ResearchTypes.InvestmentReviewFeedback feedback,
+            String portfolioDecision
+    ) {
+        var model = new LinkedHashMap<String, Object>();
+        model.put("past_memory_str", AgentUtils.NO_PAST_MEMORY);
+        model.put("history", String.join("\n", state.history()));
+        model.put("risk_level", riskAssessment != null ? riskAssessment.level().name() : null);
+        model.put("risk_reasoning", riskAssessment != null ? riskAssessment.reasoning() : null);
+        model.put("human_approved", feedback != null && feedback.approved());
+        model.put("user_feedback", feedback != null && feedback.approved() && feedback.feedback() != null && !feedback.feedback().isBlank()
+                ? sanitizeForPrompt(feedback.feedback())
+                : null);
+        model.put("ticker", ticker.content());
+        model.put("portfolio_decision", portfolioDecision);
+        return model;
     }
 
     @Action(description = "Store the final decision to memory for future learning")
@@ -316,21 +328,17 @@ public class DebateAgent {
             FundamentalsReport fundamentals,
             MarketReport market,
             NewsReport news,
-            SocialMediaReport social) {
-        if (ticker.content() == null || ticker.content().isBlank()) {
-            throw new IllegalArgumentException("Ticker must not be blank");
+            SocialMediaReport social
+    ) {
+        requireNotBlank(ticker.content(), "Ticker");
+        for (ResearchTypes.Report report : List.of(fundamentals, market, news, social)) {
+            requireNotBlank(report.content(), "Report");
         }
-        if (fundamentals.content() == null || fundamentals.content().isBlank()) {
-            throw new IllegalArgumentException("Fundamentals report must not be null or blank");
-        }
-        if (market.content() == null || market.content().isBlank()) {
-            throw new IllegalArgumentException("Market report must not be null or blank");
-        }
-        if (news.content() == null || news.content().isBlank()) {
-            throw new IllegalArgumentException("News report must not be null or blank");
-        }
-        if (social.content() == null || social.content().isBlank()) {
-            throw new IllegalArgumentException("Social media report must not be null or blank");
+    }
+
+    private void requireNotBlank(String value, String name) {
+        if (value == null || value.isBlank()) {
+            throw new IllegalArgumentException(name + " must not be null or blank");
         }
     }
 

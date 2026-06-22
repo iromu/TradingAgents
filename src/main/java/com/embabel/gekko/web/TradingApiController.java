@@ -6,13 +6,9 @@ import com.embabel.agent.core.AgentProcessStatusCode;
 import com.embabel.agent.core.Budget;
 import com.embabel.agent.core.ProcessOptions;
 import com.embabel.agent.core.Verbosity;
-import com.embabel.agent.core.hitl.FormBindingRequest;
-import com.embabel.agent.core.hitl.FormResponse;
 import com.embabel.gekko.agent.OrchestratorAgent;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.AgentUtils;
-import com.embabel.ux.form.Form;
-import com.embabel.ux.form.FormSubmission;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
@@ -23,11 +19,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * REST API for the trading research workflow.
@@ -76,6 +70,7 @@ public class TradingApiController {
 
     @GetMapping("/plan/{processId}/status")
     public ResponseEntity<Map<String, Object>> getPlanStatus(@PathVariable String processId) {
+        AgentUtils.validateProcessId(processId);
         var process = agentPlatform.getAgentProcess(processId);
         if (process == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Process not found: " + processId));
@@ -106,6 +101,7 @@ public class TradingApiController {
             @PathVariable String processId,
             @RequestBody ApprovalRequest request
     ) {
+        AgentUtils.validateProcessId(processId);
         var process = agentPlatform.getAgentProcess(processId);
         if (process == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Process not found: " + processId));
@@ -117,28 +113,12 @@ public class TradingApiController {
                         .body(Map.of("error", "Process is no longer in WAITING state. Current: " + process.getStatus()));
             }
 
-            var formRequest = AgentUtils.findWaitForForm(process)
-                    .orElseThrow(() -> new IllegalStateException("No WaitFor form found for this process."));
+            Map<String, Object> values = Map.of("approved", request.approved(), "feedback", request.feedback() != null ? request.feedback() : "");
 
-            var form = (Form) formRequest.getPayload();
-            var submission = new FormSubmission(
-                    form.getId().toString(),
-                    Map.of("approved", request.approved(), "feedback", request.feedback() != null ? request.feedback() : ""),
-                    UUID.randomUUID().toString(),
-                    java.time.Instant.now()
-            );
-            var response = new FormResponse(
-                    UUID.randomUUID().toString(), formRequest.getId().toString(), submission, false, java.time.Instant.now()
-            );
-
-            formRequest.onResponse(response, process);
-
-            try {
-                agentPlatform.start(process);
-            } catch (Exception e) {
-                logger.error("Failed to resume process {} after WaitFor submission", processId, e);
+            var resumed = AgentUtils.submitWaitForForm(process, agentPlatform, values, "Failed to resume process");
+            if (resumed == null) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                        .body(Map.of("error", "Failed to resume process: " + e.getMessage()));
+                        .body(Map.of("error", "Failed to resume process: " + processId));
             }
         }
 
