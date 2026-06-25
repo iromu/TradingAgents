@@ -293,11 +293,11 @@ public class DebateAgent {
     }
 
     private String extractRating(String content) {
-        String lower = content.toLowerCase();
-        if (lower.contains("buy")) return "Buy";
-        if (lower.contains("sell")) return "Sell";
-        if (lower.contains("overweight")) return "Overweight";
-        if (lower.contains("underweight")) return "Underweight";
+        // Use word-boundary regex to avoid false positives (e.g., "not a buy" should not match)
+        if (content.matches("(?i).*\\bbuy\\b.*")) return "Buy";
+        if (content.matches("(?i).*\\bsell\\b.*")) return "Sell";
+        if (content.matches("(?i).*\\boverweight\\b.*")) return "Overweight";
+        if (content.matches("(?i).*\\bunderweight\\b.*")) return "Underweight";
         return "Hold";
     }
 

@@ -2,6 +2,11 @@
 
 > **Purpose**: This document defines the complete architecture of the TradingAgents system so that it can be reimplemented in another programming language or with different frameworks. It covers every component, their responsibilities, interfaces, data flows, and external dependencies.
 
+> **⚠️ PARTIALLY OUTDATED**: This document was originally written for the Python/LangGraph implementation.
+> The system has been refactored to **Java 25 / Spring Boot 3.5.13 / Embabel 0.5.0-SNAPSHOT**.
+> See the **Current Java Implementation** section (Section 17) below for the actual codebase architecture.
+> The sections above (1–16) describe the original Python architecture and serve as a conceptual reference.
+
 ---
 
 ## 1. System Overview
@@ -21,6 +26,8 @@ TradingAgents is a **multi-agent LLM-powered financial trading analysis framewor
 | **Checkpoint resume** | Graph execution can be paused and resumed from the last successful node |
 
 ### 1.2 High-Level Architecture
+
+> *This diagram shows the original Python/LangGraph architecture. The current Java implementation uses Spring Boot + Embabel with a different UI layer (HTMX).*
 
 ```
 ┌─────────────────────────────────────────────────────────────────────┐
@@ -89,7 +96,11 @@ TradingAgents is a **multi-agent LLM-powered financial trading analysis framewor
 | `cli/main.py` | CLI App | Interactive Typer CLI with Rich live dashboard (1339 lines) |
 | `TradingAgentsGraph` | Class | Python API entry point; `.propagate(ticker, date)` returns (state, rating) |
 
-### 2.2 Agent Teams (12 Agents, 5 Teams)
+> *Note: The current Java implementation uses `TradingHtmxController` (Spring MVC) with Thymeleaf + HTMX instead of the Typer CLI.*
+
+---
+
+## 2.2 Agent Teams (12 Agents, 5 Teams)
 
 #### Team 1: Analyst Team — Data Collection
 
@@ -131,6 +142,8 @@ TradingAgents is a **multi-agent LLM-powered financial trading analysis framewor
 ### 2.3 Tools (11 Tool Functions)
 
 Tools are LangChain `@tool`-decorated functions. Each wraps `route_to_vendor()` which dispatches to the configured data provider.
+
+> *Note: In the Java implementation, tools are Spring `@Service` classes (`YFinService`, `AlphaVantageService`, etc.) called directly from agent code — no LangChain tool decorators.*
 
 | Tool | Category | Vendors | Description |
 |------|----------|---------|-------------|
@@ -179,6 +192,8 @@ Tools are LangChain `@tool`-decorated functions. Each wraps `route_to_vendor()` 
 | Ollama (local) | `ollama` | none | `OpenAIClient` (keyless) |
 | OpenAI-compatible | `openai_compatible` | `OPENAI_COMPATIBLE_API_KEY` (opt) | `OpenAIClient` |
 
+> *Note: In Java, LLM providers are managed by Embabel's `ModelProvider.BEST_ROLE` / `CHEAPEST_ROLE` abstraction configured via `application.yaml` — no direct client classes.*
+
 ### 2.6 Pydantic Schemas (Structured Output)
 
 | Schema | Produced By | Fields |
@@ -194,6 +209,8 @@ Tools are LangChain `@tool`-decorated functions. Each wraps `route_to_vendor()` 
 - `SentimentBand`: BULLISH, MILDLY_BULLISH, NEUTRAL, MIXED, MILDLY_BEARISH, BEARISH
 
 ### 2.7 State Schema (LangGraph `AgentState`)
+
+> *Note: In Java, state is managed via records in `ResearchTypes.java` — no `AgentState` or `MessagesState`.*
 
 ```
 AgentState (extends MessagesState):
@@ -604,162 +621,21 @@ Dashboard panels:
 
 ---
 
-## 10. File Structure Reference
+## 10. Dependencies
 
-```
-TradingAgents/
-├── main.py                          # Entry point example
-├── pyproject.toml                   # Build config, dependencies, tooling
-├── requirements.txt                 # Flat dependency list
-├── docker-compose.yml               # Docker compose (tradingagents + ollama)
-├── Dockerfile                       # Multi-stage build (Python 3.12 slim)
-├── .env.example                     # API key templates
-├── .env.enterprise.example          # Azure OpenAI templates
-│
-├── tradingagents/                   # Main package
-│   ├── __init__.py
-│   ├── default_config.py            # DEFAULT_CONFIG + env-var overrides
-│   │
-│   ├── agents/                      # Agent implementations
-│   │   ├── __init__.py              # Re-exports all create_* functions
-│   │   ├── schemas.py               # Pydantic schemas (ResearchPlan, etc.)
-│   │   ├── analysts/
-│   │   │   ├── market_analyst.py
-│   │   │   ├── sentiment_analyst.py
-│   │   │   ├── news_analyst.py
-│   │   │   └── fundamentals_analyst.py
-│   │   ├── researchers/
-│   │   │   ├── bull_researcher.py
-│   │   │   └── bear_researcher.py
-│   │   ├── managers/
-│   │   │   ├── research_manager.py
-│   │   │   └── portfolio_manager.py
-│   │   ├── trader/
-│   │   │   └── trader.py
-│   │   ├── risk_mgmt/
-│   │   │   ├── aggressive_debator.py
-│   │   │   ├── conservative_debator.py
-│   │   │   └── neutral_debator.py
-│   │   └── utils/
-│   │       ├── agent_states.py      # AgentState, InvestDebateState, RiskDebateState
-│   │       ├── agent_utils.py       # Tool imports, instrument context, message delete
-│   │       ├── memory.py            # TradingMemoryLog (append-only decision log)
-│   │       ├── rating.py            # 5-tier rating parser (heuristic)
-│   │       ├── structured.py        # bind_structured / invoke_structured_or_freetext
-│   │       ├── core_stock_tools.py  # get_stock_data tool
-│   │       ├── technical_indicators_tools.py  # get_indicators tool
-│   │       ├── fundamental_data_tools.py      # get_fundamentals, get_balance_sheet, etc.
-│   │       ├── news_data_tools.py             # get_news, get_global_news, get_insider_transactions
-│   │       ├── macro_data_tools.py            # get_macro_indicators tool (FRED)
-│   │       ├── prediction_markets_tools.py    # get_prediction_markets tool (Polymarket)
-│   │       └── market_data_validation_tools.py # get_verified_market_snapshot tool
-│   │
-│   ├── dataflows/                   # Data provider abstraction
-│   │   ├── interface.py             # route_to_vendor() -- central dispatch
-│   │   ├── config.py                # get_config(), set_config()
-│   │   ├── errors.py                # VendorError, NoMarketDataError, etc.
-│   │   ├── symbol_utils.py          # normalize_symbol() (broker -> Yahoo symbols)
-│   │   ├── utils.py                 # safe_ticker_component(), save_output()
-│   │   ├── stockstats_utils.py      # load_ohlcv(), yf_retry(), StockstatsUtils
-│   │   ├── y_finance.py             # yfinance: stock data, fundamentals, indicators
-│   │   ├── yfinance_news.py         # yfinance: ticker news, global news
-│   │   ├── alpha_vantage.py         # Aggregator for Alpha Vantage sub-modules
-│   │   ├── alpha_vantage_stock.py   # Alpha Vantage: OHLCV
-│   │   ├── alpha_vantage_indicator.py # Alpha Vantage: technical indicators
-│   │   ├── alpha_vantage_fundamentals.py # Alpha Vantage: financial statements
-│   │   ├── alpha_vantage_news.py    # Alpha Vantage: news, insider transactions
-│   │   ├── alpha_vantage_common.py  # Alpha Vantage: shared utilities
-│   │   ├── fred.py                  # FRED: macroeconomic indicators
-│   │   ├── polymarket.py            # Polymarket: prediction market probabilities
-│   │   ├── stocktwits.py            # StockTwits: retail sentiment
-│   │   ├── reddit.py                # Reddit: finance subreddit posts
-│   │   └── market_data_validator.py # Verified market snapshot builder
-│   │
-│   ├── graph/                       # LangGraph workflow orchestration
-│   │   ├── __init__.py
-│   │   ├── trading_graph.py         # TradingAgentsGraph (main entry class)
-│   │   ├── setup.py                 # GraphSetup (StateGraph construction)
-│   │   ├── propagation.py           # Propagator (state initialization)
-│   │   ├── conditional_logic.py     # ConditionalLogic (debate loop routing)
-│   │   ├── analyst_execution.py     # AnalystWallTimeTracker, execution plan
-│   │   ├── signal_processing.py     # SignalProcessor (rating extraction)
-│   │   ├── reflection.py            # Reflector (decision reflection)
-│   │   └── checkpointer.py          # LangGraph checkpoint resume support
-│   │
-│   └── llm_clients/                 # Multi-provider LLM abstraction
-│       ├── __init__.py
-│       ├── base_client.py           # BaseLLMClient (abstract), normalize_content()
-│       ├── factory.py               # create_llm_client() -- lazy provider imports
-│       ├── openai_client.py         # OpenAI, xAI, DeepSeek, Ollama, OpenRouter, etc.
-│       ├── anthropic_client.py      # Anthropic Claude
-│       ├── google_client.py         # Google Gemini
-│       ├── azure_client.py          # Azure OpenAI
-│       ├── bedrock_client.py        # AWS Bedrock (optional [bedrock] extra)
-│       ├── model_catalog.py         # Known model lists per provider
-│       ├── capabilities.py          # Per-model capability detection
-│       ├── validators.py            # Model name validation
-│       └── api_key_env.py           # Provider → API key env var mapping
-│
-├── cli/                             # Interactive CLI
-│   ├── __init__.py
-│   ├── main.py                      # Typer app, live Rich dashboard
-│   ├── utils.py                     # User prompts, provider selection
-│   ├── config.py                    # CLI config helpers
-│   ├── announcements.py             # Fetch/display project announcements
-│   ├── stats_handler.py             # StatsCallbackHandler (LLM/tool token tracking)
-│   ├── models.py                    # Typer model definitions
-│   └── static/welcome.txt           # ASCII art welcome banner
-│
-├── tests/                           # Pytest suite (30+ test files)
-├── scripts/                         # Utility scripts
-└── assets/                          # Images (schema.png, agent.png, etc.)
-```
+> *Note: The Python dependencies listed in the original version have been replaced by Java/Spring Boot dependencies. See Section 16.7 for the current Java file structure.*
+
+**Java core dependencies:** `embabel-agent-starter`, `embabel-agent-starter-openai-custom`, `spring-boot-starter-web`, `yahoofinance` (v3.17.0), `ta4j-core` (v0.18), `spring-boot-starter-thymeleaf`
+
+**Optional:** `embabel-agent-starter-anthropic` (provided scope), `langgraph-checkpoint-sqlite` (not used — Java uses file-based checkpoints)
 
 ---
 
-## 11. Dependencies
-
-### 11.1 Core Dependencies
-
-| Package | Purpose |
-|---------|---------|
-| `langchain-core` | LLM abstractions, tool definitions, messages |
-| `langgraph` | StateGraph workflow orchestration |
-| `langchain-openai` | OpenAI LLM client |
-| `langchain-anthropic` | Anthropic Claude client |
-| `langchain-google-genai` | Google Gemini client |
-| `langchain-experimental` | Experimental features |
-| `langgraph-checkpoint-sqlite` | SQLite-based checkpoint persistence |
-| `yfinance` | Yahoo Finance data (stock prices, fundamentals, news) |
-| `backtrader` | Backtesting framework |
-| `pandas` | Data manipulation |
-| `stockstats` | Technical indicators (RSI, MACD, Bollinger, ATR, etc.) |
-| `typer` | CLI framework |
-| `rich` | Rich terminal UI (live dashboard) |
-| `python-dotenv` | .env file loading |
-| `questionary` | Interactive prompts |
-| `redis` | Caching |
-| `requests` | HTTP requests |
-| `parsel` | HTML parsing |
-| `tqdm` | Progress bars |
-| `pytz` | Timezone handling |
-| `typing-extensions` | Type hints compatibility |
-| `setuptools` | Build system |
-
-### 11.2 Optional Dependencies
-
-| Extra | Packages | Purpose |
-|-------|---------|---------|
-| `dev` | `ruff`, `pytest`, `pytest-subtests` | Development tooling |
-| `bedrock` | `langchain-aws` | AWS Bedrock support |
-
----
-
-## 12. Reimplementation Guide
+## 11. Reimplementation Guide
 
 To reimplement this system in another language or framework, follow this structure:
 
-### 12.1 Required Capabilities
+### 11.1 Required Capabilities
 
 1. **Graph-based workflow orchestration** — A directed graph with conditional edges and state passing between nodes
 2. **LLM integration** — Support for multiple LLM providers with:
@@ -772,7 +648,7 @@ To reimplement this system in another language or framework, follow this structu
 5. **State management** — Persistent state across graph nodes, with checkpoint/resume capability
 6. **Markdown file I/O** — Append-only log file with atomic updates
 
-### 12.2 Component Mapping
+### 11.2 Component Mapping
 
 | TradingAgents Component | Equivalent in Other Frameworks |
 |------------------------|-------------------------------|
@@ -784,7 +660,7 @@ To reimplement this system in another language or framework, follow this structu
 | TradingMemoryLog | Any append-only log (event sourcing pattern) |
 | Rich live dashboard | ncurses, TUI framework, or web dashboard |
 
-### 12.3 Agent Prompt Structure
+### 11.3 Agent Prompt Structure
 
 Each agent follows this pattern:
 1. **System prompt**: Role definition + instructions + constraints
@@ -793,7 +669,7 @@ Each agent follows this pattern:
 4. **Structured output** (for decision agents): Pydantic schema with field descriptions
 5. **Rating scale guidance**: Explicit scale definitions for consistent ratings
 
-### 12.4 Data Flow Requirements
+### 11.4 Data Flow Requirements
 
 1. **Ticker resolution**: Convert ticker symbol to canonical form (handle exchange suffixes, crypto symbols)
 2. **Data fetching**: OHLCV, fundamentals, news, sentiment, macro indicators, prediction markets
@@ -803,7 +679,7 @@ Each agent follows this pattern:
 6. **Return calculation**: Post-trade return vs benchmark (alpha) computation
 7. **Reflection generation**: LLM-generated analysis of past prediction accuracy
 
-### 12.5 Configuration Requirements
+### 11.5 Configuration Requirements
 
 - Single source of truth config dict
 - Environment variable overrides with type coercion
@@ -814,7 +690,7 @@ Each agent follows this pattern:
 
 ---
 
-## 13. Supported Markets
+## 12. Supported Markets
 
 | Market | Suffix | Example | Benchmark |
 |--------|--------|---------|-----------|
@@ -832,7 +708,7 @@ Each agent follows this pattern:
 
 ---
 
-## 14. Technical Indicators
+## 13. Technical Indicators
 
 | Indicator | Description |
 |-----------|-------------|
@@ -852,9 +728,9 @@ Each agent follows this pattern:
 
 ---
 
-## 15. API Reference
+## 14. API Reference
 
-### 15.1 Programmatic API
+### 14.1 Programmatic API
 
 ```python
 from tradingagents.graph.trading_graph import TradingAgentsGraph
@@ -891,7 +767,7 @@ _, decision = ta.propagate("AAPL", "2026-01-15")
 print(decision)
 ```
 
-### 15.2 CLI Commands
+### 14.2 CLI Commands
 
 ```bash
 # Launch interactive CLI
@@ -906,7 +782,7 @@ tradingagents analyze --clear-checkpoints
 
 ---
 
-## 16. Directory Structure (Reimplementation Checklist)
+## 15. Directory Structure (Reimplementation Checklist)
 
 For a clean-room reimplementation, create the following module structure:
 
@@ -967,3 +843,192 @@ For a clean-room reimplementation, create the following module structure:
 ---
 
 *Document version: 1.0 | Based on TradingAgents v0.2.5 | Last updated: 2026-06-15*
+
+## 16. Current Java Implementation (as of 2026-06-24)
+
+The system has been refactored from Python/LangGraph to **Java 25 / Spring Boot 3.5.13 / Embabel 0.5.0-SNAPSHOT**.
+
+### 16.1 Entry Points
+
+| Component | Type | Description |
+|-----------|------|-------------|
+| `TradingHtmxController` | Spring MVC Controller | Web UI entry point — Thymeleaf + HTMX, SSE for live updates |
+| `OrchestratorAgent` | Embabel Agent | Entry point agent — ticker input, HITL plan approval, orchestrates research |
+| `mvn spring-boot:run` | CLI | Start the web application |
+
+### 16.2 Agent Architecture (Embabel @Agent Pattern)
+
+The system uses Embabel's annotation-based agent framework with `asSubProcess` for nested agent composition:
+
+| Agent | File | Role |
+|-------|------|------|
+| `OrchestratorAgent` | `agent/OrchestratorAgent.java` | Entry point — resolves pending decisions, resolves instrument identity, generates research plan, HITL approval via `WaitFor.formSubmission()` |
+| `DebateAgent` | `agent/DebateAgent.java` | Central orchestrator — generates all 4 analyst reports, orchestrates bull/bear debate, delegates risk debate, produces final plan |
+| `DebateLoopAgent` | `agent/DebateLoopAgent.java` | Bull/bear iterative debate loop — uses `RepeatUntilBuilder` with Jaccard bigram similarity convergence detection |
+| `RiskDebateAgent` | `agent/RiskDebateAgent.java` | 3-round risk debate (aggressive/conservative/neutral) with explicit round-robin and fallback parsing |
+| `Trader` | `agent/Trader.java` | Generates structured `TraderProposalOutput` (Buy/Hold/Sell + entry, stop-loss, sizing) |
+| `PortfolioManager` | `agent/managers/PortfolioManager.java` | Generates final `PortfolioDecisionOutput` (5-tier rating + thesis) |
+| `InstrumentIdentityAgent` | `agent/identity/InstrumentIdentityAgent.java` | Resolves ticker to company name/sector/industry via Yahoo Finance |
+| `CheckpointAgent` | `agent/checkpoint/CheckpointAgent.java` | Manages crash recovery via file-based checkpoint store |
+| `DecisionMemoryAgent` | `agent/memory/DecisionMemoryAgent.java` | Manages append-only decision memory lifecycle |
+
+### 16.3 Data Providers (Java Services)
+
+| Service | File | Data |
+|---------|------|------|
+| `YFinService` | `dataflows/YFinService.java` | Stock data, fundamentals, indicators via `yahoofinance` Java library |
+| `AlphaVantageService` | `dataflows/AlphaVantageService.java` | Stock data, fundamentals, news, insider transactions via REST API |
+| `FredService` | `dataflows/FredService.java` | Macroeconomic indicators via FRED REST API |
+| `PolymarketService` | `dataflows/PolymarketService.java` | Prediction market probabilities via REST API |
+| `VendorRouter` | `dataflows/VendorRouter.java` | Routes data requests to Alpha Vantage (yfinance used directly by agents) |
+
+**Note**: The Python version had a dual-vendor routing layer (yfinance + Alpha Vantage). The Java version routes through `VendorRouter` to Alpha Vantage only; yfinance is accessed directly via `YFinService` by agents that need it.
+
+### 16.4 Configuration
+
+Configuration uses Spring Boot's `@ConfigurationProperties`:
+
+| Key | Default | Description |
+|-----|---------|-------------|
+| `app.llm-options.ticker-llm` | (from model provider) | LLM options for ticker input processing |
+| `app.llm-options.writer-llm` | (from model provider) | LLM options for report generation |
+| `app.llm-options.provider` | (from model provider) | LLM provider name |
+| `app.llm-options.best-model` | (from model provider) | Model for complex reasoning |
+| `app.llm-options.cheapest-model` | (from model provider) | Model for quick tasks |
+| `app.llm-options.max-concurrency` | `1` | Analyst parallelism |
+| `app.llm-options.similarity-threshold` | `0.8` | Jaccard similarity threshold for debate convergence |
+| `app.llm-options.max-debate-iterations` | `5` | Max debate loop iterations |
+| `app.llm-options.anthropic.effort` | (from model provider) | Anthropic effort level |
+| `app.llm-options.google.thinking-level` | (from model provider) | Gemini thinking level |
+| `app.llm-options.openai.reasoning-effort` | (from model provider) | OpenAI reasoning effort |
+| `app.checkpoint.enabled` | `false` | Enable checkpoint resume |
+| `app.memory.log-path` | `~/.tradingagents/memory/trading_memory.md` | Decision log path |
+
+> *Note: LLM options are managed by Embabel's `LlmOptions` record with `ModelProvider.BEST_ROLE` / `CHEAPEST_ROLE` abstraction. Provider-specific settings are nested under `app.llm-options.<provider>.*`.*
+
+### 16.5 State Management (Java Records)
+
+State is managed via Java records in `domain/ResearchTypes.java`:
+
+```
+ResearchTypes.Ticker — {content, feedback}
+ResearchTypes.DebateBriefs — {fundamentalsBrief, marketBrief, newsBrief, socialBrief}
+ResearchTypes.InvestmentDebateState — {history, bullHistory, bearHistory, currentResponse, count, briefs, riskAssessment, latestSpeaker, currentAggressiveResponse, currentConservativeResponse, currentNeutralResponse, traderProposal}
+ResearchTypes.InvestmentPlan — {judgeDecision, investmentDebateState}
+ResearchTypes.ResearchPlan — {content}
+ResearchTypes.PlanApproval — {feedback, approved}
+ResearchTypes.InvestmentReviewFeedback — {feedback, approved}
+```
+
+**Structured output records** (used by decision agents with `createObject(T.class, ...)`):
+
+| Record | Produced By | Fields |
+|--------|------------|--------|
+| `PortfolioDecisionOutput` | PortfolioManager | `rating` (5-tier), `executiveSummary`, `investmentThesis`, `priceTarget`, `timeHorizon` |
+| `TraderProposalOutput` | Trader | `action` (Buy/Hold/Sell), `reasoning`, `entryPrice`, `stopLoss`, `positionSizing` |
+| `ResearchPlanOutput` | (unused — dead code) | `recommendation`, `rationale`, `strategicActions` |
+
+> *Note: `ResearchPlanOutput` exists but is never used — all research plan generation uses `String.class` and wraps in `ResearchTypes.InvestmentPlan`. This is intentional because the LLM produces narrative plans, not structured data.*
+
+**Risk assessment:**
+| Record | Produced By | Fields |
+|--------|------------|--------|
+| `RiskAssessment` | RiskDebateAgent | `level` (RiskLevel enum), `reasoning` |
+
+**Key enums** (same as Python version):
+- `PortfolioRating`: BUY, OVERWEIGHT, HOLD, UNDERWEIGHT, SELL
+- `TraderAction`: BUY, HOLD, SELL
+- `SentimentBand`: BULLISH, MILDLY_BULLISH, NEUTRAL, MIXED, MILDLY_BEARISH, BEARISH
+- `RiskLevel`: LOW, MEDIUM, HIGH (used by RiskAssessment)
+
+### 16.6 Persistence
+
+| Mechanism | Implementation |
+|-----------|---------------|
+| Decision Log | Append-only markdown at `app.memory.log-path` — two-phase lifecycle (pending → resolved) |
+| Checkpoint | File-based JSON at `data/checkpoints/<TICKER>.json` — `CheckpointStore` + `CheckpointAgent` |
+| LLM Cache | Disk-based `FileCache` with SHA-256 hashed keys, per-key locking, atomic writes at `data/llm/cache/` |
+| Web UI | Spring MVC + Thymeleaf + HTMX — processing page at `/plan/status/{processId}` with SSE updates |
+
+### 16.7 File Structure
+
+```
+TradingAgents/
+├── pom.xml                          # Maven build (Spring Boot 3.5.13, Embabel 0.5.0-SNAPSHOT)
+├── src/main/java/com/embabel/gekko/
+│   ├── agent/                       # Agent implementations
+│   │   ├── OrchestratorAgent.java   # Entry point agent
+│   │   ├── DebateAgent.java         # Central orchestrator
+│   │   ├── DebateLoopAgent.java     # Bull/bear loop with convergence
+│   │   ├── RiskDebateAgent.java     # 3-round risk debate
+│   │   ├── Trader.java              # Trading proposal agent
+│   │   ├── checkpoint/              # Checkpoint management
+│   │   ├── identity/                # Instrument identity resolution
+│   │   ├── managers/                # Research/Portfolio managers
+│   │   ├── memory/                  # Decision memory
+│   │   ├── researchers/             # Bull/Bear researchers
+│   │   └── risk/                    # Risk debators
+│   ├── config/                      # Spring configuration
+│   ├── dataflows/                   # Data provider services
+│   ├── domain/                      # Java records & enums
+│   ├── htmx/                        # HTMX controllers
+│   ├── util/                        # FileCache, etc.
+│   └── web/                         # Web controllers
+├── src/main/resources/
+│   ├── application.yaml             # Spring Boot config
+│   ├── prompts/                     # Jinja prompt templates
+│   │   ├── analysts/                # Analyst agent prompts
+│   │   ├── debate/                  # Debate prompts
+│   │   ├── managers/                # Manager prompts
+│   │   ├── memory/                  # Memory prompts
+│   │   ├── researchers/             # Researcher prompts
+│   │   └── risk/                    # Risk debate prompts
+│   └── templates/                   # Thymeleaf HTML templates
+└── data/                            # Runtime directories
+    ├── llm/cache/                   # LLM response cache
+    └── checkpoints/                 # Checkpoint files
+```
+
+### 16.8 Key Differences from Python Version
+
+| Aspect | Python (documented in sections 1–16) | Java (current) |
+|--------|--------------------------------------|----------------|
+| Framework | LangGraph + LangChain | Embabel + Spring Boot |
+| Agent definition | Factory functions (`create_*`) | `@Agent`, `@Action`, `@AchievesGoal` annotations |
+| State management | LangGraph `AgentState` dict | Java records in `ResearchTypes.java` |
+| Structured output | Pydantic models | Java records with validation |
+| Graph orchestration | `StateGraph` with conditional edges | `asSubProcess` for nested agent composition |
+| Loop control | LangGraph conditional edges | `RepeatUntilBuilder` (convergence) + explicit `for` loops |
+| CLI | Typer + Rich live dashboard | Spring MVC + Thymeleaf + HTMX + SSE |
+| Caching | Redis | `FileCache` — disk-based with SHA-256 keys |
+| Checkpoint | SQLite via LangGraph | JSON file-based via `CheckpointStore` |
+| Data providers | Python yfinance + Alpha Vantage | Java `yahoofinance` lib + Alpha Vantage REST |
+| Prompt templates | Python f-strings | Jinja templates in `prompts/*.jinja` |
+| Vendor routing | Dual-vendor (yfinance + Alpha Vantage) | Alpha Vantage via `VendorRouter`; yfinance direct via `YFinService` |
+| HITL | Custom implementation | Native Embabel `WaitFor.formSubmission()` |
+| Convergence | Count-based only | Jaccard bigram similarity + count-based |
+| Missing features | — | StockTwits sentiment (not implemented), Reddit sentiment (not implemented) |
+
+### 16.9 Known Issues (from code audit)
+
+| Issue | Severity | Status |
+|-------|----------|--------|
+| Hardcoded Alpha Vantage API key in `application-local.yaml` | High | Gitignored, local only |
+| Base64-encoded Langfuse credentials in `application-local.yaml` | High | Gitignored, local only |
+| `createObject(String.class, ...)` wrapped in typed records — no validation | High | Open — intentional for free-text reports; structured output used where schema is known |
+| Path traversal in `FileCache` — sanitization strips valid characters causing collisions | High | Open — aggressive sanitization for defense-in-depth; may cause theoretical collisions |
+| Dead `InvestmentDebateFeedback` record | Medium | **Dead code** — zero references in codebase; `InvestmentReviewFeedback` is the active HITL record |
+| No timeout on RestTemplate | Medium | **Fixed** — `AlphaVantageService` now has connect/read timeouts |
+| Cache key bug: `getNews()` ignores date range params | Medium | **Fixed** — `AlphaVantageService.getNews()` now includes `time_from` and `time_to` |
+
+### 16.10 API Key Environment Variables
+
+| Variable | Purpose |
+|----------|---------|
+| `OPENAI_API_KEY` | OpenAI-compatible provider (LiteLLM) |
+| `OPENAI_BASE_URL` | Custom API endpoint (default: http://spark.local:4000) |
+| `OPENAI_MODEL` | Default model override |
+| `FRED_API_KEY` | FRED macroeconomic data |
+| `ALPHA_VANTAGE_API_KEY` | Alpha Vantage API |
+| `LANGFUSE_SECRET_KEY` | Langfuse observability (base64-encoded) |
+| `LANGFUSE_HOST` | Langfuse host |

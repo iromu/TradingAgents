@@ -39,27 +39,18 @@ public class FileCache {
 
     /**
      * Sanitizes a cache key to prevent path traversal attacks.
-     * Strips path separators, null bytes, and other dangerous characters.
+     * Only strips path traversal sequences — the SHA-256 hash handles uniqueness.
      */
     private String sanitizeKey(String key) {
         if (key == null || key.isBlank()) {
             throw new IllegalArgumentException("Cache key must not be null or blank");
         }
-        // Strip path traversal sequences and dangerous characters
+        // Strip only path traversal sequences
         String sanitized = key
                 .replace("..", "")
                 .replace("/", "")
                 .replace("\\", "")
-                .replace("\0", "")
-                .replace(";", "")
-                .replace("&", "")
-                .replace("|", "")
-                .replace("*", "")
-                .replace("?", "")
-                .replace("<", "")
-                .replace(">", "")
-                .replace("'", "")
-                .replace("\"", "");
+                .replace("\0", "");
         if (sanitized.isBlank()) {
             throw new IllegalArgumentException("Cache key must not be empty after sanitization");
         }
