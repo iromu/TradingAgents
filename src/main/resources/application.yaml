@@ -25,7 +25,7 @@ app:
     log-path: ~/.tradingagents/memory/trading_memory.md
     log-max-entries: 1000
   alphavantage:
-    enabled: false
+    enabled: true
   checkpoint:
     enabled: false
     dir: data/checkpoints

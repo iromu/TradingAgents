@@ -374,12 +374,12 @@ public class DebateAgent {
         if (input.length() > MAX_INPUT_LENGTH) {
             input = input.substring(0, MAX_INPUT_LENGTH);
         }
-        String sanitized = JINJA_VAR.matcher(input).replaceAll("[BLOCKED_TEMPLATE]")
-                .replaceAll(JINJA_STMT.pattern(), "[BLOCKED_TEMPLATE]")
-                .replaceAll(JINJA_VAR_UNCLOSED.pattern(), "[BLOCKED_TEMPLATE]")
-                .replaceAll(JINJA_STMT_UNCLOSED.pattern(), "[BLOCKED_TEMPLATE]")
-                .replaceAll(CODE_FENCE.pattern(), "[BLOCKED_CODE]")
-                .replaceAll(CODE_FENCE_UNCLOSED.pattern(), "[BLOCKED_CODE]");
+        String sanitized = JINJA_VAR.matcher(input).replaceAll("[BLOCKED_TEMPLATE]");
+        sanitized = JINJA_STMT.matcher(sanitized).replaceAll("[BLOCKED_TEMPLATE]");
+        sanitized = JINJA_VAR_UNCLOSED.matcher(sanitized).replaceAll("[BLOCKED_TEMPLATE]");
+        sanitized = JINJA_STMT_UNCLOSED.matcher(sanitized).replaceAll("[BLOCKED_TEMPLATE]");
+        sanitized = CODE_FENCE.matcher(sanitized).replaceAll("[BLOCKED_CODE]");
+        sanitized = CODE_FENCE_UNCLOSED.matcher(sanitized).replaceAll("[BLOCKED_CODE]");
 
         StringBuilder sb = new StringBuilder(sanitized.length());
         for (int i = 0; i < sanitized.length(); i++) {
