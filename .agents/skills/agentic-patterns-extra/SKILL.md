@@ -2,19 +2,16 @@
 name: agentic-patterns-extra
 description: >-
   Curated catalogue of 180+ agentic AI patterns across 8 categories — real-world
-  tricks, workflows, and mini-architectures that help autonomous or semi-autonomous
-  AI agents get useful work done in production. Use this skill whenever the user
-  asks about agent architecture, agent design patterns, how to solve an agent-related
-  challenge, or wants recommendations for patterns. Trigger on questions about
-  context management, multi-agent coordination, reliability, security, tool use,
-  feedback loops, learning & adaptation, or human-agent collaboration. Also
-  trigger when the user wants to compare patterns, find the right pattern for a
-  use case, understand trade-offs between different agent approaches, or wants
-  to know which patterns work best together. Don't hesitate to suggest patterns
-  even when the user doesn't explicitly mention "patterns" — if they describe an
-  agent problem, this skill likely applies. Also trigger when the user asks about
-  agent failures, token waste, context contamination, or any operational issue
-  with autonomous agents.
+  tricks, workflows, and mini-architectures for autonomous agents in production.
+  Use this skill whenever the user asks about agent architecture, agent design
+  patterns, how to solve an agent-related challenge, or wants pattern recommendations.
+  Trigger on questions about context management, multi-agent coordination, reliability,
+  security, tool use, feedback loops, learning, or human-agent collaboration.
+  Also trigger when the user wants to compare patterns, find the right pattern for a
+  use case, understand trade-offs, or know which patterns work best together.
+  Suggest patterns even when the user doesn't mention "patterns" — if they describe
+  an agent problem, this skill likely applies. Also trigger on agent failures,
+  token waste, context contamination, or operational issues with autonomous agents.
 ---
 
 # Agentic Patterns Extra

@@ -120,26 +120,40 @@ Add `embabel-agent-netty-client-autoconfigure` for Netty:
 
 ```yaml
 embabel:
-  models:
-    default-llm: gpt-4o
+  agent:
+    platform:
+      models:
+        openai:
+          api-key: ${OPENAI_API_KEY}
+          base-url: ${OPENAI_BASE_URL:}  # Azure: https://{resource}.openai.azure.com/openai
 ```
 
 Environment variables:
 - `OPENAI_API_KEY` (required)
 - `OPENAI_BASE_URL` (optional, for Azure)
+- `OPENAI_COMPLETIONS_PATH` (optional, default: `/v1/completions`)
+- `OPENAI_EMBEDDINGS_PATH` (optional, default: `/v1/embeddings`)
 
 Add: `embabel-agent-starter-openai`
 
-### OpenAI Custom (Groq, Together AI, etc.)
+### OpenAI Custom (Groq, Together AI, Z.AI, etc.)
 
 ```yaml
 embabel:
-  models:
-    default-llm: llama-3.1-70b
-    openai-custom:
-      base-url: https://api.groq.com/openai
-      api-key: ${OPENAI_CUSTOM_API_KEY}
-      models: llama-3.1-70b,llama-3.1-8b
+  agent:
+    platform:
+      models:
+        openai:
+          custom:
+            api-key: ${OPENAI_CUSTOM_API_KEY}
+            base-url: https://api.groq.com/openai
+            models: llama-3.3-70b-versatile,mixtral-8x7b-32768
+```
+
+For Z.AI with non-standard paths:
+```bash
+export OPENAI_CUSTOM_BASE_URL="https://api.z.ai/api/coding/paas"
+export OPENAI_CUSTOM_COMPLETIONS_PATH="/v4/chat/completions"
 ```
 
 Add: `embabel-agent-starter-openai-custom`
@@ -148,13 +162,13 @@ Add: `embabel-agent-starter-openai-custom`
 
 ```yaml
 embabel:
-  models:
-    default-llm: claude-sonnet-4-20250514
+  agent:
+    platform:
+      models:
+        anthropic:
+          api-key: ${ANTHROPIC_API_KEY}
+          base-url: ${ANTHROPIC_BASE_URL:}
 ```
-
-Environment variables:
-- `ANTHROPIC_API_KEY` (required)
-- `ANTHROPIC_BASE_URL` (optional)
 
 Add: `embabel-agent-starter-anthropic`
 
@@ -162,26 +176,42 @@ Add: `embabel-agent-starter-anthropic`
 
 ```yaml
 embabel:
-  models:
-    default-llm: gemini-2.5-flash
+  agent:
+    platform:
+      models:
+        gemini:
+          api-key: ${GEMINI_API_KEY}
+          base-url: ${GEMINI_BASE_URL:https://generativelanguage.googleapis.com/v1beta/openai}
 ```
-
-Environment variables:
-- `GEMINI_API_KEY` (required)
 
 Add: `embabel-agent-starter-gemini`
 
-### Google GenAI (Native)
+### Google GenAI (Native — Gemini 3.x)
+
+Uses the native Google GenAI SDK with full feature support including thinking mode.
 
 ```yaml
 embabel:
   models:
     default-llm: gemini-3.5-flash
-  google-genai:
-    api-key: ${GOOGLE_API_KEY}
-    project-id: ${GOOGLE_PROJECT_ID}
-    location: ${GOOGLE_LOCATION}
+    default-embedding-model: gemini-embedding-001
+    llms:
+      fast: gemini-2.5-flash
+      best: gemini-2.5-pro
+      reasoning: gemini-3.1-pro-preview
+  agent:
+    platform:
+      models:
+        googlegenai:
+          api-key: ${GOOGLE_API_KEY}
+          # Or Vertex AI:
+          # project-id: ${GOOGLE_PROJECT_ID}
+          # location: ${GOOGLE_LOCATION}  # Must be 'global' for Gemini 3
+          max-attempts: 10
+          backoff-millis: 5000
 ```
+
+Available models: `gemini-3.5-flash`, `gemini-3.1-flash-lite`, `gemini-3.1-pro-preview`, `gemini-2.5-pro`, `gemini-2.5-flash`, `gemini-2.5-flash-lite`, `gemini-2.0-flash`, `gemini-2.0-flash-lite`.
 
 Add: `embabel-agent-starter-google-genai`
 
@@ -189,8 +219,12 @@ Add: `embabel-agent-starter-google-genai`
 
 ```yaml
 embabel:
-  models:
-    default-llm: deepseek-chat
+  agent:
+    platform:
+      models:
+        deepseek:
+          api-key: ${DEEPSEEK_API_KEY}
+          base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com}
 ```
 
 Add: `embabel-agent-starter-deepseek`
@@ -199,14 +233,29 @@ Add: `embabel-agent-starter-deepseek`
 
 Add: `embabel-agent-starter-oci-genai`
 
-Defaults to `~/.oci/config` with profile `DEFAULT`. Supports `INSTANCE_PRINCIPAL`, `RESOURCE_PRINCIPAL`, `WORKLOAD_IDENTITY`, `SESSION_TOKEN`, and `SIMPLE` authentication.
+Defaults to `~/.oci/config` with profile `DEFAULT`. When the OpenAI provider is not on the classpath, OCI supplies defaults for Embabel's default LLM and embedding model.
+
+```yaml
+embabel:
+  agent:
+    platform:
+      models:
+        ocigenai:
+          compartment-id: ocid1.compartment.oc1...
+          region: us-chicago-1
+          # authentication-type: INSTANCE_PRINCIPAL | RESOURCE_PRINCIPAL | WORKLOAD_IDENTITY | SESSION_TOKEN | SIMPLE
+```
 
 ### Mistral AI
 
 ```yaml
 embabel:
-  models:
-    default-llm: mistral-large
+  agent:
+    platform:
+      models:
+        mistralai:
+          api-key: ${MISTRAL_API_KEY}
+          base-url: ${MISTRAL_BASE_URL:https://api.mistral.ai}
 ```
 
 Add: `embabel-agent-starter-mistral-ai`
@@ -215,21 +264,16 @@ Add: `embabel-agent-starter-mistral-ai`
 
 ```yaml
 embabel:
-  models:
-    default-llm: my-lmstudio-model
-  lmstudio:
-    base-url: http://localhost:1234/v1
+  agent:
+    platform:
+      models:
+        lmstudio:
+          base-url: http://localhost:1234/v1
 ```
 
 Add: `embabel-agent-starter-lmstudio`
 
 ### Ollama
-
-```yaml
-embabel:
-  models:
-    default-llm: llama-3.1
-```
 
 Add: `embabel-agent-starter-ollama`
 
