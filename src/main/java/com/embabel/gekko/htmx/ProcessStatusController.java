@@ -4,9 +4,6 @@ import com.embabel.agent.core.Agent;
 import com.embabel.agent.core.AgentPlatform;
 import com.embabel.agent.core.AgentProcess;
 import com.embabel.agent.core.AgentProcessStatusCode;
-import com.embabel.agent.core.Budget;
-import com.embabel.agent.core.ProcessOptions;
-import com.embabel.agent.core.Verbosity;
 import com.embabel.agent.core.hitl.FormBindingRequest;
 import com.embabel.agent.core.hitl.FormResponse;
 import com.embabel.ux.form.Control;
@@ -16,6 +13,7 @@ import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.htmx.GenericProcessingValues;
 import com.embabel.gekko.htmx.HitlService.HitlSession;
 import com.embabel.gekko.util.AgentUtils;
+import com.embabel.gekko.web.ResearchPlanService;
 import com.embabel.gekko.web.TradingHtmxController.TickerForm;
 
 import org.slf4j.Logger;
@@ -54,10 +52,12 @@ public class ProcessStatusController {
 
     private final AgentPlatform agentPlatform;
     private final HitlService hitlService;
+    private final ResearchPlanService researchPlanService;
 
-    public ProcessStatusController(AgentPlatform agentPlatform, HitlService hitlService) {
+    public ProcessStatusController(AgentPlatform agentPlatform, HitlService hitlService, ResearchPlanService researchPlanService) {
         this.agentPlatform = agentPlatform;
         this.hitlService = hitlService;
+        this.researchPlanService = researchPlanService;
     }
 
     /**
@@ -179,13 +179,7 @@ public class ProcessStatusController {
 
             // Create a new TickerForm with feedback injected into the agent
             var form = new TickerForm(userInput, feedback);
-            agentProcess = agentPlatform.createAgentProcessFrom(
-                    agent,
-                    ProcessOptions.DEFAULT
-                            .withVerbosity(new Verbosity(true, true))
-                            .withBudget(new Budget().withTokens(16384)),
-                    form
-            );
+            agentProcess = researchPlanService.createAndStart(agent, form);
 
             // Start the process BEFORE migrating the session.
             // If start() fails, the old session is still intact and the user can retry.

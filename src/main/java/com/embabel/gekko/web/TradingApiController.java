@@ -3,10 +3,6 @@ package com.embabel.gekko.web;
 import com.embabel.agent.core.AgentPlatform;
 import com.embabel.agent.core.AgentProcess;
 import com.embabel.agent.core.AgentProcessStatusCode;
-import com.embabel.agent.core.Budget;
-import com.embabel.agent.core.ProcessOptions;
-import com.embabel.agent.core.Verbosity;
-import com.embabel.gekko.agent.OrchestratorAgent;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.AgentUtils;
 import org.slf4j.Logger;
@@ -34,22 +30,17 @@ public class TradingApiController {
     private static final Logger logger = LoggerFactory.getLogger(TradingApiController.class);
 
     private final AgentPlatform agentPlatform;
+    private final ResearchPlanService researchPlanService;
 
-    public TradingApiController(AgentPlatform agentPlatform) {
+    public TradingApiController(AgentPlatform agentPlatform, ResearchPlanService researchPlanService) {
         this.agentPlatform = agentPlatform;
+        this.researchPlanService = researchPlanService;
     }
 
     @PostMapping("/plan")
     public ResponseEntity<Map<String, Object>> planResearch(@RequestBody TickerRequest request) {
         var ticker = new ResearchTypes.Ticker(request.ticker(), request.feedback() != null ? request.feedback() : "");
-        var agent = AgentUtils.findAgent(agentPlatform, OrchestratorAgent.class);
-        var agentProcess = agentPlatform.createAgentProcessFrom(
-                agent,
-                ProcessOptions.DEFAULT.withVerbosity(new Verbosity(true, true)).withBudget(new Budget().withTokens(16384)),
-                ticker
-        );
-
-        agentPlatform.start(agentProcess);
+        var agentProcess = researchPlanService.createAndStart(ticker);
         var process = agentPlatform.getAgentProcess(agentProcess.getId());
 
         if (process != null && process.getStatus() == AgentProcessStatusCode.WAITING) {
@@ -115,7 +106,7 @@ public class TradingApiController {
 
             Map<String, Object> values = Map.of("approved", request.approved(), "feedback", request.feedback() != null ? request.feedback() : "");
 
-            var resumed = AgentUtils.submitWaitForForm(process, agentPlatform, values, "Failed to resume process");
+            var resumed = researchPlanService.submitWaitForForm(process, values, "Failed to resume process");
             if (resumed == null) {
                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                         .body(Map.of("error", "Failed to resume process: " + processId));

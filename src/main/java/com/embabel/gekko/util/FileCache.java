@@ -7,11 +7,10 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 
-import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -23,14 +22,18 @@ import java.util.function.Supplier;
 @Component
 public class FileCache {
 
-    private final File baseDir;
+    private final Path baseDir;
     private final ObjectMapper mapper;
     /** Per-key locks to prevent concurrent duplicate computation. */
     private final Map<String, Object> lockMap = new ConcurrentHashMap<>();
 
     public FileCache() {
-        this.baseDir = new File("data/llm/cache");
-        if (!baseDir.exists()) baseDir.mkdirs();
+        this.baseDir = Path.of("data/llm/cache");
+        try {
+            Files.createDirectories(baseDir);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to create cache directory: " + baseDir, e);
+        }
 
         this.mapper = new ObjectMapper()
                 .enable(SerializationFeature.INDENT_OUTPUT)
@@ -70,24 +73,24 @@ public class FileCache {
         }
     }
 
-    private File fileForKey(String key, String extension) {
+    private Path pathForKey(String key, String extension) {
         String sanitized = sanitizeKey(key);
         String hashed = hashKey(sanitized);
-        return new File(baseDir, hashed + extension);
+        return baseDir.resolve(hashed + extension);
     }
 
     /**
      * Get a cached value by key, or return null if not found.
      */
     public <T> T get(String key, Class<T> clazz) {
-        File jsonFile = fileForKey(key, ".json");
-        File mdFile = fileForKey(key, ".md");
+        Path jsonPath = pathForKey(key, ".json");
+        Path mdPath = pathForKey(key, ".md");
 
         try {
-            if (jsonFile.exists()) {
-                return mapper.readValue(jsonFile, clazz);
-            } else if (mdFile.exists()) {
-                String content = Files.readString(mdFile.toPath(), StandardCharsets.UTF_8);
+            if (Files.exists(jsonPath)) {
+                return mapper.readValue(jsonPath.toFile(), clazz);
+            } else if (Files.exists(mdPath)) {
+                String content = Files.readString(mdPath, StandardCharsets.UTF_8);
                 return clazz.cast(content);
             }
         } catch (IOException ex) {
@@ -144,12 +147,12 @@ public class FileCache {
     public void save(String key, Object value) {
         try {
             if (value instanceof ResearchTypes.Report report) {
-                mapper.writeValue(fileForKey(key, ".json"), value);
+                mapper.writeValue(pathForKey(key, ".json").toFile(), value);
                 saveMarkdown(key, report.content());
             } else if (value instanceof String string) {
                 saveMarkdown(key, string);
             } else {
-                mapper.writeValue(fileForKey(key, ".json"), value);
+                mapper.writeValue(pathForKey(key, ".json").toFile(), value);
             }
         } catch (IOException e) {
             throw new RuntimeException("Failed to save cache for key " + key + ": " + e.getMessage(), e);
@@ -157,16 +160,16 @@ public class FileCache {
     }
 
     private void saveMarkdown(String key, String markdown) throws RuntimeException {
-        File mdFile = fileForKey(key, ".md");
-        File tempFile = new File(mdFile.getParentFile(), mdFile.getName() + ".tmp");
-        try (FileWriter fw = new FileWriter(tempFile, StandardCharsets.UTF_8)) {
+        Path mdPath = pathForKey(key, ".md");
+        Path tempPath = mdPath.resolveSibling(mdPath.getFileName() + ".tmp");
+        try (var fw = Files.newBufferedWriter(tempPath, StandardCharsets.UTF_8)) {
             fw.write(markdown);
         } catch (IOException e) {
             throw new RuntimeException("Failed to write cache for key " + key + ": " + e.getMessage(), e);
         }
         // Atomic rename: temp file → final file
         try {
-            Files.move(tempFile.toPath(), mdFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+            Files.move(tempPath, mdPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
             log.error("Failed to atomically save cache for key {}: {}", key, e.getMessage(), e);
         }

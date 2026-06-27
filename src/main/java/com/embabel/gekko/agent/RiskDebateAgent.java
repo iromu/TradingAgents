@@ -73,7 +73,10 @@ public class RiskDebateAgent {
         String currentConservative = "";
         String currentNeutral = "";
 
-        String history = debateState.history() != null ? String.join("\n", debateState.history()) : "";
+        StringBuilder history = new StringBuilder();
+        if (debateState.history() != null) {
+            history.append(String.join("\n", debateState.history()));
+        }
 
         for (int round = 0; round < MAX_RISK_DEBATE_ROUNDS; round++) {
             // Aggressive speaks (Python: round-robin via latest_speaker, starts with Aggressive)
@@ -83,12 +86,12 @@ public class RiskDebateAgent {
                     briefs.socialBrief(),
                     briefs.newsBrief(),
                     briefs.fundamentalsBrief(),
-                    history,
+                    history.toString(),
                     currentConservative,
                     currentNeutral,
                     actionContext
             );
-            history += "\n" + currentAggressive;
+            history.append("\n").append(currentAggressive);
             aggressiveResponses.add(currentAggressive);
 
             // Conservative speaks
@@ -98,12 +101,12 @@ public class RiskDebateAgent {
                     briefs.socialBrief(),
                     briefs.newsBrief(),
                     briefs.fundamentalsBrief(),
-                    history,
+                    history.toString(),
                     currentAggressive,
                     currentNeutral,
                     actionContext
             );
-            history += "\n" + currentConservative;
+            history.append("\n").append(currentConservative);
             conservativeResponses.add(currentConservative);
 
             // Neutral speaks
@@ -113,12 +116,12 @@ public class RiskDebateAgent {
                     briefs.socialBrief(),
                     briefs.newsBrief(),
                     briefs.fundamentalsBrief(),
-                    history,
+                    history.toString(),
                     currentAggressive,
                     currentConservative,
                     actionContext
             );
-            history += "\n" + currentNeutral;
+            history.append("\n").append(currentNeutral);
             neutralResponses.add(currentNeutral);
 
             log.info("Risk debate round {} complete: aggressive={}, conservative={}, neutral={}",

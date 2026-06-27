@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -31,8 +32,7 @@ class OrchestratorAgentResearchPlanTest {
      */
     private FileCache createCache() {
         try {
-            File tempDir = Files.createTempDirectory("research-plan-test-cache-").toFile();
-            tempDir.deleteOnExit();
+            Path tempDir = Files.createTempDirectory("research-plan-test-cache-");
             var cache = new FileCache();
             var field = FileCache.class.getDeclaredField("baseDir");
             field.setAccessible(true);

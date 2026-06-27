@@ -2,13 +2,10 @@ package com.embabel.gekko.web;
 
 import com.embabel.agent.core.AgentPlatform;
 import com.embabel.agent.core.AgentProcess;
-import com.embabel.agent.core.Budget;
-import com.embabel.agent.core.ProcessOptions;
 import com.embabel.agent.core.AgentProcessStatusCode;
-import com.embabel.agent.core.Verbosity;
-import com.embabel.gekko.agent.OrchestratorAgent;
 import com.embabel.gekko.htmx.GenericProcessingValues;
 import com.embabel.gekko.util.AgentUtils;
+import com.embabel.gekko.web.ResearchPlanService;
 import lombok.Data;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -32,9 +29,11 @@ public class TradingHtmxController {
     private static final Logger logger = LoggerFactory.getLogger(TradingHtmxController.class);
 
     private final AgentPlatform agentPlatform;
+    private final ResearchPlanService researchPlanService;
 
-    public TradingHtmxController(AgentPlatform agentPlatform) {
+    public TradingHtmxController(AgentPlatform agentPlatform, ResearchPlanService researchPlanService) {
         this.agentPlatform = agentPlatform;
+        this.researchPlanService = researchPlanService;
     }
 
     /* =======================
@@ -60,15 +59,7 @@ public class TradingHtmxController {
             @ModelAttribute TickerForm form,
             Model model
     ) {
-        var agent = AgentUtils.findAgent(agentPlatform, OrchestratorAgent.class);
-
-        var agentProcess = agentPlatform.createAgentProcessFrom(
-                agent,
-                ProcessOptions.DEFAULT
-                        .withVerbosity(new Verbosity(true, true))
-                        .withBudget(new Budget().withTokens(16384)),
-                form
-        );
+        var agentProcess = researchPlanService.createAndStart(form);
 
         model.addAttribute("ticker", form);
 
@@ -79,8 +70,6 @@ public class TradingHtmxController {
                 "researchPlan",
                 "plan"
         ).addToModel(model);
-
-        agentPlatform.start(agentProcess);
 
         // Check if the process has already entered WAITING state (plan generated, awaiting approval)
         AgentProcess process = agentPlatform.getAgentProcess(agentProcess.getId());
@@ -159,9 +148,9 @@ public class TradingHtmxController {
                 return "redirect:/plan/review/" + processId;
             }
 
-            Map<String, Object> values = Map.of("approved", Boolean.parseBoolean(approved), "feedback", feedback != null ? feedback : "");
+            Map<String, Object> values = Map.of("approved", "true".equalsIgnoreCase(approved), "feedback", feedback != null ? feedback : "");
 
-            var resumed = AgentUtils.submitWaitForForm(process, agentPlatform, values, "Failed to resume process");
+            var resumed = researchPlanService.submitWaitForForm(process, values, "Failed to resume process");
             if (resumed == null) {
                 redirectAttrs.addFlashAttribute("error", "Failed to resume process: " + processId);
                 return "redirect:/plan/review/" + processId;

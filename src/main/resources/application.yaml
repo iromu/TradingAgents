@@ -23,7 +23,9 @@ embabel:
 app:
   memory:
     log-path: ~/.tradingagents/memory/trading_memory.md
-    log-max-entries: 0
+    log-max-entries: 1000
+  alphavantage:
+    enabled: false
   checkpoint:
     enabled: false
     dir: data/checkpoints

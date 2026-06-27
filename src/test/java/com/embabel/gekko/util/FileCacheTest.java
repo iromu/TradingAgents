@@ -20,7 +20,7 @@ class FileCacheTest {
     @Test
     void saveAndRetrieveString() {
         FileCache cache = new FileCache();
-        ReflectionTestUtils.setField(cache, "baseDir", tempDir.toFile());
+        ReflectionTestUtils.setField(cache, "baseDir", tempDir);
 
         cache.save("test_key", "hello world");
 
@@ -33,7 +33,7 @@ class FileCacheTest {
     @Test
     void getOrCompute_cachesResult() {
         FileCache cache = new FileCache();
-        ReflectionTestUtils.setField(cache, "baseDir", tempDir.toFile());
+        ReflectionTestUtils.setField(cache, "baseDir", tempDir);
 
         int[] callCount = {0};
         String result1 = cache.getOrCompute("compute_key", String.class, () -> {
@@ -57,7 +57,7 @@ class FileCacheTest {
     @Test
     void sanitizeKey_stripsPathTraversal() {
         FileCache cache = new FileCache();
-        ReflectionTestUtils.setField(cache, "baseDir", tempDir.toFile());
+        ReflectionTestUtils.setField(cache, "baseDir", tempDir);
 
         // Path traversal sequences are stripped, not rejected
         // "../../etc/passwd" becomes "etc_passwd" after sanitization
@@ -85,7 +85,7 @@ class FileCacheTest {
     @Test
     void get_returnsNullForMissingKey() {
         FileCache cache = new FileCache();
-        ReflectionTestUtils.setField(cache, "baseDir", tempDir.toFile());
+        ReflectionTestUtils.setField(cache, "baseDir", tempDir);
 
         assertNull(cache.get("nonexistent_key", String.class));
     }
@@ -93,7 +93,7 @@ class FileCacheTest {
     @Test
     void concurrent_sameKey_computeOnce() throws InterruptedException {
         FileCache cache = new FileCache();
-        ReflectionTestUtils.setField(cache, "baseDir", tempDir.toFile());
+        ReflectionTestUtils.setField(cache, "baseDir", tempDir);
 
         AtomicInteger callCount = new AtomicInteger(0);
         int threadCount = 10;
@@ -129,7 +129,7 @@ class FileCacheTest {
     @Test
     void concurrent_differentKeys_computeIndependently() throws InterruptedException {
         FileCache cache = new FileCache();
-        ReflectionTestUtils.setField(cache, "baseDir", tempDir.toFile());
+        ReflectionTestUtils.setField(cache, "baseDir", tempDir);
 
         AtomicInteger callCount = new AtomicInteger(0);
         int threadCount = 10;
@@ -163,7 +163,7 @@ class FileCacheTest {
     @Test
     void concurrent_exceptionReleasesLock() throws InterruptedException {
         FileCache cache = new FileCache();
-        ReflectionTestUtils.setField(cache, "baseDir", tempDir.toFile());
+        ReflectionTestUtils.setField(cache, "baseDir", tempDir);
 
         // First call throws exception
         assertThrows(RuntimeException.class, () ->

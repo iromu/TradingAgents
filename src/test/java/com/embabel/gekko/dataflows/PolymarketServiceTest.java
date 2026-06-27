@@ -4,7 +4,6 @@ import com.embabel.gekko.util.FileCache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -19,8 +18,7 @@ class PolymarketServiceTest {
     Path tempDir;
 
     private PolymarketService createService() throws Exception {
-        File cacheDir = Files.createTempDirectory("polymarket-test-cache-").toFile();
-        cacheDir.deleteOnExit();
+        Path cacheDir = Files.createTempDirectory("polymarket-test-cache-");
         var cache = new FileCache();
         var field = FileCache.class.getDeclaredField("baseDir");
         field.setAccessible(true);

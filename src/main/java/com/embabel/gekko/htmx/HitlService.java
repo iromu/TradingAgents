@@ -38,7 +38,7 @@ public class HitlService implements DisposableBean {
 
     private final Map<String, HitlSession> sessions = new ConcurrentHashMap<>();
     private final Map<String, Object> sessionLocks = new ConcurrentHashMap<>();
-    private final ScheduledExecutorService cleanupScheduler = Executors.newSingleThreadScheduledExecutor();
+    private final ScheduledExecutorService cleanupScheduler = Executors.newSingleThreadScheduledExecutor(r -> { Thread t = new Thread(r); t.setDaemon(true); return t; });
     private final Duration sessionTtl;
 
     /**

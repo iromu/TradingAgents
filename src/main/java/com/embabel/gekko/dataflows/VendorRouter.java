@@ -1,15 +1,22 @@
 package com.embabel.gekko.dataflows;
 
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class VendorRouter {
 
-    private final AlphaVantageService alphaVantageService;
+    @Autowired(required = false)
+    private AlphaVantageService alphaVantageService;
+
+    /**
+     * Set the Alpha Vantage service (for testing).
+     */
+    public void setAlphaVantageService(AlphaVantageService alphaVantageService) {
+        this.alphaVantageService = alphaVantageService;
+    }
 
     // --------------------------
     // Helpers for safe extraction
@@ -27,6 +34,9 @@ public class VendorRouter {
     // --------------------------
     public String routeToVendor(String method, Object... params) {
         try {
+            if (alphaVantageService == null) {
+                return "Alpha Vantage service not configured — set app.alphavantage.enabled=true and provide app.alphavantage.api-key";
+            }
             return switch (method) {
 
                 // ====================================================

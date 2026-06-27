@@ -25,6 +25,7 @@ import org.springframework.stereotype.Component;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
+import java.util.regex.Pattern;
 
 import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
 import static com.embabel.common.ai.model.ModelProvider.CHEAPEST_ROLE;
@@ -66,6 +67,17 @@ public class DebateAgent {
     private final ObjectProvider<RiskDebateAgent> riskDebateAgentProvider;
     private final ObjectProvider<Trader> traderProvider;
     private final ObjectProvider<PortfolioManager> portfolioManagerProvider;
+
+    // Pre-compiled regex patterns for input sanitization (ReDoS mitigation)
+    private static final Pattern JINJA_VAR = Pattern.compile("(?s)\\{\\{.*?\\}\\}");
+    private static final Pattern JINJA_STMT = Pattern.compile("(?s)\\{%.*?%\\}");
+    private static final Pattern JINJA_VAR_UNCLOSED = Pattern.compile("(?s)\\{\\{[^}]*$");
+    private static final Pattern JINJA_STMT_UNCLOSED = Pattern.compile("(?s)\\{%[^%]*$");
+    private static final Pattern CODE_FENCE = Pattern.compile("(?s)```[\\s\\S]*?```");
+    private static final Pattern CODE_FENCE_UNCLOSED = Pattern.compile("(?s)```.*$");
+
+    private static final int MAX_INPUT_LENGTH = 10000;
+    private static final int MAX_OUTPUT_LENGTH = 1000;
 
     private com.embabel.agent.core.Agent getDebateLoopAgent() {
         return debateLoopAgentProvider.getObject();
@@ -358,19 +370,16 @@ public class DebateAgent {
         if (input == null || input.isBlank()) {
             return "";
         }
-        String sanitized = input
-                // Block complete Jinja variable expressions: {{ ... }}
-                .replaceAll("(?s)\\{\\{.*?\\}\\}", "[BLOCKED_TEMPLATE]")
-                // Block complete Jinja statement expressions: {% ... %}
-                .replaceAll("(?s)\\{%.*?%\\}", "[BLOCKED_TEMPLATE]")
-                // Block unclosed Jinja variable: {{ without matching }}
-                .replaceAll("(?s)\\{\\{[^}]*$", "[BLOCKED_TEMPLATE]")
-                // Block unclosed Jinja statement: {% without matching %}
-                .replaceAll("(?s)\\{%[^%]*$", "[BLOCKED_TEMPLATE]")
-                // Block markdown code fences (triple backtick blocks)
-                .replaceAll("(?s)```[\\s\\S]*?```", "[BLOCKED_CODE]")
-                // Block unclosed code fence
-                .replaceAll("(?s)```.*$", "[BLOCKED_CODE]");
+        // Reject oversized input before regex processing (ReDoS mitigation)
+        if (input.length() > MAX_INPUT_LENGTH) {
+            input = input.substring(0, MAX_INPUT_LENGTH);
+        }
+        String sanitized = JINJA_VAR.matcher(input).replaceAll("[BLOCKED_TEMPLATE]")
+                .replaceAll(JINJA_STMT.pattern(), "[BLOCKED_TEMPLATE]")
+                .replaceAll(JINJA_VAR_UNCLOSED.pattern(), "[BLOCKED_TEMPLATE]")
+                .replaceAll(JINJA_STMT_UNCLOSED.pattern(), "[BLOCKED_TEMPLATE]")
+                .replaceAll(CODE_FENCE.pattern(), "[BLOCKED_CODE]")
+                .replaceAll(CODE_FENCE_UNCLOSED.pattern(), "[BLOCKED_CODE]");
 
         StringBuilder sb = new StringBuilder(sanitized.length());
         for (int i = 0; i < sanitized.length(); i++) {
@@ -383,8 +392,8 @@ public class DebateAgent {
         }
         sanitized = sb.toString();
 
-        if (sanitized.length() > 1000) {
-            sanitized = sanitized.substring(0, 1000) + "...[truncated]";
+        if (sanitized.length() > MAX_OUTPUT_LENGTH) {
+            sanitized = sanitized.substring(0, MAX_OUTPUT_LENGTH) + "...[truncated]";
         }
         return "<user_feedback>\n" + sanitized + "\n</user_feedback>";
     }

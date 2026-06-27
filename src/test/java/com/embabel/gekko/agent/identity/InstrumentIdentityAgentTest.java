@@ -31,7 +31,7 @@ class InstrumentIdentityAgentTest {
         try {
             var field = FileCache.class.getDeclaredField("baseDir");
             field.setAccessible(true);
-            field.set(cache, tempDir.toFile());
+            field.set(cache, tempDir);
         } catch (Exception e) {
             throw new RuntimeException("Failed to set cache baseDir", e);
         }

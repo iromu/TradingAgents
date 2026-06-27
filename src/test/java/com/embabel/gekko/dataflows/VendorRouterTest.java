@@ -9,7 +9,8 @@ class VendorRouterTest {
     @Test
     void route_delegatesToAlphaVantageForFundamentals() {
         AlphaVantageService alphaVantageService = new AlphaVantageService();
-        VendorRouter router = new VendorRouter(alphaVantageService);
+        VendorRouter router = new VendorRouter();
+        router.setAlphaVantageService(alphaVantageService);
 
         // The router should handle the method name without throwing
         String result = router.routeToVendor("get_fundamentals", "AAPL", "2026-01-01");
@@ -20,7 +21,8 @@ class VendorRouterTest {
     @Test
     void route_delegatesToAlphaVantageForBalanceSheet() {
         AlphaVantageService alphaVantageService = new AlphaVantageService();
-        VendorRouter router = new VendorRouter(alphaVantageService);
+        VendorRouter router = new VendorRouter();
+        router.setAlphaVantageService(alphaVantageService);
 
         String result = router.routeToVendor("get_balance_sheet", "AAPL", "quarterly", "2026-01-01");
         assertNotNull(result);
@@ -29,7 +31,8 @@ class VendorRouterTest {
     @Test
     void route_delegatesToAlphaVantageForNews() {
         AlphaVantageService alphaVantageService = new AlphaVantageService();
-        VendorRouter router = new VendorRouter(alphaVantageService);
+        VendorRouter router = new VendorRouter();
+        router.setAlphaVantageService(alphaVantageService);
 
         String result = router.routeToVendor("get_news", "AAPL", "2020-01-01", "2030-01-01");
         assertNotNull(result);
@@ -38,7 +41,8 @@ class VendorRouterTest {
     @Test
     void route_throwsOnUnknownMethod() {
         AlphaVantageService alphaVantageService = new AlphaVantageService();
-        VendorRouter router = new VendorRouter(alphaVantageService);
+        VendorRouter router = new VendorRouter();
+        router.setAlphaVantageService(alphaVantageService);
 
         // The router catches exceptions and returns error string, not throws
         String result = router.routeToVendor("unknown_method", "AAPL");
@@ -49,9 +53,20 @@ class VendorRouterTest {
     @Test
     void route_handlesNullParams() {
         AlphaVantageService alphaVantageService = new AlphaVantageService();
-        VendorRouter router = new VendorRouter(alphaVantageService);
+        VendorRouter router = new VendorRouter();
+        router.setAlphaVantageService(alphaVantageService);
 
         String result = router.routeToVendor("get_fundamentals", null, null);
         assertNotNull(result);
+    }
+
+    @Test
+    void route_returnsErrorWhenAlphaVantageNotConfigured() {
+        VendorRouter router = new VendorRouter();
+        // No AlphaVantageService set
+
+        String result = router.routeToVendor("get_fundamentals", "AAPL");
+        assertNotNull(result);
+        assertTrue(result.contains("not configured"));
     }
 }

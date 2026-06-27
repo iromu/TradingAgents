@@ -1,7 +1,5 @@
 package com.embabel.gekko.domain;
 
-import com.embabel.gekko.agent.RiskAssessment;
-
 import java.util.List;
 
 /**
@@ -37,32 +35,8 @@ public final class ResearchTypes {
             List<String> bearHistory,
             String currentResponse,
             int count,
-            DebateBriefs briefs,
-            RiskAssessment riskAssessment,
-            // Risk debate state fields (matching Python RiskDebateState)
-            String latestSpeaker,
-            String currentAggressiveResponse,
-            String currentConservativeResponse,
-            String currentNeutralResponse,
-            String traderProposal
+            DebateBriefs briefs
     ) implements Report {
-        public InvestmentDebateState {
-            if (latestSpeaker == null) {
-                latestSpeaker = "";
-            }
-            if (currentAggressiveResponse == null) {
-                currentAggressiveResponse = "";
-            }
-            if (currentConservativeResponse == null) {
-                currentConservativeResponse = "";
-            }
-            if (currentNeutralResponse == null) {
-                currentNeutralResponse = "";
-            }
-            if (traderProposal == null) {
-                traderProposal = "";
-            }
-        }
 
         @Override
         public String content() {

@@ -1,7 +1,7 @@
 package com.embabel.gekko.dataflows;
 
-import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -13,6 +13,8 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Service for querying Alpha Vantage endpoints with a simple file-based cache.
@@ -33,7 +35,9 @@ import java.time.format.DateTimeFormatter;
  * simplified cache key (e.g. {@code TICKER_NEWS}) — be mindful if you need
  * more granular cache invalidation.
  */
+@Slf4j
 @Service
+@ConditionalOnProperty(prefix = "app.alphavantage", name = "enabled", havingValue = "true", matchIfMissing = false)
 public class AlphaVantageService {
 
     /**
@@ -78,14 +82,6 @@ public class AlphaVantageService {
         factory.setConnectTimeout(connTimeout);
         factory.setReadTimeout(readTimeout);
         this.restTemplate = new RestTemplate(factory);
-    }
-
-    @PostConstruct
-    void validateApiKey() {
-        if ("dummy_key".equals(apiKey)) {
-            throw new IllegalStateException(
-                    "Alpha Vantage API key is not configured. Set 'app.alphavantage.api-key' in application configuration.");
-        }
     }
 
     // -------------------------------

@@ -4,7 +4,6 @@ import com.embabel.gekko.util.FileCache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
-import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -21,8 +20,7 @@ class FredServiceTest {
 
     private FredService createService(String apiKey) {
         try {
-            File cacheDir = Files.createTempDirectory("fred-test-cache-").toFile();
-            cacheDir.deleteOnExit();
+            Path cacheDir = Files.createTempDirectory("fred-test-cache-");
             var cache = new FileCache();
             var field = FileCache.class.getDeclaredField("baseDir");
             field.setAccessible(true);
