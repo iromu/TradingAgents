@@ -1,200 +1,54 @@
 <!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org" lang="en">
+<html xmlns:th="https://www.thymeleaf.org" lang="en"
+      th:replace="~{common/layout :: layout(~{::title}, ~{::section}, ~{::extraHeadContent})}">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title th:text="${pageTitle} ?: 'Review Research Plan'">Review Research Plan</title>
-    <link rel="stylesheet" th:href="@{/css/project.css}" />
-    <style>
-        .plan-review-container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 2rem 1rem;
-        }
-        .plan-review-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        .plan-review-header h2 {
-            color: #f0c040;
-            font-size: 1.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .plan-review-header p {
-            color: #aaa;
-            font-size: 0.95rem;
-        }
-        .plan-preview {
-            background: #0f0f23;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-bottom: 2rem;
-            max-height: 500px;
-            overflow-y: auto;
-        }
-        .plan-preview h3 {
-            color: #e0e0e0;
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-        }
-        .plan-content {
-            color: #ccc;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-        }
-        .plan-actions {
-            background: #1a1a2e;
-            border: 1px solid #333;
-            border-radius: 8px;
-            padding: 2rem;
-        }
-        .plan-actions h3 {
-            color: #e0e0e0;
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-        }
-        .form-group {
-            margin-bottom: 1.5rem;
-        }
-        .form-group label {
-            display: block;
-            color: #ccc;
-            font-size: 0.9rem;
-            margin-bottom: 0.5rem;
-        }
-        .form-group textarea {
-            width: 100%;
-            padding: 0.75rem;
-            background: #0f0f23;
-            border: 1px solid #444;
-            border-radius: 4px;
-            color: #e0e0e0;
-            font-size: 0.95rem;
-            font-family: inherit;
-            box-sizing: border-box;
-            min-height: 100px;
-            resize: vertical;
-        }
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        .checkbox-group input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            accent-color: #4CAF50;
-        }
-        .checkbox-group label {
-            color: #ccc;
-            font-size: 0.95rem;
-            margin-bottom: 0;
-            cursor: pointer;
-        }
-        .form-actions {
-            display: flex;
-            gap: 1rem;
-            justify-content: flex-end;
-            margin-top: 1.5rem;
-        }
-        .btn {
-            padding: 0.75rem 1.5rem;
-            border: none;
-            border-radius: 4px;
-            font-size: 0.95rem;
-            cursor: pointer;
-            font-weight: 600;
-        }
-        .btn-approve {
-            background: #4CAF50;
-            color: white;
-        }
-        .btn-approve:hover {
-            background: #45a049;
-        }
-        .btn-reject {
-            background: #f44336;
-            color: white;
-        }
-        .btn-reject:hover {
-            background: #d32f2f;
-        }
-        .btn-cancel {
-            background: #555;
-            color: #ccc;
-        }
-        .btn-cancel:hover {
-            background: #666;
-        }
-        .flash-message {
-            padding: 1rem;
-            border-radius: 4px;
-            margin-bottom: 1.5rem;
-            text-align: center;
-        }
-        .flash-error {
-            background: #2d1b1b;
-            border: 1px solid #f44336;
-            color: #f44336;
-        }
-        .flash-success {
-            background: #1b2d1b;
-            border: 1px solid #4CAF50;
-            color: #4CAF50;
-        }
-        .info-text {
-            text-align: center;
-            color: #888;
-            font-size: 0.85rem;
-            margin-top: 1rem;
-        }
-    </style>
+    <th:block th:fragment="extraHeadContent">
+        <link rel="stylesheet" th:href="@{/css/project.css}" />
+    </th:block>
 </head>
-<body>
-<div class="plan-review-container">
-    <div class="plan-review-header">
-        <h2>Review Research Plan</h2>
-        <p>The research agent has generated a plan. Review it below and approve or provide feedback before execution.</p>
-    </div>
-
-    <!-- Flash messages -->
-    <div th:if="${error}" class="flash-message flash-error" th:text="${error}"></div>
-    <div th:if="${success}" class="flash-message flash-success" th:text="${success}"></div>
-
-    <!-- Plan preview -->
-    <div class="plan-preview">
-        <h3>Generated Research Plan</h3>
-        <div class="plan-content" th:text="${planContent}">Research plan content will appear here...</div>
-    </div>
-
-    <!-- Approval form -->
-    <form th:action="@{/status/{processId}/waitfor(processId=${processId})}" method="post" class="plan-actions">
-        <h3>Approve or Provide Feedback</h3>
-
-        <div class="form-group">
-            <label for="feedback">Feedback / Instructions (optional)</label>
-            <textarea id="feedback" name="feedback" maxlength="1000" placeholder="Provide feedback, corrections, or additional instructions for the research..."></textarea>
+<section>
+    <div class="plan-review-container">
+        <div class="plan-review-header">
+            <h2>Review Research Plan</h2>
+            <p>The research agent has generated a plan. Review it below and approve or provide feedback before execution.</p>
         </div>
 
-        <div class="form-group">
-            <div class="checkbox-group">
-                <input type="checkbox" id="approved" name="approved" checked />
-                <label for="approved">Approve and execute the full research workflow</label>
+        <!-- Flash messages -->
+        <div th:if="${error}" class="flash-message flash-error" th:text="${error}"></div>
+        <div th:if="${success}" class="flash-message flash-success" th:text="${success}"></div>
+
+        <!-- Plan preview -->
+        <div class="plan-preview">
+            <h3>Generated Research Plan</h3>
+            <div class="plan-content" th:text="${planContent}">Research plan content will appear here...</div>
+        </div>
+
+        <!-- Approval form -->
+        <form th:action="@{/status/{processId}/waitfor(processId=${processId})}" method="post" class="plan-actions">
+            <h3>Approve or Provide Feedback</h3>
+
+            <div class="form-group">
+                <label for="feedback">Feedback / Instructions (optional)</label>
+                <textarea id="feedback" name="feedback" maxlength="1000" placeholder="Provide feedback, corrections, or additional instructions for the research..."></textarea>
             </div>
-        </div>
 
-        <div class="form-actions">
-            <a th:href="@{/}" class="btn btn-cancel">Cancel</a>
-            <button type="submit" class="btn btn-approve">Approve &amp; Execute</button>
-        </div>
-    </form>
+            <div class="form-group">
+                <div class="checkbox-group">
+                    <input type="checkbox" id="approved" name="approved" value="true" checked />
+                    <label for="approved">Approve and execute the full research workflow</label>
+                </div>
+            </div>
 
-    <div class="info-text">
-        <p>Approving will execute the full research workflow. You can provide feedback to guide the research process.</p>
+            <div class="form-actions">
+                <a th:href="@{/}" class="btn btn-cancel">Cancel</a>
+                <button type="submit" class="btn btn-approve">Approve &amp; Execute</button>
+            </div>
+        </form>
+
+        <div class="info-text">
+            <p>Approving will execute the full research workflow. You can provide feedback to guide the research process.</p>
+        </div>
     </div>
-</div>
-</body>
+</section>
 </html>

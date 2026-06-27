@@ -1,15 +1,13 @@
-<html
-        xmlns:th="http://www.thymeleaf.org"
-        th:replace="~{common/layout :: layout(~{::title}, ~{::section}, ~{::extraHeadContent})}">
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en"
+      th:replace="~{common/layout :: layout(~{::title}, ~{::section}, ~{::extraHeadContent})}">
 <head>
     <th:block th:fragment="extraHeadContent">
         <script src="https://unpkg.com/marked@12.0.2/marked.min.js"></script>
         <script src="https://unpkg.com/dompurify@3.1.7/dist/purify.min.js"></script>
     </th:block>
     <title>Processing</title>
-
 </head>
-<body>
 <section>
     <h2 th:text="${pageTitle}"></h2>
     <div id="agent-container">
@@ -21,7 +19,7 @@
                     <button type="button"
                             th:hx-delete="@{/api/v1/process/{id}(id=${processId})}"
                             hx-confirm="Are you sure you want to kill this process?"
-                            hx-target="this"
+                            hx-target="#agent-status"
                             hx-swap="outerHTML"
                             class="scary-delete-btn">
                         Kill Process
@@ -34,7 +32,7 @@
             <h3>Plan</h3>
             <div id="plan-content"></div>
         </div>
-        <div id="sse-updates">
+        <div id="sse-updates" role="log" aria-live="polite">
             <p id="init-message">Initializing...</p>
         </div>
     </div>
@@ -265,6 +263,12 @@
                     break;
             }
 
+            // Handle non-event types (e.g., ConnectionError from SSE error handler)
+            if (data.type === 'ConnectionError') {
+                headerText = '❌ Connection Error';
+                detailsText = data.message || 'Connection to server lost';
+            }
+
             // Update element content
             headerEl.textContent = headerText;
             detailsEl.textContent = detailsText;
@@ -299,7 +303,7 @@
             detailsEl.textContent = `${originalDetails}\nResponse received`;
 
             // Show the JSON response
-            jsonEl.textContent = normalizeJsonResult(data.response);
+            jsonEl.textContent = normalizeResult(data.response);
             jsonEl.classList.remove('hidden');
 
             return true;
@@ -346,9 +350,10 @@
                 type: 'ConnectionError',
                 message: 'Connection to server lost'
             });
-            updatesContainer.appendChild(errorUpdate);
+            if (errorUpdate) {
+                updatesContainer.appendChild(errorUpdate);
+            }
         });
     </script>
 </section>
-</body>
 </html>

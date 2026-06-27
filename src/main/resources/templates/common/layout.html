@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" th:fragment="layout(title, content, extraHead)">
+<html xmlns:th="https://www.thymeleaf.org" th:fragment="layout(title, content, extraHead)">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title th:replace="${title}">Embabel</title>
-    <link href="/css/embabel-common-dark.css" rel="stylesheet">
-    <link href="/css/project.css" rel="stylesheet">
+    <title th:text="${title}">Embabel</title>
+    <link href="@{/css/embabel-common-dark.css}" rel="stylesheet">
+    <link href="@{/css/project.css}" rel="stylesheet">
     <script src="https://unpkg.com/htmx.org@2.0.5" th:if="${_htmx}"></script>
-    <script src="https://unpkg.com/htmx.org@2.2.2/dist/ext/sse.js" th:if="${_sse}"></script>
-    <th:block th:insert="${extraHead}"></th:block>
-
+    <script src="https://unpkg.com/htmx.org@2.0.5/dist/ext/sse.js" th:if="${_sse}"></script>
+    <th:block th:if="${extraHead != null}" th:insert="${extraHead}"></th:block>
 </head>
 <body>
 
@@ -19,3 +18,5 @@
 <div th:replace="~{common/fragments/footer :: footer}"></div>
 </body>
 </html>
+
+<th:block th:fragment="empty"></th:block>

@@ -1,0 +1,67 @@
+{
+  "skill_name": "htmx",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "I want to build a contact management page where clicking a contact shows its details, there's an edit button that swaps the view into a form, and a delete button that removes the row. No React — I want server-rendered HTML with AJAX. My backend is Flask.",
+      "expected_output": "HTML with htmx attributes: hx-get for loading details, hx-put for saving edits, hx-delete for removing rows, hx-target=\"this\" hx-swap=\"outerHTML\" for view swapping, hx-confirm for delete confirmation, hx-boost for navigation",
+      "files": [],
+      "assertions": [
+        "Output includes hx-get, hx-put, and hx-delete attributes",
+        "Output uses hx-target=\"this\" with hx-swap=\"outerHTML\" for view transitions",
+        "Output includes hx-confirm for delete action",
+        "Output includes CDN script tag for htmx",
+        "Output does not include React/Vue/Svelte imports"
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "I need a search box that debounces input, shows results as I type, and also triggers on Enter key press. Results go into a table. My backend is Django.",
+      "expected_output": "HTML with hx-post to search endpoint, hx-trigger with input changed delay:500ms and keyup[key=='Enter'], hx-target on the results table body, htmx indicator for loading state",
+      "files": [],
+      "assertions": [
+        "Output includes hx-trigger with 'input changed delay:' modifier",
+        "Output includes keyup[key=='Enter'] trigger",
+        "Output includes hx-target pointing to a results container",
+        "Output includes hx-indicator or htmx-indicator class for loading state",
+        "Output includes a results container element (table body or div)"
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "Help me add a file upload form with a progress bar to my Spring Boot application. I want to show upload progress as the file uploads.",
+      "expected_output": "HTML form with hx-encoding='multipart/form-data', hx-post for upload endpoint, progress element, and JavaScript listener for htmx:xhr:progress event to update the progress bar value",
+      "files": [],
+      "assertions": [
+        "Output includes hx-encoding='multipart/form-data' or hx-encoding=\"multipart/form-data\"",
+        "Output includes a file input element",
+        "Output includes a progress element",
+        "Output includes JavaScript listener for htmx:xhr:progress event",
+        "Output calculates progress percentage from loaded/total"
+      ]
+    },
+    {
+      "id": 4,
+      "prompt": "I'm building a dashboard with a nav bar where all links load via AJAX instead of full page reloads. How do I do that with htmx?",
+      "expected_output": "HTML nav element with hx-boost=\"true\" wrapping anchor tags, explaining that boosting makes links use AJAX while still working without JS",
+      "files": [],
+      "assertions": [
+        "Output uses hx-boost=\"true\" on a nav or container element",
+        "Output includes anchor tags inside the boosted container",
+        "Output explains progressive enhancement (works without JS)"
+      ]
+    },
+    {
+      "id": 5,
+      "prompt": "I want to create a row deletion in a table with a fade-out animation. When the user clicks delete, the row should fade out smoothly before being removed.",
+      "expected_output": "HTML with hx-delete on delete button, CSS using htmx-swapping class with opacity transition, hx-target=\"closest tr\" hx-swap=\"outerHTML\" with swap delay for animation timing",
+      "files": [],
+      "assertions": [
+        "Output includes CSS with htmx-swapping class and opacity transition",
+        "Output includes hx-delete attribute on delete button",
+        "Output uses hx-target=\"closest tr\" or similar selector",
+        "Output includes swap timing modifier (swap:Ns)"
+      ]
+    }
+  ]
+}

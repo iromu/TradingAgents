@@ -1,4 +1,4 @@
-<div th:fragment="plan-complete">
+<th:block xmlns:th="https://www.thymeleaf.org" th:fragment="plan-complete">
     <div>
         <h3>Plan</h3>
         <div id="plan-content">
@@ -33,5 +33,4 @@
                     th:text="${#numbers.formatDecimal(agentProcess.usage.completionTokens, 1, 'COMMA', 0, 'DEFAULT')}"></i></span>
         </p>
     </div>
-
-</div>
+</th:block>

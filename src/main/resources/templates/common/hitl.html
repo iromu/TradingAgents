@@ -1,9 +1,9 @@
-<html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{common/layout :: layout(~{::title}, ~{::section})}">
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en"
+      th:replace="~{common/layout :: layout(~{::title}, ~{::section}, ~{})}">
 <head>
     <title>Human Review Required</title>
 </head>
-<body>
 <section>
     <h2>⚠️ Agent Error — Human Review Required</h2>
 
@@ -39,7 +39,7 @@
 
             <div class="form-actions">
                 <button type="submit" class="submit-btn">Resubmit with Feedback</button>
-                <a href="/" class="cancel-btn">Cancel — Return Home</a>
+                <a th:href="@{/}" class="cancel-btn">Cancel — Return Home</a>
             </div>
         </form>
     </div>

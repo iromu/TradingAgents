@@ -1,0 +1,25 @@
+<th:block xmlns:th="https://www.thymeleaf.org"
+          th:fragment="approval-form(processId, feedbackPlaceholder, feedbackMaxlength, checkboxLabel, submitButtonText, cancelUrl)">
+    <form th:action="@{/status/{processId}/waitfor(processId=${processId})}" method="post" class="approval-form">
+        <h3>Your Feedback</h3>
+
+        <div class="form-group">
+            <label for="feedback">Feedback / Instructions (optional)</label>
+            <textarea id="feedback" name="feedback"
+                      th:attr="maxlength=${feedbackMaxlength != null ? feedbackMaxlength : 1000}, placeholder=${feedbackPlaceholder != null ? feedbackPlaceholder : 'Provide feedback, corrections, or additional instructions...'}"
+                      rows="4"></textarea>
+        </div>
+
+        <div class="form-group">
+            <div class="checkbox-group">
+                <input type="checkbox" id="approved" name="approved" value="true" checked />
+                <label for="approved" th:text="${checkboxLabel != null ? checkboxLabel : 'Approve and proceed with generating the final investment plan'}"></label>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <a th:href="${cancelUrl != null ? cancelUrl : '/'}" class="btn btn-cancel">Cancel</a>
+            <button type="submit" class="btn btn-submit" th:text="${submitButtonText != null ? submitButtonText : 'Submit Feedback'}"></button>
+        </div>
+    </form>
+</th:block>

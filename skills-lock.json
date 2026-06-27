@@ -48,6 +48,12 @@
       "sourceType": "github",
       "skillPath": "skills/git-wiki/SKILL.md",
       "computedHash": "7a0c766675ee104158a9957ed185731411446b5b2e00ef475581b7b8aa9a6349"
+    },
+    "htmx": {
+      "source": "iromu/awesome-qwen",
+      "sourceType": "github",
+      "skillPath": "skills/htmx/SKILL.md",
+      "computedHash": "9a254a38b6fcd44cb068f024635ea14fc9b3ef1482b17fcd956a56eb73cf7bca"
     }
   }
 }

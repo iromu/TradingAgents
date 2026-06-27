@@ -17,5 +17,6 @@ public record GenericProcessingValues(AgentProcess agentProcess, String pageTitl
         model.addAttribute("detail", detail);
         model.addAttribute("resultModelKey", resultModelKey);
         model.addAttribute("successView", successView);
+        model.addAttribute("_htmx", true);
     }
 }

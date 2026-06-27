@@ -1,12 +1,9 @@
-<html xmlns:th="http://www.thymeleaf.org"
-      th:replace="~{common/layout :: layout(~{::title}, ~{::section}, ~{common/fragments/empty :: empty})}">
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" lang="en"
+      th:replace="~{common/layout :: layout(~{::title}, ~{::section}, ~{})}">
 <head>
-    <title th:text="${travelPlan.proposal.title}">Embabel Trading Agent</title>
-    <th:block th:fragment="extraHeadContent">
-        <script src="https://unpkg.com/htmx.org@2.0.5"></script>
-    </th:block>
+    <title>Embabel Trading Agent</title>
 </head>
-<body>
 <section>
     <div th:if="${travelPlan != null}">
         <h2 th:text="${travelPlan.proposal.title}"></h2>
@@ -22,8 +19,8 @@
         <div th:if="${travelPlan.brief != null}">
             <h3>Brief</h3>
             <p style="margin-bottom: 0.75rem;">From [[${travelPlan.brief.from}]] to [[${travelPlan.brief.to}]]
-                from [[${#temporals.format(travelPlan.brief.departureDate, 'dd MMM yyyy')}]] to
-                [[${#temporals.format(travelPlan.brief.returnDate, 'dd MMM yyyy')}]]</p>
+                from [[${#dates.format(travelPlan.brief.departureDate, 'dd MMM yyyy')}]] to
+                [[${#dates.format(travelPlan.brief.returnDate, 'dd MMM yyyy')}]]</p>
             <i style="margin-bottom: 1rem; display:block;">[[${travelPlan.brief.brief}]]</i>
 
             <ul class="travelers-list">
@@ -72,7 +69,6 @@
     </div>
 
     <hr class="dotted"/>
-    <div id="currenxt-plan" th:replace="~{common/fragments/plan-complete :: plan-complete}"></div>
+    <div id="current-plan" th:replace="~{common/fragments/plan-complete :: plan-complete}"></div>
 </section>
-</body>
 </html>
