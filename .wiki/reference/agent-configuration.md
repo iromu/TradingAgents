@@ -5,18 +5,17 @@ status: "active"
 language: "default"
 source_paths:
   - "src/main/java/com/embabel/gekko/config/TraderAgentConfig.java"
+  - "src/main/java/com/embabel/gekko/config/AgentScanningConfiguration.java"
   - "src/main/resources/application.yaml"
   - "src/main/resources/application-app.yaml"
-updated_at: "2026-06-11"
+updated_at: "2026-07-06"
 ---
 
 # Agent Configuration
 
-## File
+## TraderAgentConfig
 
 `src/main/java/com/embabel/gekko/config/TraderAgentConfig.java`
-
-## Record Definition
 
 ```java
 @ConfigurationProperties("app.llm-options")
@@ -29,7 +28,13 @@ public record TraderAgentConfig(
     RoleGoalBackstory writer,
     String outputDirectory,
     double similarityThreshold,
-    int maxDebateIterations
+    int maxDebateIterations,
+    String provider,
+    String bestModel,
+    String cheapestModel,
+    AnthropicProviderConfig anthropic,
+    GoogleProviderConfig google,
+    OpenAiProviderConfig openai
 )
 ```
 
@@ -44,8 +49,33 @@ public record TraderAgentConfig(
 | `app.llm-options.outliner` | `RoleGoalBackstory` | (configurable) | Personality for outliners |
 | `app.llm-options.writer` | `RoleGoalBackstory` | (configurable) | Personality for writers |
 | `app.llm-options.output-directory` | `String` | (configurable) | Where to save outputs |
-| `app.llm-options.similarity-threshold` | `double` | 0.8 | Threshold for debate convergence |
+| `app.llm-options.similarity-threshold` | `double` | 0.8 | Jaccard similarity threshold for debate convergence |
 | `app.llm-options.max-debate-iterations` | `int` | 5 | Max rounds for investment debate |
+| `app.llm-options.provider` | `String` | (configurable) | LLM provider name |
+| `app.llm-options.best-model` | `String` | (configurable) | Best model name |
+| `app.llm-options.cheapest-model` | `String` | (configurable) | Cheapest model name |
+
+## Provider-Specific Configuration
+
+The config supports provider-specific settings for Anthropic, Google, and OpenAI:
+
+### Anthropic
+
+| Property | Type | Purpose |
+|----------|------|---------|
+| `app.llm-options.anthropic.effort` | `String` | Thinking effort level |
+
+### Google
+
+| Property | Type | Purpose |
+|----------|------|---------|
+| `app.llm-options.google.thinking-level` | `String` | Thinking level configuration |
+
+### OpenAI
+
+| Property | Type | Purpose |
+|----------|------|---------|
+| `app.llm-options.openai.reasoning-effort` | `String` | Reasoning effort level |
 
 ## LLM Options
 
@@ -56,6 +86,20 @@ public record TraderAgentConfig(
 | `model` | Specific model name |
 | `role` | Model role (CHEAPEST_ROLE or BEST_ROLE) |
 | `maxTokens` | Token limit for responses |
+
+## Default Validation
+
+The constructor validates and sets defaults:
+- `tickerLlm` and `writerLlm` default to `LlmOptions.withDefaultLlm()` if null
+- `similarityThreshold` defaults to 0.8 if ≤ 0 or > 1
+- `maxDebateIterations` defaults to 5 if ≤ 0
+
+## Agent Scanning Configuration
+
+`AgentScanningConfiguration` registers the Embabel agent scanning BeanPostProcessor so that `@Agent`-annotated classes are automatically registered as agent beans.
+
+- **Conditional:** Enabled when `embabel.agent.platform.scanning.annotation: true` (default: true)
+- **Beans:** `DelegatingAgentScanningBeanPostProcessor` and `AgentScanningPostProcessorDelegate`
 
 ## Global LLM Configuration
 

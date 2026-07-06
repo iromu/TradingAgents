@@ -4,9 +4,14 @@ type: "flow"
 status: "active"
 language: "default"
 source_paths:
-  - "src/main/java/com/embabel/gekko/agent/TraderAgent.java"
+  - "src/main/java/com/embabel/gekko/agent/OrchestratorAgent.java"
+  - "src/main/java/com/embabel/gekko/agent/DebateAgent.java"
+  - "src/main/java/com/embabel/gekko/agent/DebateLoopAgent.java"
+  - "src/main/java/com/embabel/gekko/agent/RiskDebateAgent.java"
+  - "src/main/java/com/embabel/gekko/agent/Trader.java"
+  - "src/main/java/com/embabel/gekko/agent/managers/PortfolioManager.java"
   - "src/main/java/com/embabel/gekko/web/TradingHtmxController.java"
-updated_at: "2026-06-11"
+updated_at: "2026-07-06"
 ---
 
 # Trading Workflow
@@ -20,20 +25,30 @@ This page describes the complete step-by-step flow from user input to final inve
 The user navigates to the web UI and enters a stock ticker (e.g., "AAPL").
 
 - **Controller:** `TradingHtmxController`
-- **Action:** `tickerFromForm()` validates and sanitizes the input
+- **Action:** `OrchestratorAgent.tickerFromForm()` validates and sanitizes the input
 - **Result:** A `Ticker` record with sanitized, uppercase ticker symbol
 
-### 2. Research Plan Generation
+### 2. Identity Resolution
+
+The system resolves the ticker to its real company identity.
+
+- **Agent:** `InstrumentIdentityAgent`
+- **Action:** `OrchestratorAgent.resolveIdentity()`
+- **Data source:** Yahoo Finance via `YFinService`
+- **Output:** `InstrumentContext` (company name, sector, industry, exchange)
+- **Purpose:** Prevents LLM hallucination about company details
+
+### 3. Research Plan Generation
 
 The system generates a high-level research plan.
 
-- **Action:** `generateResearchPlan()` calls the ResearchManager prompt
+- **Action:** `OrchestratorAgent.generateResearchPlan()` calls the ResearchManager prompt
 - **Output:** A `ResearchPlan` record with a summary of what will be done
-- **Checkpoint:** `waitForPlanApproval()` — user reviews and approves (HITL)
+- **Checkpoint:** `OrchestratorAgent.waitForPlanApproval()` — user reviews and approves (HITL)
 
-### 3. Data Collection (Analyst Reports)
+### 4. Data Collection (Analyst Reports)
 
-If the plan is approved, four analyst agents run in sequence:
+If the plan is approved, `DebateAgent` orchestrates four analyst reports:
 
 | Order | Analyst | What it collects |
 |-------|---------|-----------------|
@@ -42,9 +57,9 @@ If the plan is approved, four analyst agents run in sequence:
 | 3 | News | Recent news articles with sentiment |
 | 4 | Social Media | Social sentiment and discussion |
 
-Each report is cached individually.
+Each report is cached individually via `FileCache`.
 
-### 4. Brief Distillation
+### 5. Brief Distillation
 
 Each full analyst report is distilled into a concise brief using `Distiller.jinja`:
 
@@ -52,46 +67,80 @@ Each full analyst report is distilled into a concise brief using `Distiller.jinj
 4 Full Reports → 4 Briefs (DebateBriefs)
 ```
 
-### 5. Investment Debate (Bull vs Bear)
+### 6. Investment Debate (Bull vs Bear)
 
-The Bull and Bear researchers debate the investment case:
+`DebateLoopAgent` runs the bull/bear debate with convergence detection:
 
 ```
 Round 1: Bull argues → Bear responds
 Round 2: Bull argues → Bear responds
+... (until convergence or max iterations)
 ```
 
-Each turn sees the full conversation history. The loop runs exactly 2 rounds (4 turns total).
+Each turn sees the full conversation history. The loop stops when:
+- **Jaccard similarity** between consecutive bull responses exceeds `similarityThreshold` (default: 0.8)
+- **Max iterations** reached (`maxDebateIterations`, default: 5)
 
-### 6. Human Review (HITL Checkpoint)
+### 7. Trader Proposal
 
-After the debate, the process enters a WAITING state:
+The `Trader` agent translates the research plan into a concrete transaction proposal (Buy/Hold/Sell with entry price, stop-loss, position sizing).
 
-- **Action:** `waitForReview()` returns `WaitFor.formSubmission(...)`
-- **UI:** `waiting.html` shows the debate history (bull turns / bear turns)
-- **User actions:** Provide feedback, approve or reject
-- **Record:** `InvestmentReviewFeedback(feedback, approved)`
+### 8. Risk Assessment
 
-### 7. Risk Assessment
+`RiskDebateAgent` runs a 3-round structured risk debate:
 
-A risk debate runs to evaluate the plan from multiple risk perspectives:
-
-- **Service:** `RiskDebateService`
-- **Agents:** Aggressive, Conservative, Neutral debaters (3 rounds)
+- **Debators:** Aggressive, Conservative, Neutral (round-robin order)
+- **Rounds:** 3 rounds, each debator responds to the others
 - **Output:** `RiskAssessment(RiskLevel, reasoning)`
 - **Risk levels:** RISKY, NEUTRAL, CONSERVATIVE
 
-### 8. Final Investment Plan
+### 9. Portfolio Decision
+
+`PortfolioManager` synthesizes the risk debate, research plan, and trader proposal into a final portfolio decision.
+
+### 10. Human Review (HITL Checkpoint)
+
+After the full pipeline, the process enters a WAITING state:
+
+- **Action:** `DebateAgent.waitForReview()` returns `WaitFor.formSubmission(...)`
+- **UI:** `waiting.html` shows the debate history
+- **User actions:** Provide feedback, approve or reject
+- **Record:** `InvestmentReviewFeedback(feedback, approved)`
+
+### 11. Final Investment Plan
 
 If approved, the ResearchManager generates the final plan:
 
-- **Action:** `researchManager()` with debate history + user feedback
+- **Action:** `DebateAgent.researchManager()` with debate history + risk assessment + portfolio decision + user feedback
 - **Output:** `InvestmentPlan` with the final recommendation
 - **UI:** `plan.html` or `plan-review.html` displays the plan
 
-### 9. Logging
+### 12. Decision Memory
 
-The full state is logged as JSON for later analysis and reflection.
+The final decision is stored in decision memory for future learning:
+
+- **Agent:** `DecisionMemoryAgent`
+- **Action:** `DebateAgent.storeFinalDecision()`
+- **Data stored:** Rating (Buy/Sell/Hold/etc.), summary, thesis
+- **Future use:** Past context is injected into future research plans
+
+## Visual Summary
+
+```
+User Input → OrchestratorAgent
+    ├─→ Identity Resolution
+    ├─→ Research Plan → [HITL]
+    └─→ DebateAgent (asSubProcess)
+            ├─→ 4 Analyst Reports
+            ├─→ Distill Briefs
+            ├─→ DebateLoopAgent (bull/bear debate with convergence)
+            ├─→ Trader (transaction proposal)
+            ├─→ RiskDebateAgent (3-way risk debate)
+            ├─→ PortfolioManager (final decision)
+            ├─→ [HITL]
+            ├─→ InvestmentPlan
+            └─→ DecisionMemory (store)
+```
 
 ## Conditional Gates
 
@@ -99,12 +148,4 @@ The workflow has several conditional gates:
 
 1. **Report sufficiency** — if analysts can't produce sufficient reports, the workflow exits early
 2. **Investment conviction** — if the debate doesn't show strong conviction, the workflow may reject
-3. **Risk review** — risk debate runs only if the system determines it's needed
-
-## Visual Summary
-
-```
-User Input → Research Plan → [HITL] → 4 Analyst Reports
-    → Distill Briefs → Bull/Bear Debate → [HITL] → Investment Plan
-    → Log Results
-```
+3. **Debate convergence** — the debate stops when positions stabilize (similarity threshold) or max iterations reached

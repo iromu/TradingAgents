@@ -1,44 +1,63 @@
 ---
-title: "Trader Agent"
+title: "Orchestrator & Debate Agents"
 type: "feature"
 status: "active"
 language: "default"
 source_paths:
-  - "src/main/java/com/embabel/gekko/agent/TraderAgent.java"
-updated_at: "2026-06-11"
+  - "src/main/java/com/embabel/gekko/agent/OrchestratorAgent.java"
+  - "src/main/java/com/embabel/gekko/agent/DebateAgent.java"
+updated_at: "2026-07-06"
 ---
 
-# Trader Agent
+# Orchestrator & Debate Agents
 
-The `TraderAgent` is the **central agent** in Gekko. It's the only `@Agent`-annotated class and orchestrates the entire research workflow.
+The `TraderAgent` monolith was decomposed into two primary orchestrators: **OrchestratorAgent** (entry point) and **DebateAgent** (workflow orchestrator).
 
-## What it does
+## OrchestratorAgent
 
-The TraderAgent is a **workflow orchestrator** — it doesn't make decisions itself. Instead, it:
+The entry point for the trading research pipeline. Handles user input, identity resolution, research plan generation, and delegates to DebateAgent.
 
-1. **Collects data** through analyst actions (fundamentals, market, news, social)
-2. **Distills reports** into concise debate briefs
-3. **Runs debates** between Bull and Bear researchers
-4. **Pauses for human review** at critical decision points (HITL)
-5. **Generates final plans** using the ResearchManager prompt
-
-## Key Actions
+### Key Actions
 
 | Action | Description |
 |--------|-------------|
 | `tickerFromForm()` | Validates and sanitizes user ticker input |
-| `generateFundamentalsReport()` | Pulls financial statements via `FundamentalDataTools` |
-| `generateMarketReport()` | Gets stock price + technical indicators via `MarketDataTools` |
+| `resolveIdentity()` | Resolves ticker to real company identity via `InstrumentIdentityAgent` |
+| `generateResearchPlan()` | Generates a research plan using the ResearchManager prompt |
+| `waitForPlanApproval()` | HITL checkpoint — user reviews and approves the plan |
+| `resolvePendingDecisions()` | Resolves past decisions for this ticker from decision memory |
+| `generatePastContext()` | Generates past context from decision memory for prompt injection |
+| `executeDebate()` | Delegates to DebateAgent via `asSubProcess` |
+
+## DebateAgent
+
+Orchestrates the full research workflow after plan approval. Calls sub-agents via `asSubProcess` for isolated blackboards.
+
+### Key Actions
+
+| Action | Description |
+|--------|-------------|
+| `generateFundamentalsReport()` | Pulls financial data via LLM with analyst tools |
+| `generateMarketReport()` | Gets stock price + technical indicators |
 | `generateNewsReport()` | Fetches news with sentiment scores |
 | `generateSocialMediaReport()` | Gets social sentiment data |
 | `prepareDebateBriefs()` | Distills 4 analyst reports into 4 briefs |
-| `debateInvestment()` | Runs Bull→Bear debate (up to `maxDebateIterations`) |
-| `waitForReview()` | HITL checkpoint before final plan |
+| `runDebate()` | Runs bull/bear debate via `DebateLoopAgent` sub-process |
+| `runTrader()` | Produces trader proposal via `Trader` agent |
+| `runRiskDebate()` | Runs 3-round risk debate via `RiskDebateAgent` sub-process |
+| `runPortfolioManager()` | Produces final portfolio decision |
+| `waitForReview()` | HITL checkpoint after debate completes |
 | `researchManager()` | Generates final investment plan |
-| `generateResearchPlan()` | Creates a research plan for user review |
-| `waitForPlanApproval()` | HITL checkpoint before full execution |
-| `executeFullResearch()` | Runs the complete pipeline after approval |
-| `assessRisk()` | Runs risk debate via `RiskDebateService` |
+| `storeFinalDecision()` | Stores decision to memory for future learning |
+
+### Input Sanitization
+
+`sanitizeForPrompt()` protects against prompt injection:
+- Strips Jinja syntax (`{{`, `}}`, `{%`, `%}`)
+- Removes code fences
+- Rejects oversized input (>10,000 chars)
+- Truncates output (>1,000 chars)
+- Uses pre-compiled regex patterns (ReDoS mitigation)
 
 ## Data Flow
 
@@ -46,16 +65,10 @@ The TraderAgent is a **workflow orchestrator** — it doesn't make decisions its
 User Input
     │
     ▼
-Ticker → [4 Analyst Reports]
+OrchestratorAgent: Ticker → Identity → Research Plan → [HITL]
     │
     ▼
-DebateBriefs → [Bull/Bear Debate]
-    │
-    ▼
-[Human Review]
-    │
-    ▼
-InvestmentPlan
+DebateAgent: [4 Analyst Reports] → Briefs → Debate → Trader → Risk → Portfolio → [HITL] → Plan
 ```
 
 ## Caching
@@ -67,7 +80,7 @@ Every action result is cached via `FileCache`:
 
 ## Prompts
 
-The agent uses Jinja templates for its LLM prompts:
+The agents use Jinja templates for their LLM prompts:
 
 | Prompt | File |
 |--------|------|
@@ -78,25 +91,19 @@ The agent uses Jinja templates for its LLM prompts:
 | Debate Distiller | `prompts/debate/Distiller.jinja` |
 | Research Manager | `prompts/managers/ResearchManager.jinja` |
 | Risk Manager | `prompts/managers/RiskManager.jinja` |
-| Trader | `prompts/trader/Trader.jinja` |
-| Aggressive Debator | `prompts/risk/AggressiveDebator.jinja` |
-| Conservative Debator | `prompts/risk/ConservativeDebator.jinja` |
-| Neutral Debator | `prompts/risk/NeutralDebator.jinja` |
-
-## Sub-Agents
-
-The TraderAgent injects and calls sub-agent classes:
-
-- **`BullResearcher`** — Argues in favor of the investment
-- **`BearResearcher`** — Argues against the investment
-- **`RiskDebateService`** — Runs risk debate between Aggressive, Conservative, and Neutral debaters
+| Trader | `prompts/managers/Trader.jinja` |
+| Portfolio Manager | `prompts/managers/PortfolioManager.jinja` |
 
 ## Dependencies
 
 | Dependency | Role |
 |------------|------|
-| `MarketDataTools` | Provides stock data and technical indicators |
-| `FundamentalDataTools` | Provides financial statement data |
-| `NewsDataTools` | Provides news data |
-| `RiskDebateService` | Runs the risk assessment debate |
+| `FileCache` | Disk-based caching layer |
+| `InstrumentIdentityAgent` | Resolves ticker to company identity |
+| `DecisionMemoryAgent` | Past decision context and storage |
+| `CheckpointAgent` | Crash recovery via blackboard snapshots |
+| `DebateLoopAgent` | Bull/bear iterative debate |
+| `RiskDebateAgent` | 3-round risk debate |
+| `Trader` | Transaction proposal |
+| `PortfolioManager` | Final portfolio decision |
 | `TemplateRenderer` | Renders Jinja prompt templates |

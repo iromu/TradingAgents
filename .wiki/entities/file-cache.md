@@ -6,7 +6,7 @@ language: "default"
 source_paths:
   - "src/main/java/com/embabel/gekko/util/FileCache.java"
   - "src/test/java/com/embabel/gekko/util/FileCacheTest.java"
-updated_at: "2026-06-11"
+updated_at: "2026-07-06"
 ---
 
 # File Cache
@@ -21,8 +21,8 @@ Cache files are stored in `data/llm/cache/` relative to the project root.
 
 ### Sanitization
 
-Cache keys are sanitized to prevent path traversal and injection:
-- Removes `..`, `/`, `\`, null bytes, and shell metacharacters (`;`, `&`, `|`, `*`, `?`, `<`, `>`, `'`, `"`)
+Cache keys are sanitized to prevent path traversal attacks:
+- Strips only path traversal sequences (`..`, `/`, `\`, null bytes)
 - If the key is empty after sanitization, an exception is thrown
 
 ### Hashing
@@ -46,13 +46,16 @@ This prevents filename collisions and keeps filenames deterministic.
 1. If value is a `Report`, save both JSON and Markdown
 2. If value is a String, save as Markdown
 3. Otherwise, save as JSON
+4. Uses **atomic write** — writes to a `.tmp` file first, then renames to the final path
 
 ## Thread Safety
 
 Uses per-key locking via `ConcurrentHashMap<String, Object>`:
 - Each unique cache key gets its own lock object
-- Prevents concurrent duplicate computation — two threads requesting the same key compute exactly once
-- Multiple readers can proceed concurrently (no explicit read lock needed for file reads)
+- `getOrCompute()` uses `computeIfAbsent` + double-check pattern
+- Two threads requesting the same key compute exactly once
+- Different keys compute independently
+- Lock is cleaned up after successful computation
 
 ## Usage Pattern
 
@@ -71,3 +74,7 @@ Ticker ticker = cache.getOrCompute("AAPL_ticker", Ticker.class, () -> {
 | `get(key, clazz)` | `T` (null if missing) | Get cached value by key |
 | `getOrCompute(key, clazz, supplier)` | `T` | Get or compute with per-key locking |
 | `save(key, value)` | void | Save a value to cache |
+
+## Character Encoding
+
+Uses `StandardCharsets.UTF_8` explicitly (not `Charset.defaultCharset()`).

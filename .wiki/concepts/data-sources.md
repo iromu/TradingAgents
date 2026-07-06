@@ -6,13 +6,15 @@ language: "default"
 source_paths:
   - "src/main/java/com/embabel/gekko/dataflows/AlphaVantageService.java"
   - "src/main/java/com/embabel/gekko/dataflows/YFinService.java"
+  - "src/main/java/com/embabel/gekko/dataflows/FredService.java"
+  - "src/main/java/com/embabel/gekko/dataflows/PolymarketService.java"
   - "src/main/java/com/embabel/gekko/dataflows/VendorRouter.java"
-updated_at: "2026-06-13"
+updated_at: "2026-07-06"
 ---
 
 # Data Sources
 
-Gekko fetches financial and market data from two external sources, abstracted behind a `VendorRouter` so the system can switch between them.
+Gekko fetches financial and market data from multiple external sources, abstracted behind services so the system can switch between them.
 
 ## Alpha Vantage
 
@@ -23,14 +25,36 @@ The primary data source for fundamental and news data.
 - **Rate limit:** Free tier allows 25 requests/day
 - **Caching:** All responses cached to `data/alphavantage/` as JSON files
 - **Config:** API key from `app.alphavantage.api-key`
+- **Conditional:** Disabled via `@ConditionalOnProperty` when `app.alphavantage.enabled: false`
 
 ## Yahoo Finance
 
-Used for stock price data and technical indicator calculations.
+Used for stock price data, technical indicator calculations, and company identity resolution.
 
-- **Library:** `YahooFinanceAPI` (version 3.17.0)
-- **Key data:** Historical OHLCV prices, company stats
+- **Library:** `YahooFinanceAPI`
+- **Key data:** Historical OHLCV prices, company stats, ticker info
 - **Used by:** `YFinService` → `MarketDataTools` → LLM agents
+- **Identity resolution:** `InstrumentIdentityAgent` uses Yahoo Finance to resolve ticker → company identity
+
+## FRED (Federal Reserve Economic Data)
+
+Macroeconomic indicators for broader market context.
+
+- **API:** `https://api.stlouisfed.org/fred/`
+- **Key data:** GDP, CPI, unemployment, federal funds rate, Treasury yields
+- **Dashboard:** Pre-configured set of default macro indicators (GDP, CPIAUCSL, UNRATE, FEDFUNDS, TB3MS)
+- **Config:** API key from `app.fred.api-key`
+- **Tools:** `FredDataTools` exposes FRED data as LLM tools
+- **Caching:** Results cached via `FileCache` with `fred:` prefix
+
+## Polymarket
+
+Prediction market data for sentiment and probability signals.
+
+- **API:** `https://clob.polymarket.com/` (no API key required)
+- **Key data:** Market probabilities, outcome prices, trading volume
+- **Tools:** `PolymarketDataTools` exposes prediction market data as LLM tools
+- **Caching:** Results cached via `FileCache` with `polymarket:` prefix
 
 ## Vendor Router
 
@@ -42,7 +66,9 @@ Used for stock price data and technical indicator calculations.
 
 ## Caching
 
-Both data sources use `[[file-cache]]` for local disk caching. Cached files are stored in:
+All data sources use `[[file-cache]]` for local disk caching. Cached files are stored in:
 
 - **Alpha Vantage:** `data/alphavantage/` (raw JSON responses)
 - **LLM responses:** `data/llm/cache/` (cached LLM outputs)
+- **FRED:** `data/llm/cache/` (markdown tables)
+- **Polymarket:** `data/llm/cache/` (markdown tables)

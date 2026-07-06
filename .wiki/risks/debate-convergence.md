@@ -1,50 +1,60 @@
 ---
 title: "Debate Convergence"
 type: "risk"
-status: "active"
+status: "mitigated"
 language: "default"
 source_paths:
-  - "src/main/java/com/embabel/gekko/agent/TraderAgent.java"
+  - "src/main/java/com/embabel/gekko/agent/DebateLoopAgent.java"
+  - "src/main/java/com/embabel/gekko/agent/DebateAgent.java"
   - "src/main/java/com/embabel/gekko/config/TraderAgentConfig.java"
-updated_at: "2026-06-13"
+updated_at: "2026-07-06"
 ---
 
-# Debate Convergence Risk
+# Debate Convergence
 
-## The Problem
+## Status: Mitigated
 
-The `debateInvestment()` method in `TraderAgent` uses a **fixed iteration count** rather than a semantic convergence condition.
+The debate convergence risk has been **mitigated** — `DebateLoopAgent` now uses Jaccard similarity on bigrams to detect when positions have stabilized.
 
-## Current State
+## How Convergence Works
 
-The fixed count is now configurable:
+`DebateLoopAgent` uses `RepeatUntilBuilder` with a convergence condition:
+
+1. After each bull response, compute **Jaccard similarity** on bigrams between the current and previous bull response
+2. If similarity ≥ `similarityThreshold` (default: 0.8), the debate stops
+3. Falls back to `maxDebateIterations` (default: 5) as a safety net
+
+### Bigram Jaccard Similarity
+
+The algorithm:
+1. Extracts bigrams (pairs of consecutive words) from each response
+2. Computes Jaccard similarity: `|intersection| / |union|`
+3. Returns a value between 0 (no overlap) and 1 (identical)
+
+This is a lightweight, deterministic check that doesn't require an additional LLM call.
+
+## Configuration
 
 | Property | Default | Purpose |
 |----------|---------|---------|
-| `app.llm-options.max-debate-iterations` | 5 | Max rounds for investment debate |
-| `app.llm-options.similarity-threshold` | 0.8 | (planned) Threshold for convergence detection |
+| `app.llm-options.similarity-threshold` | 0.8 | Jaccard similarity threshold for convergence |
+| `app.llm-options.max-debate-iterations` | 5 | Safety net max rounds |
 
-## Why It's Still a Risk
+## Remaining Risks
 
-1. **No intelligence:** The debate always runs for the configured number of rounds regardless of whether agents have reached consensus
-2. **Token cost:** Each additional round adds significant LLM token cost
-3. **similarityThreshold not yet used:** The `similarityThreshold` config exists but has not been wired into a convergence check
-
-## What Would Be Better
-
-A convergence condition that checks whether the agents' positions have stabilized:
-- Compare the latest response to the previous one (semantic similarity)
-- Stop if the bull and bear positions have stopped changing significantly
-- Fall back to `maxDebateIterations` as a safety net
+1. **Threshold tuning:** A threshold of 0.8 may be too aggressive (stops too early) or too lenient (runs too long) depending on the ticker and market conditions
+2. **Bigram limitations:** Bigram similarity doesn't capture semantic meaning — two responses could be semantically similar but use different wording (low similarity) or use similar wording but different conclusions (high similarity)
+3. **Bull-only comparison:** Only bull responses are compared; bear responses are not checked for convergence
+4. **Edge cases:** Very short responses may produce few bigrams, leading to unreliable similarity scores
 
 ## Impact
 
 - **Too few rounds:** May miss important counterarguments
 - **Too many rounds:** Wastes tokens on repetitive arguments
-- **Fixed count:** A compromise that may not work well for all tickers
+- **Convergence detection:** Reduces token cost when the debate stabilizes early
 
 ## Related
 
 - `[[trading-workflow]]` — where the debate fits in the overall flow
 - `[[investment-debate]]` — the debate feature page
-- `[[agent-configuration]]` — where to adjust iteration count
+- `[[agent-configuration]]` — where to adjust threshold and iteration count
