@@ -34,6 +34,7 @@ class ResearcherLLMTest {
         var invocation = invocations.get(0);
         var interaction = invocation.getInteraction();
         assertEquals("bullResearcher", interaction.getId());
+        assertEquals("best", invocation.getInteraction().getLlm().getRole());
         assertTrue(result.contains("# Bull Analyst"));
     }
 
@@ -56,6 +57,7 @@ class ResearcherLLMTest {
         var invocation = invocations.get(0);
         var interaction = invocation.getInteraction();
         assertEquals("bearResearcher", interaction.getId());
+        assertEquals("best", invocation.getInteraction().getLlm().getRole());
         assertTrue(result.contains("# Bear Analyst"));
     }
 

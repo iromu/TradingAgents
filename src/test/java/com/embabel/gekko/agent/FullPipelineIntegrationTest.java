@@ -1,9 +1,19 @@
 package com.embabel.gekko.agent;
 
 import com.embabel.agent.test.integration.EmbabelMockitoIntegrationTest;
+import com.embabel.agent.test.unit.FakeOperationContext;
+import com.embabel.gekko.agent.managers.PortfolioManager;
 import com.embabel.gekko.domain.ResearchTypes;
+import com.embabel.gekko.util.FileCache;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -18,35 +28,57 @@ import static org.junit.jupiter.api.Assertions.*;
  * 5. Human-in-the-loop review with WaitFor
  * 6. Final investment plan generated
  *
- * Uses Embabel's EmbabelMockitoIntegrationTest base with scripted LLM responses.
+ * Uses Embabel's FakeOperationContext with scripted LLM responses for deterministic testing.
  */
 @Tag("integration")
 class FullPipelineIntegrationTest extends EmbabelMockitoIntegrationTest {
 
-    @Test
-    void shouldExecuteFullResearchPipeline() {
-        // Verify the orchestrator agent is registered and has actions
-        var orchestrator = agentPlatform.agents().stream()
-                .filter(a -> a.getName().equals("OrchestratorAgent"))
-                .findFirst()
-                .orElse(null);
+    private FakeOperationContext ctx;
+    private ResearchTypes.Ticker ticker;
+    private DebateAgent debateAgent;
+    private OrchestratorAgent orchestratorAgent;
+    private PortfolioManager portfolioManager;
+    private Path tempCacheDir;
 
-        // Then: the orchestrator should be registered with actions
-        assertNotNull(orchestrator, "OrchestratorAgent should be registered");
-        assertFalse(orchestrator.getActions().isEmpty(),
-                "OrchestratorAgent should have actions");
+    private FileCache createCache() throws Exception {
+        tempCacheDir = Files.createTempDirectory("full-pipeline-test-cache-");
+        var cache = new FileCache();
+        var field = FileCache.class.getDeclaredField("baseDir");
+        field.setAccessible(true);
+        field.set(cache, tempCacheDir);
+        return cache;
     }
 
-    @Test
-    void shouldHaveAllFourAgentsRegistered() {
-        var agents = agentPlatform.agents();
-        String[] expectedNames = {"OrchestratorAgent", "DebateAgent", "DebateLoopAgent", "RiskDebateAgent"};
-
-        for (String name : expectedNames) {
-            var found = agents.stream().anyMatch(a -> a.getName().equals(name));
-            assertTrue(found, "AgentPlatform should contain agent '" + name + "'");
+    @AfterEach
+    void cleanupTempDir() {
+        if (tempCacheDir != null) {
+            try {
+                java.nio.file.Files.walk(tempCacheDir)
+                        .sorted((a, b) -> b.compareTo(a))
+                        .forEach(path -> {
+                            try { java.nio.file.Files.delete(path); } catch (Exception ignored) {}
+                        });
+            } catch (Exception ignored) {}
         }
     }
+
+    @BeforeEach
+    void setUp() throws Exception {
+        ctx = FakeOperationContext.create();
+        ticker = new ResearchTypes.Ticker("AAPL", "");
+
+        // Initialize agents with minimal constructors (LLM calls go through ctx)
+        var cache = createCache();
+        debateAgent = new DebateAgent(
+                cache, null, null, null, null, null, null
+        );
+        orchestratorAgent = new OrchestratorAgent(
+                cache, null, null, null, null, null
+        );
+        portfolioManager = new PortfolioManager();
+    }
+
+    // --- Agent registration smoke tests (preserved from original) ---
 
     @Test
     void shouldHaveOrchestratorAgentWithActions() {
@@ -130,10 +162,85 @@ class FullPipelineIntegrationTest extends EmbabelMockitoIntegrationTest {
 
     @Test
     void shouldHaveDataToolsAsSpringBeans() {
-        // FredDataTools and PolymarketDataTools should be registered as Spring beans
-        // (verified by successful Spring context startup)
         var agents = agentPlatform.agents();
         assertNotNull(agents);
         assertFalse(agents.isEmpty());
+    }
+
+    // --- Agent invocation integration tests ---
+
+    @Test
+    void shouldInvokeDebateAgentGenerateFundamentalsReport() {
+        // Arrange — stub the LLM response
+        ctx.expectResponse("Stub fundamentals report.");
+
+        // Act — invoke the agent action directly
+        var result = debateAgent.generateFundamentalsReport(ticker, ctx);
+
+        // Assert — verify the result is the stubbed response wrapped in a report
+        assertEquals("Stub fundamentals report.", result.content());
+
+        // Verify the LLM interaction
+        var invocations = ctx.getPromptRunner().getLlmInvocations();
+        assertEquals(1, invocations.size());
+        assertEquals("generateFundamentalsReport", invocations.get(0).getInteraction().getId());
+    }
+
+    @Test
+    void shouldInvokeOrchestratorGenerateResearchPlan() {
+        // Arrange — stub the LLM response for research plan
+        ctx.expectResponse("Stub research plan.");
+
+        // Act — invoke the orchestrator action
+        var result = orchestratorAgent.generateResearchPlan(
+                ticker, null, ctx
+        );
+
+        // Assert — verify the result is the stubbed response wrapped in a plan
+        assertEquals("Stub research plan.", result.content());
+
+        // Verify the LLM interaction
+        var invocations = ctx.getPromptRunner().getLlmInvocations();
+        assertEquals(1, invocations.size());
+        assertEquals("generateResearchPlan", invocations.get(0).getInteraction().getId());
+    }
+
+    @Test
+    void shouldInvokePortfolioManagerWithStubbedResponse() {
+        // Arrange — stub the LLM response for portfolio decision
+        // The PortfolioManager tries PortfolioDecisionOutput first, then falls back to String
+        // We need to stub both: first the PortfolioDecisionOutput (which will fail),
+        // then the String fallback
+        ctx.expectResponse("Stub portfolio decision."); // consumed by PortfolioDecisionOutput attempt (fails)
+        ctx.expectResponse("Stub portfolio decision."); // consumed by String fallback
+
+        var debateState = new ResearchTypes.InvestmentDebateState(
+                List.of("bull argument", "bear argument"),
+                List.of("bull argument"),
+                List.of("bear argument"),
+                "bear argument", 2,
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+        );
+        var researchPlan = "Stub research plan.";
+        var traderProposal = "Stub trader proposal.";
+        var riskAssessment = new RiskAssessment(RiskLevel.NEUTRAL, "Stub risk reasoning.");
+
+        // Act — invoke the portfolio manager using a fresh FakeActionContext with its own stubs
+        var pmFake = FakeActionContext.create();
+        pmFake.getDelegate().expectResponse("Stub portfolio decision."); // consumed by PortfolioDecisionOutput attempt (fails)
+        pmFake.getDelegate().expectResponse("Stub portfolio decision."); // consumed by String fallback
+        var result = portfolioManager.portfolioDecision(
+                ticker, debateState, researchPlan, traderProposal, riskAssessment,
+                pmFake.getActionContext()
+        );
+
+        // Assert — verify the result is the stubbed response
+        assertEquals("Stub portfolio decision.", result);
+
+        // Verify the LLM interaction (2 calls: PortfolioDecisionOutput attempt + String fallback)
+        var invocations = pmFake.getDelegate().getPromptRunner().getLlmInvocations();
+        assertEquals(2, invocations.size());
+        assertEquals("portfolioManager", invocations.get(0).getInteraction().getId());
+        assertEquals("portfolioManager", invocations.get(1).getInteraction().getId());
     }
 }

@@ -66,6 +66,7 @@ class RiskDebateServiceLLMTest {
         );
         var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertEquals(RiskLevel.RISKY, result.level());
+        assertEquals(2, fake.getDelegate().getPromptRunner().getLlmInvocations().size());
     }
 
     @Test
@@ -83,6 +84,7 @@ class RiskDebateServiceLLMTest {
         );
         var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertEquals(RiskLevel.CONSERVATIVE, result.level());
+        assertEquals(2, fake.getDelegate().getPromptRunner().getLlmInvocations().size());
     }
 
     @Test
@@ -100,6 +102,7 @@ class RiskDebateServiceLLMTest {
         );
         var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertEquals(RiskLevel.NEUTRAL, result.level());
+        assertEquals(2, fake.getDelegate().getPromptRunner().getLlmInvocations().size());
     }
 
     @Test
@@ -119,6 +122,7 @@ class RiskDebateServiceLLMTest {
         var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertNotNull(result);
         assertEquals(RiskLevel.NEUTRAL, result.level());
+        assertEquals(2, fake.getDelegate().getPromptRunner().getLlmInvocations().size());
     }
 
     @Test
@@ -136,5 +140,6 @@ class RiskDebateServiceLLMTest {
         );
         var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertNotNull(result);
+        assertEquals(2, fake.getDelegate().getPromptRunner().getLlmInvocations().size());
     }
 }

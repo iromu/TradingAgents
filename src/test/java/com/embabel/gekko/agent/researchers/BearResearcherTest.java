@@ -83,6 +83,7 @@ class BearResearcherTest {
         var invocations = delegate.getPromptRunner().getLlmInvocations();
         var llm = invocations.get(0).getInteraction().getLlm();
         assertNotNull(llm);
+        assertEquals("best", llm.getRole());
     }
 
     @Test

@@ -8,6 +8,7 @@ import com.embabel.gekko.config.TraderAgentConfig;
 import com.embabel.gekko.dataflows.YFinService;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.FileCache;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,25 +27,37 @@ class OrchestratorAgentResearchPlanTest {
     private FakePromptRunner promptRunner;
     private OrchestratorAgent agent;
     private InstrumentIdentityAgent identityAgent;
+    private Path tempCacheDir;
 
     /**
      * Creates a FileCache backed by a unique temp directory.
      */
-    private FileCache createCache() {
-        try {
-            Path tempDir = Files.createTempDirectory("research-plan-test-cache-");
-            var cache = new FileCache();
-            var field = FileCache.class.getDeclaredField("baseDir");
-            field.setAccessible(true);
-            field.set(cache, tempDir);
-            return cache;
-        } catch (Exception e) {
-            throw new RuntimeException("Failed to create temp cache directory", e);
+    private FileCache createCache() throws Exception {
+        tempCacheDir = Files.createTempDirectory("research-plan-test-cache-");
+        var cache = new FileCache();
+        var field = FileCache.class.getDeclaredField("baseDir");
+        field.setAccessible(true);
+        field.set(cache, tempCacheDir);
+        return cache;
+    }
+
+    @AfterEach
+    void cleanupTempDir() {
+        if (tempCacheDir != null) {
+            try {
+                java.nio.file.Files.walk(tempCacheDir)
+                        .sorted((a, b) -> b.compareTo(a))
+                        .forEach(path -> {
+                            try {
+                                java.nio.file.Files.delete(path);
+                            } catch (Exception ignored) {}
+                        });
+            } catch (Exception ignored) {}
         }
     }
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws Exception {
         ctx = FakeOperationContext.create();
         promptRunner = ctx.getPromptRunner();
         FileCache testCache = createCache();
@@ -168,6 +181,8 @@ class OrchestratorAgentResearchPlanTest {
         // Assert — verify the LLM call was made
         var invocations = promptRunner.getLlmInvocations();
         assertEquals(1, invocations.size());
+        var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
+        assertFalse(prompt.isBlank());
     }
 
     @Test
@@ -182,6 +197,8 @@ class OrchestratorAgentResearchPlanTest {
         // Assert — verify the LLM call was made
         var invocations = promptRunner.getLlmInvocations();
         assertEquals(1, invocations.size());
+        var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
+        assertFalse(prompt.isBlank());
     }
 
     @Test
@@ -196,6 +213,8 @@ class OrchestratorAgentResearchPlanTest {
         // Assert — verify the LLM call was made
         var invocations = promptRunner.getLlmInvocations();
         assertEquals(1, invocations.size());
+        var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
+        assertFalse(prompt.isBlank());
     }
 
     @Test
@@ -210,5 +229,7 @@ class OrchestratorAgentResearchPlanTest {
         // Assert — verify the LLM call was made
         var invocations = promptRunner.getLlmInvocations();
         assertEquals(1, invocations.size());
+        var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
+        assertFalse(prompt.isBlank());
     }
 }

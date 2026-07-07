@@ -42,10 +42,13 @@ The `embabel-agent-test` dependency is already in pom.xml with test scope, provi
 
 ### Decision 4: No unit test for debateInvestment
 **Choice:** Skip unit test for `debateInvestment` (RepeatUntil subprocess); cover only via integration test.
-**Rationale:** debateInvestment uses RepeatUntilBuilder which orchestrates bullAgent and bearAgent sub-calls with cache-based deduplication. Mocking this at the unit level requires mocking the entire RepeatUntil infrastructure, which is complex and fragile. The integration test verifies the behavior end-to-end.
+**Rationale:** debateInvestment uses RepeatUntilBuilder which orchestrates bullAgent and bearAgent sub-calls with cache-based deduplication. Mocking this at the unit level requires mocking the entire RepeatUntil infrastructure, which is complex and fragile. The integration test provides Spring context smoke tests (agent registration) but does NOT invoke the debate loop end-to-end — that remains a known gap.
 **Alternatives considered:**
 - Mock RepeatUntilBuilder → fragile, breaks with framework updates
 - Integration test only → acceptable because the complexity is in the framework, not the business logic
+- Extract convergence logic into a pure method → would enable unit testing but adds complexity to the agent
+
+**Known limitation:** No test currently invokes `DebateLoopAgent.debate()` end-to-end. The debate loop (convergence detection, max-iteration stopping, history structure) is the most complex logic in the pipeline and has no direct test coverage. This is documented as a follow-up item.
 
 ### Decision 5: Preserve existing tests, add new ones
 **Choice:** Do NOT replace existing tests. Add new test files alongside existing ones.
