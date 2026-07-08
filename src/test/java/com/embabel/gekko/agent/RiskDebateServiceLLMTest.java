@@ -6,6 +6,7 @@ import com.embabel.gekko.agent.risk.NeutralDebator;
 import com.embabel.gekko.domain.ResearchTypes;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
+import org.springframework.beans.factory.ObjectProvider;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,34 +17,13 @@ import static org.mockito.Mockito.when;
 class RiskDebateServiceLLMTest {
 
     private RiskDebateAgent createAgent() {
-        var aggressive = Mockito.mock(AggressiveDebator.class);
-        var conservative = Mockito.mock(ConservativeDebator.class);
-        var neutral = Mockito.mock(NeutralDebator.class);
-        when(aggressive.argue(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(),
-                Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any()))
-                .thenReturn("Aggressive argument");
-        when(conservative.argue(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(),
-                Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any()))
-                .thenReturn("Conservative argument");
-        when(neutral.argue(Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(),
-                Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any(), Mockito.any()))
-                .thenReturn("Neutral argument");
-        when(aggressive.argue(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
-                Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
-                Mockito.anyString(), Mockito.anyString(), Mockito.any()))
-                .thenReturn("Aggressive argument");
-        when(conservative.argue(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
-                Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
-                Mockito.anyString(), Mockito.anyString(), Mockito.any()))
-                .thenReturn("Conservative argument");
-        when(neutral.argue(Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
-                Mockito.anyString(), Mockito.anyString(), Mockito.anyString(),
-                Mockito.anyString(), Mockito.anyString(), Mockito.any()))
-                .thenReturn("Neutral argument");
+        var aggressive = new AggressiveDebator();
+        var conservative = new ConservativeDebator();
+        var neutral = new NeutralDebator();
 
-        var aggressiveProvider = Mockito.mock(org.springframework.beans.factory.ObjectProvider.class);
-        var conservativeProvider = Mockito.mock(org.springframework.beans.factory.ObjectProvider.class);
-        var neutralProvider = Mockito.mock(org.springframework.beans.factory.ObjectProvider.class);
+        var aggressiveProvider = Mockito.mock(ObjectProvider.class);
+        var conservativeProvider = Mockito.mock(ObjectProvider.class);
+        var neutralProvider = Mockito.mock(ObjectProvider.class);
         when(aggressiveProvider.getObject()).thenReturn(aggressive);
         when(conservativeProvider.getObject()).thenReturn(conservative);
         when(neutralProvider.getObject()).thenReturn(neutral);
@@ -66,7 +46,7 @@ class RiskDebateServiceLLMTest {
         );
         var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertEquals(RiskLevel.RISKY, result.level());
-        assertEquals(2, fake.getDelegate().getPromptRunner().getLlmInvocations().size());
+        assertEquals(10, fake.getDelegate().getPromptRunner().getLlmInvocations().size());
     }
 
     @Test
@@ -84,7 +64,7 @@ class RiskDebateServiceLLMTest {
         );
         var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertEquals(RiskLevel.CONSERVATIVE, result.level());
-        assertEquals(2, fake.getDelegate().getPromptRunner().getLlmInvocations().size());
+        assertEquals(10, fake.getDelegate().getPromptRunner().getLlmInvocations().size());
     }
 
     @Test
@@ -102,7 +82,7 @@ class RiskDebateServiceLLMTest {
         );
         var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertEquals(RiskLevel.NEUTRAL, result.level());
-        assertEquals(2, fake.getDelegate().getPromptRunner().getLlmInvocations().size());
+        assertEquals(10, fake.getDelegate().getPromptRunner().getLlmInvocations().size());
     }
 
     @Test
@@ -122,7 +102,7 @@ class RiskDebateServiceLLMTest {
         var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertNotNull(result);
         assertEquals(RiskLevel.NEUTRAL, result.level());
-        assertEquals(2, fake.getDelegate().getPromptRunner().getLlmInvocations().size());
+        assertEquals(10, fake.getDelegate().getPromptRunner().getLlmInvocations().size());
     }
 
     @Test
@@ -140,6 +120,6 @@ class RiskDebateServiceLLMTest {
         );
         var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertNotNull(result);
-        assertEquals(2, fake.getDelegate().getPromptRunner().getLlmInvocations().size());
+        assertEquals(10, fake.getDelegate().getPromptRunner().getLlmInvocations().size());
     }
 }

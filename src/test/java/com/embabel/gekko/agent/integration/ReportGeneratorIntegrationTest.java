@@ -1,15 +1,16 @@
 package com.embabel.gekko.agent.integration;
 
+import com.embabel.agent.test.integration.EmbabelMockitoIntegrationTest;
+import com.embabel.agent.test.unit.FakeOperationContext;
 import com.embabel.gekko.agent.DebateAgent;
-import com.embabel.gekko.agent.FakeActionContext;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.FileCache;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
@@ -22,22 +23,18 @@ import static org.junit.jupiter.api.Assertions.*;
  * 1. Invokes the LLM with the correct template and interaction ID
  * 2. Returns the stubbed response wrapped in the correct report type
  * 3. Includes the ticker in the prompt
+ *
+ * Extends EmbabelMockitoIntegrationTest for Spring context access.
+ * Uses @Autowired to inject DebateAgent from the Spring context.
+ * Uses FakeOperationContext (the framework test helper) instead of custom FakeActionContext.
  */
 @Tag("integration")
-class ReportGeneratorIntegrationTest {
+class ReportGeneratorIntegrationTest extends EmbabelMockitoIntegrationTest {
 
-    private FakeActionContext fake;
+    @Autowired
     private DebateAgent debateAgent;
-    private Path tempCacheDir;
 
-    private FileCache createCache() throws Exception {
-        tempCacheDir = Files.createTempDirectory("report-gen-test-cache-");
-        var cache = new FileCache();
-        var field = FileCache.class.getDeclaredField("baseDir");
-        field.setAccessible(true);
-        field.set(cache, tempCacheDir);
-        return cache;
-    }
+    private Path tempCacheDir;
 
     @AfterEach
     void cleanupTempDir() {
@@ -54,27 +51,33 @@ class ReportGeneratorIntegrationTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        fake = FakeActionContext.create();
-        debateAgent = new DebateAgent(
-                createCache(), null, null, null, null, null, null
-        );
+        // Create a temp cache dir and inject it into the cached DebateAgent
+        tempCacheDir = Files.createTempDirectory("report-gen-test-cache-");
+        var cache = new FileCache();
+        var field = FileCache.class.getDeclaredField("baseDir");
+        field.setAccessible(true);
+        field.set(cache, tempCacheDir);
+        // Replace the cache field on the autowired DebateAgent
+        var debateField = DebateAgent.class.getDeclaredField("cache");
+        debateField.setAccessible(true);
+        debateField.set(debateAgent, cache);
     }
 
     @Test
     void shouldGenerateFundamentalsReport() {
-        // Arrange — stub the LLM response
-        fake.getDelegate().expectResponse("Stub fundamentals report.");
+        // Arrange — stub the LLM response via FakeOperationContext
+        var fake = FakeOperationContext.create();
+        fake.expectResponse("Stub fundamentals report.");
 
         // Act — invoke the report generator
-        var result = debateAgent.generateFundamentalsReport(
-                new ResearchTypes.Ticker("AAPL", ""), fake.getActionContext()
-        );
+        var ticker = new ResearchTypes.Ticker("AAPL", "");
+        var result = debateAgent.generateFundamentalsReport(ticker, fake);
 
         // Assert — verify the result is the stubbed response wrapped in a report
         assertEquals("Stub fundamentals report.", result.content());
 
         // Verify the LLM interaction
-        var invocations = fake.getDelegate().getPromptRunner().getLlmInvocations();
+        var invocations = fake.getPromptRunner().getLlmInvocations();
         assertEquals(1, invocations.size());
         assertEquals("generateFundamentalsReport", invocations.get(0).getInteraction().getId());
     }
@@ -82,18 +85,18 @@ class ReportGeneratorIntegrationTest {
     @Test
     void shouldGenerateMarketReport() {
         // Arrange — stub the LLM response
-        fake.getDelegate().expectResponse("Stub market report.");
+        var fake = FakeOperationContext.create();
+        fake.expectResponse("Stub market report.");
 
         // Act — invoke the report generator
-        var result = debateAgent.generateMarketReport(
-                new ResearchTypes.Ticker("AAPL", ""), fake.getActionContext()
-        );
+        var ticker = new ResearchTypes.Ticker("AAPL", "");
+        var result = debateAgent.generateMarketReport(ticker, fake);
 
         // Assert — verify the result is the stubbed response wrapped in a report
         assertEquals("Stub market report.", result.content());
 
         // Verify the LLM interaction
-        var invocations = fake.getDelegate().getPromptRunner().getLlmInvocations();
+        var invocations = fake.getPromptRunner().getLlmInvocations();
         assertEquals(1, invocations.size());
         assertEquals("generateMarketReport", invocations.get(0).getInteraction().getId());
     }
@@ -101,18 +104,18 @@ class ReportGeneratorIntegrationTest {
     @Test
     void shouldGenerateNewsReport() {
         // Arrange — stub the LLM response
-        fake.getDelegate().expectResponse("Stub news report.");
+        var fake = FakeOperationContext.create();
+        fake.expectResponse("Stub news report.");
 
         // Act — invoke the report generator
-        var result = debateAgent.generateNewsReport(
-                new ResearchTypes.Ticker("AAPL", ""), fake.getActionContext()
-        );
+        var ticker = new ResearchTypes.Ticker("AAPL", "");
+        var result = debateAgent.generateNewsReport(ticker, fake);
 
         // Assert — verify the result is the stubbed response wrapped in a report
         assertEquals("Stub news report.", result.content());
 
         // Verify the LLM interaction
-        var invocations = fake.getDelegate().getPromptRunner().getLlmInvocations();
+        var invocations = fake.getPromptRunner().getLlmInvocations();
         assertEquals(1, invocations.size());
         assertEquals("generateNewsReport", invocations.get(0).getInteraction().getId());
     }
@@ -120,18 +123,18 @@ class ReportGeneratorIntegrationTest {
     @Test
     void shouldGenerateSocialMediaReport() {
         // Arrange — stub the LLM response
-        fake.getDelegate().expectResponse("Stub social media report.");
+        var fake = FakeOperationContext.create();
+        fake.expectResponse("Stub social media report.");
 
         // Act — invoke the report generator
-        var result = debateAgent.generateSocialMediaReport(
-                new ResearchTypes.Ticker("AAPL", ""), fake.getActionContext()
-        );
+        var ticker = new ResearchTypes.Ticker("AAPL", "");
+        var result = debateAgent.generateSocialMediaReport(ticker, fake);
 
         // Assert — verify the result is the stubbed response wrapped in a report
         assertEquals("Stub social media report.", result.content());
 
         // Verify the LLM interaction
-        var invocations = fake.getDelegate().getPromptRunner().getLlmInvocations();
+        var invocations = fake.getPromptRunner().getLlmInvocations();
         assertEquals(1, invocations.size());
         assertEquals("generateSocialMediaReport", invocations.get(0).getInteraction().getId());
     }

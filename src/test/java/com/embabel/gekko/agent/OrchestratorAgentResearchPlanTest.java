@@ -165,8 +165,9 @@ class OrchestratorAgentResearchPlanTest {
 
         // Assert
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
-        // The ticker is passed as a model variable to the template
-        assertFalse(prompt.isBlank());
+        // The ResearchManager template is rendered — check for role content
+        assertTrue(prompt.contains("portfolio manager"),
+                "Prompt should contain the portfolio manager role from the template");
     }
 
     @Test
@@ -178,11 +179,13 @@ class OrchestratorAgentResearchPlanTest {
         // Act
         agent.generateResearchPlan(ticker, null, ctx);
 
-        // Assert — verify the LLM call was made
+        // Assert — verify the LLM call was made and prompt contains expected content
         var invocations = promptRunner.getLlmInvocations();
         assertEquals(1, invocations.size());
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
-        assertFalse(prompt.isBlank());
+        // The template renders past_memory_str as "No past memories found." when there are none
+        assertTrue(prompt.contains("No past memories found."),
+                "Prompt should contain the past memory placeholder text");
     }
 
     @Test
@@ -194,11 +197,13 @@ class OrchestratorAgentResearchPlanTest {
         // Act
         agent.generateResearchPlan(ticker, null, ctx);
 
-        // Assert — verify the LLM call was made
+        // Assert — verify the LLM call was made and prompt contains expected content
         var invocations = promptRunner.getLlmInvocations();
         assertEquals(1, invocations.size());
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
-        assertFalse(prompt.isBlank());
+        // The template includes "Debate History:" section
+        assertTrue(prompt.contains("Debate History:"),
+                "Prompt should contain the debate history section header");
     }
 
     @Test
@@ -210,11 +215,13 @@ class OrchestratorAgentResearchPlanTest {
         // Act
         agent.generateResearchPlan(ticker, null, ctx);
 
-        // Assert — verify the LLM call was made
+        // Assert — verify the LLM call was made and prompt contains expected content
         var invocations = promptRunner.getLlmInvocations();
         assertEquals(1, invocations.size());
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
-        assertFalse(prompt.isBlank());
+        // When human_approved=false, the template renders the "Do NOT generate" branch
+        assertTrue(prompt.contains("Do NOT generate a full investment plan"),
+                "Prompt should contain the human_approved conditional text");
     }
 
     @Test
@@ -226,10 +233,14 @@ class OrchestratorAgentResearchPlanTest {
         // Act
         agent.generateResearchPlan(ticker, null, ctx);
 
-        // Assert — verify the LLM call was made
+        // Assert — verify the LLM call was made and prompt contains expected content
         var invocations = promptRunner.getLlmInvocations();
         assertEquals(1, invocations.size());
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
-        assertFalse(prompt.isBlank());
+        // When user_feedback is empty, the template does not render the feedback block
+        // The template structure uses Jinja conditionals, so the variable name won't appear
+        // but the role and other template content will
+        assertTrue(prompt.contains("portfolio manager") && prompt.contains("investment plan"),
+                "Prompt should contain the template role and content");
     }
 }

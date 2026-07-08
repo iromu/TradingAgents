@@ -116,8 +116,9 @@ class DebateAgentLLMTest {
         // Assert
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
         assertFalse(prompt.isBlank());
-        // The template describes the researcher role
-        assertTrue(prompt.contains("researcher") || prompt.contains("FundamentalsAnalyst"));
+        // The FundamentalsAnalyst template is rendered with role and content
+        assertTrue(prompt.contains("fundamental") || prompt.contains("financial"),
+                "Prompt should contain fundamentals-related content from the template");
     }
 
     @Test
@@ -179,6 +180,9 @@ class DebateAgentLLMTest {
         // Assert
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
         assertFalse(prompt.isBlank());
+        // The MarketAnalyst template is rendered with role and indicator content
+        assertTrue(prompt.contains("indicator") || prompt.contains("trading assistant"),
+                "Prompt should contain market-analysis content from the template");
     }
 
     // --- generateNewsReport tests ---
@@ -222,6 +226,9 @@ class DebateAgentLLMTest {
         // Assert
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
         assertFalse(prompt.isBlank());
+        // The NewsAnalyst template is rendered with role and content
+        assertTrue(prompt.contains("news researcher") || prompt.contains("macroeconomic"),
+                "Prompt should contain news-analysis content from the template");
     }
 
     // --- generateSocialMediaReport tests ---
@@ -265,6 +272,9 @@ class DebateAgentLLMTest {
         // Assert
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
         assertFalse(prompt.isBlank());
+        // The SocialMediaAnalyst template is rendered with role and content
+        assertTrue(prompt.contains("social media") || prompt.contains("sentiment"),
+                "Prompt should contain social-media content from the template");
     }
 
     // --- prepareDebateBriefs (distill) tests ---
@@ -510,6 +520,11 @@ class DebateAgentLLMTest {
         // Assert
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
         assertFalse(prompt.isBlank());
+        // The ResearchManager template is rendered with role and debate content
+        assertTrue(prompt.contains("portfolio manager"),
+                "Prompt should contain the portfolio manager role from the template");
+        assertTrue(prompt.contains("debate"),
+                "Prompt should contain debate-related content from the template");
     }
 
     @Test
@@ -549,13 +564,13 @@ class DebateAgentLLMTest {
         // Act
         agent.researchManager(ticker, state, new RiskAssessment(RiskLevel.RISKY, "high risk"), feedback, null, ctx);
 
-        // Assert — verify the LLM call was made with risk data in the model
+        // Assert — verify the LLM call was made and prompt contains expected content
         var invocations = promptRunner.getLlmInvocations();
         assertEquals(1, invocations.size());
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
-        // The model includes risk_level and risk_reasoning as variables
-        // Note: the template currently does not reference them, but they are in the model
-        assertFalse(prompt.isBlank());
+        // The template renders role content (even though risk_level/risk_reasoning are not referenced in the template)
+        assertTrue(prompt.contains("portfolio manager"),
+                "Prompt should contain the portfolio manager role from the template");
     }
 
     @Test
@@ -572,11 +587,11 @@ class DebateAgentLLMTest {
         // Act
         agent.researchManager(ticker, state, new RiskAssessment(RiskLevel.RISKY, "high risk with aggressive growth potential"), feedback, null, ctx);
 
-        // Assert — verify the LLM call was made with risk reasoning in the model
+        // Assert — verify the LLM call was made and prompt contains expected content
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
-        // The model includes risk_reasoning as a variable
-        // Note: the template currently does not reference it, but it is in the model
-        assertFalse(prompt.isBlank());
+        // The template renders role content (even though risk_reasoning is not referenced in the template)
+        assertTrue(prompt.contains("portfolio manager"),
+                "Prompt should contain the portfolio manager role from the template");
     }
 
     @Test
@@ -698,7 +713,9 @@ class DebateAgentLLMTest {
         assertNotNull(result);
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
         // Should not throw NPE — null risk assessment should be handled gracefully
-        assertFalse(prompt.isBlank());
+        // The template renders role content even without risk data
+        assertTrue(prompt.contains("portfolio manager"),
+                "Prompt should contain the portfolio manager role from the template");
     }
 
     @Test
