@@ -11,12 +11,15 @@ import com.embabel.gekko.util.FileCache;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.ObjectProvider;
 
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for OrchestratorAgent.generateResearchPlan LLM-calling action.
@@ -28,6 +31,12 @@ class OrchestratorAgentResearchPlanTest {
     private OrchestratorAgent agent;
     private InstrumentIdentityAgent identityAgent;
     private Path tempCacheDir;
+
+    private static ObjectProvider<com.embabel.gekko.dataflows.AlphaVantageService> avProvider(com.embabel.gekko.dataflows.AlphaVantageService service) {
+        var provider = mock(ObjectProvider.class);
+        when(provider.getIfAvailable()).thenReturn(service);
+        return provider;
+    }
 
     /**
      * Creates a FileCache backed by a unique temp directory.
@@ -62,7 +71,7 @@ class OrchestratorAgentResearchPlanTest {
         promptRunner = ctx.getPromptRunner();
         FileCache testCache = createCache();
         YFinService yFinService = new YFinService();
-        identityAgent = new InstrumentIdentityAgent(yFinService, testCache);
+        identityAgent = new InstrumentIdentityAgent(yFinService, testCache, avProvider(null));
         agent = new OrchestratorAgent(
                 testCache,
                 identityAgent,

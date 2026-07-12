@@ -12,10 +12,13 @@ import com.embabel.gekko.util.FileCache;
 import com.embabel.gekko.web.TradingHtmxController.TickerForm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.ObjectProvider;
 
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 
 /**
  * Unit tests for OrchestratorAgent LLM-calling actions using FakeOperationContext + FakePromptRunner.
@@ -27,6 +30,12 @@ class OrchestratorAgentLLMTest {
     private FakePromptRunner promptRunner;
     private OrchestratorAgent agent;
 
+    private static ObjectProvider<com.embabel.gekko.dataflows.AlphaVantageService> mockAvProvider() {
+        var provider = mock(ObjectProvider.class);
+        when(provider.getIfAvailable()).thenReturn(null);
+        return provider;
+    }
+
     @BeforeEach
     void setUp() {
         ctx = FakeOperationContext.create();
@@ -34,7 +43,7 @@ class OrchestratorAgentLLMTest {
 
         FileCache cache = new FileCache();
         YFinService yFinService = new YFinService();
-        InstrumentIdentityAgent identityAgent = new InstrumentIdentityAgent(yFinService, cache);
+        InstrumentIdentityAgent identityAgent = new InstrumentIdentityAgent(yFinService, cache, mockAvProvider());
 
         agent = new OrchestratorAgent(
                 cache,

@@ -100,6 +100,36 @@ public class AlphaVantageService {
     }
 
     /**
+     * Retrieve the company overview for a ticker as a parsed JSON map.
+     * Fields: Name, Sector, Industry, Exchange, Currency, Symbol.
+     *
+     * @param ticker The stock ticker symbol (e.g. "AAPL").
+     * @return A map of the OVERVIEW JSON, or null if the request fails or the response is empty.
+     */
+    public java.util.Map<String, String> getOverview(String ticker) {
+        String json = getFundamentals(ticker, null);
+        if (json == null || json.isBlank()) {
+            return null;
+        }
+        try {
+            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
+            com.fasterxml.jackson.databind.JsonNode node = mapper.readTree(json);
+            if (node == null || node.isMissingNode()) {
+                return null;
+            }
+            java.util.Map<String, String> map = new java.util.LinkedHashMap<>();
+            for (String field : new String[]{"Name", "Sector", "Industry", "Exchange", "Currency", "Symbol"}) {
+                com.fasterxml.jackson.databind.JsonNode val = node.get(field);
+                map.put(field, val != null && !val.isNull() ? val.asText() : null);
+            }
+            return map;
+        } catch (Exception e) {
+            log.warn("Failed to parse OVERVIEW for {}: {}", ticker, e.getMessage());
+            return null;
+        }
+    }
+
+    /**
      * Retrieve the company's balance sheet data.
      *
      * @param ticker   The stock ticker symbol.
