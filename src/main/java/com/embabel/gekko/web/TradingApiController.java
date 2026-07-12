@@ -87,6 +87,20 @@ public class TradingApiController {
         return ResponseEntity.ok(response);
     }
 
+    /**
+     * Lightweight status endpoint for polling from the processing page.
+     * Returns just the process status as JSON for SSE polling.
+     */
+    @GetMapping("/v1/process/{processId}/status")
+    public ResponseEntity<Map<String, String>> getProcessStatus(@PathVariable String processId) {
+        AgentUtils.validateProcessId(processId);
+        var process = agentPlatform.getAgentProcess(processId);
+        if (process == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Process not found"));
+        }
+        return ResponseEntity.ok(Map.of("status", process.getStatus().name()));
+    }
+
     @PostMapping("/plan/{processId}/approve")
     public ResponseEntity<Map<String, Object>> approvePlan(
             @PathVariable String processId,

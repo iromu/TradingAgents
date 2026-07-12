@@ -94,13 +94,11 @@ public final class AgentUtils {
     }
 
     /**
-     * Validate a process ID as a valid UUID.
-     * Extracted from TradingHtmxController and ProcessStatusController.
+     * Validate a process ID is non-null and non-empty.
+     * Embabel process IDs are names (e.g. "pedantic_elgamal"), not UUIDs.
      */
     public static void validateProcessId(String processId) {
-        try {
-            UUID.fromString(processId);
-        } catch (IllegalArgumentException e) {
+        if (processId == null || processId.isBlank()) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid process ID: " + processId);
         }
     }

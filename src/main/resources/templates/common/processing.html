@@ -50,12 +50,32 @@
 
     <script>
         const processId = '[[${processId}]]';
+        const resultModelKey = '[[${resultModelKey}]]';
+        const successView = '[[${successView}]]';
         const eventSource = new EventSource(`/events/process/${processId}`);
         const updatesContainer = document.getElementById('sse-updates');
         const initMessage = document.getElementById('init-message');
         const updateTemplate = document.getElementById('update-template');
         const currentPlanElement = document.getElementById('current-plan');
         const planContentElement = document.getElementById('plan-content');
+
+        // Poll process status every 3 seconds to detect WAITING state transition
+        const statusCheckInterval = setInterval(async () => {
+            try {
+                const response = await fetch(`/api/v1/process/${processId}/status`);
+                if (response.ok) {
+                    const data = await response.json();
+                    if (data.status === 'WAITING') {
+                        // Process entered WAITING state — redirect to the HITL form
+                        clearInterval(statusCheckInterval);
+                        window.location.href = `/status/${processId}?resultModelKey=${resultModelKey}&successView=${successView}`;
+                        return;
+                    }
+                }
+            } catch (e) {
+                // Silently ignore polling errors
+            }
+        }, 3000);
 
         // Store tool call elements by their ID for later updates
         const toolCallElements = new Map();
@@ -315,9 +335,10 @@
             // Handle completion events
             if (data.type === "GoalAchievedEvent") {
                 eventSource.close();
+                clearInterval(statusCheckInterval);
 
                 // Get values from template context
-                window.location.href = `/status/${processId}?resultModelKey=[[${resultModelKey}]]&successView=[[${successView}]]`;
+                window.location.href = `/status/${processId}?resultModelKey=${resultModelKey}&successView=${successView}`;
                 return;
             }
 
@@ -346,6 +367,8 @@
 
         eventSource.addEventListener('error', function (event) {
             console.error('EventSource error:', event);
+            clearInterval(statusCheckInterval);
+            eventSource.close();
             const errorUpdate = createUpdateElement({
                 type: 'ConnectionError',
                 message: 'Connection to server lost'
