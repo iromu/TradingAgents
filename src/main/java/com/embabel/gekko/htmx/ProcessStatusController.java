@@ -5,10 +5,7 @@ import com.embabel.agent.core.AgentPlatform;
 import com.embabel.agent.core.AgentProcess;
 import com.embabel.agent.core.AgentProcessStatusCode;
 import com.embabel.agent.core.hitl.FormBindingRequest;
-import com.embabel.agent.core.hitl.FormResponse;
-import com.embabel.ux.form.Control;
 import com.embabel.ux.form.Form;
-import com.embabel.ux.form.FormSubmission;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.htmx.GenericProcessingValues;
 import com.embabel.gekko.htmx.HitlService.HitlSession;
@@ -32,7 +29,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.UUID;
 
 /**
  * Handles HITL (Human-in-the-Loop) workflow for failed agent processes.
@@ -283,10 +279,7 @@ public class ProcessStatusController {
      *
      * <p>Flow:
      * <ol>
-     *   <li>Find the FormBindingRequest on the blackboard</li>
-     *   <li>Build a FormSubmission from the form fields</li>
-     *   <li>Create a FormResponse and call FormBindingRequest.onResponse()</li>
-     *   <li>Resume the process by calling agentPlatform.start()</li>
+     *   <li>Use AgentUtils.submitWaitForForm() to submit the form and resume the process</li>
      * </ol>
      */
     @PostMapping("/status/{processId}/waitfor")
@@ -310,50 +303,10 @@ public class ProcessStatusController {
                 return "common/processing-error";
             }
 
-            // Find the FormBindingRequest on the blackboard
-            @SuppressWarnings("unchecked")
-            List<FormBindingRequest<?>> requests = (List) agentProcess.getBlackboard().getObjects()
-                    .stream()
-                    .filter(FormBindingRequest.class::isInstance)
-                    .map(o -> (FormBindingRequest<?>) o)
-                    .toList();
-            if (requests.isEmpty()) {
-                model.addAttribute("error", "No WaitFor form found for this process.");
-                model.addAttribute("pageTitle", "Form Not Found");
-                return "common/processing-error";
-            }
-
-            FormBindingRequest<?> request = requests.get(0);
-            Form form = (Form) request.getPayload();
-
-            // Build the form submission values map
-            // Control IDs match the record field names: "feedback", "approved"
-            Map<String, Object> values = new LinkedHashMap<>();
-            values.put("feedback", feedback);
-            values.put("approved", approved);
-
-            String submissionId = UUID.randomUUID().toString();
-            FormSubmission submission = new FormSubmission(form.getId().toString(), values, submissionId, java.time.Instant.now());
-
-            // Create the form response with the awaitable ID
-            FormResponse response = new FormResponse(
-                    UUID.randomUUID().toString(),
-                    request.getId().toString(),
-                    submission,
-                    false,
-                    java.time.Instant.now()
-            );
-
-            // Process the form response — this binds the result to the blackboard
-            request.onResponse(response, agentProcess);
-
-            // Resume the process INSIDE the synchronized block to prevent the race condition
-            // where another thread could call start() between onResponse() and start().
-            try {
-                agentPlatform.start(agentProcess);
-            } catch (Exception e) {
-                logger.error("Failed to resume process {} after WaitFor submission", processId, e);
-                model.addAttribute("error", "Failed to resume process: " + e.getMessage());
+            Map<String, Object> values = Map.of("approved", approved, "feedback", feedback);
+            var resumed = AgentUtils.submitWaitForForm(agentProcess, agentPlatform, values, "WaitFor submission");
+            if (resumed == null) {
+                model.addAttribute("error", "Failed to resume process: " + processId);
                 model.addAttribute("pageTitle", "Resume Failed");
                 return "common/processing-error";
             }
@@ -361,7 +314,7 @@ public class ProcessStatusController {
             logger.info("WaitFor form submitted for process {}, resuming...", processId);
         }
 
-        model.addAttribute("processId", processId);
+        model.addAttribute("processId", agentProcess.getId());
         model.addAttribute("pageTitle", "Investment Research in Progress");
         new GenericProcessingValues(
                 agentProcess,

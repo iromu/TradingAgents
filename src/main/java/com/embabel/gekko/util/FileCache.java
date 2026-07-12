@@ -75,7 +75,8 @@ public class FileCache {
 
     private Path pathForKey(String key, String extension) {
         String sanitized = sanitizeKey(key);
-        String hashed = hashKey(sanitized);
+        // TODO enable this with a feature toggle String hashed = hashKey(sanitized);
+        String hashed = sanitized;
         return baseDir.resolve(hashed + extension);
     }
 

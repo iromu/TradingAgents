@@ -10,7 +10,10 @@
 </head>
 <section>
     <h2 th:text="${pageTitle}"></h2>
-    <div id="agent-container">
+    <div id="agent-container"
+         th:data-process-id="${processId}"
+         th:data-result-model-key="${resultModelKey}"
+         th:data-success-view="${successView}">
         <div id="agent-status">
             <div class="working">
                 <p th:text="${detail}"></p>
@@ -49,9 +52,10 @@
     </template>
 
     <script>
-        const processId = '[[${processId}]]';
-        const resultModelKey = '[[${resultModelKey}]]';
-        const successView = '[[${successView}]]';
+        const container = document.getElementById('agent-container');
+        const processId = container.dataset.processId;
+        const resultModelKey = container.dataset.resultModelKey;
+        const successView = container.dataset.successView;
         const eventSource = new EventSource(`/events/process/${processId}`);
         const updatesContainer = document.getElementById('sse-updates');
         const initMessage = document.getElementById('init-message');
@@ -68,12 +72,13 @@
                     if (data.status === 'WAITING') {
                         // Process entered WAITING state — redirect to the HITL form
                         clearInterval(statusCheckInterval);
+                        eventSource.close();
                         window.location.href = `/status/${processId}?resultModelKey=${resultModelKey}&successView=${successView}`;
                         return;
                     }
                 }
             } catch (e) {
-                // Silently ignore polling errors
+                console.warn('Process status polling failed:', e.message);
             }
         }, 3000);
 
@@ -337,7 +342,7 @@
                 eventSource.close();
                 clearInterval(statusCheckInterval);
 
-                // Get values from template context
+                // Get values from dataset
                 window.location.href = `/status/${processId}?resultModelKey=${resultModelKey}&successView=${successView}`;
                 return;
             }

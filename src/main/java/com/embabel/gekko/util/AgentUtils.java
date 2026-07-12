@@ -136,6 +136,8 @@ public final class AgentUtils {
         } catch (Exception e) {
             log.error("{}: {}", logPrefix, e.getMessage());
             return null;
+        } finally {
+            PROCESS_LOCKS.remove(process.getId());
         }
     }
 
