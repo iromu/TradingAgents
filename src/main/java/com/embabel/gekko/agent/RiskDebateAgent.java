@@ -9,6 +9,7 @@ import com.embabel.gekko.agent.risk.ConservativeDebator;
 import com.embabel.gekko.agent.risk.NeutralDebator;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.AgentUtils;
+import com.embabel.gekko.util.LlmBudgetTracker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
@@ -39,6 +40,7 @@ public class RiskDebateAgent {
     private final ObjectProvider<AggressiveDebator> aggressiveDebatorProvider;
     private final ObjectProvider<ConservativeDebator> conservativeDebatorProvider;
     private final ObjectProvider<NeutralDebator> neutralDebatorProvider;
+    private final LlmBudgetTracker llmBudgetTracker;
 
     private AggressiveDebator getAggressiveDebator() {
         return aggressiveDebatorProvider.getObject();
@@ -50,6 +52,12 @@ public class RiskDebateAgent {
 
     private NeutralDebator getNeutralDebator() {
         return neutralDebatorProvider.getObject();
+    }
+
+    private void trackCall(String ticker) {
+        if (llmBudgetTracker != null) {
+            llmBudgetTracker.recordCall(ticker);
+        }
     }
 
     @Action(description = "Assess risk via 3-round structured debate with 3 debators")
@@ -80,6 +88,7 @@ public class RiskDebateAgent {
 
         for (int round = 0; round < MAX_RISK_DEBATE_ROUNDS; round++) {
             // Aggressive speaks (Python: round-robin via latest_speaker, starts with Aggressive)
+            trackCall(ticker.content());
             currentAggressive = aggressiveDebator.argue(
                     traderProposal,
                     briefs.marketBrief(),
@@ -95,6 +104,7 @@ public class RiskDebateAgent {
             aggressiveResponses.add(currentAggressive);
 
             // Conservative speaks
+            trackCall(ticker.content());
             currentConservative = conservativeDebator.argue(
                     traderProposal,
                     briefs.marketBrief(),
@@ -110,6 +120,7 @@ public class RiskDebateAgent {
             conservativeResponses.add(currentConservative);
 
             // Neutral speaks
+            trackCall(ticker.content());
             currentNeutral = neutralDebator.argue(
                     traderProposal,
                     briefs.marketBrief(),
@@ -141,6 +152,7 @@ public class RiskDebateAgent {
     }
 
     private RiskAssessment judgeRisk(String ticker, String debateOutput, String traderProposal, ActionContext actionContext) {
+        trackCall(ticker);
         var model = Map.<String, Object>ofEntries(
                 Map.entry("ticker", ticker.toUpperCase()),
                 Map.entry("history", debateOutput),

@@ -10,6 +10,7 @@ import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.agent.researchers.BearResearcher;
 import com.embabel.gekko.agent.researchers.BullResearcher;
 import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.util.LlmBudgetTracker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -29,6 +30,7 @@ public class DebateLoopAgent {
     private final BearResearcher bearResearcher;
     private final FileCache cache;
     private final TraderAgentConfig config;
+    private final LlmBudgetTracker llmBudgetTracker;
 
     @Action(description = "Run iterative bull/bear debate loop")
     @AchievesGoal(description = "Produce investment debate state")
@@ -50,6 +52,7 @@ public class DebateLoopAgent {
                             String.class,
                             () -> bullResearcher.argue(briefs, history, actionContext)
                     );
+                    llmBudgetTracker.recordCall(ticker.content());
                     history.add(bullResponse);
                     bullHistory.add(bullResponse);
 
@@ -59,6 +62,7 @@ public class DebateLoopAgent {
                             String.class,
                             () -> bearResearcher.argue(briefs, history, actionContext)
                     );
+                    llmBudgetTracker.recordCall(ticker.content());
                     history.add(bearResponse);
                     bearHistory.add(bearResponse);
 

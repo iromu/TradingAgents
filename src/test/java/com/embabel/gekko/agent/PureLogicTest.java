@@ -1,6 +1,7 @@
 package com.embabel.gekko.agent;
 
 import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.util.LlmBudgetTracker;
 import com.embabel.common.textio.template.TemplateRenderer;
 import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -20,7 +21,8 @@ class PureLogicTest {
                 null, // ObjectProvider for DebateLoopAgent not needed
                 null, // ObjectProvider for RiskDebateAgent not needed
                 null, // ObjectProvider for Trader not needed
-                null  // ObjectProvider for PortfolioManager not needed
+                null, // ObjectProvider for PortfolioManager not needed
+                null  // LlmBudgetTracker not needed for sanitizeForPrompt
         );
     }
 

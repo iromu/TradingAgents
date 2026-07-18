@@ -15,6 +15,7 @@ import com.embabel.gekko.agent.managers.PortfolioManager;
 import com.embabel.gekko.agent.memory.DecisionMemoryAgent;
 import com.embabel.gekko.util.AgentUtils;
 import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.util.LlmBudgetTracker;
 import com.embabel.common.textio.template.TemplateRenderer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -67,6 +68,7 @@ public class DebateAgent {
     private final ObjectProvider<RiskDebateAgent> riskDebateAgentProvider;
     private final ObjectProvider<Trader> traderProvider;
     private final ObjectProvider<PortfolioManager> portfolioManagerProvider;
+    private final LlmBudgetTracker llmBudgetTracker;
 
     // Pre-compiled regex patterns for input sanitization (ReDoS mitigation)
     private static final Pattern JINJA_VAR = Pattern.compile("(?s)\\{\\{.*?\\}\\}");
@@ -95,10 +97,17 @@ public class DebateAgent {
         return portfolioManagerProvider.getObject();
     }
 
+    private void trackCall(ResearchTypes.Ticker ticker) {
+        if (llmBudgetTracker != null) {
+            llmBudgetTracker.recordCall(ticker.content());
+        }
+    }
+
     @Action(description = "Generate fundamentals report from ticker")
     public FundamentalsReport generateFundamentalsReport(ResearchTypes.Ticker ticker, OperationContext context) {
         String key = ticker.content() + "_fundamentals";
         return cache.getOrCompute(key, FundamentalsReport.class, () -> {
+            trackCall(ticker);
             String result = context.ai()
                     .withLlmByRole(CHEAPEST_ROLE)
                     .withId("generateFundamentalsReport")
@@ -114,6 +123,7 @@ public class DebateAgent {
     public MarketReport generateMarketReport(ResearchTypes.Ticker ticker, OperationContext context) {
         String key = ticker.content() + "_market";
         return cache.getOrCompute(key, MarketReport.class, () -> {
+            trackCall(ticker);
             String result = context.ai()
                     .withLlmByRole(CHEAPEST_ROLE)
                     .withId("generateMarketReport")
@@ -129,6 +139,7 @@ public class DebateAgent {
     public NewsReport generateNewsReport(ResearchTypes.Ticker ticker, OperationContext context) {
         String key = ticker.content() + "_news";
         return cache.getOrCompute(key, NewsReport.class, () -> {
+            trackCall(ticker);
             String result = context.ai()
                     .withLlmByRole(CHEAPEST_ROLE)
                     .withId("generateNewsReport")
@@ -144,6 +155,7 @@ public class DebateAgent {
     public SocialMediaReport generateSocialMediaReport(ResearchTypes.Ticker ticker, OperationContext context) {
         String key = ticker.content() + "_social_media";
         return cache.getOrCompute(key, SocialMediaReport.class, () -> {
+            trackCall(ticker);
             String result = context.ai()
                     .withLlmByRole(CHEAPEST_ROLE)
                     .withId("generateSocialMediaReport")
@@ -234,6 +246,7 @@ public class DebateAgent {
     ) {
         String key = ticker.content() + "_research_manager";
         return cache.getOrCompute(key, ResearchTypes.InvestmentPlan.class, () -> {
+            trackCall(ticker);
             var model = buildResearchManagerModel(ticker, state, riskAssessment, feedback, portfolioDecision);
 
             String result = context.ai()
@@ -355,6 +368,7 @@ public class DebateAgent {
     }
 
     private String distill(String reportType, String content, ResearchTypes.Ticker ticker, ActionContext ctx) {
+        trackCall(ticker);
         return ctx.ai()
                 .withLlmByRole(CHEAPEST_ROLE)
                 .withId("distillBrief_" + reportType.toLowerCase().replace(" ", "_"))
@@ -386,7 +400,7 @@ public class DebateAgent {
             char c = sanitized.charAt(i);
             if (c == '\t' || c == '\n' || c == '\r') {
                 sb.append(c);
-            } else if (c >= 0x20 && Character.isISOControl(c) == false) {
+            } else if (c >= 0x20 && !Character.isISOControl(c)) {
                 sb.append(c);
             }
         }

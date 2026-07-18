@@ -1,5 +1,6 @@
 package com.embabel.gekko.agent.researchers;
 
+import com.embabel.agent.api.annotation.Action;
 import com.embabel.agent.api.common.ActionContext;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.AgentUtils;
@@ -11,10 +12,15 @@ import java.util.Map;
 
 import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
 
+/**
+ * Bull researcher — generates a bullish argument based on analyst briefs and debate history.
+ * Called directly by DebateLoopAgent via createObject(), not as a sub-process agent.
+ */
 @Component
 @RequiredArgsConstructor
 public class BullResearcher {
 
+    @Action(description = "Generate a bullish argument from analyst briefs and debate history")
     public String argue(
             ResearchTypes.DebateBriefs briefs,
             List<String> history,

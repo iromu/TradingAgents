@@ -1,11 +1,9 @@
 package com.embabel.gekko.agent.memory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.FileWriter;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
@@ -14,12 +12,10 @@ import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 /**
  * File-based repository for decision memory log.
@@ -52,7 +48,47 @@ public class DecisionMemoryRepository {
 
     private final Path memoryLogPath;
     private final int maxEntries;
-    private final ObjectMapper mapper;
+    private final Object cacheLock = new Object();
+
+    /** In-memory cache of the file content to avoid re-reading on every operation. */
+    private volatile String cachedContent;
+    /** Last-modified timestamp of the file when cachedContent was read. */
+    private volatile long cachedModified;
+
+    /**
+     * Get file content, using an in-memory buffer that is invalidated
+     * when the file's last-modified time changes.
+     */
+    private String getContent() {
+        try {
+            if (!Files.exists(memoryLogPath)) {
+                return "";
+            }
+            synchronized (cacheLock) {
+                long modified = Files.getLastModifiedTime(memoryLogPath).toMillis();
+                if (cachedContent != null && modified == cachedModified) {
+                    return cachedContent;
+                }
+                // Cache miss or file changed — re-read
+                cachedContent = Files.readString(memoryLogPath, StandardCharsets.UTF_8);
+                cachedModified = modified;
+                return cachedContent;
+            }
+        } catch (Exception e) {
+            log.error("Failed to read memory log: {}", e.getMessage());
+            return "";
+        }
+    }
+
+    /**
+     * Invalidate the in-memory cache (called after atomic writes).
+     */
+    private void invalidateCache() {
+        synchronized (cacheLock) {
+            cachedContent = null;
+            cachedModified = 0;
+        }
+    }
 
     public DecisionMemoryRepository(
             @Value("${app.memory.log-path:~/.tradingagents/memory/trading_memory.md}") String logPath,
@@ -60,7 +96,6 @@ public class DecisionMemoryRepository {
     ) {
         this.memoryLogPath = Path.of(logPath.replace("~", System.getProperty("user.home")));
         this.maxEntries = maxEntries;
-        this.mapper = new ObjectMapper();
         ensureFileExists();
     }
 
@@ -73,7 +108,7 @@ public class DecisionMemoryRepository {
             if (!Files.exists(memoryLogPath)) {
                 Files.createFile(memoryLogPath);
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.warn("Failed to ensure memory log file exists at {}: {}", memoryLogPath, e.getMessage());
         }
     }
@@ -108,21 +143,24 @@ public class DecisionMemoryRepository {
     /**
      * Resolve a pending decision with actual returns and reflection.
      * Atomically updates the log file.
+     *
+     * @return true if a pending entry was found and resolved, false otherwise
      */
-    public void resolve(String ticker, String tradeDate, BigDecimal rawReturn,
+    public boolean resolve(String ticker, String tradeDate, BigDecimal rawReturn,
                         BigDecimal alphaReturn, String benchmark, int daysHeld,
                         String reflection) {
         try {
-            String content = Files.readString(memoryLogPath, StandardCharsets.UTF_8);
+            String content = getContent();
             String[] entries = splitEntries(content);
             StringBuilder newContent = new StringBuilder();
             boolean resolved = false;
+            String tickerUpper = ticker.toUpperCase();
 
             for (String entry : entries) {
                 if (entry.trim().isEmpty()) continue;
 
                 Matcher matcher = PENDING_ENTRY_RE.matcher(entry);
-                if (matcher.find() && matcher.group(2).equals(ticker) && matcher.group(1).equals(tradeDate)) {
+                if (matcher.find() && matcher.group(2).toUpperCase().equals(tickerUpper) && matcher.group(1).equals(tradeDate)) {
                     String resolvedEntry = buildResolvedEntry(ticker, tradeDate, matcher.group(3),
                             rawReturn, alphaReturn, daysHeld, reflection);
                     newContent.append(resolvedEntry).append("\n\n");
@@ -133,13 +171,15 @@ public class DecisionMemoryRepository {
             }
 
             if (!resolved) {
-                log.warn("No pending entry found for {} on {}", ticker, tradeDate);
-                return;
+                return false;
             }
 
             atomicWrite(newContent.toString().trim());
-        } catch (IOException e) {
+            invalidateCache();
+            return true;
+        } catch (Exception e) {
             log.error("Failed to resolve decision for {} on {}: {}", ticker, tradeDate, e.getMessage());
+            return false;
         }
     }
 
@@ -171,15 +211,16 @@ public class DecisionMemoryRepository {
      */
     public boolean hasPendingEntriesFor(String ticker) {
         try {
-            String content = Files.readString(memoryLogPath, StandardCharsets.UTF_8);
+            String content = getContent();
+            String tickerUpper = ticker.toUpperCase();
             Matcher matcher = PENDING_ENTRY_RE.matcher(content);
             while (matcher.find()) {
-                if (matcher.group(2).equals(ticker)) {
+                if (matcher.group(2).toUpperCase().equals(tickerUpper)) {
                     return true;
                 }
             }
             return false;
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("Failed to check pending entries for {}: {}", ticker, e.getMessage());
             return false;
         }
@@ -191,12 +232,13 @@ public class DecisionMemoryRepository {
     public List<PendingDecision> getPendingEntries(String ticker) {
         List<PendingDecision> results = new ArrayList<>();
         try {
-            String content = Files.readString(memoryLogPath, StandardCharsets.UTF_8);
+            String content = getContent();
+            String tickerUpper = ticker.toUpperCase();
             String[] entries = splitEntries(content);
 
             for (String entry : entries) {
                 Matcher headerMatcher = PENDING_ENTRY_RE.matcher(entry);
-                if (headerMatcher.find() && headerMatcher.group(2).equals(ticker)) {
+                if (headerMatcher.find() && headerMatcher.group(2).toUpperCase().equals(tickerUpper)) {
                     Matcher decisionMatcher = DECISION_BLOCK_RE.matcher(entry);
                     String rating = headerMatcher.group(3);
                     String executiveSummary = "N/A";
@@ -217,7 +259,7 @@ public class DecisionMemoryRepository {
                     ));
                 }
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("Failed to get pending entries for {}: {}", ticker, e.getMessage());
         }
         return results;
@@ -228,11 +270,12 @@ public class DecisionMemoryRepository {
      */
     public String generatePastContext(String ticker) {
         try {
-            String content = Files.readString(memoryLogPath, StandardCharsets.UTF_8);
+            String content = getContent();
             String[] entries = splitEntries(content);
 
             List<String> sameTicker = new ArrayList<>();
             List<String> crossTicker = new ArrayList<>();
+            String tickerUpper = ticker.toUpperCase();
 
             for (String entry : entries) {
                 if (entry.trim().isEmpty()) continue;
@@ -253,7 +296,7 @@ public class DecisionMemoryRepository {
 
                 String lesson = String.format("[%s] %s: %s", entryTicker, resolvedMatcher.group(3), reflection);
 
-                if (entryTicker.equals(ticker)) {
+                if (entryTicker.toUpperCase().equals(tickerUpper)) {
                     sameTicker.add(lesson);
                 } else {
                     crossTicker.add(lesson);
@@ -274,7 +317,7 @@ public class DecisionMemoryRepository {
 
             return "PAST DECISION MEMORY:\n" + String.join("\n---\n", context);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("Failed to generate past context for {}: {}", ticker, e.getMessage());
             return "";
         }
@@ -287,7 +330,7 @@ public class DecisionMemoryRepository {
         if (maxEntries <= 0) return;
 
         try {
-            String content = Files.readString(memoryLogPath, StandardCharsets.UTF_8);
+            String content = getContent();
             String[] entries = splitEntries(content);
 
             // Count resolved entries (non-pending)
@@ -330,9 +373,10 @@ public class DecisionMemoryRepository {
             }
 
             atomicWrite(newContent.toString().trim());
+            invalidateCache();
             log.info("Rotated memory log: removed {} oldest resolved entries", toRemove);
 
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("Failed to rotate memory log: {}", e.getMessage());
         }
     }
@@ -342,14 +386,14 @@ public class DecisionMemoryRepository {
      */
     public void recoverFromCorruption() {
         try {
-            String content = Files.readString(memoryLogPath, StandardCharsets.UTF_8);
+            String content = getContent();
             int lastSeparator = content.lastIndexOf(ENTRY_SEPARATOR);
             if (lastSeparator > 0) {
                 String recovered = content.substring(0, lastSeparator + ENTRY_SEPARATOR.length());
                 atomicWrite(recovered);
                 log.info("Recovered memory log from corruption, truncated to last complete entry");
             }
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("Failed to recover memory log from corruption: {}", e.getMessage());
         }
     }
@@ -381,12 +425,13 @@ public class DecisionMemoryRepository {
 
     private void atomicAppend(String entry) {
         try {
-            String existing = Files.exists(memoryLogPath)
-                    ? Files.readString(memoryLogPath, StandardCharsets.UTF_8).trim()
-                    : "";
-            String combined = existing.isEmpty() ? entry : existing + "\n\n" + entry;
-            atomicWrite(combined + "\n");
-        } catch (IOException e) {
+            synchronized (cacheLock) {
+                String existing = getContent().trim();
+                String combined = existing.isEmpty() ? entry : existing + "\n\n" + entry;
+                atomicWrite(combined + "\n");
+                invalidateCache();
+            }
+        } catch (Exception e) {
             log.error("Failed to append to memory log: {}", e.getMessage());
         }
     }
@@ -396,7 +441,7 @@ public class DecisionMemoryRepository {
             Path tempFile = memoryLogPath.resolveSibling(memoryLogPath.getFileName() + ".tmp");
             Files.writeString(tempFile, content, StandardCharsets.UTF_8);
             Files.move(tempFile, memoryLogPath, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
+        } catch (Exception e) {
             log.error("Failed to write memory log: {}", e.getMessage());
         }
     }

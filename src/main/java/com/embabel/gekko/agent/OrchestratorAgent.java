@@ -1,6 +1,5 @@
 package com.embabel.gekko.agent;
 
-import com.embabel.agent.api.annotation.AchievesGoal;
 import com.embabel.agent.api.annotation.Action;
 import com.embabel.agent.api.annotation.Agent;
 import com.embabel.agent.api.common.ActionContext;
@@ -18,6 +17,7 @@ import com.embabel.gekko.domain.Analysts.SocialMediaReport;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.AgentUtils;
 import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.util.LlmBudgetTracker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
@@ -56,6 +56,7 @@ public class OrchestratorAgent {
     private final CheckpointAgent checkpointAgent;
     private final InstrumentContextPromptContributor instrumentContextContributor;
     private final ObjectProvider<com.embabel.agent.core.Agent> debateAgentProvider;
+    private final LlmBudgetTracker llmBudgetTracker;
 
     private com.embabel.agent.core.Agent getDebateAgent() {
         var agent = debateAgentProvider.getObject();
@@ -63,6 +64,12 @@ public class OrchestratorAgent {
             throw new IllegalStateException("No DebateAgent registered — check that DebateAgent has a @Component annotation");
         }
         return agent;
+    }
+
+    private void trackCall(String ticker) {
+        if (llmBudgetTracker != null) {
+            llmBudgetTracker.recordCall(ticker);
+        }
     }
 
     @Action(description = "Convert form input to Ticker object")
@@ -98,6 +105,7 @@ public class OrchestratorAgent {
             OperationContext context) {
         String key = ticker.content() + "_research_plan";
         return cache.getOrCompute(key, ResearchTypes.ResearchPlan.class, () -> {
+            trackCall(ticker.content());
             var model = buildResearchPlanModel(ticker, instrumentContext);
 
             String result = context.ai()
@@ -156,13 +164,12 @@ public class OrchestratorAgent {
             }
             return AgentUtils.NO_PAST_MEMORY;
         } catch (Exception e) {
-            log.error("Failed to generate past context for {}: {}", ticker.content(), e.getMessage());
+            log.error("Failed to generate past context for {}: {}", ticker.content(), e.getMessage(), e);
             return AgentUtils.NO_PAST_MEMORY;
         }
     }
 
     @Action(description = "Delegate to DebateAgent for full research workflow")
-    @AchievesGoal(description = "Execute full research workflow with debate and risk assessment")
     public ResearchTypes.InvestmentPlan executeDebate(ResearchTypes.Ticker ticker, ResearchTypes.PlanApproval approval, ActionContext context) {
         return context.asSubProcess(ResearchTypes.InvestmentPlan.class, getDebateAgent());
     }

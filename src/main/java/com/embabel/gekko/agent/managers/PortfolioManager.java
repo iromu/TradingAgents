@@ -1,8 +1,6 @@
 package com.embabel.gekko.agent.managers;
 
-import com.embabel.agent.api.annotation.AchievesGoal;
 import com.embabel.agent.api.annotation.Action;
-import com.embabel.agent.api.annotation.Agent;
 import com.embabel.agent.api.common.ActionContext;
 import com.embabel.gekko.agent.RiskAssessment;
 import com.embabel.gekko.domain.PortfolioDecisionOutput;
@@ -20,9 +18,8 @@ import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
 /**
  * Portfolio Manager agent — judges the risk debate, reads the Research Plan and
  * Trader's proposal, and produces the final structured PortfolioDecision.
- * Mirrors Python's create_portfolio_manager.
+ * Called directly by DebateAgent via createObject(), not as a sub-process agent.
  */
-@Agent(description = "Portfolio Manager — synthesises risk debate into final trade decision")
 @Component
 @RegisterReflectionForBinding(PortfolioDecisionOutput.class)
 @RequiredArgsConstructor
@@ -30,7 +27,6 @@ import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
 public class PortfolioManager {
 
     @Action(description = "Produce final portfolio decision from risk debate, research plan, and trader proposal")
-    @AchievesGoal(description = "Produce final portfolio decision")
     public String portfolioDecision(
             ResearchTypes.Ticker ticker,
             ResearchTypes.InvestmentDebateState debateState,

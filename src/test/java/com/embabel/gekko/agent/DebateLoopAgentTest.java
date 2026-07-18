@@ -5,6 +5,7 @@ import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.agent.researchers.BearResearcher;
 import com.embabel.gekko.agent.researchers.BullResearcher;
 import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.util.LlmBudgetTracker;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
@@ -23,7 +24,8 @@ class DebateLoopAgentTest {
         var bearResearcher = new BearResearcher();
         var cache = new FileCache();
         var config = new TraderAgentConfig(null, null, maxIterations, null, null, null, "/tmp", similarityThreshold, 5, null, null, null, null, null, null);
-        return new DebateLoopAgent(bullResearcher, bearResearcher, cache, config);
+        var budgetTracker = new LlmBudgetTracker(30);
+        return new DebateLoopAgent(bullResearcher, bearResearcher, cache, config, budgetTracker);
     }
 
     // --- computeSimilarity tests (via reflection since it's private) ---

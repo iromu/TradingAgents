@@ -169,7 +169,8 @@ class DecisionMemoryIntegrationTest {
     @Test
     void shouldLimitMaxEntries() throws IOException {
         // Use max-entries = 3
-        var repo = new DecisionMemoryRepository(tempDir.toString(), 3);
+        var logFile = tempDir.resolve("trading_memory.md");
+        var repo = new DecisionMemoryRepository(logFile.toString(), 3);
 
         for (int i = 0; i < 5; i++) {
             repo.appendPending("AMD", "2026-06-" + (10 + i), "BUY",

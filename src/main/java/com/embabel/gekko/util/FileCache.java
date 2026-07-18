@@ -41,23 +41,18 @@ public class FileCache {
     }
 
     /**
-     * Sanitizes a cache key to prevent path traversal attacks.
-     * Only strips path traversal sequences — the SHA-256 hash handles uniqueness.
+     * Sanitizes a cache key by ensuring it is non-null and non-blank.
+     * Path traversal prevention is handled by the SHA-256 hash — the sanitized
+     * key is hashed before being used as a filename, so special characters
+     * like '.', '/', and '\' cannot cause traversal. Stripping these characters
+     * was unnecessary and caused hash collisions (e.g., "a.b" and "ab"
+     * produced identical cache keys).
      */
     private String sanitizeKey(String key) {
         if (key == null || key.isBlank()) {
             throw new IllegalArgumentException("Cache key must not be null or blank");
         }
-        // Strip only path traversal sequences
-        String sanitized = key
-                .replace("..", "")
-                .replace("/", "")
-                .replace("\\", "")
-                .replace("\0", "");
-        if (sanitized.isBlank()) {
-            throw new IllegalArgumentException("Cache key must not be empty after sanitization");
-        }
-        return sanitized;
+        return key;
     }
 
     private String hashKey(String key) {
@@ -75,8 +70,7 @@ public class FileCache {
 
     private Path pathForKey(String key, String extension) {
         String sanitized = sanitizeKey(key);
-        // TODO enable this with a feature toggle String hashed = hashKey(sanitized);
-        String hashed = sanitized;
+        String hashed = hashKey(sanitized);
         return baseDir.resolve(hashed + extension);
     }
 

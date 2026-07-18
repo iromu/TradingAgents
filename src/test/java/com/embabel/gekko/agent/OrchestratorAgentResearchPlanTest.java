@@ -78,7 +78,8 @@ class OrchestratorAgentResearchPlanTest {
                 null, // memoryAgent — not needed for generateResearchPlan
                 null, // checkpointAgent — not needed for generateResearchPlan
                 new InstrumentContextPromptContributor(), // instrumentContextContributor
-                null  // debateAgentProvider — not needed for generateResearchPlan
+                null, // debateAgentProvider — not needed for generateResearchPlan
+                null  // llmBudgetTracker — not needed for generateResearchPlan
         );
     }
 

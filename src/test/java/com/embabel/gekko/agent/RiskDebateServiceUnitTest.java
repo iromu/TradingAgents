@@ -14,7 +14,8 @@ class RiskDebateServiceUnitTest {
         return new RiskDebateAgent(
                 Mockito.mock(org.springframework.beans.factory.ObjectProvider.class),
                 Mockito.mock(org.springframework.beans.factory.ObjectProvider.class),
-                Mockito.mock(org.springframework.beans.factory.ObjectProvider.class)
+                Mockito.mock(org.springframework.beans.factory.ObjectProvider.class),
+                null
         );
     }
 

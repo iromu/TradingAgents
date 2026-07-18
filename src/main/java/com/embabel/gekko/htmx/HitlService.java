@@ -15,6 +15,12 @@ import org.springframework.beans.factory.DisposableBean;
 /**
  * Human-in-the-Loop service that stores error state for agent processes
  * and allows humans to provide input/feedback to retry failed processes.
+ *
+ * <p><b>Limitation:</b> Session state is stored entirely in-memory (ConcurrentHashMap).
+ * On application restart, all HITL sessions are lost. This is acceptable for the current
+ * use case where HITL sessions are short-lived (minutes to hours) and a restart is rare.
+ * If persistent HITL state is needed in the future, sessions should be backed by a
+ * database or file-based store.</p>
  */
 public class HitlService implements DisposableBean {
 

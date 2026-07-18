@@ -55,20 +55,6 @@ class FileCacheTest {
     }
 
     @Test
-    void sanitizeKey_stripsPathTraversal() {
-        FileCache cache = new FileCache();
-        ReflectionTestUtils.setField(cache, "baseDir", tempDir);
-
-        // Path traversal sequences are stripped, not rejected
-        // "../../etc/passwd" becomes "etc_passwd" after sanitization
-        String result = cache.getOrCompute("../../etc/passwd", String.class, () -> "safe");
-
-        // Should succeed — the path traversal is sanitized away
-        assertNotNull(result);
-        assertEquals("safe", result);
-    }
-
-    @Test
     void sanitizeKey_rejectsNull() {
         FileCache cache = new FileCache();
 
@@ -80,6 +66,18 @@ class FileCacheTest {
         FileCache cache = new FileCache();
 
         assertThrows(IllegalArgumentException.class, () -> cache.getOrCompute("   ", String.class, () -> "blank_key"));
+    }
+
+    @Test
+    void sanitizeKey_preservesSpecialChars() {
+        FileCache cache = new FileCache();
+        ReflectionTestUtils.setField(cache, "baseDir", tempDir);
+
+        // Special characters are preserved — the SHA-256 hash prevents traversal
+        String result = cache.getOrCompute("a.b/c\\d\0", String.class, () -> "safe");
+
+        assertNotNull(result);
+        assertEquals("safe", result);
     }
 
     @Test

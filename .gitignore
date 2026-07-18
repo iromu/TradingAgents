@@ -2,3 +2,8 @@ target
 .idea
 **/*.log
 application-local.yaml
+
+# Ignore LLM cache (cheap to regenerate)
+data/llm/
+
+# Keep Alpha Vantage data (expensive API, valuable to persist)

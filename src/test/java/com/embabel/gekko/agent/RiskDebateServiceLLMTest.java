@@ -28,7 +28,7 @@ class RiskDebateServiceLLMTest {
         when(conservativeProvider.getObject()).thenReturn(conservative);
         when(neutralProvider.getObject()).thenReturn(neutral);
 
-        return new RiskDebateAgent(aggressiveProvider, conservativeProvider, neutralProvider);
+        return new RiskDebateAgent(aggressiveProvider, conservativeProvider, neutralProvider, null);
     }
 
     @Test

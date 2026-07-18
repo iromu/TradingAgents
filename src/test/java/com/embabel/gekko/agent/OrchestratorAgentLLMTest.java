@@ -51,7 +51,8 @@ class OrchestratorAgentLLMTest {
                 null, // memoryAgent
                 null, // checkpointAgent
                 new InstrumentContextPromptContributor(), // instrumentContextContributor
-                null  // debateAgentProvider
+                null, // debateAgentProvider
+                null  // llmBudgetTracker
         );
     }
 

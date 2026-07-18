@@ -1,8 +1,6 @@
 package com.embabel.gekko.agent.risk;
 
-import com.embabel.agent.api.annotation.AchievesGoal;
 import com.embabel.agent.api.annotation.Action;
-import com.embabel.agent.api.annotation.Agent;
 import com.embabel.agent.api.common.ActionContext;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,16 +12,14 @@ import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
 
 /**
  * Neutral Risk Analyst — provides balanced perspective, weighs both sides.
- * Mirrors Python's create_neutral_debator.
+ * Called directly by RiskDebateAgent via createObject(), not as a sub-process agent.
  */
-@Agent(description = "Neutral Risk Debator — provides balanced risk perspective")
 @Component
 @RequiredArgsConstructor
 @Slf4j
 public class NeutralDebator {
 
     @Action(description = "Produce neutral risk argument")
-    @AchievesGoal(description = "Produce neutral risk argument")
     public String argue(
             String traderDecision,
             String marketResearchReport,
