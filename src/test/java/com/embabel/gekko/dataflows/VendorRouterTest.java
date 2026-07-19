@@ -44,10 +44,7 @@ class VendorRouterTest {
         VendorRouter router = new VendorRouter();
         router.setAlphaVantageService(alphaVantageService);
 
-        // The router catches exceptions and returns error string, not throws
-        String result = router.routeToVendor("unknown_method", "AAPL");
-        assertNotNull(result);
-        assertTrue(result.contains("Error"));
+        assertThrows(IllegalArgumentException.class, () -> router.routeToVendor("unknown_method", "AAPL"));
     }
 
     @Test

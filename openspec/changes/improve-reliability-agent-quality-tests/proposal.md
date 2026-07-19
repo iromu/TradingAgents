@@ -2,16 +2,29 @@
 
 The TradingAgents project has accumulated several known issues that undermine its reliability, agent quality, and engineering rigor. The debate system runs a fixed number of iterations with no convergence check, critical cache key bugs cause stale data to be served, the risk debate system is dead code, and the core agent logic has zero test coverage. These issues make the system unreliable for its primary purpose — producing trustworthy investment research — and make future refactoring risky.
 
+## Status
+
+**Phase 1 (Reliability fixes): COMPLETE** — cache keys, timeouts, FileCache race condition all fixed.
+**Phase 2 (Agent quality): PARTIALLY COMPLETE** — debate convergence implemented, MarketDataTools created, .jinja prompts unified. Risk debate system wired up as RiskDebateAgent.
+**Phase 3 (Test coverage): IN PROGRESS** — 437 tests passing. This update expands test coverage with integration tests for agents that previously had none.
+
 ## What Changes
 
-- **Fix cache key bugs** in `AlphaVantageService.getGlobalNews()` and `getInsiderSentiment()` to include all query parameters in cache keys
-- **Add RestTemplate timeouts** to prevent indefinite blocking on API calls
-- **Fix FileCache race condition** in `getOrCompute()` to prevent duplicate computation under concurrent access
-- **Add debate convergence check** to replace fixed 2-iteration loop with a condition that detects when the debate has stabilized or reached agreement
-- **Wire up the risk debate system** (RiskManager, AggresiveDebator, ConservativeDebator, NeutralDebator prompts) or remove dead prompt files
-- **Enable MarketAnalyst tool calls** by uncommenting and wiring `get_stock_data,get_indicators` tools
-- **Expand test coverage** to include TraderAgent core actions, BullResearcher, BearResearcher, YFinService, VendorRouter, and integration tests for the full pipeline
-- **Unify prompt file extensions** — rename all `.txt` analyst prompts to `.jinja` for consistency
+### Already Implemented (Phases 1-2)
+- ✅ **Cache key bugs fixed** — `getGlobalNews()` includes `dateFrom`/`dateTo`, `getInsiderSentiment()` includes all params
+- ✅ **RestTemplate timeouts** — `readTimeoutMs` configured with 30s default
+- ✅ **FileCache race condition fixed** — per-key locking with `ConcurrentHashMap.computeIfAbsent()` double-check
+- ✅ **Debate convergence** — Jaccard bigram similarity with configurable threshold (default 0.8), max iterations (default 5)
+- ✅ **Risk debate system wired** — `RiskDebateAgent` with 3 debators + judge, integrated into DebateAgent pipeline
+- ✅ **MarketAnalyst tools** — `MarketDataTools` with `get_stock_data` and `get_indicators`
+- ✅ **Prompt file extensions unified** — all `.txt` renamed to `.jinja`
+
+### New: Expanded Test Coverage (Phase 3)
+- **Integration tests for agents with zero coverage**: PortfolioManager, InstrumentIdentityAgent, InstrumentContextPromptContributor, RiskDebateAgent
+- **Integration tests for sub-process delegation**: OrchestratorAgent.executeDebate, DebateAgent.runDebate/runTrader/runRiskDebate/runPortfolioManager
+- **Integration tests for DebateLoopAgent debate() with LLM calls**
+- **Integration tests for MarketDataTools**
+- **Unit tests for edge cases**: DebateAgent helpers (sanitizeForPrompt, extractRating, etc.), DebateLoopAgent convergence in practice
 
 ## Capabilities
 
@@ -21,11 +34,11 @@ The TradingAgents project has accumulated several known issues that undermine it
 - `test-coverage`: Expand unit and integration test suite to cover core agent logic
 
 ### Modified Capabilities
-<!-- No existing capabilities in openspec/specs/ — all new -->
+- `test-coverage`: Expanded to include integration tests for sub-process delegation, HITL checkpoints, and agents with zero prior coverage
 
 ## Impact
 
 - **Code**: `AlphaVantageService.java`, `FileCache.java`, `TraderAgent.java`, `BullResearcher.java`, `BearResearcher.java`, `YFinService.java`, `VendorRouter.java`
 - **Prompts**: `prompts/analysts/*.txt` → `.jinja`, risk debate prompts wired or removed
-- **Tests**: New test files for core agents and services
+- **Tests**: New test files for PortfolioManager, InstrumentIdentityAgent, RiskDebateAgent, OrchestratorAgent delegation, DebateAgent sub-processes, DebateLoopAgent LLM tests, MarketDataTools, DebateAgent helpers
 - **Dependencies**: No new external dependencies required

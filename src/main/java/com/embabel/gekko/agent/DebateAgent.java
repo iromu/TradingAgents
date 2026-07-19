@@ -68,6 +68,7 @@ public class DebateAgent {
     private final ObjectProvider<RiskDebateAgent> riskDebateAgentProvider;
     private final ObjectProvider<Trader> traderProvider;
     private final ObjectProvider<PortfolioManager> portfolioManagerProvider;
+    private final ObjectProvider<com.embabel.gekko.tools.MarketDataTools> marketDataToolsProvider;
     private final LlmBudgetTracker llmBudgetTracker;
 
     // Pre-compiled regex patterns for input sanitization (ReDoS mitigation)
@@ -124,8 +125,10 @@ public class DebateAgent {
         String key = ticker.content() + "_market";
         return cache.getOrCompute(key, MarketReport.class, () -> {
             trackCall(ticker);
+            var marketTools = marketDataToolsProvider.getObject();
             String result = context.ai()
                     .withLlmByRole(CHEAPEST_ROLE)
+                    .withToolObject(marketTools)
                     .withId("generateMarketReport")
                     .withTemplate("analysts/MarketAnalyst")
                     .createObject(String.class, Map.of(
