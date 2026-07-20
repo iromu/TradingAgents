@@ -4,13 +4,13 @@
     {
       "id": 1,
       "query": "Create an Embabel agent that takes a user's stock ticker, looks up the company's latest news, and generates a brief investment recommendation. Use GOAP planning.",
-      "expected_output": "A complete Java class annotated with @Agent, containing @Action methods for fetching news and generating recommendations, with @AchievesGoal on the final action. Should include OperationContext injection, LLM calls via context.ai(), and proper type-driven data flow between actions.",
+      "expected_output": "A complete Java class annotated with @Agent, containing @Action methods for fetching news and generating recommendations, with @Goal on the final action. Should include OperationContext injection, LLM calls via context.ai(), and proper type-driven data flow between actions.",
       "files": [],
       "should_trigger": true,
       "assertions": [
         "The output contains a class annotated with @Agent",
         "The class has at least two @Action methods",
-        "The final action is annotated with @AchievesGoal",
+        "The final action is annotated with @Goal",
         "The code uses OperationContext for AI access",
         "The code uses context.ai() or context.promptRunner() for LLM calls",
         "The code includes proper type-driven data flow between actions"
@@ -61,14 +61,14 @@
     {
       "id": 5,
       "query": "I need to publish an Embabel agent as an MCP server with SSE transport. Show the configuration and how to annotate a goal so it's automatically published as an MCP tool.",
-      "expected_output": "Configuration showing spring.ai.mcp.server.type: SYNC or ASYNC with SSE transport, and an example showing @AchievesGoal with @Export(remote = true) annotation. Should explain the automatic MCP tool publishing mechanism.",
+      "expected_output": "Configuration showing spring.ai.mcp.server.type: SYNC or ASYNC with SSE transport, and an example showing @Goal with @Export(remote = true) annotation. Should explain the automatic MCP tool publishing mechanism.",
       "files": [],
       "should_trigger": true,
       "assertions": [
         "The output includes MCP server configuration (spring.ai.mcp.server.type)",
         "The config shows SSE transport configuration",
         "The code shows @Export(remote = true) annotation",
-        "The code shows @AchievesGoal with MCP export",
+        "The code shows @Goal with MCP export",
         "The output explains automatic MCP tool publishing"
       ]
     },
@@ -84,6 +84,59 @@
         "The code demonstrates state transitions",
         "The output explains how states hide previous state objects",
         "The code shows the looping pattern with clearBlackboard"
+      ]
+    },
+    {
+      "id": 7,
+      "query": "How do I handle AgentProcess lifecycle in Embabel? I need to understand the different process states, how to use tick() vs run(), and how the blackboard works between actions.",
+      "expected_output": "Explanation of AgentProcess lifecycle states (RUNNING, COMPLETED, FAILED, STUCK, WAITING, etc.), tick() for single-step execution vs run() for full execution, blackboard operations (add, last, all, hide), and the OODA planning loop.",
+      "files": [],
+      "should_trigger": true,
+      "assertions": [
+        "The output lists multiple AgentProcess states (RUNNING, COMPLETED, FAILED, STUCK, WAITING, etc.)",
+        "The output explains tick() vs run() difference",
+        "The output describes blackboard operations (add, last, all, hide, etc.)",
+        "The output mentions the OODA loop or planning cycle"
+      ]
+    },
+    {
+      "id": 8,
+      "query": "I'm using Anthropic Claude and want to reduce costs. How does prompt caching work in Embabel? Also, can I use native structured output for better JSON reliability?",
+      "expected_output": "Explanation of Anthropic prompt caching with AnthropicCachingConfig (systemPrompt, tools, conversationHistory strategies), usage examples with withAnthropicCaching(), and native structured output with NativeStructuredOutputMode.ENABLED/DISABLED/DEFAULT, including limitations.",
+      "files": [],
+      "should_trigger": true,
+      "assertions": [
+        "The output mentions AnthropicCachingConfig or prompt caching",
+        "The output shows caching strategies (systemPrompt, tools, conversationHistory)",
+        "The output mentions NativeStructuredOutputMode",
+        "The output includes ENABLED/DISABLED/DEFAULT modes",
+        "The output mentions limitations (e.g., streaming not supported)"
+      ]
+    },
+    {
+      "id": 9,
+      "query": "I need to add AWS Bedrock support to my Embabel project. What dependency do I need and what Claude models are available across regions?",
+      "expected_output": "Maven/Gradle dependency for embabel-agent-bedrock-autoconfigure, AWS configuration, and a table of available Claude models across US/EU/APAC regions with model IDs and knowledge cutoff dates.",
+      "files": [],
+      "should_trigger": true,
+      "assertions": [
+        "The output shows embabel-agent-bedrock-autoconfigure dependency",
+        "The output lists models across multiple regions (US, EU, APAC)",
+        "The output includes model IDs (e.g., us.anthropic.claude-...)",
+        "The output mentions knowledge cutoff dates"
+      ]
+    },
+    {
+      "id": 10,
+      "query": "What's the difference between Embabel's API and SPI packages? I want to make sure I'm not using internal APIs in my production code.",
+      "expected_output": "Clear distinction: API is com.embabel.agent.api.* (stable, production-safe), SPI is com.embabel.agent.spi.* (subject to change, for framework extension only). Should warn against using SPI in production.",
+      "files": [],
+      "should_trigger": true,
+      "assertions": [
+        "The output distinguishes API (com.embabel.agent.api.*) from SPI (com.embabel.agent.spi.*)",
+        "The output states API is stable and production-safe",
+        "The output warns that SPI is subject to change",
+        "The output advises against using SPI in production code"
       ]
     }
   ]

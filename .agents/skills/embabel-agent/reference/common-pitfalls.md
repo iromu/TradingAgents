@@ -1,124 +1,142 @@
-# Common Pitfalls Reference
+# Common Pitfalls — Embabel v1.0.0
 
-## Missing Agent Annotations
+## Annotation Pitfalls
 
-**Problem:** Forgetting `@Agent` or `@Agentic` on the class.
+### Missing `@Agent` / `@EmbabelComponent`
 
-**Impact:** The agent won't be discovered by the platform.
+**Problem:** Forgetting `@Agent` on an agent class or `@EmbabelComponent` on a component that exposes actions/goals.
 
-**Fix:** Both annotations register beans, but `@Agentic` is auto-discovered via component scanning. Always annotate agent classes.
+**Impact:** The class won't be registered as a Spring bean or discovered by the agent platform.
 
-## Missing OperationContext
+**Fix:** Annotate every agent with `@Agent(description = "...")` and every component with `@EmbabelComponent`.
 
-**Problem:** Not providing `OperationContext` as a parameter.
+### Missing `@Goal` on terminal actions
 
-**Impact:** Actions can't access the AI or blackboard.
+**Problem:** Not marking a terminal action with `@Goal` (v1.0.0 replaces the older `@AchievesGoal`).
 
-**Fix:** Every `@Action` method must include `OperationContext` as a parameter.
+**Impact:** The planner cannot determine goal satisfaction — the agent may loop indefinitely or complete without producing output.
 
-## Confusing Execution Modes
+**Fix:** Every agent needs at least one action marked with `@Goal(description = "...")`.
 
-**Problem:** Mixing up execution modes (SIMPLE vs CONCURRENT) with autonomy modes (CLOSED vs OPEN).
+### Exposing sensitive methods without `@Tool` / `@LlmTool`
 
-**Impact:** Unexpected agent behavior — actions may run in parallel when you expect sequential, or the LLM may assemble agents incorrectly.
+**Problem:** Relying on visibility modifiers (private, package-private) to hide methods from LLMs.
 
-**Fix:**
-- Execution mode (SIMPLE/CONCURRENT) controls how actions run within an agent
-- Autonomy mode (CLOSED/OPEN) controls how the LLM selects agents
-- These operate at different levels
+**Impact:** Annotated methods are safe; unannotated methods are never exposed regardless of visibility. But if a method *is* annotated with `@Tool` or `@LlmTool`, the LLM can call it — including methods that mutate state or leak data.
 
-## Missing @AchievesGoal
+**Fix:** Explicitly annotate only the methods you want the LLM to call. Keep internal implementation details hidden.
 
-**Problem:** Not marking an action with `@AchievesGoal`.
+## Action Pitfalls
 
-**Impact:** The planner can't determine goal satisfaction — the agent may loop indefinitely or complete without producing output.
+### Missing `OperationContext` parameter
 
-**Fix:** Every agent needs at least one action marked with `@AchievesGoal` to define what constitutes completion.
+**Problem:** An `@Action` method that doesn't accept `OperationContext`.
 
-## Ignoring Tool Loop Iterations
+**Impact:** The action cannot access the AI, blackboard, or invoke LLMs.
 
-**Problem:** Not setting `toolloop.max-iterations` for complex agents.
+**Fix:** Include `OperationContext` as a parameter on every `@Action` method.
+
+### Using `clearBlackboard` on goal-achieving actions
+
+**Problem:** Setting `clearBlackboard = true` on an action annotated with `@Goal` / `@AchievesGoal`.
+
+**Impact:** Clearing the blackboard removes `hasRun` tracking conditions, which may interfere with goal satisfaction detection.
+
+**Fix:** Use `clearBlackboard = true` only on *intermediate* actions (e.g., preprocessing, loop-back actions). Never on the goal-achieving action.
+
+### Ignoring `max-iterations`
+
+**Problem:** Not configuring `toolloop.max-iterations` for complex agents.
 
 **Impact:** Agent stops after 20 iterations (default), even if the goal isn't reached.
 
 **Fix:** Increase via `embabel.agent.platform.toolloop.max-iterations` for complex multi-step agents.
 
-## Using Default Model Everywhere
+### Using the default model everywhere
 
-**Problem:** Not setting model per-action.
+**Problem:** Not setting the model per-action.
 
 **Impact:** Using the default model for everything wastes money or sacrifices quality.
 
-**Fix:** Use `LlmOptions.withModel()` for each action — cheaper models for simple tasks, stronger models for complex reasoning.
+**Fix:** Use `LlmOptions.withModel()` per action — cheaper models for simple tasks, stronger models for complex reasoning.
 
-## Forgetting .withId()
+### Condition methods with side effects
 
-**Problem:** Not using `.withId()` on LLM calls.
+**Problem:** Modifying the blackboard or having other side effects inside a `@Condition` method.
 
-**Impact:** Test verification becomes harder and debugging is opaque.
+**Impact:** Conditions may be called multiple times, leading to inconsistent state.
+
+**Fix:** `@Condition` methods must be pure — evaluate and return only.
+
+## State Pitfalls
+
+### Non-static inner classes for `@State`
+
+**Problem:** Declaring a `@State` class as a non-static inner class (Java) or using `inner class` (Kotlin).
+
+**Impact:** The class holds a reference to its enclosing instance, causing serialization and persistence failures. The framework throws `IllegalStateException` at startup.
+
+**Fix:** Use Java records (implicitly static) or Kotlin top-level data classes.
+
+### Forgetting `canRerun = true` when returning `this`
+
+**Problem:** An action that returns `this` to stay in the current state without `canRerun = true`.
+
+**Impact:** The action's `hasRun` flag prevents it from executing again, even though it returned `this`.
+
+**Fix:** Add `@Action(canRerun = true)` for actions that return `this`.
+
+### Missing `clearBlackboard = true` for looping states
+
+**Problem:** An action that returns a new instance of the same `@State` type without `clearBlackboard = true`.
+
+**Impact:** The planner sees the output type already exists on the blackboard and skips the action — the loop never executes.
+
+**Fix:** Use `@Action(clearBlackboard = true)` on actions that loop back to a previously-visited state type.
+
+### Not passing context through state records with `clearBlackboard`
+
+**Problem:** Using `clearBlackboard = true` in a loop but not including all necessary data in the state record.
+
+**Impact:** The blackboard is fully cleared — only the state record's fields survive.
+
+**Fix:** Bundle all necessary context (user input, configuration, intermediate results) into the state record fields.
+
+## Tool Pitfalls
+
+### OneShotPerLoopTool without loop ID stamping
+
+**Problem:** Wrapping a tool with `OneShotPerLoopTool` but not stamping a fresh `loopId` in `ToolCallContext` each turn.
+
+**Impact:** Without a loop ID, `LoopMemo`'s fallback is "always emit" — the wrapper degrades to a passthrough and the tool is called every iteration instead of once per loop.
+
+**Fix:** Stamp a fresh `UUID` as `ToolCallContext.LOOP_ID_KEY` in the `ToolCallContext` for every LLM call.
+
+### Circular type dependencies
+
+**Problem:** Action input/output types form a circular dependency (A → B → A with no entry point).
+
+**Impact:** The planner can't find a valid plan path — the agent completes immediately with no actions.
+
+**Fix:** Check that action input/output types form a valid directed acyclic graph. Use `ProcessOptions.verbosity` to debug planning.
+
+## Testing Pitfalls
+
+### Forgetting `.withId()` on LLM calls
+
+**Problem:** Not using `.withId("...")` on `PromptRunner` calls.
+
+**Impact:** Test verification becomes harder and debugging is opaque — you can't correlate LLM invocations with specific actions.
 
 **Fix:** Always use `.withId("action-name")` for traceability. Essential for test assertions and log correlation.
 
-## Non-Static Inner Classes for @State
+### Not using `FakePromptRunner` for unit tests
 
-**Problem:** Using non-static inner classes for `@State`-annotated types.
+**Problem:** Running integration tests against a real LLM.
 
-**Impact:** Serialization and persistence issues.
+**Impact:** Slow tests, non-deterministic results, API costs.
 
-**Fix:** Use Java records (implicitly static) or Kotlin top-level classes.
+**Fix:** Use `FakePromptRunner` with `expectResponse()` for deterministic, fast unit tests.
+---
 
-## Missing clearBlackboard for Looping States
-
-**Problem:** Not using `clearBlackboard = true` for looping states.
-
-**Impact:** Planner sees output type already exists and skips the action — the loop never executes.
-
-**Fix:** Use `@Action(clearBlackboard = true)` for revise-and-review or iterative loops.
-
-## Exposing Sensitive Methods
-
-**Problem:** Allowing LLMs to call sensitive methods.
-
-**Impact:** LLM may call methods it shouldn't, leading to data leaks or unintended side effects.
-
-**Fix:** Always gate with `@Tool`/`@LlmTool`; unannotated methods stay hidden regardless of visibility.
-
-## Missing @Export on MCP Agents
-
-**Problem:** Forgetting `@Export(remote=true)` on MCP agents.
-
-**Impact:** Agents won't be visible to MCP clients like Claude Desktop.
-
-**Fix:** Add `@Export(remote=true)` to agents you want to expose via MCP.
-
-## Circular Type Dependencies
-
-**Problem:** Action input/output types form a circular dependency.
-
-**Impact:** Planner can't find a valid plan path — agent completes immediately with no actions.
-
-**Fix:** Check that action input/output types form a valid plan path. Use `ProcessOptions.verbosity` to debug planning.
-
-## Custom Conditions Without Postconditions
-
-**Problem:** An action sets a custom condition but doesn't mark it in `post`.
-
-**Impact:** Other actions that depend on it mark it in `pre` but the planner doesn't see it as satisfied.
-
-**Fix:** If an action sets a custom condition, mark it in `post`; if another action depends on it, mark it in `pre`.
-
-## Key Points
-
-- Always annotate agent classes with `@Agent`, `@Agentic`, or register as `@Bean(Agent)`
-- Every `@Action` needs `OperationContext` as a parameter
-- Execution mode and autonomy mode operate at different levels
-- Every agent needs at least one `@AchievesGoal` action
-- Increase `max-iterations` for complex multi-step agents
-- Use `LlmOptions.withModel()` per action for cost/quality optimization
-- Always use `.withId()` for traceability in tests and logs
-- Use Java records or Kotlin top-level classes for `@State` types
-- Use `clearBlackboard = true` for looping states
-- Gate all LLM-accessible methods with `@Tool`/`@LlmTool`
-- Add `@Export(remote=true)` for MCP-exposed agents
-- Check action type chains for circular dependencies
-- Mark custom conditions in both `pre` and `post` as needed
+*Source: Embabel Agent v1.0.0 documentation*

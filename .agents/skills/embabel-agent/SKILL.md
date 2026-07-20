@@ -1,25 +1,26 @@
 ---
 name: embabel-agent
 description: >-
-  Build agentic AI on the JVM with Embabel v0.5.0 — Rod Johnson's Spring-based framework for authoring agents that combine LLMs with non-LLM planning (GOAP, Utility AI, Hybrid, Supervisor). Use for: creating agents with @Agent or @EmbabelComponent, annotating actions (@Action), goals (@AchievesGoal), conditions (@Condition), and tools (@LlmTool, @Tool); publishing agents as MCP servers with @Export(remote=true) via SYNC or ASYNC (SSE) transport; managing agent state with @State and state transitions; configuring LLM providers (OpenAI, Anthropic, Google GenAI, Gemini, DeepSeek, Ollama, Bedrock); setting execution modes (SIMPLE, CONCURRENT, Autonomy); implementing RAG with ToolishRAG; writing tests with FakeOperationContext and EmbabelMockitoIntegrationTest; adding interceptors, guardrails, cost tracking, streaming, thinking, and termination; building chatbots with triggers and conversation storage; using DSL builders; troubleshooting and migrating from CrewAI, Pydantic AI, or LangGraph.
+  Build agentic AI on the JVM with Embabel v1.0.0 — Rod Johnson's Spring-based framework for authoring agents that combine LLMs with non-LLM planning (GOAP, Utility AI, Hybrid, Supervisor). Use when creating agents with @Agent or @EmbabelComponent, annotating actions (@Action), goals (@Goal), conditions (@Condition), and tools (@LlmTool, @Tool); publishing agents as MCP servers with @Export(remote=true); managing agent state with @State and transitions; configuring LLM providers (OpenAI, Anthropic, Gemini, GenAI, DeepSeek, Ollama, LM Studio, Bedrock, OCI, Mistral, Z.ai, Docker Models, MiniMax); implementing RAG with ToolishRAG; writing tests with FakeOperationContext; adding interceptors, guardrails, cost tracking, streaming, thinking, and termination; building chatbots with triggers; using DSL builders, OneShotPerLoopTool, ToolCallContext; troubleshooting and migrating from CrewAI, Pydantic AI, or LangGraph.
 ---
 
-# Embabel Agent Framework (v0.5.0)
+# Embabel Agent Framework (v1.0.0)
 
 Build agentic AI on the JVM with **Embabel** — a Spring-based framework for authoring agentic flows that mix LLM-prompted interactions with code and domain models. Created by Rod Johnson (creator of Spring), it uses non-LLM AI planning (GOAP, Utility AI, Hybrid, Supervisor) to find intelligent paths toward goals.
 
 ## Output Quality
 
 - **Be comprehensive** — Full classes with imports, domain models, all annotations
-- **Include the "why"** — Explain design decisions (planner choice, temperature, execution mode)
-- **Include configuration** — Always show full `application.yml` with relevant settings
-- **Provide testing** — Unit tests with `FakePromptRunner`/`FakeOperationContext` AND integration tests
+- **Explain design decisions** — Justify planner choice, model selection, temperature, execution mode, and concurrency strategy
+- **Include configuration** — Always show full `application.yml` with relevant `embabel:` and `spring.ai:` settings
+- **Provide testing** — Unit tests with `FakePromptRunner`/`FakeOperationContext` AND integration tests with `EmbelMockitoIntegrationTest`
 - **Use latest API patterns** — `LlmOptions.fromCriteria(ModelSelectionCriteria.getAuto())`, `context.ai().withLlm().creating().fromPrompt()`, `.withId()`, `withExample()`
+- **Use few-shot examples** — `.withExample()` on LLM calls improves output quality for structured tasks
 
 ## Core Concepts
 
 - **Actions** (`@Action`) — Steps the agent takes. Each method transforms inputs into outputs.
-- **Goals** (`@AchievesGoal`) — What the agent is trying to achieve. Marks goal-satisfaction.
+- **Goals** (`@Goal`) — What the agent is trying to achieve. Marks goal-satisfaction.
 - **Conditions** (`@Condition`) — Predicates evaluated before actions or to determine goal achievement.
 - **Domain Model** — Strongly-typed objects carrying both data and behavior (DICE).
 - **Blackboard** — Shared memory where actions add results and read inputs by type.
@@ -40,27 +41,14 @@ Add the appropriate starter:
 | `embabel-agent-starter-shell` | Interactive CLI shell |
 | `embabel-agent-starter-mcpserver` | MCP server (SSE, Streamable-HTTP) |
 
-Add the Embabel repository for snapshots:
-
-```xml
-<repositories>
-    <repository>
-        <id>embabel-releases</id>
-        <url>https://repo.embabel.com/artifactory/libs-release</url>
-    </repository>
-    <repository>
-        <id>embabel-snapshots</id>
-        <url>https://repo.embabel.com/artifactory/libs-snapshot</url>
-    </repository>
-</repositories>
-```
+Embabel release binaries are published to **Maven Central** — no snapshot repository needed for stable releases.
 
 ### LLM Providers
 
 | Provider | Starter | Key Env Var |
 |----------|---------|-------------|
 | OpenAI | `embabel-agent-starter-openai` | `OPENAI_API_KEY` |
-| OpenAI Custom (Groq, Z.AI) | `embabel-agent-starter-openai-custom` | `OPENAI_CUSTOM_API_KEY` |
+| OpenAI Custom (Groq, Z.AI, OpenRouter) | `embabel-agent-starter-openai-custom` | `OPENAI_CUSTOM_API_KEY` |
 | Anthropic | `embabel-agent-starter-anthropic` | `ANTHROPIC_API_KEY` |
 | Google Gemini (OpenAI-compatible) | `embabel-agent-starter-gemini` | `GEMINI_API_KEY` |
 | Google GenAI (Native, Gemini 3.x) | `embabel-agent-starter-google-genai` | `GOOGLE_API_KEY` |
@@ -69,7 +57,9 @@ Add the Embabel repository for snapshots:
 | Mistral AI | `embabel-agent-starter-mistral-ai` | `MISTRAL_API_KEY` |
 | LM Studio | `embabel-agent-starter-lmstudio` | _(none)_ |
 | Ollama | `embabel-agent-starter-ollama` | _(none)_ |
-| AWS Bedrock | `embabel-agent-bedrock-autoconfigure` | AWS credentials (standard Spring AI Bedrock) |
+| AWS Bedrock | `embabel-agent-starter-bedrock` | AWS credentials (standard Spring AI Bedrock) |
+| Z.ai (Zhipu GLM) | `embabel-agent-starter-zai` | `ZAI_API_KEY` |
+| Docker Models | `embabel-agent-starter-dockermodels` | _(none)_ |
 | MiniMax | `embabel-agent-starter-minimax` | `MINIMAX_API_KEY` |
 
 See `reference/configuration.md` for full provider config details.
@@ -83,11 +73,12 @@ See `reference/configuration.md` for full provider config details.
 public class StarNewsFinder {
     @Action
     public StarPerson extractStarPerson(UserInput userInput, OperationContext context) {
-        return context.ai().withLlm(OpenAiModels.GPT_41)
+        return context.ai()
+            .withLlm(OpenAiModels.GPT_41)
             .createObject("Create a person from this input...", StarPerson.class);
     }
 
-    @AchievesGoal(description = "Write an amusing writeup")
+    @Goal
     @Action
     public Writeup writeup(StarPerson person, RelevantNewsStories stories, OperationContext context) {
         return context.ai().withLlm(llm).createObject(prompt, Writeup.class);
@@ -107,13 +98,14 @@ Annotate with `@Export(remote = true)` on goals to auto-publish them as MCP tool
 
 ## Domain Objects
 
-Domain objects carry both data and behavior — they are not anemic DTOs. Expose methods to LLMs with `@Tool` (Spring AI). Unannotated methods are **never** exposed.
+Domain objects carry both data and behavior — they are not anemic DTOs. Expose methods to LLMs with `@Tool` (Spring AI) or `@LlmTool` (Embabel). Unannotated methods are **never** exposed.
 
-See `reference/domain-objects.md` for DICE best practices.
+See `reference/domain.md` for DICE best practices.
 
 ## Tools
 
-- **@LlmTool** — Expose JVM methods to LLMs
+- **@LlmTool** — Expose JVM methods to LLMs (Embabel)
+- **@Tool** — Expose JVM methods to LLMs (Spring AI)
 - **ToolCallContext** — Inject infrastructure metadata invisible to the LLM
 - **OneShotPerLoopTool** — Prevent repeated tool calls in a single planning loop
 - **@Cost / costMethod** — Compute action costs dynamically from blackboard state
@@ -142,9 +134,10 @@ See `reference/planners.md` for detailed comparison.
 Annotate classes with `@State` to trigger state transitions. Previous state objects are hidden, the new state is bound to the blackboard, and planning considers only actions from the new state.
 
 - For looping states, use `@Action(clearBlackboard = true)`
-- For staying in the same state, return `this`
+- For staying in the same state, return `this` (requires `canRerun = true`)
 - For human-in-the-loop: `WaitFor.formSubmission("...", Feedback.class)`
 - Use Java records or Kotlin top-level classes for state types
+- `@State` annotation is inherited through class hierarchy
 
 See `reference/states.md` for detailed state patterns, inheritance, WaitFor, and parent state interface.
 
@@ -163,7 +156,7 @@ Set: `embabel.agent.platform.process-type: CONCURRENT`
 
 **Autonomy:** Closed (LLM picks one agent) vs Open (LLM picks goal, assembles from all actions).
 
-See `reference/invocation.md` for confidence thresholds and REST endpoints.
+See `reference/invoking.md` for confidence thresholds and programmatic invocation.
 
 ## Chatbots
 
@@ -174,7 +167,9 @@ Chatbots use a **long-lived `AgentProcess`** that pauses between user messages. 
 public class MyChatbot {
     @Action(trigger = UserMessage.class)
     public AssistantResponse handleMessage(UserMessage msg, Ai ai) {
-        return ai.withDefaultLlm().creating(AssistantResponse.class).fromPrompt(msg.getContent());
+        return ai.withDefaultLlm()
+            .creating(AssistantResponse.class)
+            .fromPrompt(msg.getContent());
     }
 }
 ```
@@ -240,7 +235,10 @@ Embabel's RAG is **entirely agentic and tool-based** — the LLM controls retrie
 `ToolishRag` facade auto-discovers store capabilities (vector, text, regex, result expansion) and exposes them as LLM tools via `LlmReference`:
 
 ```java
-LlmReference ragRef = LlmReference.builder().description("Search the knowledge base").rag(toolishRag).build();
+LlmReference ragRef = LlmReference.builder()
+    .description("Search the knowledge base")
+    .rag(toolishRag)
+    .build();
 ```
 
 See `reference/rag.md` for full RAG architecture.
@@ -263,6 +261,11 @@ Two-layer security:
 - **Layer 1:** HTTP filter chain (JWT auth via `SecurityWebFilterChain`)
 - **Layer 2:** `@SecureAgentTool(expression = "hasAuthority('news:read')")` on agents/methods
 
+For clients requiring Streamable HTTP, use the `mcpo` proxy to bridge SSE:
+```bash
+uvx mcpo --port 8000 --server-type sse -- http://localhost:8080/sse
+```
+
 See `reference/integrations.md` for MCP server/client, security, observability, and A2A.
 
 ## Testing
@@ -273,17 +276,22 @@ See `reference/integrations.md` for MCP server/client, security, observability, 
 
 See `reference/testing.md` for more patterns.
 
-## Key APIs
+## Deep Dives
 
-- **LLM Integration:** `LlmOptions.fromCriteria(ModelSelectionCriteria.getAuto())`, inject `Ai` via constructor, use `.withId("...")` for test verification. See `reference/llm-integration.md`.
-- **Structured Prompts:** `Persona`, `RoleGoalBackstory`, `PromptContributor`. See `reference/structured-prompts.md`.
-- **Interceptors:** `ToolLoopInspector` (read-only), `ToolLoopTransformer` (modify data). Built-ins: `ToolLoopLoggingInspector`, `ToolResultTruncatingTransformer`, `SlidingWindowTransformer`. See `reference/interceptors.md`.
-- **Thinking:** `.thinking()` on PromptRunner extracts reasoning blocks. See `reference/thinking.md`.
-- **Termination:** `ctx.terminateAgent("reason")` (graceful) or `TerminateAgentException` (immediate). See `reference/termination.md`.
-- **Guardrails:** `.withGuardRails(...)` — `CRITICAL` severity throws `GuardRailViolationException`. See `reference/guardrails.md`.
-- **Cost Tracking:** Listen for `LlmInvocationEvent`, combine with guardrails for budget management. See `reference/cost-tracking.md`.
-- **Streaming:** `.streaming()` on PromptRunner. See `reference/streams.md`.
-- **Agent Skills:** Load from GitHub or local dirs, lazy-loaded. See `reference/agent-skills.md`.
+For topics not covered in detail above, consult the reference files:
+
+| Topic | Reference |
+|-------|-----------|
+| LLM options, caching, native structured output | `reference/llm-integration.md` |
+| AgentProcess lifecycle, blackboard, planning loop | `reference/flow.md` |
+| Core types (`LlmOptions`, `PromptRunner`, `AgentImage`) | `reference/types.md` |
+| Structured prompts (`Persona`, `RoleGoalBackstory`) | `reference/structured-prompts.md` |
+| Interceptors & transformers | `reference/interceptors.md` |
+| Thinking, guardrails, cost tracking, streaming | `reference/thinking.md`, `reference/guardrails.md`, `reference/cost-tracking.md`, `reference/streaming.md` |
+| Termination, error handling | `reference/termination.md`, `reference/error-handling.md` |
+| Agent skills, API vs SPI | `reference/agent-skills.md`, `reference/api-spi.md` |
+
+> **Rule:** Application code uses only `com.embabel.agent.api.*`. SPI (`com.embabel.agent.spi.*`) is for framework extension only and is subject to change.
 
 ## Configuration
 
@@ -308,15 +316,17 @@ See `reference/async-mode.md` for full behavior matrix.
 - **Non-critical:** Use `createObjectIfPossible()` — returns null instead of throwing
 - **Guardrails:** Catch `GuardRailViolationException` for `CRITICAL` blocks
 - **Cost caps:** Use `EarlyTerminationPolicy` for process-level termination
+- **Validation:** Catch `InvalidLlmReturnTypeException` when JSR-380 validation fails after retry
+- **Empty responses:** Configure `toolloop.empty-response.max-retries` for weak models (see `reference/llm-integration.md`)
 
-See `reference/error-handling.md` for full patterns.
+See `reference/error-handling.md` and `reference/flow.md` for full patterns.
 
 ## Troubleshooting
 
 | Issue | Quick Fix |
 |-------|-----------|
 | Agent not discovered | Check `@Agent`/`@EmbabelComponent` annotation and component scan path |
-| Planner can't find plan | Verify `@AchievesGoal`, input type matching, enable DEBUG logging |
+| Planner can't find plan | Verify `@Goal`, input type matching, enable DEBUG logging |
 | Blackboard type not found | Check previous action added the type, not hidden by state transition |
 | State transitions broken | Use `@State` annotation, Java records or Kotlin top-level classes |
 | LLM calls failing | Check API keys, model names, timeouts, network connectivity |
@@ -330,28 +340,43 @@ Migrating from Python AI frameworks? See `reference/migrating.md` for guidance o
 
 ## Common Pitfalls
 
-1. **Missing `@Agent`/`@EmbabelComponent`** — Agent/component won't be discovered
-2. **Missing `OperationContext`** — Actions can't access AI or blackboard
-3. **Missing `@AchievesGoal`** — Planner can't determine completion
-4. **Ignoring `max-iterations`** — Agent stops after 20 (default)
-5. **Not setting model per-action** — Wastes money or sacrifices quality
-6. **Forgetting `.withId()`** — Makes testing and debugging opaque
-7. **Non-static inner classes for `@State`** — Serialization issues
-8. **Missing `clearBlackboard = true` for loops** — Planner skips existing types
-9. **Exposing sensitive methods** — Always gate with `@Tool`/`@LlmTool`
-10. **Circular type dependencies** — Planner can't find valid plan path
+A quick checklist of the most frequent issues. See `reference/common-pitfalls.md` for detailed Problem/Impact/Fix treatment.
+
+1. **Missing `@Agent`/`@EmbabelComponent`** — Component won't be discovered by Spring
+2. **Missing `@Goal`** — Planner can't determine completion (replaced `@AchievesGoal`)
+3. **Missing `clearBlackboard = true` for loops** — Planner skips existing types
+4. **Non-static inner classes for `@State`** — Serialization/persistence failures
+5. **Missing `OperationContext` parameter** — Actions can't access AI or blackboard
+6. **Not setting model per-action** — Wastes money or sacrifices quality
+7. **Forgetting `.withId()`** — Makes testing and debugging opaque
+8. **Using SPI in production** — `com.embabel.agent.spi.*` is subject to change
+9. **Streaming with native structured output** — Not supported by Spring AI currently
 
 ## Scaffolding
 
-```bash
-./scripts/project-creator.sh my-agent com.example
-```
+Use the Embabel template repositories or the `project-creator` tool to scaffold new projects:
+
+- [Java Agent Template](https://github.com/embabel/java-agent-template)
+- [Kotlin Agent Template](https://github.com/embabel/kotlin-agent-template)
 
 ## Real-World Examples
 
-See `reference/examples.md` for complete, production-quality examples:
+Explore the [embabel-agent-examples](https://github.com/embabel/embabel-agent-examples) repository for production-quality examples:
 - **FactChecker**: Multi-LLM fact-checking with ScatterGather, ConsensusBuilder, parallel execution, and MCP publishing
-- **StarNewsFinder**: Human-in-the-loop with WaitFor, cost-based planning, domain tools
+- **Horoscope**: Human-in-the-loop with WaitFor, cost-based planning, domain tools
+
+## When to Use Embabel
+
+| Scenario | Why Embabel Fits |
+|----------|-----------------|
+| LLM-driven decision making | Planner picks best action sequence dynamically |
+| Domain-driven planning | DICE pattern — data and behavior in one type |
+| Multi-step agentic workflows | GOAP/Utility/Hybrid/Supervisor planners |
+| Human-in-the-loop workflows | `WaitFor.formSubmission()` with state management |
+| Agent composition | `Subagent.ofClass()`, ScatterGather, ConsensusBuilder |
+| MCP server publishing | `@Export(remote=true)` auto-publishes goals as tools |
+| Chatbots with memory | Long-lived `AgentProcess` with blackboard state |
+| Cost-aware planning | `@Cost`/`costMethod` lets planner pick cheapest path |
 
 ## When NOT to Use Embabel
 

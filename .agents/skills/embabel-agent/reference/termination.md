@@ -1,50 +1,114 @@
-# Termination Reference
+# Termination
 
-Graceful and immediate agent/action termination. See SKILL.md for the core workflow.
+Embabel provides three mechanisms to terminate agents and actions early: graceful signals, immediate exceptions, and process-level policies.
 
-## Choosing Between Signal and Exception
+## Graceful Termination
 
-| Mechanism | When to Use | Behavior |
-|-----------|-------------|----------|
-| **Graceful (Signal)** | "Let me finish my work, then stop" — side effects need to complete | Terminates at next checkpoint; current operation completes normally |
-| **Immediate (Exception)** | "Stop now, nothing left to do" — no further processing needed | Terminates immediately; nothing executes after the exception |
+Graceful termination signals the agent to **finish the current operation**, then stop at the next checkpoint. Use when side effects must complete before shutdown.
 
-## Agent Termination
+### Agent-level: `terminateAgent(reason)`
 
-### Graceful (Signal)
+Stops the entire agent process after the current tool call completes.
 
-Use `terminateAgent()` when the current operation should complete before stopping:
-
-```kotlin
+```java
 @LlmTool(description = "Save all pending work and shutdown")
-fun saveAndShutdown(ctx: ProcessContext): String {
-    repository.saveAll(pendingRecords)  // side effect completes
-    ctx.terminateAgent("All work saved, shutting down")
-    return "Saved ${pendingRecords.size} records"  // tool finishes normally
+public String saveAndShutdown(ProcessContext ctx) {
+    repository.saveAll(pendingRecords);  // side effect completes
+    ctx.terminateAgent("All work saved, shutting down");
+    return "Saved " + pendingRecords.size() + " records";  // tool finishes normally
 }
 ```
 
-### Immediate (Exception)
+### Action-level: `terminateAction(reason)`
 
-Use `TerminateAgentException` when the agent must stop immediately:
+Stops only the current action; the agent continues with the next planned action. The action must be defined with `canRerun = true` for graceful action termination to allow retry.
 
-```kotlin
+```java
+import static com.embabel.agent.api.termination.Termination.terminateAction;
+
+@Action
+public String firstAction(UserInput input, ActionContext context) {
+    context.set("firstActionRan", true);
+
+    // Graceful action termination via static import
+    terminateAction(context.getProcessContext(), "Save complete, no more work needed");
+
+    return "first-" + input.getContent();
+}
+```
+
+> **NOTE:** Graceful action termination only works for LLM-based actions that use a tool loop. For simple transformation actions, use `TerminateActionException` instead.
+
+## Immediate Termination
+
+Immediate termination stops execution **right now** by throwing an exception. No further tool calls, actions, or code after the throw point execute. Use for critical errors where no recovery is possible.
+
+### Agent-level: `TerminateAgentException`
+
+```java
 @LlmTool(description = "Validate critical prerequisites")
-fun validatePrerequisites(): String {
-    if (!hasPermission()) {
-        throw TerminateAgentException("No permission to proceed")
+public String validatePrerequisites() {
+    if (!authService.hasRequiredPermissions()) {
+        throw new TerminateAgentException("Missing required permissions");
+        // nothing after this runs
     }
-    return "Proceeding"
+    return "Prerequisites validated";
 }
 ```
 
-## Action Termination
+### Action-level: `TerminateActionException`
 
-Actions can be terminated early using `TerminateActionException` to skip the current action and let the planner re-evaluate.
+```java
+@LlmTool(description = "Check service health")
+public String checkHealth() {
+    if (!mcpClient.isConnected("required_service")) {
+        throw new TerminateActionException("Service unavailable");
+        // nothing after this runs
+    }
+    return "Healthy";
+}
+```
 
-## Key Points
+### Catching Both Types
 
-- Graceful termination completes side effects; immediate does not
-- Agent termination sets process status to `TERMINATED`
-- Use signals for cleanup, exceptions for hard stops
-- Action termination allows the planner to re-evaluate
+Both exception types extend `TerminationException`, allowing unified handling:
+
+```java
+try {
+    tool.execute();
+} catch (TerminationException e) {
+    logger.info("Terminated: " + e.getReason());
+    // Handle both agent and action termination
+}
+```
+
+## Early Termination Policy
+
+`EarlyTerminationPolicy` is a process-level control option in `ProcessOptions` that terminates the entire agent process as a last resort. It can be configured based on:
+
+- **Absolute number of actions** — stop after N actions
+- **Maximum budget** — stop after a dollar/spend cap is reached
+
+```java
+var processOptions = ProcessOptions.builder()
+    .control(new EarlyTerminationPolicy(
+        /* maxActions */ 100,
+        /* maxBudget */ new Money(10.00, CurrencyUnit.USD)
+    ))
+    .build();
+```
+
+Use `EarlyTerminationPolicy` standalone or alongside the Budget Guardrail as a safety net. See [Cost Tracking](../cost-tracking.md) for the `Budget Guardrail` complement.
+
+## Decision Matrix
+
+| Scope | Mechanism | Method/Exception | When to Use |
+|-------|-----------|------------------|-------------|
+| **Agent** | Graceful | `ctx.terminateAgent(reason)` | "Finish current work, then stop" — side effects must complete |
+| **Agent** | Immediate | `throw TerminateAgentException(reason)` | "Stop now" — critical error, no recovery |
+| **Action** | Graceful | `terminateAction(ctx, reason)` | "Finish current tool, then stop action" — allow next action |
+| **Action** | Immediate | `throw TerminateActionException(reason)` | "Stop now" — try a different approach |
+| **Process** | Policy | `EarlyTerminationPolicy` | Hard cap on actions or budget — last-resort safeguard |
+---
+
+*Source: Embabel Agent v1.0.0 documentation*

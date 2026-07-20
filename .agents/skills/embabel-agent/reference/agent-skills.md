@@ -1,8 +1,8 @@
-# Agent Skills Reference
+# Agent Skills
 
-Agent Skills provide a standardized way to extend agent capabilities with reusable, shareable skill packages. Embabel implements the [Agent Skills Specification](https://agentspec.dev).
+Agent Skills provide a standardized way to extend agent capabilities with reusable, shareable skill packages. Embabel implements the [Agent Skills Specification](https://agentskills.io/specification).
 
-## What are Agent Skills?
+## Overview
 
 An Agent Skill is a directory containing a `SKILL.md` file with YAML frontmatter and markdown instructions. Skills can include bundled resources:
 
@@ -10,133 +10,146 @@ An Agent Skill is a directory containing a `SKILL.md` file with YAML frontmatter
 - `references/` — Documentation and reference materials
 - `assets/` — Static resources like templates and data files
 
-Skills use **lazy loading** — only minimal metadata is included in the system prompt, with full instructions loaded when the skill is activated.
-
-## Skill Directory Structure
-
-```
-my-skill/
-├── SKILL.md        # Required — metadata and instructions
-├── scripts/        # Optional — executable scripts
-├── references/     # Optional — documentation
-└── assets/         # Optional — static resources (templates, data)
-```
+Skills use **lazy loading: only minimal metadata is included in the system prompt, with full instructions loaded when the skill is activated.
 
 ### SKILL.md Format
 
 ```yaml
 ---
 name: my-skill
-description: What this skill does and when to use it
+description: A skill that does something useful
+license: Apache-2.0
 ---
 
-# My Skill
+# My Skill Instructions
 
-Instructions go here...
+Step-by-step instructions for using this skill...
+```
+
+### Skill Directory Structure
+
+```
+my-skill/
+├── SKILL.md        # Required — metadata and instructions
+├── scripts/        # Optional — executable scripts
+├── references/     # Optional — documentation
+└── assets/         # Optional — static resources
 ```
 
 ## Loading Skills
 
 ### From GitHub
 
+The simplest way to load skills is from a GitHub URL:
+
 ```java
-// From repository root
-var skills = Skills.fromGitHub("github.com/owner/repo");
+var skills = new Skills("my-skills", "Skills for my agent")
+    .withGitHubUrl("https://github.com/anthropics/skills/tree/main/skills");
+```
 
-// Specific branch
-var skills = Skills.fromGitHub("github.com/owner/repo/tree/main");
+Supported URL formats:
 
-// Specific path within repository
-var skills = Skills.fromGitHub("github.com/owner/repo/tree/main/path/to/skills");
+| Format | Description
+|------|------------|
+| `https://github.com/owner/repo` | Load from repository root |
+| `https://github.com/owner/repo/tree/branch` | Specific branch |
+| `https://github.com/owner/repo/tree/branch/path/to/skills` | Specific path |
 
-// With explicit parameters
-var skills = Skills.fromGitHub(
-    "github.com/owner/repo",
-    "main",
-    "path/to/skills"
-);
+For more control, use explicit parameters:
+
+```java
+var skills = new Skills("my-skills", "Skills for my agent")
+    .withGitHubSkills("anthropics", "skills", "skills", "main");
 ```
 
 ### From Local Directories
 
-```java
-// Single skill from directory
-var skills = Skills.fromLocal(new File("./my-skill"));
+Load a single skill from a directory containing `SKILL.md`:
 
-// Multiple skills from parent directory (depth 1 only — no recursion)
-var skills = Skills.fromLocal(new File("./skills/"));
+```java
+var skills = new Skills("my-skills", "Local skills")
+    .withLocalSkill("/path/to/my-skill");
 ```
 
-## Using Skills with PromptRunner
+Load multiple skills from a parent directory:
 
 ```java
-var skills = Skills.fromGitHub("github.com/owner/repo");
+var skills = new Skills("my-skills", "Local skills")
+    .withLocalSkills("/path/to/skills-directory");
+```
 
-context.ai().withDefaultLlm()
-    .withSkills(skills)
-    .creating(Result.class)
-    .fromPrompt("Use the available skills");
+> **NOTE:** `withLocalSkills` scans immediate subdirectories only (depth 1). It does not recurse into nested directories.
+
+## Using Skills in Actions
+
+The `Skills` class implements `LlmReference`, allowing it to be passed to a `PromptRunner`:
+
+```java
+var skills = new Skills("financial-skills", "Financial analysis skills")
+    .withGitHubUrl("https://github.com/wshobson/agents/tree/main/plugins/business-analytics/skills");
+
+var response = context.ai()
+    .withLlm(llm)
+    .withReference(skills)
+    .withSystemPrompt("You are a helpful financial analyst.")
+    .respond(conversation.getMessages());
 ```
 
 When skills are added as a reference, the agent can:
+
 - See available skills in the system prompt
 - Activate skills to get full instructions
 - List and read skill resources
 
-## Skill Activation
-
-Skills are activated lazily. The system prompt contains only minimal metadata (~50-100 tokens per skill). When an agent needs a skill, it calls the `activate` tool to load full instructions.
-
-The `Skills` class exposes three LLM tools:
-- `activate(name)` — Load full instructions for a skill
-- `listResources(skillName, resourceType)` — List files in scripts/references/assets
-- `readResource(skillName, resourceType, fileName)` — Read a resource file
-
-## Combining Skills with Other References
+### Combining with Other References
 
 Skills can be combined with other `LlmReference` implementations:
 
 ```java
-var skills = Skills.fromGitHub("github.com/owner/repo");
-var persona = new Persona("Expert", "You are an expert.", "Help users.", "Professional");
-
-context.ai().withDefaultLlm()
-    .withSkills(skills)
-    .withPromptContributor(persona)
-    .creating(Result.class)
-    .fromPrompt("...");
+var response = context.ai()
+    .withLlm(properties.chatLlm())
+    .withReference(
+        new LocalDirectory("./data/financial", "Financial data files")
+            .withUsageNotes("Search to find files matching user requests.")
+    )
+    .withReference(
+        new Skills("analytics", "Business analytics skills")
+            .withGitHubUrl("https://github.com/example/skills/tree/main/analytics")
+    )
+    .withSystemPrompt("You are a financial analyst assistant.")
+    .respond(conversation.getMessages());
 ```
+
+## Skill Activation
+
+Skills are activated lazily. The system prompt contains only minimal metadata (~50–100 tokens per skill). When an agent needs a skill, it calls the `activate` tool to load full instructions.
+
+The `Skills` class exposes three LLM tools:
+
+| Tool | Description |
+|------|-------------|
+| `activate(name)` | Load full instructions for a skill |
+| `listResources(skillName, resourceType)` | List files in `scripts/`, `references/`, or `assets/` |
+| `readResource(skillName, resourceType, fileName)` | Read a resource file |
 
 ## Validation
 
 Skills are validated when loaded:
 
-- **Frontmatter validation** — Required fields (name, description) and field lengths
+- **Frontmatter validation** — Required fields (`name`, `description`) and field lengths
 - **File reference validation** — Paths in instructions (e.g., `scripts/build.sh`) must exist
 - **Name matching** — Skill name must match its parent directory name
 
 To disable file reference validation:
 
 ```java
-var skills = Skills.fromLocal(new File("./skills/"))
-    .withValidation(false);
+var loader = new DefaultDirectorySkillDefinitionLoader(false);
 ```
 
 ## Current Limitations
 
-### Script Execution
+- **Script execution** — Skills with `scripts/` directories are loaded, but script execution is not yet supported. A warning is logged.
+- **`allowed-tools` field** — The `allowed-tools` frontmatter field is parsed but not currently enforced.
+---
 
-Skills with `scripts/` directories are loaded, but script execution is not yet supported. A warning is logged when such skills are loaded.
-
-### allowed-tools Field
-
-The `allowed-tools` frontmatter field is parsed but not currently enforced.
-
-## Key Points
-
-- Skills use lazy loading — metadata in system prompt, full content on `activate`
-- GitHub URLs support branch and path specification
-- Local loading scans immediate subdirectories only (depth 1)
-- Skills are validated on load (frontmatter, file references, name matching)
-- Combine with other `LlmReference` implementations
-- Script execution is not yet supported
+*Source: Embabel Agent v1.0.0 documentation*

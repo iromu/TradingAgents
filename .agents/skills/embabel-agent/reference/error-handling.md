@@ -117,3 +117,6 @@ while (true) {
 - For hard process-level caps, use `EarlyTerminationPolicy`
 - Poll `process.getState()` for long-running agents
 - Use `.withId()` on every LLM call for traceability
+---
+
+*Source: Embabel Agent v1.0.0 documentation*

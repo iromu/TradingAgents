@@ -70,7 +70,7 @@ public record BookWriter(BookWriterConfig config) {
             .createObject("Create a book outline...", BookOutline.class);
     }
 
-    @AchievesGoal
+    @Goal
     @Action
     Book writeBook(BookRequest request, BookOutline outline, OperationContext context) {
         var chapters = context.parallelMap(outline.chapterOutlines(),
@@ -151,7 +151,7 @@ record SupportOutput(
 @Agent(description = "Customer support agent")
 record SupportAgent(CustomerRepository customerRepository) {
 
-    @AchievesGoal(description = "Help bank customer with their query")
+    @Goal(description = "Help bank customer with their query")
     @Action
     SupportOutput supportCustomer(SupportInput supportInput, OperationContext context) {
         var customer = customerRepository.findById(supportInput.customerId());
@@ -197,6 +197,6 @@ Key differences:
 | Python tool functions | `@Tool` / `@LlmTool` JVM methods |
 | Checkpointing for persistence | Blackboard + context IDs for session state |
 
-## Migrating from Google ADK
+TBD.---
 
-TBD — see the Embabel documentation for updates.
+*Source: Embabel Agent v1.0.0 documentation*

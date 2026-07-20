@@ -1,26 +1,31 @@
 # Annotation Model Reference
 
-Detailed annotation patterns for Embabel agents. See SKILL.md for the core workflow.
+Embabel's Spring-style annotation model for agents, actions, goals, and conditions (Java/Kotlin).
 
 ## @Agent Annotation
+
+Spring stereotype annotation that registers a class as an agent. Auto-registered via component scanning.
 
 ```java
 @Agent(description = "Writes and reviews stories")
 public class WriteAndReviewAgent { ... }
 ```
 
-Must provide `description` — used by the LLM in agent selection.
+**Must provide `description`** — used by the LLM in agent selection.
 
 ## @Agentic Annotation
+
+Sibling of `@Agent` for marking classes that participate in the agent framework.
+Auto-registered via Spring component scanning (enabled by default via `embabel.agent.platform.scanning.annotation`).
 
 ```java
 @Agentic(description = "Generates reports from data")
 public class ReportAgent { ... }
 ```
 
-Auto-registered via Spring component scanning (enabled by default via `embabel.agent.platform.scanning.annotation`).
-
 ## @EmbabelComponent — Action Container
+
+Exposes actions, goals, and conditions for use by agents without being an agent itself. Most useful with the **Utility AI planner**.
 
 ```java
 @EmbabelComponent
@@ -29,8 +34,6 @@ public class IssueActions {
     public GHIssue saveNewIssue(GHIssue ghIssue, OperationContext context) { ... }
 }
 ```
-
-Useful with Utility AI planner that selects the most valuable next action among all available actions.
 
 ## @Action — Full Attribute Reference
 
@@ -48,35 +51,89 @@ Useful with Utility AI planner that selects the most valuable next action among 
 public FlightInfo searchFlights(Destination dest, Ai ai) { ... }
 ```
 
+| Attribute | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `description` | String | — | Human-readable description |
+| `pre` | String[] | — | Preconditions (SpEL or `@Condition` method names) |
+| `post` | String[] | — | Postconditions (SpEL expressions) |
+| `canRerun` | boolean | `false` | Whether the action can be rerun if already executed |
+| `readOnly` | boolean | `false` | No external side effects (data analysis only) |
+| `clearBlackboard` | boolean | `false` | Clear blackboard after completion, keeping only output |
+| `cost` | double | `0.0` | Relative cost (0–1) |
+| `value` | double | `0.0` | Relative value (0–1) |
+| `costMethod` | String | — | Name of a `@Cost` method for dynamic cost |
+| `valueMethod` | String | — | Name of a `@Cost` method for dynamic value |
+| `trigger` | Class<?> | — | Reactive trigger — fires only when this type is most recently added |
+
 ### clearBlackboard
 
-Useful in two scenarios:
-1. **Multi-step workflows** where you want to reset the processing context
-2. **Looping states** where an action returns to a previously-visited state type
+Useful for multi-step workflows (reset context) and looping states (return to a previously-visited state type):
 
-> **Warning:** Avoid using `clearBlackboard` on goal-achieving actions (those with `@AchievesGoal`). Clearing the blackboard removes `hasRun` tracking conditions, which may interfere with goal satisfaction.
+```java
+@State
+record ProcessingState(String data, int iteration) {
+    @Action(clearBlackboard = true)  // enables returning to same state type
+    LoopOutcome process() {
+        if (iteration >= 3) return new DoneState(data);
+        return new ProcessingState(data + "+", iteration + 1);
+    }
+}
+```
+
+> **Warning:** Avoid `clearBlackboard = true` on `@Goal` methods — it removes `hasRun` tracking conditions, interfering with goal satisfaction. Use on intermediate actions only.
 
 ### Dynamic Cost Computation with @Cost
 
 ```java
-@Cost(name = "computeCost")
-public double computeCost(@Nullable GHIssue issue, Blackboard bb) {
-    return issue != null ? 0.8 : 0.2;
+@Cost(name = "processingCost")
+public double computeProcessingCost(@Nullable LargeDataSet data) {
+    if (data != null && data.size() > 1000) return 0.9;
+    return 0.1;
 }
 
-@Action(costMethod = "computeCost")
-public GHIssue saveIssue(GHIssue input, OperationContext context) { ... }
+@Action(costMethod = "processingCost")
+public ProcessedData process(RawData input) {
+    return new ProcessedData(input.transform());
+}
 ```
 
-Key differences from `@Condition` methods:
-- All domain object parameters in `@Cost` methods must be nullable
-- When a domain object is not available on the blackboard, `null` is passed
-- The method must return a `double` between 0.0 and 1.0
-- The `Blackboard` can be passed as a parameter for direct access
+## @Goal Annotation (replaces @AchievesGoal)
 
-Dynamic cost is especially useful with **Utility planning** (`PlannerType.UTILITY`), where cost/value tradeoffs are a core concept.
+Marks an `@Action` method as achieving a specific goal. In Embabel v1.0.0, `@AchievesGoal` was renamed to `@Goal`.
+For MCP publishing, use `@Export(remote = true)` on the `@Goal` method.
+
+```java
+@Agent(description = "Issue triage agent")
+public class IssueTriageAgent {
+
+    @Action
+    public IssueAssessment assess(GHIssue issue, Ai ai) {
+        return ai.withDefaultLlm()
+                 .creating(IssueAssessment.class)
+                 .fromTemplate("issue_triage", Map.of("issue", issue));
+    }
+
+    @Goal(description = "Escalate urgent issues")
+    @Action
+    public void escalateUrgent(IssueAssessment assessment, GHIssue issue) { ... }
+}
+```
+
+Every agent needs at least one `@Goal` action to define completion.
+
+For MCP publishing:
+
+```java
+@Goal(description = "Produce a curated news digest")
+@Action(export = @Export(remote = true, name = "newsDigest",
+                         startingInputTypes = {UserInput.class}))
+public NewsDigest produceDigest(NewsTopic topic, OperationContext context) { ... }
+```
 
 ## @Condition Annotation
+
+Marks methods that evaluate conditions. May take an `OperationContext` parameter to access the blackboard.
+If they take domain object parameters, the condition will automatically be false until suitable instances are available.
 
 ```java
 @Condition
@@ -85,79 +142,78 @@ public boolean hasCriticalTicket(Ticket ticket) {
 }
 ```
 
-Conditions should not have side effects — they may be called multiple times.
+> **Important:** Condition methods should not have side effects — they may be called multiple times.
 
 ### Dynamic SpEL Conditions
 
+Specify dynamic preconditions directly on `@Action` annotations using SpEL:
+
 ```java
-@Action(pre = {
-    "spel:urgency > 0.5",
-    "spel:newEntity.newEntities.?[#this instanceof T(com.example.Issue)].size() > 0"
-})
-public void handleIssue(GHIssue issue, OperationContext context) { ... }
+@Action(pre = {"spel:issueAssessment.urgency > 0.0"})
+public void escalateUrgentIssue(GHIssue issue, IssueAssessment issueAssessment) { ... }
+
+@Action(pre = {"spel:ghIssue instanceof T(org.kohsuke.github.GHPullRequest) && ghIssue.changedFiles > 10"})
+public void reviewLargePullRequest(GHPullRequest issue, PullRequestAssessment assessment) { ... }
 ```
 
-### Expression Syntax
+### SpEL Collection Filtering
 
-SpEL expressions reference blackboard objects by their binding names (typically the camelCase form of the class name).
+```java
+@Action(pre = {
+    "spel:newEntity.newEntities.?[#this instanceof T(com.example.Issue) " +
+    "&& !(#this instanceof T(com.example.PullRequest))].size() > 0"
+})
+public IssueAssessment reactToNewIssue(GHIssue ghIssue, NewEntity<?> newEntity, Ai ai) { ... }
+```
 
-| Pattern | Description |
-|---------|-------------|
+| SpEL Pattern | Description |
+|--------------|-------------|
 | `spel:obj.property > value` | Simple property comparison |
 | `spel:obj instanceof T(com.example.Type)` | Type checking |
 | `spel:collection.size() > 0` | Check collection is not empty |
 | `spel:collection.?[condition].size() > 0` | Check filtered collection |
-| `spel:obj.property != null` | Null checking |
-| `spel:condition1 && condition2` | Combine with AND |
 
-> Use SpEL conditions for simple property checks. For complex logic or reusable conditions, prefer `@Condition` methods.
+> Use SpEL for simple property checks. For complex logic or reusable conditions, prefer `@Condition` methods.
 
-## @SecureAgentTool — Security
+## @Cost — Dynamic Cost/Value Computation
 
-```java
-@Agent
-@SecureAgentTool(expression = "hasAuthority('news:read')")
-public class NewsAgent { ... }
-```
+Marks a method that returns a cost value (a `double` between 0.0 and 1.0).
+Referenced from `@Action` via `costMethod` or `valueMethod`.
 
-Method-level annotations override class-level. Requires `embabel-agent-mcp-security` starter.
-
-## @Provided — Inject Platform Beans
+Key rules: all domain object parameters must be **nullable** (`null` if not on blackboard), the method must return a `double` between 0.0 and 1.0, and the `Blackboard` can be passed as a parameter for direct access.
 
 ```java
-@Action
-public TicketCategory triage(
-        Ticket ticket,
-        @Provided TicketFlow flow) {  // injected from Spring context
-    return flow.process(ticket);
+@Cost(name = "urgencyValue")
+public double computeUrgency(@Nullable Task task) {
+    if (task == null) return 0.5;
+    if (task.getPriority() == Priority.HIGH) return 1.0;
+    return 0.2;
 }
+
+@Action(valueMethod = "urgencyValue")
+public Result processTask(Task task) { ... }
 ```
 
-Use `@Provided` for services, configuration, or enclosing component references (especially in `@State` classes).
+## @Export — MCP Publishing
 
-### When to Use @Provided
-
-- Accessing the enclosing `@EmbabelComponent` or `@Agent` from a `@State` action
-- Services that are infrastructure concerns, not domain objects
-- Configuration or environment values
-
-### Do NOT Use @Provided For
-
-- Domain objects that should drive planning (use regular parameters)
-- Objects that need to be tracked on the blackboard
-
-Since `@State` classes must be static nested classes or top-level classes, `@Provided` is the recommended way to access the enclosing component's services.
-
-## SomeOf — Union Return Types
+Used on `@Goal` methods to control MCP tool publishing.
 
 ```java
-public record Classification(Intent intent) implements SomeOf { ... }
-// Can return BillingIntent, SupportIntent, etc. — all are valid postconditions
+@Goal(description = "Produce a curated news digest")
+@Action(export = @Export(remote = true, name = "newsDigest",
+                         startingInputTypes = {UserInput.class}))
+public NewsDigest produceDigest(NewsTopic topic, OperationContext context) { ... }
 ```
 
-Enables routing scenarios where an action returns one of several possible types. Multiple fields of the `SomeOf` instance may be non-null — this enables the most appropriate routing.
+| Attribute | Type | Default | Description |
+|-----------|------|---------|-------------|
+| `remote` | boolean | `false` | Publish as a remote MCP tool |
+| `name` | String | — | Custom MCP tool name (defaults to action name) |
+| `startingInputTypes` | Class<?>[] | — | Types that can start this goal chain |
 
 ## @RequireNameMatch — Binding by Name
+
+Binds action parameters by declared name on the blackboard rather than by type.
 
 ```java
 @Action
@@ -165,59 +221,83 @@ public void process(@RequireNameMatch Thing thingOne) { ... }
 // Requires a Thing named "thingOne" on the blackboard
 ```
 
-## Reactive Triggers with trigger
+## Reactive Triggers with `trigger`
 
-The `trigger` field enables reactive behavior where an action only fires when a specific type is the **most recently added** value to the blackboard:
+The `trigger` field on `@Action` enables reactive behavior — an action only fires when a specific type is the **most recently added** value to the blackboard.
 
 ```java
-@Action(trigger = UserMessage.class)
-public void handleMessage(UserMessage msg, Conversation conv) { ... }
+@Agent(description = "Chat message handler")
+public class ChatAgent {
+
+    @Goal(description = "Respond to user message")
+    @Action(trigger = UserMessage.class)
+    public Response handleMessage(UserMessage message, Conversation conversation) {
+        return new Response("Received: " + message.content());
+    }
+}
 ```
 
-Without `trigger`, an action fires as soon as all its parameters are available. With `trigger`, the specified type must additionally be the most recent value added.
+Without `trigger`, an action fires as soon as all parameters are available. With `trigger`, the specified type must additionally be the most recent value added.
 
 Useful when:
-- You have multiple actions that could handle different event types
-- You want to distinguish between "data available" and "event just occurred"
-- You're building event-driven or reactive workflows
+- You have multiple actions handling different event types
+- You want to distinguish "data available" from "event just occurred"
+- Building event-driven or reactive workflows
 
-## Parameter Types
+## @Provided — Inject Platform Beans
 
-Action methods must have at least one parameter. Parameters fall in two categories:
+Marks an action method parameter as provided by Spring context rather than resolved from the blackboard.
 
-### Domain Objects
-Backed by the blackboard. Nullable parameters are populated if non-null on the blackboard.
+```java
+@EmbabelComponent
+public class ReservationFlow {
 
-### Infrastructure Parameters
-`OperationContext`, `ProcessContext`, `Ai` — access blackboard and invoke LLMs.
+    @State
+    public record CollectDetails(String customerId) {
 
-### @Provided
-Marked with `@Provided` — injected from Spring context rather than resolved from blackboard.
+        @Action
+        public ConfirmReservation confirm(
+                ReservationDetails details,            // domain object from blackboard
+                @Provided ReservationFlow flow         // injected from Spring context
+        ) {
+            var booking = flow.bookingService.reserve(details);
+            return new ConfirmReservation(booking);
+        }
+    }
+}
+```
 
-### Inheritance
-Both Action and Condition methods may be inherited from superclasses.
+### When to Use @Provided
+- Accessing the enclosing `@EmbabelComponent` or `@Agent` from a `@State` action
+- Infrastructure services, configuration, or environment values
 
-## Action Method Implementation
+### Do NOT Use @Provided For
+- Domain objects that should drive planning (use regular parameters)
+- Objects that need to be tracked on the blackboard
 
-Embabel makes it easy to seamlessly integrate LLM invocation and application code, using common types. An `@Action` method is a normal method, and can use any libraries or frameworks you like.
+Since `@State` classes must be static nested or top-level classes, `@Provided` is the recommended way to access the enclosing component's services.
 
-The only special thing about it is its ability to use the `OperationContext` parameter to access the blackboard and invoke LLMs.
+## Common Pitfalls
 
-## @AchievesGoal
+1. **`@Goal` not `@AchievesGoal`** — Embabel v1.0.0 renamed `@AchievesGoal` to `@Goal`. Use `@Goal` everywhere.
 
-The `@AchievesGoal` annotation can be added to an `@Action` method to indicate that the completion of the action achieves a specific goal.
+2. **`clearBlackboard` on goal actions** — Avoid using `clearBlackboard = true` on `@Goal` methods. Clearing removes `hasRun` tracking conditions, interfering with goal satisfaction.
 
-Every agent needs at least one action marked with `@AchievesGoal` to define what constitutes completion.
+3. **Nullable parameters in `@Cost`** — All domain object parameters in `@Cost` methods must be nullable. `null` is passed when the object is not on the blackboard.
 
-## Key Points
+4. **`@Cost` returns `double`** — The method must return a `double` between 0.0 and 1.0.
 
-- `@Agent` and `@Agentic` both register beans; `@Agentic` is auto-discovered
-- `@EmbabelComponent` exposes actions without being an agent itself
-- `clearBlackboard` is useful for looping states and context resets
-- `@Cost` enables dynamic cost computation for Utility AI planning
-- `@SecureAgentTool` provides MCP security with SpEL expressions
-- `@Provided` injects from Spring context (essential for `@State` classes)
-- `SomeOf` enables union return types for routing scenarios
-- `trigger` enables reactive behavior (most-recently-added check)
-- Method-level annotations override class-level for `@SecureAgentTool`
-- Both Action and Condition methods can be inherited from superclasses
+5. **SpEL binding names** — SpEL expressions reference blackboard objects by their camelCase class name. Custom binding names override this.
+
+6. **Condition side effects** — `@Condition` methods may be called multiple times. Do not mutate state inside them.
+
+7. **`@Provided` vs blackboard** — `@Provided` takes precedence over blackboard resolution. Use it only for infrastructure beans, not domain objects.
+
+8. **Unique method names** — Give `@Action` and `@Condition` methods unique names so the planner can distinguish between them.
+
+9. **`@Export` on `@Goal`** — Use `@Export(remote = true)` on `@Goal` methods for MCP publishing, not on regular `@Action` methods.
+
+10. **`readOnly` actions** — `readOnly = true` actions only analyze data without modifying external systems (APIs, databases, files). Useful for learning/catchup modes.
+---
+
+*Source: Embabel Agent v1.0.0 documentation*

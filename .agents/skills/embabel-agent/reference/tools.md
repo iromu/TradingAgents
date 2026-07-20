@@ -1,263 +1,406 @@
 # Tools Reference
 
-## @LlmTool: Expose JVM Methods to LLMs
+## Overview
+
+Embabel provides two categories of tools for exposing functionality to LLMs:
+
+- **In-process tools** — JVM methods annotated with `@LlmTool` or Spring AI's `@Tool`
+- **Remote tools** — MCP (Model Context Protocol) servers whose tools are discovered and wrapped
+
+---
+
+## @LlmTool: Expose JVM Methods
+
+Annotate methods on any class (stateful or stateless, static or instance, any visibility):
 
 ```java
 public class MathTools {
     @LlmTool(description = "add two numbers")
-    public double add(double a, double b) {
-        return a + b;
-    }
+    public double add(double a, double b) { return a + b; }
 }
 ```
 
-- Tool methods can have any visibility, static or instance scope
+- Each annotated method becomes a distinct tool exposed to the LLM
 - Return type must be serializable
-- Not supported: Optional, async types, reactive types, functional types
-- Tools can be stateful — often encapsulate domain objects with private state
+- Not supported: `Optional`, async types, reactive types, functional types
+- Tool methods can bind to `AgentProcess` to publish objects to the blackboard
 
-## Tool Groups
+---
 
-Tool groups provide indirection between user intent and tool selection:
+## @Tool (Spring AI)
 
-```yaml
-embabel:
-  agent:
-    platform:
-      tools:
-        includes:
-          weather:
-            description: Get weather for location
-            provider: Docker
-            tools:
-              - weather
-```
+The Spring AI `@Tool` annotation is also valid. Use it when you want IDE support or are already using Spring AI tool calling.
 
-Configure in `@Configuration`:
+---
+
+## ToolCallContext: Inject Out-of-Band Metadata
+
+`ToolCallContext` is an immutable key-value bag that flows through the tool pipeline without the LLM ever seeing it — like HTTP headers on a request.
+
+### Injecting into @LlmTool Methods
+
+Declare a `ToolCallContext` parameter — the framework injects it and excludes it from the JSON schema:
 
 ```java
-@Configuration
-public class ToolConfig {
-    @Bean
-    ToolGroup weatherTools(List<McpSyncClient> clients) {
-        return new McpToolGroup("weather", "Docker", "Get weather for location",
-            Set.of("INTERNET_ACCESS"),
-            client -> client.getTools(),
-            tool -> tool.getName().equals("get_weather")
-        );
-    }
-}
-```
-
-## ToolCallContext
-
-For infrastructure metadata (auth tokens, tenant IDs) that the LLM should never see:
-
-```java
-@LlmTool(description = "Look up customer")
+@LlmTool(description = "Look up customer by ID")
 public String lookupCustomer(
         @LlmTool.Param(description = "Customer ID") long customerId,
         ToolCallContext context) {
     String tenantId = context.get("tenantId");
-    String authToken = context.get("authToken");
-    return customerService.lookup(customerId, tenantId, authToken);
+    return customerService.lookup(customerId, tenantId);
 }
 ```
 
-Set at invocation:
+### Setting Context
+
+**At process boundary** (cross-cutting infrastructure):
+
 ```java
-ProcessOptions.withToolCallContext(Map.of("tenantId", "acme", "authToken", "xyz"))
+var processOptions = new ProcessOptions()
+    .withToolCallContext(Map.of("authToken", token, "tenantId", "acme"));
 ```
 
-Per-interaction:
+**Per-interaction** (domain-specific metadata):
+
 ```java
-context.ai().withDefaultLlm().withToolCallContext(Map.of("entityId", "123"))
+return ai.withDefaultLlm()
+    .withToolCallContext(Map.of("entityId", "123"))
+    .createObject(prompt, Result.class);
 ```
 
-Context merge: interaction-level values win on conflict.
+### Context Merge
+
+Interaction-level values win on conflict. `ProcessOptions` is for cross-cutting concerns; `PromptRunner.withToolCallContext()` is for per-interaction concerns.
+
+### MCP Meta Export
+
+`ToolCallContext` entries are forwarded as MCP `_meta` on the wire. Control what crosses the boundary:
+
+```java
+@Bean
+public ToolCallContextMcpMetaConverter toolCallContextMcpMetaConverter() {
+    return ToolCallContextMcpMetaConverter.allowKeys("tenantId", "correlationId");
+}
+```
+
+Factory methods: `passThrough()` (default), `noOp()`, `allowKeys(...)`, `denyKeys(...)`, or a custom lambda.
+
+---
 
 ## OneShotPerLoopTool
 
-For tools meant to fire at most once per agentic loop iteration:
+Prevent repeated tool calls within a single planning loop iteration:
 
 ```java
-var tool = new OneShotPerLoopTool(
-    underlyingTool,
-    "The body was returned earlier — read it from your conversation history."
-);
+Tool gated = new OneShotPerLoopTool(underlyingTool,
+    "The body was returned earlier — read it from your conversation history.");
 ```
 
-## Subagent: Agent Handoffs as Tools
+Loop scoping uses `LoopMemo` which reads `ToolCallContext.loopId()` — stamp a fresh UUID per turn:
+
+```kotlin
+val loopId = UUID.randomUUID().toString()
+context.ai()
+    .withToolCallContext(mapOf(ToolCallContext.LOOP_ID_KEY to loopId))
+    .withTools(gatedTools)
+    .respond(messages)
+```
+
+---
+
+## @Cost / costMethod: Dynamic Tool Costs
+
+Specify a cost estimate so budget-aware agents can check remaining budget before invoking:
 
 ```java
-var subagentTool = Subagent.ofClass(PerformanceFinder.class)
-    .consuming(WorksToFind.class);
+@LlmTool(description = "Expensive web search", costMethod = "estimateSearchCost")
+public String search(String query) { ... }
 
-context.ai().withDefaultLlm()
-    .withTool(subagentTool)
-    .creating(Concert.class)
-    .fromPrompt("Find performances and assemble a concert");
+@Cost
+public int estimateSearchCost(String query) {
+    return query.length() > 50 ? 100 : 50;
+}
 ```
 
-The LLM can now invoke another agent as a tool. The subagent shares the parent's blackboard context.
+---
 
-## Agentic Tools
+## Tool Groups
 
-### SimpleAgenticTool: Flat Tool Orchestration
+Tool groups provide indirection between user intent and tool selection — ask for "web" tools, not a specific search engine.
+
+### @Configuration
 
 ```java
-var agenticTool = SimpleAgenticTool.builder()
-    .withLlm(LlmOptions.withModel("gpt-4o"))
-    .withTools(new Calculator(), new Formatter())
-    .withSystemPrompt("You are a math assistant. Use the calculator and formatter tools.")
-    .build();
+@Bean
+ToolGroup mcpWebToolsGroup() {
+    return new McpToolGroup(
+        CoreToolGroups.WEB_DESCRIPTION, "docker-web", "Docker",
+        Set.of(ToolGroupPermission.INTERNET_ACCESS),
+        mcpSyncClients,
+        cb -> cb.getToolDefinition().name().contains("brave")
+    );
+}
 ```
 
-### PlaybookTool: Conditional Tool Unlocking
+### PromptRunner Methods
 
-```java
-var playbook = PlaybookTool.builder()
-    .withTools(
-        new SearchTool(),
-        new AnalyzeTool().withPrerequisites(Set.of("search")),
-        new SummarizeTool().withArtifacts(Set.of("analysis"))
-    )
-    .build();
-```
+| Method | Description |
+|---|---|
+| `withToolGroup(String)` | Add by name |
+| `withToolGroup(ToolGroup)` | Add instance |
+| `withToolObject(Any)` | Add domain object with `@LlmTool`/`@Tool` methods |
+| `withTool(Tool)` | Add a framework-agnostic Tool |
+| `withTools(List<Tool>)` | Add multiple tools |
 
-### StateMachineTool: State-Based Availability
-
-```java
-var smTool = StateMachineTool.builder(OrderState.class)
-    .withTools(
-        new CreateOrderTool().availableIn(OrderState.DRAFT),
-        new ConfirmOrderTool().availableIn(OrderState.DRAFT),
-        new ShipOrderTool().availableIn(OrderState.CONFIRMED),
-        new DeliverOrderTool().availableIn(OrderState.SHIPPED)
-    )
-    .build();
-```
+---
 
 ## Domain Tools
 
-Tools from `@LlmTool` methods on domain objects:
+Stateful tools on domain objects that encapsulate state never exposed to the LLM:
 
 ```java
-public class Customer {
-    @Tool
-    public double getLoyaltyDiscount() { ... }
-}
-
-// Add to prompt runner
-context.ai().withDefaultLlm()
+context.ai()
+    .withDefaultLlm()
     .withToolObject(customer)
     .creating(Order.class)
-    .fromPrompt("Create an order for this customer");
+    .fromPrompt("Create an order");
 ```
 
-The LLM can call `customer.getLoyaltyDiscount()` as a tool.
+---
 
 ## Tool Chaining
 
-Expose `@LlmTool` methods on returned objects:
+Expose `@LlmTool` methods on returned objects — the LLM navigates through well-defined operations:
 
 ```java
-context.ai().withDefaultLlm()
-    .withToolChainingFrom(Customer.class)
-    .creating(Customer.class)
-    .fromPrompt("Find the customer");
-// After customer is returned, customer.getLoyaltyDiscount() becomes available as a tool
+var userManager = new SimpleAgenticTool("userManager", "Manage users")
+    .withTools(searchUserTool, getUserTool)
+    .withToolChainingFrom(User.class);
+// Flow: getUserTool returns a User -> updateEmail() becomes available
 ```
+
+- **Predicate filtering**: `.withToolChainingFrom(User.class, (user, ctx) -> user.isAdmin())`
+- **Auto-discovery**: `.withToolChainingFromAny()` — discover on any returned object
+- **Last-wins**: only the most recent artifact of a type is active
+- **On PromptRunner**: works on any `PromptRunner`, not just agentic tools
+
+---
 
 ## Framework-Agnostic Tool Interface
 
+The `Tool` interface is not tied to any LLM framework:
+
+### Creating Tools
+
 ```java
-var tool = Tool.create("add", "Add two numbers",
-    List.of(
+Tool greetTool = Tool.of("greet", "Greets the user") { _ ->
+    Tool.Result.text("Hello!")
+};
+
+Tool addTool = Tool.of("add", "Adds two numbers",
+    Tool.InputSchema.of(
         Tool.Parameter.integer("a", "First number"),
         Tool.Parameter.integer("b", "Second number")
-    ),
-    args -> (long) args.get("a") + (long) args.get("b")
+    )
+) { input -> Tool.Result.text("42") };
+```
+
+### Strongly Typed Tools
+
+```java
+Tool addTool = Tool.fromFunction("add", "Adds two numbers",
+    AddRequest.class, AddResult.class,
+    input -> new AddResult(input.a() + input.b())
 );
 ```
 
-Or from annotated methods:
+### From Annotated Methods
 
 ```java
-var tool = LlmToolMethodTool.from(MathTools.class, "add");
+List<Tool> tools = Tool.fromInstance(new MathService());
 ```
 
-## Using Tools in Action Methods
+---
+
+## MCP Integration
+
+### McpToolFactory
 
 ```java
-@Action
-public RelevantNews findNews(StarPerson person, OperationContext context) {
-    return context.ai().withDefaultLlm()
-        .withToolGroup(CoreToolGroups.WEB)
-        .creating(RelevantNews.class)
-        .fromPrompt("Find news about " + person.name());
+@Bean
+public McpToolFactory mcpToolFactory(List<McpSyncClient> clients) {
+    return new SpringAiMcpToolFactory(clients);
 }
 ```
 
-Chaining multiple tool groups:
-
 ```java
-context.ai().withDefaultLlm()
-    .withToolGroup("weather")
-    .withToolGroup("news")
-    .creating(Report.class)
-    .fromPrompt("Create a weather and news report");
+// Single tool
+Tool braveSearch = mcpToolFactory.toolByName("brave_web_search");
+
+// Group behind UnfoldingTool facade
+UnfoldingTool wikiTool = mcpToolFactory.unfoldingByName(
+    "wikipedia", "Search Wikipedia",
+    Set.of("search_wikipedia", "get_article", "get_summary")
+);
 ```
 
-## Subagent: Agent Handoffs
+### Lazy MCP Initialization
+
+For OAuth-authenticated MCP servers, defer the handshake:
+
+```yaml
+spring:
+  ai:
+    mcp:
+      client:
+        initialized: false
+        toolcallback:
+          enabled: false
+embabel:
+  agent:
+    platform:
+      tools:
+        lazy-init: true
+```
+
+---
+
+## MCP Docker Tools
+
+Embabel supports consuming tools from Docker containers via the MCP Docker Gateway. Tools are conditionally created based on available images.
+
+### CoreToolGroups
+
+Embabel provides predefined tool groups:
+
+| Group | Description |
+|-------|-------------|
+| `CoreToolGroups.WEB` | Web search, browsing tools |
+| `CoreToolGroups.BROWSER_AUTOMATION` | Browser automation tools |
+| `CoreToolGroups.MAPS` | Maps and location tools |
+| `CoreToolGroups.GITHUB` | GitHub operations tools |
+
+### Docker MCP Gateway Configuration
+
+```yaml
+spring:
+  ai:
+    mcp:
+      docker:
+        enabled: true
+        gateway-url: http://mcp-gateway:3100
+        tool-groups:
+          - WEB
+          - BROWSER_AUTOMATION
+```
+
+### Conditional Tool Creation
+
+Tools are created only when the required Docker image is available:
+
+```java
+@Bean
+public McpToolFactory mcpDockerTools(McpSyncClient dockerClient) {
+    return new SpringAiMcpToolFactory(List.of(dockerClient));
+}
+```
+
+### Custom Tool Groups
+
+Create custom tool groups from Docker containers:
+
+```java
+@Bean
+public UnfoldingTool dockerWebTools(McpToolFactory factory) {
+    return factory.unfoldingByName("docker-web", "Docker Web Tools",
+        Set.of(ToolGroupPermission.INTERNET_ACCESS));
+}
+```
+
+---
+
+## Subagent: Agent Handoffs as Tools
+
+A Subagent delegates to another Embabel agent, sharing the parent's blackboard:
 
 ```java
 var subagent = Subagent.ofClass(PerformanceFinder.class)
     .consuming(WorksToFind.class);
 
-context.ai().withDefaultLlm()
+context.ai()
+    .withDefaultLlm()
     .withTool(subagent)
     .creating(Concert.class)
-    .fromPrompt("Find performances and assemble a concert");
+    .fromPrompt("Assemble a concert");
 ```
 
-The subagent shares the parent's blackboard context.
+Reference by name, instance, or annotated instance.
+
+---
 
 ## Agentic Tools
 
-### SimpleAgenticTool: Flat Tool Orchestration
+An agentic tool uses an LLM to orchestrate sub-tools:
+
+### SimpleAgenticTool
 
 ```java
-var agenticTool = SimpleAgenticTool.builder()
-    .withLlm(LlmOptions.withModel("gpt-4o"))
-    .withTools(searchTool, analyzeTool, summarizeTool)
-    .build();
+var orchestrator = new SimpleAgenticTool("math-orchestrator", "Orchestrates math")
+    .withTools(addTool, multiplyTool)
+    .withParameter(Tool.Parameter.string("expression", "Math expression"))
+    .withLlm(LlmOptions.withModel("gpt-4"));
 ```
 
-### PlaybookTool: Progressive Unlocking
+### PlaybookTool: Conditional Unlocking
 
 ```java
-var playbook = PlaybookTool.builder()
-    .withTools(searchTool)
-    .withTools(analyzeTool, PlaybookCondition.prerequisite("search"))
-    .build();
+var researcher = new PlaybookTool("researcher", "Research topics")
+    .withTools(searchTool, fetchTool)
+    .withTool(analyzeTool).unlockedBy(searchTool)
+    .withTool(summarizeTool).unlockedBy(analyzeTool);
 ```
 
-### StateMachineTool: State-Based Availability
+All three support tool chaining via `withToolChainingFrom()`.
+
+---
+
+## Progressive Tools (UnfoldingTool)
+
+Progressive disclosure — present a single facade, reveal inner tools on invocation:
 
 ```java
-var sm = StateMachineTool.builder(OrderState.class)
-    .withTool(createTool, OrderState.DRAFT)
-    .withTool(confirmTool, OrderState.DRAFT, OrderState.CONFIRMED)
-    .build();
+var databaseTool = UnfoldingTool.of(
+    "database_operations",
+    "Work with the database. Invoke to see specific operations.",
+    List.of(queryTool, insertTool, deleteTool)
+);
 ```
 
-## Key Points
+### Category-Based
 
-- `@LlmTool` methods can be on any class — stateful domain objects are common
-- Tool groups provide indirection; configure in YAML or `@Configuration`
-- `ToolCallContext` passes infrastructure metadata invisible to the LLM
-- Subagents let the LLM invoke other agents as tools, sharing blackboard context
-- Agentic tools (Simple, Playbook, StateMachine) let an LLM orchestrate sub-tools
-- Domain tools expose `@Tool` methods on objects the LLM works with
-- Tool chaining dynamically exposes tools from returned artifacts
+```java
+var fileTool = UnfoldingTool.byCategory(
+    "file_operations",
+    "File operations. Pass category: 'read' or 'write'.",
+    Map.of("read", List.of(readFile, listDir), "write", List.of(writeFile, deleteFile))
+);
+```
+### Annotation-Based
+
+```java
+@UnfoldingTools(name = "database_operations", description = "Database operations")
+public class DatabaseTools {
+    @LlmTool(description = "Execute a SQL query")
+    public QueryResult query(String sql) { ... }
+}
+var tool = UnfoldingTool.fromInstance(new DatabaseTools());
+```
+- **ToolCallContext is invisible to the LLM** — never put sensitive data in `@LlmTool` parameters; use `ToolCallContext` for infrastructure metadata
+- **OneShotPerLoopTool requires a loop ID** — without stamping `ToolCallContext.LOOP_ID_KEY`, the wrapper degrades to passthrough
+- **MCP meta converter defaults to pass-through** — for production with third-party MCP servers, always set an allowlist or denylist
+- **Tool chaining uses last-wins semantics** — only the most recent artifact of a type is active
+- **Async/reactive types are not supported** as tool parameters or return types
+- **Lazy MCP init requires three properties** — both Spring AI flags and `embabel.agent.platform.tools.lazy-init=true`
+---
+
+*Source: Embabel Agent v1.0.0 documentation*

@@ -1,159 +1,284 @@
 # Integrations Reference
 
-MCP, A2A, observability, and security integrations for Embabel agents. See SKILL.md for the core workflow.
+MCP, A2A, security, and observability integrations for Embabel agents. See SKILL.md for the core workflow.
 
-## MCP Server Publishing
+---
+
+## Model Context Protocol (MCP)
+
+Embabel Agent exposes agents as MCP servers for external clients (Claude Desktop, Cursor, MCP Inspector). Goals are auto-published as tools and prompts.
 
 ### Server Configuration
 
-Publish agents as MCP servers with SYNC or ASYNC transport:
+```yaml
+spring:
+  ai:
+    mcp:
+      server:
+        type: SYNC  # SYNC (default) or ASYNC
+```
+
+| **SYNC** (default) | Blocking ops in reactive streams. Simple, good error handling. |
+| **ASYNC** | True non-blocking reactive. Higher throughput, more complex error handling. |
+
+### Transport Protocol
+
+Uses **SSE transport** at `http://localhost:8080/sse`. For clients requiring Streamable HTTP (e.g., OpenWebUI), use the `mcpo` proxy:
+
+```bash
+uvx mcpo --port 8000 --server-type sse -- http://localhost:8080/sse
+```
+
+Then connect to `http://localhost:8000`.
+
+---
+
+## Automatic Publishing
+
+Goals annotated with `@Export(remote = true)` are auto-discovered via `PerGoalMcpToolExportCallbackPublisher`. Prompts are generated for each goal's starting input types via `PerGoalStartingInputTypesPromptPublisher`.
+
+---
+
+## Exposing Agent Goals as Tools
+
+Annotate goal methods with `@Export(remote = true)`:
+
+```java
+@Agent(goal = "Provide weather information", backstory = "Weather service agent")
+public class WeatherAgent {
+
+    @Goal
+    @Export(remote = true)  // Becomes MCP tool
+    public String getWeather(@Param("location") String location,
+                             @Param("units") String units) {
+        return "Weather for " + location + " in " + units;
+    }
+
+    @Goal
+    public String internalMethod() {
+        // Not exposed to MCP
+        return "Internal use only";
+    }
+}
+```
+
+```kotlin
+@Agent(goal = "Provide weather information", backstory = "Weather service agent")
+class WeatherAgent {
+
+    @Goal
+    @Export(remote = true)  // Becomes MCP tool
+    fun getWeather(
+        @Param("location") location: String,
+        @Param("units") units: String
+    ): String = "Weather for $location in $units"
+
+    @Goal
+    fun internalMethod(): String = "Internal use only"  // Not exposed
+}
+```
+
+---
+
+## Exposing LlmReference as MCP Tools
+
+Use `McpToolExport` to expose `LlmReference` or `ToolObject` types:
+
+```java
+@Configuration
+public class RagMcpTools {
+    @Bean
+    McpToolExport ragTools(SearchOperations searchOperations) {
+        var toolishRag = new ToolishRag("docs", "Embabel docs", searchOperations);
+        return McpToolExport.fromLlmReference(toolishRag);
+    }
+}
+```
+
+```kotlin
+@Configuration
+class RagMcpTools {
+    @Bean
+    fun ragTools(searchOperations: SearchOperations): McpToolExport {
+        val toolishRag = ToolishRag("docs", "Embabel docs", searchOperations)
+        return McpToolExport.fromLlmReference(toolishRag)
+    }
+}
+```
+
+### Naming Strategies
+
+Control tool name transformation to avoid conflicts:
+
+```java
+// ToolObject with prefix
+@Bean
+public McpToolExport prefixedTools() {
+    return McpToolExport.fromToolObject(
+        new ToolObject(List.of(myTool), name -> "myservice_" + name));
+}
+```
+
+```kotlin
+@Bean
+fun prefixedTools(): McpToolExport {
+    return McpToolExport.fromToolObject(
+        ToolObject(objects = listOf(myTool), namingStrategy = { "myservice_$it" }))
+}
+```
+
+**LlmReference naming**: `fromLlmReference` prefixes tools with the lowercased reference name (e.g., "WeatherService" → `weatherservice_getWeather`).
+
+### Filtering
+
+```java
+@Bean
+public McpToolExport filteredTools() {
+    return McpToolExport.fromToolObject(
+        new ToolObject(List.of(myTool), StringTransformer.IDENTITY,
+            name -> name.startsWith("public_")));  // Only public tools
+}
+```
+
+The filter applies to the **original** name before the naming strategy transforms it.
+
+### Spring AI @McpTool on Components
+
+```java
+@Component
+public class CalculatorTools {
+    @McpTool(name = "add", description = "Add two numbers")
+    public int add(@McpToolParam(description = "First", required = true) int a,
+                   @McpToolParam(description = "Second", required = true) int b) {
+        return a + b;
+    }
+}
+```
+
+---
+
+## Security
+
+Two complementary layers: HTTP filter chain (reception desk) + `@SecureAgentTool` (locked office door).
+
+### Layer 1 — HTTP Transport (Filter Chain)
+
+All requests to `/sse/**`, `/mcp/**`, `/message/**` require a JWT Bearer token.
+
+```kotlin
+@Configuration
+@EnableWebSecurity
+class McpSecurityConfiguration {
+    @Bean
+    fun mcpFilterChain(http: HttpSecurity): SecurityFilterChain {
+        http.securityMatcher("/sse/**", "/mcp/**", "/message/**")
+            .authorizeHttpRequests { it.anyRequest().authenticated() }
+            .sessionManagement { it.sessionCreationPolicy(SessionCreationPolicy.STATELESS) }
+            .oauth2ResourceServer { oauth2 -> oauth2.jwt { jwt ->
+                jwt.jwtAuthenticationConverter(jwtAuthenticationConverter()) }}
+            .csrf { it.disable() }
+        return http.build()
+    }
+
+    @Bean
+    fun jwtAuthenticationConverter(): JwtAuthenticationConverter {
+        val conv = JwtGrantedAuthoritiesConverter().apply {
+            setAuthoritiesClaimName("authorities"); setAuthorityPrefix("") }
+        return JwtAuthenticationConverter().apply {
+            setJwtGrantedAuthoritiesConverter(conv) }
+    }
+}
+```
+
+**JWT config:**
 
 ```yaml
-embabel:
-  agent:
-    platform:
-      mcp:
-        server:
-          name: my-agent-server
-          version: 1.0.0
-          transport: SSE  # SYNC or SSE or Streamable-HTTP
+spring:
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          public-key-location: classpath:keys/public.pem
+          jws-algorithms: RS256
 ```
 
-### Automatic Tool Publishing
+### Layer 2 — Method-level (`@SecureAgentTool`)
 
-Goals are automatically published as MCP tools. Use `McpToolExport` to expose `LlmReference` types:
+Protects every `@Action` in an agent class. Kotlin:
 
-```java
-@McpTool(name = "search", description = "Search the knowledge base")
-public LlmReference searchTool() {
-    return LlmReference.builder()
-        .description("Search for documents")
-        .build();
+```kotlin
+@Agent(description = "Curated news digest agent")
+@SecureAgentTool("hasAuthority('news:read')")
+class NewsDigestAgent {
+    @Action
+    fun extractTopic(userInput: UserInput, context: OperationContext): NewsTopic { ... }
+
+    @Goal(description = "Produce news digest",
+                  export = Export(remote = true, name = "newsDigest",
+                                  startingInputTypes = [UserInput::class]))
+    @Action
+    fun produceDigest(topic: NewsTopic, context: OperationContext): NewsDigest { ... }
 }
 ```
 
-### Tool Filtering
-
-Control which tools are exposed:
+Java:
 
 ```java
-@Bean
-public ToolGroup mcpToolsGroup(McpSyncClient client) {
-    return new McpToolGroup(
-        "MCP Tools",
-        "mcp-server",
-        "Embabel",
-        Set.of(ToolGroupPermission.INTERNET_ACCESS),
-        List.of(client),
-        callback -> {
-            String name = callback.getToolDefinition().name();
-            return !name.contains("internal");  // Exclude internal tools
-        }
-    );
+@Agent(description = "Curated news digest agent")
+@SecureAgentTool("hasAuthority('news:read')")
+public class NewsDigestAgent {
+    @Action
+    public NewsTopic extractTopic(UserInput userInput, OperationContext context) { ... }
+
+    @Goal(description = "Produce news digest",
+                  export = @Export(remote = true, name = "newsDigest",
+                                   startingInputTypes = {UserInput.class}))
+    @Action
+    public NewsDigest produceDigest(NewsTopic topic, OperationContext context) { ... }
 }
 ```
 
-### Spring AI @McpTool
+Without class-level security, intermediate actions run freely before the goal action's check fires — potentially burning LLM tokens on an unauthorized request.
 
-Use Spring AI's `@McpTool` annotation for simpler MCP tool exposure:
+**Dependency:**
 
-```java
-@McpTool(description = "Get the current weather")
-public String getWeather(String location) {
-    return weatherService.getWeather(location);
-}
+```xml
+<dependency>
+    <groupId>com.embabel.agent</groupId>
+    <artifactId>embabel-agent-starter-mcpserver-security</artifactId>
+    <version>${embabel-agent.version}</version>
+</dependency>
 ```
 
-## MCP Security
-
-### Layer 1: HTTP Filter Chain
-
-Secure MCP endpoints with JWT authentication:
-
-```java
-@Bean
-public SecurityWebFilterChain securityWebFilterChain(ServerHttpSecurity http) {
-    return http
-        .authorizeExchange(exchange -> exchange
-            .pathMatchers("/mcp/**").authenticated()
-            .anyExchange().permitAll()
-        )
-        .oauth2ResourceServer(oauth2 -> oauth2.jwt(Customizer.withDefaults()))
-        .build();
-}
-```
-
-### Layer 2: @SecureAgentTool
-
-Protect individual agents or methods with SpEL expressions:
-
-```java
-@Agent
-@SecureAgentTool(expression = "hasAuthority('news:read')")
-public class NewsAgent { ... }
-
-// Method-level overrides class-level
-@Action
-@SecureAgentTool(expression = "hasAuthority('news:write')")
-public void publishNews(News news) { ... }
-```
-
-Requires: `embabel-agent-mcp-security` starter.
-
-## MCP Client / Consuming
-
-### Docker Tools Integration
-
-Use MCP tools from Docker containers:
-
-```java
-@Bean
-@ConditionalOnMcpConnection
-public ToolGroup dockerWebTools(McpSyncClient dockerClient) {
-    return new McpToolGroup(
-        "Web tools from Docker",
-        "docker-web",
-        "Docker",
-        Set.of(ToolGroupPermission.INTERNET_ACCESS),
-        List.of(dockerClient),
-        callback -> {
-            String name = callback.getToolDefinition().name();
-            return name.contains("brave") || name.contains("fetch");
-        }
-    );
-}
-```
-
-### Conditional MCP Connection
-
-Only create MCP clients when the server is available:
-
-```java
-@Bean
-@ConditionalOnMcpConnection
-public McpSyncClient dockerMcpClient() {
-    return McpClient.sync(...)
-        .serverUrl("http://localhost:3001")
-        .buildSyncClient();
-}
-```
-
-### Tool Groups
-
-Configure tool groups for MCP tools:
-
-| Group | Description | Typical Tools |
-|-------|-------------|---------------|
-| `WEB` | Web search and browsing | Brave, Google, DuckDuckGo |
-| `MAPS` | Location-based tools | Google Maps, OpenStreetMap |
-| `BROWSER_AUTOMATION` | Browser control | Playwright, Puppeteer |
-| `GITHUB` | GitHub operations | Issues, PRs, repos |
+---
 
 ## Observability
 
+Auto-traces agent lifecycle, actions, LLM calls, tool invocations — zero code changes. Integrates with any OpenTelemetry backend (Zipkin, Langfuse, LangSmith, Jaeger, Prometheus).
+
 ### Setup
 
-Add the observability starter and configure exporters:
+Add the observability starter and an exporter. For Zipkin:
+
+```xml
+<dependency>
+    <groupId>com.embabel.agent</groupId>
+    <artifactId>embabel-agent-starter-observability</artifactId>
+    <version>${embabel-agent.version}</version>
+</dependency>
+```
+
+Or the Embabel exporter (Langfuse + LangSmith in one):
+
+```xml
+<dependency>
+    <groupId>com.quantpulsar</groupId>
+    <artifactId>opentelemetry-exporter-embabel</artifactId>
+    <version>0.6.0</version>
+</dependency>
+```
+
+### Configuration
 
 ```yaml
 embabel:
@@ -161,33 +286,125 @@ embabel:
     platform:
       observability:
         enabled: true
-        exporter: langfuse  # langfuse, langsmith, zipkin
-        endpoint: https://app.langfuse.com
-        public-key: ${LANGFUSE_PUBLIC_KEY}
-        secret-key: ${LANGFUSE_SECRET_KEY}
+        service-name: my-agent-app
+
+management:
+  tracing:
+    enabled: true
+    sampling:
+      probability: 1.0
+  langfuse:
+    enabled: true
+    endpoint: https://cloud.langfuse.com/api/public/otel
+    public-key: pk-lf-...
+    secret-key: sk-lf-...
 ```
 
-### Supported Exporters
+Spans are organized in a parent-child hierarchy. Key span types: `embabel.agent` (one run turn), `embabel.action` (actions), `embabel.tool_loop` (tool loop), `embabel.llm` (LLM calls with token usage/cost), `embabel.tool` (tool invocations), `embabel.goal` / `embabel.lifecycle` (goal achievement and lifecycle states).
 
-| Exporter | Dependency | Use Case |
-|----------|-----------|----------|
-| Langfuse | `embabel-agent-observability-langfuse` | Production monitoring |
-| LangSmith | `embabel-agent-observability-langsmith` | Debugging & testing |
-| Zipkin | `embabel-agent-observability-zipkin` | Distributed tracing |
+### Key Configuration Properties
 
-### Migration Notes
+| Property | Default | Description |
+|----------|---------|-------------|
+| `observability.enabled` | `true` | Master switch for traces + metrics |
+| `observability.tracing-enabled` | `true` | Umbrella for all tracing |
+| `observability.service-name` | `embabel-agent` | Service name in traces |
+| `observability.trace-agent` | `true` | `embabel.agent` span (one run turn) |
+| `observability.trace-action` | `true` | `embabel.action` span |
+| `observability.trace-tool-calls` | `true` | Tool invocations |
+| `observability.trace-tool-loop` | `true` | Tool loop execution |
+| `observability.trace-llm-calls` | `true` | LLM calls with token usage/cost |
+| `observability.capture-message-content` | `true` | Capture message bodies (opt-in for PII safety) |
+| `observability.disabled-traces` | `[]` | Observation names to suppress |
 
-Older versions used different property names. Check the migration guide in `migrating.md` for upgrade instructions.
+### Custom Tracking with `@Tracked`
 
-## A2A (Agent-to-Agent)
+Add spans to your own methods:
 
-A2A enables agents to communicate with each other across process boundaries. Configure A2A cards and task definitions for inter-agent workflows.
+```java
+@Tracked("enrichCustomer")
+public Customer enrich(Customer input) { ... }
 
-## Key Points
+@Tracked(value = "callPaymentApi", type = TrackType.EXTERNAL_CALL, description = "Payment gateway")
+public PaymentResult processPayment(Order order) { ... }
+```
 
-- MCP servers publish goals as tools automatically
-- Use `McpToolExport` for `LlmReference` exposure
-- Two-layer security: HTTP filter chain + `@SecureAgentTool`
-- MCP clients are conditionally created with `@ConditionalOnMcpConnection`
-- Observability supports Langfuse, LangSmith, and Zipkin
-- Tool groups provide abstraction between intent and tool selection
+Track types: `CUSTOM`, `PROCESSING`, `VALIDATION`, `TRANSFORMATION`, `EXTERNAL_CALL`, `COMPUTATION`.
+
+> **Note:** `@Tracked` uses Spring AOP proxies. Internal method calls within the same class are *not* intercepted — extract tracked methods into a separate `@Component` bean.
+
+### MDC Log Correlation
+
+Agent context is propagated into SLF4J MDC automatically (`embabel.agent.run_id`, `embabel.agent.name`, `embabel.action.name`).
+
+```xml
+<pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36}
+  [runId=%X{embabel.agent.run_id} agent=%X{embabel.agent.name} action=%X{embabel.action.name}] - %msg%n</pattern>
+```
+
+---
+
+## Observability Migration Notes
+
+When upgrading from older Embabel versions, be aware of the following changes:
+
+### Breaking Changes
+
+- **Config prefix changed**: Observability config moved from `embabel.observability.*` to `embabel.agent.platform.observability.*`
+- **`trace-http-details`**: Now defaults to `false` for privacy (was `true` in older versions)
+- **Removed properties**: `embabel.observability.capture-tool-calls` was removed — use `embabel.agent.platform.observability.trace-tool-calls` instead
+
+### What Gets Traced
+
+| Span Type | Description |
+|-----------|-------------|
+| `embabel.agent` | One run turn (parent span) |
+| `embabel.action` | Individual action execution |
+| `embabel.tool_loop` | Tool loop execution |
+| `embabel.llm` | LLM calls with token usage/cost |
+| `embabel.tool` | Tool invocations |
+| `embabel.goal` | Goal achievement |
+| `embabel.lifecycle` | Lifecycle states |
+
+### Custom Tracking with `@Tracked`
+
+Add spans to your own methods:
+
+```java
+@Tracked("enrichCustomer")
+public Customer enrich(Customer input) { ... }
+
+@Tracked(value = "callPaymentApi", type = TrackType.EXTERNAL_CALL, description = "Payment gateway")
+public PaymentResult processPayment(Order order) { ... }
+```
+
+Track types: `CUSTOM`, `PROCESSING`, `VALIDATION`, `TRANSFORMATION`, `EXTERNAL_CALL`, `COMPUTATION`.
+
+> **Note:** `@Tracked` uses Spring AOP proxies. Internal method calls within the same class are *not* intercepted — extract tracked methods into a separate `@Component` bean.
+
+---
+
+## MCP Consuming
+
+Embabel can consume external MCP servers as tool sources. Configure MCP clients and they are automatically available as tools:
+
+```yaml
+spring:
+  ai:
+    mcp:
+      client:
+        enabled: true
+        tools:
+          enabled: true
+```
+
+MCP tools are discovered at startup and registered as `Tool` beans. Use `McpToolFactory` to access them by name or group.
+
+---
+
+## Agent-to-Agent (A2A)
+
+A2A enables agents to communicate across process boundaries. Configure A2A cards and task definitions for inter-agent workflows.
+---
+
+*Source: Embabel Agent v1.0.0 documentation*

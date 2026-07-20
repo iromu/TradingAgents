@@ -13,21 +13,21 @@ public class MyAgentApplication {
 }
 ```
 
-## Configuration Properties
+## Default LLM and Roles
 
-### Default LLM and Roles
+Decouples code from specific models:
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `embabel.models.default-llm` | String | `gpt-4.1-mini` | Default LLM name |
 | `embabel.models.default-embedding-model` | String | `null` | Default embedding model |
-| `embabel.models.llms` | Map<String, String> | `{}` | Map of role to LLM name |
-| `embabel.models.embedding-services` | Map<String, String> | `{}` | Map of role to embedding service |
+| `embabel.models.llms` | Map\<String, String\> | `{}` | Role to LLM name map |
+| `embabel.models.embedding-services` | Map\<String, String\> | `{}` | Role to embedding service map |
 
 ```yaml
 embabel:
   models:
-    default-llm: gpt-4.1-mini
+    default-llm: gpt-4o-mini
     default-embedding-model: text-embedding-3-small
     llms:
       cheapest: gpt-4o-mini
@@ -38,83 +38,94 @@ embabel:
       accurate: text-embedding-3-large
 ```
 
-### Platform Configuration
+## Platform Configuration
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `embabel.agent.platform.name` | String | `embabel-default` | Core platform identity name |
+| `embabel.agent.platform.name` | String | `embabel-default` | Platform identity name |
 | `embabel.agent.platform.description` | String | `Embabel Default Agent Platform` | Platform description |
 
-### Logging Personality
+## Logging Personality
+
+| Value | Description |
+|-------|-------------|
+| `starwars` | Star Wars themed messages |
+| `severance` | Severance — "Praise Kier" |
+| `colossus` | Colossus: The Forbin Project |
+| `hitchhiker` | Hitchhiker's Guide to the Galaxy |
+| `montypython` | Monty Python |
+
+```yaml
+embabel:
+  agent:
+    logging:
+      personality: hitchhiker
+```
+
+## Agent Scanning
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `embabel.agent.logging.personality` | String | _(none)_ | Themed logging messages |
-
-Available values: `starwars`, `severance`, `colossus`, `hitchhiker`, `montypython`
-
-### Agent Scanning
-
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `embabel.agent.platform.scanning.annotation` | Boolean | `true` | Auto-register beans with `@Agent` and `@Agentic` |
+| `embabel.agent.platform.scanning.annotation` | Boolean | `true` | Auto-register `@Agent` / `@Agentic` beans |
 | `embabel.agent.platform.scanning.bean` | Boolean | `false` | Auto-register Spring beans of type `Agent` |
 
-### Tool Loop
+## Planner Configuration
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `embabel.agent.platform.toolloop.type` | String | `default` | `default` (sequential) or `parallel` (experimental) |
-| `embabel.agent.platform.toolloop.max-iterations` | Int | `20` | Max tool loop iterations |
-| `embabel.agent.platform.toolloop.parallel.per-tool-timeout` | Duration | `30s` | Timeout per tool in parallel mode |
-| `embabel.agent.platform.toolloop.parallel.batch-timeout` | Duration | `60s` | Timeout for entire batch in parallel mode |
-| `embabel.agent.platform.toolloop.empty-response.max-retries` | Int | `0` | Max retries for empty responses (weak models) |
-| `embabel.agent.platform.toolloop.empty-response.nudge-message` | String | _(none)_ | Message appended when LLM goes silent |
-| `embabel.agent.platform.toolloop.tool-not-found.max-retries` | Int | `3` | Max retries when LLM calls unknown tool name |
+| `embabel.agent.platform.planner.restricted-goals` | Boolean | `false` | When `true`, each `@Agent` must have a single unique return type across all `@Goal` actions; violations rejected at startup |
 
-### Execution Mode
+```yaml
+embabel:
+  agent:
+    platform:
+      planner:
+        restricted-goals: true
+```
+
+## Execution Mode
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
 | `embabel.agent.platform.process-type` | String | `SIMPLE` | `SIMPLE` (sequential) or `CONCURRENT` (parallel actions) |
 
-### Autonomy
+## Autonomy Configuration
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `embabel.agent.platform.autonomy.agent-confidence-cut-off` | Double | `0.6` | Confidence threshold for agent operations |
+| `embabel.agent.platform.autonomy.agent-confidence-cut-off` | Double | `0.6` | Confidence threshold for agent selection |
 | `embabel.agent.platform.autonomy.goal-confidence-cut-off` | Double | `0.6` | Confidence threshold for goal achievement |
 
-### HTTP Client
+```yaml
+embabel:
+  agent:
+    platform:
+      autonomy:
+        agent-confidence-cut-off: 0.7
+        goal-confidence-cut-off: 0.8
+```
 
-Add `embabel-agent-netty-client-autoconfigure` for Netty:
-
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `embabel.agent.platform.http-client.connect-timeout` | Duration | `25s` | Connection timeout |
-| `embabel.agent.platform.http-client.read-timeout` | Duration | `1m` | Read timeout |
-
-### REST Endpoints
-
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `embabel.agent.platform.rest.process-status-enabled` | Boolean | `true` | `GET /api/v1/process/{id}` |
-| `embabel.agent.platform.rest.process-kill-enabled` | Boolean | `true` | `DELETE /api/v1/process/{id}` |
-| `embabel.agent.platform.rest.process-events-enabled` | Boolean | `true` | `GET /events/process/{id}` |
-
-### Process Repository
-
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `embabel.agent.platform.process-repository.window-size` | Int | `1000` | Max processes kept in memory |
-
-### Test Configuration
-
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| `embabel.agent.platform.test.mock-mode` | Boolean | `true` | Enable mock mode for testing |
+Certainty below these thresholds causes failure to choose an agent or goal.
 
 ## LLM Provider Configuration
+
+### Provider Summary
+
+| Provider | Starter | Key Env Var |
+|----------|---------|-------------|
+| OpenAI | `embabel-agent-starter-openai` | `OPENAI_API_KEY` |
+| OpenAI Custom (Groq, Z.AI) | `embabel-agent-starter-openai-custom` | `OPENAI_CUSTOM_API_KEY` |
+| Anthropic | `embabel-agent-starter-anthropic` | `ANTHROPIC_API_KEY` |
+| Google Gemini (OpenAI-compatible) | `embabel-agent-starter-gemini` | `GEMINI_API_KEY` |
+| Google GenAI (Native) | `embabel-agent-starter-google-genai` | `GOOGLE_API_KEY` |
+| DeepSeek | `embabel-agent-starter-deepseek` | `DEEPSEEK_API_KEY` |
+| OCI GenAI | `embabel-agent-starter-oci-genai` | OCI config file |
+| Mistral AI | `embabel-agent-starter-mistral-ai` | `MISTRAL_API_KEY` |
+| LM Studio | `embabel-agent-starter-lmstudio` | (none, local) |
+| Ollama | `embabel-agent-starter-ollama` | (none, local) |
+| AWS Bedrock | `embabel-agent-starter-bedrock` | AWS credentials |
+| Docker Local Models | `embabel-agent-starter-docker` | (none, local) |
+| ONNX Embeddings | `embabel-agent-starter-onnx` | (none, local) |
 
 ### OpenAI
 
@@ -128,15 +139,9 @@ embabel:
           base-url: ${OPENAI_BASE_URL:}  # Azure: https://{resource}.openai.azure.com/openai
 ```
 
-Environment variables:
-- `OPENAI_API_KEY` (required)
-- `OPENAI_BASE_URL` (optional, for Azure)
-- `OPENAI_COMPLETIONS_PATH` (optional, default: `/v1/completions`)
-- `OPENAI_EMBEDDINGS_PATH` (optional, default: `/v1/embeddings`)
+Env vars: `OPENAI_API_KEY` (required), `OPENAI_BASE_URL` (optional, for Azure), `OPENAI_COMPLETIONS_PATH`, `OPENAI_EMBEDDINGS_PATH`.
 
-Add: `embabel-agent-starter-openai`
-
-### OpenAI Custom (Groq, Together AI, Z.AI, etc.)
+### OpenAI Custom (Groq, Z.AI, etc.)
 
 ```yaml
 embabel:
@@ -151,12 +156,11 @@ embabel:
 ```
 
 For Z.AI with non-standard paths:
+
 ```bash
 export OPENAI_CUSTOM_BASE_URL="https://api.z.ai/api/coding/paas"
 export OPENAI_CUSTOM_COMPLETIONS_PATH="/v4/chat/completions"
 ```
-
-Add: `embabel-agent-starter-openai-custom`
 
 ### Anthropic
 
@@ -169,22 +173,6 @@ embabel:
           api-key: ${ANTHROPIC_API_KEY}
           base-url: ${ANTHROPIC_BASE_URL:}
 ```
-
-Add: `embabel-agent-starter-anthropic`
-
-### Google Gemini (OpenAI-compatible)
-
-```yaml
-embabel:
-  agent:
-    platform:
-      models:
-        gemini:
-          api-key: ${GEMINI_API_KEY}
-          base-url: ${GEMINI_BASE_URL:https://generativelanguage.googleapis.com/v1beta/openai}
-```
-
-Add: `embabel-agent-starter-gemini`
 
 ### Google GenAI (Native — Gemini 3.x)
 
@@ -213,7 +201,46 @@ embabel:
 
 Available models: `gemini-3.5-flash`, `gemini-3.1-flash-lite`, `gemini-3.1-pro-preview`, `gemini-2.5-pro`, `gemini-2.5-flash`, `gemini-2.5-flash-lite`, `gemini-2.0-flash`, `gemini-2.0-flash-lite`.
 
-Add: `embabel-agent-starter-google-genai`
+Embedding: `gemini_embedding_001` (3072 dims, $0.15/1M tokens).
+
+### Ollama
+
+```yaml
+embabel:
+  agent:
+    platform:
+      models:
+        ollama:
+          base-url: http://localhost:11434
+```
+
+Alternatively, use the OpenAI-compatible API: add `embabel-agent-starter-openai-custom` with `OPENAI_CUSTOM_BASE_URL=http://localhost:11434/v1`.
+
+### LM Studio
+
+```yaml
+embabel:
+  agent:
+    platform:
+      models:
+        lmstudio:
+          base-url: http://localhost:1234/v1
+```
+
+### OCI Generative AI
+
+```yaml
+embabel:
+  agent:
+    platform:
+      models:
+        ocigenai:
+          compartment-id: ocid1.compartment.oc1...
+          region: us-chicago-1
+          # authentication-type: INSTANCE_PRINCIPAL | FILE | SESSION_TOKEN | SIMPLE
+```
+
+Defaults to `~/.oci/config` with profile `DEFAULT`. When the OpenAI provider is absent from the classpath, OCI supplies defaults for Embabel's default LLM and embedding model.
 
 ### DeepSeek
 
@@ -225,25 +252,6 @@ embabel:
         deepseek:
           api-key: ${DEEPSEEK_API_KEY}
           base-url: ${DEEPSEEK_BASE_URL:https://api.deepseek.com}
-```
-
-Add: `embabel-agent-starter-deepseek`
-
-### OCI Generative AI
-
-Add: `embabel-agent-starter-oci-genai`
-
-Defaults to `~/.oci/config` with profile `DEFAULT`. When the OpenAI provider is not on the classpath, OCI supplies defaults for Embabel's default LLM and embedding model.
-
-```yaml
-embabel:
-  agent:
-    platform:
-      models:
-        ocigenai:
-          compartment-id: ocid1.compartment.oc1...
-          region: us-chicago-1
-          # authentication-type: INSTANCE_PRINCIPAL | RESOURCE_PRINCIPAL | WORKLOAD_IDENTITY | SESSION_TOKEN | SIMPLE
 ```
 
 ### Mistral AI
@@ -258,88 +266,173 @@ embabel:
           base-url: ${MISTRAL_BASE_URL:https://api.mistral.ai}
 ```
 
-Add: `embabel-agent-starter-mistral-ai`
+### AWS Bedrock
 
-### LM Studio
+```yaml
+embabel:
+  models:
+    bedrock:
+      models:
+        - name: anthropic.claude-3-5-sonnet-20241022-v2:0
+          input-price: 3.0
+          output-price: 15.0
+```
+
+### Docker Local Models
+
+```yaml
+embabel:
+  docker:
+    models:
+      base-url: http://localhost:12434/engines
+```
+
+### ONNX Embeddings
 
 ```yaml
 embabel:
   agent:
     platform:
       models:
-        lmstudio:
-          base-url: http://localhost:1234/v1
+        onnx:
+          embeddings:
+            enabled: true
+            model-uri: file://./models/all-MiniLM-L6-v2/model.onnx
+            tokenizer-uri: file://./models/all-MiniLM-L6-v2/tokenizer.json
+            dimensions: 384
+            model-name: all-MiniLM-L6-v2
 ```
 
-Add: `embabel-agent-starter-lmstudio`
+### Retry / Backoff (All Cloud Providers)
 
-### Ollama
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `max-attempts` | Int | `10` | Max retry attempts |
+| `backoff-millis` | Long | `5000` | Initial backoff (ms) |
+| `backoff-multiplier` | Double | `5.0` | Backoff multiplier |
+| `backoff-max-interval` | Long | `180000` | Max backoff interval (ms) |
 
-Add: `embabel-agent-starter-ollama`
+Example — customizing OpenAI retries:
 
-Or use the OpenAI-compatible API: add `embabel-agent-starter-openai-custom` with `OPENAI_CUSTOM_BASE_URL=http://localhost:11434/v1`.
-
-## LlmOptions (Per-Call Configuration)
-
-For per-call LLM configuration, use the fluent `LlmOptions` API:
-
-```java
-var options = LlmOptions.withModel("gpt-4o")
-    .withTemperature(0.8)
-    .withTopP(0.9)
-    .withPersona("You are a creative storyteller");
+```yaml
+embabel:
+  agent:
+    platform:
+      models:
+        openai:
+          max-attempts: 5
+          backoff-millis: 2000
+          backoff-multiplier: 3.0
 ```
 
-Key methods:
-- `withModel(String)` — specific model name
-- `withRole(String)` — role defined in config (e.g., `#best`)
-- `withTemperature(Double)` — 0.0–1.0
-- `withTopP(Double)` — nucleus sampling
-- `withTopK(Integer)` — top-K sampling
-- `withPersona(String)` — system message persona
+## Tool Loop
 
-`LlmOptions` is serializable — can be set in `application.yml` for externalized configuration.
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.agent.platform.toolloop.type` | String | `default` | `default` (sequential) or `parallel` (experimental) |
+| `embabel.agent.platform.toolloop.max-iterations` | Int | `20` | Max iterations |
+| `embabel.agent.platform.toolloop.parallel.per-tool-timeout` | Duration | `30s` | Per-tool timeout in parallel mode |
+| `embabel.agent.platform.toolloop.parallel.batch-timeout` | Duration | `60s` | Batch timeout in parallel mode |
+| `embabel.agent.platform.toolloop.empty-response.max-retries` | Int | `0` | Retries for empty responses (weak models) |
+| `embabel.agent.platform.toolloop.empty-response.nudge-message` | String | _(none)_ | Nudge message when LLM goes silent |
 
-## Anthropic Prompt Caching
-
-```java
-var caching = AnthropicCachingConfig.builder()
-    .systemPrompt()
-    .tools()
-    .conversationHistory()
-    .build();
+```yaml
+embabel:
+  agent:
+    platform:
+      toolloop:
+        max-iterations: 30
+        empty-response:
+          max-retries: 1
 ```
 
-Cache reads cost 90% less than regular tokens. Minimum size: 1024 tokens (older models) or 4096 tokens (Claude Sonnet 4.5+).
+For weak open-weights models (e.g., `gpt-oss-20b`, some Qwen variants), set `max-retries: 1` to re-invoke the LLM with a nudge. Strong frontier models should keep `0`.
 
-## Custom LLM Integration
+## HTTP Client
 
-Implement `LlmMessageSender` for unsupported providers:
+Add `embabel-agent-netty-client-autoconfigure` for Reactor Netty:
 
-```java
-public class CustomLlmMessageSender implements LlmMessageSender {
-    @Override
-    public LlmMessageResponse sendMessage(List<Message> messages) {
-        // Make HTTP call to your provider
-        return new LlmMessageResponse(message, textContent, usage);
-    }
-}
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.agent.platform.http-client.connect-timeout` | Duration | `25s` | Connection timeout |
+| `embabel.agent.platform.http-client.read-timeout` | Duration | `1m` | Read timeout (increase for long responses / thinking mode) |
+
+```yaml
+embabel:
+  agent:
+    platform:
+      http-client:
+        connect-timeout: 10s
+        read-timeout: 10m
 ```
 
-Register as a Spring bean with `LlmService` for model discovery.
+## REST Endpoints
 
-## Custom Embedding Service
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.agent.platform.rest.process-status-enabled` | Boolean | `true` | `GET /api/v1/process/{id}` |
+| `embabel.agent.platform.rest.process-kill-enabled` | Boolean | `true` | `DELETE /api/v1/process/{id}` |
+| `embabel.agent.platform.rest.process-events-enabled` | Boolean | `true` | `GET /events/process/{id}` (SSE) |
 
-Implement `EmbeddingService` for custom embeddings:
+## Process Repository
 
-```java
-public class CustomEmbeddingService implements EmbeddingService {
-    @Override
-    public List<float[]> embed(List<String> texts) {
-        // Call your embedding API
-        return results;
-    }
-}
-```
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.agent.platform.process-repository.window-size` | Int | `1000` | Max processes kept in memory (default `InMemoryAgentProcessRepository`) |
 
-Register as a Spring bean for auto-discovery.
+## Test Configuration
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.agent.platform.test.mock-mode` | Boolean | `true` | Enable mock mode for testing |
+
+## LLM Operations (Prompts & Data Binding)
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.agent.platform.llm-operations.prompts.maybe-prompt-template` | String | `maybe_prompt_contribution` | "Maybe" prompt template (enables failure result) |
+| `embabel.agent.platform.llm-operations.prompts.generate-examples-by-default` | Boolean | `true` | Generate examples by default |
+| `embabel.agent.platform.llm-operations.data-binding.max-attempts` | Int | `10` | Max data-binding retry attempts |
+| `embabel.agent.platform.llm-operations.data-binding.fixed-backoff-millis` | Long | `30` | Fixed backoff between retries (ms) |
+
+## Standalone LLM Operations
+
+Separate config prefix for LLM operations that are not agent-platform specific:
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.llm-operations.prompts.default-timeout` | Duration | _(none)_ | Default timeout for LLM prompt operations |
+
+## SSE Configuration
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.agent.platform.sse.max-buffer-size` | Int | _(default)_ | Max SSE buffer size |
+| `embabel.agent.platform.sse.max-process-buffers` | Int | _(default)_ | Max process buffers for SSE |
+
+## Process ID Generation
+
+| Property | Type | Default | Description |
+|----------|------|---------|-------------|
+| `embabel.agent.platform.process-id-generation` | String | _(default)_ | Strategy for generating process IDs |
+
+## Empty Response Policy
+
+For weak models that return empty responses after tool calls, configure an `EmptyResponsePolicy` bean or use the `toolloop.empty-response` properties above (see `reference/llm-integration.md` for details).
+
+## Module Stability
+
+Embabel modules are classified by stability level:
+
+| Level | Description |
+|-------|-------------|
+| **Stable** | Production-ready, no breaking changes without major version bump |
+| **Incubating** | Under active development, may have breaking changes |
+| **Experimental** | Early-stage, may be removed or significantly changed |
+
+Key incubating modules: `embabel-agent-onnx` (ONNX embeddings), `embabel-agent-eval` (evaluation framework).
+Experimental modules: `embabel-agent-discord`, `embabel-agent-remote`, `embabel-agent-skills`, `embabel-agent-spec`.
+
+---
+
+*Source: Embabel Agent v1.0.0 documentation — `reference/configuration`, `reference/llms`, `reference/asynch-mode`*

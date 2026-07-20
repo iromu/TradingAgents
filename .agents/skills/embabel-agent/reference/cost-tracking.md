@@ -1,155 +1,113 @@
-# Cost Tracking Reference
+# Cost Tracking
 
-Embabel emits events for every LLM and embedding call, enabling real-time cost tracking and budget management.
+Embabel emits an event for every LLM and embedding call your agent makes. Subscribe to those events to track real-time cost, model usage, and per-agent spend — then use that data to enforce budget guardrails that block the *next* call.
 
-## Events
+## Cost Tracking Overview
 
-### LlmInvocationEvent
+Two event types are available:
 
-Emitted once per LLM call:
+- **`LlmInvocationEvent`** — emitted once per LLM call.
+- **`EmbeddingInvocationEvent`** — emitted once per embedding call.
 
-```java
-public class CostTrackingListener implements AgenticEventListener {
-    @EventListener
-    public void onLlmCall(LlmInvocationEvent event) {
-        String model = event.getInvocation().getLlmMetadata().getModel();
-        String provider = event.getInvocation().getLlmMetadata().getProvider();
-        int inputTokens = event.getInvocation().getUsage().getInputTokens();
-        int outputTokens = event.getInvocation().getUsage().getOutputTokens();
-        double cost = event.getInvocation().getCost();
-        String interactionId = event.getInteractionId().getValue();
-        String processId = event.getAgentProcess().getId();
-        String agentName = event.getAgentProcess().getAgent().getName();
+Each event exposes:
 
-        // Track cost by process, tenant, user, etc.
-    }
-}
-```
+| Field | Description |
+|---|---|
+| `invocation.llmMetadata` (or `embeddingMetadata`) | Model name and provider |
+| `invocation.usage` | Token counts |
+| `invocation.cost()` | Computed cost for that call |
+| `interactionId` | Identifier of the originating interaction |
+| `agentProcess` | The agent process that triggered the call (`agentProcess.id` to group, `agentProcess.agent.name` to label) |
 
-### EmbeddingInvocationEvent
+## Listening for LlmInvocationEvent
 
-Emitted once per embedding call:
+Implement `AgenticEventListener` and react to the events you care about. The listener is registered like any other Embabel event listener.
 
 ```java
-@EventListener
-public void onEmbedding(EmbeddingInvocationEvent event) {
-    String model = event.getEmbeddingMetadata().getModel();
-    double cost = event.getEmbeddingInvocation().getCost();
-    // Track embedding costs similarly
-}
-```
+import io.emabel.agent.framework.events.AgenticEventListener;
+import io.emabel.agent.framework.events.LlmInvocationEvent;
+import io.emabel.agent.framework.events.AgentProcessEvent;
+import java.util.concurrent.ConcurrentHashMap;
+import it.unimi.dsi.fastutil.doubles.DoubleAdder;
 
-## Cost Tracking by Dimension
+public class OrganizationCostTracker implements AgenticEventListener {
 
-### By Process
+    private final ConcurrentHashMap<String, DoubleAdder> costPerAgent = new ConcurrentHashMap<>();
 
-```java
-public class ProcessCostListener implements AgenticEventListener {
-    private final ConcurrentHashMap<String, Double> costs = new ConcurrentHashMap<>();
-
-    @EventListener
-    public void onLlmCall(LlmInvocationEvent event) {
-        String processId = event.getAgentProcess().getId();
-        costs.merge(processId, event.getInvocation().getCost(), Double::sum);
-    }
-
-    public double getProcessCost(String processId) {
-        return costs.getOrDefault(processId, 0.0);
-    }
-}
-```
-
-### By Tenant
-
-```java
-public class TenantCostListener implements AgenticEventListener {
-    private final ConcurrentHashMap<String, Double> tenantCosts = new ConcurrentHashMap<>();
-
-    @EventListener
-    public void onLlmCall(LlmInvocationEvent event) {
-        String tenantId = event.getToolCallContext().get("tenantId");
-        if (tenantId != null) {
-            tenantCosts.merge(tenantId, event.getInvocation().getCost(), Double::sum);
+    @Override
+    public void onProcessEvent(AgentProcessEvent event) {
+        if (event instanceof LlmInvocationEvent llm) {
+            costPerAgent
+                .computeIfAbsent(llm.getAgentProcess().getAgent().getName(), k -> new DoubleAdder())
+                .add(llm.getInvocation().cost());
         }
     }
 }
 ```
 
-## Budget Guardrail Pattern
+**Best practices:**
 
-Combine cost tracking events with guardrails to cap spending:
+- Use a thread-safe data structure (e.g. `ConcurrentHashMap` + `DoubleAdder`). Multiple agent processes may emit events concurrently.
+- The same pattern works for `EmbeddingInvocationEvent`.
+- Group by `agentProcess.id` for fine-grained accounting, or `agentProcess.agent.name` for a high-level label.
 
-### Step 1: Cost Listener
+## Budget Management
 
-```java
-public class CostTrackingListener implements AgenticEventListener {
-    private final ConcurrentHashMap<String, Double> costs = new ConcurrentHashMap<>();
+Cost events fire **after** the call completes, so they cannot stop the call that just ran. What they can do is stop the *next* one.
 
-    @EventListener
-    public void onLlmCall(LlmInvocationEvent event) {
-        String processId = event.getAgentProcess().getId();
-        costs.merge(processId, event.getInvocation().getCost(), Double::sum);
-    }
+The pattern combines two pieces:
 
-    public double getCost(String processId) {
-        return costs.getOrDefault(processId, 0.0);
-    }
-}
+1. **A listener that counts.** Subscribe to `LlmInvocationEvent` and accumulate cost or tokens against the key you care about — agent process id, tenant, or end user.
+2. **A guardrail that blocks.** A `UserInputGuardRail` reads the counter before the next LLM call. If the budget is exceeded, the guardrail returns a `CRITICAL` validation error and the call never happens.
+
+```
+                    LLM call ───► LlmInvocationEvent ─┐
+                                                       ▼
+                                         counter (per agent / tenant / user)
+                                                       │
+  next call ──► UserInputGuardRail reads counter ──────┘
+                               │
+                      over budget? ──► CRITICAL ──► call blocked
 ```
 
-### Step 2: Budget Guardrail
+### Budget Guardrail Example
 
 ```java
-public class BudgetGuardRail implements UserInputGuardRail {
-    private final CostTrackingListener costListener;
-    private final double maxCost;
+import io.emabel.agent.framework.guardrails.UserInputGuardRail;
+import io.emabel.agent.framework.guardrails.ValidationResult;
+import java.util.concurrent.ConcurrentHashMap;
+import it.unimi.dsi.fastutil.doubles.DoubleAdder;
 
-    public BudgetGuardRail(CostTrackingListener costListener, double maxCost) {
-        this.costListener = costListener;
-        this.maxCost = maxCost;
+public class BudgetGuardrail implements UserInputGuardRail {
+
+    private final DoubleAdder totalSpend = new DoubleAdder();
+    private final double budgetLimit;
+
+    public BudgetGuardrail(double budgetLimit) {
+        this.budgetLimit = budgetLimit;
+    }
+
+    // Called by the cost-tracking listener after each LLM call
+    public void recordCost(double cost) {
+        totalSpend.add(cost);
     }
 
     @Override
-    public ValidationResult validate(String input) {
-        String processId = getCurrentProcessId(); // from context
-        if (costListener.getCost(processId) > maxCost) {
-            return ValidationResult.failure(ValidationSeverity.CRITICAL,
-                "Budget exceeded: $" + costListener.getCost(processId));
+    public ValidationResult validate(String userInput) {
+        if (totalSpend.sum() >= budgetLimit) {
+            return ValidationResult.critical(
+                "Budget exceeded: $" + String.format("%.2f", totalSpend.sum())
+                + " / $" + String.format("%.2f", budgetLimit)
+            );
         }
-        return ValidationResult.success();
+        return ValidationResult.valid();
     }
 }
 ```
 
-### Step 3: Register Guardrail
+Wire the listener and guardrail into the same agent process. The listener accumulates cost; the guardrail reads it and blocks when over budget. Register the guardrail as a `UserInputGuardRail` (see Guardrails reference).
 
-```java
-@Bean
-public BudgetGuardRail budgetGuardRail(CostTrackingListener costListener) {
-    return new BudgetGuardRail(costListener, 10.0); // $10 limit
-}
-```
+> **NOTE:** For a hard cap on the agent process itself (e.g. "stop this run after $1 of total spend"), see `EarlyTerminationPolicy`. Use it standalone or alongside the Budget Guardrail as a safety net.
+---
 
-## Early Termination Policy
-
-For a hard cap on the agent process itself:
-
-```java
-var options = ProcessOptions.builder()
-    .withEarlyTerminationPolicy(new EarlyTerminationPolicy() {
-        @Override
-        public boolean shouldTerminate(AgentProcess process) {
-            return costListener.getCost(process.getId()) > 1.0; // $1 cap
-        }
-    })
-    .build();
-```
-
-## Key Points
-
-- Cost events fire **after** the call completes — they cannot stop the call that just ran
-- Use a listener to accumulate costs, then a guardrail to block the **next** call
-- For hard process-level caps, use `EarlyTerminationPolicy`
-- Cost tracking is event-based — subscribe via `AgenticEventListener`
-- Use thread-safe data structures for accumulated state (concurrent processes)
-- Group by `agentProcess.id` for per-process tracking, or by tenant/user for multi-tenant scenarios
+*Source: Embabel Agent v1.0.0 documentation*

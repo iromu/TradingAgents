@@ -1,198 +1,453 @@
-# LLM Integration Reference
+# LLM Integration — Per-Call Configuration
 
-Full details for LLM integration with Embabel. See SKILL.md for the core workflow.
+Embabel supports any LLM backed by Spring AI. The central abstraction for selecting and configuring models is `LlmOptions`, which is passed through the `PromptRunner` fluent API or injected via the `Ai` interface.
 
 ## LlmOptions — Per-Call Configuration
 
+`LlmOptions` is a fluent builder that specifies which model to use and its hyperparameters. It is deserializable, so you can set it in `application.yml`.
+
+### Key Methods
+
+| Method | Description |
+|---|---|
+| `withModel(String)` | Direct model name (e.g. `"gpt-4o"`) |
+| `withRole(String)` | Role name mapped in config via `embabel.models.llms.<role>` |
+| `withTemperature(Double)` | Creativity / randomness (`0.0`–`1.0`) |
+| `withTopP(Double)` | Nucleus-sampling parameter |
+| `withTopK(Integer)` | Top-K sampling parameter |
+| `withPersona(String)` | Inject a system-message persona |
+
+### Basic Usage
+
+**Java**
+
 ```java
-var options = LlmOptions.withModel("gpt-4o")
-    .withTemperature(0.8)
-    .withTopP(0.9)
-    .withTopK(10)
-    .withPersona("You are a creative storyteller");
+import com.embabel.common.ai.model.LlmOptions;
+import com.embabel.common.ai.model.OpenAiModels;
+
+LlmOptions creative = LlmOptions
+    .withModel(OpenAiModels.GPT_4O_MINI)
+    .withTemperature(0.8);
+
+LlmOptions analytical = LlmOptions
+    .withModel(OpenAiModels.GPT_4O_MINI)
+    .withTemperature(0.2)
+    .withTopP(0.9);
 ```
 
-Key methods:
-- `withModel(String)` — specific model name
-- `withRole(String)` — role defined in config (e.g., `#best`)
-- `withTemperature(Double)` — 0.0–1.0
-- `withTopP(Double)` — nucleus sampling
-- `withTopK(Integer)` — top-K sampling
-- `withPersona(String)` — system message persona
+**Kotlin**
 
-`LlmOptions` is serializable — can be set in `application.yml` for externalized configuration.
+```kotlin
+import com.embabel.common.ai.model.LlmOptions
+import com.embabel.common.ai.model.OpenAiModels
+
+val creative = LlmOptions
+    .withModel(OpenAiModels.GPT_4O_MINI)
+    .withTemperature(0.8)
+```
+
+### Factory Methods
+
+| Factory | Purpose |
+|---|---|
+| `LlmOptions.withDefaultLlm()` | Resolve the configured `default-llm` |
+| `LlmOptions.withModel(String)` | Hard-code a model name |
+| `LlmOptions.withRole(String)` | Resolve via `embabel.models.llms.<role>` |
+| `LlmOptions.fromCriteria(ModelSelectionCriteria)` | Pick model by capability criteria |
+
+---
 
 ## Mixing Models
 
-```java
-var writer = LlmOptions.withModel(OpenAiModels.GPT_4O_MINI)
-    .withTemperature(0.8);
+Break agentic flows into discrete action steps — each step can target a different model.
 
-var reviewer = LlmOptions.withModel(OpenAiModels.GPT_4O)
-    .withTemperature(0.2);
+```java
+@Action
+public Story createStory(UserInput input, OperationContext context) {
+    var writer = context.ai()
+        .withLlm(LlmOptions.withModel(OpenAiModels.GPT_4O));
+
+    Story draft = writer.createObject(
+        "Write a story about: " + input.getContent(), Story.class);
+
+    var reviewer = context.ai()
+        .withLlm(LlmOptions.withModel(OpenAiModels.GPT_4O_MINI)
+            .withTemperature(0.2));
+
+    return reviewer.generateText("Critique this story:\n" + draft);
+}
 ```
 
-Use different models and temperatures for different actions in the same agent.
+```kotlin
+@Action
+fun createStory(input: UserInput, context: OperationContext): String {
+    val writer = context.ai()
+        .withLlm(LlmOptions.withModel(OpenAiModels.GPT_4O))
 
-## Using the Ai Interface
+    val draft = writer.createObject(
+        "Write a story about: ${input.content}", Story::class.java)
+
+    val reviewer = context.ai()
+        .withLlm(LlmOptions.withModel(OpenAiModels.GPT_4O_MINI)
+            .withTemperature(0.2))
+
+    return reviewer.generateText("Critique this story:\n$draft")
+}
+```
+
+---
+
+## Role-Based Model Selection
+
+Map role names to models in config, then reference them with `#` prefix or `withRole()`.
+
+**application.yml**
+
+```yaml
+embabel:
+  models:
+    default-llm: gpt-4o-mini
+    llms:
+      cheapest: gpt-4o-mini
+      best: gpt-4o
+      reasoning: o1-preview
+```
+
+**Java**
 
 ```java
-public record InjectedComponent(Ai ai) {
-    public Joke createJoke(String topic1, String topic2, String voice) {
-        return ai.withLlm(LlmOptions.withDefaultLlm().withTemperature(.8))
-            .withId("tell-joke")
-            .creating(Joke.class)
-            .fromPrompt("Tell me a joke about %s and %s. Voice: %s".formatted(topic1, topic2, voice));
+@LlmCall(llm = "#best")
+String myAction();
+
+ai.withLlmByRole("best")
+    .create("Analyze this data", Report.class);
+```
+
+**Kotlin**
+
+```kotlin
+@LlmCall(llm = "#best")
+fun myAction(): String
+
+ai.withLlmByRole("best")
+    .create("Analyze this data", Report::class.java)
+```
+
+---
+
+## The Ai Interface
+
+`Ai` is the top-level entry point for all Embabel AI operations. Inject it like any Spring bean via constructor injection, or access it through `OperationContext.ai()`.
+
+**Java**
+
+```java
+@Component
+public record MyService(Ai ai) {
+    public String tellJoke(String topic) {
+        return ai.withDefaultLlm().generateText("Tell me a joke about " + topic);
     }
 }
 ```
 
-## PromptRunner Methods
+**Kotlin**
+
+```kotlin
+@Component
+class MyService(private val ai: Ai) {
+    fun tellJoke(topic: String): String =
+        ai.withDefaultLlm().generateText("Tell me a joke about $topic")
+}
+```
+
+| Method | Returns | Purpose |
+|---|---|---|
+| `ai.withDefaultLlm()` | `PromptRunner` | Runner using the configured default model |
+| `ai.withLlm(LlmOptions)` | `PromptRunner` | Runner with custom model / hyperparameters |
+| `ai.withLlm(String)` | `PromptRunner` | Runner with a model name (shortcut) |
+| `ai.withLlmByRole(String)` | `PromptRunner` | Runner resolved by role name |
+
+---
+
+## PromptRunner Fluent API
+
+`PromptRunner` is the interface used to send prompts to the LLM. Build it via `Ai` or `OperationContext.promptRunner()`.
+
+| Method | Description |
+|---|---|
+| `createObject(String, Class<T>)` | Create a typed object; throws on persistent failure (with retry) |
+| `createObjectIfPossible(String, Class<T>)` | Create a typed object; returns `null` on failure |
+| `generateText(String)` | Simple text response |
+
+### Fluent Chaining
+
+```java
+Story story = context.ai()
+    .withDefaultLlm()
+    .withToolGroup(CoreToolGroups.WEB)
+    .withId("create-story")
+    .creating(Story.class)
+    .withExample("A children's story",
+        new Story("Once upon a time..."))
+    .fromPrompt("Create a story about: " + input);
+```
+
+```kotlin
+val story = context.ai()
+    .withDefaultLlm()
+    .withToolGroup(CoreToolGroups.WEB)
+    .withId("create-story")
+    .creating(Story::class.java)
+    .withExample("A children's story",
+        Story("Once upon a time..."))
+    .fromPrompt("Create a story about: ${input.content}")
+```
 
 | Method | Purpose |
-|--------|---------|
-| `createObject(prompt, Class<T>)` | Create typed object (throws on failure, triggers retry) |
-| `createObjectIfPossible(prompt, Class<T>)` | Try to create, return null on failure |
-| `generateText(prompt)` | Simple text response |
-| `withLlm(LlmOptions)` | Set LLM config |
-| `withToolGroup(String)` | Add tool group |
-| `withToolObject(obj)` | Add domain object with @Tool methods |
-| `withId("id")` | Tag interaction for test verification |
-| `withExample(text, obj)` | Few-shot example |
-| `withPromptContributor(pc)` | Add prompt content |
-| `withReference(LlmReference)` | Add LlmReference with content and tools |
-| `withTool(Tool)` | Add a single tool |
-| `withTools(Tool...)` | Add multiple tools |
-| `withToolChainingFrom(Class)` | Enable tool chaining from returned type |
-| `withToolCallContext(Map)` | Set per-interaction tool call context |
-| `withGuardRails(GuardRail...)` | Add guardrails for this call |
-| `withSkills(Skills)` | Add agent skills |
-| `withImage(AgentImage)` | Add image for vision |
-| `rendering("template-name")` | Use Jinja template |
-| `streaming()` | Enable streaming mode |
+|---|---|
+| `creating(Class<T>)` | Enter the `Creating` sub-API for typed output |
+| `withExample(String prompt, T example)` | Add a few-shot example (rendered as JSON) |
+| `fromPrompt(String)` | Execute the call with the given prompt |
 
-## Vision Support
+| Method | Purpose |
+|---|---|
+| `withImage(AgentImage)` | Attach an image for vision-capable models |
+| `withDocument(AgentDocument)` | Attach a document (PDF, Office, etc.) |
+| `withMessage(Message)` | Attach a raw Embabel `Message` |
+| `withTool(Subagent.ofClass(...))` | Enable handoff to another agent |
+| `withToolObject(Object)` | Expose `@Tool` methods on a domain object |
+| `rendering(String)` | Use Jinja templates for the prompt |
+| `withThinking(Thinking)` | Enable native reasoning mode (e.g. GLM) |
+| `withStreaming(Boolean)` | Enable streaming responses |
+| `withToolNotFoundPolicy(ToolNotFoundPolicy)` | Control tool-name recovery strategy |
+
+### Full Chain Example
 
 ```java
-var image = AgentImage.fromFile(new File("diagram.png"));
-context.ai().withDefaultLlm()
+String answer = context.ai()
+    .withLlm(LlmOptions.fromCriteria(
+            ModelSelectionCriteria.getAuto()))
+    .withToolGroup(CoreToolGroups.WEB)
+    .withId("research-topic")
+    .withThinking(Thinking.withTokenBudget(2048))
+    .createObject("Research and summarize: " + topic, Answer.class);
+```
+
+```kotlin
+val answer = context.ai()
+    .withLlm(LlmOptions.fromCriteria(
+        ModelSelectionCriteria.getAuto()))
+    .withToolGroup(CoreToolGroups.WEB)
+    .withId("research-topic")
+    .withThinking(Thinking.withTokenBudget(2048))
+    .createObject("Research and summarize: $topic", Answer::class.java)
+```
+
+---
+
+## Model Constants
+
+| Class | Example Constants |
+|---|---|
+| `OpenAiModels` | `GPT_4O`, `GPT_4O_MINI`, `GPT_41`, `GPT_41_MINI`, `GPT_41_NANO`, `PROVIDER` |
+| `AnthropicModels` | `CLAUDE_SONNET_4_5`, `CLAUDE_35_HAIKU`, `CLAUDE_35_SONNET`, `PROVIDER` |
+
+```java
+ai.withLlm(OpenAiModels.GPT_4O)
+    .createObject("Analyze this", Report.class);
+
+ai.withLlm(AnthropicModels.CLAUDE_35_HAIKU)
     .withImage(image)
-    .generateText("What is in this image?");
+    .generateText("Describe this image");
 ```
 
-## Streaming
+---
 
-### Object Streaming
+## Model Selection Criteria
+
+Pick models by capability rather than name:
 
 ```java
-context.ai().withDefaultLlm()
-    .streaming()
-    .createObject(Report.class)
-    .fromPrompt("Generate report")
-    .doOnNext(event -> {
-        if (event instanceof Thinking thinking) {
-            System.out.println("Thinking: " + thinking.getContent());
-        } else if (event instanceof ObjectCreated obj) {
-            System.out.println("Created: " + obj.getObject());
-        }
-    })
-    .doOnComplete(() -> {
-        System.out.println("Stream complete");
-    })
-    .subscribe();
+LlmOptions.fromCriteria(ModelSelectionCriteria.getAuto());
+LlmOptions.fromCriteria(ModelSelectionCriteria.getCheapest());
 ```
 
-### Raw Text Streaming
-
-```java
-context.ai().withDefaultLlm()
-    .streaming()
-    .generateText("Write a story")
-    .doOnNext(event -> {
-        if (event instanceof TextChunk chunk) {
-            System.out.print(chunk.getText());
-        }
-    })
-    .doOnComplete(() -> System.out.println())
-    .subscribe();
+```kotlin
+LlmOptions.fromCriteria(ModelSelectionCriteria.getAuto())
+LlmOptions.fromCriteria(ModelSelectionCriteria.getCheapest())
 ```
 
-## Custom LLM Provider
+---
 
-Implement `LlmMessageSender` for unsupported providers:
+## Quick Reference: Choosing an LLM
 
-```java
-public class CustomLlmMessageSender implements LlmMessageSender {
-    @Override
-    public LlmMessageResponse sendMessage(List<Message> messages) {
-        // HTTP call to your provider
-        return new LlmMessageResponse(message, textContent, usage);
-    }
-}
-```
+| Consideration | Guidance |
+|---|---|
+| **Complex return type** | Deeply nested structures need a stronger model |
+| **Task nature** | Review docs — different models have different strengths |
+| **Tool calling complexity** | Simple calls work on small models; complex orchestration needs a strong LLM |
+| **Cost** | Try the cheapest model that works; switch if it fails |
+| **Privacy** | Local models via Ollama or Docker are an option |
 
-Register as a Spring bean with `LlmService` for model discovery:
-
-```java
-@Bean
-LlmService customLlm() {
-    return new LlmService() {
-        @Override public String getName() { return "my-custom-llm"; }
-        @Override public LlmMessageSender createMessageSender() { return new CustomLlmMessageSender(); }
-    };
-}
-```
-
-## Custom Embedding Service
-
-Implement `EmbeddingService` for custom embeddings:
-
-```java
-public class CustomEmbeddingService implements EmbeddingService {
-    @Override
-    public List<float[]> embed(List<String> texts) {
-        // Call your embedding API
-        return results;
-    }
-}
-```
-
-Register as a Spring bean for auto-discovery.
-
-## Callbacks / Interceptors
-
-```java
-@Bean
-ToolLoopInspector toolLoopLoggingInspector() {
-    return new ToolLoopLoggingInspector();
-}
-
-@Bean
-ToolResultTruncatingTransformer truncatingTransformer() {
-    return new ToolResultTruncatingTransformer(5000);
-}
-```
+---
 
 ## Anthropic Prompt Caching
 
+Anthropic exposes public APIs for explicit prompt caching control, providing significant cost and latency savings for multi-turn conversations.
+
+### Caching Strategies
+
+Embabel provides `AnthropicCachingConfig` with granular control over what gets cached:
+
+| Strategy | What It Caches | Best For |
+|----------|---------------|----------|
+| `systemPrompt` | System prompt | Multi-turn conversations with fixed system prompt |
+| `tools` | Tool definitions | Applications with large tool schemas |
+| `conversationHistory` | Message history | Long conversations with many turns |
+| `messageType` | Specific message content | Large documents or data blocks |
+
+### Usage
+
+**Java**
+
 ```java
-var caching = AnthropicCachingConfig.builder()
-    .systemPrompt()
-    .tools()
-    .conversationHistory()
-    .build();
+import static com.embabel.agent.core.llm.AnthropicCachingConfigKt.withAnthropicCaching;
+
+AnthropicCachingConfig cachingConfig = new AnthropicCachingConfig();
+cachingConfig.setSystemPrompt(true);
+cachingConfig.setTools(true);
+
+LlmOptions options = LlmOptions.withModel(AnthropicModels.CLAUDE_SONNET_4_5);
+options = withAnthropicCaching(options, cachingConfig);
+
+var story = context.ai()
+    .withLlm(options)
+    .creating(Story.class)
+    .fromPrompt("Write a story about: " + input);
 ```
 
-Cache reads cost 90% less than regular tokens. Minimum size: 1024 tokens (older models) or 4096 tokens (Claude Sonnet 4.5+).
+**Kotlin**
 
-## Key Points
+```kotlin
+val cachingConfig = AnthropicCachingConfig()
+cachingConfig.systemPrompt = true
+cachingConfig.tools = true
 
-- Use `LlmOptions.withModel()` for per-call model/temperature configuration
-- Different actions in the same agent can use different models and temperatures
-- `withId()` is essential for test verification and debugging
-- `withExample()` enables few-shot prompting
-- `withReference()` combines content injection with tool exposure
-- Custom LLM providers require implementing `LlmMessageSender`
-- Custom embedding services implement `EmbeddingService`
-- Callbacks/interceptors can log, transform, or truncate results
-- Anthropic prompt caching significantly reduces costs for repeated content
+val options = LlmOptions.withModel(AnthropicModels.CLAUDE_SONNET_4_5)
+    .withAnthropicCaching(
+        AnthropicCachingConfig(
+            systemPrompt = true,
+            tools = true
+        )
+    )
+```
+
+### Advanced: Message-Type Caching
+
+Cache specific message content (e.g., large reference documents):
+
+```kotlin
+val cachingConfig = AnthropicCachingConfig(
+    messageType = listOf(0)  // Cache message at index 0
+)
+```
+
+### Best Practices
+
+- **System prompt caching** gives the biggest ROI — it's cached across all turns
+- **Tool caching** helps when tool schemas are large (> 50 tools)
+- **Conversation history** caching is useful for long conversations but can be expensive
+- **Cache metrics** are available in the LLM response — monitor hit rates
+- **TTL** can be configured per-cache entry for time-sensitive content
+
+> **Tip:** Start with `systemPrompt = true` and `tools = true` for the best cost/latency ratio. Add conversation history caching as needed.
+
+---
+
+## Native Structured Output
+
+Native structured output enables the model provider to enforce a JSON Schema directly, rather than relying only on prompt instructions and Embabel's object construction.
+
+### How It Works
+
+1. Embabel generates a JSON Schema from the target class
+2. The provider (e.g., OpenAI) validates the output against the schema natively
+3. Output is guaranteed to match the accepted schema
+
+### Usage
+
+```java
+var options = LlmOptions.withModel(OpenAiModels.GPT_4O)
+    .withNativeStructuredOutput(NativeStructuredOutputMode.ENABLED);
+```
+
+```kotlin
+val options = LlmOptions.withModel(OpenAiModels.GPT_4O)
+    .withNativeStructuredOutput(NativeStructuredOutputMode.ENABLED)
+```
+
+### Modes
+
+| Mode | Behavior |
+|------|----------|
+| `NativeStructuredOutputMode.ENABLED` | Try the native path when model capability and schema compatibility allow it |
+| `NativeStructuredOutputMode.DISABLED` | Force Embabel's normal object construction path |
+| `NativeStructuredOutputMode.DEFAULT` | Let Embabel decide from model capability, API shape, and schema compatibility |
+
+### Limitations
+
+- **Required fields**: OpenAI native structured output requires `required` to include every property. Optional Java reference fields are not treated as required unless annotated (e.g., `@NotNull` or `@JsonProperty(required = true)`)
+- **Arrays of objects**: May not be supported in all providers
+- **Streaming**: Native structured output is not supported for streaming by Spring AI currently
+- **Provider coverage**: OpenAI-compatible `response_format` is the primary supported path. Anthropic native structured output is currently disabled by default until its semantics are verified
+
+---
+
+## Smaller and Local Model Tuning
+
+Smaller chat models behave differently from frontier models. Embabel compensates for common issues:
+
+### Empty Response Handling
+
+Weaker open-weights models (e.g., `gpt-oss-20b`, some Qwen variants) sometimes return blank text with no further tool calls. Activate empty-response retries:
+
+```yaml
+embabel:
+  agent:
+    platform:
+      toolloop:
+        empty-response:
+          max-retries: 1  # Feed a synthetic nudge back to the model
+          nudge-message: "Please continue with your response."
+```
+
+### Tool-Name Confusion
+
+Smaller models more frequently call tools by approximate names. The default `AutoCorrectionPolicy` handles this by feeding back a "did you mean X?" suggestion. Tune retries if needed:
+
+```yaml
+embabel:
+  agent:
+    platform:
+      toolloop:
+        tool-not-found:
+          max-retries: 3  # Default: 3
+```
+
+### Iteration Headroom
+
+Recovery costs LLM calls. If you enable retry policies, raise `max-iterations` so a turn that needs an extra round trip doesn't run out of budget:
+
+```yaml
+embabel:
+  agent:
+    platform:
+      toolloop:
+        max-iterations: 30  # Default: 20
+```
+
+These settings are off-by-default so existing deployments using strong models behave exactly as before. Turn them on per-deployment when the model you've picked benefits from them.
+
+---
+
+*Source: Embabel Agent v1.0.0 documentation — `reference/llms` and `reference/types`*

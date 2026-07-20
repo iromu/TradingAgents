@@ -1,162 +1,90 @@
-# Example Agents
+# Embabel Agent Examples
 
-Real-world Embabel agent examples distilled from the official docs. See SKILL.md for the core workflow.
+Actionable walkthroughs of real Embabel agent workflows in Java. Each example shows how to define actions, use tools, and compose agents around an LLM core.
 
-## FactChecker — Multi-LLM Fact-Checking with ScatterGather/Consensus
+---
 
-A comprehensive example that demonstrates ScatterGather, ConsensusBuilder, parallel execution, and multi-model fact-checking.
+## Overview
 
-### Key Concepts Demonstrated
+Embabel agents are built from `@Action` methods that run through an `Ai` instance. Actions can call LLMs, invoke tools (web search, MCP, etc.), and carry structured context across the full call chain.
 
-- **ConsensusBuilder**: Multiple LLMs extract assertions, then consolidate into unique set
-- **ScatterGatherBuilder**: Fan-out to multiple LLMs for fact-checking, then reconcile results
-- **@AchievesGoal with @Export(remote=true)**: Auto-publishes as MCP tool
-- **ConfigurationProperties**: Type-safe config with PromptContributor factory
-- **Parallel execution**: `context.parallelMap()` for concurrent LLM calls
-- **Multi-model consensus**: Fact-check across multiple LLMs for higher accuracy
+> **Full source:** All examples live in the [embabel-agent-examples](https://github.com/embabel/embabel-agent-examples) repository. The snippets below are distilled from the official docs.
 
-### Full Code
+---
+
+## Horoscope Agent (StarNewsFinder)
+
+A multi-action agent that takes a person's name and star sign, fetches their horoscope from an API, finds relevant news stories using web tools, and composes an entertaining piece.
+
+### Key pattern: interaction-level tool call context
+
+The `findNewsStories` action attaches domain metadata to every tool invoked within that single LLM call. The context flows through to remote MCP tools as `_meta`:
 
 ```java
-@ConfigurationProperties("embabel.fact-checker")
-record FactCheckerProperties(
-        int reasoningWordCount,
-        List<String> trustedSources,
-        List<String> untrustedSources,
-        List<String> models,
-        String deduplicationModel,
-        int maxConcurrency
-) {
-    LlmOptions deduplicationLlm() {
-        return LlmOptions.withModel(deduplicationModel);
-    }
+@Action
+public RelevantNewsStories findNewsStories(
+        StarPerson person, Horoscope horoscope, Ai ai) {
 
-    PromptContributor promptContributor() {
-        return PromptContributor.fixed(
-                """
-                        Be guided by the following regarding sources:
-                        - Trusted sources: %s
-                        - Untrusted sources: %s
-                        """.formatted(
-                        String.join(", ", trustedSources),
-                        String.join(", ", untrustedSources)
-                )
-        );
-    }
-}
+    var interactionContext = ToolCallContext.of(Map.of(
+            "personName", person.name(),
+            "starSign",   person.sign(),
+            "feature",    "star-news-finder"
+    ));
 
-@Agent(description = "Fact checker agent")
-class FactChecker {
-
-    private final FactCheckerProperties properties;
-
-    public FactChecker(FactCheckerProperties properties) {
-        this.properties = properties;
-    }
-
-    @Action
-    DistinctFactualAssertions identifyDistinctFactualAssertions(
-            UserInput userInput,
-            ActionContext actionContext) {
-        return ConsensusBuilder
-                .returning(DistinctFactualAssertions.class)
-                .sourcedFrom(factualAssertionExtractors(userInput, actionContext).toList())
-                .withConsensusBy(this::consolidateFactualAssertions)
-                .asSubProcess(actionContext);
-    }
-
-    @AchievesGoal(description = "Content has been fact-checked",
-            export = @Export(remote = true, startingInputTypes = {UserInput.class}))
-    @Action
-    FactChecks runAndConsolidateFactChecks(
-            DistinctFactualAssertions distinctFactualAssertions,
-            ActionContext context) {
-        var llmFactChecks = properties.models().stream()
-                .flatMap(model -> factCheckWithSingleLlm(model, distinctFactualAssertions, context))
-                .toList();
-        return ScatterGatherBuilder
-                .returning(FactChecks.class)
-                .fromElements(FactCheck.class)
-                .generatedBy(llmFactChecks)
-                .consolidatedBy(this::reconcileFactChecks)
-                .asSubProcess(context);
-    }
-
-    private Stream<Supplier<FactCheck>> factCheckWithSingleLlm(
-            String model,
-            DistinctFactualAssertions distinctFactualAssertions,
-            OperationContext context) {
-        return context.parallelMap(
-                distinctFactualAssertions.assertions(),
-                properties.maxConcurrency(),
-                assertion -> context.ai()
-                        .withLlm(LlmOptions.withModel(model).withTimeout(Duration.ofMinutes(3)))
-                        .withPromptContributor(properties.promptContributor())
-                        .withTools(CoreToolGroups.WEB)
-                        .createObject(
-                                """
-                                        Given the following assertion, check if it is true or false and explain why in %d words
-                                        Express your confidence in your determination as a number between 0 and 1.
-                                        Use web tools so you can cite information to support your conclusion.
-                                        Use '%s' for the source field.
-
-                                        ASSERTION TO CHECK:
-                                        %s
-                                        """.formatted(
-                                        properties.reasoningWordCount(),
-                                        model,
-                                        assertion
-                                ),
-                                FactCheck.class
-                        )
-        ).stream();
-    }
+    return ai
+            .withDefaultLlm()
+            .withId("find_news_stories")
+            .withToolGroup(CoreToolGroups.WEB)
+            .withToolCallContext(interactionContext)
+            .createObject(prompt, RelevantNewsStories.class);
 }
 ```
 
-### Data Model
+**Context resolution rules:**
 
-```java
-record DistinctFactualAssertions(List<String> assertions) {}
+- Interaction-level values (set via `withToolCallContext`) win on conflict.
+- Process-level context (set via `ProcessOptions.withToolCallContext()`) is merged in as a fallback.
+- Context propagates to remote MCP tools as `_meta`.
 
-record FactCheck(
-        String assertion,
-        boolean isTrue,
-        @JsonPropertyDescription("confidence in your judgment as to whether the assertion true or false. From 0-1")
-        double confidence,
-        @JsonPropertyDescription("reasoning for your scoring")
-        String reasoning,
-        @JsonPropertyDescription("Source of the fact checks, typically a LLM model")
-        String source,
-        List<InternetResource> links
-) {}
+### Verifying context propagation
 
-record FactChecks(List<FactCheck> checks) {}
+Run the agent from the shell with the diagnostic flag:
+
+```
+sc tenantId=acme
+x "Natasha is Pisces. Find news for her" -d
 ```
 
-## StarNewsFinder — Human-in-the-Loop with WaitFor
+The `check_tool_call_context` diagnostic tool (bundled in the WEB tool group) logs the full context map:
 
-An agent that combines horoscope reading with news stories, using `WaitFor` for human-in-the-loop interaction.
-
-### Key Concepts Demonstrated
-
-- **WaitFor.formSubmission**: Pauses agent execution for user input
-- **@Cost on actions**: Controls planner action selection priority
-- **Multiple LLM models**: Different models for different steps
-- **Domain model with tools**: `HoroscopeService` exposed as a tool
-- **Spring injection**: `@Value` for configuration
-- **LlmReference**: Tool-based RAG integration
-
-### Key Pattern
-
-```java
-@Action(cost = 100.0) // Make it costly so it won't be used unless there's no other path
-public Starry makeStarry(Person person) {
-    return WaitFor.formSubmission(
-        "Let's get some astrological details for " + person.getName(),
-        Starry.class
-    );
-}
+```
+[task-2] INFO ContextDiagnosticTools - ToolCallContext received: {personName=Alex, starSign=Cancer, feature=star-news-finder, tenantId=acme}
 ```
 
-High `cost` ensures this action is only used when no cheaper path exists, making it a fallback for human input.
+### What this demonstrates
+
+| Concept | How |
+|---------|-----|
+| Multi-action agent | `StarPerson`, `Horoscope`, `RelevantNewsStories` as action return types |
+| LLM calls | `ai.createObject(prompt, Class)` for structured output |
+| Non-LLM actions | Tool groups like `CoreToolGroups.WEB` for web search |
+| Context propagation | `withToolCallContext()` carries metadata to every tool in the call |
+| Goal achievement | End-to-end: user input → horoscope + news → composed piece |
+
+---
+
+## Movies Agent
+
+The movies example is a companion workflow demonstrating another agent pattern. The source docs contain only a section header with no further detail. See the full examples repository for the complete implementation.
+
+---
+
+## Full Examples Repository
+
+All source code, including the horoscope and movies agents, is available at:
+
+**[github.com/embabel/embabel-agent-examples](https://github.com/embabel/embabel-agent-examples)**
+
+For deeper dives into `ToolCallContext` (including `@LlmTool` injection and `ToolCallContextMcpMetaConverter`), see the Embabel reference documentation.---
+
+*Source: Embabel Agent v1.0.0 documentation*

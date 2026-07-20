@@ -1,10 +1,12 @@
-# Structured Prompts Reference
+# Structured Prompts
 
-Embabel provides structured ways to organize and inject content into LLM prompts.
+Embabel provides **prompt contributors** — a way to structure, inject, and reuse content across LLM prompts. You can build prompts as plain strings, but contributors give you consistency and composability across actions and agents.
+
+---
 
 ## PromptContributor
 
-`PromptContributor` is a fundamental way to inject reusable content into prompts:
+All contributors implement `PromptContributor` with a single method:
 
 ```java
 public interface PromptContributor {
@@ -12,29 +14,32 @@ public interface PromptContributor {
 }
 ```
 
-Add to a `PromptRunner`:
+Add them to a `PromptRunner` via `withPromptContributor()`:
 
 ```java
 context.ai().withDefaultLlm()
-    .withPromptContributor(new Persona("Alex", "Data analyst.", "Help users.", "Professional."))
+    .withPromptContributor(persona)
     .creating(Analysis.class)
     .fromPrompt("Analyze the data");
 ```
 
-### Built-in Convenience Classes
+---
 
-**Persona** — Define an AI agent's personality:
+## Persona
+
+`Persona` gives a structured way to define an agent's personality, voice, and objective.
 
 ```java
-var persona = new Persona(
+var persona = Persona.create(
     "Alex the Analyst",
-    "A detail-oriented data analyst with expertise in financial markets.",
-    "Help users understand complex financial data through clear analysis.",
-    "Professional yet approachable, uses clear explanations."
+    "A detail-oriented data analyst with expertise in financial markets",
+    "Professional yet approachable, uses clear explanations",
+    "Help users understand complex financial data through clear analysis"
 );
 ```
 
-Generates:
+**Generated prompt contribution:**
+
 ```
 You are Alex the Analyst.
 Your persona: A detail-oriented data analyst with expertise in financial markets.
@@ -42,49 +47,81 @@ Your objective is Help users understand complex financial data through clear ana
 Your voice: Professional yet approachable, uses clear explanations.
 ```
 
-**RoleGoalBackstory** — Follows the Crew AI pattern:
+---
+
+## RoleGoalBackstory
+
+Follows the Crew AI pattern — useful for migration or familiar task framing.
 
 ```java
-var rgb = new RoleGoalBackstory(
-    "Senior Software Engineer",
-    "Write clean, maintainable code",
-    "10+ years experience in enterprise software development"
-);
+var agent = RoleGoalBackstory.withRole("Senior Software Engineer")
+    .andGoal("Write clean, maintainable code")
+    .andBackstory("10+ years experience in enterprise software development");
 ```
 
-Generates:
+**Generated prompt contribution:**
+
 ```
 Role: Senior Software Engineer
 Goal: Write clean, maintainable code
 Backstory: 10+ years experience in enterprise software development
 ```
 
+---
+
+## Building Structured Prompts
+
 ### Custom PromptContributor
 
+Implement the interface directly for full control over prompt content:
+
 ```java
-var custom = new PromptContributor() {
+public class DomainContext implements PromptContributor {
+    private final String domainContext;
+
+    public DomainContext(String domainContext) {
+        this.domainContext = domainContext;
+    }
+
     @Override
     public String contribution() {
-        return "Here is the domain context: " + domainContext;
+        return "Domain Context:\n" + domainContext;
     }
-};
-```
-
-## LlmReference
-
-A subinterface of `PromptContributor` that also provides tools via annotated `@Tool` methods:
-
-```java
-public interface LlmReference extends PromptContributor {
-    String getName();
-    String getDescription();
 }
 ```
 
-Add via `withReference()`:
+### Conditional PromptContributor
+
+Include content only when a condition is met:
 
 ```java
-var reference = new LlmReference("git-repo", "GitHub repository tools") {
+public class ConditionalPrompt implements PromptContributor {
+    private final Supplier<Boolean> condition;
+    private final String trueContent;
+    private final String falseContent;
+
+    public ConditionalPrompt(Supplier<Boolean> condition,
+                             String trueContent,
+                             String falseContent) {
+        this.condition = condition;
+        this.trueContent = trueContent;
+        this.falseContent = falseContent;
+    }
+
+    @Override
+    public String contribution() {
+        return condition.get() ? trueContent : falseContent;
+    }
+}
+```
+
+### LlmReference (Content + Tools)
+
+`LlmReference` extends `PromptContributor` to also expose `@Tool` methods. Use it when you need both prompt content and tools from the same object:
+
+```java
+// Programmatic creation
+var reference = new LlmReference("git-tools", "Git operations") {
     @Tool
     public String getFile(String path) { ... }
 };
@@ -95,25 +132,17 @@ context.ai().withDefaultLlm()
     .fromPrompt("Get the file from the repo");
 ```
 
-### When to Use LlmReference vs PromptContributor
+**When to use `LlmReference` vs `PromptContributor`:**
 
-| Use LlmReference | Use PromptContributor |
-|------------------|----------------------|
-| Need to provide both content AND tools | Just need to inject text |
-| Want specific instructions on tool usage | Simple text injection |
-| Data may be best as tools or content depending on context | Static content |
+| Use `LlmReference` | Use `PromptContributor` |
+|---|---|
+| Need to provide content AND tools | Just need to inject text |
+| Want specific tool usage instructions | Simple static content |
+| Data may be content or tools depending on context | |
 
-### Built-in LlmReference Providers
+### YML-based LlmReference Providers
 
-- `LiteralText` — Text in `notes` field
-- `SpringResource` — Contents of a Spring resource path
-- `WebPage` — Content of a fetchable web page
-- `GitHubRepository` — GitHub repositories (`embabel-agent-code` module)
-- `ApiReferenceProvider` — API from classpath (`embabel-agent-code` module)
-
-### YML Configuration
-
-Define references in `references.yml`:
+Define references in `references.yml` (under `src/main/resources/`):
 
 ```yaml
 - fqn: com.embabel.agent.api.reference.LiteralText
@@ -127,17 +156,31 @@ Define references in `references.yml`:
   url: https://api.example.com/docs
 ```
 
-Parse with:
+Load them programmatically:
 
 ```java
-List<LlmReference> references = LlmReferenceProviders.fromYml("references.yml");
+List<LmmReference> references = LlmReferenceProviders.fromYml("references.yml");
 ```
+
+**Built-in providers:**
+
+| Provider | Purpose |
+|---|---|
+| `LiteralText` | Static text via `notes` field |
+| `SpringResource` | Contents of a Spring resource path |
+| `WebPage` | Content of a fetchable web page |
+| `GitHubRepository` | GitHub repositories (`embabel-agent-code`) |
+| `ApiReferenceProvider` | API from classpath (`embabel-agent-code`) |
+
+---
 
 ## Best Practices
 
-- Keep prompt contributors focused and single-purpose
-- Use convenience classes (`Persona`, `RoleGoalBackstory`) when they fit
-- Implement custom `PromptContributor` for domain-specific requirements
-- Consider dynamic contributors for context-dependent content
-- Test prompt contributions to verify desired LLM behavior
+- Keep contributors focused and single-purpose
+- Use `Persona` and `RoleGoalBackstory` for common patterns
+- Implement custom `PromptContributor` for domain-specific content
 - Use `LlmReference` when you need both content and tools from the same source
+- Test contributions to verify desired LLM behavior
+---
+
+*Source: Embabel Agent v1.0.0 documentation*
