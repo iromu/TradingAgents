@@ -70,7 +70,7 @@ class FullPipelineIntegrationTest extends EmbabelMockitoIntegrationTest {
         // Initialize agents with minimal constructors (LLM calls go through ctx)
         var cache = createCache();
         debateAgent = new DebateAgent(
-                cache, null, null, null, null, null, null, null
+                cache, null, null, null, null, null, null, null, null
         );
         orchestratorAgent = new OrchestratorAgent(
                 cache, null, null, null, null, null, null

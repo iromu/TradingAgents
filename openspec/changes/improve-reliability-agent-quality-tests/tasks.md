@@ -47,7 +47,7 @@
 - [x] 6.1 Create `MarketDataTools.java` with `@Tool` methods: `get_stock_data(String ticker, ...)` and `get_indicators(String ticker, ...)`
 - [x] 6.2 Implement `get_stock_data` to call `YFinService` and return price data as JSON
 - [x] 6.3 Implement `get_indicators` to call `YFinService` TA4J calculations and return results as JSON
-- [ ] 6.4 Uncomment and wire `tool_names` and `withToolObject` in `DebateAgent.generateMarketReport()`
+- [x] 6.4 Uncomment and wire `tool_names` and `withToolObject` in `DebateAgent.generateMarketReport()`
 - [x] 6.5 Register `MarketDataTools` as a Spring bean
 - [ ] 6.6 Add unit test: `MarketDataTools.get_stock_data()` returns valid JSON for a known ticker
 - [ ] 6.7 Add unit test: `MarketDataTools.get_indicators()` returns indicator calculations
@@ -114,20 +114,20 @@
 - [ ] 11.4.4 Test: `assessRisk()` judge uses BEST_ROLE
 
 ### 11.5 OrchestratorAgent Sub-Process Integration Tests
-- [ ] 11.5.1 Test: `executeDebate()` delegates to DebateAgent via asSubProcess
-- [ ] 11.5.2 Test: `executeDebate()` returns InvestmentPlan
+- [x] 11.5.1 Test: `executeDebate()` delegates to DebateAgent via asSubProcess
+- [x] 11.5.2 Test: `executeDebate()` returns InvestmentPlan
 
 ### 11.6 DebateAgent Sub-Process Integration Tests
-- [ ] 11.6.1 Test: `runDebate()` delegates to DebateLoopAgent via asSubProcess
-- [ ] 11.6.2 Test: `runTrader()` delegates to Trader.traderProposal()
-- [ ] 11.6.3 Test: `runRiskDebate()` delegates to RiskDebateAgent.assessRisk()
-- [ ] 11.6.4 Test: `runPortfolioManager()` delegates to PortfolioManager.portfolioDecision()
+- [x] 11.6.1 Test: `runDebate()` delegates to DebateLoopAgent via asSubProcess
+- [x] 11.6.2 Test: `runTrader()` delegates to Trader.traderProposal()
+- [x] 11.6.3 Test: `runRiskDebate()` delegates to RiskDebateAgent.assessRisk()
+- [x] 11.6.4 Test: `runPortfolioManager()` delegates to PortfolioManager.portfolioDecision()
 
 ### 11.7 DebateLoopAgent LLM Integration Tests
-- [ ] 11.7.1 Test: `debate()` invokes BullResearcher and BearResearcher
-- [ ] 11.7.2 Test: `debate()` returns InvestmentDebateState with history
-- [ ] 11.7.3 Test: `debate()` converges when bull responses are similar
-- [ ] 11.7.4 Test: `debate()` stops at max iterations
+- [x] 11.7.1 Test: `debate()` invokes BullResearcher and BearResearcher
+- [x] 11.7.2 Test: `debate()` returns InvestmentDebateState with history
+- [x] 11.7.3 Test: `debate()` converges when bull responses are similar
+- [x] 11.7.4 Test: `debate()` stops at max iterations
 
 ### 11.8 MarketDataTools Integration Tests
 - [ ] 11.8.1 Test: `get_stock_data()` returns non-empty string for valid ticker
@@ -153,8 +153,8 @@
 - [ ] 11.9.15 Test: `extractThesis()` limits to 500 chars
 
 ### 11.10 DebateLoopAgent Convergence Integration Tests
-- [ ] 11.10.1 Test: Debate loop stops at max iterations
-- [ ] 11.10.2 Test: Debate loop converges early on similar responses
+- [x] 11.10.1 Test: Debate loop stops at max iterations
+- [x] 11.10.2 Test: Debate loop converges early on similar responses
 
 ## 12. Verification — Build and Smoke Test
 

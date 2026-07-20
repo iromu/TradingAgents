@@ -22,6 +22,7 @@ class PureLogicTest {
                 null, // ObjectProvider for RiskDebateAgent not needed
                 null, // ObjectProvider for Trader not needed
                 null, // ObjectProvider for PortfolioManager not needed
+                null, // ObjectProvider for MarketDataTools not needed
                 null  // LlmBudgetTracker not needed for sanitizeForPrompt
         );
     }

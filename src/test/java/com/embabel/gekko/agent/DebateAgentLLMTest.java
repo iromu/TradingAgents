@@ -72,6 +72,7 @@ class DebateAgentLLMTest {
                 null, // riskDebateAgentProvider
                 null, // traderProvider
                 null,  // portfolioManagerProvider
+                null,  // marketDataToolsProvider
                 null   // llmBudgetTracker
         );
     }
@@ -752,14 +753,14 @@ class DebateAgentLLMTest {
         var ctx1 = FakeOperationContext.create();
         var runner1 = ctx1.getPromptRunner();
         runner1.expectResponse("Plan A.");
-        var agent1 = new DebateAgent(createCache(), null, null, null, null, null, null, null);
+        var agent1 = new DebateAgent(createCache(), null, null, null, null, null, null, null, null);
         agent1.researchManager(ticker, state, null, new ResearchTypes.InvestmentReviewFeedback("feedback A", true), null, ctx1);
 
         // Second call — fresh context
         var ctx2 = FakeOperationContext.create();
         var runner2 = ctx2.getPromptRunner();
         runner2.expectResponse("Plan B.");
-        var agent2 = new DebateAgent(createCache(), null, null, null, null, null, null, null);
+        var agent2 = new DebateAgent(createCache(), null, null, null, null, null, null, null, null);
         agent2.researchManager(ticker, state, null, new ResearchTypes.InvestmentReviewFeedback("feedback B", true), null, ctx2);
 
         // Assert — each call made exactly 1 LLM call

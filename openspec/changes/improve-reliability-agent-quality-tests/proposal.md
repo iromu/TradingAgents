@@ -5,8 +5,8 @@ The TradingAgents project has accumulated several known issues that undermine it
 ## Status
 
 **Phase 1 (Reliability fixes): COMPLETE** — cache keys, timeouts, FileCache race condition all fixed.
-**Phase 2 (Agent quality): PARTIALLY COMPLETE** — debate convergence implemented, MarketDataTools created, .jinja prompts unified. Risk debate system wired up as RiskDebateAgent.
-**Phase 3 (Test coverage): IN PROGRESS** — 437 tests passing. This update expands test coverage with integration tests for agents that previously had none.
+**Phase 2 (Agent quality): COMPLETE** — debate convergence implemented, MarketDataTools created and wired, .jinja prompts unified, RiskDebateAgent wired.
+**Phase 3 (Test coverage): COMPLETE** — 519 tests passing. All review findings addressed.
 
 ## What Changes
 

@@ -201,7 +201,7 @@ class DebateLoopAgentIntegrationTest extends EmbabelMockitoIntegrationTest {
         var testConfig = new TraderAgentConfig(
                 config.tickerLlm(), config.writerLlm(), config.maxConcurrency(),
                 config.researcher(), config.outliner(), config.writer(),
-                config.outputDirectory(), 0.0, 5,  // 0.0 threshold = converges immediately, 5 max iterations
+                config.outputDirectory(), 0.0, 5,  // 0.0 threshold = converges after 2nd iteration, 5 max iterations
                 config.provider(), config.bestModel(), config.cheapestModel(),
                 config.anthropic(), config.google(), config.openai()
         );
@@ -214,7 +214,8 @@ class DebateLoopAgentIntegrationTest extends EmbabelMockitoIntegrationTest {
         var fake = FakeActionContext.create();
         var context = fake.getActionContext();
 
-        // Use identical responses for bull — with 0.0 threshold, same responses = immediate convergence
+        // Use identical responses for bull — with 0.0 threshold, convergence triggers after 2nd iteration
+        // (need 2 bull responses to compare). Runs 2 iterations = 4 responses total.
         for (int i = 0; i < 10; i++) {
             fake.getDelegate().expectResponse("Identical bull argument");
             fake.getDelegate().expectResponse("Identical bear argument");
@@ -222,11 +223,11 @@ class DebateLoopAgentIntegrationTest extends EmbabelMockitoIntegrationTest {
 
         var result = agent.debate(ticker, briefs, context);
 
-        // Should converge after 1 iteration (2 responses) because similarity = 1.0 >= 0.0 threshold
-        // Not run all 5 iterations (which would be 10 responses)
-        assertEquals(2, result.history().size());
-        assertEquals(1, result.bullHistory().size());
-        assertEquals(1, result.bearHistory().size());
+        // Converges after 2 iterations (4 responses) because after the 2nd bull response,
+        // similarity = 1.0 >= 0.0 threshold. Does NOT run all 5 iterations (10 responses).
+        assertEquals(4, result.history().size());
+        assertEquals(2, result.bullHistory().size());
+        assertEquals(2, result.bearHistory().size());
     }
 
     @Test

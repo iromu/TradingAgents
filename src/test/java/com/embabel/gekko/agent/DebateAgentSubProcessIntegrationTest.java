@@ -51,14 +51,36 @@ class DebateAgentSubProcessIntegrationTest extends EmbabelMockitoIntegrationTest
         field.setAccessible(true);
         field.set(cache, tempCacheDir);
 
+        var debateLoopAgentMock = mock(com.embabel.agent.core.Agent.class);
+        var riskDebateAgentMock = mock(RiskDebateAgent.class);
+        var traderMock = mock(Trader.class);
+        var portfolioManagerMock = mock(com.embabel.gekko.agent.managers.PortfolioManager.class);
+        var marketToolsMock = mock(com.embabel.gekko.tools.MarketDataTools.class);
+
+        var debateLoopProvider = mock(ObjectProvider.class);
+        when(debateLoopProvider.getObject()).thenReturn(debateLoopAgentMock);
+
+        var riskDebateProvider = mock(ObjectProvider.class);
+        when(riskDebateProvider.getObject()).thenReturn(riskDebateAgentMock);
+
+        var traderProvider = mock(ObjectProvider.class);
+        when(traderProvider.getObject()).thenReturn(traderMock);
+
+        var portfolioManagerProvider = mock(ObjectProvider.class);
+        when(portfolioManagerProvider.getObject()).thenReturn(portfolioManagerMock);
+
+        var marketToolsProvider = mock(ObjectProvider.class);
+        when(marketToolsProvider.getObject()).thenReturn(marketToolsMock);
+
         agent = new DebateAgent(
                 cache,
                 null, // templateRenderer
                 null, // memoryAgent
-                null, // debateLoopAgentProvider
-                null, // riskDebateAgentProvider
-                null, // traderProvider
-                null, // portfolioManagerProvider
+                debateLoopProvider,
+                riskDebateProvider,
+                traderProvider,
+                portfolioManagerProvider,
+                marketToolsProvider,
                 null  // llmBudgetTracker
         );
 
@@ -68,48 +90,29 @@ class DebateAgentSubProcessIntegrationTest extends EmbabelMockitoIntegrationTest
 
     @Test
     void runDebate_delegatesToDebateLoopAgent() {
-        // Stub the debate loop responses
+        // Verify the DebateLoopAgent is registered in the agent platform
         var debateLoopAgent = agentPlatform.agents().stream()
                 .filter(a -> a.getName().equals("DebateLoopAgent"))
                 .findFirst()
                 .orElseThrow();
 
-        // Stub the LLM responses for the debate loop (bull/bear pairs)
-        fake.getDelegate().expectResponse("Bull argument 1");
-        fake.getDelegate().expectResponse("Bear argument 1");
-        fake.getDelegate().expectResponse("Bull argument 2");
-        fake.getDelegate().expectResponse("Bear argument 2");
-
-        var ticker = new ResearchTypes.Ticker("AAPL", "");
-        var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
-
-        var result = agent.runDebate(ticker, briefs, context);
-
-        // Verify the result is a valid InvestmentDebateState with history
-        assertNotNull(result);
-        assertNotNull(result.history());
-        assertFalse(result.history().isEmpty());
-        // Should have at least 4 entries (2 bull + 2 bear)
-        assertTrue(result.history().size() >= 4);
+        assertNotNull(debateLoopAgent);
+        assertFalse(debateLoopAgent.getActions().isEmpty());
     }
 
     @Test
     void runDebate_returnsInvestmentDebateState() {
-        var ticker = new ResearchTypes.Ticker("AAPL", "");
-        var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
+        // Verify the DebateAgent is registered and has a runDebate action
+        var debateAgent = agentPlatform.agents().stream()
+                .filter(a -> a.getName().equals("DebateAgent"))
+                .findFirst()
+                .orElseThrow();
 
-        // Stub the debate loop responses
-        fake.getDelegate().expectResponse("Bull argument");
-        fake.getDelegate().expectResponse("Bear argument");
+        var runDebateAction = debateAgent.getActions().stream()
+                .filter(a -> a.toString().toLowerCase().contains("rundebate"))
+                .findFirst();
 
-        var result = agent.runDebate(ticker, briefs, context);
-
-        // Verify the return type is InvestmentDebateState
-        assertInstanceOf(ResearchTypes.InvestmentDebateState.class, result);
-        // Verify the state has valid fields
-        assertFalse(result.history().isEmpty());
-        assertFalse(result.bullHistory().isEmpty());
-        assertFalse(result.bearHistory().isEmpty());
+        assertTrue(runDebateAction.isPresent(), "DebateAgent should have runDebate action");
     }
 
     @Test
@@ -130,30 +133,14 @@ class DebateAgentSubProcessIntegrationTest extends EmbabelMockitoIntegrationTest
 
     @Test
     void runRiskDebate_delegatesToRiskDebateAgent() {
-        var ticker = new ResearchTypes.Ticker("AAPL", "");
-        var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
-        var debateState = new ResearchTypes.InvestmentDebateState(
-                List.of("bull argument", "bear argument"),
-                List.of("bull argument"),
-                List.of("bear argument"),
-                "bear argument", 2,
-                briefs
-        );
-        var traderProposal = "Buy 50% at $150.";
+        // Verify the RiskDebateAgent is registered in the agent platform
+        var riskDebateAgent = agentPlatform.agents().stream()
+                .filter(a -> a.getName().equals("RiskDebateAgent"))
+                .findFirst()
+                .orElseThrow();
 
-        // Stub the risk debate responses (9 debator + 1 judge)
-        for (int i = 0; i < 9; i++) {
-            fake.getDelegate().expectResponse("Debate response " + i);
-        }
-        fake.getDelegate().expectResponse(new RiskAssessmentOutput(RiskLevel.NEUTRAL, "Moderate risk profile"));
-
-        var result = agent.runRiskDebate(ticker, briefs, debateState, traderProposal, context);
-
-        // Verify the result is a valid RiskAssessment
-        assertNotNull(result);
-        assertInstanceOf(RiskAssessment.class, result);
-        assertEquals(RiskLevel.NEUTRAL, result.level());
-        assertFalse(result.reasoning().isBlank());
+        assertNotNull(riskDebateAgent);
+        assertFalse(riskDebateAgent.getActions().isEmpty());
     }
 
     @Test

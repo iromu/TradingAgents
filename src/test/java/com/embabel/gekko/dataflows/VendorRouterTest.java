@@ -3,44 +3,46 @@ package com.embabel.gekko.dataflows;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 
 class VendorRouterTest {
 
     @Test
     void route_delegatesToAlphaVantageForFundamentals() {
-        AlphaVantageService alphaVantageService = new AlphaVantageService();
+        AlphaVantageService alphaVantageService = mock(AlphaVantageService.class);
+        when(alphaVantageService.getFundamentals(anyString(), anyString())).thenReturn("fundamentals data");
         VendorRouter router = new VendorRouter();
         router.setAlphaVantageService(alphaVantageService);
 
-        // The router should handle the method name without throwing
         String result = router.routeToVendor("get_fundamentals", "AAPL", "2026-01-01");
-        // Should return error or data, not throw
-        assertNotNull(result);
+        assertEquals("fundamentals data", result);
     }
 
     @Test
     void route_delegatesToAlphaVantageForBalanceSheet() {
-        AlphaVantageService alphaVantageService = new AlphaVantageService();
+        AlphaVantageService alphaVantageService = mock(AlphaVantageService.class);
+        when(alphaVantageService.getBalanceSheet(anyString(), anyString(), anyString())).thenReturn("balance sheet data");
         VendorRouter router = new VendorRouter();
         router.setAlphaVantageService(alphaVantageService);
 
         String result = router.routeToVendor("get_balance_sheet", "AAPL", "quarterly", "2026-01-01");
-        assertNotNull(result);
+        assertEquals("balance sheet data", result);
     }
 
     @Test
     void route_delegatesToAlphaVantageForNews() {
-        AlphaVantageService alphaVantageService = new AlphaVantageService();
+        AlphaVantageService alphaVantageService = mock(AlphaVantageService.class);
+        when(alphaVantageService.getNews(anyString(), anyString(), anyString())).thenReturn("news data");
         VendorRouter router = new VendorRouter();
         router.setAlphaVantageService(alphaVantageService);
 
         String result = router.routeToVendor("get_news", "AAPL", "2020-01-01", "2030-01-01");
-        assertNotNull(result);
+        assertEquals("news data", result);
     }
 
     @Test
     void route_throwsOnUnknownMethod() {
-        AlphaVantageService alphaVantageService = new AlphaVantageService();
+        AlphaVantageService alphaVantageService = mock(AlphaVantageService.class);
         VendorRouter router = new VendorRouter();
         router.setAlphaVantageService(alphaVantageService);
 
@@ -49,7 +51,9 @@ class VendorRouterTest {
 
     @Test
     void route_handlesNullParams() {
-        AlphaVantageService alphaVantageService = new AlphaVantageService();
+        AlphaVantageService alphaVantageService = mock(AlphaVantageService.class);
+        // Null params should still route correctly (the service handles null internally)
+        when(alphaVantageService.getFundamentals(isNull(), isNull())).thenReturn("fundamentals data");
         VendorRouter router = new VendorRouter();
         router.setAlphaVantageService(alphaVantageService);
 
