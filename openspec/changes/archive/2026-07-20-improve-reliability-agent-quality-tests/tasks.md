@@ -18,8 +18,8 @@
 - [x] 3.2 Implement per-key locking using `ConcurrentHashMap.computeIfAbsent()` with double-check pattern
 - [x] 3.3 Add atomic write (write to temp file, then rename) to prevent partial read corruption
 - [x] 3.4 Ensure lock is released on exception (try-finally or synchronized block)
-- [ ] 3.5 Add concurrent unit test: two threads requesting same key compute exactly once
-- [ ] 3.6 Add concurrent unit test: different keys compute independently
+- [x] 3.5 Add concurrent unit test: two threads requesting same key compute exactly once
+- [x] 3.6 Add concurrent unit test: different keys compute independently
 
 ## 4. Agent Quality — Debate Convergence
 
@@ -49,8 +49,8 @@
 - [x] 6.3 Implement `get_indicators` to call `YFinService` TA4J calculations and return results as JSON
 - [x] 6.4 Uncomment and wire `tool_names` and `withToolObject` in `DebateAgent.generateMarketReport()`
 - [x] 6.5 Register `MarketDataTools` as a Spring bean
-- [ ] 6.6 Add unit test: `MarketDataTools.get_stock_data()` returns valid JSON for a known ticker
-- [ ] 6.7 Add unit test: `MarketDataTools.get_indicators()` returns indicator calculations
+- [x] 6.6 Add unit test: `MarketDataTools.get_stock_data()` returns valid JSON for a known ticker
+- [x] 6.7 Add unit test: `MarketDataTools.get_indicators()` returns indicator calculations
 
 ## 7. Agent Quality — Prompt File Unification
 
@@ -84,34 +84,34 @@
 
 - [ ] 10.1 Add test: `YFinService.getBarSeries()` returns non-null for valid ticker
 - [ ] 10.2 Add test: `YFinService` throws on invalid ticker
-- [ ] 10.3 Add test: `VendorRouter.route()` delegates to correct service for known method
-- [ ] 10.4 Add test: `VendorRouter.route()` throws on unknown method name
+- [x] 10.3 Add test: `VendorRouter.route()` delegates to correct service for known method
+- [x] 10.4 Add test: `VendorRouter.route()` throws on unknown method name
 
 ## 11. Test Coverage — New Integration Tests
 
 ### 11.1 PortfolioManager Integration Tests
-- [ ] 11.1.1 Test: `portfolioDecision()` uses BEST_ROLE
-- [ ] 11.1.2 Test: `portfolioDecision()` uses correct interaction ID
-- [ ] 11.1.3 Test: `portfolioDecision()` prompt contains all inputs (ticker, debate state, research plan, trader proposal, risk)
-- [ ] 11.1.4 Test: `portfolioDecision()` prompt is non-empty
-- [ ] 11.1.5 Test: `portfolioDecision()` tries structured output then falls back to String
+- [x] 11.1.1 Test: `portfolioDecision()` uses BEST_ROLE
+- [x] 11.1.2 Test: `portfolioDecision()` uses correct interaction ID
+- [x] 11.1.3 Test: `portfolioDecision()` prompt contains all inputs (ticker, debate state, research plan, trader proposal, risk)
+- [x] 11.1.4 Test: `portfolioDecision()` prompt is non-empty
+- [x] 11.1.5 Test: `portfolioDecision()` tries structured output then falls back to String
 
 ### 11.2 InstrumentIdentityAgent Unit Tests
-- [ ] 11.2.1 Test: `resolveIdentity()` returns InstrumentContext for valid ticker
-- [ ] 11.2.2 Test: `resolveIdentity()` caches result
-- [ ] 11.2.3 Test: `resolveIdentity()` handles invalid ticker
-- [ ] 11.2.4 Test: `resolveIdentity()` validates ticker format
+- [x] 11.2.1 Test: `resolveIdentity()` returns InstrumentContext for valid ticker
+- [x] 11.2.2 Test: `resolveIdentity()` caches result
+- [x] 11.2.3 Test: `resolveIdentity()` handles invalid ticker
+- [x] 11.2.4 Test: `resolveIdentity()` validates ticker format
 
 ### 11.3 InstrumentContextPromptContributor Tests
-- [ ] 11.3.1 Test: `contribution()` returns formatted context after setContext()
-- [ ] 11.3.2 Test: `contribution()` returns empty string before context is set
-- [ ] 11.3.3 Test: `contribution()` includes all fields (companyName, sector, industry, exchange, ticker)
+- [x] 11.3.1 Test: `contribution()` returns formatted context after setContext()
+- [x] 11.3.2 Test: `contribution()` returns empty string before context is set
+- [x] 11.3.3 Test: `contribution()` includes all fields (companyName, sector, industry, exchange, ticker)
 
 ### 11.4 RiskDebateAgent Integration Tests
-- [ ] 11.4.1 Test: `assessRisk()` invokes 3 debators x 3 rounds = 9 LLM calls
-- [ ] 11.4.2 Test: `assessRisk()` judge produces valid RiskAssessment
-- [ ] 11.4.3 Test: `assessRisk()` returns correct RiskLevel (RISKY/NEUTRAL/CONSERVATIVE)
-- [ ] 11.4.4 Test: `assessRisk()` judge uses BEST_ROLE
+- [x] 11.4.1 Test: `assessRisk()` invokes 3 debators x 3 rounds = 9 LLM calls
+- [x] 11.4.2 Test: `assessRisk()` judge produces valid RiskAssessment
+- [x] 11.4.3 Test: `assessRisk()` returns correct RiskLevel (RISKY/NEUTRAL/CONSERVATIVE)
+- [x] 11.4.4 Test: `assessRisk()` judge uses BEST_ROLE
 
 ### 11.5 OrchestratorAgent Sub-Process Integration Tests
 - [x] 11.5.1 Test: `executeDebate()` delegates to DebateAgent via asSubProcess
@@ -130,27 +130,27 @@
 - [x] 11.7.4 Test: `debate()` stops at max iterations
 
 ### 11.8 MarketDataTools Integration Tests
-- [ ] 11.8.1 Test: `get_stock_data()` returns non-empty string for valid ticker
-- [ ] 11.8.2 Test: `get_stock_data()` handles errors gracefully
-- [ ] 11.8.3 Test: `get_indicators()` returns indicator results
-- [ ] 11.8.4 Test: `get_indicators()` handles individual indicator errors
+- [x] 11.8.1 Test: `get_stock_data()` returns non-empty string for valid ticker
+- [x] 11.8.2 Test: `get_stock_data()` handles errors gracefully
+- [x] 11.8.3 Test: `get_indicators()` returns indicator results
+- [x] 11.8.4 Test: `get_indicators()` handles individual indicator errors
 
 ### 11.9 DebateAgent Helper Unit Tests
-- [ ] 11.9.1 Test: `sanitizeForPrompt()` blocks `{{ variable }}` with replacement
-- [ ] 11.9.2 Test: `sanitizeForPrompt()` blocks unclosed `{{`
-- [ ] 11.9.3 Test: `sanitizeForPrompt()` blocks Jinja statements `{% ... %}`
-- [ ] 11.9.4 Test: `sanitizeForPrompt()` strips code fences
-- [ ] 11.9.5 Test: `sanitizeForPrompt()` strips control characters
-- [ ] 11.9.6 Test: `sanitizeForPrompt()` truncates oversized input
-- [ ] 11.9.7 Test: `extractRating()` returns Buy for "buy"
-- [ ] 11.9.8 Test: `extractRating()` returns Sell for "sell"
-- [ ] 11.9.9 Test: `extractRating()` returns Overweight for "overweight"
-- [ ] 11.9.10 Test: `extractRating()` returns Hold as default
-- [ ] 11.9.11 Test: `extractSummary()` extracts first sentence
-- [ ] 11.9.12 Test: `extractSummary()` truncates at 500 chars
-- [ ] 11.9.13 Test: `extractThesis()` finds thesis section
-- [ ] 11.9.14 Test: `extractThesis()` finds rationale section
-- [ ] 11.9.15 Test: `extractThesis()` limits to 500 chars
+- [x] 11.9.1 Test: `sanitizeForPrompt()` blocks `{{ variable }}` with replacement
+- [x] 11.9.2 Test: `sanitizeForPrompt()` blocks unclosed `{{`
+- [x] 11.9.3 Test: `sanitizeForPrompt()` blocks Jinja statements `{% ... %}`
+- [x] 11.9.4 Test: `sanitizeForPrompt()` strips code fences
+- [x] 11.9.5 Test: `sanitizeForPrompt()` strips control characters
+- [x] 11.9.6 Test: `sanitizeForPrompt()` truncates oversized input
+- [x] 11.9.7 Test: `extractRating()` returns Buy for "buy"
+- [x] 11.9.8 Test: `extractRating()` returns Sell for "sell"
+- [x] 11.9.9 Test: `extractRating()` returns Overweight for "overweight"
+- [x] 11.9.10 Test: `extractRating()` returns Hold as default
+- [x] 11.9.11 Test: `extractSummary()` extracts first sentence
+- [x] 11.9.12 Test: `extractSummary()` truncates at 500 chars
+- [x] 11.9.13 Test: `extractThesis()` finds thesis section
+- [x] 11.9.14 Test: `extractThesis()` finds rationale section
+- [x] 11.9.15 Test: `extractThesis()` limits to 500 chars
 
 ### 11.10 DebateLoopAgent Convergence Integration Tests
 - [x] 11.10.1 Test: Debate loop stops at max iterations
