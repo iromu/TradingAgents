@@ -15,7 +15,7 @@
     <name>Gekko</name>
     <properties>
         <java.version>25</java.version>
-        <embabel-agent.version>0.5.0</embabel-agent.version>
+        <embabel-agent.version>1.0.0</embabel-agent.version>
         <ta4j-core.version>0.18</ta4j-core.version>
         <YahooFinanceAPI.version>3.17.0</YahooFinanceAPI.version>
     </properties>
