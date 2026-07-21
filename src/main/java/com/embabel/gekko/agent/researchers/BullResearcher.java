@@ -31,8 +31,8 @@ public class BullResearcher {
         return "# Bull Analyst\n" + actionContext.ai()
                 .withLlmByRole(BEST_ROLE)
                 .withId("bullResearcher")
-                .withTemplate("researchers/BullResearcher")
-                .createObject(String.class, Map.of(
+                .creating(String.class)
+                .fromTemplate("researchers/BullResearcher", Map.of(
                         "fundamentalsBrief", briefs.fundamentalsBrief(),
                         "marketBrief", briefs.marketBrief(),
                         "newsBrief", briefs.newsBrief(),

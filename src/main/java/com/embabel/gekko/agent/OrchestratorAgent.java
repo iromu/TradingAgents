@@ -111,8 +111,8 @@ public class OrchestratorAgent {
             String result = context.ai()
                     .withLlmByRole(BEST_ROLE)
                     .withId("generateResearchPlan")
-                    .withTemplate("managers/ResearchManager")
-                    .createObject(String.class, model);
+                    .creating(String.class)
+                    .fromTemplate("managers/ResearchManager", model);
             return new ResearchTypes.ResearchPlan(result);
         });
     }

@@ -112,8 +112,8 @@ public class DebateAgent {
             String result = context.ai()
                     .withLlmByRole(CHEAPEST_ROLE)
                     .withId("generateFundamentalsReport")
-                    .withTemplate("analysts/FundamentalsAnalyst")
-                    .createObject(String.class, Map.of(
+                    .creating(String.class)
+                    .fromTemplate("analysts/FundamentalsAnalyst", Map.of(
                             "ticker", ticker.content().toUpperCase()
                     ));
             return new FundamentalsReport(result);
@@ -134,8 +134,8 @@ public class DebateAgent {
                     runner.withToolObject(marketTools);
                 }
             }
-            String result = runner.withTemplate("analysts/MarketAnalyst")
-                    .createObject(String.class, Map.of(
+            String result = runner.creating(String.class)
+                    .fromTemplate("analysts/MarketAnalyst", Map.of(
                             "ticker", ticker.content().toUpperCase()
                     ));
             return new MarketReport(result);
@@ -150,8 +150,8 @@ public class DebateAgent {
             String result = context.ai()
                     .withLlmByRole(CHEAPEST_ROLE)
                     .withId("generateNewsReport")
-                    .withTemplate("analysts/NewsAnalyst")
-                    .createObject(String.class, Map.of(
+                    .creating(String.class)
+                    .fromTemplate("analysts/NewsAnalyst", Map.of(
                             "ticker", ticker.content().toUpperCase()
                     ));
             return new NewsReport(result);
@@ -166,8 +166,8 @@ public class DebateAgent {
             String result = context.ai()
                     .withLlmByRole(CHEAPEST_ROLE)
                     .withId("generateSocialMediaReport")
-                    .withTemplate("analysts/SocialMediaAnalyst")
-                    .createObject(String.class, Map.of(
+                    .creating(String.class)
+                    .fromTemplate("analysts/SocialMediaAnalyst", Map.of(
                             "ticker", ticker.content().toUpperCase()
                     ));
             return new SocialMediaReport(result);
@@ -259,8 +259,8 @@ public class DebateAgent {
             String result = context.ai()
                     .withLlmByRole(BEST_ROLE)
                     .withId("researchManager")
-                    .withTemplate("managers/ResearchManager")
-                    .createObject(String.class, model);
+                    .creating(String.class)
+                    .fromTemplate("managers/ResearchManager", model);
             var plan = new ResearchTypes.InvestmentPlan(result, state);
 
             // Store decision to memory after plan is generated
@@ -379,8 +379,8 @@ public class DebateAgent {
         return ctx.ai()
                 .withLlmByRole(CHEAPEST_ROLE)
                 .withId("distillBrief_" + reportType.toLowerCase().replace(" ", "_"))
-                .withTemplate("debate/Distiller")
-                .createObject(String.class, Map.of(
+                .creating(String.class)
+                .fromTemplate("debate/Distiller", Map.of(
                         "reportType", reportType,
                         "ticker", ticker.content().toUpperCase(),
                         "reportContent", content

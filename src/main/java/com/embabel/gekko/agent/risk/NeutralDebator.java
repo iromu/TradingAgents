@@ -45,7 +45,7 @@ public class NeutralDebator {
         return actionContext.ai()
                 .withLlmByRole(BEST_ROLE)
                 .withId("neutralDebator")
-                .withTemplate("risk/NeutralDebator")
-                .createObject(String.class, model);
+                .creating(String.class)
+                .fromTemplate("risk/NeutralDebator", model);
     }
 }

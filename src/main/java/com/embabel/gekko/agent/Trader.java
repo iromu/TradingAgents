@@ -39,16 +39,16 @@ public class Trader {
             var output = actionContext.ai()
                     .withLlmByRole(BEST_ROLE)
                     .withId("trader")
-                    .withTemplate("managers/Trader")
-                    .createObject(TraderProposalOutput.class, model);
+                    .creating(TraderProposalOutput.class)
+                    .fromTemplate("managers/Trader", model);
             return output.render();
         } catch (Exception e) {
             log.warn("Structured trader proposal failed, falling back to free-text: {}", e.getMessage());
             return actionContext.ai()
                     .withLlmByRole(BEST_ROLE)
                     .withId("trader")
-                    .withTemplate("managers/Trader")
-                    .createObject(String.class, model);
+                    .creating(String.class)
+                    .fromTemplate("managers/Trader", model);
         }
     }
 }

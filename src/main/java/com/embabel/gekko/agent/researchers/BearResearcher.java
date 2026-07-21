@@ -31,8 +31,8 @@ public class BearResearcher {
         return "# Bear Analyst\n" + actionContext.ai()
                 .withLlmByRole(BEST_ROLE)
                 .withId("bearResearcher")
-                .withTemplate("researchers/BearResearcher")
-                .createObject(String.class, Map.of(
+                .creating(String.class)
+                .fromTemplate("researchers/BearResearcher", Map.of(
                         "fundamentalsBrief", briefs.fundamentalsBrief(),
                         "marketBrief", briefs.marketBrief(),
                         "newsBrief", briefs.newsBrief(),

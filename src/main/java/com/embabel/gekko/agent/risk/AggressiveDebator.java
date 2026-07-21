@@ -45,7 +45,7 @@ public class AggressiveDebator {
         return actionContext.ai()
                 .withLlmByRole(BEST_ROLE)
                 .withId("aggressiveDebator")
-                .withTemplate("risk/AggressiveDebator")
-                .createObject(String.class, model);
+                .creating(String.class)
+                .fromTemplate("risk/AggressiveDebator", model);
     }
 }

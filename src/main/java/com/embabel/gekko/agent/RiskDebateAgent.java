@@ -164,16 +164,16 @@ public class RiskDebateAgent {
             var output = actionContext.ai()
                     .withLlmByRole(BEST_ROLE)
                     .withId("riskJudge")
-                    .withTemplate("managers/RiskManager")
-                    .createObject(RiskAssessmentOutput.class, model);
+                    .creating(RiskAssessmentOutput.class)
+                    .fromTemplate("managers/RiskManager", model);
             return new RiskAssessment(output.riskLevel(), output.reasoning());
         } catch (Exception e) {
             log.warn("Structured risk assessment failed, falling back to string parsing: {}", e.getMessage());
             var fallbackResult = actionContext.ai()
                     .withLlmByRole(BEST_ROLE)
                     .withId("riskJudge")
-                    .withTemplate("managers/RiskManager")
-                    .createObject(String.class, model);
+                    .creating(String.class)
+                    .fromTemplate("managers/RiskManager", model);
             return parseRiskAssessmentFallback(fallbackResult);
         }
     }

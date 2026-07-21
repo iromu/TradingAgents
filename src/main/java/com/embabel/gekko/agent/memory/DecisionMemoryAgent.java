@@ -126,8 +126,8 @@ public class DecisionMemoryAgent {
             return context.ai()
                     .withLlmByRole(BEST_ROLE)
                     .withId("memory-reflection")
-                    .withTemplate("memory/reflection")
-                    .createObject(String.class, model);
+                    .creating(String.class)
+                    .fromTemplate("memory/reflection", model);
         } catch (Exception e) {
             log.warn("Failed to generate reflection: {}", e.getMessage());
             return "Return was " + returns.rawReturn() + "% for " + pending.ticker();

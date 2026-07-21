@@ -48,16 +48,16 @@ public class PortfolioManager {
             var output = actionContext.ai()
                     .withLlmByRole(BEST_ROLE)
                     .withId("portfolioManager")
-                    .withTemplate("managers/PortfolioManager")
-                    .createObject(PortfolioDecisionOutput.class, model);
+                    .creating(PortfolioDecisionOutput.class)
+                    .fromTemplate("managers/PortfolioManager", model);
             return output.render();
         } catch (Exception e) {
             log.warn("Structured portfolio decision failed, falling back to free-text: {}", e.getMessage());
             return actionContext.ai()
                     .withLlmByRole(BEST_ROLE)
                     .withId("portfolioManager")
-                    .withTemplate("managers/PortfolioManager")
-                    .createObject(String.class, model);
+                    .creating(String.class)
+                    .fromTemplate("managers/PortfolioManager", model);
         }
     }
 }
