@@ -1,6 +1,7 @@
 package com.embabel.gekko.agent.identity;
 
 import com.embabel.agent.api.annotation.Action;
+import com.embabel.agent.api.annotation.AchievesGoal;
 import com.embabel.agent.api.annotation.Agent;
 import com.embabel.gekko.dataflows.AlphaVantageService;
 import com.embabel.gekko.dataflows.YFinService;
@@ -32,6 +33,7 @@ public class InstrumentIdentityAgent {
     private static final long INITIAL_BACKOFF_MS = 2000;
 
     @Action(description = "Resolve ticker to real company identity (name, sector, industry, exchange)")
+    @AchievesGoal(description = "Resolve a ticker symbol to its real company identity to prevent LLM hallucination")
     public InstrumentContext resolveIdentity(ResearchTypes.Ticker ticker) {
         if (ticker == null || ticker.content() == null || ticker.content().isBlank()
                 || !ticker.content().matches("^[A-Z0-9.\\-]+$")) {

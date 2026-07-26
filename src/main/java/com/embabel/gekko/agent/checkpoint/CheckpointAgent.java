@@ -1,6 +1,7 @@
 package com.embabel.gekko.agent.checkpoint;
 
 import com.embabel.agent.api.annotation.Action;
+import com.embabel.agent.api.annotation.AchievesGoal;
 import com.embabel.agent.api.annotation.Agent;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
@@ -30,6 +31,7 @@ public class CheckpointAgent {
     }
 
     @Action(description = "Restore blackboard from checkpoint if exists for the given ticker/date")
+    @AchievesGoal(description = "Restore blackboard state from crash checkpoint for recovery")
     public Map<String, Object> restoreCheckpoint(String ticker, String tradeDate) {
         if (!checkpointEnabled) {
             log.debug("Checkpoints disabled, skipping restore");

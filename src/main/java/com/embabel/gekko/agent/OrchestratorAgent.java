@@ -1,6 +1,7 @@
 package com.embabel.gekko.agent;
 
 import com.embabel.agent.api.annotation.Action;
+import com.embabel.agent.api.annotation.AchievesGoal;
 import com.embabel.agent.api.annotation.Agent;
 import com.embabel.agent.api.common.ActionContext;
 import com.embabel.agent.api.common.OperationContext;
@@ -170,6 +171,7 @@ public class OrchestratorAgent {
     }
 
     @Action(description = "Delegate to DebateAgent for full research workflow")
+    @AchievesGoal(description = "Execute full research workflow and produce an investment plan")
     public ResearchTypes.InvestmentPlan executeDebate(ResearchTypes.Ticker ticker, ResearchTypes.PlanApproval approval, ActionContext context) {
         return context.asSubProcess(ResearchTypes.InvestmentPlan.class, getDebateAgent());
     }

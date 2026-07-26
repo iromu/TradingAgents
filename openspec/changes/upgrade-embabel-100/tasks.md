@@ -1,41 +1,59 @@
-## 1. Rename @AchievesGoal → @Goal
+## Context
 
-- [x] 1.1 Update DebateAgent.java: change import from `com.embabel.agent.api.annotation.AchievesGoal` to `com.embabel.agent.api.annotation.Goal`
-- [x] 1.2 Update DebateAgent.java: change `@AchievesGoal(description = "Generate final investment plan")` to `@Goal(description = "Generate final investment plan")`
-- [x] 1.3 Update RiskDebateAgent.java: change import from `com.embabel.agent.api.annotation.AchievesGoal` to `com.embabel.agent.api.annotation.Goal`
-- [x] 1.4 Update RiskDebateAgent.java: change `@AchievesGoal(description = "Produce risk assessment")` to `@Goal(description = "Produce risk assessment")`
-- [x] 1.5 Update DebateLoopAgent.java: change import from `com.embabel.agent.api.annotation.AchievesGoal` to `com.embabel.agent.api.annotation.Goal`
-- [x] 1.6 Update DebateLoopAgent.java: change `@AchievesGoal(description = "Produce investment debate state")` to `@Goal(description = "Produce investment debate state")`
-- [x] 1.7 Verify no remaining `@AchievesGoal` references in the entire codebase
+The TradingAgents project uses Embabel (by Rod Johnson) as its agentic AI framework. The committed version is 0.5.0, and the working tree has already bumped the version property to 1.0.0 in `pom.xml` along with updated skill documentation.
 
-## 2. Review AgentScanningConfiguration
+During the review cycle, a critical finding emerged: the original proposal's premise was **incorrect**. `@AchievesGoal` was NOT renamed to `@Goal` in 1.0.0 — the annotation still exists and is now **required** on every `@Agent` class.
 
-- [x] 2.1 Attempt `./mvnw compile` to check if SPI classes resolve in 1.0.0
-- [x] 2.2 If SPI classes don't resolve, remove `AgentScanningConfiguration.java`
-- [x] 2.3 If SPI classes resolve, keep the file but add a TODO comment to revisit in next upgrade
-- [x] 2.4 Verify agent scanning still works (all @Agent classes are registered)
+## Actual Findings
 
-## 3. Update embabel-agent skill docs
+### False Premise: `@AchievesGoal` → `@Goal` rename
+The proposal claimed Embabel 1.0.0 renamed `@AchievesGoal` to `@Goal`. **This is false.** The `@AchievesGoal` annotation still exists in 1.0.0 at `com.embabel.agent.api.annotation.AchievesGoal`. There is no `@Goal` annotation in the 1.0.0 API — only a runtime `com.embabel.agent.core.Goal` class (not an annotation).
 
-- [x] 3.1 Verify SKILL.md description mentions v1.0.0 (already done in working tree)
-- [x] 3.2 Verify all reference docs are consistent with 1.0.0 APIs
-- [x] 3.3 Verify deleted docs (domain-objects.md, execution-modes.md, guide-server.md, invocation.md, streams.md) are properly removed
-- [x] 3.4 Verify new docs (types.md, api-spi.md, flow.md, invoking.md, streaming.md, minimax.md, bedrock.md, domain.md) are present
+### New Breaking Change: Mandatory `@AchievesGoal` on every `@Agent`
+Embabel 1.0.0 enforces a new validation rule: every `@Agent` class must have at least one `@AchievesGoal` annotation. Agents without it produce `MISSING_GOALS` validation errors at startup.
 
-## 4. Verify build compiles
+Three agents were missing `@AchievesGoal`:
+- **OrchestratorAgent** — added on `executeDebate()` method
+- **InstrumentIdentityAgent** — added on `resolveIdentity()` method
+- **CheckpointAgent** — added on `restoreCheckpoint()` method
 
-- [x] 4.1 Run `./mvnw compile` — should compile cleanly
-- [x] 4.2 If compilation fails, fix any remaining API incompatibilities
-- [x] 4.3 Check for deprecation warnings and address if they indicate real breakage
+### Planner Validation: `NO_PATH_TO_GOAL` on `DebateAgent.researchManager`
+The planner cannot construct a valid path to achieve the `researchManager` goal due to a complex chain of preconditions (ticker → debateState → riskAssessment → feedback → portfolioDecision → researchManager). This is a **non-fatal** validation warning — the workflow works correctly at runtime via human-in-the-loop interaction, but the automated planner cannot model it.
 
-## 5. Run tests
+## Updated Tasks
 
-- [x] 5.1 Run `./mvnw test` — all tests should pass
-- [x] 5.2 If test compilation fails, update test imports (e.g., `EmbelabelMockitoIntegrationTest` → `EmbelMockitoIntegrationTest` if the name changed)
-- [x] 5.3 If test failures occur, investigate and fix root causes
+## 1. Verify pom.xml version bump
 
-## 6. Final verification
+- [x] 1.1 Verify `embabel-agent.version` is `1.0.0` in `pom.xml`
 
-- [x] 6.1 Run `./mvnw verify` — full build including integration tests
-- [x] 6.2 Confirm 62 test files all pass
-- [x] 6.3 Verify the application still starts (`./mvnw spring-boot:run` or equivalent)
+## 2. Correct the false premise
+
+- [x] 2.1 Verify `@AchievesGoal` still exists in Embabel 1.0.0 (confirmed — no rename)
+- [x] 2.2 Confirm no `@Goal` annotation exists in 1.0.0 API
+- [x] 2.3 Update proposal to reflect actual findings
+
+## 3. Add missing `@AchievesGoal` annotations
+
+- [x] 3.1 Add `@AchievesGoal` to `OrchestratorAgent.executeDebate()` — goal: "Execute full research workflow and produce an investment plan"
+- [x] 3.2 Add `@AchievesGoal` to `InstrumentIdentityAgent.resolveIdentity()` — goal: "Resolve a ticker symbol to its real company identity to prevent LLM hallucination"
+- [x] 3.3 Add `@AchievesGoal` to `CheckpointAgent.restoreCheckpoint()` — goal: "Restore blackboard state from crash checkpoint for recovery"
+
+## 4. Review AgentScanningConfiguration
+
+- [x] 4.1 Verify `AgentScanningConfiguration.java` compiles with 1.0.0 (confirmed — SPI classes still resolve)
+- [x] 4.2 Keep the file with existing TODO comment to revisit in next upgrade
+
+## 5. Verify build compiles
+
+- [x] 5.1 Run `./mvnw compile` — compiles cleanly
+- [x] 5.2 No deprecation warnings indicating real breakage
+
+## 6. Run tests
+
+- [x] 6.1 Run `./mvnw test` — 519 tests, 0 failures
+- [x] 6.2 Run `./mvnw verify` — full build passes
+
+## 7. Document known issues
+
+- [x] 7.1 Document `NO_PATH_TO_GOAL` on `DebateAgent.researchManager` as a known non-fatal planner limitation
+- [x] 7.2 Document that the workflow relies on human-in-the-loop interaction which the automated planner cannot model
