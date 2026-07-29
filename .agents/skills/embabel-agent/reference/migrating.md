@@ -70,7 +70,7 @@ public record BookWriter(BookWriterConfig config) {
             .createObject("Create a book outline...", BookOutline.class);
     }
 
-    @Goal
+    @AchievesGoal
     @Action
     Book writeBook(BookRequest request, BookOutline outline, OperationContext context) {
         var chapters = context.parallelMap(outline.chapterOutlines(),
@@ -151,7 +151,7 @@ record SupportOutput(
 @Agent(description = "Customer support agent")
 record SupportAgent(CustomerRepository customerRepository) {
 
-    @Goal(description = "Help bank customer with their query")
+    @AchievesGoal(description = "Help bank customer with their query")
     @Action
     SupportOutput supportCustomer(SupportInput supportInput, OperationContext context) {
         var customer = customerRepository.findById(supportInput.customerId());

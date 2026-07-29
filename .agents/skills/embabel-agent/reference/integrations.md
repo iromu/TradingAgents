@@ -47,14 +47,14 @@ Annotate goal methods with `@Export(remote = true)`:
 @Agent(goal = "Provide weather information", backstory = "Weather service agent")
 public class WeatherAgent {
 
-    @Goal
+    @AchievesGoal
     @Export(remote = true)  // Becomes MCP tool
     public String getWeather(@Param("location") String location,
                              @Param("units") String units) {
         return "Weather for " + location + " in " + units;
     }
 
-    @Goal
+    @AchievesGoal
     public String internalMethod() {
         // Not exposed to MCP
         return "Internal use only";
@@ -66,14 +66,14 @@ public class WeatherAgent {
 @Agent(goal = "Provide weather information", backstory = "Weather service agent")
 class WeatherAgent {
 
-    @Goal
+    @AchievesGoal
     @Export(remote = true)  // Becomes MCP tool
     fun getWeather(
         @Param("location") location: String,
         @Param("units") units: String
     ): String = "Weather for $location in $units"
 
-    @Goal
+    @AchievesGoal
     fun internalMethod(): String = "Internal use only"  // Not exposed
 }
 ```
@@ -213,7 +213,7 @@ class NewsDigestAgent {
     @Action
     fun extractTopic(userInput: UserInput, context: OperationContext): NewsTopic { ... }
 
-    @Goal(description = "Produce news digest",
+    @AchievesGoal(description = "Produce news digest",
                   export = Export(remote = true, name = "newsDigest",
                                   startingInputTypes = [UserInput::class]))
     @Action
@@ -230,7 +230,7 @@ public class NewsDigestAgent {
     @Action
     public NewsTopic extractTopic(UserInput userInput, OperationContext context) { ... }
 
-    @Goal(description = "Produce news digest",
+    @AchievesGoal(description = "Produce news digest",
                   export = @Export(remote = true, name = "newsDigest",
                                    startingInputTypes = {UserInput.class}))
     @Action

@@ -80,7 +80,7 @@ record ProcessingState(String data, int iteration) {
 }
 ```
 
-> **Warning:** Avoid `clearBlackboard = true` on `@Goal` methods — it removes `hasRun` tracking conditions, interfering with goal satisfaction. Use on intermediate actions only.
+> **Warning:** Avoid `clearBlackboard = true` on `@AchievesGoal` methods — it removes `hasRun` tracking conditions, interfering with goal satisfaction. Use on intermediate actions only.
 
 ### Dynamic Cost Computation with @Cost
 
@@ -97,10 +97,9 @@ public ProcessedData process(RawData input) {
 }
 ```
 
-## @Goal Annotation (replaces @AchievesGoal)
+## @AchievesGoal Annotation
 
-Marks an `@Action` method as achieving a specific goal. In Embabel v1.0.0, `@AchievesGoal` was renamed to `@Goal`.
-For MCP publishing, use `@Export(remote = true)` on the `@Goal` method.
+Marks an `@Action` method as achieving a specific goal. Use `@Export(remote = true)` on the `@AchievesGoal` method for MCP publishing.
 
 ```java
 @Agent(description = "Issue triage agent")
@@ -113,18 +112,18 @@ public class IssueTriageAgent {
                  .fromTemplate("issue_triage", Map.of("issue", issue));
     }
 
-    @Goal(description = "Escalate urgent issues")
+    @AchievesGoal(description = "Escalate urgent issues")
     @Action
     public void escalateUrgent(IssueAssessment assessment, GHIssue issue) { ... }
 }
 ```
 
-Every agent needs at least one `@Goal` action to define completion.
+Every agent needs at least one `@AchievesGoal` action to define completion.
 
 For MCP publishing:
 
 ```java
-@Goal(description = "Produce a curated news digest")
+@AchievesGoal(description = "Produce a curated news digest")
 @Action(export = @Export(remote = true, name = "newsDigest",
                          startingInputTypes = {UserInput.class}))
 public NewsDigest produceDigest(NewsTopic topic, OperationContext context) { ... }
@@ -196,10 +195,10 @@ public Result processTask(Task task) { ... }
 
 ## @Export — MCP Publishing
 
-Used on `@Goal` methods to control MCP tool publishing.
+Used on `@AchievesGoal` methods to control MCP tool publishing.
 
 ```java
-@Goal(description = "Produce a curated news digest")
+@AchievesGoal(description = "Produce a curated news digest")
 @Action(export = @Export(remote = true, name = "newsDigest",
                          startingInputTypes = {UserInput.class}))
 public NewsDigest produceDigest(NewsTopic topic, OperationContext context) { ... }
@@ -229,7 +228,7 @@ The `trigger` field on `@Action` enables reactive behavior — an action only fi
 @Agent(description = "Chat message handler")
 public class ChatAgent {
 
-    @Goal(description = "Respond to user message")
+    @AchievesGoal(description = "Respond to user message")
     @Action(trigger = UserMessage.class)
     public Response handleMessage(UserMessage message, Conversation conversation) {
         return new Response("Received: " + message.content());
@@ -279,9 +278,9 @@ Since `@State` classes must be static nested or top-level classes, `@Provided` i
 
 ## Common Pitfalls
 
-1. **`@Goal` not `@AchievesGoal`** — Embabel v1.0.0 renamed `@AchievesGoal` to `@Goal`. Use `@Goal` everywhere.
+1. **`@AchievesGoal` not `@Goal`** — Embabel v1.0.0 uses `@AchievesGoal` (not `@Goal`). Use `@AchievesGoal` everywhere.
 
-2. **`clearBlackboard` on goal actions** — Avoid using `clearBlackboard = true` on `@Goal` methods. Clearing removes `hasRun` tracking conditions, interfering with goal satisfaction.
+2. **`clearBlackboard` on goal actions** — Avoid using `clearBlackboard = true` on `@AchievesGoal` methods. Clearing removes `hasRun` tracking conditions, interfering with goal satisfaction.
 
 3. **Nullable parameters in `@Cost`** — All domain object parameters in `@Cost` methods must be nullable. `null` is passed when the object is not on the blackboard.
 
@@ -295,7 +294,7 @@ Since `@State` classes must be static nested or top-level classes, `@Provided` i
 
 8. **Unique method names** — Give `@Action` and `@Condition` methods unique names so the planner can distinguish between them.
 
-9. **`@Export` on `@Goal`** — Use `@Export(remote = true)` on `@Goal` methods for MCP publishing, not on regular `@Action` methods.
+9. **`@Export` on `@AchievesGoal`** — Use `@Export(remote = true)` on `@AchievesGoal` methods for MCP publishing, not on regular `@Action` methods.
 
 10. **`readOnly` actions** — `readOnly = true` actions only analyze data without modifying external systems (APIs, databases, files). Useful for learning/catchup modes.
 ---

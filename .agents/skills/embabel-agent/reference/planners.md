@@ -48,7 +48,7 @@ public class TravelAgent {
     @Action
     public HotelInfo searchHotels(FlightInfo flight, Ai ai) { ... }
 
-    @Goal(description = "Complete travel plan with flight and hotel")
+    @AchievesGoal(description = "Complete travel plan with flight and hotel")
     @Action
     public TravelPlan compilePlan(FlightInfo flight, HotelInfo hotel, Ai ai) { ... }
 }
@@ -225,7 +225,7 @@ public class MarketResearchAgent {
             CompetitorAnalysis.class);
     }
 
-    @Goal(description = "Compile all information into a final report")
+    @AchievesGoal(description = "Compile all information into a final report")
     @Action(description = "Compile the final report")
     public FinalReport compileReport(ReportRequest request, Ai ai) {
         return ai.withDefaultLlm().createObject(

@@ -100,7 +100,7 @@ When an action returns a `@State`-annotated class:
 - Any previous state objects are **hidden** from the blackboard (not removed, but no longer visible)
 - The returned object is bound to the blackboard (as `it`)
 - Planning considers only actions defined within the **current** state class
-- Any `@Goal` methods in the state become potential goals
+- Any `@AchievesGoal` methods in the state become potential goals
 
 Context (non-state objects) is preserved across state transitions — user messages, customer data, conversation history, etc. remain available.
 
@@ -146,7 +146,7 @@ record ReviseStory(String content) implements Stage {
 }
 
 record Done(String content) implements Stage {
-    @Goal(description = "Processing complete")
+    @AchievesGoal(description = "Processing complete")
     @Action
     Output complete() {
         return new Output(content);
@@ -177,7 +177,7 @@ data class ReviseStory(val content: String) : Stage {
 }
 
 data class Done(val content: String) : Stage {
-    @Goal(description = "Processing complete")
+    @AchievesGoal(description = "Processing complete")
     @Action
     fun complete(): Output {
         return Output(content)

@@ -73,7 +73,7 @@ embabel:
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `embabel.agent.platform.planner.restricted-goals` | Boolean | `false` | When `true`, each `@Agent` must have a single unique return type across all `@Goal` actions; violations rejected at startup |
+| `embabel.agent.platform.planner.restricted-goals` | Boolean | `false` | When `true`, each `@Agent` must have a single unique return type across all `@AchievesGoal` actions; violations rejected at startup |
 
 ```yaml
 embabel:

@@ -1,7 +1,7 @@
 ---
 name: embabel-agent
 description: >-
-  Build agentic AI on the JVM with Embabel v1.0.0 — Rod Johnson's Spring-based framework for authoring agents that combine LLMs with non-LLM planning (GOAP, Utility AI, Hybrid, Supervisor). Use when creating agents with @Agent or @EmbabelComponent, annotating actions (@Action), goals (@Goal), conditions (@Condition), and tools (@LlmTool, @Tool); publishing agents as MCP servers with @Export(remote=true); managing agent state with @State and transitions; configuring LLM providers (OpenAI, Anthropic, Gemini, GenAI, DeepSeek, Ollama, LM Studio, Bedrock, OCI, Mistral, Z.ai, Docker Models, MiniMax); implementing RAG with ToolishRAG; writing tests with FakeOperationContext; adding interceptors, guardrails, cost tracking, streaming, thinking, and termination; building chatbots with triggers; using DSL builders, OneShotPerLoopTool, ToolCallContext; troubleshooting and migrating from CrewAI, Pydantic AI, or LangGraph.
+  Build agentic AI on the JVM with Embabel v1.0.0 — Rod Johnson's Spring-based framework for authoring agents that combine LLMs with non-LLM planning (GOAP, Utility AI, Hybrid, Supervisor). Use when creating agents with @Agent or @EmbabelComponent, annotating actions (@Action), goals (@AchievesGoal), conditions (@Condition), and tools (@LlmTool, @Tool); publishing agents as MCP servers with @Export(remote=true); managing agent state with @State and transitions; configuring LLM providers (OpenAI, Anthropic, Gemini, GenAI, DeepSeek, Ollama, LM Studio, Bedrock, OCI, Mistral, Z.ai, Docker Models, MiniMax); implementing RAG with ToolishRAG; writing tests with FakeOperationContext; adding interceptors, guardrails, cost tracking, streaming, thinking, and termination; building chatbots with triggers; using DSL builders, OneShotPerLoopTool, ToolCallContext; troubleshooting and migrating from CrewAI, Pydantic AI, or LangGraph.
 ---
 
 # Embabel Agent Framework (v1.0.0)
@@ -20,7 +20,7 @@ Build agentic AI on the JVM with **Embabel** — a Spring-based framework for au
 ## Core Concepts
 
 - **Actions** (`@Action`) — Steps the agent takes. Each method transforms inputs into outputs.
-- **Goals** (`@Goal`) — What the agent is trying to achieve. Marks goal-satisfaction.
+- **Goals** (`@AchievesGoal`) — What the agent is trying to achieve. Marks goal-satisfaction.
 - **Conditions** (`@Condition`) — Predicates evaluated before actions or to determine goal achievement.
 - **Domain Model** — Strongly-typed objects carrying both data and behavior (DICE).
 - **Blackboard** — Shared memory where actions add results and read inputs by type.
@@ -78,7 +78,7 @@ public class StarNewsFinder {
             .createObject("Create a person from this input...", StarPerson.class);
     }
 
-    @Goal
+    @AchievesGoal
     @Action
     public Writeup writeup(StarPerson person, RelevantNewsStories stories, OperationContext context) {
         return context.ai().withLlm(llm).createObject(prompt, Writeup.class);
@@ -326,7 +326,7 @@ See `reference/error-handling.md` and `reference/flow.md` for full patterns.
 | Issue | Quick Fix |
 |-------|-----------|
 | Agent not discovered | Check `@Agent`/`@EmbabelComponent` annotation and component scan path |
-| Planner can't find plan | Verify `@Goal`, input type matching, enable DEBUG logging |
+| Planner can't find plan | Verify `@AchievesGoal`, input type matching, enable DEBUG logging |
 | Blackboard type not found | Check previous action added the type, not hidden by state transition |
 | State transitions broken | Use `@State` annotation, Java records or Kotlin top-level classes |
 | LLM calls failing | Check API keys, model names, timeouts, network connectivity |
@@ -343,7 +343,7 @@ Migrating from Python AI frameworks? See `reference/migrating.md` for guidance o
 A quick checklist of the most frequent issues. See `reference/common-pitfalls.md` for detailed Problem/Impact/Fix treatment.
 
 1. **Missing `@Agent`/`@EmbabelComponent`** — Component won't be discovered by Spring
-2. **Missing `@Goal`** — Planner can't determine completion (replaced `@AchievesGoal`)
+2. **Missing `@AchievesGoal`** — Planner can't determine completion (uses `@AchievesGoal`, not `@Goal`)
 3. **Missing `clearBlackboard = true` for loops** — Planner skips existing types
 4. **Non-static inner classes for `@State`** — Serialization/persistence failures
 5. **Missing `OperationContext` parameter** — Actions can't access AI or blackboard

@@ -4,13 +4,13 @@
     {
       "id": 1,
       "query": "Create an Embabel agent that takes a user's stock ticker, looks up the company's latest news, and generates a brief investment recommendation. Use GOAP planning.",
-      "expected_output": "A complete Java class annotated with @Agent, containing @Action methods for fetching news and generating recommendations, with @Goal on the final action. Should include OperationContext injection, LLM calls via context.ai(), and proper type-driven data flow between actions.",
+      "expected_output": "A complete Java class annotated with @Agent, containing @Action methods for fetching news and generating recommendations, with @AchievesGoal on the final action. Should include OperationContext injection, LLM calls via context.ai(), and proper type-driven data flow between actions.",
       "files": [],
       "should_trigger": true,
       "assertions": [
         "The output contains a class annotated with @Agent",
         "The class has at least two @Action methods",
-        "The final action is annotated with @Goal",
+        "The final action is annotated with @AchievesGoal",
         "The code uses OperationContext for AI access",
         "The code uses context.ai() or context.promptRunner() for LLM calls",
         "The code includes proper type-driven data flow between actions"
@@ -61,14 +61,14 @@
     {
       "id": 5,
       "query": "I need to publish an Embabel agent as an MCP server with SSE transport. Show the configuration and how to annotate a goal so it's automatically published as an MCP tool.",
-      "expected_output": "Configuration showing spring.ai.mcp.server.type: SYNC or ASYNC with SSE transport, and an example showing @Goal with @Export(remote = true) annotation. Should explain the automatic MCP tool publishing mechanism.",
+      "expected_output": "Configuration showing spring.ai.mcp.server.type: SYNC or ASYNC with SSE transport, and an example showing @AchievesGoal with @Export(remote = true) annotation. Should explain the automatic MCP tool publishing mechanism.",
       "files": [],
       "should_trigger": true,
       "assertions": [
         "The output includes MCP server configuration (spring.ai.mcp.server.type)",
         "The config shows SSE transport configuration",
         "The code shows @Export(remote = true) annotation",
-        "The code shows @Goal with MCP export",
+        "The code shows @AchievesGoal with MCP export",
         "The output explains automatic MCP tool publishing"
       ]
     },

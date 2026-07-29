@@ -10,13 +10,13 @@
 
 **Fix:** Annotate every agent with `@Agent(description = "...")` and every component with `@EmbabelComponent`.
 
-### Missing `@Goal` on terminal actions
+### Missing `@AchievesGoal` on terminal actions
 
-**Problem:** Not marking a terminal action with `@Goal` (v1.0.0 replaces the older `@AchievesGoal`).
+**Problem:** Not marking a terminal action with `@AchievesGoal`.
 
 **Impact:** The planner cannot determine goal satisfaction — the agent may loop indefinitely or complete without producing output.
 
-**Fix:** Every agent needs at least one action marked with `@Goal(description = "...")`.
+**Fix:** Every agent needs at least one action marked with `@AchievesGoal(description = "...")`.
 
 ### Exposing sensitive methods without `@Tool` / `@LlmTool`
 
@@ -38,7 +38,7 @@
 
 ### Using `clearBlackboard` on goal-achieving actions
 
-**Problem:** Setting `clearBlackboard = true` on an action annotated with `@Goal` / `@AchievesGoal`.
+**Problem:** Setting `clearBlackboard = true` on an action annotated with `@AchievesGoal`.
 
 **Impact:** Clearing the blackboard removes `hasRun` tracking conditions, which may interfere with goal satisfaction detection.
 
