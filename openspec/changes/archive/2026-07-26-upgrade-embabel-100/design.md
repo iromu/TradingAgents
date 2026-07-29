@@ -58,7 +58,7 @@ The project has 66 main source files and 62 test files, all using Embabel's `@Ag
 
 1. **Compile** — Run `./mvnw compile` to identify all breakage
 2. **Verify `@AchievesGoal` still exists** — confirmed in 1.0.0 JAR, no rename to `@Goal`
-3. **Add `@AchievesGoal` to missing agents** — OrchestratorAgent, InstrumentIdentityAgent, CheckpointAgent
+3. **Add `@AchievesGoal` to missing agents** — OrchestratorAgent, InstrumentIdentityAgent, CheckpointAgent, DecisionMemoryAgent
 4. **Fix `AgentScanningConfiguration`** — SPI classes still resolve; keep the file
 5. **Verify** — Run `./mvnw verify` to confirm build and tests pass
 6. **Document known issues** — `NO_PATH_TO_GOAL` on `DebateAgent.researchManager` (non-fatal)

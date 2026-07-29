@@ -67,3 +67,33 @@ The system SHALL use `.jinja` as the uniform extension for all prompt template f
 - **WHEN** the prompts directory is scanned
 - **THEN** no `.txt` files exist in `src/main/resources/prompts/`
 - **AND** all prompt loading code uses `.jinja` references
+
+### Requirement: Goal annotation uses @Goal (not @AchievesGoal)
+
+The system SHALL use `@Goal` (not the deprecated `@AchievesGoal`) on all action methods that achieve an agent's goal. Embabel 1.0.0 renamed `@AchievesGoal` to `@Goal`.
+
+The following actions MUST be annotated with `@Goal(description = "...")`:
+- `DebateAgent.researchManager()` — goal: "Generate final investment plan"
+- `RiskDebateAgent.assessRisk()` — goal: "Produce risk assessment"
+- `DebateLoopAgent.debate()` — goal: "Produce investment debate state"
+
+The import `com.embabel.agent.api.annotation.AchievesGoal` MUST NOT appear anywhere in the codebase.
+
+#### Scenario: DebateAgent has @Goal on researchManager
+- **WHEN** `DebateAgent.java` is inspected
+- **THEN** the `researchManager` method is annotated with `@Goal(description = "Generate final investment plan")`
+- **AND** the import is `com.embabel.agent.api.annotation.Goal`
+
+#### Scenario: RiskDebateAgent has @Goal on assessRisk
+- **WHEN** `RiskDebateAgent.java` is inspected
+- **THEN** the `assessRisk` method is annotated with `@Goal(description = "Produce risk assessment")`
+- **AND** the import is `com.embabel.agent.api.annotation.Goal`
+
+#### Scenario: DebateLoopAgent has @Goal on debate
+- **WHEN** `DebateLoopAgent.java` is inspected
+- **THEN** the `debate` method is annotated with `@Goal(description = "Produce investment debate state")`
+- **AND** the import is `com.embabel.agent.api.annotation.Goal`
+
+#### Scenario: No @AchievesGoal remains in codebase
+- **WHEN** the source tree is searched
+- **THEN** no file contains `@AchievesGoal` or `import com.embabel.agent.api.annotation.AchievesGoal`

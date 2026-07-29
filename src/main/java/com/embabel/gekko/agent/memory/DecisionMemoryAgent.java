@@ -1,6 +1,7 @@
 package com.embabel.gekko.agent.memory;
 
 import com.embabel.agent.api.annotation.Action;
+import com.embabel.agent.api.annotation.AchievesGoal;
 import com.embabel.agent.api.annotation.Agent;
 import com.embabel.agent.api.common.OperationContext;
 import com.embabel.gekko.dataflows.YFinService;
@@ -71,6 +72,7 @@ public class DecisionMemoryAgent {
     }
 
     @Action(description = "Generate past_context for injection into Portfolio Manager prompt")
+    @AchievesGoal(description = "Generate past trading context for injection into agent prompts")
     public String generatePastContext(String ticker) {
         return repository.generatePastContext(ticker);
     }

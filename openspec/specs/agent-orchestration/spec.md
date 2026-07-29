@@ -16,7 +16,7 @@ The `OrchestratorAgent` SHALL have the following actions:
 - `waitForPlanApproval` — HITL checkpoint using `WaitFor.formSubmission()`, produce `PlanApproval`
 - `executeDebate` — delegate to `DebateAgent` via `context.asSubProcess(InvestmentPlan.class, debateAgent)`, produce `InvestmentPlan`
 
-The `executeDebate` action SHALL be the only action that produces `InvestmentPlan`, marking it as the goal achievement action with `@AchievesGoal`.
+The `executeDebate` action SHALL be the only action that produces `InvestmentPlan`, marking it as the goal achievement action with `@Goal`.
 
 #### Scenario: Orchestrator accepts ticker and generates plan
 - **WHEN** user submits a ticker via form
@@ -41,7 +41,7 @@ The `DebateAgent` SHALL have the following actions in its action list:
 - `runDebate` — invoke `DebateLoopAgent` via `asSubProcess()`, produce `InvestmentDebateState`
 - `runRiskDebate` — invoke `RiskDebateAgent` via `asSubProcess()`, produce `RiskAssessment`
 - `waitForReview` — HITL checkpoint using `WaitFor.formSubmission()`, produce `InvestmentReviewFeedback`
-- `researchManager` — produce `InvestmentPlan` from all prior state + feedback, marked with `@AchievesGoal`
+- `researchManager` — produce `InvestmentPlan` from all prior state + feedback, marked with `@Goal`
 
 The planner SHALL discover and chain these actions based on their input/output type flow on the blackboard.
 
@@ -121,3 +121,17 @@ When an agent invokes another agent via `asSubProcess()`:
 #### Scenario: Subagent result flows back to parent
 - **WHEN** `DebateLoopAgent` returns `InvestmentDebateState`
 - **THEN** `DebateAgent`'s `runDebate` action receives the result and can pass it to `runRiskDebate`
+
+### Requirement: Agent scanning is auto-configured
+
+The system SHALL auto-register `@Agent`-annotated classes as `com.embabel.agent.core.Agent` beans without manual SPI wiring. Embabel 1.0.0's `embabel-agent-starter-webmvc` provides this auto-configuration.
+
+Manual registration of `DelegatingAgentScanningBeanPostProcessor` and `AgentScanningPostProcessorDelegate` via `AgentScanningConfiguration` is optional and should be removed if the auto-configuration works.
+
+#### Scenario: Agent scanning works without manual SPI config
+- **WHEN** `AgentScanningConfiguration` is removed or disabled
+- **THEN** all `@Agent`-annotated classes are still discovered and registered as agent beans
+
+#### Scenario: Manual SPI config is removed
+- **WHEN** `AgentScanningConfiguration.java` is removed
+- **THEN** the build compiles without errors (SPI classes are no longer referenced)

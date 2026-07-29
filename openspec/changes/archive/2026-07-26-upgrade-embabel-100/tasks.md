@@ -16,6 +16,7 @@ Three agents were missing `@AchievesGoal`:
 - **OrchestratorAgent** — added on `executeDebate()` method
 - **InstrumentIdentityAgent** — added on `resolveIdentity()` method
 - **CheckpointAgent** — added on `restoreCheckpoint()` method
+- **DecisionMemoryAgent** — added on `generatePastContext()` method (discovered during runtime testing)
 
 ### Planner Validation: `NO_PATH_TO_GOAL` on `DebateAgent.researchManager`
 The planner cannot construct a valid path to achieve the `researchManager` goal due to a complex chain of preconditions (ticker → debateState → riskAssessment → feedback → portfolioDecision → researchManager). This is a **non-fatal** validation warning — the workflow works correctly at runtime via human-in-the-loop interaction, but the automated planner cannot model it.
@@ -37,6 +38,7 @@ The planner cannot construct a valid path to achieve the `researchManager` goal 
 - [x] 3.1 Add `@AchievesGoal` to `OrchestratorAgent.executeDebate()` — goal: "Execute full research workflow and produce an investment plan"
 - [x] 3.2 Add `@AchievesGoal` to `InstrumentIdentityAgent.resolveIdentity()` — goal: "Resolve a ticker symbol to its real company identity to prevent LLM hallucination"
 - [x] 3.3 Add `@AchievesGoal` to `CheckpointAgent.restoreCheckpoint()` — goal: "Restore blackboard state from crash checkpoint for recovery"
+- [x] 3.4 Add `@AchievesGoal` to `DecisionMemoryAgent.generatePastContext()` — goal: "Generate past trading context for injection into agent prompts"
 
 ## 4. Review AgentScanningConfiguration
 
