@@ -2,7 +2,6 @@ package com.embabel.gekko.agent.memory;
 
 import com.embabel.agent.api.annotation.Action;
 import com.embabel.agent.api.annotation.AchievesGoal;
-import com.embabel.agent.api.annotation.Agent;
 import com.embabel.agent.api.common.OperationContext;
 import com.embabel.gekko.dataflows.YFinService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +18,6 @@ import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
  * Decision memory system that learns from past outcomes.
  * Stores decisions, resolves them with actual returns, and injects past context.
  */
-@Agent(description = "Decision memory system that learns from past trading outcomes")
 @Component
 @RequiredArgsConstructor
 @Slf4j
@@ -31,10 +29,26 @@ public class DecisionMemoryAgent {
     private final YFinService yFinService;
 
     @Action(description = "Store a pending decision for later resolution with actual returns")
-    public void storeDecision(String ticker, String tradeDate, String rating,
-                              String executiveSummary, String investmentThesis) {
+    public String storeDecision(String ticker, String tradeDate, String rating,
+                                String executiveSummary, String investmentThesis) {
         repository.appendPending(ticker, tradeDate, rating, executiveSummary, investmentThesis);
         log.info("Stored pending decision for {} on {}", ticker, tradeDate);
+        return "Decision stored for " + ticker;
+    }
+
+    @Action(description = "Store a decision in memory for future learning")
+    public String storeDecisionInMemory(String ticker, String tradeDate, String rating,
+                                        String executiveSummary, String investmentThesis) {
+        return storeDecision(ticker, tradeDate, rating, executiveSummary, investmentThesis);
+    }
+
+    @Action(description = "Store a decision and resolve it with reflection in one call")
+    public String storeAndResolveWithReflection(String ticker, String tradeDate, String rating,
+                                                String executiveSummary, String investmentThesis,
+                                                OperationContext context) {
+        storeDecision(ticker, tradeDate, rating, executiveSummary, investmentThesis);
+        resolvePending(ticker, tradeDate, context);
+        return "Stored and resolved decision for " + ticker;
     }
 
     @Action(description = "Resolve pending decisions with actual returns and generate LLM reflection")
@@ -72,7 +86,7 @@ public class DecisionMemoryAgent {
     }
 
     @Action(description = "Generate past_context for injection into Portfolio Manager prompt")
-    @AchievesGoal(description = "Generate past trading context for injection into agent prompts")
+    @AchievesGoal(description = "Generate past context from decision memory for prompt injection")
     public String generatePastContext(String ticker) {
         return repository.generatePastContext(ticker);
     }

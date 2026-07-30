@@ -156,6 +156,7 @@ public class OrchestratorAgent {
     }
 
     @Action(description = "Generate past context from decision memory for injection into PM prompt")
+    @AchievesGoal(description = "Generate past context from decision memory for injection into agent prompts")
     public String generatePastContext(ResearchTypes.Ticker ticker) {
         try {
             String context = memoryAgent.generatePastContext(ticker.content());

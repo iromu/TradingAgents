@@ -234,6 +234,7 @@ public class DebateAgent {
     }
 
     @Action(description = "Wait for user review after debate completes")
+    @AchievesGoal(description = "Wait for user review of investment debate")
     public ResearchTypes.InvestmentReviewFeedback waitForReview(ResearchTypes.InvestmentDebateState state, ResearchTypes.Ticker ticker) {
         return WaitFor.formSubmission(
                 "Review the investment debate below and provide feedback, or approve to proceed with the final plan.",
@@ -242,7 +243,7 @@ public class DebateAgent {
     }
 
     @Action(description = "Generate final investment plan from debate state, risk assessment, and user feedback")
-    @AchievesGoal(description = "Generate final investment plan")
+    @AchievesGoal(description = "Produce final investment plan after debate, risk assessment, and user review")
     public ResearchTypes.InvestmentPlan researchManager(
             ResearchTypes.Ticker ticker,
             ResearchTypes.InvestmentDebateState state,
