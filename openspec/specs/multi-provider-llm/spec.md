@@ -33,7 +33,7 @@ The system SHALL be able to connect to additional LLM providers beyond OpenAI-co
 - Docker Models (`embabel-agent-starter-dockermodels`)
 - Google GenAI / Gemini 3.x (`embabel-agent-starter-google-genai`)
 
-These providers are available as optional dependencies and can be added to the project's `pom.xml` when needed.
+These providers are available as optional dependencies and can be added to the project's `pom.xml` when needed. No code changes are required for this upgrade — the providers are available for future use.
 
 #### Scenario: Bedrock provider can be added
 - **WHEN** `embabel-agent-starter-bedrock` is added as a dependency

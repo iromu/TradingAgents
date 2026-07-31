@@ -1,10 +1,4 @@
-# Spec: Agent Orchestration
-
-## Purpose
-
-Define the multi-agent architecture for the trading research platform, decomposing the monolithic TraderAgent into focused agents with clear responsibilities using Embabel's `asSubProcess()` pattern.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: OrchestratorAgent delegates to DebateAgent
 

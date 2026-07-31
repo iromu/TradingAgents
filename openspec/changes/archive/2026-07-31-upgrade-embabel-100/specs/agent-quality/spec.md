@@ -1,10 +1,4 @@
-# Agent Quality
-
-## Purpose
-
-Ensure the trading agent system produces high-quality, reliable outputs by requiring convergence-based debate, functional risk debate, data-driven market analysis, and consistent prompt file conventions.
-
-## Requirements
+## MODIFIED Requirements
 
 ### Requirement: Debate loop uses convergence check
 The system SHALL replace the fixed 2-iteration debate loop with a convergence-based loop that continues until the debate stabilizes or reaches a maximum iteration limit.
