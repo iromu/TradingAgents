@@ -149,9 +149,9 @@ public class ProcessStatusController {
     ) {
         AgentUtils.validateProcessId(processId);
         // Check if already resolved — prevent duplicate resubmissions
-        // Synchronized with updateSession to prevent race conditions
+        // Use per-process lock to avoid blocking other processes
         AgentProcess agentProcess;
-        synchronized (hitlService) {
+        synchronized (AgentUtils.getProcessLock(processId)) {
             HitlSession existingSession = hitlService.getSession(processId).orElse(null);
             if (existingSession == null) {
                 model.addAttribute("error", "No HITL session found for process " + processId);

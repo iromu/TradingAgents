@@ -5,7 +5,6 @@ import org.junit.jupiter.api.io.TempDir;
 import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.File;
 import java.nio.file.Path;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -15,9 +14,15 @@ class AlphaVantageServiceTest {
     @TempDir
     Path tempDir;
 
+    private AlphaVantageService createService() {
+        AlphaVantageService service = new AlphaVantageService();
+        service.init(); // @PostConstruct doesn't fire outside Spring container
+        return service;
+    }
+
     @Test
     void constructor_setsUpRestTemplate() {
-        AlphaVantageService service = new AlphaVantageService();
+        AlphaVantageService service = createService();
 
         // The service should be created without errors
         // RestTemplate timeout configuration is internal
@@ -34,7 +39,7 @@ class AlphaVantageServiceTest {
 
     @Test
     void getNews_differentDates_produceDifferentCacheKeys() {
-        AlphaVantageService service = new AlphaVantageService();
+        AlphaVantageService service = createService();
         ReflectionTestUtils.setField(service, "cacheDir", tempDir.toString());
 
         // Call with different date ranges — they should produce different cache files
@@ -46,7 +51,7 @@ class AlphaVantageServiceTest {
 
     @Test
     void getGlobalNews_includesTopicInCacheKey() {
-        AlphaVantageService service = new AlphaVantageService();
+        AlphaVantageService service = createService();
         ReflectionTestUtils.setField(service, "cacheDir", tempDir.toString());
 
         // Different topics should produce different cache keys
@@ -56,7 +61,7 @@ class AlphaVantageServiceTest {
 
     @Test
     void getInsiderSentiment_includesIntervalInCacheKey() {
-        AlphaVantageService service = new AlphaVantageService();
+        AlphaVantageService service = createService();
         ReflectionTestUtils.setField(service, "cacheDir", tempDir.toString());
 
         // Different intervals should produce different cache keys
@@ -66,7 +71,7 @@ class AlphaVantageServiceTest {
 
     @Test
     void getFundamentals_usesCorrectCacheKey() {
-        AlphaVantageService service = new AlphaVantageService();
+        AlphaVantageService service = createService();
         ReflectionTestUtils.setField(service, "cacheDir", tempDir.toString());
 
         assertDoesNotThrow(() -> service.getFundamentals("AAPL", null));
@@ -74,7 +79,7 @@ class AlphaVantageServiceTest {
 
     @Test
     void getBalanceSheet_usesCorrectCacheKey() {
-        AlphaVantageService service = new AlphaVantageService();
+        AlphaVantageService service = createService();
         ReflectionTestUtils.setField(service, "cacheDir", tempDir.toString());
 
         assertDoesNotThrow(() -> service.getBalanceSheet("AAPL", "quarterly", null));
@@ -82,7 +87,7 @@ class AlphaVantageServiceTest {
 
     @Test
     void getCashflow_usesCorrectCacheKey() {
-        AlphaVantageService service = new AlphaVantageService();
+        AlphaVantageService service = createService();
         ReflectionTestUtils.setField(service, "cacheDir", tempDir.toString());
 
         assertDoesNotThrow(() -> service.getCashflow("AAPL", "quarterly", null));
@@ -90,7 +95,7 @@ class AlphaVantageServiceTest {
 
     @Test
     void getIncomeStatement_usesCorrectCacheKey() {
-        AlphaVantageService service = new AlphaVantageService();
+        AlphaVantageService service = createService();
         ReflectionTestUtils.setField(service, "cacheDir", tempDir.toString());
 
         assertDoesNotThrow(() -> service.getIncomeStatement("AAPL", "quarterly", null));
@@ -98,7 +103,7 @@ class AlphaVantageServiceTest {
 
     @Test
     void getInsiderTransactions_usesCorrectCacheKey() {
-        AlphaVantageService service = new AlphaVantageService();
+        AlphaVantageService service = createService();
         ReflectionTestUtils.setField(service, "cacheDir", tempDir.toString());
 
         assertDoesNotThrow(() -> service.getInsiderTransactions("AAPL"));
@@ -106,9 +111,9 @@ class AlphaVantageServiceTest {
 
     @Test
     void constructor_configuresRestTemplateWithTimeouts() {
-        AlphaVantageService service = new AlphaVantageService();
+        AlphaVantageService service = createService();
 
-        // The constructor uses defaults (10000ms connect, 30000ms read) when @Value fields are 0
+        // init() uses defaults (10000ms connect, 30000ms read) when @Value fields are 0
         // Verify by checking the RestTemplate's request factory
         RestTemplate rt = (RestTemplate) ReflectionTestUtils.getField(service, "restTemplate");
         assertNotNull(rt);

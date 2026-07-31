@@ -72,8 +72,8 @@ public class DebateLoopAgent {
                     if (bullHistory.size() >= 2) {
                         String prevBull = bullHistory.get(bullHistory.size() - 2);
                         double similarity = computeSimilarity(prevBull, bullResponse);
-                        log.info("Debate iteration {} - bull similarity: {:.4f} (threshold: {:.4f})",
-                                last.count() / 2, similarity, config.similarityThreshold());
+                        log.info("Debate iteration {} - bull similarity: {} (threshold: {})",
+                                last.count() / 2, String.format("%.4f", similarity), String.format("%.4f", config.similarityThreshold()));
                     }
 
                     return new ResearchTypes.InvestmentDebateState(history, bullHistory, bearHistory, bearResponse, count, briefs);
@@ -89,8 +89,8 @@ public class DebateLoopAgent {
                         String currBull = last.bullHistory().get(last.bullHistory().size() - 1);
                         double similarity = computeSimilarity(prevBull, currBull);
                         if (similarity >= config.similarityThreshold()) {
-                            log.info("Debate converged at iteration {} (similarity: {:.4f} >= {:.4f})",
-                                    last.count() / 2, similarity, config.similarityThreshold());
+                            log.info("Debate converged at iteration {} (similarity: {} >= {})",
+                                    last.count() / 2, String.format("%.4f", similarity), String.format("%.4f", config.similarityThreshold()));
                             return true;
                         }
                     }

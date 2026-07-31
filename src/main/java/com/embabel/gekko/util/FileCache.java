@@ -142,15 +142,33 @@ public class FileCache {
     public void save(String key, Object value) {
         try {
             if (value instanceof ResearchTypes.Report report) {
-                mapper.writeValue(pathForKey(key, ".json").toFile(), value);
+                saveJson(key, value);
                 saveMarkdown(key, report.content());
-            } else if (value instanceof String string) {
-                saveMarkdown(key, string);
+            } else if (value instanceof String) {
+                saveMarkdown(key, (String) value);
             } else {
-                mapper.writeValue(pathForKey(key, ".json").toFile(), value);
+                saveJson(key, value);
             }
+        } catch (RuntimeException e) {
+            throw e;
+        }
+    }
+
+    /**
+     * Atomically write a JSON cache file via temp file + rename.
+     */
+    private void saveJson(String key, Object value) {
+        Path jsonPath = pathForKey(key, ".json");
+        Path tempPath = jsonPath.resolveSibling(jsonPath.getFileName() + ".tmp");
+        try {
+            mapper.writeValue(tempPath.toFile(), value);
         } catch (IOException e) {
-            throw new RuntimeException("Failed to save cache for key " + key + ": " + e.getMessage(), e);
+            throw new RuntimeException("Failed to write JSON cache for key " + key + ": " + e.getMessage(), e);
+        }
+        try {
+            Files.move(tempPath, jsonPath, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            log.error("Failed to atomically save JSON cache for key {}: {}", key, e.getMessage(), e);
         }
     }
 

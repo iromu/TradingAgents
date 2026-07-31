@@ -1,7 +1,5 @@
 package com.embabel.gekko.agent.memory;
 
-import com.embabel.agent.api.annotation.Action;
-import com.embabel.agent.api.annotation.AchievesGoal;
 import com.embabel.agent.api.common.OperationContext;
 import com.embabel.gekko.dataflows.YFinService;
 import lombok.RequiredArgsConstructor;
@@ -28,7 +26,6 @@ public class DecisionMemoryAgent {
     private final DecisionMemoryRepository repository;
     private final YFinService yFinService;
 
-    @Action(description = "Store a pending decision for later resolution with actual returns")
     public String storeDecision(String ticker, String tradeDate, String rating,
                                 String executiveSummary, String investmentThesis) {
         repository.appendPending(ticker, tradeDate, rating, executiveSummary, investmentThesis);
@@ -36,13 +33,6 @@ public class DecisionMemoryAgent {
         return "Decision stored for " + ticker;
     }
 
-    @Action(description = "Store a decision in memory for future learning")
-    public String storeDecisionInMemory(String ticker, String tradeDate, String rating,
-                                        String executiveSummary, String investmentThesis) {
-        return storeDecision(ticker, tradeDate, rating, executiveSummary, investmentThesis);
-    }
-
-    @Action(description = "Store a decision and resolve it with reflection in one call")
     public String storeAndResolveWithReflection(String ticker, String tradeDate, String rating,
                                                 String executiveSummary, String investmentThesis,
                                                 OperationContext context) {
@@ -51,7 +41,6 @@ public class DecisionMemoryAgent {
         return "Stored and resolved decision for " + ticker;
     }
 
-    @Action(description = "Resolve pending decisions with actual returns and generate LLM reflection")
     public void resolvePending(String ticker, String tradeDate, OperationContext context) {
         if (!repository.hasPendingEntriesFor(ticker)) {
             log.debug("No pending entries for {}, skipping resolution", ticker);
@@ -85,13 +74,10 @@ public class DecisionMemoryAgent {
         }
     }
 
-    @Action(description = "Generate past_context for injection into Portfolio Manager prompt")
-    @AchievesGoal(description = "Generate past context from decision memory for prompt injection")
     public String generatePastContext(String ticker) {
         return repository.generatePastContext(ticker);
     }
 
-    @Action(description = "Fetch actual returns for a ticker on a given date")
     public ReturnsData fetchReturns(String ticker, String tradeDate) throws Exception {
         // Fetch 5-day return from Yahoo Finance
         LocalDate trade = LocalDate.parse(tradeDate, DF);
@@ -109,12 +95,17 @@ public class DecisionMemoryAgent {
             String[] parts = line.split(",");
             if (parts.length < 7) continue;
 
-            LocalDate lineDate = LocalDate.parse(parts[0], DF);
-            if (lineDate.equals(trade)) {
-                openPrice = Double.parseDouble(parts[1]);
-            }
-            if (lineDate.equals(end)) {
-                closePrice = Double.parseDouble(parts[4]); // Close price
+            try {
+                LocalDate lineDate = LocalDate.parse(parts[0], DF);
+                if (lineDate.equals(trade)) {
+                    openPrice = Double.parseDouble(parts[1]);
+                }
+                if (lineDate.equals(end)) {
+                    closePrice = Double.parseDouble(parts[4]); // Close price
+                }
+            } catch (Exception e) {
+                log.debug("Skipping malformed CSV line: {}", line);
+                continue;
             }
         }
 

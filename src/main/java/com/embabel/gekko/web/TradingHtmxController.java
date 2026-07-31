@@ -78,16 +78,6 @@ public class TradingHtmxController {
         }
 
         // Still running — show processing page with SSE updates
-        model.addAttribute("ticker", form);
-
-        new GenericProcessingValues(
-                agentProcess,
-                "Planning your research",
-                form.content,
-                "researchPlan",
-                "plan"
-        ).addToModel(model);
-
         return "common/processing";
     }
 

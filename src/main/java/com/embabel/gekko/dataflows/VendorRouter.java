@@ -36,6 +36,9 @@ public class VendorRouter {
         if (alphaVantageService == null) {
             return "Alpha Vantage service not configured — set app.alphavantage.enabled=true and provide app.alphavantage.api-key";
         }
+        if (params == null || params.length == 0) {
+            return "ERROR: No parameters provided for method: " + method;
+        }
         return switch (method) {
 
             // ====================================================

@@ -34,11 +34,10 @@ public class FredService {
     ) {
         this.apiKey = apiKey;
         this.fileCache = fileCache;
-        this.restTemplate = new RestTemplate();
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
         factory.setConnectTimeout(10000);
         factory.setReadTimeout(30000);
-        this.restTemplate.setRequestFactory(factory);
+        this.restTemplate = new RestTemplate(factory);
     }
 
     /**

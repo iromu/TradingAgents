@@ -362,7 +362,7 @@ public class DecisionMemoryRepository {
             // Prune oldest resolved entries
             int toKeep = Math.min(maxEntries, resolvedEntries.size());
             int toRemove = resolvedEntries.size() - toKeep;
-            resolvedEntries = resolvedEntries.subList(toRemove, resolvedEntries.size());
+            resolvedEntries = new ArrayList<>(resolvedEntries.subList(toRemove, resolvedEntries.size()));
 
             StringBuilder newContent = new StringBuilder();
             for (String entry : pendingEntries) {

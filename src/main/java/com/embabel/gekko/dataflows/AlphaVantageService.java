@@ -7,6 +7,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -68,14 +72,20 @@ public class AlphaVantageService {
     private int readTimeoutMs;
 
     private static final String BASE_URL = "https://www.alphavantage.co/query";
+    private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
     /**
      * RestTemplate instance with configured timeouts to prevent hanging requests.
      * Connect timeout: {@link #connectTimeoutMs}ms, Read timeout: {@link #readTimeoutMs}ms.
+     * Built in {@code @PostConstruct} so that {@code @Value} fields are populated first.
      */
-    private final RestTemplate restTemplate;
+    private RestTemplate restTemplate;
 
     public AlphaVantageService() {
+    }
+
+    @PostConstruct
+    public void init() {
         int connTimeout = connectTimeoutMs > 0 ? connectTimeoutMs : 10000;
         int readTimeout = readTimeoutMs > 0 ? readTimeoutMs : 30000;
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
@@ -112,14 +122,13 @@ public class AlphaVantageService {
             return null;
         }
         try {
-            com.fasterxml.jackson.databind.ObjectMapper mapper = new com.fasterxml.jackson.databind.ObjectMapper();
-            com.fasterxml.jackson.databind.JsonNode node = mapper.readTree(json);
+            JsonNode node = JSON_MAPPER.readTree(json);
             if (node == null || node.isMissingNode()) {
                 return null;
             }
             java.util.Map<String, String> map = new java.util.LinkedHashMap<>();
             for (String field : new String[]{"Name", "Sector", "Industry", "Exchange", "Currency", "Symbol"}) {
-                com.fasterxml.jackson.databind.JsonNode val = node.get(field);
+                JsonNode val = node.get(field);
                 map.put(field, val != null && !val.isNull() ? val.asText() : null);
             }
             return map;
