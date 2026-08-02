@@ -13,7 +13,7 @@ source_paths:
   - "src/main/java/com/embabel/gekko/agent/checkpoint/CheckpointAgent.java"
   - "src/main/java/com/embabel/gekko/agent/identity/InstrumentIdentityAgent.java"
   - "src/main/java/com/embabel/gekko/agent/memory/DecisionMemoryAgent.java"
-updated_at: "2026-07-06"
+updated_at: "2026-08-02"
 ---
 
 # Multi-Agent Architecture
@@ -26,11 +26,11 @@ Gekko is built on the principle that **specialized agents working together produ
 OrchestratorAgent (entry point)
     │
     ├── InstrumentIdentityAgent (resolve ticker → company identity)
-    ├── DecisionMemoryAgent (past context generation)
+    ├── DecisionMemoryAgent (past context generation — utility component)
     └── DebateAgent (via asSubProcess)
             │
             ├── [4 Analyst Reports — cached LLM calls]
-            ├── DebateLoopAgent (via asSubProcess)
+            ├── DebateLoopAgent (via asSubProcess, tracks LLM budget)
             │       ├── BullResearcher
             │       └── BearResearcher
             ├── Trader (transaction proposal)
@@ -39,7 +39,7 @@ OrchestratorAgent (entry point)
             │       ├── ConservativeDebator
             │       └── NeutralDebator
             ├── PortfolioManager (final decision)
-            └── DecisionMemoryAgent (store decision)
+            └── DecisionMemoryAgent (store decision — utility component)
 ```
 
 ## Core Agents
@@ -48,18 +48,20 @@ OrchestratorAgent (entry point)
 |-------|---------|------|
 | **OrchestratorAgent** | `agent` | Entry point: ticker input, identity resolution, research plan, HITL approval, delegates to DebateAgent |
 | **DebateAgent** | `agent` | Workflow orchestrator: 4 analyst reports, debate briefs, debate loop, trader, risk debate, portfolio decision, HITL review, final plan |
-| **DebateLoopAgent** | `agent` | Bull/bear iterative debate with convergence detection (Jaccard similarity) |
+| **DebateLoopAgent** | `agent` | Bull/bear iterative debate with convergence detection (Jaccard similarity) and LLM budget tracking |
 | **RiskDebateAgent** | `agent` | 3-round risk debate (aggressive → conservative → neutral) with judgment |
 | **Trader** | `agent` | Translates research plan into concrete transaction proposal |
 | **PortfolioManager** | `agent` | Synthesizes risk debate, research plan, and trader proposal into final decision |
 
-## Supplementary Agents
+## Supplementary Components
 
-| Agent | Package | Role |
-|-------|---------|------|
+| Component | Package | Role |
+|-----------|---------|------|
 | **InstrumentIdentityAgent** | `agent.identity` | Resolves ticker to real company identity (name, sector, industry, exchange) via Yahoo Finance |
-| **DecisionMemoryAgent** | `agent.memory` | Learns from past trading outcomes — stores decisions, resolves with actual returns, generates past context |
+| **DecisionMemoryAgent** | `agent.memory` | Utility component (not an `@Agent`) — stores decisions, resolves with actual returns, generates past context |
 | **CheckpointAgent** | `agent.checkpoint` | Crash recovery via blackboard snapshot persistence |
+| **LlmBudgetTracker** | `util` | Soft limiter tracking LLM calls per ticker with warning thresholds |
+| **AgentUtils** | `util` | Shared utilities for WaitFor form submission, process locks, and plan extraction |
 
 ## How Agents Communicate
 

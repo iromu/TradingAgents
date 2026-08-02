@@ -12,7 +12,7 @@ source_paths:
   - "src/main/java/com/embabel/gekko/tools/MarketDataTools.java"
   - "src/main/java/com/embabel/gekko/tools/FredDataTools.java"
   - "src/main/java/com/embabel/gekko/tools/PolymarketDataTools.java"
-updated_at: "2026-07-06"
+updated_at: "2026-08-02"
 ---
 
 # Data Flow Services

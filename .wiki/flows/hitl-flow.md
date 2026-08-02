@@ -7,9 +7,10 @@ source_paths:
   - "src/main/java/com/embabel/gekko/htmx/ProcessStatusController.java"
   - "src/main/java/com/embabel/gekko/htmx/HitlService.java"
   - "src/main/java/com/embabel/gekko/htmx/HitlAgenticEventListener.java"
+  - "src/main/java/com/embabel/gekko/util/AgentUtils.java"
   - "src/main/resources/templates/common/waiting.html"
   - "src/main/resources/templates/common/hitl.html"
-updated_at: "2026-06-11"
+updated_at: "2026-08-02"
 ---
 
 # Human-in-the-Loop (HITL) Flow
@@ -85,11 +86,13 @@ When an agent process enters the `FAILED` state (e.g., LLM error, network failur
 
 ### Session Management
 
-`HitlService` uses a 24-hour TTL:
-- Sessions older than 24 hours are automatically cleaned up every 5 minutes
+`HitlService` uses a 24-hour TTL with scheduled cleanup every 5 minutes:
+- Sessions older than 24 hours are automatically removed
 - Uses `ConcurrentHashMap` for thread-safe session storage
-- `computeIfAbsent()` prevents duplicate session creation
+- `computeIfAbsent()` prevents duplicate session creation from concurrent events
 - `compute()` prevents concurrent update overwrites
+- Session migration uses per-session locking to avoid global serialization
+- Implements `DisposableBean` for graceful shutdown of the cleanup scheduler
 
 ## Security
 

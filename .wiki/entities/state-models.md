@@ -4,10 +4,9 @@ type: "entity"
 status: "active"
 language: "default"
 source_paths:
-  - "src/main/java/com/embabel/gekko/agent/TraderAgent.java"
-  - "src/main/java/com/embabel/gekko/domain/Analysts.java"
+  - "src/main/java/com/embabel/gekko/domain/ResearchTypes.java"
   - "src/main/java/com/embabel/gekko/htmx/HitlService.java"
-updated_at: "2026-06-11"
+updated_at: "2026-08-02"
 ---
 
 # State Models (Entities)

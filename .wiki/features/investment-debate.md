@@ -10,7 +10,7 @@ source_paths:
   - "src/main/java/com/embabel/gekko/agent/researchers/BearResearcher.java"
   - "src/main/resources/prompts/researchers/"
   - "src/main/resources/prompts/debate/Distiller.jinja"
-updated_at: "2026-07-06"
+updated_at: "2026-08-02"
 ---
 
 # Investment Debate
@@ -38,6 +38,8 @@ These four briefs are bundled into a `DebateBriefs` record and cached.
 2. **Bear Researcher** argues why the stock is risky or overvalued
 3. They alternate turns, each seeing the full conversation history
 4. The loop runs until **convergence** or **max iterations**
+
+Each debate turn is cached via `FileCache` and tracked by `[[llm-budget-tracker]]` to prevent runaway LLM calls.
 
 ### Convergence Detection
 

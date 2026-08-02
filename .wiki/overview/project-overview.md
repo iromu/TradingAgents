@@ -7,7 +7,7 @@ source_paths:
   - "README.md"
   - "pom.xml"
   - "src/main/java/com/embabel/gekko/GekkoApplication.java"
-updated_at: "2026-06-11"
+updated_at: "2026-08-02"
 ---
 
 # Project Overview

@@ -7,7 +7,7 @@ source_paths:
   - "src/main/java/com/embabel/gekko/agent/DebateLoopAgent.java"
   - "src/main/java/com/embabel/gekko/agent/DebateAgent.java"
   - "src/main/java/com/embabel/gekko/config/TraderAgentConfig.java"
-updated_at: "2026-07-06"
+updated_at: "2026-08-02"
 ---
 
 # Debate Convergence

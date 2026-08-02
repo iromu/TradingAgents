@@ -1,29 +1,32 @@
 ---
 title: "Cache Key Bug"
 type: "risk"
-status: "stale"
+status: "mitigated"
 language: "default"
 source_paths:
   - "src/main/java/com/embabel/gekko/dataflows/AlphaVantageService.java"
-updated_at: "2026-06-13"
+  - "src/main/java/com/embabel/gekko/util/FileCache.java"
+updated_at: "2026-08-02"
 ---
 
-# Alpha Vantage Cache Key Bug
+# Cache Key Bug
 
-> **Status: Stale** — This bug was fixed. All methods now include relevant query parameters in their cache keys.
+> **Status: Mitigated** — All methods include relevant query parameters in their cache keys. The FileCache uses SHA-256 hashing to prevent path traversal and hash collisions.
 
-## What Was Fixed
+## Current State
 
-The following methods previously ignored important parameters in their cache keys:
+All Alpha Vantage methods include relevant parameters in cache keys:
 
-| Method | Was Ignoring | Now Uses |
-|--------|-------------|----------|
-| `getNews()` | Date range | `ticker_NEWS_startDate_endDate` |
-| `getGlobalNews()` | topic, limit, page | `GLOBAL_NEWS_topic_limit_page` |
-| `getInsiderSentiment()` | interval | `ticker_INSIDER_SENTIMENT_interval` |
-| `getBalanceSheet()` | frequency | `ticker_BALANCE_SHEET_freq` |
-| `getCashflow()` | frequency | `ticker_CASH_FLOW_freq` |
-| `getIncomeStatement()` | frequency | `ticker_INCOME_STATEMENT_freq` |
+| Method | Cache Key |
+|--------|-----------|
+| `getNews()` | `ticker_NEWS_startDate_endDate` |
+| `getGlobalNews()` | `GLOBAL_NEWS_topic_limit_page` |
+| `getInsiderSentiment()` | `ticker_INSIDER_SENTIMENT_interval` |
+| `getBalanceSheet()` | `ticker_BALANCE_SHEET_freq` |
+| `getCashflow()` | `ticker_CASH_FLOW_freq` |
+| `getIncomeStatement()` | `ticker_INCOME_STATEMENT_freq` |
+
+The FileCache hashes all keys via SHA-256, so special characters in keys cannot cause path traversal or filename collisions.
 
 ## Remaining Risk
 

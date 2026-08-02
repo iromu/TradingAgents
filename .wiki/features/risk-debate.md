@@ -12,7 +12,7 @@ source_paths:
   - "src/main/java/com/embabel/gekko/agent/RiskLevel.java"
   - "src/main/resources/prompts/risk/"
   - "src/main/resources/prompts/managers/RiskManager.jinja"
-updated_at: "2026-07-06"
+updated_at: "2026-08-02"
 ---
 
 # Risk Debate

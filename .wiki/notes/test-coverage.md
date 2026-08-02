@@ -5,12 +5,12 @@ status: "active"
 language: "default"
 source_paths:
   - "src/test/java/com/embabel/gekko/"
-updated_at: "2026-07-06"
+updated_at: "2026-08-02"
 ---
 
 # Test Coverage
 
-The project has **43 test classes** across agent, data, tool, utility, and integration layers.
+The project has **62 test classes** across agent, data, tool, utility, and integration layers.
 
 ## Agent Tests
 
@@ -18,13 +18,18 @@ The project has **43 test classes** across agent, data, tool, utility, and integ
 
 | Test Class | Source | What it tests |
 |------------|--------|---------------|
+| `AllAgentsPlanValidationTest` | `agent/AllAgentsPlanValidationTest.java` | Plan validation across all agents |
+| `DebateAgentHelperTest` | `agent/DebateAgentHelperTest.java` | DebateAgent helper methods |
 | `DebateAgentLLMTest` | `agent/DebateAgentLLMTest.java` | DebateAgent with mocked LLM |
+| `DebateAgentSubProcessIntegrationTest` | `agent/DebateAgentSubProcessIntegrationTest.java` | DebateAgent asSubProcess integration |
 | `DebateBriefsUnitTest` | `agent/DebateBriefsUnitTest.java` | Brief distillation logic |
 | `DebateLoopAgentTest` | `agent/DebateLoopAgentTest.java` | Bull/bear loop and convergence detection |
+| `DebateLoopAgentIntegrationTest` | `agent/DebateLoopAgentIntegrationTest.java` | DebateLoopAgent integration |
 | `OrchestratorAgentResearchPlanTest` | `agent/OrchestratorAgentResearchPlanTest.java` | Research plan generation |
+| `OrchestratorExecuteDebateIntegrationTest` | `agent/OrchestratorExecuteDebateIntegrationTest.java` | Orchestrator executeDebate integration |
 | `PureLogicTest` | `agent/PureLogicTest.java` | Jaccard similarity, bigram extraction |
-| `TraderAgentLLMTest` | `agent/TraderAgentLLMTest.java` | Legacy trader agent LLM tests |
 | `TraderAgentTickerValidationTest` | `agent/TraderAgentTickerValidationTest.java` | Ticker format validation |
+| `TraderLLMTest` | `agent/TraderLLMTest.java` | Trader agent LLM tests |
 
 ### Checkpoint Tests
 
@@ -38,6 +43,7 @@ The project has **43 test classes** across agent, data, tool, utility, and integ
 
 | Test Class | Source | What it tests |
 |------------|--------|---------------|
+| `InstrumentContextPromptContributorTest` | `agent/identity/InstrumentContextPromptContributorTest.java` | Instrument context prompt contributions |
 | `InstrumentIdentityAgentTest` | `agent/identity/InstrumentIdentityAgentTest.java` | Ticker validation, cache, Yahoo Finance resolution |
 | `InstrumentIdentityIntegrationTest` | `agent/InstrumentIdentityIntegrationTest.java` | Full identity resolution pipeline |
 
@@ -61,6 +67,10 @@ The project has **43 test classes** across agent, data, tool, utility, and integ
 
 | Test Class | Source | What it tests |
 |------------|--------|---------------|
+| `AggressiveDebatorTest` | `agent/risk/AggressiveDebatorTest.java` | Aggressive debator arguments |
+| `ConservativeDebatorTest` | `agent/risk/ConservativeDebatorTest.java` | Conservative debator arguments |
+| `NeutralDebatorTest` | `agent/risk/NeutralDebatorTest.java` | Neutral debator arguments |
+| `RiskDebateAgentIntegrationTest` | `agent/RiskDebateAgentIntegrationTest.java` | RiskDebateAgent integration |
 | `RiskDebateServiceLLMTest` | `agent/RiskDebateServiceLLMTest.java` | Risk debate with mocked LLM |
 | `RiskDebateServiceUnitTest` | `agent/RiskDebateServiceUnitTest.java` | Risk level classification, fallback parsing |
 
@@ -71,6 +81,9 @@ The project has **43 test classes** across agent, data, tool, utility, and integ
 | `AgentDetectionIntegrationTest` | `agent/AgentDetectionIntegrationTest.java` | Agent scanning and registration |
 | `FullPipelineIntegrationTest` | `agent/FullPipelineIntegrationTest.java` | End-to-end research pipeline |
 | `MultiProviderLLMIntegrationTest` | `config/MultiProviderLLMIntegrationTest.java` | Multiple LLM provider configs |
+| `ReportGeneratorIntegrationTest` | `agent/integration/ReportGeneratorIntegrationTest.java` | Report generator integration |
+| `ResearcherIntegrationTest` | `agent/integration/ResearcherIntegrationTest.java` | Researcher integration |
+| `RiskDebateServiceIntegrationTest` | `agent/integration/RiskDebateServiceIntegrationTest.java` | Risk debate service integration |
 
 ## Data Flow Tests
 
@@ -88,6 +101,7 @@ The project has **43 test classes** across agent, data, tool, utility, and integ
 | `ExtendedDataSourcesIntegrationTest` | `tools/ExtendedDataSourcesIntegrationTest.java` | FRED + Polymarket tool integration |
 | `FredDataToolsTest` | `tools/FredDataToolsTest.java` | FRED data tools |
 | `FundamentalDataToolsTest` | `tools/FundamentalDataToolsTest.java` | Fundamental data tools |
+| `MarketDataToolsIntegrationTest` | `tools/MarketDataToolsIntegrationTest.java` | Market data tools integration |
 | `MarketDataToolsTest` | `tools/MarketDataToolsTest.java` | Market data and technical indicators |
 | `NewsDataToolsTest` | `tools/NewsDataToolsTest.java` | News data tools |
 | `PolymarketDataToolsTest` | `tools/PolymarketDataToolsTest.java` | Polymarket data tools |
@@ -108,11 +122,14 @@ The project has **43 test classes** across agent, data, tool, utility, and integ
 | `DateUtilsTest` | `util/DateUtilsTest.java` | Date formatting utilities |
 | `FileCacheTest` | `util/FileCacheTest.java` | File cache read/write, locking, hashing |
 | `IndicatorMapperTest` | `util/IndicatorMapperTest.java` | TA4J indicator mapping |
+| `LlmBudgetTrackerTest` | `util/LlmBudgetTrackerTest.java` | LLM budget tracking and warnings |
 
 ## Configuration Tests
 
 | Test Class | Source | What it tests |
 |------------|--------|---------------|
+| `PortfolioManagerExtendedTest` | `agent/managers/PortfolioManagerExtendedTest.java` | Extended portfolio manager tests |
+| `PortfolioManagerLLMTest` | `agent/managers/PortfolioManagerLLMTest.java` | Portfolio manager LLM tests |
 | `TraderAgentConfigTest` | `config/TraderAgentConfigTest.java` | Config property binding and defaults |
 
 ## Web Tests
@@ -121,17 +138,18 @@ The project has **43 test classes** across agent, data, tool, utility, and integ
 |------------|--------|---------------|
 | `HitlServiceTest` | `htmx/HitlServiceTest.java` | HITL session management |
 | `TemplateParsingTest` | `web/TemplateParsingTest.java` | Thymeleaf template parsing |
+| `WaitForPollingUnitTest` | `htmx/WaitForPollingUnitTest.java` | WaitFor polling unit tests |
 
 ## Test Summary
 
 | Category | Count |
 |----------|-------|
-| Agent tests | 16 |
+| Agent tests | 25 |
 | Data flow tests | 4 |
-| Tool tests | 6 |
+| Tool tests | 7 |
 | Indicator tests | 4 |
-| Utility tests | 3 |
-| Configuration tests | 2 |
-| Web tests | 2 |
-| Integration tests | 3 |
-| **Total** | **43** |
+| Utility tests | 4 |
+| Configuration tests | 3 |
+| Web tests | 3 |
+| Integration tests | 6 |
+| **Total** | **62** |

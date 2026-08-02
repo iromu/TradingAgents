@@ -4,12 +4,11 @@ type: "feature"
 status: "active"
 language: "default"
 source_paths:
-  - "src/main/java/com/embabel/gekko/agent/TraderAgent.java"
-  - "src/main/java/com/embabel/gekko/domain/Analysts.java"
+  - "src/main/java/com/embabel/gekko/agent/DebateAgent.java"
   - "src/main/java/com/embabel/gekko/tools/FundamentalDataTools.java"
   - "src/main/java/com/embabel/gekko/tools/NewsDataTools.java"
   - "src/main/resources/prompts/analysts/"
-updated_at: "2026-06-11"
+updated_at: "2026-08-02"
 ---
 
 # Analyst Agents

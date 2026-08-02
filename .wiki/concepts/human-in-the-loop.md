@@ -4,11 +4,11 @@ type: "concept"
 status: "active"
 language: "default"
 source_paths:
-  - "src/main/java/com/embabel/gekko/htmx/HitlConfig.java"
   - "src/main/java/com/embabel/gekko/htmx/HitlService.java"
   - "src/main/java/com/embabel/gekko/htmx/HitlAgenticEventListener.java"
-  - "src/main/java/com/embabel/gekko/htmx/HitlConfig.java"
-updated_at: "2026-06-11"
+  - "src/main/java/com/embabel/gekko/htmx/ProcessStatusController.java"
+  - "src/main/java/com/embabel/gekko/util/AgentUtils.java"
+updated_at: "2026-08-02"
 ---
 
 # Human-in-the-Loop (HITL)
@@ -56,10 +56,14 @@ Gekko uses two HITL mechanisms:
 
 ### Custom Failure Recovery
 
-- `HitlService` manages HITL sessions with a 24-hour TTL
+- `HitlService` manages HITL sessions with a 24-hour TTL and scheduled cleanup (every 5 minutes)
 - `HitlAgenticEventListener` catches process failures and creates sessions
 - User provides feedback → a new process is created with feedback injected
 - Sessions auto-expire after 24 hours
+- Session creation uses `computeIfAbsent()` for atomic check-and-create
+- Session updates use `compute()` for atomic read-modify-write
+- Session migration uses per-session locking to avoid global serialization
+- `AgentUtils` provides shared WaitFor form submission and process lock utilities
 
 ## Security
 

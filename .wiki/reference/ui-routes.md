@@ -8,7 +8,7 @@ source_paths:
   - "src/main/java/com/embabel/gekko/htmx/PlatformController.java"
   - "src/main/java/com/embabel/gekko/htmx/GenericProcessingValues.java"
   - "src/main/resources/templates/"
-updated_at: "2026-06-11"
+updated_at: "2026-08-02"
 ---
 
 # UI Routes

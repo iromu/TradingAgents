@@ -1,33 +1,30 @@
 ---
 title: "FileCache Race Condition"
 type: "risk"
-status: "stale"
+status: "mitigated"
 language: "default"
 source_paths:
   - "src/main/java/com/embabel/gekko/util/FileCache.java"
-updated_at: "2026-06-13"
+updated_at: "2026-08-02"
 ---
 
 # FileCache Race Condition
 
-> **Status: Stale** — This risk was addressed in a later commit. The implementation changed from `ReentrantReadWriteLock` to per-key locking via `ConcurrentHashMap`.
-
-## What Was Fixed
-
-The original `getOrCompute()` used `ReentrantReadWriteLock` for the entire cache, which allowed a race window between the initial read check and the write lock acquisition. Two threads could both see a cache miss and both compute the value.
+> **Status: Mitigated** — The per-key locking implementation prevents concurrent duplicate computation within a single process.
 
 ## Current Implementation
 
-The fix uses per-key locking:
+`FileCache` uses per-key locking via `ConcurrentHashMap<String, Object>`:
 
-```java
-private final Map<String, Object> lockMap = new ConcurrentHashMap<>();
-```
-
-Each unique cache key gets its own lock object. `getOrCompute()` uses `computeIfAbsent` on the lock map to ensure only one thread ever computes for a given key.
+- Each unique cache key gets its own lock object
+- `getOrCompute()` uses `computeIfAbsent` + double-check pattern
+- Two threads requesting the same key compute exactly once
+- Different keys compute independently
+- Lock is cleaned up after successful computation via `lockMap.remove(key, lock)` (atomic removal)
+- Both JSON and Markdown writes use atomic writes (temp file + rename)
 
 ## Remaining Considerations
 
-- File I/O itself is not atomic — if two processes (not just threads) write to the same cache file, the last write wins
-- No TTL or expiration on cache entries — they persist indefinitely
-- No cache size limit — the cache can grow unbounded
+- **Cross-process:** No cross-process protection — if multiple JVM instances write to the same cache directory, the last write wins
+- **No TTL or expiration:** Cache entries persist indefinitely
+- **No cache size limit:** The cache can grow unbounded

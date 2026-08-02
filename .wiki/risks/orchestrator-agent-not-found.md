@@ -6,7 +6,7 @@ source_paths:
   - src/main/java/com/embabel/gekko/util/AgentUtils.java
   - src/main/java/com/embabel/gekko/web/TradingHtmxController.java
   - src/main/java/com/embabel/gekko/agent/OrchestratorAgent.java
-updated_at: "2026-06-14"
+updated_at: "2026-08-02"
 ---
 
 # OrchestratorAgent Not Found at Runtime

@@ -3,8 +3,8 @@ title: "Gekko Project Wiki"
 type: "index"
 status: "active"
 language: "default"
-last_commit: "b64da1dbec4478b87493718db7a537e9cd3b004f"
-updated_at: "2026-07-06"
+last_commit: "fff445c9cbd82404671027430153bc9e58f48a3a"
+updated_at: "2026-08-02"
 ---
 
 # Gekko: Multi-Agent Trading Research Platform
@@ -65,6 +65,7 @@ See `[[trading-workflow]]` for the full step-by-step flow.
 | Risk debate | `[[risk-debate]]` |
 | Human-in-the-loop | `[[human-in-the-loop]]` |
 | Caching layer | `[[file-cache]]` |
+| LLM budget tracker | `[[llm-budget-tracker]]` |
 | Test coverage | `[[test-coverage]]` |
 
 ## What should I avoid breaking?
@@ -83,7 +84,8 @@ See `[[trading-workflow]]` for the full step-by-step flow.
 - **Market tools:** `src/main/java/com/embabel/gekko/tools/MarketDataTools.java`
 - **HITL:** `src/main/java/com/embabel/gekko/htmx/HitlService.java`, `src/main/java/com/embabel/gekko/htmx/HitlAgenticEventListener.java`
 - **Caching:** `src/main/java/com/embabel/gekko/util/FileCache.java`
-- **Utilities:** `[[date-utils]]`, `[[indicator-mapper]]`
+- **Budget tracking:** `src/main/java/com/embabel/gekko/util/LlmBudgetTracker.java`
+- **Utilities:** `[[date-utils]]`, `[[indicator-mapper]]`, `AgentUtils`
 - **UI:** `src/main/resources/templates/` (Thymeleaf templates)
 - **Prompts:** `src/main/resources/prompts/` (Jinja templates)
 

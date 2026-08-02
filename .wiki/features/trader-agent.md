@@ -6,7 +6,7 @@ language: "default"
 source_paths:
   - "src/main/java/com/embabel/gekko/agent/OrchestratorAgent.java"
   - "src/main/java/com/embabel/gekko/agent/DebateAgent.java"
-updated_at: "2026-07-06"
+updated_at: "2026-08-02"
 ---
 
 # Orchestrator & Debate Agents
