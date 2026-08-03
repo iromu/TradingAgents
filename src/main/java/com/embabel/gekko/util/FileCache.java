@@ -41,12 +41,8 @@ public class FileCache {
     }
 
     /**
-     * Sanitizes a cache key by ensuring it is non-null and non-blank.
-     * Path traversal prevention is handled by the SHA-256 hash — the sanitized
-     * key is hashed before being used as a filename, so special characters
-     * like '.', '/', and '\' cannot cause traversal. Stripping these characters
-     * was unnecessary and caused hash collisions (e.g., "a.b" and "ab"
-     * produced identical cache keys).
+     * Validates cache key is non-null and non-blank.
+     * Path traversal is prevented by SHA-256 hashing, not character stripping.
      */
     private String sanitizeKey(String key) {
         if (key == null || key.isBlank()) {

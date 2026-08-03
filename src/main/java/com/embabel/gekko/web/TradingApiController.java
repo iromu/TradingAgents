@@ -5,8 +5,7 @@ import com.embabel.agent.core.AgentProcess;
 import com.embabel.agent.core.AgentProcessStatusCode;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.AgentUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,13 +20,11 @@ import java.util.Map;
 
 /**
  * REST API for the trading research workflow.
- * Mirrors the HTMX controller flow but returns JSON responses.
  */
+@Slf4j
 @RestController
 @RequestMapping("/api")
 public class TradingApiController {
-
-    private static final Logger logger = LoggerFactory.getLogger(TradingApiController.class);
 
     private final AgentPlatform agentPlatform;
     private final ResearchPlanService researchPlanService;

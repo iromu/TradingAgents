@@ -50,9 +50,12 @@ public class DebateLoopAgent {
                     String bullResponse = cache.getOrCompute(
                             ticker.content() + "_debate_" + count + "_bull",
                             String.class,
-                            () -> bullResearcher.argue(briefs, history, actionContext)
+                            () -> {
+                                String result = bullResearcher.argue(briefs, history, actionContext);
+                                llmBudgetTracker.recordCall(ticker.content());
+                                return result;
+                            }
                     );
-                    llmBudgetTracker.recordCall(ticker.content());
                     history.add(bullResponse);
                     bullHistory.add(bullResponse);
 
@@ -60,9 +63,12 @@ public class DebateLoopAgent {
                     String bearResponse = cache.getOrCompute(
                             ticker.content() + "_debate_" + (count + 1) + "_bear",
                             String.class,
-                            () -> bearResearcher.argue(briefs, history, actionContext)
+                            () -> {
+                                String result = bearResearcher.argue(briefs, history, actionContext);
+                                llmBudgetTracker.recordCall(ticker.content());
+                                return result;
+                            }
                     );
-                    llmBudgetTracker.recordCall(ticker.content());
                     history.add(bearResponse);
                     bearHistory.add(bearResponse);
 

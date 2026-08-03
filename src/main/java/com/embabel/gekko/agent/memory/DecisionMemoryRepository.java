@@ -4,7 +4,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
@@ -18,8 +17,8 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * File-based repository for decision memory log.
- * Uses atomic writes (temp file + rename) and regex parsing matching Python's format.
+ * File-based decision memory log with atomic writes and regex parsing.
+ * Format matches Python TradingAgents for cross-language compatibility.
  */
 @Component
 @Slf4j
@@ -50,15 +49,12 @@ public class DecisionMemoryRepository {
     private final int maxEntries;
     private final Object cacheLock = new Object();
 
-    /** In-memory cache of the file content to avoid re-reading on every operation. */
+    /** In-memory cache of file content, invalidated on write. */
     private volatile String cachedContent;
-    /** Last-modified timestamp of the file when cachedContent was read. */
+    /** Last-modified timestamp when cachedContent was read. */
     private volatile long cachedModified;
 
-    /**
-     * Get file content, using an in-memory buffer that is invalidated
-     * when the file's last-modified time changes.
-     */
+    /** Read file content, using in-memory buffer invalidated by mtime change. */
     private String getContent() {
         try {
             if (!Files.exists(memoryLogPath)) {
@@ -80,9 +76,7 @@ public class DecisionMemoryRepository {
         }
     }
 
-    /**
-     * Invalidate the in-memory cache (called after atomic writes).
-     */
+    /** Invalidate cache after atomic writes. */
     private void invalidateCache() {
         synchronized (cacheLock) {
             cachedContent = null;
@@ -113,9 +107,6 @@ public class DecisionMemoryRepository {
         }
     }
 
-    /**
-     * Append a pending decision entry atomically.
-     */
     public void appendPending(String ticker, String tradeDate, String rating,
                               String executiveSummary, String investmentThesis) {
         String entry = buildPendingEntry(ticker, tradeDate, rating, executiveSummary, investmentThesis);
@@ -142,9 +133,7 @@ public class DecisionMemoryRepository {
 
     /**
      * Resolve a pending decision with actual returns and reflection.
-     * Atomically updates the log file.
-     *
-     * @return true if a pending entry was found and resolved, false otherwise
+     * @return true if entry found and resolved, false otherwise
      */
     public boolean resolve(String ticker, String tradeDate, BigDecimal rawReturn,
                         BigDecimal alphaReturn, String benchmark, int daysHeld,
@@ -206,9 +195,6 @@ public class DecisionMemoryRepository {
         );
     }
 
-    /**
-     * Check if there are pending entries for the given ticker.
-     */
     public boolean hasPendingEntriesFor(String ticker) {
         try {
             String content = getContent();
@@ -226,9 +212,6 @@ public class DecisionMemoryRepository {
         }
     }
 
-    /**
-     * Get pending entries for a specific ticker.
-     */
     public List<PendingDecision> getPendingEntries(String ticker) {
         List<PendingDecision> results = new ArrayList<>();
         try {
@@ -265,9 +248,7 @@ public class DecisionMemoryRepository {
         return results;
     }
 
-    /**
-     * Generate past_context string: 5 same-ticker + 3 cross-ticker lessons.
-     */
+    /** Generate past_context: 5 same-ticker + 3 cross-ticker lessons. */
     public String generatePastContext(String ticker) {
         try {
             String content = getContent();
@@ -323,9 +304,7 @@ public class DecisionMemoryRepository {
         }
     }
 
-    /**
-     * Rotate (prune oldest resolved entries) if over max-entries limit.
-     */
+    /** Prune oldest resolved entries if over max-entries limit. */
     public void rotate() {
         if (maxEntries <= 0) return;
 
@@ -381,9 +360,7 @@ public class DecisionMemoryRepository {
         }
     }
 
-    /**
-     * Recover from corruption by truncating to last complete entry.
-     */
+    /** Truncate to last complete entry on corruption. */
     public void recoverFromCorruption() {
         try {
             String content = getContent();
@@ -400,10 +377,7 @@ public class DecisionMemoryRepository {
 
     // --- Split entries helper ---
 
-    /**
-     * Split memory log content into individual entries by ENTRY_SEPARATOR.
-     * Handles the separator as a delimiter (not a lookahead), preserving it with each entry.
-     */
+    /** Split log content into entries by ENTRY_SEPARATOR delimiter. */
     private String[] splitEntries(String content) {
         if (content == null || content.isBlank()) return new String[0];
         // Split on the separator, keeping it with each entry

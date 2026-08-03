@@ -1,15 +1,13 @@
 package com.embabel.gekko.dataflows;
 
+import com.embabel.gekko.util.AgentUtils;
 import com.embabel.gekko.util.FileCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,10 +32,7 @@ public class FredService {
     ) {
         this.apiKey = apiKey;
         this.fileCache = fileCache;
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(10000);
-        factory.setReadTimeout(30000);
-        this.restTemplate = new RestTemplate(factory);
+        this.restTemplate = AgentUtils.restTemplate(10000, 30000);
     }
 
     /**
@@ -52,9 +47,10 @@ public class FredService {
         }
 
         String cacheKey = "fred:" + seriesId + ":" + limit;
-        String cached = fileCache.get(cacheKey, String.class);
-        if (cached != null) return cached;
+        return fileCache.getOrCompute(cacheKey, String.class, () -> fetchSeries(seriesId, limit));
+    }
 
+    private String fetchSeries(String seriesId, int limit) {
         try {
             String url = UriComponentsBuilder.fromHttpUrl(BASE_URL + "series/observations")
                     .queryParam("series_id", seriesId)
@@ -78,9 +74,7 @@ public class FredService {
                 return "NO_DATA_AVAILABLE: No observations found for series " + seriesId;
             }
 
-            String result = formatAsMarkdown(seriesId, observations);
-            fileCache.save(cacheKey, result);
-            return result;
+            return formatAsMarkdown(seriesId, observations);
         } catch (Exception e) {
             log.error("Failed to fetch FRED series {}: {}", seriesId, e.getMessage());
             return "NO_DATA_AVAILABLE: Failed to fetch FRED data: " + e.getMessage();
@@ -123,8 +117,8 @@ public class FredService {
         int count = 0;
         Double prevValue = null;
         for (Map<String, Object> obs : observations) {
-            String date = getString(obs, "date", "N/A");
-            String valueStr = getString(obs, "value", null);
+            String date = AgentUtils.mapString(obs, "date", "N/A");
+            String valueStr = AgentUtils.mapString(obs, "value", null);
             if (valueStr == null || valueStr.equals("NA")) continue;
 
             double value = Double.parseDouble(valueStr);
@@ -151,10 +145,5 @@ public class FredService {
             return "NO_DATA_AVAILABLE: No valid observations for series " + seriesId;
         }
         return sb.toString();
-    }
-
-    private String getString(Map<String, Object> map, String key, String defaultValue) {
-        Object val = map.get(key);
-        return val != null ? val.toString() : defaultValue;
     }
 }

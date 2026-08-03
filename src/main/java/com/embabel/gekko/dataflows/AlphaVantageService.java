@@ -2,11 +2,11 @@ package com.embabel.gekko.dataflows;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
+import com.embabel.gekko.util.AgentUtils;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
@@ -14,71 +14,40 @@ import jakarta.annotation.PostConstruct;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import lombok.extern.slf4j.Slf4j;
 
 /**
- * Service for querying Alpha Vantage endpoints with a simple file-based cache.
- *
- * <p>This service wraps calls to various Alpha Vantage functions (overview, balance
- * sheet, cash flow, income statement, news & sentiment, insider data) and stores
- * responses in a local cache directory to avoid repeated network calls.</p>
- *
- * <p>Cache files are stored as JSON under the configured {@code cacheDir}. The
- * service uses Spring's {@link RestTemplate} for HTTP requests and expects an
- * Alpha Vantage API key to be provided via configuration property
- * {@code alphavantage.apiKey}.</p>
- * <p>
- * Usage notes:
- * - Public methods return raw JSON responses as {@link String}. The caller is
- * responsible for parsing and validating the JSON payload.
- * - Cache keys are derived from request parameters; several endpoints use a
- * simplified cache key (e.g. {@code TICKER_NEWS}) — be mindful if you need
- * more granular cache invalidation.
+ * Service for querying Alpha Vantage endpoints with file-based caching.
+ * Cache files stored as JSON under {@code cacheDir}.
  */
 @Slf4j
 @Service
 @ConditionalOnProperty(prefix = "app.alphavantage", name = "enabled", havingValue = "true", matchIfMissing = false)
 public class AlphaVantageService {
 
-    /**
-     * API key for Alpha Vantage; injected from application configuration.
-     */
     @Value("${app.alphavantage.api-key:dummy_key}")
     private String apiKey;
 
-    /**
-     * Directory used to persist cached API responses. Default: {@code data/alphavantage}.
-     * Configurable via {@code app.alphavantage.output-directory} property.
-     */
     @Value("${app.alphavantage.output-directory:data/alphavantage}")
-    private String cacheDir;  // configurable cache directory
+    private String cacheDir;
 
-    /**
-     * Connect timeout in milliseconds for HTTP requests to Alpha Vantage.
-     * Configurable via {@code app.alphavantage.connect-timeout-ms} property.
-     */
     @Value("${app.alphavantage.connect-timeout-ms:10000}")
     private int connectTimeoutMs;
 
-    /**
-     * Read timeout in milliseconds for HTTP requests to Alpha Vantage.
-     * Configurable via {@code app.alphavantage.read-timeout-ms} property.
-     */
     @Value("${app.alphavantage.read-timeout-ms:30000}")
     private int readTimeoutMs;
 
     private static final String BASE_URL = "https://www.alphavantage.co/query";
     private static final ObjectMapper JSON_MAPPER = new ObjectMapper();
 
-    /**
-     * RestTemplate instance with configured timeouts to prevent hanging requests.
-     * Connect timeout: {@link #connectTimeoutMs}ms, Read timeout: {@link #readTimeoutMs}ms.
-     * Built in {@code @PostConstruct} so that {@code @Value} fields are populated first.
-     */
     private RestTemplate restTemplate;
 
     public AlphaVantageService() {
@@ -88,35 +57,18 @@ public class AlphaVantageService {
     public void init() {
         int connTimeout = connectTimeoutMs > 0 ? connectTimeoutMs : 10000;
         int readTimeout = readTimeoutMs > 0 ? readTimeoutMs : 30000;
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(connTimeout);
-        factory.setReadTimeout(readTimeout);
-        this.restTemplate = new RestTemplate(factory);
+        this.restTemplate = AgentUtils.restTemplate(connTimeout, readTimeout);
     }
 
-    // -------------------------------
     // Fundamental financial endpoints
-    // -------------------------------
 
-    /**
-     * Retrieve company fundamentals (OVERVIEW) for the given ticker.
-     *
-     * @param ticker   The stock ticker symbol (e.g. "AAPL").
-     * @param currDate Currently unused — retained for compatibility with callers.
-     * @return The raw JSON response from Alpha Vantage as a {@link String}.
-     */
     public String getFundamentals(String ticker, String currDate) {
         return getDataWithCache("OVERVIEW", ticker);
     }
 
-    /**
-     * Retrieve the company overview for a ticker as a parsed JSON map.
-     * Fields: Name, Sector, Industry, Exchange, Currency, Symbol.
-     *
-     * @param ticker The stock ticker symbol (e.g. "AAPL").
-     * @return A map of the OVERVIEW JSON, or null if the request fails or the response is empty.
-     */
-    public java.util.Map<String, String> getOverview(String ticker) {
+    private static final String[] OVERVIEW_FIELDS = {"Name", "Sector", "Industry", "Exchange", "Currency", "Symbol"};
+
+    public Map<String, String> getOverview(String ticker) {
         String json = getFundamentals(ticker, null);
         if (json == null || json.isBlank()) {
             return null;
@@ -126,8 +78,8 @@ public class AlphaVantageService {
             if (node == null || node.isMissingNode()) {
                 return null;
             }
-            java.util.Map<String, String> map = new java.util.LinkedHashMap<>();
-            for (String field : new String[]{"Name", "Sector", "Industry", "Exchange", "Currency", "Symbol"}) {
+            Map<String, String> map = new LinkedHashMap<>();
+            for (String field : OVERVIEW_FIELDS) {
                 JsonNode val = node.get(field);
                 map.put(field, val != null && !val.isNull() ? val.asText() : null);
             }
@@ -138,14 +90,6 @@ public class AlphaVantageService {
         }
     }
 
-    /**
-     * Retrieve the company's balance sheet data.
-     *
-     * @param ticker   The stock ticker symbol.
-     * @param freq     Frequency (e.g. "quarterly", "annual").
-     * @param currDate Currently unused.
-     * @return The raw JSON response from Alpha Vantage.
-     */
     public String getBalanceSheet(String ticker, String freq, String currDate) {
         String cacheKey = ticker.toUpperCase() + "_BALANCE_SHEET_" + (freq != null ? freq : "annual");
         return getDataWithCache("BALANCE_SHEET", cacheKey, builder ->
@@ -154,14 +98,6 @@ public class AlphaVantageService {
         );
     }
 
-    /**
-     * Retrieve the company's cash flow statement.
-     *
-     * @param ticker   The stock ticker symbol.
-     * @param freq     Frequency (e.g. "quarterly", "annual").
-     * @param currDate Currently unused.
-     * @return The raw JSON response from Alpha Vantage.
-     */
     public String getCashflow(String ticker, String freq, String currDate) {
         String cacheKey = ticker.toUpperCase() + "_CASH_FLOW_" + (freq != null ? freq : "annual");
         return getDataWithCache("CASH_FLOW", cacheKey, builder ->
@@ -170,14 +106,6 @@ public class AlphaVantageService {
         );
     }
 
-    /**
-     * Retrieve the income statement for the company.
-     *
-     * @param ticker   The stock ticker symbol.
-     * @param freq     Frequency (e.g. "quarterly", "annual").
-     * @param currDate Currently unused.
-     * @return The raw JSON response from Alpha Vantage.
-     */
     public String getIncomeStatement(String ticker, String freq, String currDate) {
         String cacheKey = ticker.toUpperCase() + "_INCOME_STATEMENT_" + (freq != null ? freq : "annual");
         return getDataWithCache("INCOME_STATEMENT", cacheKey, builder ->
@@ -185,21 +113,8 @@ public class AlphaVantageService {
                         .queryParam("frequency", freq != null ? freq : "annual")
         );
     }
-    // =============================================================
-    // ============== NEWS & SENTIMENT ==============================
-    // =============================================================
+    // News & sentiment endpoints
 
-    /**
-     * Retrieve news and sentiment for a specific ticker between two dates.
-     *
-     * <p>The cache key includes the date range to ensure different date ranges
-     * are cached separately.</p>
-     *
-     * @param ticker    Stock ticker symbol to fetch news for.
-     * @param startDate Start date in ISO format ("yyyy-MM-dd").
-     * @param endDate   End date in ISO format ("yyyy-MM-dd").
-     * @return Raw JSON response from Alpha Vantage's news_sentiment endpoint.
-     */
     public String getNews(String ticker, String startDate, String endDate) {
         String cacheKey = String.format("%s_NEWS_%s_%s", ticker, startDate, endDate);
         return getDataWithCache("NEWS_SENTIMENT", cacheKey, builder -> builder
@@ -211,41 +126,20 @@ public class AlphaVantageService {
         );
     }
 
-    /**
-     * Retrieve global news for a topic.
-     *
-     * @param topic Topic string to filter global news (may be null to fetch general news).
-     * @param limit Maximum number of results to return (can be null to use default API behavior).
-     * @param page  Page number for paginated results (can be null).
-     * @return Raw JSON response from Alpha Vantage.
-     */
     public String getGlobalNews(String topic, Integer limit, Integer page) {
         String topicKey = topic != null ? topic : "general";
         int limitVal = limit != null ? limit : 0;
         int pageVal = page != null ? page : 0;
         String cacheKey = String.format("GLOBAL_NEWS_%s_%d_%d", topicKey, limitVal, pageVal);
         return getDataWithCache("NEWS_SENTIMENT", cacheKey, builder -> {
-            if (topic != null) {
-                builder.queryParam("topics", topic);
-            }
-            if (limit != null) {
-                builder.queryParam("limit", limit);
-            }
-            if (page != null) {
-                builder.queryParam("page", page);
-            }
+            if (topic != null) builder.queryParam("topics", topic);
+            if (limit != null) builder.queryParam("limit", limit);
+            if (page != null) builder.queryParam("page", page);
             builder.queryParam("sort", "LATEST");
             return builder;
         });
     }
 
-    /**
-     * Retrieve insider sentiment data for a symbol.
-     *
-     * @param ticker   Stock ticker symbol.
-     * @param interval Interval string expected by the API (e.g. "3month").
-     * @return Raw JSON response containing insider sentiment data.
-     */
     public String getInsiderSentiment(String ticker, String interval) {
         String cacheKey = String.format("%s_INSIDER_SENTIMENT_%s", ticker, interval);
         return getDataWithCache("INSIDER_SENTIMENT", cacheKey, builder -> builder
@@ -254,12 +148,6 @@ public class AlphaVantageService {
         );
     }
 
-    /**
-     * Retrieve insider transactions for the given ticker.
-     *
-     * @param ticker Stock ticker symbol.
-     * @return Raw JSON response containing insider transactions.
-     */
     public String getInsiderTransactions(String ticker) {
         String cacheKey = ticker.toUpperCase() + "_INSIDER_TRANSACTIONS";
         return getDataWithCache("INSIDER_TRANSACTIONS", cacheKey, builder -> builder
@@ -267,51 +155,19 @@ public class AlphaVantageService {
         );
     }
 
-    // =============================================================
-    // ============== SHARED CACHING LAYER =========================
-    // =============================================================
+    // Shared caching layer
 
-    /**
-     * Convenience overload that builds a basic cache key using the symbol and
-     * forwards to the generic cache-enabled fetch method.
-     *
-     * @param function Alpha Vantage function name (e.g. "OVERVIEW").
-     * @param symbol   The symbol used to construct the cache key and as a query param.
-     * @return Raw JSON response, possibly read from cache.
-     */
     private String getDataWithCache(String function, String symbol) {
-
         String cacheKey = symbol.toUpperCase() + "_" + function;
         return getDataWithCache(function, cacheKey, builder ->
                 builder.queryParam("symbol", symbol)
         );
     }
 
-    /**
-     * Functional interface allowing callers to customize a {@link UriComponentsBuilder}
-     * before the request is executed. Used to add query parameters specific to each
-     * endpoint while keeping shared caching logic centralized.
-     */
     private interface UrlBuilderCustomizer {
         UriComponentsBuilder customize(UriComponentsBuilder builder);
     }
 
-    /**
-     * Centralized method that handles caching logic and performs the HTTP request
-     * when cache is missing.
-     *
-     * <p>Behavior:
-     * - Ensures cache directory exists.
-     * - Attempts to read cached response from file ({@code cacheDir/cacheKey.json}).
-     * - If not cached, builds the request URL, performs the GET, writes the response
-     * to the cache, and returns the response.</p>
-     *
-     * @param function   Alpha Vantage function name.
-     * @param cacheKey   Key used to name the cache file (without extension).
-     * @param customizer Lambda that adds endpoint-specific query parameters.
-     * @return Raw JSON response as a String.
-     * @throws RuntimeException if cache directory creation or file IO fails.
-     */
     private String getDataWithCache(String function, String cacheKey, UrlBuilderCustomizer customizer) {
         try {
             Files.createDirectories(Paths.get(cacheDir));
@@ -335,7 +191,18 @@ public class AlphaVantageService {
             String response = restTemplate.getForObject(url, String.class);
 
             if (response != null) {
-                Files.writeString(cacheFile.toPath(), response);
+                Path cachePath = cacheFile.toPath();
+                Path tempPath = cachePath.resolveSibling(cachePath.getFileName() + ".tmp");
+                try {
+                    Files.writeString(tempPath, response);
+                } catch (IOException e) {
+                    throw new RuntimeException("Failed to write cache for key " + cacheKey + ": " + e.getMessage(), e);
+                }
+                try {
+                    Files.move(tempPath, cachePath, StandardCopyOption.REPLACE_EXISTING);
+                } catch (IOException e) {
+                    log.error("Failed to atomically save cache for key {}: {}", cacheKey, e.getMessage());
+                }
             }
 
             return response;
@@ -345,13 +212,6 @@ public class AlphaVantageService {
         }
     }
 
-    /**
-     * Convert an ISO date (yyyy-MM-dd) into the timestamp format expected by the
-     * Alpha Vantage news_sentiment API (pattern: yyyyMMdd'T'HHmm).
-     *
-     * @param date ISO date string (e.g. "2023-10-01").
-     * @return Formatted date/time string suitable for the API query params.
-     */
     private String formatDateForApi(String date) {
         LocalDate parsed = LocalDate.parse(date, DateTimeFormatter.ISO_DATE);
         return parsed.atStartOfDay()

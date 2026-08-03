@@ -13,19 +13,14 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.DisposableBean;
 
 /**
- * Human-in-the-Loop service that stores error state for agent processes
- * and allows humans to provide input/feedback to retry failed processes.
- *
- * <p><b>Limitation:</b> Session state is stored entirely in-memory (ConcurrentHashMap).
- * On application restart, all HITL sessions are lost. This is acceptable for the current
- * use case where HITL sessions are short-lived (minutes to hours) and a restart is rare.
- * If persistent HITL state is needed in the future, sessions should be backed by a
- * database or file-based store.</p>
+ * In-memory HITL session store with TTL-based cleanup.
+ * Sessions are lost on restart — acceptable for short-lived workflows.
  */
 public class HitlService implements DisposableBean {
 
     /**
      * Represents a human-in-the-loop session for a failed agent process.
+     * Immutable snapshot of session state at time of creation.
      */
     public record HitlSession(
             String processId,
@@ -46,30 +41,35 @@ public class HitlService implements DisposableBean {
     private final Map<String, Object> sessionLocks = new ConcurrentHashMap<>();
     private final ScheduledExecutorService cleanupScheduler = Executors.newSingleThreadScheduledExecutor(r -> { Thread t = new Thread(r); t.setDaemon(true); return t; });
     private final Duration sessionTtl;
+    private final int maxSessions;
+
+    /** Maximum number of sessions allowed before eviction. */
+    public static final int DEFAULT_MAX_SESSIONS = 1000;
 
     /**
      * Create a new HitlService with the given TTL for session cleanup.
      * Sessions older than TTL will be automatically removed.
      */
     public HitlService(Duration sessionTtl) {
+        this(sessionTtl, DEFAULT_MAX_SESSIONS);
+    }
+
+    /**
+     * Create a new HitlService with custom TTL and max session cap.
+     */
+    public HitlService(Duration sessionTtl, int maxSessions) {
         this.sessionTtl = sessionTtl;
+        this.maxSessions = maxSessions;
         // Schedule periodic cleanup every 5 minutes
         cleanupScheduler.scheduleAtFixedRate(this::cleanupExpiredSessions, 5, 5, TimeUnit.MINUTES);
     }
 
     /**
-     * Create a new HitlService with a default 24-hour TTL.
-     */
-    public HitlService() {
-        this(Duration.ofHours(24));
-    }
-
-    /**
      * Create a HITL session for a failed process.
-     * Uses computeIfAbsent for true atomic check-and-create — prevents duplicate sessions
-     * from concurrent event firings.
+     * Atomic via computeIfAbsent — safe for concurrent event firings.
      */
     public HitlSession createSession(String processId, String agentName, String errorMessage) {
+        evictIfFull();
         return sessions.computeIfAbsent(processId, id -> new HitlSession(
                 id,
                 agentName,
@@ -90,7 +90,7 @@ public class HitlService implements DisposableBean {
 
     /**
      * Update a session with user input and feedback.
-     * Uses compute() for atomic read-modify-write — prevents concurrent updates from silently overwriting.
+     * Atomic via compute() — prevents concurrent update conflicts.
      */
     public HitlSession updateSession(String processId, String userInput, String feedback) {
         return sessions.compute(processId, (key, existing) -> {
@@ -162,6 +162,23 @@ public class HitlService implements DisposableBean {
     private void cleanupExpiredSessions() {
         LocalDateTime cutoff = LocalDateTime.now().minus(sessionTtl);
         sessions.entrySet().removeIf(e -> e.getValue().occurredAt().isBefore(cutoff));
+    }
+
+    /**
+     * Evict the oldest session if max capacity is reached.
+     */
+    private void evictIfFull() {
+        if (sessions.size() >= maxSessions) {
+            String oldestKey = sessions.entrySet().stream()
+                    .min(Map.Entry.<String, HitlSession>comparingByValue(
+                            java.util.Comparator.comparing(HitlService.HitlSession::occurredAt)
+                    ))
+                    .map(Map.Entry::getKey)
+                    .orElse(null);
+            if (oldestKey != null) {
+                sessions.remove(oldestKey);
+            }
+        }
     }
 
     /**

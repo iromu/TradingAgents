@@ -8,9 +8,10 @@ import com.embabel.agent.core.hitl.FormResponse;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.ux.form.Form;
 import com.embabel.ux.form.FormSubmission;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -21,16 +22,36 @@ import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Shared utilities for agent platform operations and request handling.
- * Centralizes patterns duplicated across TradingApiController, TradingHtmxController, and ProcessStatusController.
+ * Centralizes patterns duplicated across controllers and services.
  */
+@Slf4j
 public final class AgentUtils {
-
-    private static final Logger log = LoggerFactory.getLogger(AgentUtils.class);
 
     /** Default value for past_memory_str in LLM prompt models. */
     public static final String NO_PAST_MEMORY = "No past memories found.";
 
     private AgentUtils() {}
+
+    /**
+     * Get a string value from a Map, returning default if null.
+     */
+    public static String mapString(Map<String, Object> map, String key, String defaultValue) {
+        Object val = map.get(key);
+        return val != null ? val.toString() : defaultValue;
+    }
+
+    /**
+     * Create a RestTemplate with configurable timeouts.
+     *
+     * @param connectTimeoutMs connect timeout in milliseconds
+     * @param readTimeoutMs    read timeout in milliseconds
+     */
+    public static RestTemplate restTemplate(int connectTimeoutMs, int readTimeoutMs) {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(connectTimeoutMs);
+        factory.setReadTimeout(readTimeoutMs);
+        return new RestTemplate(factory);
+    }
 
     /**
      * Shared lock map for process-safe WaitFor submissions.
@@ -94,11 +115,12 @@ public final class AgentUtils {
     }
 
     /**
-     * Validate a process ID is non-null and non-empty.
+     * Validate a process ID is non-null, non-empty, and contains only safe characters.
      * Embabel process IDs are names (e.g. "pedantic_elgamal"), not UUIDs.
+     * Allowed characters: alphanumeric, underscore, hyphen.
      */
     public static void validateProcessId(String processId) {
-        if (processId == null || processId.isBlank()) {
+        if (processId == null || processId.isBlank() || !processId.matches("^[A-Za-z0-9_-]+$")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Invalid process ID: " + processId);
         }
     }

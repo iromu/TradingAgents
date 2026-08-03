@@ -35,22 +35,25 @@ public class InstrumentIdentityAgent {
     @Action(description = "Resolve ticker to real company identity (name, sector, industry, exchange)")
     @AchievesGoal(description = "Resolve a ticker symbol to its real company identity to prevent LLM hallucination")
     public InstrumentContext resolveIdentity(ResearchTypes.Ticker ticker) {
-        if (ticker == null || ticker.content() == null || ticker.content().isBlank()
-                || !ticker.content().matches("^[A-Z0-9.\\-]+$")) {
+        if (ticker == null || ticker.content() == null || ticker.content().isBlank()) {
             log.warn("Invalid ticker format, skipping identity resolution: {}", ticker);
             return null;
         }
 
-        String cacheKey = CACHE_PREFIX + ticker.content();
+        String tickerUpper = ticker.content().toUpperCase();
+        if (!tickerUpper.matches("^[A-Z0-9.\\-]+$")) {
+            log.warn("Invalid ticker format, skipping identity resolution: {}", tickerUpper);
+            return null;
+        }
+
+        String cacheKey = CACHE_PREFIX + tickerUpper;
 
         // Check cache first
         InstrumentContext cached = fileCache.get(cacheKey, InstrumentContext.class);
         if (cached != null) {
-            log.debug("Cache hit for identity: {}", ticker.content());
+            log.debug("Cache hit for identity: {}", tickerUpper);
             return cached;
         }
-
-        String tickerUpper = ticker.content().toUpperCase();
 
         // Try Yahoo Finance first (with retry)
         try {
@@ -61,23 +64,23 @@ public class InstrumentIdentityAgent {
                 return tryAlphaVantageFallback(ticker.content(), tickerUpper);
             }
 
-            String companyName = stock.getName() != null ? stock.getName() : ticker.content();
+            String companyName = stock.getName() != null ? stock.getName() : tickerUpper;
             String sector = "Unknown";
             String industry = "Unknown";
             String exchange = stock.getStockExchange() != null ? stock.getStockExchange() : "Unknown";
             String currency = stock.getCurrency() != null ? stock.getCurrency() : "USD";
 
             InstrumentContext context = new InstrumentContext(
-                    ticker.content(), companyName, sector, industry, exchange, currency
+                    tickerUpper, companyName, sector, industry, exchange, currency
             );
 
             fileCache.save(cacheKey, context);
-            log.info("Resolved identity for {}: {} ({}) via Yahoo Finance", ticker.content(), companyName, sector);
+            log.info("Resolved identity for {}: {} ({}) via Yahoo Finance", tickerUpper, companyName, sector);
             return context;
 
         } catch (Exception e) {
-            log.warn("Yahoo Finance failed for {}, trying Alpha Vantage fallback: {}", ticker.content(), e.getMessage());
-            return tryAlphaVantageFallback(ticker.content(), tickerUpper);
+            log.warn("Yahoo Finance failed for {}, trying Alpha Vantage fallback: {}", tickerUpper, e.getMessage());
+            return tryAlphaVantageFallback(tickerUpper, tickerUpper);
         }
     }
 
@@ -108,11 +111,11 @@ public class InstrumentIdentityAgent {
             String companyName = (name != null && !name.isBlank()) ? name : tickerDisplay;
 
             InstrumentContext context = new InstrumentContext(
-                    tickerDisplay, companyName, sector, industry, exchange, currency
+                    tickerUpper, companyName, sector, industry, exchange, currency
             );
 
-            fileCache.save(CACHE_PREFIX + tickerDisplay, context);
-            log.info("Resolved identity for {}: {} ({}) via Alpha Vantage fallback", tickerDisplay, companyName, sector);
+            fileCache.save(CACHE_PREFIX + tickerUpper, context);
+            log.info("Resolved identity for {}: {} ({}) via Alpha Vantage fallback", tickerUpper, companyName, sector);
             return context;
 
         } catch (Exception e) {

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Component;
 @Profile("gekko")
 public class GekkoLoggingAgenticEventListener extends LoggingAgenticEventListener {
 
+    // Custom logger name "gekko" — not a class name, so @Slf4j won't work here.
     private static final Logger LOGGER = LoggerFactory.getLogger("gekko");
 
     private static final String WELCOME_MESSAGE = color(

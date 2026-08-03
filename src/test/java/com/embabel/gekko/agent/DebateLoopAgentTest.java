@@ -24,7 +24,7 @@ class DebateLoopAgentTest {
         var bearResearcher = new BearResearcher();
         var cache = new FileCache();
         var config = new TraderAgentConfig(null, null, maxIterations, null, null, null, "/tmp", similarityThreshold, 5, null, null, null, null, null, null);
-        var budgetTracker = new LlmBudgetTracker(30);
+        var budgetTracker = new LlmBudgetTracker(30, false);
         return new DebateLoopAgent(bullResearcher, bearResearcher, cache, config, budgetTracker);
     }
 

@@ -87,75 +87,33 @@ class InstrumentContextPromptContributorTest {
     }
 
     @Test
-    void contribution_overwritesPreviousContext() {
+    void contribution_noCrossContaminationBetweenTickers() {
         var context1 = new InstrumentContext(
-                "AAPL",
-                "Apple Inc.",
-                "Technology",
-                "Consumer Electronics",
-                "NASDAQ",
-                "USD"
+                "AAPL", "Apple Inc.", "Technology", "Consumer Electronics", "NASDAQ", "USD"
         );
-
-        contributor.setContext(context1);
-        assertTrue(contributor.contribution().contains("Apple Inc."));
-
-        // Overwrite with different context
         var context2 = new InstrumentContext(
-                "GOOGL",
-                "Alphabet Inc.",
-                "Technology",
-                "Internet Content & Information",
-                "NASDAQ",
-                "USD"
+                "GOOGL", "Alphabet Inc.", "Technology", "Internet", "NASDAQ", "USD"
         );
 
+        // Set both contexts
+        contributor.setContext(context1);
         contributor.setContext(context2);
+
+        // contribution() should return context2 (last set via ThreadLocal)
         String result = contributor.contribution();
         assertTrue(result.contains("Alphabet Inc."));
         assertFalse(result.contains("Apple Inc."));
     }
 
     @Test
-    void contribution_isVolatile() {
-        // Verify thread-safety: setContext is volatile, contribution reads volatile field
+    void contribution_returnsEmptyAfterNullContext() {
         var context = new InstrumentContext(
-                "AAPL",
-                "Apple Inc.",
-                "Technology",
-                "Consumer Electronics",
-                "NASDAQ",
-                "USD"
+                "AAPL", "Apple Inc.", "Technology", "Consumer Electronics", "NASDAQ", "USD"
         );
+        contributor.setContext(context);
+        assertTrue(contributor.contribution().contains("Apple Inc."));
 
-        Thread setter = new Thread(() -> {
-            try {
-                Thread.sleep(10);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
-            contributor.setContext(context);
-        });
-
-        Thread reader = new Thread(() -> {
-            try {
-                Thread.sleep(50);
-                String result = contributor.contribution();
-                assertNotNull(result);
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
-        });
-
-        setter.start();
-        reader.start();
-
-        try {
-            setter.join(1000);
-            reader.join(1000);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            fail("Test interrupted");
-        }
+        contributor.setContext(null);
+        assertEquals("", contributor.contribution());
     }
 }

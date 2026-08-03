@@ -2,11 +2,11 @@ package com.embabel.gekko.config;
 
 import com.embabel.agent.prompt.persona.RoleGoalBackstory;
 import com.embabel.common.ai.model.LlmOptions;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties("app.llm-options")
+@Slf4j
 public record TraderAgentConfig(
         LlmOptions tickerLlm,
         LlmOptions writerLlm,
@@ -28,7 +28,6 @@ public record TraderAgentConfig(
     public record GoogleProviderConfig(String thinkingLevel) {}
     public record OpenAiProviderConfig(String reasoningEffort) {}
 
-    private static final Logger log = LoggerFactory.getLogger(TraderAgentConfig.class);
     public TraderAgentConfig {
         if (tickerLlm == null) {
             tickerLlm = LlmOptions.withDefaultLlm();

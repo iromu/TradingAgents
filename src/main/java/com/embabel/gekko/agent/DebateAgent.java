@@ -32,18 +32,8 @@ import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
 import static com.embabel.common.ai.model.ModelProvider.CHEAPEST_ROLE;
 
 /**
- * Debate Agent — orchestrates the full research workflow:
- * 1. Generate 4 analyst reports (fundamentals, market, news, social media)
- * 2. Distill reports into debate briefs
- * 3. Run bull/bear debate loop (DebateLoopAgent sub-process)
- * 4. Research Manager produces investment plan
- * 5. Trader produces transaction proposal
- * 6. Risk Debate Agent assesses risk (sub-process)
- * 7. Portfolio Manager produces final decision
- * 8. HITL review
- * 9. Final investment plan
- *
- * Mirrors the Python TradingAgents pipeline architecture.
+ * Debate Agent — orchestrates research workflow: reports, debate, risk, portfolio decision.
+ * Mirrors Python TradingAgents pipeline architecture.
  */
 @Agent(description = "Debate Agent — orchestrates full research workflow: reports, debate, risk, portfolio decision")
 @Component

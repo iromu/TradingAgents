@@ -13,8 +13,7 @@ import com.embabel.gekko.util.AgentUtils;
 import com.embabel.gekko.web.ResearchPlanService;
 import com.embabel.gekko.web.TradingHtmxController.TickerForm;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -32,19 +31,10 @@ import java.util.Optional;
 
 /**
  * Handles HITL (Human-in-the-Loop) workflow for failed agent processes.
- *
- * <p>Flow:
- * <ol>
- *   <li>Agent process fails → {@link HitlAgenticEventListener} creates a HITL session</li>
- *   <li>User polls {@code /status/{processId}} → controller detects FAILED status and shows HITL form</li>
- *   <li>User submits feedback → {@code /resubmit} creates a new agent process with feedback injected</li>
- *   <li>Session is migrated to the new processId so the retry is tracked</li>
- * </ol>
  */
+@Slf4j
 @Controller
 public class ProcessStatusController {
-
-    private static final Logger logger = LoggerFactory.getLogger(ProcessStatusController.class);
 
     private final AgentPlatform agentPlatform;
     private final HitlService hitlService;
@@ -56,9 +46,6 @@ public class ProcessStatusController {
         this.researchPlanService = researchPlanService;
     }
 
-    /**
-     * Poll endpoint for the processing page. Returns different views based on process status.
-     */
     @GetMapping("/status/{processId}")
     public String checkPlanStatus(
             @PathVariable String processId,
@@ -76,7 +63,7 @@ public class ProcessStatusController {
 
         switch (status) {
             case COMPLETED -> {
-                logger.info("Process {} completed successfully", processId);
+                log.info("Process {} completed successfully", processId);
                 Object result = agentProcess.lastResult();
                 model.addAttribute(resultModelKey, result);
                 model.addAttribute("agentProcess", agentProcess);
@@ -84,7 +71,7 @@ public class ProcessStatusController {
             }
 
             case FAILED -> {
-                logger.error("Process {} failed", processId);
+                log.error("Process {} failed", processId);
 
                 // The HitlAgenticEventListener should have already created a session via
                 // AgentProcessFinishedEvent. Show the form if it exists.
@@ -98,7 +85,7 @@ public class ProcessStatusController {
                     String failureInfo = Optional.ofNullable(agentProcess.getFailureInfo())
                             .map(Object::toString)
                             .orElse("No failure details available");
-                    logger.warn("No HITL session for failed process {} (agent='{}') — creating defensively",
+                    log.warn("No HITL session for failed process {} (agent='{}') — creating defensively",
                             processId, agentName);
                     session = hitlService.createSession(processId, agentName, failureInfo);
                 }
@@ -110,13 +97,13 @@ public class ProcessStatusController {
             }
 
             case TERMINATED -> {
-                logger.info("Process {} was terminated", processId);
+                log.info("Process {} was terminated", processId);
                 model.addAttribute("error", "Process was terminated before completion");
                 return "common/processing-error";
             }
 
             case WAITING -> {
-                logger.info("Process {} is waiting for human input (HITL WaitFor checkpoint)", processId);
+                log.info("Process {} is waiting for human input (HITL WaitFor checkpoint)", processId);
                 return renderWaitingForm(processId, agentProcess, model);
             }
 
@@ -128,18 +115,6 @@ public class ProcessStatusController {
         }
     }
 
-    /**
-     * Submit human input/feedback for a failed process and restart it.
-     *
-     * <p>Resubmit flow:
-     * <ol>
-     *   <li>Check resolved flag — prevent duplicate submissions</li>
-     *   <li>Look up the agent by name stored in the HITL session (deterministic)</li>
-     *   <li>Create the new agent process with feedback injected</li>
-     *   <li>Start the process — if this fails, the old session is intact</li>
-     *   <li>Migrate the HITL session to the new processId (point of no return)</li>
-     * </ol>
-     */
     @PostMapping("/status/{processId}/resubmit")
     public String resubmit(
             @PathVariable String processId,
@@ -182,7 +157,7 @@ public class ProcessStatusController {
             try {
                 agentPlatform.start(agentProcess);
             } catch (Exception e) {
-                logger.error("Failed to start retry process for HITL session {}", processId, e);
+                log.error("Failed to start retry process for HITL session {}", processId, e);
                 model.addAttribute("error", "Failed to start retry: " + e.getMessage());
                 model.addAttribute("pageTitle", "Retry Failed");
                 return "common/processing-error";
@@ -206,17 +181,10 @@ public class ProcessStatusController {
         return "common/processing";
     }
 
-    /**
-     * Renders the WaitFor HITL form for a process in WAITING state.
-     *
-     * <p>Extracts the InvestmentDebateState from the blackboard and the
-     * FormBindingRequest (generated by WaitFor.formSubmission()) to pre-populate
-     * the form with debate context and form metadata.
-     */
     private String renderWaitingForm(String processId, AgentProcess agentProcess, Model model) {
         var blackboard = agentProcess.getBlackboard();
         if (blackboard == null) {
-            logger.warn("Blackboard is null for process {} — rendering waiting form without debate preview", processId);
+            log.warn("Blackboard is null for process {} — rendering waiting form without debate preview", processId);
             model.addAttribute("processId", processId);
             model.addAttribute("pageTitle", "Review & Approve Investment Plan");
             model.addAttribute("debateHistory", List.of());
@@ -274,14 +242,6 @@ public class ProcessStatusController {
         return "common/waiting";
     }
 
-    /**
-     * Submits the WaitFor HITL form and resumes the agent process.
-     *
-     * <p>Flow:
-     * <ol>
-     *   <li>Use AgentUtils.submitWaitForForm() to submit the form and resume the process</li>
-     * </ol>
-     */
     @PostMapping("/status/{processId}/waitfor")
     public String submitWaitForFeedback(
             @PathVariable String processId,
@@ -311,7 +271,7 @@ public class ProcessStatusController {
                 return "common/processing-error";
             }
 
-            logger.info("WaitFor form submitted for process {}, resuming...", processId);
+            log.info("WaitFor form submitted for process {}, resuming...", processId);
         }
 
         model.addAttribute("processId", agentProcess.getId());

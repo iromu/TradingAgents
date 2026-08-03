@@ -13,6 +13,7 @@ import java.nio.file.Path;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
 
 /**
@@ -234,5 +235,52 @@ class InstrumentIdentityAgentTest {
         var result = agent.resolveIdentity(ticker);
 
         assertNull(result);
+    }
+
+    @Test
+    void resolveIdentity_normalizesLowercaseTicker() throws Exception {
+        var ticker = new ResearchTypes.Ticker("aapl", "");
+        yahoofinance.Stock stock = mock(yahoofinance.Stock.class);
+        when(stock.isValid()).thenReturn(true);
+        when(stock.getName()).thenReturn("Apple Inc.");
+        when(stock.getStockExchange()).thenReturn("NASDAQ");
+        when(stock.getCurrency()).thenReturn("USD");
+        when(yFinService.getTickerInfo("AAPL")).thenReturn(stock);
+
+        var result = agent.resolveIdentity(ticker);
+
+        assertNotNull(result);
+        assertEquals("AAPL", result.ticker());
+        assertEquals("Apple Inc.", result.companyName());
+        verify(yFinService).getTickerInfo("AAPL");
+    }
+
+    @Test
+    void resolveIdentity_cacheHitAcrossCaseVariants() throws Exception {
+        yahoofinance.Stock stock = mock(yahoofinance.Stock.class);
+        when(stock.isValid()).thenReturn(true);
+        when(stock.getName()).thenReturn("Apple Inc.");
+        when(stock.getStockExchange()).thenReturn("NASDAQ");
+        when(stock.getCurrency()).thenReturn("USD");
+        when(yFinService.getTickerInfo(any(String.class))).thenReturn(stock);
+
+        // First call with lowercase
+        var result1 = agent.resolveIdentity(new ResearchTypes.Ticker("aapl", ""));
+        assertNotNull(result1);
+        assertEquals("AAPL", result1.ticker());
+
+        // Second call with mixed case — should also work (cache or fresh fetch)
+        var result2 = agent.resolveIdentity(new ResearchTypes.Ticker("aApL", ""));
+        assertNotNull(result2);
+        assertEquals("AAPL", result2.ticker());
+
+        // Third call with uppercase
+        var result3 = agent.resolveIdentity(new ResearchTypes.Ticker("AAPL", ""));
+        assertNotNull(result3);
+        assertEquals("AAPL", result3.ticker());
+
+        // All results should have the same normalized ticker
+        assertEquals(result1.ticker(), result2.ticker());
+        assertEquals(result2.ticker(), result3.ticker());
     }
 }

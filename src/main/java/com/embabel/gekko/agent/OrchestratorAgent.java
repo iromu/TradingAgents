@@ -26,6 +26,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.HashMap;
 
 import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
 import static com.embabel.common.ai.model.ModelProvider.CHEAPEST_ROLE;
@@ -122,7 +123,7 @@ public class OrchestratorAgent {
             ResearchTypes.Ticker ticker,
             InstrumentContext instrumentContext
     ) {
-        var model = new java.util.HashMap<String, Object>();
+        var model = new HashMap<String, Object>();
         model.put("past_memory_str", generatePastContext(ticker));
         model.put("history", "");
         model.put("human_approved", false);

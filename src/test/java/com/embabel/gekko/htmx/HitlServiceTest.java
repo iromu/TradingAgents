@@ -100,4 +100,44 @@ class HitlServiceTest {
         assertEquals(session1.processId(), session2.processId());
         assertEquals("Error 1", session2.errorMessage()); // Original error preserved
     }
+
+    @Test
+    void createSession_evictsOldestWhenMaxReached() throws InterruptedException {
+        HitlService service = new HitlService(Duration.ofHours(24), 3);
+
+        service.createSession("proc-1", "TraderAgent", "Error 1");
+        Thread.sleep(10);
+        service.createSession("proc-2", "TraderAgent", "Error 2");
+        Thread.sleep(10);
+        service.createSession("proc-3", "TraderAgent", "Error 3");
+
+        // All 3 should exist
+        assertTrue(service.getSession("proc-1").isPresent());
+        assertTrue(service.getSession("proc-2").isPresent());
+        assertTrue(service.getSession("proc-3").isPresent());
+
+        // 4th should evict proc-1 (oldest)
+        service.createSession("proc-4", "TraderAgent", "Error 4");
+
+        assertFalse(service.getSession("proc-1").isPresent());
+        assertTrue(service.getSession("proc-2").isPresent());
+        assertTrue(service.getSession("proc-3").isPresent());
+        assertTrue(service.getSession("proc-4").isPresent());
+    }
+
+    @Test
+    void createSession_doesNotEvictExistingKey() {
+        HitlService service = new HitlService(Duration.ofHours(24), 2);
+
+        service.createSession("proc-1", "TraderAgent", "Error 1");
+        service.createSession("proc-2", "TraderAgent", "Error 2");
+
+        // Re-create proc-1 should not evict anything (computeIfAbsent returns existing)
+        HitlService.HitlSession existing = service.createSession("proc-1", "TraderAgent", "Error 1");
+        assertEquals("Error 1", existing.errorMessage());
+
+        // Both should still exist
+        assertTrue(service.getSession("proc-1").isPresent());
+        assertTrue(service.getSession("proc-2").isPresent());
+    }
 }

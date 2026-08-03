@@ -1,13 +1,12 @@
 package com.embabel.gekko.dataflows;
 
+import com.embabel.gekko.util.AgentUtils;
 import com.embabel.gekko.util.FileCache;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -26,11 +25,7 @@ public class PolymarketService {
 
     public PolymarketService(FileCache fileCache) {
         this.fileCache = fileCache;
-        this.restTemplate = new RestTemplate();
-        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
-        factory.setConnectTimeout(10000);
-        factory.setReadTimeout(30000);
-        this.restTemplate.setRequestFactory(factory);
+        this.restTemplate = AgentUtils.restTemplate(10000, 30000);
     }
 
     /**
@@ -42,9 +37,10 @@ public class PolymarketService {
         }
 
         String cacheKey = "polymarket:search:" + query.toLowerCase();
-        String cached = fileCache.get(cacheKey, String.class);
-        if (cached != null) return cached;
+        return fileCache.getOrCompute(cacheKey, String.class, () -> fetchSearch(query));
+    }
 
+    private String fetchSearch(String query) {
         try {
             String url = UriComponentsBuilder.fromHttpUrl(BASE_URL + "markets")
                     .queryParam("search", query)
@@ -58,9 +54,7 @@ public class PolymarketService {
                 return "NO_DATA_AVAILABLE: No markets found for query: " + query;
             }
 
-            String result = formatAsMarkdown(markets);
-            fileCache.save(cacheKey, result);
-            return result;
+            return formatAsMarkdown(markets);
         } catch (Exception e) {
             log.error("Failed to search Polymarket markets for '{}': {}", query, e.getMessage());
             return "NO_DATA_AVAILABLE: Failed to fetch Polymarket data: " + e.getMessage();
@@ -76,9 +70,10 @@ public class PolymarketService {
         }
 
         String cacheKey = "polymarket:market:" + slug.toLowerCase();
-        String cached = fileCache.get(cacheKey, String.class);
-        if (cached != null) return cached;
+        return fileCache.getOrCompute(cacheKey, String.class, () -> fetchMarket(slug));
+    }
 
+    private String fetchMarket(String slug) {
         try {
             String url = UriComponentsBuilder.fromHttpUrl(BASE_URL + "market")
                     .queryParam("slug", slug)
@@ -91,9 +86,7 @@ public class PolymarketService {
                 return "NO_DATA_AVAILABLE: Market not found: " + slug;
             }
 
-            String result = formatMarketDetail(slug, market);
-            fileCache.save(cacheKey, result);
-            return result;
+            return formatMarketDetail(slug, market);
         } catch (Exception e) {
             log.error("Failed to fetch Polymarket market '{}': {}", slug, e.getMessage());
             return "NO_DATA_AVAILABLE: Failed to fetch Polymarket data: " + e.getMessage();
@@ -106,8 +99,8 @@ public class PolymarketService {
         sb.append("|--------|---------|-------------|\n");
 
         for (Map<String, Object> market : markets) {
-            String title = getString(market, "question", getString(market, "title", "N/A"));
-            String slug = getString(market, "slug", "N/A");
+            String title = AgentUtils.mapString(market, "question", AgentUtils.mapString(market, "title", "N/A"));
+            String slug = AgentUtils.mapString(market, "slug", "N/A");
             // Polymarket API returns outcomes as a list or a single outcome field
             Object outcome = market.get("outcome");
             if (outcome == null) {
@@ -118,7 +111,7 @@ public class PolymarketService {
                 }
             }
             String outcomeStr = outcome != null ? outcome.toString() : "N/A";
-            String prob = getString(market, "probability", getString(market, "price", outcomeStr));
+            String prob = AgentUtils.mapString(market, "probability", AgentUtils.mapString(market, "price", outcomeStr));
 
             sb.append("| [").append(title).append("](").append("https://polymarket.com/mark/").append(slug).append(") | ")
                     .append(outcomeStr).append(" | ")
@@ -129,25 +122,20 @@ public class PolymarketService {
 
     private String formatMarketDetail(String slug, Map<String, Object> market) {
         StringBuilder sb = new StringBuilder();
-        sb.append("## ").append(getString(market, "question", slug)).append("\n\n");
+        sb.append("## ").append(AgentUtils.mapString(market, "question", slug)).append("\n\n");
         sb.append("- **Slug**: ").append(slug).append("\n");
-        sb.append("- **Status**: ").append(getString(market, "closed", "false")).append("\n");
-        sb.append("- **Volume**: ").append(getString(market, "volume", "N/A")).append("\n");
+        sb.append("- **Status**: ").append(AgentUtils.mapString(market, "closed", "false")).append("\n");
+        sb.append("- **Volume**: ").append(AgentUtils.mapString(market, "volume", "N/A")).append("\n");
         sb.append("\n**Outcomes**:\n");
 
         @SuppressWarnings("unchecked")
         List<Map<String, Object>> outcomes = (List<Map<String, Object>>) market.get("outcomes");
         if (outcomes != null) {
             for (Map<String, Object> outcome : outcomes) {
-                sb.append("- ").append(getString(outcome, "name", "N/A"))
-                        .append(": ").append(getString(outcome, "price", "N/A")).append("\n");
+                sb.append("- ").append(AgentUtils.mapString(outcome, "name", "N/A"))
+                        .append(": ").append(AgentUtils.mapString(outcome, "price", "N/A")).append("\n");
             }
         }
         return sb.toString();
-    }
-
-    private String getString(Map<String, Object> map, String key, String defaultValue) {
-        Object val = map.get(key);
-        return val != null ? val.toString() : defaultValue;
     }
 }

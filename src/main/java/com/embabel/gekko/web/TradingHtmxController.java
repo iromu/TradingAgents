@@ -7,8 +7,6 @@ import com.embabel.gekko.htmx.GenericProcessingValues;
 import com.embabel.gekko.util.AgentUtils;
 import com.embabel.gekko.web.ResearchPlanService;
 import lombok.Data;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,8 +23,6 @@ import java.util.UUID;
 @Controller
 @RequestMapping({"/", "/research"})
 public class TradingHtmxController {
-
-    private static final Logger logger = LoggerFactory.getLogger(TradingHtmxController.class);
 
     private final AgentPlatform agentPlatform;
     private final ResearchPlanService researchPlanService;

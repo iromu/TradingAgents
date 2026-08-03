@@ -24,9 +24,8 @@ import org.springframework.beans.factory.ObjectProvider;
 import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
 
 /**
- * Risk Debate Agent — runs a 3-round structured risk debate with 3 debators
- * (Aggressive, Conservative, Neutral) in round-robin order, then judges the debate.
- * Mirrors Python's risk management team with round-robin turn-order via latest_speaker.
+ * Risk Debate Agent — 3-round structured risk debate (aggressive → conservative → neutral → judge).
+ * Mirrors Python's round-robin via latest_speaker pattern.
  */
 @Agent(description = "Risk Debate Agent — runs 3-round structured risk debate (aggressive → conservative → neutral → judge)")
 @Component
