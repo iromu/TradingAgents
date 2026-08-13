@@ -21,6 +21,8 @@ public class FredService {
 
     private static final String BASE_URL = "https://api.stlouisfed.org/fred/";
     private static final int DEFAULT_LIMIT = 365;
+    private static final int CONNECT_TIMEOUT_MS = 30_000;
+    private static final int READ_TIMEOUT_MS = 60_000;
 
     private final RestTemplate restTemplate;
     private final String apiKey;
@@ -32,7 +34,7 @@ public class FredService {
     ) {
         this.apiKey = apiKey;
         this.fileCache = fileCache;
-        this.restTemplate = AgentUtils.restTemplate(10000, 30000);
+        this.restTemplate = AgentUtils.restTemplate(CONNECT_TIMEOUT_MS, READ_TIMEOUT_MS);
     }
 
     /**

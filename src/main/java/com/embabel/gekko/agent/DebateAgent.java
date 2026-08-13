@@ -69,6 +69,12 @@ public class DebateAgent {
     private static final Pattern CODE_FENCE = Pattern.compile("(?s)```[\\s\\S]*?```");
     private static final Pattern CODE_FENCE_UNCLOSED = Pattern.compile("(?s)```.*$");
 
+    // Pre-compiled rating keyword patterns (find-based, case-insensitive, word-boundary)
+    private static final Pattern BUY_PAT = Pattern.compile("\\bbuy\\b", Pattern.CASE_INSENSITIVE);
+    private static final Pattern SELL_PAT = Pattern.compile("\\bsell\\b", Pattern.CASE_INSENSITIVE);
+    private static final Pattern OVERWEIGHT_PAT = Pattern.compile("\\boverweight\\b", Pattern.CASE_INSENSITIVE);
+    private static final Pattern UNDERWEIGHT_PAT = Pattern.compile("\\bunderweight\\b", Pattern.CASE_INSENSITIVE);
+
     private static final int MAX_INPUT_LENGTH = 10000;
     private static final int MAX_OUTPUT_LENGTH = 1000;
 
@@ -243,7 +249,7 @@ public class DebateAgent {
             OperationContext context
     ) {
         String key = ticker.content() + "_research_manager";
-        return cache.getOrCompute(key, ResearchTypes.InvestmentPlan.class, () -> {
+        ResearchTypes.InvestmentPlan plan = cache.getOrCompute(key, ResearchTypes.InvestmentPlan.class, () -> {
             trackCall(ticker);
             var model = buildResearchManagerModel(ticker, state, riskAssessment, feedback, portfolioDecision);
 
@@ -252,17 +258,17 @@ public class DebateAgent {
                     .withId("researchManager")
                     .creating(String.class)
                     .fromTemplate("managers/ResearchManager", model);
-            var plan = new ResearchTypes.InvestmentPlan(result, state);
-
-            // Store decision to memory after plan is generated
-            try {
-                storeFinalDecision(ticker, plan, "auto");
-            } catch (Exception e) {
-                log.warn("Failed to store decision to memory: {}", e.getMessage());
-            }
-
-            return plan;
+            return new ResearchTypes.InvestmentPlan(result, state);
         });
+
+        // Store decision to memory outside cache supplier so it runs on every call, not just cache misses
+        try {
+            storeFinalDecision(ticker, plan, "auto");
+        } catch (Exception e) {
+            log.warn("Failed to store decision to memory: {}", e.getMessage());
+        }
+
+        return plan;
     }
 
     private Map<String, Object> buildResearchManagerModel(
@@ -274,7 +280,7 @@ public class DebateAgent {
     ) {
         var model = new LinkedHashMap<String, Object>();
         model.put("past_memory_str", AgentUtils.NO_PAST_MEMORY);
-        model.put("history", String.join("\n", state.history()));
+        model.put("history", sanitizeValue(state.history() != null ? String.join("\n", state.history()) : ""));
         model.put("risk_level", riskAssessment != null ? riskAssessment.level().name() : null);
         model.put("risk_reasoning", riskAssessment != null ? riskAssessment.reasoning() : null);
         model.put("human_approved", feedback != null && feedback.approved());
@@ -282,7 +288,7 @@ public class DebateAgent {
                 ? sanitizeForPrompt(feedback.feedback())
                 : null);
         model.put("ticker", ticker.content());
-        model.put("portfolio_decision", portfolioDecision);
+        model.put("portfolio_decision", sanitizeValue(portfolioDecision));
         return model;
     }
 
@@ -316,11 +322,16 @@ public class DebateAgent {
     }
 
     private String extractRating(String content) {
-        // Use word-boundary regex to avoid false positives (e.g., "not a buy" should not match)
-        if (content.matches("(?i).*\\bbuy\\b.*")) return "Buy";
-        if (content.matches("(?i).*\\bsell\\b.*")) return "Sell";
-        if (content.matches("(?i).*\\boverweight\\b.*")) return "Overweight";
-        if (content.matches("(?i).*\\bunderweight\\b.*")) return "Underweight";
+        // Priority-based extraction: buy/sell > overweight/underweight > hold.
+        // Uses find() with pre-compiled patterns instead of matches() scanning the whole string 4 times.
+        boolean hasBuy = BUY_PAT.matcher(content).find();
+        boolean hasSell = SELL_PAT.matcher(content).find();
+        boolean hasOverweight = OVERWEIGHT_PAT.matcher(content).find();
+        boolean hasUnderweight = UNDERWEIGHT_PAT.matcher(content).find();
+        if (hasBuy) return "Buy";
+        if (hasSell) return "Sell";
+        if (hasOverweight) return "Overweight";
+        if (hasUnderweight) return "Underweight";
         return "Hold";
     }
 
@@ -379,6 +390,18 @@ public class DebateAgent {
     }
 
     private String sanitizeForPrompt(String input) {
+        String sanitized = sanitizeValue(input);
+        if (sanitized.isEmpty()) {
+            return "";
+        }
+        return "<user_feedback>\n" + sanitized + "\n</user_feedback>";
+    }
+
+    /**
+     * Sanitize a value for safe template injection (no XML wrapper).
+     * Strips jinja blocks, code fences, control chars, and truncates oversized input.
+     */
+    private String sanitizeValue(String input) {
         if (input == null || input.isBlank()) {
             return "";
         }
@@ -407,6 +430,6 @@ public class DebateAgent {
         if (sanitized.length() > MAX_OUTPUT_LENGTH) {
             sanitized = sanitized.substring(0, MAX_OUTPUT_LENGTH) + "...[truncated]";
         }
-        return "<user_feedback>\n" + sanitized + "\n</user_feedback>";
+        return sanitized;
     }
 }

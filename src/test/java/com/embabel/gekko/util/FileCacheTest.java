@@ -89,6 +89,28 @@ class FileCacheTest {
     }
 
     @Test
+    void get_mdFallback_doesNotCastNonString() throws Exception {
+        FileCache cache = new FileCache();
+        ReflectionTestUtils.setField(cache, "baseDir", tempDir);
+
+        // The cache uses SHA-256 of the key as filename.
+        // Write an .md file directly so only MD exists (no JSON).
+        java.security.MessageDigest md = java.security.MessageDigest.getInstance("SHA-256");
+        String hashed = java.util.HexFormat.of().formatHex(md.digest("md_key".getBytes(java.nio.charset.StandardCharsets.UTF_8)));
+        Path mdFile = tempDir.resolve(hashed + ".md");
+        java.nio.file.Files.writeString(mdFile, "some markdown content");
+
+        // Requesting a non-String type should NOT ClassCastException.
+        // It should return null since MD fallback only works for String.class.
+        Object result = cache.get("md_key", Object.class);
+        assertNull(result, "MD fallback should not cast to non-String types");
+
+        // String.class should still work via MD fallback
+        String stringResult = cache.get("md_key", String.class);
+        assertEquals("some markdown content", stringResult);
+    }
+
+    @Test
     void concurrent_sameKey_computeOnce() throws InterruptedException {
         FileCache cache = new FileCache();
         ReflectionTestUtils.setField(cache, "baseDir", tempDir);

@@ -10,7 +10,7 @@ class VendorRouterTest {
     @Test
     void route_delegatesToAlphaVantageForFundamentals() {
         AlphaVantageService alphaVantageService = mock(AlphaVantageService.class);
-        when(alphaVantageService.getFundamentals(anyString(), anyString())).thenReturn("fundamentals data");
+        when(alphaVantageService.getFundamentals(anyString())).thenReturn("fundamentals data");
         VendorRouter router = new VendorRouter();
         router.setAlphaVantageService(alphaVantageService);
 
@@ -53,7 +53,7 @@ class VendorRouterTest {
     void route_handlesNullParams() {
         AlphaVantageService alphaVantageService = mock(AlphaVantageService.class);
         // Null params should still route correctly (the service handles null internally)
-        when(alphaVantageService.getFundamentals(isNull(), isNull())).thenReturn("fundamentals data");
+        when(alphaVantageService.getFundamentals(isNull())).thenReturn("fundamentals data");
         VendorRouter router = new VendorRouter();
         router.setAlphaVantageService(alphaVantageService);
 

@@ -13,18 +13,27 @@ import com.embabel.gekko.util.FileCache;
 import com.embabel.gekko.util.LlmBudgetTracker;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.regex.Pattern;
 
 @Agent(description = "Debate Loop Agent — runs iterative bull/bear debate")
 @Component
+@RegisterReflectionForBinding({
+        ResearchTypes.Ticker.class,
+        ResearchTypes.DebateBriefs.class,
+        ResearchTypes.InvestmentDebateState.class
+})
 @RequiredArgsConstructor
 @Slf4j
 public class DebateLoopAgent {
+
+    private static final Pattern WHITESPACE = Pattern.compile("\\s+");
 
     private final BullResearcher bullResearcher;
     private final BearResearcher bearResearcher;
@@ -133,7 +142,7 @@ public class DebateLoopAgent {
 
     private Set<String> bigrams(String text) {
         Set<String> result = new HashSet<>();
-        String normalized = text.toLowerCase().replaceAll("\\s+", " ").trim();
+        String normalized = WHITESPACE.matcher(text.toLowerCase()).replaceAll(" ").trim();
         for (int i = 0; i < normalized.length() - 1; i++) {
             result.add(normalized.substring(i, i + 2));
         }

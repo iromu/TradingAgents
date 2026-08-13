@@ -17,6 +17,8 @@ import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -59,20 +61,18 @@ public class MarketDataTools {
     ) {
         log.info("Getting indicators {} for ticker {} with lookback {} days", indicators, ticker, lookbackDays);
         try {
-            String[] indicatorCodes = indicators.split(",");
-            StringBuilder result = new StringBuilder();
-            for (String code : indicatorCodes) {
+            List<String> indicatorCodes = new ArrayList<>();
+            for (String code : indicators.split(",")) {
                 String trimmed = code.trim();
-                if (trimmed.isEmpty()) continue;
-                try {
-                    String indicatorResult = yFinService.getStockStatsIndicatorsWindow(
-                            ticker, trimmed, currDate, lookbackDays);
-                    result.append(indicatorResult).append("\n\n");
-                } catch (Exception e) {
-                    result.append("Error calculating ").append(trimmed).append(": ").append(e.getMessage()).append("\n\n");
+                if (!trimmed.isEmpty()) {
+                    indicatorCodes.add(trimmed);
                 }
             }
-            return result.toString();
+            if (indicatorCodes.isEmpty()) {
+                return "No valid indicator codes provided.";
+            }
+            return yFinService.getStockStatsIndicatorsWindowBatch(
+                    ticker, indicatorCodes, currDate, lookbackDays);
         } catch (Exception e) {
             return "Error fetching indicators for " + ticker + ": " + e.getMessage();
         }

@@ -9,6 +9,8 @@ import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
 
@@ -87,21 +89,30 @@ public class DecisionMemoryAgent {
 
         // Parse the CSV data to get close prices
         String[] lines = data.split("\n");
+
+        // Parse header row and validate expected columns by name
+        Map<String, Integer> columns = parseCsvHeader(lines);
+        int dateIdx = resolveColumn(columns, "Date");
+        int openIdx = resolveColumn(columns, "Open");
+        int closeIdx = resolveColumn(columns, "Close");
+
         double openPrice = 0;
         double closePrice = 0;
 
         for (String line : lines) {
-            if (line.startsWith("#") || line.startsWith("Date,")) continue;
+            if (line.startsWith("#") || line.isBlank()) continue;
+
             String[] parts = line.split(",");
-            if (parts.length < 7) continue;
+            int maxIdx = Math.max(dateIdx, Math.max(openIdx, closeIdx));
+            if (parts.length <= maxIdx) continue;
 
             try {
-                LocalDate lineDate = LocalDate.parse(parts[0], DF);
+                LocalDate lineDate = LocalDate.parse(parts[dateIdx], DF);
                 if (lineDate.equals(trade)) {
-                    openPrice = Double.parseDouble(parts[1]);
+                    openPrice = parseFiniteDouble(parts[openIdx]);
                 }
                 if (lineDate.equals(end)) {
-                    closePrice = Double.parseDouble(parts[4]); // Close price
+                    closePrice = parseFiniteDouble(parts[closeIdx]);
                 }
             } catch (Exception e) {
                 log.debug("Skipping malformed CSV line: {}", line);
@@ -118,6 +129,36 @@ public class DecisionMemoryAgent {
         BigDecimal alphaReturn = rawReturn;
 
         return new ReturnsData(rawReturn, alphaReturn, "SPY", 5);
+    }
+
+    private Map<String, Integer> parseCsvHeader(String[] lines) {
+        for (String line : lines) {
+            if (line.startsWith("#") || line.isBlank()) continue;
+            String[] parts = line.split(",");
+            Map<String, Integer> columns = new LinkedHashMap<>();
+            for (int i = 0; i < parts.length; i++) {
+                columns.put(parts[i].trim(), i);
+            }
+            return columns;
+        }
+        return Map.of();
+    }
+
+    private int resolveColumn(Map<String, Integer> columns, String name) {
+        Integer idx = columns.get(name);
+        if (idx == null) {
+            throw new IllegalArgumentException("CSV missing required column: " + name
+                    + ". Found: " + columns.keySet());
+        }
+        return idx;
+    }
+
+    private double parseFiniteDouble(String raw) {
+        double value = Double.parseDouble(raw);
+        if (!Double.isFinite(value)) {
+            throw new IllegalArgumentException("Non-finite value in CSV: " + raw);
+        }
+        return value;
     }
 
     private String generateReflection(OperationContext context, PendingDecision pending, ReturnsData returns) {

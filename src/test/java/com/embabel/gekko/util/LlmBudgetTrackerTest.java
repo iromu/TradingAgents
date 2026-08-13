@@ -12,8 +12,8 @@ class LlmBudgetTrackerTest {
 
     @BeforeEach
     void setUp() {
-        tracker = new LlmBudgetTracker(5, false);
-        hardLimitTracker = new LlmBudgetTracker(5, true);
+        tracker = new LlmBudgetTracker(5, false, 1000);
+        hardLimitTracker = new LlmBudgetTracker(5, true, 1000);
     }
 
     @Test
@@ -120,5 +120,69 @@ class LlmBudgetTrackerTest {
     @Test
     void getCallCount_returnsZeroForUnknown() {
         assertEquals(0, tracker.getCallCount("NONEXISTENT"));
+    }
+
+    // --- LRU eviction tests ---
+
+    @Test
+    void evictsOldestEntryWhenMaxTickersExceeded() {
+        var smallTracker = new LlmBudgetTracker(100, false, 3);
+
+        smallTracker.recordCall("A");
+        smallTracker.recordCall("B");
+        smallTracker.recordCall("C");
+        assertEquals(1, smallTracker.getCallCount("A"));
+        assertEquals(1, smallTracker.getCallCount("B"));
+        assertEquals(1, smallTracker.getCallCount("C"));
+
+        // 4th ticker evicts the least-recently-accessed ("A")
+        smallTracker.recordCall("D");
+        assertEquals(0, smallTracker.getCallCount("A")); // evicted
+        assertEquals(1, smallTracker.getCallCount("D"));
+    }
+
+    @Test
+    void evictionUsesAccessOrderNotInsertionOrder() {
+        var smallTracker = new LlmBudgetTracker(100, false, 3);
+
+        smallTracker.recordCall("A");
+        smallTracker.recordCall("B");
+        smallTracker.recordCall("C");
+
+        // Access "A" to make it recently used
+        smallTracker.getCallCount("A");
+
+        // "B" is now the least-recently-accessed and should be evicted
+        smallTracker.recordCall("D");
+        assertEquals(1, smallTracker.getCallCount("A")); // survived (recently accessed)
+        assertEquals(0, smallTracker.getCallCount("B")); // evicted
+        assertEquals(1, smallTracker.getCallCount("C"));
+    }
+
+    @Test
+    void repeatedEvictionDoesNotLeakMemory() {
+        var smallTracker = new LlmBudgetTracker(100, false, 5);
+
+        // Insert 100 tickers into a map that holds only 5
+        for (int i = 0; i < 100; i++) {
+            smallTracker.recordCall("TICKER_" + i);
+        }
+
+        // Oldest entries should be gone
+        assertEquals(0, smallTracker.getCallCount("TICKER_0"));
+        assertEquals(0, smallTracker.getCallCount("TICKER_10"));
+        // Newest entries should remain
+        assertEquals(1, smallTracker.getCallCount("TICKER_99"));
+        assertEquals(1, smallTracker.getCallCount("TICKER_95"));
+    }
+
+    @Test
+    void resetAll_clearsEvictionMap() {
+        var smallTracker = new LlmBudgetTracker(100, false, 3);
+        smallTracker.recordCall("A");
+        smallTracker.recordCall("B");
+        smallTracker.resetAll();
+        assertEquals(0, smallTracker.getCallCount("A"));
+        assertEquals(0, smallTracker.getCallCount("B"));
     }
 }

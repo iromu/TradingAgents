@@ -29,8 +29,11 @@ public class FredDataTools {
             String seriesId
     ) {
         if (!enabled) return "NO_DATA_AVAILABLE: FRED data is disabled (app.fred.enabled=false)";
+        if (seriesId == null || seriesId.isBlank()) {
+            return "NO_DATA_AVAILABLE: seriesId must not be null or blank";
+        }
         try {
-            return fredService.getSeries(seriesId, 365);
+            return fredService.getSeries(seriesId.trim(), 365);
         } catch (Exception e) {
             log.error("Error fetching FRED data for {}: {}", seriesId, e.getMessage());
             return "NO_DATA_AVAILABLE: Failed to fetch FRED data: " + e.getMessage();

@@ -18,6 +18,7 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import org.springframework.beans.factory.ObjectProvider;
 
@@ -68,6 +69,10 @@ public class RiskDebateAgent {
             String traderProposal,
             ActionContext actionContext
     ) {
+        Objects.requireNonNull(briefs, "briefs must not be null");
+        Objects.requireNonNull(debateState, "debateState must not be null");
+        Objects.requireNonNull(traderProposal, "traderProposal must not be null");
+
         var aggressiveDebator = getAggressiveDebator();
         var conservativeDebator = getConservativeDebator();
         var neutralDebator = getNeutralDebator();
@@ -141,13 +146,24 @@ public class RiskDebateAgent {
                     shortPreview(currentNeutral));
         }
 
-        String allResponses = String.join("\n\n--- AGGRESSIVE ---\n\n", aggressiveResponses)
-                + "\n\n--- CONSERVATIVE ---\n\n"
-                + String.join("\n\n--- CONSERVATIVE ---\n\n", conservativeResponses)
-                + "\n\n--- NEUTRAL ---\n\n"
-                + String.join("\n\n--- NEUTRAL ---\n\n", neutralResponses);
+        StringBuilder allResponses = new StringBuilder();
+        for (int i = 0; i < aggressiveResponses.size(); i++) {
+            if (i > 0) allResponses.append("\n\n");
+            allResponses.append("Aggressive (Round ").append(i + 1).append("):\n")
+                    .append(aggressiveResponses.get(i));
+        }
+        for (int i = 0; i < conservativeResponses.size(); i++) {
+            if (allResponses.length() > 0) allResponses.append("\n\n");
+            allResponses.append("Conservative (Round ").append(i + 1).append("):\n")
+                    .append(conservativeResponses.get(i));
+        }
+        for (int i = 0; i < neutralResponses.size(); i++) {
+            if (allResponses.length() > 0) allResponses.append("\n\n");
+            allResponses.append("Neutral (Round ").append(i + 1).append("):\n")
+                    .append(neutralResponses.get(i));
+        }
 
-        return judgeRisk(ticker.content(), allResponses, traderProposal, actionContext);
+        return judgeRisk(ticker.content(), allResponses.toString(), traderProposal, actionContext);
     }
 
     private RiskAssessment judgeRisk(String ticker, String debateOutput, String traderProposal, ActionContext actionContext) {
@@ -194,22 +210,23 @@ public class RiskDebateAgent {
     }
 
     private RiskLevel classifyRisk(String lower) {
-        if (lower.contains("buy") && riskWords(lower)) {
+        if (riskyWords(lower)) {
             return RiskLevel.RISKY;
         }
-        if (sellWords(lower)) {
+        if (conservativeWords(lower)) {
             return RiskLevel.CONSERVATIVE;
         }
         return RiskLevel.NEUTRAL;
     }
 
-    private boolean riskWords(String s) {
-        return s.contains("risk") || s.contains("bold") || s.contains("aggressive") || s.contains("high");
+    private boolean riskyWords(String s) {
+        return s.contains("high risk") || s.contains("risky") || s.contains("aggressive")
+                || s.contains("bold move") || s.contains("strong buy") || s.contains("overweight");
     }
 
-    private boolean sellWords(String s) {
-        return s.contains("sell") || s.contains("avoid") || s.contains("cautious")
-                || s.contains("conservative") || s.contains("safe");
+    private boolean conservativeWords(String s) {
+        return s.contains("low risk") || s.contains("conservative") || s.contains("safe")
+                || s.contains("avoid") || s.contains("cautious") || s.contains("underweight");
     }
 
     private String truncate(String s, int max) {

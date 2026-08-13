@@ -134,7 +134,7 @@ public class TradingHtmxController {
                 return "redirect:/plan/review/" + processId;
             }
 
-            Map<String, Object> values = Map.of("approved", "true".equalsIgnoreCase(approved), "feedback", feedback != null ? feedback : "");
+            Map<String, Object> values = Map.of("approved", Boolean.parseBoolean(approved), "feedback", feedback != null ? feedback : "");
 
             var resumed = researchPlanService.submitWaitForForm(process, values, "Failed to resume process");
             if (resumed == null) {

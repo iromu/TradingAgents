@@ -6,8 +6,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -36,8 +37,8 @@ class MarketDataToolsTest {
     void getStockData_returnsErrorOnFailure() throws Exception {
         // Given
         MarketDataTools tools = new MarketDataTools(yFinService);
-        doThrow(new RuntimeException("Symbol not found"))
-                .when(yFinService).getYFinDataOnline("INVALID", "2026-01-01", "2026-01-31");
+        when(yFinService.getYFinDataOnline("INVALID", "2026-01-01", "2026-01-31"))
+                .thenThrow(new RuntimeException("Symbol not found"));
 
         // When
         String result = tools.get_stock_data("INVALID", "2026-01-01", "2026-01-31");
@@ -52,10 +53,8 @@ class MarketDataToolsTest {
     void getIndicators_returnsCalculations() throws Exception {
         // Given
         MarketDataTools tools = new MarketDataTools(yFinService);
-        when(yFinService.getStockStatsIndicatorsWindow("AAPL", "SMA", "2026-01-31", 30))
-                .thenReturn("SMA(20): 150.25");
-        when(yFinService.getStockStatsIndicatorsWindow("AAPL", "RSI", "2026-01-31", 30))
-                .thenReturn("RSI(14): 65.2");
+        when(yFinService.getStockStatsIndicatorsWindowBatch("AAPL", List.of("SMA", "RSI"), "2026-01-31", 30))
+                .thenReturn("SMA(20): 150.25\nRSI(14): 65.2");
 
         // When
         String result = tools.get_indicators("AAPL", "SMA,RSI", "2026-01-31", 30);
@@ -70,10 +69,9 @@ class MarketDataToolsTest {
     void getIndicators_handlesPartialFailure() throws Exception {
         // Given
         MarketDataTools tools = new MarketDataTools(yFinService);
-        when(yFinService.getStockStatsIndicatorsWindow("AAPL", "SMA", "2026-01-31", 30))
-                .thenReturn("SMA(10): 150.5");
-        doThrow(new IllegalArgumentException("Unknown indicator"))
-                .when(yFinService).getStockStatsIndicatorsWindow("AAPL", "INVALID", "2026-01-31", 30);
+        // The batch method handles partial failures internally
+        when(yFinService.getStockStatsIndicatorsWindowBatch("AAPL", List.of("SMA", "INVALID"), "2026-01-31", 30))
+                .thenReturn("SMA(10): 150.5\nError calculating INVALID: Unknown indicator");
 
         // When
         String result = tools.get_indicators("AAPL", "SMA,INVALID", "2026-01-31", 30);
@@ -92,8 +90,9 @@ class MarketDataToolsTest {
         // When
         String result = tools.get_indicators("AAPL", "", "2026-01-31", 30);
 
-        // Then — empty indicator list should return empty string
-        assertEquals("", result);
+        // Then — empty indicator list returns a descriptive message
+        assertNotNull(result);
+        assertTrue(result.contains("No valid indicator codes"));
     }
 
     @Test
@@ -104,7 +103,8 @@ class MarketDataToolsTest {
         // When
         String result = tools.get_indicators("AAPL", "   ", "2026-01-31", 30);
 
-        // Then — whitespace-only should return empty
-        assertTrue(result.isBlank());
+        // Then — whitespace-only returns a descriptive message
+        assertNotNull(result);
+        assertTrue(result.contains("No valid indicator codes"));
     }
 }

@@ -1,60 +1,46 @@
 package com.embabel.gekko.agent.identity;
 
 import com.embabel.common.ai.prompt.PromptContributor;
-import jakarta.annotation.PreDestroy;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Injects resolved instrument identity into LLM prompts to prevent hallucination.
  * Fail-open: if no InstrumentContext is available, contributes nothing.
  *
- * Uses a ConcurrentHashMap keyed by ticker to prevent cross-contamination between
- * concurrent requests. The current ticker is tracked via ThreadLocal so contribution()
- * can look up the correct context without a parameter.
- *
- * The context is set by OrchestratorAgent.resolveIdentity() via setContext().
+ * Thread-safe: uses ThreadLocal to prevent cross-contamination between concurrent
+ * agent processes running on different threads. Context is set and cleared per
+ * agent turn by OrchestratorAgent to avoid stale data leaking across turns.
  */
 @Component
 public class InstrumentContextPromptContributor implements PromptContributor {
 
-    /** Per-ticker contexts to prevent cross-request contamination. */
-    private final Map<String, InstrumentContext> contexts = new ConcurrentHashMap<>();
-
-    /** ThreadLocal tracking the current ticker for this request. */
-    private final ThreadLocal<String> currentTicker = new ThreadLocal<>();
+    /** Per-thread context to prevent cross-request contamination. */
+    private final ThreadLocal<InstrumentContext> context = new ThreadLocal<>();
 
     /**
      * Set by OrchestratorAgent after resolving identity.
-     * Also sets the ThreadLocal ticker so contribution() can look up the right context.
+     * Clears any previous context for this thread first.
      */
-    public void setContext(InstrumentContext context) {
-        if (context == null) {
-            contexts.clear();
-            currentTicker.remove();
+    public void setContext(InstrumentContext ctx) {
+        if (ctx == null) {
+            context.remove();
             return;
         }
-        contexts.put(context.ticker(), context);
-        currentTicker.set(context.ticker());
+        context.set(ctx);
     }
 
     /**
-     * Clean up ThreadLocal to prevent memory leaks.
+     * Clear the ThreadLocal after an agent turn completes.
+     * Call from OrchestratorAgent after the full turn to prevent stale context
+     * leaking if the thread is reused for a different ticker.
      */
-    @PreDestroy
-    public void cleanup() {
-        currentTicker.remove();
+    public void clear() {
+        context.remove();
     }
 
     @Override
     public String contribution() {
-        String ticker = currentTicker.get();
-        if (ticker == null) {
-            return "";
-        }
-        InstrumentContext ctx = contexts.get(ticker);
+        InstrumentContext ctx = context.get();
         if (ctx == null) {
             return "";
         }

@@ -9,12 +9,16 @@ import org.springframework.stereotype.Component;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
 
 /**
  * Bear researcher — generates a bearish argument based on analyst briefs and debate history.
  * Called directly by DebateLoopAgent via createObject(), not as a sub-process agent.
+ *
+ * <p>Output prefix: "# Bear Analyst\n" is prepended to the LLM response to clearly mark
+ * the argument's perspective in the debate transcript.
  */
 @Component
 @RequiredArgsConstructor
@@ -26,6 +30,7 @@ public class BearResearcher {
             List<String> history,
             ActionContext actionContext
     ) {
+        Objects.requireNonNull(briefs, "Briefs must not be null");
         String previousResponse = history.isEmpty() ? "No argument yet." : history.getLast();
 
         return "# Bear Analyst\n" + actionContext.ai()

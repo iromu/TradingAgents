@@ -89,7 +89,8 @@ public class ResearchPlanService {
      * @param process The process to resume.
      * @param values The form values to submit.
      * @param errorMsg The error message to use on failure.
-     * @return The resumed AgentProcess, or null on failure.
+     * @return The resumed AgentProcess.
+     * @throws RuntimeException if the process cannot be resumed.
      */
     public AgentProcess submitWaitForForm(AgentProcess process, java.util.Map<String, Object> values, String errorMsg) {
         return AgentUtils.submitWaitForForm(process, agentPlatform, values, errorMsg);

@@ -1,6 +1,8 @@
 package com.embabel.gekko.indicators;
 
 
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
+
 import org.ta4j.core.Bar;
 import org.ta4j.core.BarSeries;
 import org.ta4j.core.indicators.AbstractIndicator;
@@ -10,6 +12,7 @@ import org.ta4j.core.num.Num;
 /**
  * Rolling-window VWAP (typical price * volume / sum(volume))
  */
+@RegisterReflectionForBinding(VWAPIndicator.class)
 public class VWAPIndicator extends AbstractIndicator<Num> {
 
     private final BarSeries series;
@@ -35,13 +38,12 @@ public class VWAPIndicator extends AbstractIndicator<Num> {
             pv = pv.plus(typical.multipliedBy(vol));
             volSum = volSum.plus(vol);
         }
-        if (volSum.isZero()) return DecimalNum.valueOf(Double.NaN);
+        if (volSum.isZero()) return DecimalNum.valueOf(0);
         return pv.dividedBy(volSum);
     }
 
     @Override
     public int getCountOfUnstableBars() {
-        // VWAP has no unstable bars
-        return 0;
+        return period;
     }
 }

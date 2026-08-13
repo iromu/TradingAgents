@@ -78,9 +78,8 @@ class VWAPIndicatorTest {
     }
 
     @Test
-    void getValue_zeroVolume_throws() {
-        // Zero volume causes DecimalNum.valueOf(Double.NaN) to throw NumberFormatException
-        // in the VWAP indicator — this is a known edge case in the indicator code
+    void getValue_zeroVolume_returnsZero() {
+        // Zero volume returns 0 instead of NaN (which would throw NumberFormatException)
         BarSeries series = new org.ta4j.core.BaseBarSeriesBuilder().build();
         series.addBar(new org.ta4j.core.BaseBar(
                 Duration.ofDays(1),
@@ -91,14 +90,15 @@ class VWAPIndicatorTest {
         ));
         VWAPIndicator indicator = new VWAPIndicator(series, 5);
 
-        assertThrows(Exception.class, () -> indicator.getValue(0));
+        Num value = indicator.getValue(0);
+        assertTrue(value.isZero());
     }
 
     @Test
-    void getCountOfUnstableBars_returnsZero() {
+    void getCountOfUnstableBars_returnsPeriod() {
         BarSeries series = buildSeries(100.0);
         VWAPIndicator indicator = new VWAPIndicator(series, 5);
-        assertEquals(0, indicator.getCountOfUnstableBars());
+        assertEquals(5, indicator.getCountOfUnstableBars());
     }
 
     @Test

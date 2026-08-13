@@ -3,16 +3,16 @@ spring:
   ai:
     chat:
       observations:
-        log-prompt: true # Include prompt content in tracing (disabled by default for privacy)
-        log-completion: true # Include completion content in tracing (disabled by default)
+        log-prompt: false # Include prompt content in tracing (disabled by default for privacy)
+        log-completion: false # Include completion content in tracing (disabled by default)
 management:
   endpoints:
     web:
       exposure:
-        include: "*"
+        include: health,info,metrics,prometheus
   tracing:
     sampling:
-      probability: 1.0 # Sample 100% of requests for full tracing (adjust in production as needed)
+      probability: 0.1 # Sample 10% of requests for production tracing
     enabled: true
   observations:
     annotations:

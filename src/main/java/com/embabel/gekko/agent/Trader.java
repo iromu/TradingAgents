@@ -1,6 +1,8 @@
 package com.embabel.gekko.agent;
 
+import com.embabel.agent.api.annotation.AchievesGoal;
 import com.embabel.agent.api.annotation.Action;
+import com.embabel.agent.api.annotation.Agent;
 import com.embabel.agent.api.common.ActionContext;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.domain.TraderProposalOutput;
@@ -18,6 +20,7 @@ import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
  * transaction proposal (Buy/Hold/Sell with entry price, stop-loss, position sizing).
  * Called directly by DebateAgent via createObject(), not as a sub-process agent.
  */
+@Agent(description = "Trader — produces trading proposals from research")
 @Component
 @RegisterReflectionForBinding(TraderProposalOutput.class)
 @RequiredArgsConstructor
@@ -25,6 +28,7 @@ import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
 public class Trader {
 
     @Action(description = "Produce concrete transaction proposal from research plan")
+    @AchievesGoal(description = "Produce trading proposal from investment plan")
     public String traderProposal(
             ResearchTypes.Ticker ticker,
             String researchPlan,

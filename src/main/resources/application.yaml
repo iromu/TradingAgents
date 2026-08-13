@@ -13,7 +13,7 @@ embabel:
       models:
         openai:
           custom:
-            api-key: ${OPENAI_API_KEY:litellm_apikey}
+            api-key: ${OPENAI_API_KEY:}
             base-url: ${OPENAI_BASE_URL:http://spark.local:4000}
             models: ${OPENAI_MODEL:Qwen3.6-35B-A3B}
       scanning:
@@ -45,7 +45,7 @@ app:
     openai:
       reasoning-effort: high
 
-spring.profiles.active: base,app,local
+spring.profiles.active: base,app
 logging:
   level:
     com.embabel: WARN

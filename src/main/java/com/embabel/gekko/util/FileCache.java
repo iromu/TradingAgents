@@ -72,6 +72,7 @@ public class FileCache {
 
     /**
      * Get a cached value by key, or return null if not found.
+     * MD fallback only applies when clazz is String.class to avoid ClassCastException.
      */
     public <T> T get(String key, Class<T> clazz) {
         Path jsonPath = pathForKey(key, ".json");
@@ -79,10 +80,9 @@ public class FileCache {
 
         try {
             if (Files.exists(jsonPath)) {
-                return mapper.readValue(jsonPath.toFile(), clazz);
-            } else if (Files.exists(mdPath)) {
-                String content = Files.readString(mdPath, StandardCharsets.UTF_8);
-                return clazz.cast(content);
+                return mapper.readValue(Files.newInputStream(jsonPath), clazz);
+            } else if (clazz == String.class && Files.exists(mdPath)) {
+                return clazz.cast(Files.readString(mdPath, StandardCharsets.UTF_8));
             }
         } catch (IOException ex) {
             log.error("Failed to read cache for key {}: {}", key, ex.getMessage(), ex);
@@ -152,19 +152,26 @@ public class FileCache {
 
     /**
      * Atomically write a JSON cache file via temp file + rename.
+     * Falls back to copy+delete on cross-device filesystems where atomic move fails.
      */
     private void saveJson(String key, Object value) {
         Path jsonPath = pathForKey(key, ".json");
         Path tempPath = jsonPath.resolveSibling(jsonPath.getFileName() + ".tmp");
-        try {
-            mapper.writeValue(tempPath.toFile(), value);
+        try (var out = Files.newOutputStream(tempPath)) {
+            mapper.writeValue(out, value);
         } catch (IOException e) {
             throw new RuntimeException("Failed to write JSON cache for key " + key + ": " + e.getMessage(), e);
         }
         try {
             Files.move(tempPath, jsonPath, StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            log.error("Failed to atomically save JSON cache for key {}: {}", key, e.getMessage(), e);
+            // Cross-device fallback: copy then delete temp
+            try {
+                Files.copy(tempPath, jsonPath, StandardCopyOption.REPLACE_EXISTING);
+                Files.delete(tempPath);
+            } catch (IOException fallbackEx) {
+                log.error("Failed to save JSON cache for key {}: {}", key, fallbackEx.getMessage(), fallbackEx);
+            }
         }
     }
 

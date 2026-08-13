@@ -11,9 +11,13 @@ import com.embabel.ux.form.FormSubmission;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -40,12 +44,52 @@ public final class AgentUtils {
         return val != null ? val.toString() : defaultValue;
     }
 
+    /** Default connect timeout for HTTP clients (ms). */
+    private static final int DEFAULT_CONNECT_TIMEOUT_MS = 10_000;
+
+    /** Default read timeout for HTTP clients (ms). */
+    private static final int DEFAULT_READ_TIMEOUT_MS = 30_000;
+
+    /**
+     * Shared RestTemplate singleton with UTF-8 charset, message converters,
+     * and configurable timeouts. Reusing a single instance enables connection
+     * reuse via the underlying HTTP client's keep-alive mechanism.
+     */
+    private static final RestTemplate SHARED_REST_TEMPLATE;
+
+    static {
+        SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
+        factory.setConnectTimeout(DEFAULT_CONNECT_TIMEOUT_MS);
+        factory.setReadTimeout(DEFAULT_READ_TIMEOUT_MS);
+
+        RestTemplate template = new RestTemplate(factory);
+        template.setMessageConverters(List.of(
+                new StringHttpMessageConverter(StandardCharsets.UTF_8),
+                new MappingJackson2HttpMessageConverter()
+        ));
+
+        SHARED_REST_TEMPLATE = template;
+    }
+
+    /**
+     * Get the shared RestTemplate singleton.
+     *
+     * @return the shared RestTemplate instance
+     */
+    public static RestTemplate restTemplate() {
+        return SHARED_REST_TEMPLATE;
+    }
+
     /**
      * Create a RestTemplate with configurable timeouts.
+     * Deprecated: prefer {@link #restTemplate()} to reuse the shared singleton
+     * for connection reuse. Use this only when different timeouts are required.
      *
      * @param connectTimeoutMs connect timeout in milliseconds
      * @param readTimeoutMs    read timeout in milliseconds
+     * @deprecated Use {@link #restTemplate()} for the shared singleton.
      */
+    @Deprecated
     public static RestTemplate restTemplate(int connectTimeoutMs, int readTimeoutMs) {
         SimpleClientHttpRequestFactory factory = new SimpleClientHttpRequestFactory();
         factory.setConnectTimeout(connectTimeoutMs);
@@ -127,7 +171,9 @@ public final class AgentUtils {
 
     /**
      * Submit a WaitFor form and resume the agent process.
-     * Returns the resumed process, or null if submission failed.
+     *
+     * @return The resumed AgentProcess.
+     * @throws RuntimeException if the process cannot be resumed.
      */
     public static AgentProcess submitWaitForForm(
             AgentProcess process,
@@ -156,8 +202,8 @@ public final class AgentUtils {
             platform.start(process);
             return process;
         } catch (Exception e) {
-            log.error("{}: {}", logPrefix, e.getMessage());
-            return null;
+            log.error("{}: failed to resume agent process", logPrefix, e);
+            throw new RuntimeException("Failed to resume agent process: " + e.getMessage(), e);
         } finally {
             PROCESS_LOCKS.remove(process.getId());
         }

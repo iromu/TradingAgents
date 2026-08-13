@@ -94,9 +94,19 @@ public class YFinService {
      * indicatorCode must be one of the keys returned by IndicatorMapper.getDescriptions()
      */
     public String getStockStatsIndicatorsWindow(String symbol, String indicatorCode, String currDate, int lookbackDays) throws Exception {
+        return getStockStatsIndicatorsWindowBatch(symbol, List.of(indicatorCode), currDate, lookbackDays);
+    }
+
+    /**
+     * Returns indicator values for multiple indicator codes, fetching Yahoo data only once.
+     * Each indicatorCode must be one of the keys returned by IndicatorMapper.getDescriptions()
+     */
+    public String getStockStatsIndicatorsWindowBatch(String symbol, List<String> indicatorCodes, String currDate, int lookbackDays) throws Exception {
         Map<String, String> desc = IndicatorMapper.getDescriptions();
-        if (!desc.containsKey(indicatorCode)) {
-            throw new IllegalArgumentException("Indicator " + indicatorCode + " is not supported. Supported keys: " + desc.keySet());
+        for (String code : indicatorCodes) {
+            if (!desc.containsKey(code)) {
+                throw new IllegalArgumentException("Indicator " + code + " is not supported. Supported keys: " + desc.keySet());
+            }
         }
 
         LocalDate curr = DateUtils.parseDate(currDate);
@@ -110,28 +120,53 @@ public class YFinService {
         ClosePriceIndicator close = new ClosePriceIndicator(series);
         VolumeIndicator volume = new VolumeIndicator(series);
 
-        org.ta4j.core.Indicator<Num> indicator = IndicatorMapper.buildIndicator(indicatorCode, series, close, volume);
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("## ").append(indicatorCode).append(" values from ").append(before.format(DF)).append(" to ").append(curr.format(DF)).append(":\n\n");
-
         ZoneId zone = ZoneId.systemDefault();
-        for (int i = series.getBeginIndex(); i <= series.getEndIndex(); i++) {
+        int begin = series.getBeginIndex();
+        int end = series.getEndIndex();
+
+        // Pre-collect valid bar indices and dates
+        int[] validIndices = new int[end - begin + 1];
+        LocalDate[] barDates = new LocalDate[end - begin + 1];
+        int validCount = 0;
+        for (int i = begin; i <= end; i++) {
             Instant endTimeInstant = series.getBar(i).getEndTime();
             ZonedDateTime endTime = endTimeInstant.atZone(zone);
             LocalDate barDate = endTime.toLocalDate();
-
-            if (barDate.isBefore(before) || barDate.isAfter(curr)) continue;
-
-            Num v = indicator.getValue(i);
-            sb.append(barDate.format(DF)).append(": ");
-            sb.append(v == null || v.isNaN() ? "N/A" : v.doubleValue());
-            sb.append("\n");
+            if (!barDate.isBefore(before) && !barDate.isAfter(curr)) {
+                validIndices[validCount] = i;
+                barDates[validCount] = barDate;
+                validCount++;
+            }
         }
 
+        // Build indicator objects once
+        org.ta4j.core.Indicator<Num>[] indicators = new org.ta4j.core.Indicator[indicatorCodes.size()];
+        for (int i = 0; i < indicatorCodes.size(); i++) {
+            indicators[i] = IndicatorMapper.buildIndicator(indicatorCodes.get(i), series, close, volume);
+        }
 
-        sb.append("\n\n").append(desc.getOrDefault(indicatorCode, "No description available."));
-        return sb.toString();
+        // Output each indicator
+        StringBuilder result = new StringBuilder();
+        for (int i = 0; i < indicatorCodes.size(); i++) {
+            String code = indicatorCodes.get(i);
+            var indicator = indicators[i];
+
+            StringBuilder sb = new StringBuilder();
+            sb.append("## ").append(code).append(" values from ").append(before.format(DF)).append(" to ").append(curr.format(DF)).append(":\n\n");
+
+            for (int j = 0; j < validCount; j++) {
+                int idx = validIndices[j];
+                Num v = indicator.getValue(idx);
+                sb.append(barDates[j].format(DF)).append(": ");
+                sb.append(v == null || v.isNaN() ? "N/A" : v.doubleValue());
+                sb.append("\n");
+            }
+
+            sb.append("\n\n").append(desc.getOrDefault(code, "No description available."));
+            result.append(sb).append("\n\n");
+        }
+
+        return result.toString();
     }
 
     /**
@@ -140,11 +175,10 @@ public class YFinService {
      */
 
     private BarSeries loadBarSeries(String symbol, LocalDate startInclusive, LocalDate endInclusive) throws Exception {
-        Stock stock = YahooFinance.get(symbol.toUpperCase(),
-                toCalendar(startInclusive),
-                toCalendar(endInclusive),
-                Interval.DAILY);
-        List<HistoricalQuote> hist = stock.getHistory(toCalendar(startInclusive), toCalendar(endInclusive), Interval.DAILY);
+        Calendar startCal = toCalendar(startInclusive);
+        Calendar endCal = toCalendar(endInclusive);
+        Stock stock = YahooFinance.get(symbol.toUpperCase(), startCal, endCal, Interval.DAILY);
+        List<HistoricalQuote> hist = stock.getHistory();
 
         BarSeries series = new BaseBarSeriesBuilder()
                 .withName(symbol.toUpperCase())
@@ -157,7 +191,7 @@ public class YFinService {
                     .withHour(0).withMinute(0).withSecond(0).withNano(0);
 
             Duration timePeriod = Duration.ofDays(1);
-            Instant barEndTime = h.getDate().toInstant(); // renamed from endTime
+            Instant barEndTime = h.getDate().toInstant();
             Num open = DecimalNum.valueOf(h.getOpen() == null ? Double.NaN : h.getOpen().doubleValue());
             Num high = DecimalNum.valueOf(h.getHigh() == null ? Double.NaN : h.getHigh().doubleValue());
             Num low = DecimalNum.valueOf(h.getLow() == null ? Double.NaN : h.getLow().doubleValue());

@@ -69,8 +69,9 @@ public class PolymarketService {
             return "NO_DATA_AVAILABLE: Market slug is required";
         }
 
-        String cacheKey = "polymarket:market:" + slug.toLowerCase();
-        return fileCache.getOrCompute(cacheKey, String.class, () -> fetchMarket(slug));
+        String normalized = slug.toLowerCase();
+        String cacheKey = "polymarket:market:" + normalized;
+        return fileCache.getOrCompute(cacheKey, String.class, () -> fetchMarket(normalized));
     }
 
     private String fetchMarket(String slug) {

@@ -5,26 +5,36 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.math.BigDecimal;
+import java.nio.channels.FileChannel;
+import java.nio.channels.FileLock;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Supplier;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /**
- * File-based decision memory log with atomic writes and regex parsing.
+ * File-based decision memory log with atomic writes, per-file locking, and regex parsing.
+ * Uses FileLock via FileChannel for cross-process mutual exclusion on all read-modify-write ops.
  * Format matches Python TradingAgents for cross-language compatibility.
  */
 @Component
 @Slf4j
 public class DecisionMemoryRepository {
 
-    private static final String ENTRY_SEPARATOR = "<!-- ENTRY_END -->";
+    /**
+     * Entry delimiter using record/group separator control characters (\u001E/\u001F)
+     * wrapping a deterministic UUID. Encoding-safe and unlikely to collide with content.
+     */
+    public static final String ENTRY_SEPARATOR = "\u001E<entry-sep:550e8400-e29b-41d4-a716-446655440000>\u001F";
+
     // Matches: [2026-01-15 | NVDA | Buy | pending]
     private static final Pattern PENDING_ENTRY_RE = Pattern.compile(
             "\\[(\\d{4}-\\d{2}-\\d{2})\\s*\\|\\s*(\\S+)\\s*\\|\\s*(\\S+)\\s*\\|\\s*(pending)\\]",
@@ -36,51 +46,29 @@ public class DecisionMemoryRepository {
             Pattern.CASE_INSENSITIVE
     );
     private static final Pattern DECISION_BLOCK_RE = Pattern.compile(
-            "DECISION:\\s*(.+?)\\s*\\nRATING:\\s*(.+?)\\s*\\nDATE:\\s*(.+?)\\s*\\nRETURNS:\\s*\\nALPHA:\\s*(.+?)(?=\\s*<!--|\\Z)",
+            "DECISION:\\s*(.+?)\\s*\\nRATING:\\s*(.+?)\\s*\\nDATE:\\s*(.+?)\\s*\\nRETURNS:\\s*\\nALPHA:\\s*([\\s\\S]*?)(?=\\s*\\n" + Pattern.quote(ENTRY_SEPARATOR) + "|\\s*\\Z)",
             Pattern.DOTALL
     );
     private static final Pattern REFLECTION_BLOCK_RE = Pattern.compile(
-            "REFLECTION:\\s*\\n(.+?)(?=\\n\\n<!--|\\Z)",
+            "REFLECTION:\\s*\\n([\\s\\S]*?)(?=\\n\\n" + Pattern.quote(ENTRY_SEPARATOR) + "|\\Z)",
             Pattern.DOTALL
     );
     private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
     private final Path memoryLogPath;
+    private final Path lockPath;
     private final int maxEntries;
-    private final Object cacheLock = new Object();
 
-    /** In-memory cache of file content, invalidated on write. */
-    private volatile String cachedContent;
-    /** Last-modified timestamp when cachedContent was read. */
-    private volatile long cachedModified;
-
-    /** Read file content, using in-memory buffer invalidated by mtime change. */
+    /** Read file content. No caching — each call reads from disk. */
     private String getContent() {
         try {
             if (!Files.exists(memoryLogPath)) {
                 return "";
             }
-            synchronized (cacheLock) {
-                long modified = Files.getLastModifiedTime(memoryLogPath).toMillis();
-                if (cachedContent != null && modified == cachedModified) {
-                    return cachedContent;
-                }
-                // Cache miss or file changed — re-read
-                cachedContent = Files.readString(memoryLogPath, StandardCharsets.UTF_8);
-                cachedModified = modified;
-                return cachedContent;
-            }
+            return Files.readString(memoryLogPath, StandardCharsets.UTF_8);
         } catch (Exception e) {
             log.error("Failed to read memory log: {}", e.getMessage());
             return "";
-        }
-    }
-
-    /** Invalidate cache after atomic writes. */
-    private void invalidateCache() {
-        synchronized (cacheLock) {
-            cachedContent = null;
-            cachedModified = 0;
         }
     }
 
@@ -89,6 +77,7 @@ public class DecisionMemoryRepository {
             @Value("${app.memory.log-max-entries:0}") int maxEntries
     ) {
         this.memoryLogPath = Path.of(logPath.replace("~", System.getProperty("user.home")));
+        this.lockPath = memoryLogPath.resolveSibling(memoryLogPath.getFileName() + ".lock");
         this.maxEntries = maxEntries;
         ensureFileExists();
     }
@@ -102,15 +91,57 @@ public class DecisionMemoryRepository {
             if (!Files.exists(memoryLogPath)) {
                 Files.createFile(memoryLogPath);
             }
+            // Ensure lock file exists so FileChannel can open it
+            if (!Files.exists(lockPath)) {
+                Files.createFile(lockPath);
+            }
         } catch (Exception e) {
-            log.warn("Failed to ensure memory log file exists at {}: {}", memoryLogPath, e.getMessage());
+            log.warn("Failed to ensure memory log files exist at {}: {}", memoryLogPath, e.getMessage());
         }
+    }
+
+    /**
+     * Acquire an exclusive file lock, execute the supplied operation, then release.
+     * Uses a dedicated .lock file so the lock is independent of the data file.
+     */
+    private <T> T withLock(Supplier<T> op) {
+        FileLock lock = null;
+        try {
+            FileChannel channel = FileChannel.open(lockPath, StandardOpenOption.CREATE, StandardOpenOption.READ, StandardOpenOption.WRITE);
+            lock = channel.lock();
+            try {
+                return op.get();
+            } finally {
+                channel.close();
+            }
+        } catch (Exception e) {
+            log.error("Failed to acquire file lock for {}: {}", memoryLogPath, e.getMessage());
+            // Best-effort: if we got a lock, release it
+            if (lock != null) {
+                try { lock.release(); } catch (Exception ignored) {}
+            }
+            throw new RuntimeException("File lock failed for " + memoryLogPath, e);
+        }
+    }
+
+    /**
+     * Acquire an exclusive file lock, execute the supplied void operation, then release.
+     */
+    private void withLock(Runnable op) {
+        withLock(() -> {
+            op.run();
+            return null;
+        });
     }
 
     public void appendPending(String ticker, String tradeDate, String rating,
                               String executiveSummary, String investmentThesis) {
         String entry = buildPendingEntry(ticker, tradeDate, rating, executiveSummary, investmentThesis);
-        atomicAppend(entry);
+        withLock(() -> {
+            String existing = getContent().trim();
+            String combined = existing.isEmpty() ? entry : existing + "\n\n" + entry;
+            atomicWrite(combined + "\n");
+        });
     }
 
     private String buildPendingEntry(String ticker, String tradeDate, String rating,
@@ -123,22 +154,24 @@ public class DecisionMemoryRepository {
                 DATE: %s
                 RETURNS:
                 ALPHA: %s
-                <!-- ENTRY_END -->
+                %s
                 """.formatted(
                 tradeDate, ticker, rating,
                 ticker, rating, tradeDate,
-                investmentThesis
+                investmentThesis,
+                ENTRY_SEPARATOR
         );
     }
 
     /**
      * Resolve a pending decision with actual returns and reflection.
+     * Read-modify-write is protected by file-level lock.
      * @return true if entry found and resolved, false otherwise
      */
     public boolean resolve(String ticker, String tradeDate, BigDecimal rawReturn,
                         BigDecimal alphaReturn, String benchmark, int daysHeld,
                         String reflection) {
-        try {
+        return withLock(() -> {
             String content = getContent();
             String[] entries = splitEntries(content);
             StringBuilder newContent = new StringBuilder();
@@ -164,12 +197,8 @@ public class DecisionMemoryRepository {
             }
 
             atomicWrite(newContent.toString().trim());
-            invalidateCache();
             return true;
-        } catch (Exception e) {
-            log.error("Failed to resolve decision for {} on {}: {}", ticker, tradeDate, e.getMessage());
-            return false;
-        }
+        });
     }
 
     private String buildResolvedEntry(String ticker, String tradeDate, String rating,
@@ -308,7 +337,7 @@ public class DecisionMemoryRepository {
     public void rotate() {
         if (maxEntries <= 0) return;
 
-        try {
+        withLock(() -> {
             String content = getContent();
             String[] entries = splitEntries(content);
 
@@ -352,17 +381,13 @@ public class DecisionMemoryRepository {
             }
 
             atomicWrite(newContent.toString().trim());
-            invalidateCache();
             log.info("Rotated memory log: removed {} oldest resolved entries", toRemove);
-
-        } catch (Exception e) {
-            log.error("Failed to rotate memory log: {}", e.getMessage());
-        }
+        });
     }
 
     /** Truncate to last complete entry on corruption. */
     public void recoverFromCorruption() {
-        try {
+        withLock(() -> {
             String content = getContent();
             int lastSeparator = content.lastIndexOf(ENTRY_SEPARATOR);
             if (lastSeparator > 0) {
@@ -370,46 +395,64 @@ public class DecisionMemoryRepository {
                 atomicWrite(recovered);
                 log.info("Recovered memory log from corruption, truncated to last complete entry");
             }
-        } catch (Exception e) {
-            log.error("Failed to recover memory log from corruption: {}", e.getMessage());
-        }
+        });
     }
 
     // --- Split entries helper ---
 
-    /** Split log content into entries by ENTRY_SEPARATOR delimiter. */
+    /**
+     * Entry header pattern: [date | ticker | ...].
+     * Used to find entry boundaries when ENTRY_SEPARATOR is missing between entries.
+     */
+    private static final Pattern ENTRY_HEADER_RE = Pattern.compile("(?m)^\\[\\d{4}-\\d{2}-\\d{2}\\s*\\|");
+
+    /** Split log content into entries by ENTRY_SEPARATOR delimiter, then by entry headers. */
     private String[] splitEntries(String content) {
         if (content == null || content.isBlank()) return new String[0];
-        // Split on the separator, keeping it with each entry
-        String[] raw = content.split(Pattern.quote(ENTRY_SEPARATOR));
-        // Reattach separator to each entry
+        // First, split on the separator (separator is discarded, not reattached)
+        String[] raw = content.split(Pattern.quote(ENTRY_SEPARATOR), -1);
         List<String> entries = new ArrayList<>();
-        for (int i = 0; i < raw.length; i++) {
-            String entry = raw[i].trim();
-            if (entry.isEmpty()) continue;
-            if (i < raw.length - 1) {
-                entry = entry + "\n" + ENTRY_SEPARATOR;
+        for (String chunk : raw) {
+            String trimmed = chunk.trim();
+            if (trimmed.isEmpty()) continue;
+            // Split each chunk by entry headers to handle entries without separators between them
+            for (String entry : splitByHeaders(trimmed)) {
+                entries.add(entry);
             }
-            entries.add(entry);
+        }
+        return entries.toArray(new String[0]);
+    }
+
+    /** Split a chunk into individual entries by detecting entry header lines. */
+    private String[] splitByHeaders(String chunk) {
+        if (chunk.isBlank()) return new String[0];
+        Matcher matcher = ENTRY_HEADER_RE.matcher(chunk);
+        List<Integer> positions = new ArrayList<>();
+        while (matcher.find()) {
+            positions.add(matcher.start());
+        }
+        if (positions.isEmpty()) {
+            return new String[]{chunk.trim()};
+        }
+        List<String> entries = new ArrayList<>();
+        for (int i = 0; i < positions.size(); i++) {
+            int start = positions.get(i);
+            int end = (i + 1 < positions.size()) ? positions.get(i + 1) : chunk.length();
+            String entry = chunk.substring(start, end).trim();
+            if (!entry.isEmpty()) {
+                entries.add(entry);
+            }
         }
         return entries.toArray(new String[0]);
     }
 
     // --- Atomic write helpers ---
 
-    private void atomicAppend(String entry) {
-        try {
-            synchronized (cacheLock) {
-                String existing = getContent().trim();
-                String combined = existing.isEmpty() ? entry : existing + "\n\n" + entry;
-                atomicWrite(combined + "\n");
-                invalidateCache();
-            }
-        } catch (Exception e) {
-            log.error("Failed to append to memory log: {}", e.getMessage());
-        }
-    }
-
+    /**
+     * Atomic write via temp file + atomic rename.
+     * Must be called within a withLock() block for read-modify-write safety.
+     * The write itself is atomic (single process) via temp+rename.
+     */
     private void atomicWrite(String content) {
         try {
             Path tempFile = memoryLogPath.resolveSibling(memoryLogPath.getFileName() + ".tmp");

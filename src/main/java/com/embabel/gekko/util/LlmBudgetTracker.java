@@ -1,16 +1,20 @@
 package com.embabel.gekko.util;
 
+import java.util.Collections;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Limiter for LLM API calls per ticker.
  * Logs a warning when a ticker exceeds its soft budget limit.
  * Optionally enforces a hard limit that throws {@link BudgetExceededException}.
+ * <p>
+ * Uses an LRU map capped at {@code maxTickers} entries; the least-recently-accessed
+ * ticker is evicted when the cap is reached to prevent unbounded memory growth.
  */
 @Slf4j
 @Component
@@ -18,14 +22,24 @@ public class LlmBudgetTracker {
 
     private final int budget;
     private final boolean hardLimit;
-    private final Map<String, Integer> callCounts = new ConcurrentHashMap<>();
+    private final int maxTickers;
+    private final Map<String, Integer> callCounts;
 
     public LlmBudgetTracker(
             @Value("${llm.budget.max:30}") int maxBudget,
-            @Value("${llm.budget.hard-limit:false}") boolean hardLimit
+            @Value("${llm.budget.hard-limit:false}") boolean hardLimit,
+            @Value("${llm.budget.max-tickers:1000}") int maxTickers
     ) {
         this.budget = maxBudget;
         this.hardLimit = hardLimit;
+        this.maxTickers = maxTickers;
+        this.callCounts = Collections.synchronizedMap(
+                new LinkedHashMap<>(16, 0.75f, true) { // access-order LRU
+                    @Override
+                    protected boolean removeEldestEntry(Map.Entry<String, Integer> eldest) {
+                        return size() > maxTickers;
+                    }
+                });
     }
 
     /**

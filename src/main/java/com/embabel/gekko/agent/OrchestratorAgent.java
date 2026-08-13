@@ -152,12 +152,11 @@ public class OrchestratorAgent {
             memoryAgent.resolvePending(ticker.content(), tradeDate, null);
             log.info("Resolved pending decisions for {}", ticker.content());
         } catch (Exception e) {
-            log.error("Failed to resolve pending decisions for {}: {}", ticker.content(), e.getMessage());
+            log.error("Failed to resolve pending decisions for {}: {}", ticker.content(), e.getMessage(), e);
         }
     }
 
     @Action(description = "Generate past context from decision memory for injection into PM prompt")
-    @AchievesGoal(description = "Generate past context from decision memory for injection into agent prompts")
     public String generatePastContext(ResearchTypes.Ticker ticker) {
         try {
             String context = memoryAgent.generatePastContext(ticker.content());

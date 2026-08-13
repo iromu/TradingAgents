@@ -98,10 +98,10 @@ class VWMAIndicatorTest {
     }
 
     @Test
-    void getCountOfUnstableBars_returnsZero() {
+    void getCountOfUnstableBars_returnsPeriod() {
         BarSeries series = buildSeries(100.0);
         VWMAIndicator indicator = new VWMAIndicator(series, 5);
-        assertEquals(0, indicator.getCountOfUnstableBars());
+        assertEquals(5, indicator.getCountOfUnstableBars());
     }
 
     @Test

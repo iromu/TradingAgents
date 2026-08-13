@@ -1,7 +1,7 @@
 package com.embabel.gekko.util;
 
 import com.embabel.gekko.indicators.SubtractIndicator;
-import com.embabel.gekko.indicators.VWAPIndicator;
+import com.embabel.gekko.indicators.VWMAIndicator;
 import org.ta4j.core.BarSeries;
 import org.ta4j.core.Indicator;
 import org.ta4j.core.indicators.ATRIndicator;
@@ -12,25 +12,25 @@ import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 import org.ta4j.core.indicators.helpers.VolumeIndicator;
 import org.ta4j.core.num.Num;
 
-import java.util.HashMap;
 import java.util.Map;
 
 public class IndicatorMapper {
+
+    private static final Map<String, String> DESCRIPTIONS = Map.of(
+        "close_50_sma", "50 SMA: A medium-term trend indicator...",
+        "close_200_sma", "200 SMA: A long-term trend benchmark...",
+        "macd", "MACD: Computes momentum via differences of EMAs...",
+        "rsi", "RSI: Measures momentum to flag overbought/oversold conditions...",
+        "vwma", "VWMA: Volume Weighted Moving Average...",
+        "atr", "ATR: Average True Range...",
+        "boll", "Bollinger Bands middle line (20 SMA)..."
+    );
 
     /**
      * Returns a map of indicator codes to their descriptions.
      */
     public static Map<String, String> getDescriptions() {
-        Map<String, String> desc = new HashMap<>();
-        desc.put("close_50_sma", "50 SMA: A medium-term trend indicator...");
-        desc.put("close_200_sma", "200 SMA: A long-term trend benchmark...");
-        desc.put("macd", "MACD: Computes momentum via differences of EMAs...");
-        desc.put("rsi", "RSI: Measures momentum to flag overbought/oversold conditions...");
-        desc.put("vwma", "VWMA: Volume Weighted Moving Average...");
-        desc.put("atr", "ATR: Average True Range...");
-        desc.put("boll", "Bollinger Bands middle line (20 SMA)...");
-        // add other descriptions as needed
-        return desc;
+        return DESCRIPTIONS;
     }
 
     /**
@@ -76,7 +76,7 @@ public class IndicatorMapper {
                 return new RSIIndicator(close, 14);
 
             case "vwma":
-                return new VWAPIndicator(series, 20); // your custom VWAP indicator
+                return new VWMAIndicator(series, 20);
 
             case "atr":
                 return new ATRIndicator(series, 14);

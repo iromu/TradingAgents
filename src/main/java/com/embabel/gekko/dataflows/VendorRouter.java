@@ -46,8 +46,7 @@ public class VendorRouter {
             // ====================================================
 
             case "get_fundamentals" -> alphaVantageService.getFundamentals(
-                    str(params[0], null),
-                    str(params.length > 1 ? params[1] : null, null)
+                    str(params[0], null)
             );
 
             case "get_balance_sheet" -> alphaVantageService.getBalanceSheet(
@@ -78,10 +77,13 @@ public class VendorRouter {
                     str(params.length > 2 ? params[2] : null, "2030-01-01")
             );
 
+            // NewsDataTools.getGlobalNews(currDate, lookBackDays, limit)
+            // Alpha Vantage NEWS_SENTIMENT has no date params; currDate/lookBackDays
+            // are discarded, and the caller's limit becomes the API limit.
             case "get_global_news" -> alphaVantageService.getGlobalNews(
-                    str(params[0], "general"),         // topic
-                    integer(params.length > 1 ? params[1] : null, 10), // limit
-                    integer(params.length > 2 ? params[2] : null, 1)  // page
+                    null,                              // topic (null = no filter)
+                    integer(params.length > 2 ? params[2] : null, 10), // limit (from caller's limit param)
+                    integer(params.length > 3 ? params[3] : null, 1)   // page (optional, defaults to 1)
             );
 
             // ====================================================

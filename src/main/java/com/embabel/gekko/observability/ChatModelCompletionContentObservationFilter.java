@@ -11,6 +11,7 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.util.StringUtils;
 
 import java.util.List;
+import java.util.regex.Pattern;
 
 /**
  * Observation filter that extracts prompt and completion text from a
@@ -22,11 +23,16 @@ import java.util.List;
  * - the model completions (concatenated into {@code gen_ai.completion})
  * <p>
  * These values are added as high-cardinality key-values which are useful for
- * debugging and tracing generation results. Be mindful of privacy and PII —
- * in production you may want to redact or sample these values.</p>
+ * debugging and tracing generation results. Content is truncated to
+ * {@link #MAX_CONTENT_LENGTH} characters and ticker-like patterns are
+ * redacted to {@code [TICKER]} to limit PII leakage.</p>
  */
 @Component
 public class ChatModelCompletionContentObservationFilter implements ObservationFilter {
+
+    private static final int MAX_CONTENT_LENGTH = 500;
+
+    private static final Pattern TICKER_PATTERN = Pattern.compile("\\b[A-Z]{1,6}\\b");
 
     /**
      * Map an incoming observation context to a possibly enriched context.
@@ -50,32 +56,15 @@ public class ChatModelCompletionContentObservationFilter implements ObservationF
         var prompts = processPrompts(chatModelObservationContext);
         var completions = processCompletion(chatModelObservationContext);
 
-        // Attach concatenated prompts as a high-cardinality key
-        chatModelObservationContext.addHighCardinalityKeyValue(new KeyValue() {
-            @Override
-            public String getKey() {
-                return "gen_ai.prompt";
-            }
+        // Attach concatenated prompts as a high-cardinality key (redacted)
+        chatModelObservationContext.addHighCardinalityKeyValue(
+                RedactedKeyValue.of("gen_ai.prompt",
+                        ObservabilityHelper.concatenateStrings(prompts)));
 
-            @Override
-            public String getValue() {
-                // Use helper to safely concatenate list elements
-                return ObservabilityHelper.concatenateStrings(prompts);
-            }
-        });
-
-        // Attach concatenated completions as a high-cardinality key
-        chatModelObservationContext.addHighCardinalityKeyValue(new KeyValue() {
-            @Override
-            public String getKey() {
-                return "gen_ai.completion";
-            }
-
-            @Override
-            public String getValue() {
-                return ObservabilityHelper.concatenateStrings(completions);
-            }
-        });
+        // Attach concatenated completions as a high-cardinality key (redacted)
+        chatModelObservationContext.addHighCardinalityKeyValue(
+                RedactedKeyValue.of("gen_ai.completion",
+                        ObservabilityHelper.concatenateStrings(completions)));
 
         // Agent Name (disabled)
         return chatModelObservationContext;
@@ -122,6 +111,46 @@ public class ChatModelCompletionContentObservationFilter implements ObservationF
                     .toList();
         } else {
             return List.of();
+        }
+    }
+
+    /**
+     * Reusable {@link KeyValue} implementation that redacts ticker-like
+     * patterns and truncates long values.
+     * <p>
+     * Replaces word tokens matching {@code [A-Z]{1,6}} with {@code [TICKER]}
+     * and truncates the result to {@link #MAX_CONTENT_LENGTH} characters to
+     * limit PII leakage and high-cardinality trace attribute bloat.</p>
+     */
+    private static final class RedactedKeyValue implements KeyValue {
+
+        private final String key;
+        private final String redactedValue;
+
+        private RedactedKeyValue(String key, String redactedValue) {
+            this.key = key;
+            this.redactedValue = redactedValue;
+        }
+
+        static RedactedKeyValue of(String key, String raw) {
+            if (raw == null) {
+                return new RedactedKeyValue(key, null);
+            }
+            String redacted = TICKER_PATTERN.matcher(raw).replaceAll("[TICKER]");
+            if (redacted.length() > MAX_CONTENT_LENGTH) {
+                redacted = redacted.substring(0, MAX_CONTENT_LENGTH) + "… (truncated)";
+            }
+            return new RedactedKeyValue(key, redacted);
+        }
+
+        @Override
+        public String getKey() {
+            return key;
+        }
+
+        @Override
+        public String getValue() {
+            return redactedValue;
         }
     }
 }

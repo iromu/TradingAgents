@@ -44,7 +44,7 @@ class DecisionMemoryRepositoryTest {
         assertTrue(content.contains("RATING: Buy"));
         assertTrue(content.contains("DATE: 2026-01-15"));
         assertTrue(content.contains("ALPHA: Growth thesis"));
-        assertTrue(content.contains("<!-- ENTRY_END -->"));
+        assertTrue(content.contains(DecisionMemoryRepository.ENTRY_SEPARATOR));
     }
 
     @Test
@@ -166,8 +166,8 @@ class DecisionMemoryRepositoryTest {
                     REFLECTION:
                     AAPL lesson %d.
 
-                    <!-- ENTRY_END -->
-                    """, 10 + i, i * 2.0, i * 1.0, i);
+                    %s
+                    """, 10 + i, i * 2.0, i * 1.0, i, DecisionMemoryRepository.ENTRY_SEPARATOR);
             var field = DecisionMemoryRepository.class.getDeclaredField("memoryLogPath");
             field.setAccessible(true);
             Path path = (Path) field.get(repo);
@@ -200,8 +200,8 @@ class DecisionMemoryRepositoryTest {
                     REFLECTION:
                     AAPL lesson %d.
 
-                    <!-- ENTRY_END -->
-                    """, 1 + (i % 28), i * 1.0, i * 0.5, i);
+                    %s
+                    """, 1 + (i % 28), i * 1.0, i * 0.5, i, DecisionMemoryRepository.ENTRY_SEPARATOR);
             var field = DecisionMemoryRepository.class.getDeclaredField("memoryLogPath");
             field.setAccessible(true);
             Path path = (Path) field.get(repo);
@@ -237,8 +237,8 @@ class DecisionMemoryRepositoryTest {
                     REFLECTION:
                     %s lesson %d.
 
-                    <!-- ENTRY_END -->
-                    """, i + 1, tickers[i], (i + 1) * 0.5, (i + 1) * 0.3, tickers[i], i + 1);
+                    %s
+                    """, i + 1, tickers[i], (i + 1) * 0.5, (i + 1) * 0.3, tickers[i], i + 1, DecisionMemoryRepository.ENTRY_SEPARATOR);
             var field = DecisionMemoryRepository.class.getDeclaredField("memoryLogPath");
             field.setAccessible(true);
             Path path = (Path) field.get(repo);
@@ -274,8 +274,8 @@ class DecisionMemoryRepositoryTest {
                     REFLECTION:
                     Lesson %d.
 
-                    <!-- ENTRY_END -->
-                    """, i, i * 1.0, i * 0.5, i);
+                    %s
+                    """, i, i * 1.0, i * 0.5, i, DecisionMemoryRepository.ENTRY_SEPARATOR);
             var field = DecisionMemoryRepository.class.getDeclaredField("memoryLogPath");
             field.setAccessible(true);
             Path path = (Path) field.get(repo);
@@ -308,8 +308,8 @@ class DecisionMemoryRepositoryTest {
                     REFLECTION:
                     Lesson %d.
 
-                    <!-- ENTRY_END -->
-                    """, i, i * 1.0, i * 0.5, i);
+                    %s
+                    """, i, i * 1.0, i * 0.5, i, DecisionMemoryRepository.ENTRY_SEPARATOR);
             var field = DecisionMemoryRepository.class.getDeclaredField("memoryLogPath");
             field.setAccessible(true);
             Path path = (Path) field.get(repo);
@@ -341,8 +341,8 @@ class DecisionMemoryRepositoryTest {
                     REFLECTION:
                     Lesson %d.
 
-                    <!-- ENTRY_END -->
-                    """, i, i * 1.0, i * 0.5, i);
+                    %s
+                    """, i, i * 1.0, i * 0.5, i, DecisionMemoryRepository.ENTRY_SEPARATOR);
             var field = DecisionMemoryRepository.class.getDeclaredField("memoryLogPath");
             field.setAccessible(true);
             Path path = (Path) field.get(repo);
@@ -360,10 +360,13 @@ class DecisionMemoryRepositoryTest {
     @Test
     void rotate_preservesPendingEntries() throws Exception {
         var repo = createRepository(tempDir.resolve("memory.md").toString(), 2);
-        // Add 3 resolved entries
+        // Add a pending entry first (so it's in its own split chunk before resolved entries)
+        repo.appendPending("AAPL", "2026-01-15", "Buy", "Summary", "Thesis");
+        // Add 3 resolved entries after the pending entry
         for (int i = 1; i <= 3; i++) {
             String entry = String.format(
                     """
+
                     [2026-01-%02d | AAPL | Buy | +%.1f%% | +%.1f%% | 5d]
 
                     DECISION:
@@ -374,16 +377,14 @@ class DecisionMemoryRepositoryTest {
                     REFLECTION:
                     Resolved lesson %d.
 
-                    <!-- ENTRY_END -->
-                    """, i, i * 1.0, i * 0.5, i);
+                    %s
+                    """, i, i * 1.0, i * 0.5, i, DecisionMemoryRepository.ENTRY_SEPARATOR);
             var field = DecisionMemoryRepository.class.getDeclaredField("memoryLogPath");
             field.setAccessible(true);
             Path path = (Path) field.get(repo);
-            Files.writeString(path, entry + "\n", StandardCharsets.UTF_8,
+            Files.writeString(path, entry, StandardCharsets.UTF_8,
                     java.nio.file.StandardOpenOption.APPEND);
         }
-        // Add a pending entry (should be preserved)
-        repo.appendPending("AAPL", "2026-01-15", "Buy", "Summary", "Thesis");
 
         repo.rotate();
 
@@ -427,9 +428,9 @@ class DecisionMemoryRepositoryTest {
 
                 **Investment Thesis**: Test
 
-                <!-- ENTRY_END -->
+                %s
                 [2026-01-16 | MSFT | Hold | pen
-                """;
+                """.formatted(DecisionMemoryRepository.ENTRY_SEPARATOR);
         var field = DecisionMemoryRepository.class.getDeclaredField("memoryLogPath");
         field.setAccessible(true);
         Path path = (Path) field.get(repo);
@@ -455,8 +456,8 @@ class DecisionMemoryRepositoryTest {
 
                 **Investment Thesis**: Test
 
-                <!-- ENTRY_END -->
-                """;
+                %s
+                """.formatted(DecisionMemoryRepository.ENTRY_SEPARATOR);
         var field = DecisionMemoryRepository.class.getDeclaredField("memoryLogPath");
         field.setAccessible(true);
         Path path = (Path) field.get(repo);

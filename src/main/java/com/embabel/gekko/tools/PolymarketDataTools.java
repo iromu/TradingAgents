@@ -27,8 +27,11 @@ public class PolymarketDataTools {
             String query
     ) {
         if (!enabled) return "NO_DATA_AVAILABLE: Polymarket data is disabled (app.polymarket.enabled=false)";
+        if (query == null || query.isBlank()) {
+            return "NO_DATA_AVAILABLE: query must not be null or blank";
+        }
         try {
-            return polymarketService.searchMarkets(query);
+            return polymarketService.searchMarkets(query.trim());
         } catch (Exception e) {
             log.error("Error fetching Polymarket data for '{}': {}", query, e.getMessage());
             return "NO_DATA_AVAILABLE: Failed to fetch Polymarket data: " + e.getMessage();

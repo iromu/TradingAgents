@@ -255,7 +255,7 @@ public class ProcessStatusController {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Process not found");
         }
 
-        synchronized (agentProcess) {
+        synchronized (AgentUtils.getProcessLock(processId)) {
             // Check process is still WAITING — prevent duplicate submissions
             if (agentProcess.getStatus() != AgentProcessStatusCode.WAITING) {
                 model.addAttribute("error", "Process is no longer in WAITING state. It may have already been resumed or failed.");

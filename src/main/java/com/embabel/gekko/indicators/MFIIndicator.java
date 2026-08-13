@@ -1,14 +1,17 @@
 package com.embabel.gekko.indicators;
 
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
+
 import org.ta4j.core.Bar;
 import org.ta4j.core.BarSeries;
 import org.ta4j.core.indicators.AbstractIndicator;
-import org.ta4j.core.num.DecimalNum;
 import org.ta4j.core.num.Num;
+import org.ta4j.core.num.NumFactory;
 
 /**
  * Money Flow Index (MFI) over a rolling period
  */
+@RegisterReflectionForBinding(MFIIndicator.class)
 public class MFIIndicator extends AbstractIndicator<Num> {
 
     private final BarSeries series;
@@ -23,18 +26,19 @@ public class MFIIndicator extends AbstractIndicator<Num> {
     @Override
     public Num getValue(int index) {
         int start = Math.max(series.getBeginIndex(), index - period + 1);
+        NumFactory nf = series.numFactory();
 
-        Num positiveFlow = DecimalNum.valueOf(0);
-        Num negativeFlow = DecimalNum.valueOf(0);
+        Num positiveFlow = nf.zero();
+        Num negativeFlow = nf.zero();
 
         for (int i = start + 1; i <= index; i++) {
             Bar prev = series.getBar(i - 1);
             Bar curr = series.getBar(i);
 
             Num typicalPrev = prev.getHighPrice().plus(prev.getLowPrice()).plus(prev.getClosePrice())
-                    .dividedBy(DecimalNum.valueOf(3));
+                    .dividedBy(nf.three());
             Num typicalCurr = curr.getHighPrice().plus(curr.getLowPrice()).plus(curr.getClosePrice())
-                    .dividedBy(DecimalNum.valueOf(3));
+                    .dividedBy(nf.three());
 
             Num rawFlow = typicalCurr.multipliedBy(curr.getVolume());
 
@@ -46,9 +50,9 @@ public class MFIIndicator extends AbstractIndicator<Num> {
             // if equal, no flow counted
         }
 
-        if (negativeFlow.isZero()) return DecimalNum.valueOf(100); // maxed out
+        if (negativeFlow.isZero()) return nf.hundred(); // maxed out
         Num moneyRatio = positiveFlow.dividedBy(negativeFlow);
-        return DecimalNum.valueOf(100).minus(DecimalNum.valueOf(100).dividedBy(moneyRatio.plus(DecimalNum.valueOf(1))));
+        return nf.hundred().minus(nf.hundred().dividedBy(moneyRatio.plus(nf.one())));
     }
 
     @Override

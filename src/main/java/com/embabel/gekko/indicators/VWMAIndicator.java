@@ -1,5 +1,6 @@
 package com.embabel.gekko.indicators;
 
+import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.ta4j.core.Bar;
 import org.ta4j.core.BarSeries;
 import org.ta4j.core.indicators.AbstractIndicator;
@@ -9,6 +10,7 @@ import org.ta4j.core.num.Num;
 /**
  * Rolling-window VWMA (Volume Weighted Moving Average)
  */
+@RegisterReflectionForBinding(VWMAIndicator.class)
 public class VWMAIndicator extends AbstractIndicator<Num> {
 
     private final BarSeries series;
@@ -40,6 +42,6 @@ public class VWMAIndicator extends AbstractIndicator<Num> {
 
     @Override
     public int getCountOfUnstableBars() {
-        return 0;
+        return period;
     }
 }
