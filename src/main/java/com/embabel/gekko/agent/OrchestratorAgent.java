@@ -50,8 +50,6 @@ import static com.embabel.common.ai.model.ModelProvider.CHEAPEST_ROLE;
 @Slf4j
 public class OrchestratorAgent {
 
-    public static final String TICKER_MODEL = BEST_ROLE;
-
     private final FileCache cache;
     private final InstrumentIdentityAgent identityAgent;
     private final DecisionMemoryAgent memoryAgent;
@@ -63,7 +61,7 @@ public class OrchestratorAgent {
     private com.embabel.agent.core.Agent getDebateAgent() {
         var agent = debateAgentProvider.getObject();
         if (agent == null) {
-            throw new IllegalStateException("No DebateAgent registered — check that DebateAgent has a @Component annotation");
+            throw new IllegalStateException("Debate agent not available — ObjectProvider returned null; verify a com.embabel.agent.core.Agent bean is registered");
         }
         return agent;
     }
@@ -125,6 +123,9 @@ public class OrchestratorAgent {
     ) {
         var model = new HashMap<String, Object>();
         model.put("past_memory_str", generatePastContext(ticker));
+        // "history" and "user_feedback" are intentionally empty at this stage:
+        // research plan generation precedes the debate loop (which produces history)
+        // and the HITL approval gate (which collects user feedback).
         model.put("history", "");
         model.put("human_approved", false);
         model.put("user_feedback", "");

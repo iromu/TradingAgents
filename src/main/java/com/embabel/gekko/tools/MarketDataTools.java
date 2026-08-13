@@ -59,6 +59,9 @@ public class MarketDataTools {
             @ToolParam(description = "Current date in yyyy-MM-dd format") String currDate,
             @ToolParam(description = "Lookback period in days") int lookbackDays
     ) {
+        if (lookbackDays < 1 || lookbackDays > 3650) {
+            throw new IllegalArgumentException("lookbackDays must be between 1 and 3650, was " + lookbackDays);
+        }
         log.info("Getting indicators {} for ticker {} with lookback {} days", indicators, ticker, lookbackDays);
         try {
             List<String> indicatorCodes = new ArrayList<>();

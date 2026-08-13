@@ -67,7 +67,7 @@ public class DebateAgent {
     private static final Pattern JINJA_VAR_UNCLOSED = Pattern.compile("(?s)\\{\\{[^}]*$");
     private static final Pattern JINJA_STMT_UNCLOSED = Pattern.compile("(?s)\\{%[^%]*$");
     private static final Pattern CODE_FENCE = Pattern.compile("(?s)```[\\s\\S]*?```");
-    private static final Pattern CODE_FENCE_UNCLOSED = Pattern.compile("(?s)```.*$");
+    private static final Pattern CODE_FENCE_UNCLOSED = Pattern.compile("(?s)```.*?$");
 
     // Pre-compiled rating keyword patterns (find-based, case-insensitive, word-boundary)
     private static final Pattern BUY_PAT = Pattern.compile("\\bbuy\\b", Pattern.CASE_INSENSITIVE);

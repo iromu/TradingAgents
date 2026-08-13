@@ -39,6 +39,8 @@ public class AlphaVantageService {
     @Value("${app.alphavantage.output-directory:data/alphavantage}")
     private String cacheDir;
 
+    private Path absoluteCacheDir;
+
     @Value("${app.alphavantage.connect-timeout-ms:10000}")
     private int connectTimeoutMs;
 
@@ -58,6 +60,8 @@ public class AlphaVantageService {
     public void init() {
         int connTimeout = connectTimeoutMs > 0 ? connectTimeoutMs : 10000;
         int readTimeout = readTimeoutMs > 0 ? readTimeoutMs : 30000;
+
+        this.absoluteCacheDir = Paths.get(System.getProperty("user.dir"), cacheDir).toAbsolutePath().normalize();
 
         // RestTemplate with timeouts.
         // API key is appended to URLs in getDataWithCache() — Spring Boot does not log
@@ -202,9 +206,9 @@ public class AlphaVantageService {
 
     private String getDataWithCache(String function, String cacheKey, UrlBuilderCustomizer customizer) {
         try {
-            Files.createDirectories(Paths.get(cacheDir));
+            Files.createDirectories(absoluteCacheDir);
 
-            String filename = String.format("%s/%s.json", cacheDir, cacheKey);
+            String filename = absoluteCacheDir.resolve(cacheKey + ".json").toString();
             File cacheFile = new File(filename);
 
             // Read from cache if available

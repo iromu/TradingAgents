@@ -17,6 +17,7 @@ public record TraderAgentConfig(
         String outputDirectory,
         double similarityThreshold,
         int maxDebateIterations,
+        int researchTokenBudget,
         String provider,
         String bestModel,
         String cheapestModel,
@@ -44,6 +45,10 @@ public record TraderAgentConfig(
         if (maxDebateIterations <= 0) {
             maxDebateIterations = 5;
             log.info("Using default maxDebateIterations: 5");
+        }
+        if (researchTokenBudget <= 0) {
+            researchTokenBudget = 16384;
+            log.info("Using default researchTokenBudget: 16384");
         }
     }
 }

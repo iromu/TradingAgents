@@ -48,10 +48,11 @@ public class HitlAgenticEventListener implements AgenticEventListener {
                     .orElse("unknown");
             String failureInfo = Optional.ofNullable(process.getFailureInfo()).map(Object::toString).orElse("No failure details available");
 
-            // createSession uses putIfAbsent internally — atomic check-and-create.
-            // Returns the existing session if one was created concurrently.
+            // createSession uses computeIfAbsent internally — atomic check-and-create.
+            // If the returned session was already marked as userActionTaken, another
+            // thread created it first.
             HitlSession session = hitlService.createSession(processId, agentName, failureInfo);
-            if (!session.processId().equals(processId) || session.userActionTaken()) {
+            if (session.userActionTaken()) {
                 // Another thread created a session first — log for debugging.
                 log.info("HITL session for process {} already exists (agent='{}')", processId, agentName);
             } else {

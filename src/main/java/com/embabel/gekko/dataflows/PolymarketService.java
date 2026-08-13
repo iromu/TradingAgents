@@ -112,7 +112,8 @@ public class PolymarketService {
                 }
             }
             String outcomeStr = outcome != null ? outcome.toString() : "N/A";
-            String prob = AgentUtils.mapString(market, "probability", AgentUtils.mapString(market, "price", outcomeStr));
+            String prob = AgentUtils.mapString(market, "probability",
+                    AgentUtils.mapString(market, "price", "N/A"));
 
             sb.append("| [").append(title).append("](").append("https://polymarket.com/mark/").append(slug).append(") | ")
                     .append(outcomeStr).append(" | ")

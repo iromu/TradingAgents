@@ -165,18 +165,21 @@ public class HitlService implements DisposableBean {
     }
 
     /**
-     * Evict the oldest session if max capacity is reached.
+     * Evict the oldest expired session if max capacity is reached.
+     * Only evicts sessions that have exceeded the TTL; if no expired sessions exist, does nothing.
      */
     private void evictIfFull() {
         if (sessions.size() >= maxSessions) {
-            String oldestKey = sessions.entrySet().stream()
+            LocalDateTime cutoff = LocalDateTime.now().minus(sessionTtl);
+            String oldestExpiredKey = sessions.entrySet().stream()
+                    .filter(e -> e.getValue().occurredAt().isBefore(cutoff))
                     .min(Map.Entry.<String, HitlSession>comparingByValue(
                             java.util.Comparator.comparing(HitlService.HitlSession::occurredAt)
                     ))
                     .map(Map.Entry::getKey)
                     .orElse(null);
-            if (oldestKey != null) {
-                sessions.remove(oldestKey);
+            if (oldestExpiredKey != null) {
+                sessions.remove(oldestExpiredKey);
             }
         }
     }

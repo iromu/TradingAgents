@@ -8,6 +8,7 @@ import com.embabel.agent.core.Budget;
 import com.embabel.agent.core.ProcessOptions;
 import com.embabel.agent.core.Verbosity;
 import com.embabel.gekko.agent.OrchestratorAgent;
+import com.embabel.gekko.config.TraderAgentConfig;
 import com.embabel.gekko.util.AgentUtils;
 import org.springframework.stereotype.Service;
 
@@ -19,9 +20,11 @@ import org.springframework.stereotype.Service;
 public class ResearchPlanService {
 
     private final AgentPlatform agentPlatform;
+    private final int researchTokenBudget;
 
-    public ResearchPlanService(AgentPlatform agentPlatform) {
+    public ResearchPlanService(AgentPlatform agentPlatform, TraderAgentConfig config) {
         this.agentPlatform = agentPlatform;
+        this.researchTokenBudget = config.researchTokenBudget();
     }
 
     /**
@@ -36,7 +39,7 @@ public class ResearchPlanService {
                 agent,
                 ProcessOptions.DEFAULT
                         .withVerbosity(new Verbosity(true, true))
-                        .withBudget(new Budget().withTokens(16384)),
+                        .withBudget(new Budget().withTokens(researchTokenBudget)),
                 input
         );
         agentPlatform.start(agentProcess);
@@ -55,7 +58,7 @@ public class ResearchPlanService {
                 agent,
                 ProcessOptions.DEFAULT
                         .withVerbosity(new Verbosity(true, true))
-                        .withBudget(new Budget().withTokens(16384)),
+                        .withBudget(new Budget().withTokens(researchTokenBudget)),
                 input
         );
         agentPlatform.start(agentProcess);
