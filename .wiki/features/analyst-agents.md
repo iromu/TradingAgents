@@ -5,6 +5,8 @@ status: "active"
 language: "default"
 source_paths:
   - "src/main/java/com/embabel/gekko/agent/DebateAgent.java"
+  - "src/main/java/com/embabel/gekko/agent/researchers/BullResearcher.java"
+  - "src/main/java/com/embabel/gekko/agent/researchers/BearResearcher.java"
   - "src/main/java/com/embabel/gekko/tools/FundamentalDataTools.java"
   - "src/main/java/com/embabel/gekko/tools/NewsDataTools.java"
   - "src/main/resources/prompts/analysts/"

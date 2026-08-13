@@ -50,7 +50,7 @@ OrchestratorAgent (entry point)
 | **DebateAgent** | `agent` | Workflow orchestrator: 4 analyst reports, debate briefs, debate loop, trader, risk debate, portfolio decision, HITL review, final plan |
 | **DebateLoopAgent** | `agent` | Bull/bear iterative debate with convergence detection (Jaccard similarity) and LLM budget tracking |
 | **RiskDebateAgent** | `agent` | 3-round risk debate (aggressive → conservative → neutral) with judgment |
-| **Trader** | `agent` | Translates research plan into concrete transaction proposal |
+| **Trader** | `agent` | `@Agent` — translates research plan into concrete transaction proposal |
 | **PortfolioManager** | `agent` | Synthesizes risk debate, research plan, and trader proposal into final decision |
 
 ## Supplementary Components

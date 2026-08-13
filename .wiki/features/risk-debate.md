@@ -39,9 +39,13 @@ The risk debate evaluates a trader proposal from multiple risk perspectives usin
 
 The risk judge first tries to parse structured output (`RiskAssessmentOutput` record). If that fails, it falls back to keyword-based classification:
 
-- **RISKY:** Contains "buy" + risk words ("risk", "bold", "aggressive", "high")
-- **CONSERVATIVE:** Contains sell words ("sell", "avoid", "cautious", "conservative", "safe")
+- **RISKY:** Contains "high risk", "risky", "aggressive", "bold move", "strong buy", or "overweight"
+- **CONSERVATIVE:** Contains "low risk", "conservative", "safe", "avoid", "cautious", or "underweight"
 - **NEUTRAL:** Default
+
+### Response Formatting
+
+Debate responses are now formatted with round numbers (e.g., "Aggressive (Round 1):") for better context when the LLM judges the debate output. Null parameters are rejected early via `Objects.requireNonNull()`.
 
 ## Input
 

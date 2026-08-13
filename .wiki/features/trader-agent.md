@@ -52,12 +52,28 @@ Orchestrates the full research workflow after plan approval. Calls sub-agents vi
 
 ### Input Sanitization
 
-`sanitizeForPrompt()` protects against prompt injection:
-- Strips Jinja syntax (`{{`, `}}`, `{%`, `%}`)
-- Removes code fences
-- Rejects oversized input (>10,000 chars)
-- Truncates output (>1,000 chars)
-- Uses pre-compiled regex patterns (ReDoS mitigation)
+Two sanitization methods protect against prompt injection:
+
+- **`sanitizeValue()`** — Generic value sanitizer (no XML wrapper). Used for `history`, `portfolio_decision`, and other template values. Strips Jinja syntax, code fences, control characters, and truncates oversized input.
+- **`sanitizeForPrompt()`** — Wraps user feedback in `<user_feedback>` XML tags after calling `sanitizeValue()`. Used specifically for user feedback injection.
+
+Both methods:
+- Strip Jinja syntax (`{{`, `}}`, `{%`, `%}`)
+- Remove code fences
+- Reject oversized input (>10,000 chars)
+- Truncate output (>1,000 chars)
+- Use pre-compiled regex patterns (ReDoS mitigation)
+
+### Rating Extraction
+
+`extractRating()` uses priority-based keyword matching with pre-compiled word-boundary patterns:
+- Priority: Buy/Sell > Overweight/Underweight > Hold (default)
+- Uses `find()` with pre-compiled patterns instead of `matches()` scanning the whole string
+- Word boundaries prevent false positives (e.g., "selling" doesn't match "sell")
+
+### Decision Storage Fix
+
+`storeFinalDecision()` is now called outside the `FileCache.getOrCompute()` supplier, ensuring decisions are stored on every call — not just cache misses. Previously, cached results would skip decision storage.
 
 ## Data Flow
 

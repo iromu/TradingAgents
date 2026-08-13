@@ -6,6 +6,8 @@ language: "default"
 source_paths:
   - "src/main/java/com/embabel/gekko/domain/ResearchTypes.java"
   - "src/main/java/com/embabel/gekko/htmx/HitlService.java"
+  - "src/main/java/com/embabel/gekko/agent/memory/DecisionMemoryRepository.java"
+  - "src/main/java/com/embabel/gekko/agent/identity/InstrumentContextPromptContributor.java"
 updated_at: "2026-08-13"
 ---
 
@@ -110,3 +112,20 @@ record HitlSession(String processId, String agentName, String failureInfo,
 - `agentName` — which agent failed
 - `failureInfo` — what went wrong
 - `resolved` — whether the user has taken action
+
+## Decision Memory
+
+`DecisionMemoryRepository` stores trading decisions in a file-based log with cross-process safety:
+
+- **FileLock** via `FileChannel` on a dedicated `.lock` file for mutual exclusion
+- **Entry separator** uses control characters (`\u001E...\u001F`) for encoding safety
+- **Atomic writes** via temp file + rename
+- **`withLock()` pattern** wraps all read-modify-write operations
+
+## Instrument Context
+
+`InstrumentContextPromptContributor` uses pure `ThreadLocal<InstrumentContext>` for thread-safe prompt injection:
+
+- Context is set by `OrchestratorAgent` after identity resolution
+- `clear()` method explicitly clears ThreadLocal after each agent turn
+- No `ConcurrentHashMap` — simplified from the previous two-level approach

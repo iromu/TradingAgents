@@ -21,6 +21,7 @@ The project has **62 test classes** across agent, data, tool, utility, and integ
 | `AllAgentsPlanValidationTest` | `agent/AllAgentsPlanValidationTest.java` | Plan validation across all agents |
 | `DebateAgentHelperTest` | `agent/DebateAgentHelperTest.java` | DebateAgent helper methods |
 | `DebateAgentLLMTest` | `agent/DebateAgentLLMTest.java` | DebateAgent with mocked LLM |
+| `DebateAgentPromptInjectionTest` | `agent/DebateAgentPromptInjectionTest.java` | Prompt injection defenses: `sanitizeValue()`, `extractRating()` |
 | `DebateAgentSubProcessIntegrationTest` | `agent/DebateAgentSubProcessIntegrationTest.java` | DebateAgent asSubProcess integration |
 | `DebateBriefsUnitTest` | `agent/DebateBriefsUnitTest.java` | Brief distillation logic |
 | `DebateLoopAgentTest` | `agent/DebateLoopAgentTest.java` | Bull/bear loop and convergence detection |
@@ -144,7 +145,7 @@ The project has **62 test classes** across agent, data, tool, utility, and integ
 
 | Category | Count |
 |----------|-------|
-| Agent tests | 25 |
+| Agent tests | 26 |
 | Data flow tests | 4 |
 | Tool tests | 7 |
 | Indicator tests | 4 |
@@ -152,4 +153,4 @@ The project has **62 test classes** across agent, data, tool, utility, and integ
 | Configuration tests | 3 |
 | Web tests | 3 |
 | Integration tests | 6 |
-| **Total** | **62** |
+| **Total** | **63** |
