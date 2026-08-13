@@ -11,7 +11,7 @@ source_paths:
   - "src/main/java/com/embabel/gekko/agent/Trader.java"
   - "src/main/java/com/embabel/gekko/agent/managers/PortfolioManager.java"
   - "src/main/java/com/embabel/gekko/web/TradingHtmxController.java"
-updated_at: "2026-08-02"
+updated_at: "2026-08-13"
 ---
 
 # Trading Workflow

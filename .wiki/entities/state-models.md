@@ -6,7 +6,7 @@ language: "default"
 source_paths:
   - "src/main/java/com/embabel/gekko/domain/ResearchTypes.java"
   - "src/main/java/com/embabel/gekko/htmx/HitlService.java"
-updated_at: "2026-08-02"
+updated_at: "2026-08-13"
 ---
 
 # State Models (Entities)

@@ -13,7 +13,7 @@ source_paths:
   - "src/main/java/com/embabel/gekko/agent/checkpoint/CheckpointAgent.java"
   - "src/main/java/com/embabel/gekko/agent/identity/InstrumentIdentityAgent.java"
   - "src/main/java/com/embabel/gekko/agent/memory/DecisionMemoryAgent.java"
-updated_at: "2026-08-02"
+updated_at: "2026-08-13"
 ---
 
 # Multi-Agent Architecture

@@ -9,7 +9,7 @@ source_paths:
   - "src/main/java/com/embabel/gekko/dataflows/FredService.java"
   - "src/main/java/com/embabel/gekko/dataflows/PolymarketService.java"
   - "src/main/java/com/embabel/gekko/dataflows/VendorRouter.java"
-updated_at: "2026-08-02"
+updated_at: "2026-08-13"
 ---
 
 # Data Sources

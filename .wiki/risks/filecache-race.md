@@ -5,7 +5,7 @@ status: "mitigated"
 language: "default"
 source_paths:
   - "src/main/java/com/embabel/gekko/util/FileCache.java"
-updated_at: "2026-08-02"
+updated_at: "2026-08-13"
 ---
 
 # FileCache Race Condition

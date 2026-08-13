@@ -8,7 +8,7 @@ source_paths:
   - "src/main/java/com/embabel/gekko/tools/FundamentalDataTools.java"
   - "src/main/java/com/embabel/gekko/tools/NewsDataTools.java"
   - "src/main/resources/prompts/analysts/"
-updated_at: "2026-08-02"
+updated_at: "2026-08-13"
 ---
 
 # Analyst Agents

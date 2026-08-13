@@ -10,7 +10,7 @@ source_paths:
   - "src/main/java/com/embabel/gekko/agent/researchers/BearResearcher.java"
   - "src/main/resources/prompts/researchers/"
   - "src/main/resources/prompts/debate/Distiller.jinja"
-updated_at: "2026-08-02"
+updated_at: "2026-08-13"
 ---
 
 # Investment Debate

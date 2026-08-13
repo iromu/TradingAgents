@@ -7,7 +7,7 @@ source_paths:
   - "src/main/java/com/embabel/gekko/GekkoApplication.java"
   - "src/main/resources/application.yaml"
   - "src/main/java/com/embabel/gekko/config/TraderAgentConfig.java"
-updated_at: "2026-08-02"
+updated_at: "2026-08-13"
 ---
 
 # Startup Path

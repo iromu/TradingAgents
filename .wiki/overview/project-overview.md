@@ -7,7 +7,7 @@ source_paths:
   - "README.md"
   - "pom.xml"
   - "src/main/java/com/embabel/gekko/GekkoApplication.java"
-updated_at: "2026-08-02"
+updated_at: "2026-08-13"
 ---
 
 # Project Overview
@@ -63,5 +63,4 @@ User (Web/CLI)
 ## Entry Points
 
 - **Web UI:** `http://localhost:8080` — enter a ticker, watch agents work
-- **CLI:** `TickerShellCommands` — run from the Spring Boot CLI
 - **A2A:** Agents are automatically exportable to the A2A protocol (see `docs/a2a.md`)

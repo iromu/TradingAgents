@@ -10,7 +10,7 @@ source_paths:
   - "src/main/java/com/embabel/gekko/util/AgentUtils.java"
   - "src/main/resources/templates/common/waiting.html"
   - "src/main/resources/templates/common/hitl.html"
-updated_at: "2026-08-02"
+updated_at: "2026-08-13"
 ---
 
 # Human-in-the-Loop (HITL) Flow

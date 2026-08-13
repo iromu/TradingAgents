@@ -5,7 +5,7 @@ status: "active"
 language: "default"
 source_paths:
   - "src/main/resources/application-local.yaml"
-updated_at: "2026-08-02"
+updated_at: "2026-08-13"
 ---
 
 # Hardcoded Credentials

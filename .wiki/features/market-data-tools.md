@@ -6,7 +6,7 @@ language: "default"
 source_paths:
   - "src/main/java/com/embabel/gekko/tools/MarketDataTools.java"
   - "src/test/java/com/embabel/gekko/tools/MarketDataToolsTest.java"
-updated_at: "2026-08-02"
+updated_at: "2026-08-13"
 ---
 
 # Market Data Tools

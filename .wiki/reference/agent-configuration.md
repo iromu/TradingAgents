@@ -8,7 +8,7 @@ source_paths:
   - "src/main/java/com/embabel/gekko/config/AgentScanningConfiguration.java"
   - "src/main/resources/application.yaml"
   - "src/main/resources/application-app.yaml"
-updated_at: "2026-08-02"
+updated_at: "2026-08-13"
 ---
 
 # Agent Configuration

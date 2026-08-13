@@ -5,13 +5,14 @@ status: "active"
 language: "default"
 source_paths:
   - "src/main/java/com/embabel/gekko/util/LlmBudgetTracker.java"
+  - "src/main/java/com/embabel/gekko/util/BudgetExceededException.java"
   - "src/test/java/com/embabel/gekko/util/LlmBudgetTrackerTest.java"
-updated_at: "2026-08-02"
+updated_at: "2026-08-13"
 ---
 
 # LLM Budget Tracker
 
-`LlmBudgetTracker` is a soft limiter that tracks LLM API calls per ticker and logs a warning when a configured budget is exceeded. It does not block calls — it's a diagnostic guard, not a hard circuit breaker.
+`LlmBudgetTracker` tracks LLM API calls per ticker and can operate in two modes: **soft limit** (warning only) or **hard limit** (throws exception).
 
 ## Purpose
 
@@ -23,19 +24,25 @@ During a research workflow, a single ticker can trigger many LLM calls (analyst 
 
 ## Configuration
 
-Configured via `llm.budget.max` (default: 30 calls per ticker):
-
 ```yaml
 llm:
   budget:
-    max: 30
+    max: 30            # Max calls per ticker (default: 30)
+    hard-limit: false  # Throw exception on exceed (default: false)
 ```
+
+| Property | Default | Description |
+|----------|---------|-------------|
+| `llm.budget.max` | 30 | Max LLM calls allowed per ticker |
+| `llm.budget.hard-limit` | `false` | If `true`, throws `BudgetExceededException` when budget is exceeded |
 
 ## How It Works
 
 1. Each LLM call records the ticker via `recordCall(ticker)`
 2. Call counts are stored in a `ConcurrentHashMap<String, Integer>`
-3. When a ticker exceeds the budget, a warning is logged
+3. When a ticker exceeds the budget:
+   - **Soft mode** (default): logs a warning, allows the call to proceed
+   - **Hard mode**: throws `BudgetExceededException` with ticker, count, and budget details
 4. Counts are reset via `reset(ticker)` or `resetAll()` after a workflow completes
 
 ## Usage in DebateLoopAgent
@@ -49,6 +56,17 @@ llmBudgetTracker.recordCall(ticker.content());
 
 This means a 5-round debate (10 turns) uses 10 budget units. Combined with analyst reports (~4 calls) and other agents, a typical workflow uses around 15-20 calls per ticker.
 
+## BudgetExceededException
+
+When hard limit mode is enabled and the budget is exceeded, `BudgetExceededException` is thrown:
+
+```java
+throw new BudgetExceededException(ticker, count, budget);
+// Message: "LLM call budget hard limit exceeded for AAPL: 35 calls (budget: 30)"
+```
+
+The exception exposes `getTicker()`, `getCallCount()`, and `getBudget()` for programmatic handling.
+
 ## API
 
 | Method | Returns | Description |
@@ -60,6 +78,6 @@ This means a 5-round debate (10 turns) uses 10 budget units. Combined with analy
 
 ## Design Notes
 
-- **Soft limit only:** Exceeding the budget logs a warning but does not throw or block. This avoids hard failures during workflows while still providing visibility.
+- **Soft limit by default:** Exceeding the budget logs a warning but does not block. Enable `hard-limit: true` to enforce a circuit breaker.
 - **In-memory only:** Counts are not persisted. A restart resets all counts.
 - **Thread-safe:** Uses `ConcurrentHashMap` with `merge()` for atomic increments.
