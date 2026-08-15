@@ -90,14 +90,6 @@ public class YFinService {
     }
 
     /**
-     * Returns indicator values for a lookback window like the Python version.
-     * indicatorCode must be one of the keys returned by IndicatorMapper.getDescriptions()
-     */
-    public String getStockStatsIndicatorsWindow(String symbol, String indicatorCode, String currDate, int lookbackDays) throws Exception {
-        return getStockStatsIndicatorsWindowBatch(symbol, List.of(indicatorCode), currDate, lookbackDays);
-    }
-
-    /**
      * Returns indicator values for multiple indicator codes, fetching Yahoo data only once.
      * Each indicatorCode must be one of the keys returned by IndicatorMapper.getDescriptions()
      */
@@ -192,11 +184,11 @@ public class YFinService {
 
             Duration timePeriod = Duration.ofDays(1);
             Instant barEndTime = h.getDate().toInstant();
-            Num open = DecimalNum.valueOf(h.getOpen() == null ? Double.NaN : h.getOpen().doubleValue());
-            Num high = DecimalNum.valueOf(h.getHigh() == null ? Double.NaN : h.getHigh().doubleValue());
-            Num low = DecimalNum.valueOf(h.getLow() == null ? Double.NaN : h.getLow().doubleValue());
-            Num close = DecimalNum.valueOf(h.getClose() == null ? Double.NaN : h.getClose().doubleValue());
-            Num volume = DecimalNum.valueOf(h.getVolume() == null ? Double.NaN : h.getVolume().doubleValue());
+            Num open = h.getOpen() == null ? null : DecimalNum.valueOf(h.getOpen().doubleValue());
+            Num high = h.getHigh() == null ? null : DecimalNum.valueOf(h.getHigh().doubleValue());
+            Num low = h.getLow() == null ? null : DecimalNum.valueOf(h.getLow().doubleValue());
+            Num close = h.getClose() == null ? null : DecimalNum.valueOf(h.getClose().doubleValue());
+            Num volume = h.getVolume() == null ? null : DecimalNum.valueOf(h.getVolume().doubleValue());
 
             Num amount = DecimalNum.valueOf(0);
             long trades = 0;

@@ -124,9 +124,12 @@ public class CheckpointStore {
             Map<String, Object> phases = (Map<String, Object>) map.get("phases");
             if (phases == null) phases = Map.of();
 
+            String tickerValue = map.get("ticker") instanceof String s ? s : null;
+            String tradeDateValue = map.get("tradeDate") instanceof String s ? s : null;
+
             return new CheckpointEntry(
-                    (String) map.get("ticker"),
-                    (String) map.get("tradeDate"),
+                    tickerValue,
+                    tradeDateValue,
                     lastPhase,
                     phases
             );

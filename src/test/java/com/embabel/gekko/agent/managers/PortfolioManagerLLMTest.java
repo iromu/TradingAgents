@@ -28,7 +28,8 @@ class PortfolioManagerLLMTest {
                 List.of("Bull argument: strong growth"),
                 List.of("Bear argument: valuation concern"),
                 "Bear argument: valuation concern", 2,
-                new ResearchTypes.DebateBriefs("Fundamentals brief", "Market brief", "News brief", "Social brief")
+                new ResearchTypes.DebateBriefs("Fundamentals brief", "Market brief", "News brief", "Social brief"),
+                -1.0
         );
     }
 

@@ -44,6 +44,9 @@ public class DebateLoopAgent {
     @Action(description = "Run iterative bull/bear debate loop")
     @AchievesGoal(description = "Produce investment debate state")
     public ResearchTypes.InvestmentDebateState debate(ResearchTypes.Ticker ticker, ResearchTypes.DebateBriefs briefs, ActionContext actionContext) {
+        if (briefs == null) {
+            throw new IllegalArgumentException("briefs must not be null");
+        }
         return RepeatUntilBuilder
                 .returning(ResearchTypes.InvestmentDebateState.class)
                 .withMaxIterations(config.maxDebateIterations())
@@ -57,7 +60,7 @@ public class DebateLoopAgent {
 
                     // Bull turn
                     String bullResponse = cache.getOrCompute(
-                            ticker.content() + "_debate_" + count + "_bull",
+                            "debate:" + ticker.content() + ":bull:" + count,
                             String.class,
                             () -> {
                                 String result = bullResearcher.argue(briefs, history, actionContext);
@@ -70,7 +73,7 @@ public class DebateLoopAgent {
 
                     // Bear turn
                     String bearResponse = cache.getOrCompute(
-                            ticker.content() + "_debate_" + (count + 1) + "_bear",
+                            "debate:" + ticker.content() + ":bear:" + (count + 1),
                             String.class,
                             () -> {
                                 String result = bearResearcher.argue(briefs, history, actionContext);
@@ -83,31 +86,27 @@ public class DebateLoopAgent {
 
                     count += 2;
 
-                    // Log similarity for debugging
+                    // Compute similarity once, reuse for logging and convergence check
+                    double similarity = -1.0;
                     if (bullHistory.size() >= 2) {
                         String prevBull = bullHistory.get(bullHistory.size() - 2);
-                        double similarity = computeSimilarity(prevBull, bullResponse);
+                        similarity = computeSimilarity(prevBull, bullResponse);
                         log.info("Debate iteration {} - bull similarity: {} (threshold: {})",
                                 last.count() / 2, String.format("%.4f", similarity), String.format("%.4f", config.similarityThreshold()));
                     }
 
-                    return new ResearchTypes.InvestmentDebateState(history, bullHistory, bearHistory, bearResponse, count, briefs);
+                    return new ResearchTypes.InvestmentDebateState(history, bullHistory, bearHistory, bearResponse, count, briefs, similarity);
                 })
                 .until(ctx -> {
                     ResearchTypes.InvestmentDebateState last = ctx.lastAttempt();
                     if (last == null) return false;
                     // Stop at max iterations
                     if (last.count() / 2 >= config.maxDebateIterations()) return true;
-                    // Stop on convergence: check if last two bull responses are similar enough
-                    if (last.bullHistory().size() >= 2) {
-                        String prevBull = last.bullHistory().get(last.bullHistory().size() - 2);
-                        String currBull = last.bullHistory().get(last.bullHistory().size() - 1);
-                        double similarity = computeSimilarity(prevBull, currBull);
-                        if (similarity >= config.similarityThreshold()) {
-                            log.info("Debate converged at iteration {} (similarity: {} >= {})",
-                                    last.count() / 2, String.format("%.4f", similarity), String.format("%.4f", config.similarityThreshold()));
-                            return true;
-                        }
+                    // Stop on convergence: reuse cached similarity from repeating block
+                    if (last.lastSimilarity() >= config.similarityThreshold()) {
+                        log.info("Debate converged at iteration {} (similarity: {} >= {})",
+                                last.count() / 2, String.format("%.4f", last.lastSimilarity()), String.format("%.4f", config.similarityThreshold()));
+                        return true;
                     }
                     return false;
                 })

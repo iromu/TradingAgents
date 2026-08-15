@@ -45,9 +45,12 @@ class CheckpointAgentTest {
         var result = agent.restoreCheckpoint("AAPL", "2026-01-15");
 
         assertNotNull(result);
-        assertTrue(result.containsKey("researchPlan"));
+        assertEquals("AAPL", result.ticker());
+        assertEquals("2026-01-15", result.tradeDate());
+        assertEquals("researchPlan", result.lastCompletedPhase());
+        assertTrue(result.phases().containsKey("researchPlan"));
         @SuppressWarnings("unchecked")
-        Map<String, Object> phase = (Map<String, Object>) result.get("researchPlan");
+        Map<String, Object> phase = (Map<String, Object>) result.phases().get("researchPlan");
         assertNotNull(phase);
         // The phase contains a "blackboard" key with the actual state
         @SuppressWarnings("unchecked")

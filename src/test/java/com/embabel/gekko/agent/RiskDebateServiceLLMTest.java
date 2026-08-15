@@ -3,6 +3,7 @@ package com.embabel.gekko.agent;
 import com.embabel.gekko.agent.risk.AggressiveDebator;
 import com.embabel.gekko.agent.risk.ConservativeDebator;
 import com.embabel.gekko.agent.risk.NeutralDebator;
+import com.embabel.gekko.config.TraderAgentConfig;
 import com.embabel.gekko.domain.ResearchTypes;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -16,6 +17,15 @@ import static org.mockito.Mockito.when;
 
 class RiskDebateServiceLLMTest {
 
+    private static TraderAgentConfig testConfig() {
+        return new TraderAgentConfig(
+                null, null, 1, null, null, null, null,
+                0.8, 5, 16384, 3,
+                null, null, null,
+                null, null, null
+        );
+    }
+
     private RiskDebateAgent createAgent() {
         var aggressive = new AggressiveDebator();
         var conservative = new ConservativeDebator();
@@ -28,7 +38,7 @@ class RiskDebateServiceLLMTest {
         when(conservativeProvider.getObject()).thenReturn(conservative);
         when(neutralProvider.getObject()).thenReturn(neutral);
 
-        return new RiskDebateAgent(aggressiveProvider, conservativeProvider, neutralProvider, null);
+        return new RiskDebateAgent(testConfig(), aggressiveProvider, conservativeProvider, neutralProvider, null);
     }
 
     @Test
@@ -42,7 +52,7 @@ class RiskDebateServiceLLMTest {
         var ticker = new ResearchTypes.Ticker("TSLA", "");
         var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
         var debateState = new ResearchTypes.InvestmentDebateState(
-                List.of(), List.of(), List.of(), "", 0, briefs
+                List.of(), List.of(), List.of(), "", 0, briefs, -1.0
         );
         var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertEquals(RiskLevel.RISKY, result.level());
@@ -60,7 +70,7 @@ class RiskDebateServiceLLMTest {
         var ticker = new ResearchTypes.Ticker("KO", "");
         var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
         var debateState = new ResearchTypes.InvestmentDebateState(
-                List.of(), List.of(), List.of(), "", 0, briefs
+                List.of(), List.of(), List.of(), "", 0, briefs, -1.0
         );
         var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertEquals(RiskLevel.CONSERVATIVE, result.level());
@@ -78,7 +88,7 @@ class RiskDebateServiceLLMTest {
         var ticker = new ResearchTypes.Ticker("JNJ", "");
         var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
         var debateState = new ResearchTypes.InvestmentDebateState(
-                List.of(), List.of(), List.of(), "", 0, briefs
+                List.of(), List.of(), List.of(), "", 0, briefs, -1.0
         );
         var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertEquals(RiskLevel.NEUTRAL, result.level());
@@ -97,7 +107,7 @@ class RiskDebateServiceLLMTest {
         var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
         var debateState = new ResearchTypes.InvestmentDebateState(
                 Collections.emptyList(), Collections.emptyList(), Collections.emptyList(),
-                "", 0, briefs
+                "", 0, briefs, -1.0
         );
         var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertNotNull(result);
@@ -116,7 +126,7 @@ class RiskDebateServiceLLMTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var briefs = new ResearchTypes.DebateBriefs("", "", "", "");
         var debateState = new ResearchTypes.InvestmentDebateState(
-                List.of(), List.of(), List.of(), "", 0, briefs
+                List.of(), List.of(), List.of(), "", 0, briefs, -1.0
         );
         var result = createAgent().assessRisk(ticker, briefs, debateState, "Invest", context);
         assertNotNull(result);

@@ -285,7 +285,7 @@ class AllAgentsPlanValidationTest extends EmbabelMockitoIntegrationTest {
                 List.of("bull argument"),
                 List.of("bear argument"),
                 "bear argument", 2,
-                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
 
         ctx.expectResponse("Stub portfolio decision.");

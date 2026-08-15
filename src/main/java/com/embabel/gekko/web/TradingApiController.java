@@ -104,6 +104,10 @@ public class TradingApiController {
             @RequestBody ApprovalRequest request
     ) {
         AgentUtils.validateProcessId(processId);
+        if (request.feedback() != null && request.feedback().length() > 10000) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Feedback must not exceed 10,000 characters"));
+        }
         var process = agentPlatform.getAgentProcess(processId);
         if (process == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Map.of("error", "Process not found: " + processId));

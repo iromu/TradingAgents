@@ -136,6 +136,9 @@ class TemplateParsingTest {
         model.put("picture", "");
         model.put("successView", "plan");
 
+        // Provide mock CSRF token for templates that reference _csrf
+        model.put("_csrf", new CsrfTokenMock());
+
         ctx.setVariables(model);
 
         String templateName = TEMPLATES_DIR.relativize(template).toString();
@@ -233,4 +236,13 @@ class TemplateParsingTest {
                       String journeyMapUrl, Travelers travelers) {}
 
     record HitlSession(String processId, String agentName, String errorMessage, Instant occurredAt) {}
+
+    /**
+     * Minimal mock of Spring Security's CsrfToken for standalone template parsing.
+     */
+    record CsrfTokenMock(String parameterName, String token) {
+        CsrfTokenMock() {
+            this("_csrf", "test-csrf-token");
+        }
+    }
 }

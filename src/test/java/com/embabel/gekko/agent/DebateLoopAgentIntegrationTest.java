@@ -67,6 +67,7 @@ class DebateLoopAgentIntegrationTest extends EmbabelMockitoIntegrationTest {
                 config.tickerLlm(), config.writerLlm(), config.maxConcurrency(),
                 config.researcher(), config.outliner(), config.writer(),
                 config.outputDirectory(), 1.0, 2,  // 0.0 threshold = never converges, 2 max iterations
+                config.researchTokenBudget(), 3,
                 config.provider(), config.bestModel(), config.cheapestModel(),
                 config.anthropic(), config.google(), config.openai()
         );
@@ -103,6 +104,7 @@ class DebateLoopAgentIntegrationTest extends EmbabelMockitoIntegrationTest {
                 config.tickerLlm(), config.writerLlm(), config.maxConcurrency(),
                 config.researcher(), config.outliner(), config.writer(),
                 config.outputDirectory(), 1.0, 2,  // 2 iterations, never converges
+                config.researchTokenBudget(), 3,
                 config.provider(), config.bestModel(), config.cheapestModel(),
                 config.anthropic(), config.google(), config.openai()
         );
@@ -138,6 +140,7 @@ class DebateLoopAgentIntegrationTest extends EmbabelMockitoIntegrationTest {
                 config.tickerLlm(), config.writerLlm(), config.maxConcurrency(),
                 config.researcher(), config.outliner(), config.writer(),
                 config.outputDirectory(), 1.0, 3,  // 3 max iterations, 0.0 threshold = never converges
+                config.researchTokenBudget(), 3,
                 config.provider(), config.bestModel(), config.cheapestModel(),
                 config.anthropic(), config.google(), config.openai()
         );
@@ -170,6 +173,7 @@ class DebateLoopAgentIntegrationTest extends EmbabelMockitoIntegrationTest {
                 config.tickerLlm(), config.writerLlm(), config.maxConcurrency(),
                 config.researcher(), config.outliner(), config.writer(),
                 config.outputDirectory(), 1.0, 1,  // 1 iteration only
+                config.researchTokenBudget(), 3,
                 config.provider(), config.bestModel(), config.cheapestModel(),
                 config.anthropic(), config.google(), config.openai()
         );
@@ -202,6 +206,7 @@ class DebateLoopAgentIntegrationTest extends EmbabelMockitoIntegrationTest {
                 config.tickerLlm(), config.writerLlm(), config.maxConcurrency(),
                 config.researcher(), config.outliner(), config.writer(),
                 config.outputDirectory(), 0.0, 5,  // 0.0 threshold = converges after 2nd iteration, 5 max iterations
+                config.researchTokenBudget(), 3,
                 config.provider(), config.bestModel(), config.cheapestModel(),
                 config.anthropic(), config.google(), config.openai()
         );

@@ -39,7 +39,7 @@ public class HitlService implements DisposableBean {
 
     private final Map<String, HitlSession> sessions = new ConcurrentHashMap<>();
     private final Map<String, Object> sessionLocks = new ConcurrentHashMap<>();
-    private final ScheduledExecutorService cleanupScheduler = Executors.newSingleThreadScheduledExecutor(r -> { Thread t = new Thread(r); t.setDaemon(true); return t; });
+    private final ScheduledExecutorService cleanupScheduler;
     private final Duration sessionTtl;
     private final int maxSessions;
 
@@ -49,17 +49,46 @@ public class HitlService implements DisposableBean {
     /**
      * Create a new HitlService with the given TTL for session cleanup.
      * Sessions older than TTL will be automatically removed.
+     *
+     * @deprecated Use {@link #HitlService(Duration, ScheduledExecutorService)} with an injected scheduler.
      */
+    @Deprecated
     public HitlService(Duration sessionTtl) {
-        this(sessionTtl, DEFAULT_MAX_SESSIONS);
+        this(sessionTtl, DEFAULT_MAX_SESSIONS, Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread t = new Thread(r);
+            t.setDaemon(true);
+            return t;
+        }));
     }
 
     /**
      * Create a new HitlService with custom TTL and max session cap.
+     *
+     * @deprecated Use {@link #HitlService(Duration, ScheduledExecutorService)} with an injected scheduler.
      */
+    @Deprecated
     public HitlService(Duration sessionTtl, int maxSessions) {
+        this(sessionTtl, maxSessions, Executors.newSingleThreadScheduledExecutor(r -> {
+            Thread t = new Thread(r);
+            t.setDaemon(true);
+            return t;
+        }));
+    }
+
+    /**
+     * Create a new HitlService with an injected cleanup scheduler.
+     */
+    public HitlService(Duration sessionTtl, ScheduledExecutorService cleanupScheduler) {
+        this(sessionTtl, DEFAULT_MAX_SESSIONS, cleanupScheduler);
+    }
+
+    /**
+     * Create a new HitlService with custom TTL, max sessions, and injected scheduler.
+     */
+    public HitlService(Duration sessionTtl, int maxSessions, ScheduledExecutorService cleanupScheduler) {
         this.sessionTtl = sessionTtl;
         this.maxSessions = maxSessions;
+        this.cleanupScheduler = cleanupScheduler;
         // Schedule periodic cleanup every 5 minutes
         cleanupScheduler.scheduleAtFixedRate(this::cleanupExpiredSessions, 5, 5, TimeUnit.MINUTES);
     }
@@ -165,8 +194,8 @@ public class HitlService implements DisposableBean {
     }
 
     /**
-     * Evict the oldest expired session if max capacity is reached.
-     * Only evicts sessions that have exceeded the TTL; if no expired sessions exist, does nothing.
+     * Evict sessions if max capacity is reached.
+     * Prefers expired sessions (past TTL); if none expired, evicts the LRU session.
      */
     private void evictIfFull() {
         if (sessions.size() >= maxSessions) {
@@ -180,6 +209,17 @@ public class HitlService implements DisposableBean {
                     .orElse(null);
             if (oldestExpiredKey != null) {
                 sessions.remove(oldestExpiredKey);
+                return;
+            }
+            // No expired sessions — evict LRU (oldest) session
+            String lruKey = sessions.entrySet().stream()
+                    .min(Map.Entry.<String, HitlSession>comparingByValue(
+                            java.util.Comparator.comparing(HitlService.HitlSession::occurredAt)
+                    ))
+                    .map(Map.Entry::getKey)
+                    .orElse(null);
+            if (lruKey != null) {
+                sessions.remove(lruKey);
             }
         }
     }

@@ -32,7 +32,8 @@ class PortfolioManagerExtendedTest {
                 List.of("bull argument"),
                 List.of("bear argument"),
                 "bear argument", 2,
-                new ResearchTypes.DebateBriefs("Fundamentals brief", "Market brief", "News brief", "Social brief")
+                new ResearchTypes.DebateBriefs("Fundamentals brief", "Market brief", "News brief", "Social brief"),
+                -1.0
         );
     }
 
@@ -119,7 +120,7 @@ class PortfolioManagerExtendedTest {
                         List.of("bull: strong growth"),
                         List.of("bear: valuation concern"),
                         "bear: valuation concern", 2,
-                        new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                        new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
                 ),
                 "Research plan", "Trader proposal",
                 new RiskAssessment(RiskLevel.NEUTRAL, "Moderate"),
@@ -243,7 +244,7 @@ class PortfolioManagerExtendedTest {
                         List.of("bull: strong revenue growth"),
                         List.of("bear: valuation concern"),
                         "bear: valuation concern", 2,
-                        new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                        new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
                 ),
                 "Research plan", "Trader proposal",
                 NEUTRAL_RISK, context

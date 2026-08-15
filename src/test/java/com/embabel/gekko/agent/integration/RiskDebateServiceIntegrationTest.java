@@ -49,7 +49,7 @@ class RiskDebateServiceIntegrationTest extends EmbabelMockitoIntegrationTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
         var debateState = new ResearchTypes.InvestmentDebateState(
-                List.of(), List.of(), List.of(), "", 0, briefs
+                List.of(), List.of(), List.of(), "", 0, briefs, -1.0
         );
 
         var result = riskDebateAgent.assessRisk(ticker, briefs, debateState, "Invest", fake.getActionContext());
@@ -80,7 +80,7 @@ class RiskDebateServiceIntegrationTest extends EmbabelMockitoIntegrationTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
         var debateState = new ResearchTypes.InvestmentDebateState(
-                List.of(), List.of(), List.of(), "", 0, briefs
+                List.of(), List.of(), List.of(), "", 0, briefs, -1.0
         );
 
         riskDebateAgent.assessRisk(ticker, briefs, debateState, "Invest", fake.getActionContext());

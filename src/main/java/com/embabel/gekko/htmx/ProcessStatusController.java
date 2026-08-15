@@ -23,6 +23,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
+import jakarta.servlet.http.HttpSession;
+
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -35,6 +37,9 @@ import java.util.Optional;
 @Slf4j
 @Controller
 public class ProcessStatusController {
+
+    /** HTTP session attribute that binds a processId to the user's session. */
+    private static final String SESSION_PROCESS_ID = "hitl_processId";
 
     private final AgentPlatform agentPlatform;
     private final HitlService hitlService;
@@ -51,6 +56,7 @@ public class ProcessStatusController {
             @PathVariable String processId,
             @RequestParam String resultModelKey,
             @RequestParam String successView,
+            HttpSession session,
             Model model
     ) {
         AgentUtils.validateProcessId(processId);
@@ -75,8 +81,8 @@ public class ProcessStatusController {
 
                 // The HitlAgenticEventListener should have already created a session via
                 // AgentProcessFinishedEvent. Show the form if it exists.
-                HitlSession session = hitlService.getSession(processId).orElse(null);
-                if (session == null) {
+                HitlSession hitlSession = hitlService.getSession(processId).orElse(null);
+                if (hitlSession == null) {
                     // Safety net: event listener may not have fired (e.g., profile mismatch).
                     // Create the session so the user still gets the HITL form.
                     String agentName = Optional.ofNullable(agentProcess.getAgent())
@@ -87,10 +93,13 @@ public class ProcessStatusController {
                             .orElse("No failure details available");
                     log.warn("No HITL session for failed process {} (agent='{}') — creating defensively",
                             processId, agentName);
-                    session = hitlService.createSession(processId, agentName, failureInfo);
+                    hitlSession = hitlService.createSession(processId, agentName, failureInfo);
                 }
 
-                model.addAttribute("hitlSession", session);
+                // Bind processId to HTTP session for ownership verification
+                session.setAttribute(SESSION_PROCESS_ID, processId);
+
+                model.addAttribute("hitlSession", hitlSession);
                 model.addAttribute("processId", processId);
                 model.addAttribute("pageTitle", "Human Review Required");
                 return "common/hitl";
@@ -104,6 +113,8 @@ public class ProcessStatusController {
 
             case WAITING -> {
                 log.info("Process {} is waiting for human input (HITL WaitFor checkpoint)", processId);
+                // Bind processId to HTTP session for ownership verification
+                session.setAttribute(SESSION_PROCESS_ID, processId);
                 return renderWaitingForm(processId, agentProcess, model);
             }
 
@@ -120,9 +131,25 @@ public class ProcessStatusController {
             @PathVariable String processId,
             @RequestParam(required = false, defaultValue = "") String userInput,
             @RequestParam(required = false, defaultValue = "") String feedback,
+            HttpSession session,
             Model model
     ) {
         AgentUtils.validateProcessId(processId);
+
+        // Verify process ownership: processId must match the one bound to this HTTP session
+        String ownedProcessId = (String) session.getAttribute(SESSION_PROCESS_ID);
+        if (ownedProcessId == null || !ownedProcessId.equals(processId)) {
+            log.warn("Process ownership violation: session had '{}', request for '{}'", ownedProcessId, processId);
+            model.addAttribute("error", "Access denied: process not associated with this session.");
+            model.addAttribute("pageTitle", "Access Denied");
+            return "common/processing-error";
+        }
+
+        if (feedback.length() > 10000) {
+            model.addAttribute("error", "Feedback must not exceed 10,000 characters");
+            model.addAttribute("pageTitle", "Validation Error");
+            return "common/processing-error";
+        }
         // Check if already resolved — prevent duplicate resubmissions
         // Use per-process lock to avoid blocking other processes
         AgentProcess agentProcess;
@@ -247,9 +274,25 @@ public class ProcessStatusController {
             @PathVariable String processId,
             @RequestParam(required = false, defaultValue = "") String feedback,
             @RequestParam(required = false, defaultValue = "false") boolean approved,
+            HttpSession session,
             Model model
     ) {
         AgentUtils.validateProcessId(processId);
+
+        // Verify process ownership: processId must match the one bound to this HTTP session
+        String ownedProcessId = (String) session.getAttribute(SESSION_PROCESS_ID);
+        if (ownedProcessId == null || !ownedProcessId.equals(processId)) {
+            log.warn("Process ownership violation: session had '{}', request for '{}'", ownedProcessId, processId);
+            model.addAttribute("error", "Access denied: process not associated with this session.");
+            model.addAttribute("pageTitle", "Access Denied");
+            return "common/processing-error";
+        }
+
+        if (feedback.length() > 10000) {
+            model.addAttribute("error", "Feedback must not exceed 10,000 characters");
+            model.addAttribute("pageTitle", "Validation Error");
+            return "common/processing-error";
+        }
         AgentProcess agentProcess = agentPlatform.getAgentProcess(processId);
         if (agentProcess == null) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Process not found");

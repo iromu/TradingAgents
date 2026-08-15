@@ -20,7 +20,7 @@ class TraderAgentConfigTest {
                 tickerLlm, writerLlm, maxConcurrency,
                 researcher, outliner, writer,
                 outputDirectory, similarityThreshold, maxDebateIterations,
-                null, null, null, null, null, null
+                0, 3, null, null, null, null, null, null
         );
     }
 
@@ -147,7 +147,7 @@ class TraderAgentConfigTest {
         var config = new TraderAgentConfig(
                 LlmOptions.withDefaultLlm(), LlmOptions.withDefaultLlm(), 4,
                 null, null, null,
-                "/tmp", 0.75, 8,
+                "/tmp", 0.75, 8, 16384, 3,
                 "anthropic", "claude-opus-4", "claude-sonnet-4",
                 new TraderAgentConfig.AnthropicProviderConfig("high"),
                 new TraderAgentConfig.GoogleProviderConfig("high"),

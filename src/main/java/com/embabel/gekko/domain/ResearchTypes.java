@@ -35,7 +35,8 @@ public final class ResearchTypes {
             List<String> bearHistory,
             String currentResponse,
             int count,
-            DebateBriefs briefs
+            DebateBriefs briefs,
+            double lastSimilarity
     ) implements Report {
 
         @Override

@@ -12,6 +12,7 @@ import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.stereotype.Component;
 
 import java.util.Map;
+import java.util.Objects;
 
 import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
 
@@ -34,6 +35,10 @@ public class Trader {
             String researchPlan,
             ActionContext actionContext
     ) {
+        Objects.requireNonNull(ticker, "ticker must not be null");
+        if (researchPlan == null || researchPlan.isBlank()) {
+            throw new IllegalArgumentException("researchPlan must not be blank");
+        }
         var model = Map.<String, Object>ofEntries(
                 Map.entry("ticker", ticker.content()),
                 Map.entry("research_plan", researchPlan)

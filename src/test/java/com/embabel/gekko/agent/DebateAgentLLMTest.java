@@ -474,7 +474,7 @@ class DebateAgentLLMTest {
                 List.of("bull argument"),
                 List.of("bear argument"),
                 "bear argument", 2,
-                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
         var feedback = new ResearchTypes.InvestmentReviewFeedback("Looks good", true);
 
@@ -495,7 +495,7 @@ class DebateAgentLLMTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var state = new ResearchTypes.InvestmentDebateState(
                 List.of("history"), List.of("bull"), List.of("bear"), "response", 2,
-                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
@@ -513,7 +513,7 @@ class DebateAgentLLMTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var state = new ResearchTypes.InvestmentDebateState(
                 List.of(), List.of(), List.of(), "", 0,
-                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
@@ -540,7 +540,7 @@ class DebateAgentLLMTest {
                 List.of("bull argument about growth"),
                 List.of("bear argument about valuation"),
                 "bear argument", 2,
-                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
@@ -560,7 +560,7 @@ class DebateAgentLLMTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var state = new ResearchTypes.InvestmentDebateState(
                 List.of(), List.of(), List.of(), "", 0,
-                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
@@ -583,7 +583,7 @@ class DebateAgentLLMTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var state = new ResearchTypes.InvestmentDebateState(
                 List.of(), List.of(), List.of(), "", 0,
-                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
@@ -604,7 +604,7 @@ class DebateAgentLLMTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var state = new ResearchTypes.InvestmentDebateState(
                 List.of(), List.of(), List.of(), "", 0,
-                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
         var feedback = new ResearchTypes.InvestmentReviewFeedback("Consider the valuation more carefully", true);
 
@@ -623,7 +623,7 @@ class DebateAgentLLMTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var state = new ResearchTypes.InvestmentDebateState(
                 List.of(), List.of(), List.of(), "", 0,
-                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
         var feedback = new ResearchTypes.InvestmentReviewFeedback("Use {{ ticker }} in the prompt", true);
 
@@ -643,7 +643,7 @@ class DebateAgentLLMTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var state = new ResearchTypes.InvestmentDebateState(
                 List.of(), List.of(), List.of(), "", 0,
-                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
         var feedback = new ResearchTypes.InvestmentReviewFeedback("Approved", true);
 
@@ -663,7 +663,7 @@ class DebateAgentLLMTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var state = new ResearchTypes.InvestmentDebateState(
                 List.of(), List.of(), List.of(), "", 0,
-                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
@@ -686,7 +686,7 @@ class DebateAgentLLMTest {
         var state = new ResearchTypes.InvestmentDebateState(
                 List.of("past decision 1", "past decision 2"),
                 List.of(), List.of(), "", 0,
-                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
@@ -705,7 +705,7 @@ class DebateAgentLLMTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var state = new ResearchTypes.InvestmentDebateState(
                 List.of(), List.of(), List.of(), "", 0,
-                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
@@ -728,7 +728,7 @@ class DebateAgentLLMTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var state = new ResearchTypes.InvestmentDebateState(
                 List.of("bull", "bear"), List.of("bull"), List.of("bear"), "bear", 2,
-                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
@@ -746,7 +746,7 @@ class DebateAgentLLMTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var state = new ResearchTypes.InvestmentDebateState(
                 List.of(), List.of(), List.of(), "", 0,
-                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
 
         // First call — fresh context

@@ -151,7 +151,7 @@ class DebateAgentSubProcessIntegrationTest extends EmbabelMockitoIntegrationTest
                 List.of("bull argument"),
                 List.of("bear argument"),
                 "bear argument", 2,
-                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
         var researchPlan = "AAPL is a strong buy.";
         var traderProposal = "Buy 50% at $150.";
@@ -178,7 +178,7 @@ class DebateAgentSubProcessIntegrationTest extends EmbabelMockitoIntegrationTest
                 List.of("bull: AI growth"),
                 List.of("bear: valuation concern"),
                 "bear: valuation concern", 2,
-                new ResearchTypes.DebateBriefs("F", "M", "N", "S")
+                new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
         var researchPlan = "NVDA: Strong AI growth, buy at $500.";
         var traderProposal = "Buy 30% at $500, stop-loss $450.";

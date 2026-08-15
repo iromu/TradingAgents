@@ -16,6 +16,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.util.HtmlUtils;
+
+import jakarta.servlet.http.HttpSession;
 
 import java.util.Map;
 import java.util.UUID;
@@ -23,6 +26,9 @@ import java.util.UUID;
 @Controller
 @RequestMapping({"/", "/research"})
 public class TradingHtmxController {
+
+    /** HTTP session attribute that binds a processId to the user's session. */
+    private static final String SESSION_PROCESS_ID = "hitl_processId";
 
     private final AgentPlatform agentPlatform;
     private final ResearchPlanService researchPlanService;
@@ -55,6 +61,11 @@ public class TradingHtmxController {
             @ModelAttribute TickerForm form,
             Model model
     ) {
+        if (form.getFeedback() != null && form.getFeedback().length() > 10000) {
+            model.addAttribute("error", "Feedback must not exceed 10,000 characters");
+            model.addAttribute("ticker", form);
+            return "form";
+        }
         var agentProcess = researchPlanService.createAndStart(form);
 
         model.addAttribute("ticker", form);
@@ -83,15 +94,19 @@ public class TradingHtmxController {
     @GetMapping("/plan/review/{processId}")
     public String reviewPlan(
             @PathVariable String processId,
+            HttpSession session,
             Model model,
             RedirectAttributes redirectAttrs
     ) {
         AgentUtils.validateProcessId(processId);
         AgentProcess process = agentPlatform.getAgentProcess(processId);
         if (process == null) {
-            redirectAttrs.addFlashAttribute("error", "Process not found: " + processId);
+            redirectAttrs.addFlashAttribute("error", "Process not found: " + HtmlUtils.htmlEscape(processId));
             return "redirect:/";
         }
+
+        // Bind processId to HTTP session for ownership verification
+        session.setAttribute(SESSION_PROCESS_ID, processId);
 
         if (process.getStatus() != AgentProcessStatusCode.WAITING) {
             return "redirect:/plan/status/" + processId;
@@ -119,12 +134,25 @@ public class TradingHtmxController {
             @PathVariable String processId,
             @RequestParam String approved,
             @RequestParam(required = false) String feedback,
+            HttpSession session,
             RedirectAttributes redirectAttrs
     ) {
         AgentUtils.validateProcessId(processId);
+
+        // Verify process ownership
+        String ownedProcessId = (String) session.getAttribute(SESSION_PROCESS_ID);
+        if (ownedProcessId == null || !ownedProcessId.equals(processId)) {
+            redirectAttrs.addFlashAttribute("error", "Access denied: process not associated with this session.");
+            return "redirect:/";
+        }
+
+        if (feedback != null && feedback.length() > 10000) {
+            redirectAttrs.addFlashAttribute("error", "Feedback must not exceed 10,000 characters");
+            return "redirect:/plan/review/" + processId;
+        }
         AgentProcess process = agentPlatform.getAgentProcess(processId);
         if (process == null) {
-            redirectAttrs.addFlashAttribute("error", "Process not found: " + processId);
+            redirectAttrs.addFlashAttribute("error", "Process not found: " + HtmlUtils.htmlEscape(processId));
             return "redirect:/";
         }
 
@@ -138,7 +166,7 @@ public class TradingHtmxController {
 
             var resumed = researchPlanService.submitWaitForForm(process, values, "Failed to resume process");
             if (resumed == null) {
-                redirectAttrs.addFlashAttribute("error", "Failed to resume process: " + processId);
+                redirectAttrs.addFlashAttribute("error", "Failed to resume process: " + HtmlUtils.htmlEscape(processId));
                 return "redirect:/plan/review/" + processId;
             }
         }

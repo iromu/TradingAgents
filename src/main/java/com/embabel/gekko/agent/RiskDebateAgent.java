@@ -7,6 +7,7 @@ import com.embabel.agent.api.common.ActionContext;
 import com.embabel.gekko.agent.risk.AggressiveDebator;
 import com.embabel.gekko.agent.risk.ConservativeDebator;
 import com.embabel.gekko.agent.risk.NeutralDebator;
+import com.embabel.gekko.config.TraderAgentConfig;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.AgentUtils;
 import com.embabel.gekko.util.LlmBudgetTracker;
@@ -35,8 +36,7 @@ import static com.embabel.common.ai.model.ModelProvider.BEST_ROLE;
 @Slf4j
 public class RiskDebateAgent {
 
-    private static final int MAX_RISK_DEBATE_ROUNDS = 3;
-
+    private final TraderAgentConfig config;
     private final ObjectProvider<AggressiveDebator> aggressiveDebatorProvider;
     private final ObjectProvider<ConservativeDebator> conservativeDebatorProvider;
     private final ObjectProvider<NeutralDebator> neutralDebatorProvider;
@@ -90,7 +90,7 @@ public class RiskDebateAgent {
             history.append(String.join("\n", debateState.history()));
         }
 
-        for (int round = 0; round < MAX_RISK_DEBATE_ROUNDS; round++) {
+        for (int round = 0; round < config.maxRiskDebateRounds(); round++) {
             // Aggressive speaks (Python: round-robin via latest_speaker, starts with Aggressive)
             trackCall(ticker.content());
             currentAggressive = aggressiveDebator.argue(

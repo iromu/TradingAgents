@@ -1,6 +1,11 @@
 package com.embabel.gekko.aot.hint;
 
 import com.embabel.gekko.domain.ResearchTypes;
+import com.embabel.gekko.domain.PortfolioDecisionOutput;
+import com.embabel.gekko.domain.TraderProposalOutput;
+import com.embabel.gekko.util.BudgetExceededException;
+import com.embabel.gekko.agent.RiskAssessmentOutput;
+import com.embabel.gekko.indicators.SubtractIndicator;
 import org.springframework.aot.hint.MemberCategory;
 import org.springframework.aot.hint.RuntimeHints;
 import org.springframework.aot.hint.RuntimeHintsRegistrar;
@@ -40,6 +45,18 @@ public class TraderAgentRuntimeHintsRegistrar implements RuntimeHintsRegistrar {
         reflection.registerType(com.embabel.gekko.domain.Analysts.NewsReport.class, b -> b
                 .withMembers(MemberCategory.INVOKE_PUBLIC_CONSTRUCTORS, MemberCategory.INVOKE_PUBLIC_METHODS));
         reflection.registerType(com.embabel.gekko.domain.Analysts.SocialMediaReport.class, b -> b
+                .withMembers(MemberCategory.INVOKE_PUBLIC_CONSTRUCTORS, MemberCategory.INVOKE_PUBLIC_METHODS));
+
+        // Output types for structured LLM responses
+        reflection.registerType(TraderProposalOutput.class, b -> b
+                .withMembers(MemberCategory.INVOKE_PUBLIC_CONSTRUCTORS, MemberCategory.INVOKE_PUBLIC_METHODS));
+        reflection.registerType(PortfolioDecisionOutput.class, b -> b
+                .withMembers(MemberCategory.INVOKE_PUBLIC_CONSTRUCTORS, MemberCategory.INVOKE_PUBLIC_METHODS));
+        reflection.registerType(RiskAssessmentOutput.class, b -> b
+                .withMembers(MemberCategory.INVOKE_PUBLIC_CONSTRUCTORS, MemberCategory.INVOKE_PUBLIC_METHODS));
+        reflection.registerType(BudgetExceededException.class, b -> b
+                .withMembers(MemberCategory.INVOKE_PUBLIC_CONSTRUCTORS, MemberCategory.INVOKE_PUBLIC_METHODS));
+        reflection.registerType(SubtractIndicator.class, b -> b
                 .withMembers(MemberCategory.INVOKE_PUBLIC_CONSTRUCTORS, MemberCategory.INVOKE_PUBLIC_METHODS));
 
         // All four agent classes

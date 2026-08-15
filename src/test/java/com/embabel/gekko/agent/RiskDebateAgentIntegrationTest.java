@@ -3,6 +3,7 @@ package com.embabel.gekko.agent;
 import com.embabel.gekko.agent.risk.AggressiveDebator;
 import com.embabel.gekko.agent.risk.ConservativeDebator;
 import com.embabel.gekko.agent.risk.NeutralDebator;
+import com.embabel.gekko.config.TraderAgentConfig;
 import com.embabel.gekko.domain.ResearchTypes;
 import org.mockito.Mockito;
 import org.junit.jupiter.api.Test;
@@ -17,6 +18,15 @@ import static org.junit.jupiter.api.Assertions.*;
  * LLM calls through FakePromptRunner consume expectResponse stubs correctly.
  */
 class RiskDebateAgentIntegrationTest {
+
+    private static TraderAgentConfig testConfig() {
+        return new TraderAgentConfig(
+                null, null, 1, null, null, null, null,
+                0.8, 5, 16384, 3,
+                null, null, null,
+                null, null, null
+        );
+    }
 
     private static ResearchTypes.Ticker ticker() {
         return new ResearchTypes.Ticker("AAPL", "");
@@ -37,7 +47,7 @@ class RiskDebateAgentIntegrationTest {
                 List.of("bull argument"),
                 List.of("bear argument"),
                 "bear argument", 2,
-                briefs()
+                briefs(), -1.0
         );
     }
 
@@ -53,7 +63,7 @@ class RiskDebateAgentIntegrationTest {
         Mockito.when(conservativeProvider.getObject()).thenReturn(conservative);
         Mockito.when(neutralProvider.getObject()).thenReturn(neutral);
 
-        return new RiskDebateAgent(aggressiveProvider, conservativeProvider, neutralProvider, null);
+        return new RiskDebateAgent(testConfig(), aggressiveProvider, conservativeProvider, neutralProvider, null);
     }
 
     @Test

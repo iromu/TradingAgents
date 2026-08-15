@@ -328,6 +328,25 @@ public class DebateAgent {
         boolean hasSell = SELL_PAT.matcher(content).find();
         boolean hasOverweight = OVERWEIGHT_PAT.matcher(content).find();
         boolean hasUnderweight = UNDERWEIGHT_PAT.matcher(content).find();
+
+        // When both buy and sell are present, check contextual cues for dominant sentiment.
+        if (hasBuy && hasSell) {
+            String lower = content.toLowerCase();
+            // Strong buy signals that outweigh a sell mention
+            if (lower.contains("strong buy") || lower.contains("buy rating")
+                    || lower.contains("recommendation: buy") || lower.contains("rating: buy")
+                    || lower.contains("net buy") || lower.contains("buy the dip")) {
+                return "Buy";
+            }
+            // Strong sell signals that outweigh a buy mention
+            if (lower.contains("strong sell") || lower.contains("sell rating")
+                    || lower.contains("recommendation: sell") || lower.contains("rating: sell")
+                    || lower.contains("net sell") || lower.contains("sell off")) {
+                return "Sell";
+            }
+            // Default to buy when both present but no strong contextual cue
+            return "Buy";
+        }
         if (hasBuy) return "Buy";
         if (hasSell) return "Sell";
         if (hasOverweight) return "Overweight";
@@ -347,14 +366,20 @@ public class DebateAgent {
     private String extractThesis(String content) {
         int thesisIdx = content.toLowerCase().indexOf("thesis");
         if (thesisIdx < 0) thesisIdx = content.toLowerCase().indexOf("rationale");
-        if (thesisIdx < 0 || thesisIdx > content.length() / 2) {
-            return content.length() > 300 ? content.substring(0, 300) : content;
-        }
-        int end = content.indexOf("\n\n", thesisIdx);
-        if (end < 0 || end - thesisIdx > 500) {
+        if (thesisIdx >= 0 && thesisIdx <= content.length() / 2) {
+            int end = content.indexOf("\n\n", thesisIdx);
+            if (end > 0 && end - thesisIdx <= 500) {
+                return content.substring(thesisIdx, end);
+            }
             return content.substring(thesisIdx, Math.min(thesisIdx + 500, content.length()));
         }
-        return content.substring(thesisIdx, end);
+        // Fallback: use first paragraph (text before first double newline).
+        int paraEnd = content.indexOf("\n\n");
+        if (paraEnd > 0 && paraEnd <= 500) {
+            return content.substring(0, paraEnd);
+        }
+        // Last resort: first 300 chars.
+        return content.length() > 300 ? content.substring(0, 300) : content;
     }
 
     private void validateReports(

@@ -2,9 +2,14 @@ package com.embabel.gekko.config;
 
 import com.embabel.agent.prompt.persona.RoleGoalBackstory;
 import com.embabel.common.ai.model.LlmOptions;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Max;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
+import org.springframework.validation.annotation.Validated;
 
+@Validated
 @ConfigurationProperties("app.llm-options")
 @Slf4j
 public record TraderAgentConfig(
@@ -15,15 +20,16 @@ public record TraderAgentConfig(
         RoleGoalBackstory outliner,
         RoleGoalBackstory writer,
         String outputDirectory,
-        double similarityThreshold,
-        int maxDebateIterations,
-        int researchTokenBudget,
+        @Min(0) @Max(1) double similarityThreshold,
+        @Min(1) int maxDebateIterations,
+        @Min(1) int researchTokenBudget,
+        @Min(1) int maxRiskDebateRounds,
         String provider,
         String bestModel,
         String cheapestModel,
-        AnthropicProviderConfig anthropic,
-        GoogleProviderConfig google,
-        OpenAiProviderConfig openai
+        @Valid AnthropicProviderConfig anthropic,
+        @Valid GoogleProviderConfig google,
+        @Valid OpenAiProviderConfig openai
 ) {
     public record AnthropicProviderConfig(String effort) {}
     public record GoogleProviderConfig(String thinkingLevel) {}
@@ -49,6 +55,10 @@ public record TraderAgentConfig(
         if (researchTokenBudget <= 0) {
             researchTokenBudget = 16384;
             log.info("Using default researchTokenBudget: 16384");
+        }
+        if (maxRiskDebateRounds <= 0) {
+            maxRiskDebateRounds = 3;
+            log.info("Using default maxRiskDebateRounds: 3");
         }
     }
 }

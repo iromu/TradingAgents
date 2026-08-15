@@ -113,11 +113,11 @@ public class PolymarketService {
             }
             String outcomeStr = outcome != null ? outcome.toString() : "N/A";
             String prob = AgentUtils.mapString(market, "probability",
-                    AgentUtils.mapString(market, "price", "N/A"));
+                    AgentUtils.mapString(market, "price", null));
 
             sb.append("| [").append(title).append("](").append("https://polymarket.com/mark/").append(slug).append(") | ")
                     .append(outcomeStr).append(" | ")
-                    .append(prob).append(" |\n");
+                    .append(prob != null ? prob : "").append(" |\n");
         }
         return sb.toString();
     }
@@ -127,15 +127,18 @@ public class PolymarketService {
         sb.append("## ").append(AgentUtils.mapString(market, "question", slug)).append("\n\n");
         sb.append("- **Slug**: ").append(slug).append("\n");
         sb.append("- **Status**: ").append(AgentUtils.mapString(market, "closed", "false")).append("\n");
-        sb.append("- **Volume**: ").append(AgentUtils.mapString(market, "volume", "N/A")).append("\n");
+        String volume = AgentUtils.mapString(market, "volume", null);
+        sb.append("- **Volume**: ").append(volume != null ? volume : "").append("\n");
         sb.append("\n**Outcomes**:\n");
 
         @SuppressWarnings("unchecked")
         List<Map<String, Object>> outcomes = (List<Map<String, Object>>) market.get("outcomes");
         if (outcomes != null) {
             for (Map<String, Object> outcome : outcomes) {
-                sb.append("- ").append(AgentUtils.mapString(outcome, "name", "N/A"))
-                        .append(": ").append(AgentUtils.mapString(outcome, "price", "N/A")).append("\n");
+                String name = AgentUtils.mapString(outcome, "name", null);
+                String price = AgentUtils.mapString(outcome, "price", null);
+                sb.append("- ").append(name != null ? name : "")
+                        .append(": ").append(price != null ? price : "").append("\n");
             }
         }
         return sb.toString();

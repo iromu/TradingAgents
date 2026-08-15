@@ -43,13 +43,13 @@ class CheckpointResumeIntegrationTest {
         // Verify checkpoint was saved
         assertTrue(store.hasCheckpoint("AAPL"));
 
-        // Restore the checkpoint — returns the phases map
-        var phases = agent.restoreCheckpoint("AAPL", "2026-06-15");
+        // Restore the checkpoint — returns CheckpointData
+        var checkpointData = agent.restoreCheckpoint("AAPL", "2026-06-15");
 
-        assertNotNull(phases);
+        assertNotNull(checkpointData);
         // Phases map contains phase names as keys, each containing {blackboard: {...}}
         @SuppressWarnings("unchecked")
-        var researchPlanPhase = (Map<String, Object>) phases.get("researchPlan");
+        var researchPlanPhase = (Map<String, Object>) checkpointData.phases().get("researchPlan");
         assertNotNull(researchPlanPhase);
         @SuppressWarnings("unchecked")
         var blackboard = (Map<String, Object>) researchPlanPhase.get("blackboard");
@@ -69,16 +69,16 @@ class CheckpointResumeIntegrationTest {
         agent.saveCheckpoint("MSFT", "2026-06-15", "debateBriefs",
                 Map.of("briefs", "Complete"));
 
-        var phases = agent.restoreCheckpoint("MSFT", "2026-06-15");
+        var checkpointData = agent.restoreCheckpoint("MSFT", "2026-06-15");
 
-        assertNotNull(phases);
+        assertNotNull(checkpointData);
         // Both phases should be present in the phases map
-        assertTrue(phases.containsKey("researchPlan"));
-        assertTrue(phases.containsKey("debateBriefs"));
+        assertTrue(checkpointData.phases().containsKey("researchPlan"));
+        assertTrue(checkpointData.phases().containsKey("debateBriefs"));
         @SuppressWarnings("unchecked")
-        var researchPlanPhase = (Map<String, Object>) phases.get("researchPlan");
+        var researchPlanPhase = (Map<String, Object>) checkpointData.phases().get("researchPlan");
         @SuppressWarnings("unchecked")
-        var debateBriefsPhase = (Map<String, Object>) phases.get("debateBriefs");
+        var debateBriefsPhase = (Map<String, Object>) checkpointData.phases().get("debateBriefs");
         @SuppressWarnings("unchecked")
         var researchPlanBB = (Map<String, Object>) researchPlanPhase.get("blackboard");
         @SuppressWarnings("unchecked")

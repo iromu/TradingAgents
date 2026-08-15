@@ -32,7 +32,7 @@ public class CheckpointAgent {
 
     @Action(description = "Restore blackboard from checkpoint if exists for the given ticker/date")
     @AchievesGoal(description = "Restore blackboard state from crash checkpoint for recovery")
-    public Map<String, Object> restoreCheckpoint(String ticker, String tradeDate) {
+    public CheckpointData restoreCheckpoint(String ticker, String tradeDate) {
         if (!checkpointEnabled) {
             log.debug("Checkpoints disabled, skipping restore");
             return null;
@@ -42,7 +42,12 @@ public class CheckpointAgent {
             if (checkpoint != null) {
                 log.info("Restored checkpoint for {} on {} (phase: {})",
                         ticker, tradeDate, checkpoint.lastCompletedPhase());
-                return checkpoint.phases();
+                return new CheckpointData(
+                        checkpoint.ticker(),
+                        checkpoint.tradeDate(),
+                        checkpoint.lastCompletedPhase(),
+                        checkpoint.phases()
+                );
             }
             log.debug("No checkpoint found for {} on {}", ticker, tradeDate);
             return null;

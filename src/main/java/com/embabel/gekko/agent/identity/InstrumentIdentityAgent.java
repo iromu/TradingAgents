@@ -12,6 +12,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * Resolves a ticker symbol to its real company identity (name, sector, industry, exchange)
  * to prevent LLM hallucination. Uses Yahoo Finance as the primary data source with
@@ -137,7 +139,7 @@ public class InstrumentIdentityAgent {
                     log.warn("Yahoo Finance request failed for {} (attempt {}/{}, error: {}), retrying in {}ms",
                             ticker, attempt, MAX_RETRIES, e.getMessage(), backoff);
                     try {
-                        Thread.sleep(backoff);
+                        TimeUnit.MILLISECONDS.sleep(backoff);
                     } catch (InterruptedException ie) {
                         Thread.currentThread().interrupt();
                         throw new RuntimeException("Retry interrupted for ticker " + ticker, ie);

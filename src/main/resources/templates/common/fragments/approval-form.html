@@ -1,6 +1,8 @@
 <th:block xmlns:th="https://www.thymeleaf.org"
+          xmlns:sec="https://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
           th:fragment="approval-form(processId, feedbackPlaceholder, feedbackMaxlength, checkboxLabel, submitButtonText, cancelUrl)">
     <form th:action="@{/status/{processId}/waitfor(processId=${processId})}" method="post" class="approval-form">
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
         <h3>Your Feedback</h3>
 
         <div class="form-group">

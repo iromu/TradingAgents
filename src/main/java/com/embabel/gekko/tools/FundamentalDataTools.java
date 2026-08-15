@@ -5,9 +5,11 @@ import com.embabel.gekko.dataflows.VendorRouter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.tool.annotation.Tool;
 import org.springframework.ai.tool.annotation.ToolParam;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 @Component
+@ConditionalOnProperty(name = "app.tools.fundamental.enabled", matchIfMissing = true)
 @Slf4j
 public class FundamentalDataTools {
 
