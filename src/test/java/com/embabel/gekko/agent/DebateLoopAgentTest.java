@@ -12,6 +12,7 @@ import java.lang.reflect.Method;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.mock;
 
 /**
  * Unit tests for DebateLoopAgent.
@@ -169,6 +170,16 @@ class DebateLoopAgentTest {
     void debateLoopAgent_withHighSimilarityThreshold_stillConstructs() {
         var agent = createAgent(5, 1.0);
         assertNotNull(agent);
+    }
+
+    // --- debate() null briefs validation ---
+
+    @Test
+    void debate_nullBriefs_throwsIllegalArgumentException() {
+        var agent = createAgent(5, 0.8);
+        var ticker = new ResearchTypes.Ticker("AAPL", null);
+        var actionContext = mock(com.embabel.agent.api.common.ActionContext.class);
+        assertThrows(IllegalArgumentException.class, () -> agent.debate(ticker, null, actionContext));
     }
 
     // --- Helper ---

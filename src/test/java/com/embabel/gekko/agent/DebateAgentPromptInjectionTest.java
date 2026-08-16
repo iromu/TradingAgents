@@ -176,4 +176,49 @@ class DebateAgentPromptInjectionTest {
         String result = (String) ReflectionTestUtils.invokeMethod(agent, "extractRating", "");
         assertEquals("Hold", result);
     }
+
+    // --- extractRating buy/sell conflict tests ---
+
+    @Test
+    void extractRating_buyAndSellConflict_strongBuyWins() {
+        DebateAgent agent = createAgent();
+        String input = "We recommend a strong buy despite some sell pressure from competitors.";
+        String result = (String) ReflectionTestUtils.invokeMethod(agent, "extractRating", input);
+        assertEquals("Buy", result);
+    }
+
+    @Test
+    void extractRating_buyAndSellConflict_strongSellWins() {
+        DebateAgent agent = createAgent();
+        String input = "Despite early buy interest, we see a strong sell signal forming.";
+        String result = (String) ReflectionTestUtils.invokeMethod(agent, "extractRating", input);
+        assertEquals("Sell", result);
+    }
+
+    @Test
+    void extractRating_buyAndSellConflict_defaultsToBuy() {
+        DebateAgent agent = createAgent();
+        String input = "Some analysts want to buy while others want to sell.";
+        String result = (String) ReflectionTestUtils.invokeMethod(agent, "extractRating", input);
+        assertEquals("Buy", result);
+    }
+
+    // --- sanitizeValue unclosed code fence tests ---
+
+    @Test
+    void sanitizeValue_unclosedCodeFence_nonGreedyMatch() {
+        DebateAgent agent = createAgent();
+        String input = "Here is some text\n```\nunclosed fence content";
+        String result = (String) ReflectionTestUtils.invokeMethod(agent, "sanitizeValue", input);
+        assertFalse(result.contains("```"));
+        assertTrue(result.contains("[BLOCKED_CODE]"));
+    }
+
+    @Test
+    void sanitizeValue_multipleUnclosedFences() {
+        DebateAgent agent = createAgent();
+        String input = "first ```\ncontent one\nsecond ```\ncontent two";
+        String result = (String) ReflectionTestUtils.invokeMethod(agent, "sanitizeValue", input);
+        assertFalse(result.contains("```"));
+    }
 }
