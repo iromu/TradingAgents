@@ -11,7 +11,8 @@ source_paths:
   - "src/main/java/com/embabel/gekko/agent/Trader.java"
   - "src/main/java/com/embabel/gekko/agent/managers/PortfolioManager.java"
   - "src/main/java/com/embabel/gekko/web/TradingHtmxController.java"
-updated_at: "2026-08-13"
+  - "src/main/java/com/embabel/gekko/web/TradingApiController.java"
+updated_at: "2026-08-16"
 ---
 
 # Trading Workflow
@@ -22,9 +23,10 @@ This page describes the complete step-by-step flow from user input to final inve
 
 ### 1. User Enters Ticker
 
-The user navigates to the web UI and enters a stock ticker (e.g., "AAPL").
+The user navigates to the web UI and enters a stock ticker (e.g., "AAPL"), or sends a REST API request.
 
-- **Controller:** `TradingHtmxController`
+- **Web UI:** `TradingHtmxController` → `POST /plan`
+- **REST API:** `TradingApiController` → `POST /api/plan` with JSON body `{"ticker": "AAPL"}`
 - **Action:** `OrchestratorAgent.tickerFromForm()` validates and sanitizes the input
 - **Result:** A `Ticker` record with sanitized, uppercase ticker symbol
 

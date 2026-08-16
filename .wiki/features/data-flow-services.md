@@ -28,6 +28,8 @@ The data layer fetches financial and market data from external APIs and caches r
 - **File-based caching**: Responses saved to `data/alphavantage/` as JSON
 - **API key**: Injected from `app.alphavantage.api-key` (default: `dummy_key`)
 - **Conditional:** Behind `@ConditionalOnProperty` — disabled when `app.alphavantage.enabled: false`
+- **Ticker validation:** `validateTicker()` enforces `^[A-Z]{1,6}(\.[A-Z]{1,2})?$` before any API call
+- **Date handling:** `formatDateForApi()` is null-safe — falls back to current date when null is passed
 
 ### Endpoints
 
@@ -48,6 +50,15 @@ The data layer fetches financial and market data from external APIs and caches r
 - Stock price data
 - Technical indicator calculations
 - Company identity resolution (name, sector, exchange)
+- **Null handling:** BigDecimal values in CSV output are null-safe — missing values produce empty strings rather than "null"
+
+## Instrument Identity Agent
+
+`InstrumentIdentityAgent` resolves a ticker to its real company identity with resilience:
+
+- **Retry logic:** 3 attempts with exponential backoff (2s initial delay)
+- **Fallback:** If Yahoo Finance fails, falls back to Alpha Vantage for identity data
+- This prevents transient API failures from blocking the entire workflow
 
 ## FRED Service
 
@@ -74,7 +85,7 @@ The data layer fetches financial and market data from external APIs and caches r
 
 ## Tool Classes
 
-- **`MarketDataTools`** — Exposes stock data and technical indicator methods as LLM tools
+- **`MarketDataTools`** — Exposes stock data and technical indicator methods as LLM tools. `lookbackDays` is validated to be between 1 and 3650.
 - **`FredDataTools`** — Exposes FRED macroeconomic data methods as LLM tools
 - **`PolymarketDataTools`** — Exposes prediction market methods as LLM tools
 

@@ -34,13 +34,14 @@ record DebateBriefs(String fundamentalsBrief, String marketBrief, String newsBri
 ### InvestmentDebateState
 ```java
 record InvestmentDebateState(List<String> history, List<String> bullHistory, List<String> bearHistory,
-                             String currentResponse, int count, DebateBriefs briefs)
+                             String currentResponse, int count, DebateBriefs briefs, double lastSimilarity)
 ```
 - `history` — full conversation history
 - `bullHistory` — only bull arguments
 - `bearHistory` — only bear arguments
 - `count` — number of turns completed
 - `briefs` — the original debate briefs
+- `lastSimilarity` — Jaccard bigram similarity score from the most recent convergence check (used by `DebateLoopAgent`)
 
 ### InvestmentPlan
 ```java
@@ -130,3 +131,16 @@ record HitlSession(String processId, String agentName, String failureInfo,
 - Context is set by `OrchestratorAgent` after identity resolution
 - `clear()` method explicitly clears ThreadLocal after each agent turn
 - No `ConcurrentHashMap` — simplified from the previous two-level approach
+
+## Checkpoint Data
+
+```java
+record CheckpointData(String ticker, String tradeDate, String lastCompletedPhase, Map<String, Object> phases)
+```
+- Returned by `CheckpointAgent.restoreCheckpoint()` on successful restore
+- `ticker` — the stock symbol this checkpoint belongs to
+- `tradeDate` — the date the research was initiated
+- `lastCompletedPhase` — which phase completed last (e.g., "identity", "researchPlan", "debate")
+- `phases` — map of phase name → blackboard snapshot
+
+See `[[checkpoint-system]]` for full details.
