@@ -6,7 +6,9 @@ language: "default"
 source_paths:
   - "src/main/java/com/embabel/gekko/agent/OrchestratorAgent.java"
   - "src/main/java/com/embabel/gekko/agent/DebateAgent.java"
-updated_at: "2026-08-13"
+  - "src/main/java/com/embabel/gekko/agent/Trader.java"
+  - "src/main/java/com/embabel/gekko/agent/RiskDebateAgent.java"
+updated_at: "2026-08-16"
 ---
 
 # Orchestrator & Debate Agents
@@ -74,6 +76,33 @@ Both methods:
 ### Decision Storage Fix
 
 `storeFinalDecision()` is now called outside the `FileCache.getOrCompute()` supplier, ensuring decisions are stored on every call — not just cache misses. Previously, cached results would skip decision storage.
+
+## Trader Structured Output
+
+The `Trader` agent uses structured LLM output with a fallback to free-text:
+
+- **Primary:** `TraderProposalOutput` record — parsed from the LLM's structured response (action, entry price, stop-loss, position size)
+- **Fallback:** If structured parsing fails, the raw text is used as-is
+- This ensures the workflow doesn't break when the LLM returns unexpected formats
+
+## RiskDebateAgent Refinements
+
+`RiskDebateAgent` runs a 3-round debate with structured output:
+
+- **Structured output:** `RiskAssessment(RiskLevel, reasoning)` with fallback to keyword extraction
+- **Round formatting:** Round numbers are explicitly included in prompts for clarity
+- **Configurable rounds:** `maxRiskDebateRounds` from `TraderAgentConfig` (default: 3)
+
+## OrchestratorAgent Ticker Validation
+
+`tickerFromForm()` validates user input before it enters the pipeline:
+
+- Rejects blank/empty input
+- Uppercases the ticker
+- Validates against `^[A-Z0-9.]+$`
+- Throws `IllegalArgumentException` on invalid input
+
+This prevents malformed tickers from reaching data services.
 
 ## Data Flow
 

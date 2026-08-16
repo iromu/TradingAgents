@@ -8,7 +8,8 @@ source_paths:
   - "src/main/java/com/embabel/gekko/htmx/HitlService.java"
   - "src/main/java/com/embabel/gekko/agent/memory/DecisionMemoryRepository.java"
   - "src/main/java/com/embabel/gekko/agent/identity/InstrumentContextPromptContributor.java"
-updated_at: "2026-08-13"
+  - "src/main/java/com/embabel/gekko/agent/checkpoint/CheckpointData.java"
+updated_at: "2026-08-16"
 ---
 
 # State Models (Entities)

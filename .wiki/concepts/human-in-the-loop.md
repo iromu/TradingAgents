@@ -66,6 +66,19 @@ Gekko uses two HITL mechanisms:
 - Session migration uses per-session locking to avoid global serialization
 - `AgentUtils` provides shared WaitFor form submission and process lock utilities
 
+## Session-Based Process Ownership
+
+Both `TradingHtmxController` and `ProcessStatusController` bind a `processId` to the HTTP session when first accessed. Subsequent POST requests verify that the session-bound processId matches the requested one:
+
+```java
+String ownedProcessId = (String) session.getAttribute(SESSION_PROCESS_ID);
+if (ownedProcessId == null || !ownedProcessId.equals(processId)) {
+    // Access denied — return error or redirect
+}
+```
+
+This prevents one user from approving or resubmitting another user's research process. The constant `SESSION_PROCESS_ID = "hitl_processId"` is shared across both controllers.
+
 ## Security
 
 User input is sanitized before being injected into LLM prompts:
@@ -73,3 +86,7 @@ User input is sanitized before being injected into LLM prompts:
 - `sanitizeForPrompt()` strips Jinja syntax, control characters, and Unicode formatting
 - Prevents prompt injection attacks
 - Feedback is only injected when the user has approved
+- All feedback fields are capped at 10,000 characters (REST API returns 400; HTMX shows an error message)
+- Process IDs are validated against `^[A-Za-z0-9_-]+$` via `AgentUtils.validateProcessId()` before reaching the agent platform
+
+See `[[security]]` for the full security model.

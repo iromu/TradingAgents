@@ -12,7 +12,8 @@ source_paths:
   - "src/main/java/com/embabel/gekko/tools/MarketDataTools.java"
   - "src/main/java/com/embabel/gekko/tools/FredDataTools.java"
   - "src/main/java/com/embabel/gekko/tools/PolymarketDataTools.java"
-updated_at: "2026-08-13"
+  - "src/main/java/com/embabel/gekko/agent/identity/InstrumentIdentityAgent.java"
+updated_at: "2026-08-16"
 ---
 
 # Data Flow Services
