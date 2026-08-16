@@ -3,8 +3,8 @@ title: "Gekko Project Wiki"
 type: "index"
 status: "active"
 language: "default"
-last_commit: "967de154df9b6fb87838ea3d15214b25aba23e84"
-updated_at: "2026-08-13"
+last_commit: "70be54ce7a8dd6585dca5350c58c3914bfd37a9a"
+updated_at: "2026-08-16"
 ---
 
 # Gekko: Multi-Agent Trading Research Platform
@@ -57,13 +57,15 @@ See `[[trading-workflow]]` for the full step-by-step flow.
 |------|------|
 | Agent architecture | `[[multi-agent-architecture]]` |
 | Orchestrator agent | `[[trader-agent]]` |
-| Agent configuration | `[[agent-configuration]]` |
+| Web API (REST + HTMX) | `[[web-api]]` |
+| Security model | `[[security]]` |
 | Market data tools | `[[market-data-tools]]` |
 | Custom indicators | `[[technical-indicators]]` |
 | Data sources | `[[data-sources]]` |
 | Investment debate | `[[investment-debate]]` |
 | Risk debate | `[[risk-debate]]` |
 | Human-in-the-loop | `[[human-in-the-loop]]` |
+| Checkpoint system | `[[checkpoint-system]]` |
 | Caching layer | `[[file-cache]]` |
 | LLM budget tracker | `[[llm-budget-tracker]]` |
 | Test coverage | `[[test-coverage]]` |

@@ -7,8 +7,9 @@ source_paths:
   - "src/main/java/com/embabel/gekko/htmx/HitlService.java"
   - "src/main/java/com/embabel/gekko/htmx/HitlAgenticEventListener.java"
   - "src/main/java/com/embabel/gekko/htmx/ProcessStatusController.java"
+  - "src/main/java/com/embabel/gekko/web/TradingHtmxController.java"
   - "src/main/java/com/embabel/gekko/util/AgentUtils.java"
-updated_at: "2026-08-13"
+updated_at: "2026-08-16"
 ---
 
 # Human-in-the-Loop (HITL)
