@@ -2,6 +2,7 @@ package com.embabel.gekko.agent.memory;
 
 import com.embabel.agent.api.common.OperationContext;
 import com.embabel.gekko.dataflows.YFinService;
+import com.embabel.gekko.util.PromptSanitizer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -80,12 +81,22 @@ public class DecisionMemoryAgent {
         return repository.generatePastContext(ticker);
     }
 
+    public boolean hasPendingEntriesFor(String ticker) {
+        return repository.hasPendingEntriesFor(ticker);
+    }
+
     public ReturnsData fetchReturns(String ticker, String tradeDate) throws Exception {
         // Fetch 5-day return from Yahoo Finance
         LocalDate trade = LocalDate.parse(tradeDate, DF);
         LocalDate end = trade.plusDays(5);
 
         String data = yFinService.getYFinDataOnline(ticker, tradeDate, end.format(DF));
+
+        // Guard against error strings or missing data
+        if (data == null || data.isBlank() || data.startsWith("No data found") || data.contains("Error")) {
+            log.warn("Incomplete window for {} on {}: no close price available", ticker, tradeDate);
+            throw new IllegalStateException("Incomplete data window for " + ticker + " on " + tradeDate);
+        }
 
         // Parse the CSV data to get close prices
         String[] lines = data.split("\n");
@@ -120,15 +131,76 @@ public class DecisionMemoryAgent {
             }
         }
 
+        // Guard: validate both prices exist before recording a return
         if (openPrice == 0 || closePrice == 0) {
-            return new ReturnsData(BigDecimal.ZERO, BigDecimal.ZERO, "SPY", 5);
+            log.warn("Missing close price for {} on {} → leaving entry pending", ticker, tradeDate);
+            throw new IllegalStateException("Missing close price for " + ticker + " on " + tradeDate);
         }
 
         BigDecimal rawReturn = BigDecimal.valueOf((closePrice - openPrice) / openPrice * 100);
-        // Alpha vs benchmark (SPY) — simplified: assume benchmark return is 0 for now
-        BigDecimal alphaReturn = rawReturn;
 
-        return new ReturnsData(rawReturn, alphaReturn, "SPY", 5);
+        // Compute alpha against a real benchmark's same-window return
+        BigDecimal alphaReturn = rawReturn;
+        String benchmark = "SPY";
+        try {
+            BigDecimal benchmarkReturn = fetchBenchmarkReturn(benchmark, tradeDate, trade, end);
+            if (benchmarkReturn != null) {
+                alphaReturn = rawReturn.subtract(benchmarkReturn);
+            } else {
+                // Explicit benchmark-less marker (never silent 0)
+                benchmark = "N/A";
+                log.info("No benchmark data for {} on {} — using raw return as fallback", ticker, tradeDate);
+            }
+        } catch (Exception e) {
+            benchmark = "N/A";
+            log.warn("Failed to fetch benchmark return: {}", e.getMessage());
+        }
+
+        return new ReturnsData(rawReturn, alphaReturn, benchmark, 5);
+    }
+
+    /**
+     * Fetch the same-window return for a benchmark ticker (default SPY).
+     * Returns null if benchmark data is unavailable.
+     */
+    private BigDecimal fetchBenchmarkReturn(String benchmark, String tradeDate, LocalDate trade, LocalDate end) throws Exception {
+        String benchData = yFinService.getYFinDataOnline(benchmark, tradeDate, end.format(DF));
+        if (benchData == null || benchData.isBlank() || benchData.startsWith("No data found")) {
+            return null;
+        }
+
+        String[] lines = benchData.split("\n");
+        Map<String, Integer> columns = parseCsvHeader(lines);
+        int dateIdx = resolveColumn(columns, "Date");
+        int openIdx = resolveColumn(columns, "Open");
+        int closeIdx = resolveColumn(columns, "Close");
+
+        double benchOpen = 0;
+        double benchClose = 0;
+
+        for (String line : lines) {
+            if (line.startsWith("#") || line.isBlank()) continue;
+            String[] parts = line.split(",");
+            int maxIdx = Math.max(dateIdx, Math.max(openIdx, closeIdx));
+            if (parts.length <= maxIdx) continue;
+            try {
+                LocalDate lineDate = LocalDate.parse(parts[dateIdx], DF);
+                if (lineDate.equals(trade)) {
+                    benchOpen = parseFiniteDouble(parts[openIdx]);
+                }
+                if (lineDate.equals(end)) {
+                    benchClose = parseFiniteDouble(parts[closeIdx]);
+                }
+            } catch (Exception e) {
+                continue;
+            }
+        }
+
+        if (benchOpen == 0 || benchClose == 0) {
+            return null;
+        }
+
+        return BigDecimal.valueOf((benchClose - benchOpen) / benchOpen * 100);
     }
 
     private Map<String, Integer> parseCsvHeader(String[] lines) {
@@ -171,11 +243,12 @@ public class DecisionMemoryAgent {
         );
 
         try {
-            return context.ai()
+            String raw = context.ai()
                     .withLlmByRole(BEST_ROLE)
                     .withId("memory-reflection")
                     .creating(String.class)
                     .fromTemplate("memory/reflection", model);
+            return PromptSanitizer.sanitizeForPrompt(raw);
         } catch (Exception e) {
             log.warn("Failed to generate reflection: {}", e.getMessage());
             return "Return was " + returns.rawReturn() + "% for " + pending.ticker();

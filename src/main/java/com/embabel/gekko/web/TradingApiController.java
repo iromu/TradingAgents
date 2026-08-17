@@ -34,9 +34,16 @@ public class TradingApiController {
         this.researchPlanService = researchPlanService;
     }
 
+    private static final java.util.regex.Pattern TICKER_PATTERN = java.util.regex.Pattern.compile("^[A-Z0-9.]+$");
+
     @PostMapping("/plan")
     public ResponseEntity<Map<String, Object>> planResearch(@RequestBody TickerRequest request) {
-        var ticker = new ResearchTypes.Ticker(request.ticker(), request.feedback() != null ? request.feedback() : "");
+        String rawTicker = request.ticker();
+        if (rawTicker == null || !TICKER_PATTERN.matcher(rawTicker).matches()) {
+            return ResponseEntity.badRequest()
+                    .body(Map.of("error", "Invalid ticker format. Expected uppercase letters, digits, and dots only (e.g. AAPL, BRK.B)"));
+        }
+        var ticker = new ResearchTypes.Ticker(rawTicker, request.feedback() != null ? request.feedback() : "");
         var agentProcess = researchPlanService.createAndStart(ticker);
         var process = agentPlatform.getAgentProcess(agentProcess.getId());
 

@@ -255,8 +255,9 @@ class AllAgentsPlanValidationTest extends EmbabelMockitoIntegrationTest {
         ctx.expectResponse("Stub fundamentals report.");
 
         var cache = new FileCache();
+        var resultCache = new com.embabel.gekko.util.ResultCache(cache, "5m", "1h");
         var debateAgent = new DebateAgent(
-                cache, null, null, null, null, null, null, null, null
+                resultCache, null, null, null, null, null, null, null, null
         );
 
         var result = debateAgent.generateFundamentalsReport(ticker, ctx);
@@ -269,8 +270,9 @@ class AllAgentsPlanValidationTest extends EmbabelMockitoIntegrationTest {
         ctx.expectResponse("Stub research plan.");
 
         var cache = new FileCache();
+        var resultCache = new com.embabel.gekko.util.ResultCache(cache, "5m", "1h");
         var agent = new OrchestratorAgent(
-                cache, null, null, null, null, null, null
+                resultCache, null, null, null, null, null, null
         );
 
         var result = agent.generateResearchPlan(ticker, null, ctx);

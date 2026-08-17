@@ -4,6 +4,7 @@ import com.embabel.gekko.dataflows.AlphaVantageService;
 import com.embabel.gekko.dataflows.YFinService;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.util.ResultCache;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.ObjectProvider;
 import java.nio.file.Path;
 import java.util.Map;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.*;
@@ -24,7 +26,7 @@ class InstrumentIdentityAgentTest {
     @TempDir
     Path tempDir;
 
-    private FileCache cache;
+    private ResultCache resultCache;
     private YFinService yFinService;
     private InstrumentIdentityAgent agent;
 
@@ -42,17 +44,17 @@ class InstrumentIdentityAgentTest {
 
     @BeforeEach
     void setUp() {
-        cache = new FileCache();
-        // Override baseDir to use temp directory
+        var fileCache = new FileCache();
         try {
             var field = FileCache.class.getDeclaredField("baseDir");
             field.setAccessible(true);
-            field.set(cache, tempDir);
+            field.set(fileCache, tempDir);
         } catch (Exception e) {
             throw new RuntimeException("Failed to set cache baseDir", e);
         }
+        resultCache = new ResultCache(fileCache, "5m", "1h");
         yFinService = mock(YFinService.class);
-        agent = new InstrumentIdentityAgent(yFinService, cache, noAvProvider());
+        agent = new InstrumentIdentityAgent(yFinService, resultCache, noAvProvider());
     }
 
     @Test
@@ -177,7 +179,7 @@ class InstrumentIdentityAgentTest {
 
         when(yFinService.getTickerInfo("AAPL")).thenThrow(new RuntimeException("429 Too Many Requests"));
 
-        agent = new InstrumentIdentityAgent(yFinService, cache, avProvider(avService));
+        agent = new InstrumentIdentityAgent(yFinService, resultCache, avProvider(avService));
         var result = agent.resolveIdentity(ticker);
 
         assertNotNull(result);
@@ -204,7 +206,7 @@ class InstrumentIdentityAgentTest {
         when(invalidStock.isValid()).thenReturn(false);
         when(yFinService.getTickerInfo("INVALID")).thenReturn(invalidStock);
 
-        agent = new InstrumentIdentityAgent(yFinService, cache, avProvider(avService));
+        agent = new InstrumentIdentityAgent(yFinService, resultCache, avProvider(avService));
         var result = agent.resolveIdentity(ticker);
 
         assertNotNull(result);
@@ -220,7 +222,7 @@ class InstrumentIdentityAgentTest {
 
         when(yFinService.getTickerInfo("INVALID")).thenThrow(new RuntimeException("429 Too Many Requests"));
 
-        agent = new InstrumentIdentityAgent(yFinService, cache, avProvider(avService));
+        agent = new InstrumentIdentityAgent(yFinService, resultCache, avProvider(avService));
         var result = agent.resolveIdentity(ticker);
 
         assertNull(result);
@@ -231,7 +233,7 @@ class InstrumentIdentityAgentTest {
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         when(yFinService.getTickerInfo("AAPL")).thenThrow(new RuntimeException("429 Too Many Requests"));
 
-        agent = new InstrumentIdentityAgent(yFinService, cache, noAvProvider());
+        agent = new InstrumentIdentityAgent(yFinService, resultCache, noAvProvider());
         var result = agent.resolveIdentity(ticker);
 
         assertNull(result);
@@ -282,5 +284,45 @@ class InstrumentIdentityAgentTest {
         // All results should have the same normalized ticker
         assertEquals(result1.ticker(), result2.ticker());
         assertEquals(result2.ticker(), result3.ticker());
+    }
+
+    // --- Identity sanitization before caching (Task 5.2) ---
+
+    @Test
+    void resolveIdentity_sanitizesCompanyNameBeforeCaching() throws Exception {
+        var ticker = new ResearchTypes.Ticker("EVIL", "");
+        yahoofinance.Stock stock = mock(yahoofinance.Stock.class);
+        when(stock.isValid()).thenReturn(true);
+        when(stock.getName()).thenReturn("Evil Corp {{ config.secret }}");
+        when(stock.getStockExchange()).thenReturn("NYSE<script>alert(1)</script>");
+        when(stock.getCurrency()).thenReturn("USD");
+        when(yFinService.getTickerInfo("EVIL")).thenReturn(stock);
+
+        var result = agent.resolveIdentity(ticker);
+
+        assertNotNull(result);
+        assertThat(result.companyName()).doesNotContain("{{").doesNotContain("}}");
+        assertThat(result.exchange()).doesNotContain("<script");
+    }
+
+    @Test
+    void resolveIdentity_sanitizesAlphaVantageFallbackFields() throws Exception {
+        var ticker = new ResearchTypes.Ticker("MALICIOUS", "");
+        AlphaVantageService avService = mock(AlphaVantageService.class);
+        when(avService.getOverview("MALICIOUS")).thenReturn(Map.of(
+                "Name", "Bad Co {% set x = 1 %}",
+                "Sector", "Tech<div onclick='evil()'>",
+                "Industry", "Finance",
+                "Exchange", "NASDAQ",
+                "Currency", "USD"
+        ));
+        when(yFinService.getTickerInfo("MALICIOUS")).thenThrow(new RuntimeException("down"));
+
+        agent = new InstrumentIdentityAgent(yFinService, resultCache, avProvider(avService));
+        var result = agent.resolveIdentity(ticker);
+
+        assertNotNull(result);
+        assertThat(result.companyName()).doesNotContain("{%").doesNotContain("%}");
+        assertThat(result.sector()).doesNotContain("onclick=");
     }
 }

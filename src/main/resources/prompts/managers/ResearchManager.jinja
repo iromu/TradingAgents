@@ -14,8 +14,35 @@ Take into account your past mistakes on similar situations.
 Use these insights to refine your decision-making and ensure you are learning and improving.
 Present your analysis conversationally, as if speaking naturally, without special formatting.
 
+{%- if ticker %}
+Ticker under analysis: {{ ticker }}
+{%- endif %}
+
+{%- if companyName and companyName != "Unknown" %}
+Company: {{ companyName }}
+{%- if sector and sector != "Unknown" %}Sector: {{ sector }}
+{%- endif %}
+{%- if industry and industry != "Unknown" %}Industry: {{ industry }}
+{%- endif %}
+{%- if exchange and exchange != "Unknown" %}Exchange: {{ exchange }}
+{%- endif %}
+{%- endif %}
+
 Here are your past reflections on mistakes:
 "{{ past_memory_str }}"
+
+{%- if risk_level %}
+Risk Assessment:
+Level: {{ risk_level }}
+{%- if risk_reasoning %}
+Reasoning: {{ risk_reasoning }}
+{%- endif %}
+{%- endif %}
+
+{%- if portfolio_decision %}
+Portfolio Manager Decision:
+{{ portfolio_decision }}
+{%- endif %}
 
 {%- if human_approved %}
 Generate the full investment plan as described above, incorporating the user's feedback as additional context where applicable.

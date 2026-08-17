@@ -51,20 +51,17 @@ public class VendorRouter {
 
             case "get_balance_sheet" -> alphaVantageService.getBalanceSheet(
                     str(params[0], null),
-                    str(params.length > 1 ? params[1] : null, "quarterly"),
-                    str(params.length > 2 ? params[2] : null, null)
+                    str(params.length > 1 ? params[1] : null, "quarterly")
             );
 
             case "get_cashflow" -> alphaVantageService.getCashflow(
                     str(params[0], null),
-                    str(params.length > 1 ? params[1] : null, "quarterly"),
-                    str(params.length > 2 ? params[2] : null, null)
+                    str(params.length > 1 ? params[1] : null, "quarterly")
             );
 
             case "get_income_statement" -> alphaVantageService.getIncomeStatement(
                     str(params[0], null),
-                    str(params.length > 1 ? params[1] : null, "quarterly"),
-                    str(params.length > 2 ? params[2] : null, null)
+                    str(params.length > 1 ? params[1] : null, "quarterly")
             );
 
             // ====================================================

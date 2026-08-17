@@ -24,9 +24,15 @@ app:
   memory:
     log-path: ~/.tradingagents/memory/trading_memory.md
     log-max-entries: 1000
+  cache:
+    ttl:
+      quote: 5m
+      external-http: 1h
   alphavantage:
     enabled: true
   checkpoint:
+    # Intentionally disabled: the pipeline relies on in-memory state and
+    # does not yet support restoring from disk checkpoints.
     enabled: false
     dir: data/checkpoints
   fred:

@@ -195,38 +195,18 @@ public class RiskDebateAgent {
 
     /**
      * Fallback parser for when structured output is unavailable.
-     * Heuristic keyword matching on the LLM's free-text response.
+     * Returns NEUTRAL with an explicit undetermined marker — never classifies
+     * RISKY or CONSERVATIVE from keyword matching on the transcript, because
+     * speaker labels ("Aggressive (Round 1)", "Conservative (Round 2)") always
+     * contain those keywords and would produce a false positive.
      */
     private RiskAssessment parseRiskAssessmentFallback(String debateOutput) {
         if (debateOutput == null || debateOutput.isBlank()) {
             return new RiskAssessment(RiskLevel.NEUTRAL, "LLM returned empty result — defaulting to NEUTRAL");
         }
-
-        var lower = debateOutput.toLowerCase();
-        var level = classifyRisk(lower);
-        var reasoning = truncate(debateOutput, 200);
-
-        return new RiskAssessment(level, reasoning);
-    }
-
-    private RiskLevel classifyRisk(String lower) {
-        if (riskyWords(lower)) {
-            return RiskLevel.RISKY;
-        }
-        if (conservativeWords(lower)) {
-            return RiskLevel.CONSERVATIVE;
-        }
-        return RiskLevel.NEUTRAL;
-    }
-
-    private boolean riskyWords(String s) {
-        return s.contains("high risk") || s.contains("risky") || s.contains("aggressive")
-                || s.contains("bold move") || s.contains("strong buy") || s.contains("overweight");
-    }
-
-    private boolean conservativeWords(String s) {
-        return s.contains("low risk") || s.contains("conservative") || s.contains("safe")
-                || s.contains("avoid") || s.contains("cautious") || s.contains("underweight");
+        String reasoning = truncate(debateOutput, 200);
+        return new RiskAssessment(RiskLevel.NEUTRAL,
+                "Structured output unavailable — undetermined, defaulting to NEUTRAL. Judge said: " + reasoning);
     }
 
     private String truncate(String s, int max) {

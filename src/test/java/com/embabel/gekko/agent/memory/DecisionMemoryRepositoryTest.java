@@ -468,4 +468,105 @@ class DecisionMemoryRepositoryTest {
         String recovered = readLog(repo);
         assertEquals(content.trim(), recovered.trim());
     }
+
+    // --- separator round-trip and legacy compatibility ---
+
+    @Test
+    void separatorRoundTrip_writeAndReadCanonicalSeparator() throws Exception {
+        var repo = createRepository(tempDir.resolve("memory.md").toString(), 0);
+        repo.appendPending("AAPL", "2026-01-15", "Buy", "Summary", "Thesis");
+
+        String content = readLog(repo);
+        assertTrue(content.contains(DecisionMemoryRepository.ENTRY_SEPARATOR));
+        assertFalse(content.contains(DecisionMemoryRepository.LEGACY_ENTRY_SEPARATOR));
+
+        // Round-trip: parse back
+        var entries = repo.getPendingEntries("AAPL");
+        assertEquals(1, entries.size());
+        assertEquals("AAPL", entries.get(0).ticker());
+        assertEquals("2026-01-15", entries.get(0).tradeDate());
+    }
+
+    @Test
+    void separatorRoundTrip_resolveWritesCanonicalSeparator() throws Exception {
+        var repo = createRepository(tempDir.resolve("memory.md").toString(), 0);
+        repo.appendPending("AAPL", "2026-01-15", "Buy", "Summary", "Thesis");
+
+        repo.resolve("AAPL", "2026-01-15",
+                BigDecimal.valueOf(5.2), BigDecimal.valueOf(3.1), "SPY", 5,
+                "Reflection text");
+
+        String content = readLog(repo);
+        assertTrue(content.contains(DecisionMemoryRepository.ENTRY_SEPARATOR));
+        assertFalse(content.contains(DecisionMemoryRepository.LEGACY_ENTRY_SEPARATOR));
+        assertTrue(content.contains("[2026-01-15 | AAPL | Buy | 5.2 | 3.1 | 5d]"));
+    }
+
+    @Test
+    void parserToleratesLegacyControlCharSeparator() throws Exception {
+        var repo = createRepository(tempDir.resolve("memory.md").toString(), 0);
+        // Write an entry with the legacy control-char separator
+        String legacyEntry = """
+                [2026-01-15 | AAPL | Buy | +5.2%% | +3.1%% | 5d]
+
+                DECISION:
+                **Rating**: Buy
+
+                **Executive Summary**: N/A
+
+                REFLECTION:
+                Legacy entry reflection.
+
+                %s
+                """.formatted(DecisionMemoryRepository.LEGACY_ENTRY_SEPARATOR);
+        var field = DecisionMemoryRepository.class.getDeclaredField("memoryLogPath");
+        field.setAccessible(true);
+        Path path = (Path) field.get(repo);
+        Files.writeString(path, legacyEntry, StandardCharsets.UTF_8);
+
+        // Parser should still find the resolved entry
+        String context = repo.generatePastContext("AAPL");
+        assertTrue(context.contains("PAST DECISION MEMORY:"));
+        assertTrue(context.contains("Legacy entry reflection."));
+    }
+
+    @Test
+    void parserHandlesMixedSeparators() throws Exception {
+        var repo = createRepository(tempDir.resolve("memory.md").toString(), 0);
+        // Entry 1 uses canonical separator, entry 2 uses legacy
+        String mixedContent = """
+                [2026-01-15 | AAPL | Buy | +5.2%% | +3.1%% | 5d]
+
+                DECISION:
+                **Rating**: Buy
+
+                **Executive Summary**: N/A
+
+                REFLECTION:
+                Canonical entry.
+
+                %s
+
+                [2026-01-16 | MSFT | Hold | +1.0%% | +0.5%% | 5d]
+
+                DECISION:
+                **Rating**: Hold
+
+                **Executive Summary**: N/A
+
+                REFLECTION:
+                Legacy entry.
+
+                %s
+                """.formatted(DecisionMemoryRepository.ENTRY_SEPARATOR, DecisionMemoryRepository.LEGACY_ENTRY_SEPARATOR);
+        var field = DecisionMemoryRepository.class.getDeclaredField("memoryLogPath");
+        field.setAccessible(true);
+        Path path = (Path) field.get(repo);
+        Files.writeString(path, mixedContent, StandardCharsets.UTF_8);
+
+        // Both entries should be parsed
+        String context = repo.generatePastContext("NVDA");
+        assertTrue(context.contains("Canonical entry."));
+        assertTrue(context.contains("Legacy entry."));
+    }
 }

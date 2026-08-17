@@ -28,7 +28,11 @@ public class FileCache {
     private final Map<String, Object> lockMap = new ConcurrentHashMap<>();
 
     public FileCache() {
-        this.baseDir = Path.of("data/llm/cache");
+        this(Path.of("data/llm/cache"));
+    }
+
+    public FileCache(Path baseDir) {
+        this.baseDir = baseDir;
         try {
             Files.createDirectories(baseDir);
         } catch (IOException e) {

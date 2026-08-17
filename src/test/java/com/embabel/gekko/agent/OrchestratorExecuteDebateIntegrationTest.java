@@ -53,7 +53,7 @@ class OrchestratorExecuteDebateIntegrationTest extends EmbabelMockitoIntegration
         when(debateAgentProvider.getObject()).thenReturn(null);
 
         var orchestrator = new OrchestratorAgent(
-                cache,
+                null, // resultCache
                 null, // identityAgent
                 null, // memoryAgent
                 null, // checkpointAgent
@@ -79,7 +79,7 @@ class OrchestratorExecuteDebateIntegrationTest extends EmbabelMockitoIntegration
         when(debateAgentProvider.getObject()).thenReturn(null);
 
         var orchestrator = new OrchestratorAgent(
-                cache,
+                null, // resultCache
                 null, null, null, null,
                 debateAgentProvider,
                 null

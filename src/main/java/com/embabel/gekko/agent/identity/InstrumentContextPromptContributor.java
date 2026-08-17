@@ -1,6 +1,7 @@
 package com.embabel.gekko.agent.identity;
 
 import com.embabel.common.ai.prompt.PromptContributor;
+import com.embabel.gekko.util.PromptSanitizer;
 import org.springframework.stereotype.Component;
 
 /**
@@ -44,6 +45,11 @@ public class InstrumentContextPromptContributor implements PromptContributor {
         if (ctx == null) {
             return "";
         }
+        String name = PromptSanitizer.sanitizeForPrompt(ctx.companyName());
+        String ticker = PromptSanitizer.sanitizeForPrompt(ctx.ticker());
+        String sector = PromptSanitizer.sanitizeForPrompt(ctx.sector());
+        String industry = PromptSanitizer.sanitizeForPrompt(ctx.industry());
+        String exchange = PromptSanitizer.sanitizeForPrompt(ctx.exchange());
         return """
                 INSTRUMENT CONTEXT:
                 You are analyzing: %s (%s)
@@ -53,10 +59,6 @@ public class InstrumentContextPromptContributor implements PromptContributor {
 
                 IMPORTANT: You are analyzing %s. Do not confuse it with any other company.
                 All price data, news, and analysis MUST refer to %s.
-                """.formatted(
-                ctx.companyName(), ctx.ticker(),
-                ctx.sector(), ctx.industry(), ctx.exchange(),
-                ctx.companyName(), ctx.companyName()
-        );
+                """.formatted(name, ticker, sector, industry, exchange, name, name);
     }
 }

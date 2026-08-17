@@ -55,12 +55,19 @@ public class TradingHtmxController {
         return "form";
     }
 
+    private static final java.util.regex.Pattern TICKER_PATTERN = java.util.regex.Pattern.compile("^[A-Z0-9.]+$");
+
     @SuppressWarnings("SameReturnValue")
     @PostMapping("/plan")
     public String planResearch(
             @ModelAttribute TickerForm form,
             Model model
     ) {
+        if (form.getContent() == null || !TICKER_PATTERN.matcher(form.getContent()).matches()) {
+            model.addAttribute("error", "Invalid ticker format. Expected uppercase letters, digits, and dots only (e.g. AAPL, BRK.B)");
+            model.addAttribute("ticker", form);
+            return "form";
+        }
         if (form.getFeedback() != null && form.getFeedback().length() > 10000) {
             model.addAttribute("error", "Feedback must not exceed 10,000 characters");
             model.addAttribute("ticker", form);

@@ -1,6 +1,7 @@
 package com.embabel.gekko.dataflows;
 
 import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.util.ResultCache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 
@@ -23,7 +24,8 @@ class PolymarketServiceTest {
         var field = FileCache.class.getDeclaredField("baseDir");
         field.setAccessible(true);
         field.set(cache, cacheDir);
-        return new PolymarketService(cache);
+        var resultCache = new ResultCache(cache, "5m", "1h");
+        return new PolymarketService(resultCache);
     }
 
     // --- searchMarkets ---

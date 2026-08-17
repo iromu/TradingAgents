@@ -5,15 +5,43 @@ status: "active"
 language: "default"
 source_paths:
   - "src/main/java/com/embabel/gekko/util/FileCache.java"
+  - "src/main/java/com/embabel/gekko/util/ResultCache.java"
   - "src/test/java/com/embabel/gekko/util/FileCacheTest.java"
-updated_at: "2026-08-13"
+  - "src/test/java/com/embabel/gekko/util/ResultCacheTest.java"
+updated_at: "2026-08-17"
 ---
 
 # File Cache
 
-`FileCache` is a disk-based caching layer used throughout Gekko to cache LLM outputs and API responses.
+`FileCache` is a disk-based caching layer used throughout Gekko to cache LLM outputs and API responses. `ResultCache` is the higher-level contract that production code uses — it wraps `FileCache` and adds key normalization, error-payload guarding, and per-category TTL.
 
-## Location
+## ResultCache (Primary Contract)
+
+Production code should use `ResultCache`, not raw `FileCache`. It adds three layers on top of disk storage:
+
+### Key Normalization
+
+`ResultCache.canonicalKey(category, parts...)` builds deterministic cache keys:
+- The category is lowercased; all parts are uppercased
+- Parts are joined with the ASCII unit separator (`\u001F`)
+- This ensures `aapl`, `AAPL`, and `Aapl` all hit the same cache entry
+
+### Error-Payload Guard
+
+`ResultCache.isErrorPayload(value)` detects error, rate-limit, or empty responses from external APIs. These are **never persisted** to cache — only valid data results are cached. This prevents stale error payloads from masking subsequent valid API responses.
+
+### Per-Category TTL
+
+TTLs are configured in `application.yaml` under `app.cache.ttl`:
+- `quote` — time-sensitive data (prices, quotes); defaults to `5m`
+- `external-http` — API responses; defaults to `1h`
+- LLM results have no TTL (they are deterministic for a given prompt)
+
+On JVM restart, in-memory timestamps are lost, so `getWithTtl` treats any cached value without a recorded write time as expired (safe behavior).
+
+## FileCache (Low-Level)
+
+### Location
 
 Cache files are stored in `data/llm/cache/` relative to the project root.
 
@@ -80,3 +108,13 @@ Ticker ticker = cache.getOrCompute("AAPL_ticker", Ticker.class, () -> {
 ## Character Encoding
 
 Uses `StandardCharsets.UTF_8` explicitly (not `Charset.defaultCharset()`).
+
+## Safe to Clear
+
+Both `data/llm/cache/` and `data/alphavantage/` may be **safely deleted at any time** after deployment. Stale cache entries are invalidated by:
+
+- **TTL expiry** — `ResultCache` treats expired entries as cache misses and recomputes
+- **Key shape changes** — after a code upgrade changes the `canonicalKey()` shape, old entries are never hit
+- **Missing in-memory timestamp** — on JVM restart, any cached value without a recorded write time is treated as expired
+
+Deleting the directories forces a full recomputation on next request but causes no data loss or corruption.

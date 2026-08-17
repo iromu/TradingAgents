@@ -7,6 +7,7 @@ import com.embabel.gekko.agent.researchers.BearResearcher;
 import com.embabel.gekko.agent.researchers.BullResearcher;
 import com.embabel.gekko.util.FileCache;
 import com.embabel.gekko.util.LlmBudgetTracker;
+import com.embabel.gekko.util.ResultCache;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
@@ -27,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class DebateLoopAgentIntegrationTest extends EmbabelMockitoIntegrationTest {
 
     private Path tempCacheDir;
-    private FileCache cache;
+    private ResultCache resultCache;
 
     @Autowired
     private LlmBudgetTracker llmBudgetTracker;
@@ -51,10 +52,11 @@ class DebateLoopAgentIntegrationTest extends EmbabelMockitoIntegrationTest {
     @BeforeEach
     void setUp() throws Exception {
         tempCacheDir = Files.createTempDirectory("debate-loop-agent-integration-test-cache-");
-        cache = new FileCache();
+        var fileCache = new FileCache();
         var field = FileCache.class.getDeclaredField("baseDir");
         field.setAccessible(true);
-        field.set(cache, tempCacheDir);
+        field.set(fileCache, tempCacheDir);
+        resultCache = new ResultCache(fileCache, "5m", "1h");
     }
 
     @Test
@@ -72,7 +74,7 @@ class DebateLoopAgentIntegrationTest extends EmbabelMockitoIntegrationTest {
                 config.anthropic(), config.google(), config.openai()
         );
 
-        var agent = new DebateLoopAgent(bullResearcher, bearResearcher, cache, testConfig, llmBudgetTracker);
+        var agent = new DebateLoopAgent(bullResearcher, bearResearcher, resultCache, testConfig, llmBudgetTracker);
 
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
@@ -109,7 +111,7 @@ class DebateLoopAgentIntegrationTest extends EmbabelMockitoIntegrationTest {
                 config.anthropic(), config.google(), config.openai()
         );
 
-        var agent = new DebateLoopAgent(bullResearcher, bearResearcher, cache, testConfig, llmBudgetTracker);
+        var agent = new DebateLoopAgent(bullResearcher, bearResearcher, resultCache, testConfig, llmBudgetTracker);
 
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
@@ -145,7 +147,7 @@ class DebateLoopAgentIntegrationTest extends EmbabelMockitoIntegrationTest {
                 config.anthropic(), config.google(), config.openai()
         );
 
-        var agent = new DebateLoopAgent(bullResearcher, bearResearcher, cache, testConfig, llmBudgetTracker);
+        var agent = new DebateLoopAgent(bullResearcher, bearResearcher, resultCache, testConfig, llmBudgetTracker);
 
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
@@ -178,7 +180,7 @@ class DebateLoopAgentIntegrationTest extends EmbabelMockitoIntegrationTest {
                 config.anthropic(), config.google(), config.openai()
         );
 
-        var agent = new DebateLoopAgent(bullResearcher, bearResearcher, cache, testConfig, llmBudgetTracker);
+        var agent = new DebateLoopAgent(bullResearcher, bearResearcher, resultCache, testConfig, llmBudgetTracker);
 
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");
@@ -211,7 +213,7 @@ class DebateLoopAgentIntegrationTest extends EmbabelMockitoIntegrationTest {
                 config.anthropic(), config.google(), config.openai()
         );
 
-        var agent = new DebateLoopAgent(bullResearcher, bearResearcher, cache, testConfig, llmBudgetTracker);
+        var agent = new DebateLoopAgent(bullResearcher, bearResearcher, resultCache, testConfig, llmBudgetTracker);
 
         var ticker = new ResearchTypes.Ticker("AAPL", "");
         var briefs = new ResearchTypes.DebateBriefs("F", "M", "N", "S");

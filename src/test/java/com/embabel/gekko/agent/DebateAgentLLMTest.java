@@ -9,6 +9,7 @@ import com.embabel.gekko.domain.Analysts.SocialMediaReport;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.FileCache;
 import com.embabel.gekko.util.LlmBudgetTracker;
+import com.embabel.gekko.util.ResultCache;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -64,8 +65,9 @@ class DebateAgentLLMTest {
     void setUp() throws Exception {
         ctx = FakeOperationContext.create();
         promptRunner = ctx.getPromptRunner();
+        var cache = createCache();
         agent = new DebateAgent(
-                createCache(),
+                new ResultCache(cache, "5m", "1h"),
                 null, // templateRenderer — not needed for FakeOperationContext
                 null, // memoryAgent — not needed for LLM action tests
                 null, // debateLoopAgentProvider
@@ -479,7 +481,7 @@ class DebateAgentLLMTest {
         var feedback = new ResearchTypes.InvestmentReviewFeedback("Looks good", true);
 
         // Act
-        var result = agent.researchManager(ticker, state, new RiskAssessment(RiskLevel.NEUTRAL, "moderate"), feedback, null, ctx);
+        var result = agent.researchManager(ticker, state, new RiskAssessment(RiskLevel.NEUTRAL, "moderate"), feedback, null, null, ctx);
 
         // Assert
         var invocations = promptRunner.getLlmInvocations();
@@ -500,7 +502,7 @@ class DebateAgentLLMTest {
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
         // Act
-        agent.researchManager(ticker, state, null, feedback, null, ctx);
+        agent.researchManager(ticker, state, null, feedback, null, null, ctx);
 
         // Assert
         assertEquals("researchManager", promptRunner.getLlmInvocations().get(0).getInteraction().getId());
@@ -518,7 +520,7 @@ class DebateAgentLLMTest {
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
         // Act
-        agent.researchManager(ticker, state, null, feedback, null, ctx);
+        agent.researchManager(ticker, state, null, feedback, null, null, ctx);
 
         // Assert
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
@@ -545,7 +547,7 @@ class DebateAgentLLMTest {
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
         // Act
-        agent.researchManager(ticker, state, null, feedback, null, ctx);
+        agent.researchManager(ticker, state, null, feedback, null, null, ctx);
 
         // Assert
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
@@ -565,7 +567,7 @@ class DebateAgentLLMTest {
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
         // Act
-        agent.researchManager(ticker, state, new RiskAssessment(RiskLevel.RISKY, "high risk"), feedback, null, ctx);
+        agent.researchManager(ticker, state, new RiskAssessment(RiskLevel.RISKY, "high risk"), feedback, null, null, ctx);
 
         // Assert — verify the LLM call was made and prompt contains expected content
         var invocations = promptRunner.getLlmInvocations();
@@ -588,7 +590,7 @@ class DebateAgentLLMTest {
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
         // Act
-        agent.researchManager(ticker, state, new RiskAssessment(RiskLevel.RISKY, "high risk with aggressive growth potential"), feedback, null, ctx);
+        agent.researchManager(ticker, state, new RiskAssessment(RiskLevel.RISKY, "high risk with aggressive growth potential"), feedback, null, null, ctx);
 
         // Assert — verify the LLM call was made and prompt contains expected content
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
@@ -609,7 +611,7 @@ class DebateAgentLLMTest {
         var feedback = new ResearchTypes.InvestmentReviewFeedback("Consider the valuation more carefully", true);
 
         // Act
-        agent.researchManager(ticker, state, null, feedback, null, ctx);
+        agent.researchManager(ticker, state, null, feedback, null, null, ctx);
 
         // Assert
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
@@ -628,7 +630,7 @@ class DebateAgentLLMTest {
         var feedback = new ResearchTypes.InvestmentReviewFeedback("Use {{ ticker }} in the prompt", true);
 
         // Act
-        agent.researchManager(ticker, state, null, feedback, null, ctx);
+        agent.researchManager(ticker, state, null, feedback, null, null, ctx);
 
         // Assert — the sanitized feedback should replace {{ ticker }} with [BLOCKED_TEMPLATE]
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
@@ -648,7 +650,7 @@ class DebateAgentLLMTest {
         var feedback = new ResearchTypes.InvestmentReviewFeedback("Approved", true);
 
         // Act
-        agent.researchManager(ticker, state, null, feedback, null, ctx);
+        agent.researchManager(ticker, state, null, feedback, null, null, ctx);
 
         // Assert — when human_approved=true, the template renders the "Generate the full investment plan" block
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
@@ -668,7 +670,7 @@ class DebateAgentLLMTest {
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
         // Act
-        agent.researchManager(ticker, state, null, feedback, null, ctx);
+        agent.researchManager(ticker, state, null, feedback, null, null, ctx);
 
         // Assert — verify the LLM call was made and prompt contains expected content
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
@@ -691,7 +693,7 @@ class DebateAgentLLMTest {
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
         // Act
-        agent.researchManager(ticker, state, null, feedback, null, ctx);
+        agent.researchManager(ticker, state, null, feedback, null, null, ctx);
 
         // Assert — verify history is in the prompt
         var prompt = promptRunner.getLlmInvocations().get(0).getPrompt();
@@ -710,7 +712,7 @@ class DebateAgentLLMTest {
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
         // Act
-        var result = agent.researchManager(ticker, state, null, feedback, null, ctx);
+        var result = agent.researchManager(ticker, state, null, feedback, null, null, ctx);
 
         // Assert
         assertNotNull(result);
@@ -733,7 +735,7 @@ class DebateAgentLLMTest {
         var feedback = new ResearchTypes.InvestmentReviewFeedback("", true);
 
         // Act
-        var result = agent.researchManager(ticker, state, null, feedback, null, ctx);
+        var result = agent.researchManager(ticker, state, null, feedback, null, null, ctx);
 
         // Assert
         assertEquals("Buy AAPL at $150 with stop loss at $140.", result.judgeDecision());
@@ -748,20 +750,22 @@ class DebateAgentLLMTest {
                 List.of(), List.of(), List.of(), "", 0,
                 new ResearchTypes.DebateBriefs("F", "M", "N", "S"), -1.0
         );
+        var cache1 = createCache();
+        var cache2 = createCache();
 
         // First call — fresh context
         var ctx1 = FakeOperationContext.create();
         var runner1 = ctx1.getPromptRunner();
         runner1.expectResponse("Plan A.");
-        var agent1 = new DebateAgent(createCache(), null, null, null, null, null, null, null, null);
-        agent1.researchManager(ticker, state, null, new ResearchTypes.InvestmentReviewFeedback("feedback A", true), null, ctx1);
+        var agent1 = new DebateAgent(new ResultCache(cache1, "5m", "1h"), null, null, null, null, null, null, null, null);
+        agent1.researchManager(ticker, state, null, new ResearchTypes.InvestmentReviewFeedback("feedback A", true), null, null, ctx1);
 
         // Second call — fresh context
         var ctx2 = FakeOperationContext.create();
         var runner2 = ctx2.getPromptRunner();
         runner2.expectResponse("Plan B.");
-        var agent2 = new DebateAgent(createCache(), null, null, null, null, null, null, null, null);
-        agent2.researchManager(ticker, state, null, new ResearchTypes.InvestmentReviewFeedback("feedback B", true), null, ctx2);
+        var agent2 = new DebateAgent(new ResultCache(cache2, "5m", "1h"), null, null, null, null, null, null, null, null);
+        agent2.researchManager(ticker, state, null, new ResearchTypes.InvestmentReviewFeedback("feedback B", true), null, null, ctx2);
 
         // Assert — each call made exactly 1 LLM call
         assertEquals(1, runner1.getLlmInvocations().size());

@@ -7,16 +7,11 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import com.embabel.gekko.util.AgentUtils;
+import com.embabel.gekko.util.ResultCache;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import jakarta.annotation.PostConstruct;
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.LinkedHashMap;
@@ -36,10 +31,7 @@ public class AlphaVantageService {
     @Value("${app.alphavantage.api-key:dummy_key}")
     private String apiKey;
 
-    @Value("${app.alphavantage.output-directory:data/alphavantage}")
-    private String cacheDir;
-
-    private Path absoluteCacheDir;
+    private final ResultCache resultCache;
 
     @Value("${app.alphavantage.connect-timeout-ms:10000}")
     private int connectTimeoutMs;
@@ -53,20 +45,14 @@ public class AlphaVantageService {
 
     private RestTemplate restTemplate;
 
-    public AlphaVantageService() {
+    public AlphaVantageService(ResultCache resultCache) {
+        this.resultCache = resultCache;
     }
 
     @PostConstruct
     public void init() {
         int connTimeout = connectTimeoutMs > 0 ? connectTimeoutMs : 10000;
         int readTimeout = readTimeoutMs > 0 ? readTimeoutMs : 30000;
-
-        this.absoluteCacheDir = Paths.get(System.getProperty("user.dir"), cacheDir).toAbsolutePath().normalize();
-
-        // RestTemplate with timeouts.
-        // API key is appended to URLs in getDataWithCache() — Spring Boot does not log
-        // full request URLs by default (only at TRACE wire level), so the key is not
-        // exposed in standard application logs.
         this.restTemplate = AgentUtils.restTemplate(connTimeout, readTimeout);
     }
 
@@ -91,7 +77,9 @@ public class AlphaVantageService {
 
     public String getFundamentals(String ticker) {
         validateTicker(ticker);
-        return getDataWithCache("OVERVIEW", ticker);
+        String cacheKey = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "OVERVIEW", ticker);
+        return resultCache.getOrCompute(ResultCache.CATEGORY_EXTERNAL_HTTP, cacheKey, String.class,
+                () -> fetchData("OVERVIEW", builder -> builder.queryParam("symbol", ticker)));
     }
 
     private static final String[] OVERVIEW_FIELDS = {"Name", "Sector", "Industry", "Exchange", "Currency", "Symbol"};
@@ -119,133 +107,96 @@ public class AlphaVantageService {
         }
     }
 
-    public String getBalanceSheet(String ticker, String freq, String currDate) {
+    public String getBalanceSheet(String ticker, String freq) {
         validateTicker(ticker);
-        String cacheKey = ticker.toUpperCase() + "_BALANCE_SHEET_" + (freq != null ? freq : "annual");
-        return getDataWithCache("BALANCE_SHEET", cacheKey, builder ->
-                builder.queryParam("symbol", ticker)
-                        .queryParam("frequency", freq != null ? freq : "annual")
-        );
+        String frequency = freq != null ? freq : "annual";
+        String cacheKey = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "BALANCE_SHEET", ticker, frequency);
+        return resultCache.getOrCompute(ResultCache.CATEGORY_EXTERNAL_HTTP, cacheKey, String.class,
+                () -> fetchData("BALANCE_SHEET", builder -> builder
+                        .queryParam("symbol", ticker)
+                        .queryParam("frequency", frequency)));
     }
 
-    public String getCashflow(String ticker, String freq, String currDate) {
+    public String getCashflow(String ticker, String freq) {
         validateTicker(ticker);
-        String cacheKey = ticker.toUpperCase() + "_CASH_FLOW_" + (freq != null ? freq : "annual");
-        return getDataWithCache("CASH_FLOW", cacheKey, builder ->
-                builder.queryParam("symbol", ticker)
-                        .queryParam("frequency", freq != null ? freq : "annual")
-        );
+        String frequency = freq != null ? freq : "annual";
+        String cacheKey = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "CASH_FLOW", ticker, frequency);
+        return resultCache.getOrCompute(ResultCache.CATEGORY_EXTERNAL_HTTP, cacheKey, String.class,
+                () -> fetchData("CASH_FLOW", builder -> builder
+                        .queryParam("symbol", ticker)
+                        .queryParam("frequency", frequency)));
     }
 
-    public String getIncomeStatement(String ticker, String freq, String currDate) {
+    public String getIncomeStatement(String ticker, String freq) {
         validateTicker(ticker);
-        String cacheKey = ticker.toUpperCase() + "_INCOME_STATEMENT_" + (freq != null ? freq : "annual");
-        return getDataWithCache("INCOME_STATEMENT", cacheKey, builder ->
-                builder.queryParam("symbol", ticker)
-                        .queryParam("frequency", freq != null ? freq : "annual")
-        );
+        String frequency = freq != null ? freq : "annual";
+        String cacheKey = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "INCOME_STATEMENT", ticker, frequency);
+        return resultCache.getOrCompute(ResultCache.CATEGORY_EXTERNAL_HTTP, cacheKey, String.class,
+                () -> fetchData("INCOME_STATEMENT", builder -> builder
+                        .queryParam("symbol", ticker)
+                        .queryParam("frequency", frequency)));
     }
 
     // --- News & sentiment endpoints ---
 
     public String getNews(String ticker, String startDate, String endDate) {
         validateTicker(ticker);
-        String cacheKey = String.format("%s_NEWS_%s_%s", ticker, startDate, endDate);
-        return getDataWithCache("NEWS_SENTIMENT", cacheKey, builder -> builder
-                .queryParam("tickers", ticker)
-                .queryParam("time_from", formatDateForApi(startDate))
-                .queryParam("time_to", formatDateForApi(endDate))
-                .queryParam("limit", "50")
-                .queryParam("sort", "LATEST")
-        );
+        String from = formatDateForApi(startDate);
+        String to = formatDateForApi(endDate);
+        String cacheKey = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "NEWS_SENTIMENT", ticker, from, to);
+        return resultCache.getOrCompute(ResultCache.CATEGORY_EXTERNAL_HTTP, cacheKey, String.class,
+                () -> fetchData("NEWS_SENTIMENT", builder -> builder
+                        .queryParam("tickers", ticker)
+                        .queryParam("time_from", from)
+                        .queryParam("time_to", to)
+                        .queryParam("limit", "50")
+                        .queryParam("sort", "LATEST")));
     }
 
     public String getGlobalNews(String topic, Integer limit, Integer page) {
         String topicKey = topic != null ? topic : "null";
         String limitKey = limit != null ? String.valueOf(limit) : "null";
         String pageKey = page != null ? String.valueOf(page) : "null";
-        String cacheKey = String.format("GLOBAL_NEWS_%s_%s_%s", topicKey, limitKey, pageKey);
-        return getDataWithCache("NEWS_SENTIMENT", cacheKey, builder -> {
-            if (topic != null) builder.queryParam("topics", topic);
-            if (limit != null) builder.queryParam("limit", limit);
-            if (page != null) builder.queryParam("page", page);
-            builder.queryParam("sort", "LATEST");
-            return builder;
-        });
+        String cacheKey = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "GLOBAL_NEWS", topicKey, limitKey, pageKey);
+        return resultCache.getOrCompute(ResultCache.CATEGORY_EXTERNAL_HTTP, cacheKey, String.class,
+                () -> fetchData("NEWS_SENTIMENT", builder -> {
+                    if (topic != null) builder.queryParam("topics", topic);
+                    if (limit != null) builder.queryParam("limit", limit);
+                    if (page != null) builder.queryParam("page", page);
+                    builder.queryParam("sort", "LATEST");
+                    return builder;
+                }));
     }
 
     public String getInsiderSentiment(String ticker, String interval) {
         validateTicker(ticker);
-        String cacheKey = String.format("%s_INSIDER_SENTIMENT_%s", ticker, interval);
-        return getDataWithCache("INSIDER_SENTIMENT", cacheKey, builder -> builder
-                .queryParam("symbol", ticker)
-                .queryParam("interval", interval)
-        );
+        String cacheKey = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "INSIDER_SENTIMENT", ticker, interval);
+        return resultCache.getOrCompute(ResultCache.CATEGORY_EXTERNAL_HTTP, cacheKey, String.class,
+                () -> fetchData("INSIDER_SENTIMENT", builder -> builder
+                        .queryParam("symbol", ticker)
+                        .queryParam("interval", interval)));
     }
 
     public String getInsiderTransactions(String ticker) {
         validateTicker(ticker);
-        String cacheKey = ticker.toUpperCase() + "_INSIDER_TRANSACTIONS";
-        return getDataWithCache("INSIDER_TRANSACTIONS", cacheKey, builder -> builder
-                .queryParam("symbol", ticker)
-        );
+        String cacheKey = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "INSIDER_TRANSACTIONS", ticker);
+        return resultCache.getOrCompute(ResultCache.CATEGORY_EXTERNAL_HTTP, cacheKey, String.class,
+                () -> fetchData("INSIDER_TRANSACTIONS", builder -> builder.queryParam("symbol", ticker)));
     }
 
-    // --- Shared caching layer ---
-
-    private String getDataWithCache(String function, String symbol) {
-        String cacheKey = symbol.toUpperCase() + "_" + function;
-        return getDataWithCache(function, cacheKey, builder ->
-                builder.queryParam("symbol", symbol)
-        );
-    }
+    // --- Shared fetch layer ---
 
     private interface UrlBuilderCustomizer {
         UriComponentsBuilder customize(UriComponentsBuilder builder);
     }
 
-    private String getDataWithCache(String function, String cacheKey, UrlBuilderCustomizer customizer) {
-        try {
-            Files.createDirectories(absoluteCacheDir);
-
-            String filename = absoluteCacheDir.resolve(cacheKey + ".json").toString();
-            File cacheFile = new File(filename);
-
-            // Read from cache if available
-            if (cacheFile.exists() && cacheFile.length() > 0) {
-                return Files.readString(cacheFile.toPath());
-            }
-
-            // Build query URL with function and apikey
-            UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(BASE_URL)
-                    .queryParam("function", function)
-                    .queryParam("apikey", apiKey);
-
-            builder = customizer.customize(builder);
-
-            String url = builder.toUriString();
-            String response = restTemplate.getForObject(url, String.class);
-
-            if (response != null) {
-                Path cachePath = cacheFile.toPath();
-                Path tempPath = cachePath.resolveSibling(cachePath.getFileName() + ".tmp");
-                try {
-                    Files.writeString(tempPath, response);
-                } catch (IOException e) {
-                    throw new RuntimeException("Failed to write cache for key " + cacheKey + ": " + e.getMessage(), e);
-                }
-                try {
-                    Files.move(tempPath, cachePath, StandardCopyOption.REPLACE_EXISTING);
-                } catch (IOException e) {
-                    log.error("Failed to atomically save cache for key {}: {}", cacheKey, e.getMessage());
-                }
-            }
-
-            return response;
-
-        } catch (IOException e) {
-            throw new RuntimeException("Cache error: " + e.getMessage(), e);
-        }
+    private String fetchData(String function, UrlBuilderCustomizer customizer) {
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(BASE_URL)
+                .queryParam("function", function)
+                .queryParam("apikey", apiKey);
+        builder = customizer.customize(builder);
+        String url = builder.toUriString();
+        return restTemplate.getForObject(url, String.class);
     }
 
     /**

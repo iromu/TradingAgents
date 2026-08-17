@@ -3,6 +3,7 @@ package com.embabel.gekko.tools;
 import com.embabel.agent.test.unit.FakeOperationContext;
 import com.embabel.gekko.dataflows.FredService;
 import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.util.ResultCache;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -19,7 +20,9 @@ class FredDataToolsTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        fredService = new FredService("test_key", new FileCache());
+        var cache = new FileCache();
+        var resultCache = new ResultCache(cache, "5m", "1h");
+        fredService = new FredService("test_key", resultCache);
         tools = new FredDataTools(fredService);
         ctx = FakeOperationContext.create();
     }

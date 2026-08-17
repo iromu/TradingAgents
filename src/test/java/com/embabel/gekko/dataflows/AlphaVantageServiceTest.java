@@ -1,5 +1,7 @@
 package com.embabel.gekko.dataflows;
 
+import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.util.ResultCache;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
 import org.springframework.test.util.ReflectionTestUtils;
@@ -18,8 +20,8 @@ class AlphaVantageServiceTest {
     Path tempDir;
 
     private AlphaVantageService createService() {
-        AlphaVantageService service = new AlphaVantageService();
-        ReflectionTestUtils.setField(service, "cacheDir", tempDir.toString());
+        ResultCache resultCache = new ResultCache(new FileCache(tempDir), "5m", "1h");
+        AlphaVantageService service = new AlphaVantageService(resultCache);
         service.init(); // @PostConstruct doesn't fire outside Spring container
         return service;
     }
@@ -125,21 +127,21 @@ class AlphaVantageServiceTest {
     void getBalanceSheet_validatesTicker() {
         AlphaVantageService service = createService();
         assertThrows(IllegalArgumentException.class, () ->
-                service.getBalanceSheet("bad ticker", "annual", null));
+                service.getBalanceSheet("bad ticker", "annual"));
     }
 
     @Test
     void getIncomeStatement_validatesTicker() {
         AlphaVantageService service = createService();
         assertThrows(IllegalArgumentException.class, () ->
-                service.getIncomeStatement("bad ticker", "annual", null));
+                service.getIncomeStatement("bad ticker", "annual"));
     }
 
     @Test
     void getCashflow_validatesTicker() {
         AlphaVantageService service = createService();
         assertThrows(IllegalArgumentException.class, () ->
-                service.getCashflow("bad ticker", "annual", null));
+                service.getCashflow("bad ticker", "annual"));
     }
 
     @Test
@@ -253,19 +255,19 @@ class AlphaVantageServiceTest {
     @Test
     void getBalanceSheet_usesCorrectCacheKey() {
         AlphaVantageService service = createService();
-        assertDoesNotThrow(() -> service.getBalanceSheet("AAPL", "quarterly", null));
+        assertDoesNotThrow(() -> service.getBalanceSheet("AAPL", "quarterly"));
     }
 
     @Test
     void getCashflow_usesCorrectCacheKey() {
         AlphaVantageService service = createService();
-        assertDoesNotThrow(() -> service.getCashflow("AAPL", "quarterly", null));
+        assertDoesNotThrow(() -> service.getCashflow("AAPL", "quarterly"));
     }
 
     @Test
     void getIncomeStatement_usesCorrectCacheKey() {
         AlphaVantageService service = createService();
-        assertDoesNotThrow(() -> service.getIncomeStatement("AAPL", "quarterly", null));
+        assertDoesNotThrow(() -> service.getIncomeStatement("AAPL", "quarterly"));
     }
 
     @Test
@@ -274,12 +276,58 @@ class AlphaVantageServiceTest {
         assertDoesNotThrow(() -> service.getInsiderTransactions("AAPL"));
     }
 
+    // --- Cache key completeness tests (Task 4.5) ---
+
+    @Test
+    void cacheKey_includesAllResultAffectingParams_fundamentals() {
+        String key1 = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "OVERVIEW", "AAPL");
+        String key2 = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "OVERVIEW", "MSFT");
+        assertNotEquals(key1, key2, "Different tickers must produce different keys");
+    }
+
+    @Test
+    void cacheKey_includesFrequency_balanceSheet() {
+        String annual = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "BALANCE_SHEET", "AAPL", "annual");
+        String quarterly = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "BALANCE_SHEET", "AAPL", "quarterly");
+        assertNotEquals(annual, quarterly, "Different frequencies must produce different keys");
+    }
+
+    @Test
+    void cacheKey_includesDates_news() {
+        String jan = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "NEWS_SENTIMENT", "AAPL", "20260101T0000", "20260131T0000");
+        String feb = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "NEWS_SENTIMENT", "AAPL", "20260201T0000", "20260228T0000");
+        assertNotEquals(jan, feb, "Different date ranges must produce different keys");
+    }
+
+    @Test
+    void cacheKey_includesInterval_insiderSentiment() {
+        String oneMonth = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "INSIDER_SENTIMENT", "AAPL", "1M");
+        String sixMonths = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "INSIDER_SENTIMENT", "AAPL", "6M");
+        assertNotEquals(oneMonth, sixMonths, "Different intervals must produce different keys");
+    }
+
+    @Test
+    void cacheKey_includesTopicLimitPage_globalNews() {
+        String t1 = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "GLOBAL_NEWS", "technology", "10", "1");
+        String t2 = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "GLOBAL_NEWS", "finance", "10", "1");
+        String t3 = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "GLOBAL_NEWS", "technology", "10", "2");
+        assertNotEquals(t1, t2, "Different topics must produce different keys");
+        assertNotEquals(t1, t3, "Different pages must produce different keys");
+    }
+
+    @Test
+    void cacheKey_normalizesTickerToUppercase() {
+        String lower = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "OVERVIEW", "aapl");
+        String upper = ResultCache.canonicalKey(ResultCache.CATEGORY_EXTERNAL_HTTP, "alphavantage", "OVERVIEW", "AAPL");
+        assertEquals(lower, upper, "Cache keys must be case-insensitive for ticker symbols");
+    }
+
     // --- Timeout configuration tests ---
 
     @Test
     void init_configuresCustomTimeouts() {
-        AlphaVantageService service = new AlphaVantageService();
-        ReflectionTestUtils.setField(service, "cacheDir", tempDir.toString());
+        ResultCache resultCache = new ResultCache(new FileCache(tempDir), "5m", "1h");
+        AlphaVantageService service = new AlphaVantageService(resultCache);
         ReflectionTestUtils.setField(service, "connectTimeoutMs", 5000);
         ReflectionTestUtils.setField(service, "readTimeoutMs", 15000);
         service.init();
@@ -290,8 +338,8 @@ class AlphaVantageServiceTest {
 
     @Test
     void init_usesDefaultsWhenTimeoutsAreZero() {
-        AlphaVantageService service = new AlphaVantageService();
-        ReflectionTestUtils.setField(service, "cacheDir", tempDir.toString());
+        ResultCache resultCache = new ResultCache(new FileCache(tempDir), "5m", "1h");
+        AlphaVantageService service = new AlphaVantageService(resultCache);
         // connectTimeoutMs and readTimeoutMs default to 0 in non-Spring context
         service.init();
 

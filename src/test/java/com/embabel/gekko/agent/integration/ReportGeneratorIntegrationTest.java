@@ -51,16 +51,16 @@ class ReportGeneratorIntegrationTest extends EmbabelMockitoIntegrationTest {
 
     @BeforeEach
     void setUp() throws Exception {
-        // Create a temp cache dir and inject it into the cached DebateAgent
+        // Create a temp cache dir and inject it into the ResultCache on DebateAgent
         tempCacheDir = Files.createTempDirectory("report-gen-test-cache-");
-        var cache = new FileCache();
-        var field = FileCache.class.getDeclaredField("baseDir");
-        field.setAccessible(true);
-        field.set(cache, tempCacheDir);
-        // Replace the cache field on the autowired DebateAgent
-        var debateField = DebateAgent.class.getDeclaredField("cache");
+        var fileCache = new FileCache();
+        var baseDirField = FileCache.class.getDeclaredField("baseDir");
+        baseDirField.setAccessible(true);
+        baseDirField.set(fileCache, tempCacheDir);
+        var resultCache = new com.embabel.gekko.util.ResultCache(fileCache, "5m", "1h");
+        var debateField = DebateAgent.class.getDeclaredField("resultCache");
         debateField.setAccessible(true);
-        debateField.set(debateAgent, cache);
+        debateField.set(debateAgent, resultCache);
     }
 
     @Test

@@ -1,10 +1,9 @@
 package com.embabel.gekko.dataflows;
 
 import com.embabel.gekko.util.AgentUtils;
-import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.util.ResultCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
@@ -16,16 +15,12 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-public class PolymarketService {
+public class PolymarketService extends BaseExternalDataService {
 
     private static final String BASE_URL = "https://clob.polymarket.com/";
 
-    private final RestTemplate restTemplate;
-    private final FileCache fileCache;
-
-    public PolymarketService(FileCache fileCache) {
-        this.fileCache = fileCache;
-        this.restTemplate = AgentUtils.restTemplate(10000, 30000);
+    public PolymarketService(ResultCache resultCache) {
+        super(10_000, 30_000, resultCache);
     }
 
     /**
@@ -33,11 +28,11 @@ public class PolymarketService {
      */
     public String searchMarkets(String query) {
         if (query == null || query.isBlank()) {
-            return "NO_DATA_AVAILABLE: Search query is required";
+            return noData("Search query is required");
         }
 
-        String cacheKey = "polymarket:search:" + query.toLowerCase();
-        return fileCache.getOrCompute(cacheKey, String.class, () -> fetchSearch(query));
+        return cachedGet("polymarket", new String[]{"search", query.toLowerCase()},
+                () -> fetchSearch(query));
     }
 
     private String fetchSearch(String query) {
@@ -48,7 +43,7 @@ public class PolymarketService {
                     .toUriString();
 
             @SuppressWarnings("unchecked")
-            List<Map<String, Object>> markets = restTemplate.getForObject(url, List.class);
+            List<Map<String, Object>> markets = restTemplate().getForObject(url, List.class);
 
             if (markets == null || markets.isEmpty()) {
                 return "NO_DATA_AVAILABLE: No markets found for query: " + query;
@@ -66,12 +61,12 @@ public class PolymarketService {
      */
     public String getMarket(String slug) {
         if (slug == null || slug.isBlank()) {
-            return "NO_DATA_AVAILABLE: Market slug is required";
+            return noData("Market slug is required");
         }
 
         String normalized = slug.toLowerCase();
-        String cacheKey = "polymarket:market:" + normalized;
-        return fileCache.getOrCompute(cacheKey, String.class, () -> fetchMarket(normalized));
+        return cachedGet("polymarket", new String[]{"market", normalized},
+                () -> fetchMarket(normalized));
     }
 
     private String fetchMarket(String slug) {
@@ -81,7 +76,7 @@ public class PolymarketService {
                     .toUriString();
 
             @SuppressWarnings("unchecked")
-            Map<String, Object> market = restTemplate.getForObject(url, Map.class);
+            Map<String, Object> market = restTemplate().getForObject(url, Map.class);
 
             if (market == null) {
                 return "NO_DATA_AVAILABLE: Market not found: " + slug;

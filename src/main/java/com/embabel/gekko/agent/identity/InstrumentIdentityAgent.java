@@ -6,7 +6,8 @@ import com.embabel.agent.api.annotation.Agent;
 import com.embabel.gekko.dataflows.AlphaVantageService;
 import com.embabel.gekko.dataflows.YFinService;
 import com.embabel.gekko.domain.ResearchTypes;
-import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.util.PromptSanitizer;
+import com.embabel.gekko.util.ResultCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ObjectProvider;
@@ -28,7 +29,7 @@ public class InstrumentIdentityAgent {
     private static final String CACHE_PREFIX = "identity:";
 
     private final YFinService yFinService;
-    private final FileCache fileCache;
+    private final ResultCache resultCache;
     private final ObjectProvider<AlphaVantageService> alphaVantageProvider;
 
     private static final int MAX_RETRIES = 3;
@@ -48,42 +49,36 @@ public class InstrumentIdentityAgent {
             return null;
         }
 
-        String cacheKey = CACHE_PREFIX + tickerUpper;
+        String cacheKey = ResultCache.canonicalKey(CACHE_PREFIX, tickerUpper);
 
-        // Check cache first
-        InstrumentContext cached = fileCache.get(cacheKey, InstrumentContext.class);
-        if (cached != null) {
-            log.debug("Cache hit for identity: {}", tickerUpper);
-            return cached;
-        }
+        return resultCache.getOrCompute(ResultCache.CATEGORY_EXTERNAL_HTTP, cacheKey, InstrumentContext.class, () -> {
+            // Try Yahoo Finance first (with retry)
+            try {
+                yahoofinance.Stock stock = fetchWithRetry(tickerUpper);
 
-        // Try Yahoo Finance first (with retry)
-        try {
-            yahoofinance.Stock stock = fetchWithRetry(tickerUpper);
+                if (stock == null || !stock.isValid()) {
+                    log.warn("No Yahoo Finance info for ticker: {}, trying Alpha Vantage fallback", ticker.content());
+                    return tryAlphaVantageFallback(ticker.content(), tickerUpper);
+                }
 
-            if (stock == null || !stock.isValid()) {
-                log.warn("No Yahoo Finance info for ticker: {}, trying Alpha Vantage fallback", ticker.content());
-                return tryAlphaVantageFallback(ticker.content(), tickerUpper);
+                String companyName = PromptSanitizer.sanitizeForPrompt(stock.getName() != null ? stock.getName() : tickerUpper);
+                String sector = "Unknown";
+                String industry = "Unknown";
+                String exchange = PromptSanitizer.sanitizeForPrompt(stock.getStockExchange() != null ? stock.getStockExchange() : "Unknown");
+                String currency = PromptSanitizer.sanitizeForPrompt(stock.getCurrency() != null ? stock.getCurrency() : "USD");
+
+                InstrumentContext context = new InstrumentContext(
+                        tickerUpper, companyName, sector, industry, exchange, currency
+                );
+
+                log.info("Resolved identity for {}: {} ({}) via Yahoo Finance", tickerUpper, companyName, sector);
+                return context;
+
+            } catch (Exception e) {
+                log.warn("Yahoo Finance failed for {}, trying Alpha Vantage fallback: {}", tickerUpper, e.getMessage());
+                return tryAlphaVantageFallback(tickerUpper, tickerUpper);
             }
-
-            String companyName = stock.getName() != null ? stock.getName() : tickerUpper;
-            String sector = "Unknown";
-            String industry = "Unknown";
-            String exchange = stock.getStockExchange() != null ? stock.getStockExchange() : "Unknown";
-            String currency = stock.getCurrency() != null ? stock.getCurrency() : "USD";
-
-            InstrumentContext context = new InstrumentContext(
-                    tickerUpper, companyName, sector, industry, exchange, currency
-            );
-
-            fileCache.save(cacheKey, context);
-            log.info("Resolved identity for {}: {} ({}) via Yahoo Finance", tickerUpper, companyName, sector);
-            return context;
-
-        } catch (Exception e) {
-            log.warn("Yahoo Finance failed for {}, trying Alpha Vantage fallback: {}", tickerUpper, e.getMessage());
-            return tryAlphaVantageFallback(tickerUpper, tickerUpper);
-        }
+        });
     }
 
     /**
@@ -104,19 +99,20 @@ public class InstrumentIdentityAgent {
             }
 
             String name = overview.getOrDefault("Name", null);
-            String sector = overview.getOrDefault("Sector", "Unknown");
-            String industry = overview.getOrDefault("Industry", "Unknown");
-            String exchange = overview.getOrDefault("Exchange", "Unknown");
-            String currency = overview.getOrDefault("Currency", "USD");
+            String sector = PromptSanitizer.sanitizeForPrompt(overview.getOrDefault("Sector", "Unknown"));
+            String industry = PromptSanitizer.sanitizeForPrompt(overview.getOrDefault("Industry", "Unknown"));
+            String exchange = PromptSanitizer.sanitizeForPrompt(overview.getOrDefault("Exchange", "Unknown"));
+            String currency = PromptSanitizer.sanitizeForPrompt(overview.getOrDefault("Currency", "USD"));
 
             // Use Name from Alpha Vantage if available, otherwise fall back to ticker display
-            String companyName = (name != null && !name.isBlank()) ? name : tickerDisplay;
+            String companyName = (name != null && !name.isBlank())
+                    ? PromptSanitizer.sanitizeForPrompt(name)
+                    : tickerDisplay;
 
             InstrumentContext context = new InstrumentContext(
                     tickerUpper, companyName, sector, industry, exchange, currency
             );
 
-            fileCache.save(CACHE_PREFIX + tickerUpper, context);
             log.info("Resolved identity for {}: {} ({}) via Alpha Vantage fallback", tickerUpper, companyName, sector);
             return context;
 

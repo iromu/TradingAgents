@@ -6,3 +6,7 @@ application-local.yaml
 # Ignore LLM cache (cheap to regenerate)
 data/llm/
 tmp
+
+# MemPalace per-project files (issue #185)
+mempalace.yaml
+entities.json

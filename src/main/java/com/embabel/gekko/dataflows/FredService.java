@@ -1,11 +1,10 @@
 package com.embabel.gekko.dataflows;
 
 import com.embabel.gekko.util.AgentUtils;
-import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.util.ResultCache;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
@@ -17,24 +16,21 @@ import java.util.Map;
  */
 @Service
 @Slf4j
-public class FredService {
+public class FredService extends BaseExternalDataService {
 
     private static final String BASE_URL = "https://api.stlouisfed.org/fred/";
     private static final int DEFAULT_LIMIT = 365;
     private static final int CONNECT_TIMEOUT_MS = 30_000;
     private static final int READ_TIMEOUT_MS = 60_000;
 
-    private final RestTemplate restTemplate;
     private final String apiKey;
-    private final FileCache fileCache;
 
     public FredService(
             @Value("${app.fred.api-key:}") String apiKey,
-            FileCache fileCache
+            ResultCache resultCache
     ) {
+        super(CONNECT_TIMEOUT_MS, READ_TIMEOUT_MS, resultCache);
         this.apiKey = apiKey;
-        this.fileCache = fileCache;
-        this.restTemplate = AgentUtils.restTemplate(CONNECT_TIMEOUT_MS, READ_TIMEOUT_MS);
     }
 
     /**
@@ -42,14 +38,14 @@ public class FredService {
      */
     public String getSeries(String seriesId, int limit) {
         if (apiKey == null || apiKey.isBlank()) {
-            return "NO_DATA_AVAILABLE: FRED API key not configured (app.fred.api-key)";
+            return noData("FRED API key not configured (app.fred.api-key)");
         }
         if (seriesId == null || seriesId.isBlank()) {
-            return "NO_DATA_AVAILABLE: Series ID is required";
+            return noData("Series ID is required");
         }
 
-        String cacheKey = "fred:" + seriesId + ":" + limit;
-        return fileCache.getOrCompute(cacheKey, String.class, () -> fetchSeries(seriesId, limit));
+        return cachedGet("fred", new String[]{seriesId.toUpperCase(), String.valueOf(limit)},
+                () -> fetchSeries(seriesId, limit));
     }
 
     private String fetchSeries(String seriesId, int limit) {
@@ -63,7 +59,7 @@ public class FredService {
                     .toUriString();
 
             @SuppressWarnings("unchecked")
-            Map<String, Object> response = restTemplate.getForObject(url, Map.class);
+            Map<String, Object> response = restTemplate().getForObject(url, Map.class);
 
             if (response == null || !"success".equals(response.get("status"))) {
                 log.warn("FRED API error for series {}: {}", seriesId, response);

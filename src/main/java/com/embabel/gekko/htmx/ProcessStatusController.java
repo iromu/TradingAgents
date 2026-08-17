@@ -41,6 +41,8 @@ public class ProcessStatusController {
     /** HTTP session attribute that binds a processId to the user's session. */
     private static final String SESSION_PROCESS_ID = "hitl_processId";
 
+    private static final java.util.regex.Pattern TICKER_PATTERN = java.util.regex.Pattern.compile("^[A-Z0-9.]+$");
+
     private final AgentPlatform agentPlatform;
     private final HitlService hitlService;
     private final ResearchPlanService researchPlanService;
@@ -147,6 +149,11 @@ public class ProcessStatusController {
 
         if (feedback.length() > 10000) {
             model.addAttribute("error", "Feedback must not exceed 10,000 characters");
+            model.addAttribute("pageTitle", "Validation Error");
+            return "common/processing-error";
+        }
+        if (userInput == null || userInput.isBlank() || !TICKER_PATTERN.matcher(userInput).matches()) {
+            model.addAttribute("error", "Invalid ticker format. Expected uppercase letters, digits, and dots only (e.g. AAPL, BRK.B)");
             model.addAttribute("pageTitle", "Validation Error");
             return "common/processing-error";
         }

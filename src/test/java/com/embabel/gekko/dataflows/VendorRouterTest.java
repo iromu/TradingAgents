@@ -21,7 +21,7 @@ class VendorRouterTest {
     @Test
     void route_delegatesToAlphaVantageForBalanceSheet() {
         AlphaVantageService alphaVantageService = mock(AlphaVantageService.class);
-        when(alphaVantageService.getBalanceSheet(anyString(), anyString(), anyString())).thenReturn("balance sheet data");
+        when(alphaVantageService.getBalanceSheet(anyString(), anyString())).thenReturn("balance sheet data");
         VendorRouter router = new VendorRouter();
         router.setAlphaVantageService(alphaVantageService);
 

@@ -4,6 +4,7 @@ import com.embabel.gekko.dataflows.AlphaVantageService;
 import com.embabel.gekko.dataflows.YFinService;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.util.ResultCache;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;
@@ -36,7 +37,7 @@ class InstrumentIdentityAgentRetryTest {
     @TempDir
     Path tempDir;
 
-    private FileCache cache;
+    private ResultCache resultCache;
     private YFinService yFinService;
     private InstrumentIdentityAgent agent;
 
@@ -54,16 +55,17 @@ class InstrumentIdentityAgentRetryTest {
 
     @BeforeEach
     void setUp() {
-        cache = new FileCache();
+        var fileCache = new FileCache();
         try {
             var field = FileCache.class.getDeclaredField("baseDir");
             field.setAccessible(true);
-            field.set(cache, tempDir);
+            field.set(fileCache, tempDir);
         } catch (Exception e) {
             throw new RuntimeException("Failed to set cache baseDir", e);
         }
+        resultCache = new ResultCache(fileCache, "5m", "1h");
         yFinService = mock(YFinService.class);
-        agent = new InstrumentIdentityAgent(yFinService, cache, noAvProvider());
+        agent = new InstrumentIdentityAgent(yFinService, resultCache, noAvProvider());
     }
 
     @Test
@@ -105,7 +107,7 @@ class InstrumentIdentityAgentRetryTest {
         when(yFinService.getTickerInfo("AAPL"))
                 .thenThrow(new RuntimeException("Yahoo Finance down"));
 
-        agent = new InstrumentIdentityAgent(yFinService, cache, avProvider(avService));
+        agent = new InstrumentIdentityAgent(yFinService, resultCache, avProvider(avService));
         var result = agent.resolveIdentity(ticker);
 
         assertNotNull(result);

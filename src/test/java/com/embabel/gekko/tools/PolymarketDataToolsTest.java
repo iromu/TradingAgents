@@ -2,6 +2,7 @@ package com.embabel.gekko.tools;
 
 import com.embabel.gekko.dataflows.PolymarketService;
 import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.util.ResultCache;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -25,7 +26,8 @@ class PolymarketDataToolsTest {
         var field = FileCache.class.getDeclaredField("baseDir");
         field.setAccessible(true);
         field.set(cache, cacheDir);
-        polymarketService = new PolymarketService(cache);
+        var resultCache = new ResultCache(cache, "5m", "1h");
+        polymarketService = new PolymarketService(resultCache);
         tools = new PolymarketDataTools(polymarketService);
     }
 

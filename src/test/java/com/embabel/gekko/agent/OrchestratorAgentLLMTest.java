@@ -9,6 +9,7 @@ import com.embabel.gekko.config.TraderAgentConfig;
 import com.embabel.gekko.dataflows.YFinService;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.util.ResultCache;
 import com.embabel.gekko.web.TradingHtmxController.TickerForm;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,11 +43,12 @@ class OrchestratorAgentLLMTest {
         promptRunner = ctx.getPromptRunner();
 
         FileCache cache = new FileCache();
+        ResultCache resultCache = new ResultCache(cache, "5m", "1h");
         YFinService yFinService = new YFinService();
-        InstrumentIdentityAgent identityAgent = new InstrumentIdentityAgent(yFinService, cache, mockAvProvider());
+        InstrumentIdentityAgent identityAgent = new InstrumentIdentityAgent(yFinService, resultCache, mockAvProvider());
 
         agent = new OrchestratorAgent(
-                cache,
+                null, // resultCache
                 identityAgent,
                 null, // memoryAgent
                 null, // checkpointAgent

@@ -5,6 +5,7 @@ import com.embabel.agent.api.annotation.Action;
 import com.embabel.agent.api.annotation.Agent;
 import com.embabel.agent.api.common.ActionContext;
 import com.embabel.agent.api.common.OperationContext;
+import com.embabel.agent.api.common.PromptRunner;
 import com.embabel.agent.core.hitl.WaitFor;
 import com.embabel.gekko.domain.Analysts.FundamentalsReport;
 import com.embabel.gekko.domain.Analysts.MarketReport;
@@ -14,8 +15,9 @@ import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.agent.managers.PortfolioManager;
 import com.embabel.gekko.agent.memory.DecisionMemoryAgent;
 import com.embabel.gekko.util.AgentUtils;
-import com.embabel.gekko.util.FileCache;
 import com.embabel.gekko.util.LlmBudgetTracker;
+import com.embabel.gekko.util.PromptSanitizer;
+import com.embabel.gekko.util.ResultCache;
 import com.embabel.common.textio.template.TemplateRenderer;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -23,6 +25,8 @@ import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
 import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Map;
 import java.util.LinkedHashMap;
@@ -51,7 +55,7 @@ import static com.embabel.common.ai.model.ModelProvider.CHEAPEST_ROLE;
 @Slf4j
 public class DebateAgent {
 
-    private final FileCache cache;
+    private final ResultCache resultCache;
     private final TemplateRenderer templateRenderer;
     private final DecisionMemoryAgent memoryAgent;
     private final ObjectProvider<com.embabel.agent.core.Agent> debateLoopAgentProvider;
@@ -61,22 +65,11 @@ public class DebateAgent {
     private final ObjectProvider<com.embabel.gekko.tools.MarketDataTools> marketDataToolsProvider;
     private final LlmBudgetTracker llmBudgetTracker;
 
-    // Pre-compiled regex patterns for input sanitization (ReDoS mitigation)
-    private static final Pattern JINJA_VAR = Pattern.compile("(?s)\\{\\{.*?\\}\\}");
-    private static final Pattern JINJA_STMT = Pattern.compile("(?s)\\{%.*?%\\}");
-    private static final Pattern JINJA_VAR_UNCLOSED = Pattern.compile("(?s)\\{\\{[^}]*$");
-    private static final Pattern JINJA_STMT_UNCLOSED = Pattern.compile("(?s)\\{%[^%]*$");
-    private static final Pattern CODE_FENCE = Pattern.compile("(?s)```[\\s\\S]*?```");
-    private static final Pattern CODE_FENCE_UNCLOSED = Pattern.compile("(?s)```.*?$");
-
     // Pre-compiled rating keyword patterns (find-based, case-insensitive, word-boundary)
     private static final Pattern BUY_PAT = Pattern.compile("\\bbuy\\b", Pattern.CASE_INSENSITIVE);
     private static final Pattern SELL_PAT = Pattern.compile("\\bsell\\b", Pattern.CASE_INSENSITIVE);
     private static final Pattern OVERWEIGHT_PAT = Pattern.compile("\\boverweight\\b", Pattern.CASE_INSENSITIVE);
     private static final Pattern UNDERWEIGHT_PAT = Pattern.compile("\\bunderweight\\b", Pattern.CASE_INSENSITIVE);
-
-    private static final int MAX_INPUT_LENGTH = 10000;
-    private static final int MAX_OUTPUT_LENGTH = 1000;
 
     private com.embabel.agent.core.Agent getDebateLoopAgent() {
         return debateLoopAgentProvider.getObject();
@@ -102,72 +95,72 @@ public class DebateAgent {
 
     @Action(description = "Generate fundamentals report from ticker")
     public FundamentalsReport generateFundamentalsReport(ResearchTypes.Ticker ticker, OperationContext context) {
-        String key = ticker.content() + "_fundamentals";
-        return cache.getOrCompute(key, FundamentalsReport.class, () -> {
-            trackCall(ticker);
-            String result = context.ai()
-                    .withLlmByRole(CHEAPEST_ROLE)
-                    .withId("generateFundamentalsReport")
-                    .creating(String.class)
-                    .fromTemplate("analysts/FundamentalsAnalyst", Map.of(
-                            "ticker", ticker.content().toUpperCase()
-                    ));
-            return new FundamentalsReport(result);
-        });
+        return generateReport(ticker, context, "fundamentals", "generateFundamentalsReport",
+                "analysts/FundamentalsAnalyst", FundamentalsReport.class, FundamentalsReport::new);
     }
 
     @Action(description = "Generate market report from ticker")
     public MarketReport generateMarketReport(ResearchTypes.Ticker ticker, OperationContext context) {
-        String key = ticker.content() + "_market";
-        return cache.getOrCompute(key, MarketReport.class, () -> {
-            trackCall(ticker);
-            var runner = context.ai()
-                    .withLlmByRole(CHEAPEST_ROLE)
-                    .withId("generateMarketReport");
-            if (marketDataToolsProvider != null) {
-                var marketTools = marketDataToolsProvider.getObject();
-                if (marketTools != null) {
-                    runner.withToolObject(marketTools);
-                }
-            }
-            String result = runner.creating(String.class)
-                    .fromTemplate("analysts/MarketAnalyst", Map.of(
-                            "ticker", ticker.content().toUpperCase()
-                    ));
-            return new MarketReport(result);
-        });
+        return generateReport(ticker, context, "market", "generateMarketReport",
+                "analysts/MarketAnalyst", MarketReport.class, MarketReport::new, this::attachMarketTools);
     }
 
     @Action(description = "Generate news report from ticker")
     public NewsReport generateNewsReport(ResearchTypes.Ticker ticker, OperationContext context) {
-        String key = ticker.content() + "_news";
-        return cache.getOrCompute(key, NewsReport.class, () -> {
-            trackCall(ticker);
-            String result = context.ai()
-                    .withLlmByRole(CHEAPEST_ROLE)
-                    .withId("generateNewsReport")
-                    .creating(String.class)
-                    .fromTemplate("analysts/NewsAnalyst", Map.of(
-                            "ticker", ticker.content().toUpperCase()
-                    ));
-            return new NewsReport(result);
-        });
+        return generateReport(ticker, context, "news", "generateNewsReport",
+                "analysts/NewsAnalyst", NewsReport.class, NewsReport::new);
     }
 
     @Action(description = "Generate social media report from ticker")
     public SocialMediaReport generateSocialMediaReport(ResearchTypes.Ticker ticker, OperationContext context) {
-        String key = ticker.content() + "_social_media";
-        return cache.getOrCompute(key, SocialMediaReport.class, () -> {
+        return generateReport(ticker, context, "social_media", "generateSocialMediaReport",
+                "analysts/SocialMediaAnalyst", SocialMediaReport.class, SocialMediaReport::new);
+    }
+
+    private <R extends ResearchTypes.Report> R generateReport(
+            ResearchTypes.Ticker ticker,
+            OperationContext context,
+            String cacheSuffix,
+            String actionId,
+            String templateName,
+            Class<R> reportClass,
+            java.util.function.Function<String, R> reportFactory,
+            java.util.function.Consumer<PromptRunner> toolAttacher
+    ) {
+        String key = ResultCache.canonicalKey(ResultCache.CATEGORY_LLM, ticker.content(), cacheSuffix);
+        return resultCache.getOrCompute(ResultCache.CATEGORY_LLM, key, reportClass, () -> {
             trackCall(ticker);
-            String result = context.ai()
+            PromptRunner runner = context.ai()
                     .withLlmByRole(CHEAPEST_ROLE)
-                    .withId("generateSocialMediaReport")
-                    .creating(String.class)
-                    .fromTemplate("analysts/SocialMediaAnalyst", Map.of(
-                            "ticker", ticker.content().toUpperCase()
-                    ));
-            return new SocialMediaReport(result);
+                    .withId(actionId);
+            if (toolAttacher != null) {
+                toolAttacher.accept(runner);
+            }
+            String result = runner.creating(String.class)
+                    .fromTemplate(templateName, Map.of("ticker", ticker.content().toUpperCase()));
+            return reportFactory.apply(result);
         });
+    }
+
+    private <R extends ResearchTypes.Report> R generateReport(
+            ResearchTypes.Ticker ticker,
+            OperationContext context,
+            String cacheSuffix,
+            String actionId,
+            String templateName,
+            Class<R> reportClass,
+            java.util.function.Function<String, R> reportFactory
+    ) {
+        return generateReport(ticker, context, cacheSuffix, actionId, templateName, reportClass, reportFactory, null);
+    }
+
+    private void attachMarketTools(PromptRunner runner) {
+        if (marketDataToolsProvider != null) {
+            var marketTools = marketDataToolsProvider.getObject();
+            if (marketTools != null) {
+                runner.withToolObject(marketTools);
+            }
+        }
     }
 
     @Action(description = "Prepare structured debate briefs from analyst reports")
@@ -181,8 +174,9 @@ public class DebateAgent {
     ) {
         validateReports(ticker, fundamentals, market, news, social);
 
-        String key = ticker.content() + "_briefs";
-        return cache.getOrCompute(key, ResearchTypes.DebateBriefs.class, () -> {
+        String key = ResultCache.canonicalKey(ResultCache.CATEGORY_LLM,
+                ticker.content(), "briefs");
+        return resultCache.getOrCompute(ResultCache.CATEGORY_LLM, key, ResearchTypes.DebateBriefs.class, () -> {
             String fb = distill("FUNDAMENTALS", fundamentals.content(), ticker, actionContext);
             String mb = distill("MARKET", market.content(), ticker, actionContext);
             String nb = distill("NEWS", news.content(), ticker, actionContext);
@@ -246,12 +240,17 @@ public class DebateAgent {
             RiskAssessment riskAssessment,
             ResearchTypes.InvestmentReviewFeedback feedback,
             String portfolioDecision,
+            com.embabel.gekko.agent.identity.InstrumentContext instrumentContext,
             OperationContext context
     ) {
-        String key = ticker.content() + "_research_manager";
-        ResearchTypes.InvestmentPlan plan = cache.getOrCompute(key, ResearchTypes.InvestmentPlan.class, () -> {
+        String key = ResultCache.canonicalKey(ResultCache.CATEGORY_LLM,
+                ticker.content(), "research_manager",
+                riskAssessment != null ? riskAssessment.level().name() : "",
+                feedback != null && feedback.approved() ? "approved" : "pending",
+                feedback != null && feedback.feedback() != null ? feedback.feedback().hashCode() + "" : "");
+        ResearchTypes.InvestmentPlan plan = resultCache.getOrCompute(ResultCache.CATEGORY_LLM, key, ResearchTypes.InvestmentPlan.class, () -> {
             trackCall(ticker);
-            var model = buildResearchManagerModel(ticker, state, riskAssessment, feedback, portfolioDecision);
+            var model = buildResearchManagerModel(ticker, state, riskAssessment, feedback, portfolioDecision, instrumentContext);
 
             String result = context.ai()
                     .withLlmByRole(BEST_ROLE)
@@ -263,7 +262,7 @@ public class DebateAgent {
 
         // Store decision to memory outside cache supplier so it runs on every call, not just cache misses
         try {
-            storeFinalDecision(ticker, plan, "auto");
+            storeFinalDecision(ticker, plan, LocalDate.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")));
         } catch (Exception e) {
             log.warn("Failed to store decision to memory: {}", e.getMessage());
         }
@@ -276,19 +275,40 @@ public class DebateAgent {
             ResearchTypes.InvestmentDebateState state,
             RiskAssessment riskAssessment,
             ResearchTypes.InvestmentReviewFeedback feedback,
-            String portfolioDecision
+            String portfolioDecision,
+            com.embabel.gekko.agent.identity.InstrumentContext instrumentContext
     ) {
         var model = new LinkedHashMap<String, Object>();
-        model.put("past_memory_str", AgentUtils.NO_PAST_MEMORY);
-        model.put("history", sanitizeValue(state.history() != null ? String.join("\n", state.history()) : ""));
+        String pastContext;
+        try {
+            pastContext = memoryAgent.generatePastContext(ticker.content());
+        } catch (Exception e) {
+            log.warn("Failed to generate past context for {}: {}", ticker.content(), e.getMessage());
+            pastContext = null;
+        }
+        model.put("past_memory_str", PromptSanitizer.sanitizeForPrompt(
+                (pastContext != null && !pastContext.isBlank()) ? pastContext : AgentUtils.NO_PAST_MEMORY));
+        model.put("history", PromptSanitizer.sanitizeForPrompt(
+                state.history() != null ? String.join("\n", state.history()) : ""));
         model.put("risk_level", riskAssessment != null ? riskAssessment.level().name() : null);
-        model.put("risk_reasoning", riskAssessment != null ? riskAssessment.reasoning() : null);
+        model.put("risk_reasoning", riskAssessment != null ? PromptSanitizer.sanitizeForPrompt(riskAssessment.reasoning()) : null);
         model.put("human_approved", feedback != null && feedback.approved());
         model.put("user_feedback", feedback != null && feedback.approved() && feedback.feedback() != null && !feedback.feedback().isBlank()
-                ? sanitizeForPrompt(feedback.feedback())
+                ? PromptSanitizer.wrapUserFeedback(feedback.feedback())
                 : null);
-        model.put("ticker", ticker.content());
-        model.put("portfolio_decision", sanitizeValue(portfolioDecision));
+        model.put("ticker", PromptSanitizer.sanitizeForPrompt(ticker.content()));
+        model.put("portfolio_decision", PromptSanitizer.sanitizeForPrompt(portfolioDecision));
+        if (instrumentContext != null) {
+            model.put("companyName", PromptSanitizer.sanitizeForPrompt(instrumentContext.companyName()));
+            model.put("sector", PromptSanitizer.sanitizeForPrompt(instrumentContext.sector()));
+            model.put("industry", PromptSanitizer.sanitizeForPrompt(instrumentContext.industry()));
+            model.put("exchange", PromptSanitizer.sanitizeForPrompt(instrumentContext.exchange()));
+        } else {
+            model.put("companyName", "Unknown");
+            model.put("sector", "Unknown");
+            model.put("industry", "Unknown");
+            model.put("exchange", "Unknown");
+        }
         return model;
     }
 
@@ -414,47 +434,4 @@ public class DebateAgent {
                 ));
     }
 
-    private String sanitizeForPrompt(String input) {
-        String sanitized = sanitizeValue(input);
-        if (sanitized.isEmpty()) {
-            return "";
-        }
-        return "<user_feedback>\n" + sanitized + "\n</user_feedback>";
-    }
-
-    /**
-     * Sanitize a value for safe template injection (no XML wrapper).
-     * Strips jinja blocks, code fences, control chars, and truncates oversized input.
-     */
-    private String sanitizeValue(String input) {
-        if (input == null || input.isBlank()) {
-            return "";
-        }
-        // Reject oversized input before regex processing (ReDoS mitigation)
-        if (input.length() > MAX_INPUT_LENGTH) {
-            input = input.substring(0, MAX_INPUT_LENGTH);
-        }
-        String sanitized = JINJA_VAR.matcher(input).replaceAll("[BLOCKED_TEMPLATE]");
-        sanitized = JINJA_STMT.matcher(sanitized).replaceAll("[BLOCKED_TEMPLATE]");
-        sanitized = JINJA_VAR_UNCLOSED.matcher(sanitized).replaceAll("[BLOCKED_TEMPLATE]");
-        sanitized = JINJA_STMT_UNCLOSED.matcher(sanitized).replaceAll("[BLOCKED_TEMPLATE]");
-        sanitized = CODE_FENCE.matcher(sanitized).replaceAll("[BLOCKED_CODE]");
-        sanitized = CODE_FENCE_UNCLOSED.matcher(sanitized).replaceAll("[BLOCKED_CODE]");
-
-        StringBuilder sb = new StringBuilder(sanitized.length());
-        for (int i = 0; i < sanitized.length(); i++) {
-            char c = sanitized.charAt(i);
-            if (c == '\t' || c == '\n' || c == '\r') {
-                sb.append(c);
-            } else if (c >= 0x20 && !Character.isISOControl(c)) {
-                sb.append(c);
-            }
-        }
-        sanitized = sb.toString();
-
-        if (sanitized.length() > MAX_OUTPUT_LENGTH) {
-            sanitized = sanitized.substring(0, MAX_OUTPUT_LENGTH) + "...[truncated]";
-        }
-        return sanitized;
-    }
 }

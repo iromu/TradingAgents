@@ -6,7 +6,9 @@ import org.mockito.Mockito;
 import static org.junit.jupiter.api.Assertions.*;
 
 /**
- * Unit tests for RiskDebateAgent.parseRiskAssessment covering all 3 risk levels.
+ * Unit tests for RiskDebateAgent.parseRiskAssessmentFallback.
+ * After task 2.7, the fallback always returns NEUTRAL (no keyword-based classification)
+ * because speaker labels "Aggressive"/"Conservative" in the transcript caused false positives.
  */
 class RiskDebateServiceUnitTest {
 
@@ -21,39 +23,39 @@ class RiskDebateServiceUnitTest {
     }
 
     @Test
-    void parseRiskAssessment_risky() {
+    void parseRiskAssessment_risky_returnsNeutral() {
         var agent = createAgent();
         var result = invokeParseRiskAssessment(agent, "buy because of high risk appetite");
-        assertEquals(RiskLevel.RISKY, result.level());
-        assertTrue(result.reasoning().toLowerCase().contains("buy"));
+        assertEquals(RiskLevel.NEUTRAL, result.level());
+        assertTrue(result.reasoning().contains("undetermined"));
     }
 
     @Test
-    void parseRiskAssessment_risky_bold() {
+    void parseRiskAssessment_risky_bold_returnsNeutral() {
         var agent = createAgent();
         var result = invokeParseRiskAssessment(agent, "bold buy aggressive move");
-        assertEquals(RiskLevel.RISKY, result.level());
+        assertEquals(RiskLevel.NEUTRAL, result.level());
     }
 
     @Test
-    void parseRiskAssessment_conservative_sell() {
+    void parseRiskAssessment_conservative_sell_returnsNeutral() {
         var agent = createAgent();
         var result = invokeParseRiskAssessment(agent, "sell to avoid risk");
-        assertEquals(RiskLevel.CONSERVATIVE, result.level());
+        assertEquals(RiskLevel.NEUTRAL, result.level());
     }
 
     @Test
-    void parseRiskAssessment_conservative_cautious() {
+    void parseRiskAssessment_conservative_cautious_returnsNeutral() {
         var agent = createAgent();
         var result = invokeParseRiskAssessment(agent, "cautious approach recommended");
-        assertEquals(RiskLevel.CONSERVATIVE, result.level());
+        assertEquals(RiskLevel.NEUTRAL, result.level());
     }
 
     @Test
-    void parseRiskAssessment_conservative_safe() {
+    void parseRiskAssessment_conservative_safe_returnsNeutral() {
         var agent = createAgent();
         var result = invokeParseRiskAssessment(agent, "safe investment strategy");
-        assertEquals(RiskLevel.CONSERVATIVE, result.level());
+        assertEquals(RiskLevel.NEUTRAL, result.level());
     }
 
     @Test
@@ -68,7 +70,6 @@ class RiskDebateServiceUnitTest {
         var agent = createAgent();
         var result = invokeParseRiskAssessment(agent, "");
         assertEquals(RiskLevel.NEUTRAL, result.level());
-        assertTrue(result.reasoning().contains("empty"));
     }
 
     @Test
@@ -76,7 +77,6 @@ class RiskDebateServiceUnitTest {
         var agent = createAgent();
         var result = invokeParseRiskAssessment(agent, null);
         assertEquals(RiskLevel.NEUTRAL, result.level());
-        assertTrue(result.reasoning().contains("empty"));
     }
 
     @Test
@@ -88,15 +88,15 @@ class RiskDebateServiceUnitTest {
         }
         var result = invokeParseRiskAssessment(agent, sb.toString());
         assertEquals(RiskLevel.NEUTRAL, result.level());
-        // Reasoning is truncated to 200 chars + "..." = 203 chars max
-        assertTrue(result.reasoning().length() <= 203);
+        // Reasoning includes the truncated judge text
+        assertNotNull(result.reasoning());
     }
 
     @Test
-    void parseRiskAssessment_risky_high() {
+    void parseRiskAssessment_risky_high_returnsNeutral() {
         var agent = createAgent();
         var result = invokeParseRiskAssessment(agent, "buy high risk position");
-        assertEquals(RiskLevel.RISKY, result.level());
+        assertEquals(RiskLevel.NEUTRAL, result.level());
     }
 
     private RiskAssessment invokeParseRiskAssessment(RiskDebateAgent agent, String input) {

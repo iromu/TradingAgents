@@ -73,7 +73,7 @@ class DebateAgentSubProcessIntegrationTest extends EmbabelMockitoIntegrationTest
         when(marketToolsProvider.getObject()).thenReturn(marketToolsMock);
 
         agent = new DebateAgent(
-                cache,
+                null, // resultCache
                 null, // templateRenderer
                 null, // memoryAgent
                 debateLoopProvider,

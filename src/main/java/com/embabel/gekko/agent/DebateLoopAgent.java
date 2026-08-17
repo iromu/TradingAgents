@@ -9,8 +9,8 @@ import com.embabel.gekko.config.TraderAgentConfig;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.agent.researchers.BearResearcher;
 import com.embabel.gekko.agent.researchers.BullResearcher;
-import com.embabel.gekko.util.FileCache;
 import com.embabel.gekko.util.LlmBudgetTracker;
+import com.embabel.gekko.util.ResultCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
@@ -37,7 +37,7 @@ public class DebateLoopAgent {
 
     private final BullResearcher bullResearcher;
     private final BearResearcher bearResearcher;
-    private final FileCache cache;
+    private final ResultCache resultCache;
     private final TraderAgentConfig config;
     private final LlmBudgetTracker llmBudgetTracker;
 
@@ -59,8 +59,9 @@ public class DebateLoopAgent {
                     int count = last != null ? last.count() : 0;
 
                     // Bull turn
-                    String bullResponse = cache.getOrCompute(
-                            "debate:" + ticker.content() + ":bull:" + count,
+                    String bullResponse = resultCache.getOrCompute(
+                            ResultCache.CATEGORY_LLM,
+                            ResultCache.canonicalKey(ResultCache.CATEGORY_LLM, ticker.content(), "debate", "bull", String.valueOf(count)),
                             String.class,
                             () -> {
                                 String result = bullResearcher.argue(briefs, history, actionContext);
@@ -72,8 +73,9 @@ public class DebateLoopAgent {
                     bullHistory.add(bullResponse);
 
                     // Bear turn
-                    String bearResponse = cache.getOrCompute(
-                            "debate:" + ticker.content() + ":bear:" + (count + 1),
+                    String bearResponse = resultCache.getOrCompute(
+                            ResultCache.CATEGORY_LLM,
+                            ResultCache.canonicalKey(ResultCache.CATEGORY_LLM, ticker.content(), "debate", "bear", String.valueOf(count + 1)),
                             String.class,
                             () -> {
                                 String result = bearResearcher.argue(briefs, history, actionContext);

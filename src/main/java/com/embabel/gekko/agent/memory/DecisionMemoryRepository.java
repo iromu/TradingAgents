@@ -30,10 +30,17 @@ import java.util.regex.Pattern;
 public class DecisionMemoryRepository {
 
     /**
-     * Entry delimiter using record/group separator control characters (\u001E/\u001F)
-     * wrapping a deterministic UUID. Encoding-safe and unlikely to collide with content.
+     * Canonical entry delimiter (HTML comment format, Python-compatible).
      */
-    public static final String ENTRY_SEPARATOR = "\u001E<entry-sep:550e8400-e29b-41d4-a716-446655440000>\u001F";
+    public static final String ENTRY_SEPARATOR = "<!-- ENTRY_END -->";
+
+    /** Legacy control-char separator for backward compatibility with existing memory files. */
+    public static final String LEGACY_ENTRY_SEPARATOR = "\u001E<entry-sep:550e8400-e29b-41d4-a716-446655440000>\u001F";
+
+    /** Pattern matching both canonical and legacy separators. */
+    private static final Pattern SEPARATOR_RE = Pattern.compile(
+            Pattern.quote(ENTRY_SEPARATOR) + "|" + Pattern.quote(LEGACY_ENTRY_SEPARATOR)
+    );
 
     // Matches: [2026-01-15 | NVDA | Buy | pending]
     private static final Pattern PENDING_ENTRY_RE = Pattern.compile(
@@ -46,11 +53,11 @@ public class DecisionMemoryRepository {
             Pattern.CASE_INSENSITIVE
     );
     private static final Pattern DECISION_BLOCK_RE = Pattern.compile(
-            "DECISION:\\s*(.+?)\\s*\\nRATING:\\s*(.+?)\\s*\\nDATE:\\s*(.+?)\\s*\\nRETURNS:\\s*\\nALPHA:\\s*([\\s\\S]*?)(?=\\s*\\n" + Pattern.quote(ENTRY_SEPARATOR) + "|\\s*\\Z)",
+            "DECISION:\\s*(.+?)\\s*\\nRATING:\\s*(.+?)\\s*\\nDATE:\\s*(.+?)\\s*\\nRETURNS:\\s*\\nALPHA:\\s*([\\s\\S]*?)(?=\\s*\\n" + SEPARATOR_RE.pattern() + "|\\s*\\Z)",
             Pattern.DOTALL
     );
     private static final Pattern REFLECTION_BLOCK_RE = Pattern.compile(
-            "REFLECTION:\\s*\\n([\\s\\S]*?)(?=\\n\\n" + Pattern.quote(ENTRY_SEPARATOR) + "|\\Z)",
+            "REFLECTION:\\s*\\n([\\s\\S]*?)(?=\\n\\n" + SEPARATOR_RE.pattern() + "|\\Z)",
             Pattern.DOTALL
     );
     private static final DateTimeFormatter DF = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -389,9 +396,17 @@ public class DecisionMemoryRepository {
     public void recoverFromCorruption() {
         withLock(() -> {
             String content = getContent();
-            int lastSeparator = content.lastIndexOf(ENTRY_SEPARATOR);
+            int lastSeparator = Math.max(content.lastIndexOf(ENTRY_SEPARATOR), content.lastIndexOf(LEGACY_ENTRY_SEPARATOR));
             if (lastSeparator > 0) {
-                String recovered = content.substring(0, lastSeparator + ENTRY_SEPARATOR.length());
+                int endPos = content.indexOf(ENTRY_SEPARATOR, lastSeparator);
+                int legacyPos = content.indexOf(LEGACY_ENTRY_SEPARATOR, lastSeparator);
+                int sepEnd;
+                if (endPos >= 0 && (legacyPos < 0 || endPos <= legacyPos)) {
+                    sepEnd = endPos + ENTRY_SEPARATOR.length();
+                } else {
+                    sepEnd = legacyPos + LEGACY_ENTRY_SEPARATOR.length();
+                }
+                String recovered = content.substring(0, sepEnd);
                 atomicWrite(recovered);
                 log.info("Recovered memory log from corruption, truncated to last complete entry");
             }
@@ -410,7 +425,7 @@ public class DecisionMemoryRepository {
     private String[] splitEntries(String content) {
         if (content == null || content.isBlank()) return new String[0];
         // First, split on the separator (separator is discarded, not reattached)
-        String[] raw = content.split(Pattern.quote(ENTRY_SEPARATOR), -1);
+        String[] raw = content.split(SEPARATOR_RE.pattern(), -1);
         List<String> entries = new ArrayList<>();
         for (String chunk : raw) {
             String trimmed = chunk.trim();

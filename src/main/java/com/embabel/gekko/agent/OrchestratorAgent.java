@@ -17,8 +17,9 @@ import com.embabel.gekko.domain.Analysts.NewsReport;
 import com.embabel.gekko.domain.Analysts.SocialMediaReport;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.AgentUtils;
-import com.embabel.gekko.util.FileCache;
 import com.embabel.gekko.util.LlmBudgetTracker;
+import com.embabel.gekko.util.PromptSanitizer;
+import com.embabel.gekko.util.ResultCache;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.aot.hint.annotation.RegisterReflectionForBinding;
@@ -50,7 +51,7 @@ import static com.embabel.common.ai.model.ModelProvider.CHEAPEST_ROLE;
 @Slf4j
 public class OrchestratorAgent {
 
-    private final FileCache cache;
+    private final ResultCache resultCache;
     private final InstrumentIdentityAgent identityAgent;
     private final DecisionMemoryAgent memoryAgent;
     private final CheckpointAgent checkpointAgent;
@@ -103,8 +104,21 @@ public class OrchestratorAgent {
             ResearchTypes.Ticker ticker,
             InstrumentContext instrumentContext,
             OperationContext context) {
-        String key = ticker.content() + "_research_plan";
-        return cache.getOrCompute(key, ResearchTypes.ResearchPlan.class, () -> {
+        // Resolve any pending decisions from previous runs before generating the plan
+        try {
+            if (memoryAgent != null && memoryAgent.hasPendingEntriesFor(ticker.content())) {
+                String today = java.time.LocalDate.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+                memoryAgent.resolvePending(ticker.content(), today, context);
+                log.info("Resolved pending decisions for {} before research plan", ticker.content());
+            }
+        } catch (Exception e) {
+            log.warn("Failed to resolve pending decisions for {}: {}", ticker.content(), e.getMessage());
+        }
+
+        String identityPart = instrumentContext != null ? instrumentContext.companyName() : "";
+        String key = ResultCache.canonicalKey(ResultCache.CATEGORY_LLM,
+                ticker.content(), "research_plan", identityPart);
+        return resultCache.getOrCompute(ResultCache.CATEGORY_LLM, key, ResearchTypes.ResearchPlan.class, () -> {
             trackCall(ticker.content());
             var model = buildResearchPlanModel(ticker, instrumentContext);
 
@@ -122,19 +136,19 @@ public class OrchestratorAgent {
             InstrumentContext instrumentContext
     ) {
         var model = new HashMap<String, Object>();
-        model.put("past_memory_str", generatePastContext(ticker));
+        model.put("past_memory_str", PromptSanitizer.sanitizeForPrompt(generatePastContext(ticker)));
         // "history" and "user_feedback" are intentionally empty at this stage:
         // research plan generation precedes the debate loop (which produces history)
         // and the HITL approval gate (which collects user feedback).
         model.put("history", "");
         model.put("human_approved", false);
         model.put("user_feedback", "");
-        model.put("ticker", ticker.content());
+        model.put("ticker", PromptSanitizer.sanitizeForPrompt(ticker.content()));
         if (instrumentContext != null) {
-            model.put("companyName", instrumentContext.companyName());
-            model.put("sector", instrumentContext.sector());
-            model.put("industry", instrumentContext.industry());
-            model.put("exchange", instrumentContext.exchange());
+            model.put("companyName", PromptSanitizer.sanitizeForPrompt(instrumentContext.companyName()));
+            model.put("sector", PromptSanitizer.sanitizeForPrompt(instrumentContext.sector()));
+            model.put("industry", PromptSanitizer.sanitizeForPrompt(instrumentContext.industry()));
+            model.put("exchange", PromptSanitizer.sanitizeForPrompt(instrumentContext.exchange()));
         }
         return model;
     }

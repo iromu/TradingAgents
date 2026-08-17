@@ -6,10 +6,12 @@ language: "default"
 source_paths:
   - "src/main/java/com/embabel/gekko/config/SecurityConfig.java"
   - "src/main/java/com/embabel/gekko/util/AgentUtils.java"
+  - "src/main/java/com/embabel/gekko/util/PromptSanitizer.java"
   - "src/main/java/com/embabel/gekko/web/TradingHtmxController.java"
   - "src/main/java/com/embabel/gekko/htmx/ProcessStatusController.java"
+  - "src/main/java/com/embabel/gekko/web/TradingApiController.java"
   - "src/main/java/com/embabel/gekko/dataflows/AlphaVantageService.java"
-updated_at: "2026-08-16"
+updated_at: "2026-08-17"
 ---
 
 # Security Model
@@ -38,12 +40,15 @@ Invalid IDs throw `ResponseStatusException(400)`. This prevents path traversal a
 
 ## Ticker Validation
 
-Two layers validate ticker symbols:
+Four layers validate ticker symbols:
 
 - **`OrchestratorAgent.tickerFromForm()`** — rejects blank input, uppercases, validates against `^[A-Z0-9.]+$`
+- **`TradingHtmxController.planResearch()`** — validates against `^[A-Z0-9.]+$` before creating a process
+- **`TradingApiController.planResearch()`** — validates against `^[A-Z0-9.]+$`, returns HTTP 400 on invalid input
+- **`ProcessStatusController.resubmit()`** — validates against `^[A-Z0-9.]+$` before creating a `TickerForm` (HITL resubmit path)
 - **`AlphaVantageService.validateTicker()`** — validates against `^[A-Z]{1,6}(\.[A-Z]{1,2})?$` (e.g., AAPL, BRK.B)
 
-Both throw `IllegalArgumentException` on invalid input.
+All throw `IllegalArgumentException` or return an error response on invalid input.
 
 ## Feedback Length Limit
 
@@ -57,13 +62,16 @@ This prevents oversized payloads from being injected into LLM prompts.
 
 ## Prompt Injection Sanitization
 
-`DebateAgent.sanitizeValue()` strips dangerous content before template injection:
+`PromptSanitizer` is a shared static utility applied at **all** prompt-building sites (29+ call sites). It replaces the previously private `DebateAgent.sanitizeValue()`.
+
+`PromptSanitizer.sanitizeForPrompt(String)` neutralizes:
 
 - Jinja syntax (`{{ }}`, `{% %}`, unclosed variants) → `[BLOCKED_TEMPLATE]`
-- Code fences (```) → `[BLOCKED_CODE]`
+- HTML/script tags and code fences → `[BLOCKED_CODE]`
 - Control characters removed (only `\t`, `\n`, `\r` preserved)
 - Input truncated to 10,000 chars before regex processing (ReDoS mitigation)
-- Output truncated to 1,000 chars
+
+`PromptSanitizer.wrapUserFeedback(String)` wraps user feedback in XML delimiters (`<user_feedback>...</user_feedback>`) to clearly separate it from system instructions.
 
 Pre-compiled `Pattern` objects avoid ReDoS from repeated compilation.
 

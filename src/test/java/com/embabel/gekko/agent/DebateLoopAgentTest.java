@@ -6,6 +6,7 @@ import com.embabel.gekko.agent.researchers.BearResearcher;
 import com.embabel.gekko.agent.researchers.BullResearcher;
 import com.embabel.gekko.util.FileCache;
 import com.embabel.gekko.util.LlmBudgetTracker;
+import com.embabel.gekko.util.ResultCache;
 import org.junit.jupiter.api.Test;
 
 import java.lang.reflect.Method;
@@ -23,10 +24,10 @@ class DebateLoopAgentTest {
     private DebateLoopAgent createAgent(int maxIterations, double similarityThreshold) {
         var bullResearcher = new BullResearcher();
         var bearResearcher = new BearResearcher();
-        var cache = new FileCache();
+        var resultCache = new ResultCache(new FileCache(), "5m", "1h");
         var config = new TraderAgentConfig(null, null, maxIterations, null, null, null, "/tmp", similarityThreshold, 5, 16384, 3, null, null, null, null, null, null);
         var budgetTracker = new LlmBudgetTracker(30, false, 1000);
-        return new DebateLoopAgent(bullResearcher, bearResearcher, cache, config, budgetTracker);
+        return new DebateLoopAgent(bullResearcher, bearResearcher, resultCache, config, budgetTracker);
     }
 
     // --- computeSimilarity tests (via reflection since it's private) ---

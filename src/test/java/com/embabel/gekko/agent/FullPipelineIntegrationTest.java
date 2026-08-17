@@ -69,11 +69,12 @@ class FullPipelineIntegrationTest extends EmbabelMockitoIntegrationTest {
 
         // Initialize agents with minimal constructors (LLM calls go through ctx)
         var cache = createCache();
+        var resultCache = new com.embabel.gekko.util.ResultCache(cache, "5m", "1h");
         debateAgent = new DebateAgent(
-                cache, null, null, null, null, null, null, null, null
+                resultCache, null, null, null, null, null, null, null, null
         );
         orchestratorAgent = new OrchestratorAgent(
-                cache, null, null, null, null, null, null
+                resultCache, null, null, null, null, null, null
         );
         portfolioManager = new PortfolioManager();
     }

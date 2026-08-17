@@ -8,6 +8,7 @@ import com.embabel.gekko.config.TraderAgentConfig;
 import com.embabel.gekko.dataflows.YFinService;
 import com.embabel.gekko.domain.ResearchTypes;
 import com.embabel.gekko.util.FileCache;
+import com.embabel.gekko.util.ResultCache;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,10 +71,11 @@ class OrchestratorAgentResearchPlanTest {
         ctx = FakeOperationContext.create();
         promptRunner = ctx.getPromptRunner();
         FileCache testCache = createCache();
+        ResultCache resultCache = new ResultCache(testCache, "5m", "1h");
         YFinService yFinService = new YFinService();
-        identityAgent = new InstrumentIdentityAgent(yFinService, testCache, avProvider(null));
+        identityAgent = new InstrumentIdentityAgent(yFinService, resultCache, avProvider(null));
         agent = new OrchestratorAgent(
-                testCache,
+                resultCache,
                 identityAgent,
                 null, // memoryAgent — not needed for generateResearchPlan
                 null, // checkpointAgent — not needed for generateResearchPlan

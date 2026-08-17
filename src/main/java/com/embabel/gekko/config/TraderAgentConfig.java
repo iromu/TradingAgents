@@ -60,5 +60,9 @@ public record TraderAgentConfig(
             maxRiskDebateRounds = 3;
             log.info("Using default maxRiskDebateRounds: 3");
         }
+        if (bestModel != null && cheapestModel != null && bestModel.equals(cheapestModel)) {
+            log.warn("Model roles 'best' and 'cheapest' both resolve to '{}'. " +
+                    "Consider configuring distinct models via app.llm-options.best-model / cheapest-model.", bestModel);
+        }
     }
 }
