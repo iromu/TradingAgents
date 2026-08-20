@@ -401,7 +401,7 @@ Separate config prefix for LLM operations that are not agent-platform specific:
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `embabel.llm-operations.prompts.default-timeout` | Duration | _(none)_ | Default timeout for LLM prompt operations |
+| `embabel.llm-operations.prompts.default-timeout` | Duration | `60s` | Default timeout for LLM prompt operations |
 
 ## SSE Configuration
 
@@ -414,7 +414,8 @@ Separate config prefix for LLM operations that are not agent-platform specific:
 
 | Property | Type | Default | Description |
 |----------|------|---------|-------------|
-| `embabel.agent.platform.process-id-generation` | String | _(default)_ | Strategy for generating process IDs |
+| `embabel.agent.platform.process-id-generation.include-version` | Boolean | `false` | Whether to include version in process ID generation |
+| `embabel.agent.platform.process-id-generation.include-agent-name` | Boolean | `false` | Whether to include agent name in process ID generation |
 
 ## Empty Response Policy
 

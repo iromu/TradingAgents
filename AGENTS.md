@@ -2,6 +2,22 @@
 
 Guidance for AI agents working on this project.
 
+## Working Principles
+
+### Simplicity First
+
+**Minimum code that solves the problem. Nothing speculative.**
+**(This is the principle we care about most.)**
+
+- No features beyond what was asked.
+- No abstractions for single-use code.
+- No "flexibility" or "configurability" that wasn't requested.
+- No error handling for impossible scenarios.
+- If you write 200 lines and it could be 50, rewrite it.
+
+Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes,
+simplify.
+
 ## The .wiki Is the Primary Knowledge Source
 
 **Read `.wiki/index.md` first.** Everything you need to understand this project is there, organized for progressive disclosure.

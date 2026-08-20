@@ -315,6 +315,45 @@ embabel.agent.platform.rest.process-status-enabled=false
 embabel.agent.platform.rest.process-kill-enabled=false
 embabel.agent.platform.rest.process-events-enabled=false
 ```
+
+## ProcessOptions — Full Reference
+
+`ProcessOptions` controls how an agent process runs. Key options:
+
+| Option | Description |
+|--------|-------------|
+| `contextId` | Existing context for session state (pre-populates blackboard) |
+| `blackboard` | Custom blackboard (start from particular state) |
+| `test` | Test mode flag |
+| `verbosity` | Control logging of prompts, LLM responses, planning details |
+| `control` | Early termination (action count or budget limit) |
+| `ephemeral` | Skip persistence, no child processes |
+| `toolCallContext` | Out-of-band metadata for tool invocations |
+| `plannerType` | Override planner type for this process |
+
+```kotlin
+val processOptions = ProcessOptions()
+    .withContextId("session-123")
+    .withEphemeral(true)
+    .withVerbosity(Verbosity(showPrompts = true, showLlmResponses = true, debug = true))
+    .withToolCallContext(ToolCallContext.of(
+        "authToken" to bearerToken,
+        "tenantId" to tenantId,
+    ))
+```
+
+> **Verbosity inheritance:** Verbosity set on `ProcessOptions` is inherited by subagent invocations — set once at the top level and it flows through the call tree.
+
+## ConcurrentAgentProcess
+
+When `process-type: CONCURRENT` is configured, the platform uses `ConcurrentAgentProcess` which runs all achievable actions in parallel per tick using virtual threads.
+
+### Behavior Differences from SimpleAgentProcess
+
+- **ReplanRequestedException**: Only the first replan request is honored; subsequent ones are dropped
+- **Blacklisted actions**: An action that is blacklisted is prevented from immediate re-execution in the next tick
+- **Concurrency safety**: Actions must be safe to run concurrently — avoid shared mutable state
+
 ---
 
-*Source: Embabel Agent v1.0.0 documentation*
+*Source: Embabel Agent v1.5.0 documentation*

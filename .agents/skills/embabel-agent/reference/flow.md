@@ -41,16 +41,17 @@ Each `AgentProcess` maintains:
 
 ---
 
-## Planning (OODA Loop)
+## Planning
 
-Planning occurs after each action execution using Goal-Oriented Action Planning (GOAP).
+Planning occurs after each action execution using Goal-Oriented Action Planning (GOAP), a five-step process:
 
-1. **Observe** — Examine the current blackboard contents and world state
-2. **Orient** — Understand what has changed since the last planning cycle
-3. **Decide** — Use A* search to find optimal action sequences to achieve the goal
-4. **Act** — Execute the first action in the plan and replan
+1. **Analyze Current State** — Examine the current blackboard contents and world state
+2. **Identify Available Actions** — Find all actions that can be executed based on their preconditions
+3. **Search for Action Sequences** — Use A* algorithm to find optimal paths to achieve the goal
+4. **Select Optimal Plan** — Choose the best action sequence based on cost and success probability
+5. **Execute Next Action** — Run the first action in the plan and replan
 
-This creates a dynamic OODA loop that allows agents to:
+This creates a dynamic **OODA loop** (Observe-Orient-Decide-Act) that allows agents to:
 
 - Adapt to unexpected action results
 - Handle dynamic environments where conditions change
@@ -133,8 +134,8 @@ By default, blackboard items are matched by type. When there are multiple candid
 @Action
 public Person extractPerson(UserInput userInput, OperationContext context) {
     PersonImpl maybeAPerson = context.promptRunner()
-        .withLlm(LlmOptions.withModel(OpenAiModels.GPT_4O_MINI))
-        .createObjectIfPossible("Create a person from this input...", PersonImpl.class);
+        .withLlm(LlmOptions.fromModel(OpenAiModels.GPT_41))
+        .createObjectIfPossible("Create a person from this user input, extracting their name: %s".formatted(userInput.getContent()), PersonImpl.class);
     if (maybeAPerson != null) {
         context.bind("user", maybeAPerson);
     }

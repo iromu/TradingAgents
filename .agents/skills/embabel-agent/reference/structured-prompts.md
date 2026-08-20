@@ -159,18 +159,26 @@ Define references in `references.yml` (under `src/main/resources/`):
 Load them programmatically:
 
 ```java
-List<LmmReference> references = LlmReferenceProviders.fromYml("references.yml");
+List<LlmReference> references = LlmReferenceProviders.fromYml("references.yml");
 ```
+
+`LlmReferenceProviders.fromYml("references.yml")` loads `references.yml` under `src/main/resources/`.
 
 **Built-in providers:**
 
-| Provider | Purpose |
-|---|---|
-| `LiteralText` | Static text via `notes` field |
-| `SpringResource` | Contents of a Spring resource path |
-| `WebPage` | Content of a fetchable web page |
-| `GitHubRepository` | GitHub repositories (`embabel-agent-code`) |
-| `ApiReferenceProvider` | API from classpath (`embabel-agent-code`) |
+| Provider | Purpose | Module |
+|---|---|---|
+| `LiteralText` | Static text via `notes` field | Core |
+| `SpringResource` | Contents of a Spring resource path | Core |
+| `WebPage` | Content of a fetchable web page | Core |
+| `GitHubRepository` | GitHub repositories | `embabel-agent-code` |
+| `ApiReferenceProvider` | API from classpath | `embabel-agent-code` |
+
+> **Note:** An `LlmReference` is similar to a Claude Skill — it bundles prompt content with tools.
+
+### Examples from embabel-agent-examples
+
+The [embabel-agent-examples](https://github.com/embabel/embabel-agent-examples) repository demonstrates various agent development patterns and Spring Boot integration approaches for building AI agents with Embabel.
 
 ---
 
@@ -183,4 +191,4 @@ List<LmmReference> references = LlmReferenceProviders.fromYml("references.yml");
 - Test contributions to verify desired LLM behavior
 ---
 
-*Source: Embabel Agent v1.0.0 documentation*
+*Source: Embabel Agent v1.5.0 documentation*

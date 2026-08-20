@@ -103,66 +103,6 @@ The LLM gains access to `customer.getLoyaltyDiscount()` and `customer.isPremiumE
 
 **Important:** Domain object methods, even if annotated with `@Tool`, will **not** be exposed to LLMs unless explicitly added via `withToolObject()`.
 
-## Domain Tools
-
-Domain tools are stateful tools that live on domain objects. When a domain object is added via `withToolObject()`, its `@Tool` methods become available as tools to the LLM. These tools can encapsulate private state and business logic, giving the LLM access to rich, behavior-rich interactions rather than plain data.
-
-### Example: Domain Tool with Hidden State
-
-```java
-@Entity
-public class OrderProcessor {
-    private final Map<Long, BigDecimal> discounts = new HashMap<>();
-
-    @Tool(description = "Apply a one-time discount to an order")
-    public BigDecimal applyDiscount(long orderId, BigDecimal discount) {
-        discounts.put(orderId, discount);
-        return discount;
-    }
-
-    @Tool(description = "Get the current discount for an order")
-    public BigDecimal getDiscount(long orderId) {
-        return discounts.getOrDefault(orderId, BigDecimal.ZERO);
-    }
-
-    // Not annotated — stays internal
-    private void clearExpiredDiscounts() {
-        discounts.clear();
-    }
-}
-```
-
-```kotlin
-@Entity
-class OrderProcessor {
-    private val discounts = mutableMapOf<Long, BigDecimal>()
-
-    @Tool(description = "Apply a one-time discount to an order")
-    fun applyDiscount(orderId: Long, discount: BigDecimal): BigDecimal {
-        discounts[orderId] = discount
-        return discount
-    }
-
-    @Tool(description = "Get the current discount for an order")
-    fun getDiscount(orderId: Long): BigDecimal {
-        return discounts[orderId] ?: BigDecimal.ZERO
-    }
-
-    // Not annotated — stays internal
-    private fun clearExpiredDiscounts() {
-        discounts.clear()
-    }
-}
-```
-
-The `OrderProcessor` carries private state (`discounts` map) that the LLM can interact with through tools, while internal methods remain hidden.
-
-### Best Practices for Domain Tools
-
-- **Encapsulate state** — domain tools often carry private state; keep it hidden behind `@Tool` methods
-- **Expose safely** — only methods the LLM should call get `@Tool`
-- **Think carefully about mutations** — methods that mutate state or have side effects should be reviewed before exposing
-
 ## Best Practices
 
 ### What to Expose
@@ -178,9 +118,6 @@ The `OrderProcessor` carries private state (`discounts` map) that the LLM can in
 - **Encapsulate business logic** within domain objects where it belongs — avoid anemic DTOs
 - **Expose selectively** — only methods the LLM should call get `@Tool`
 - **Keep internal details hidden** — think carefully before exposing methods that mutate state or have side effects
-- **Design for toolability** — consider which methods should be callable by LLMs from the start
-- **Reuse across agents** — domain objects can be used across multiple agents without duplication
-- **Unit test independently** — domain logic can be tested without AI involvement
 
 ### Benefits
 

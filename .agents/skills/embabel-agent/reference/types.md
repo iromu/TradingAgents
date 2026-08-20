@@ -77,7 +77,6 @@ public Story createStory(UserInput input, OperationContext context) {
 | `withLlm(LlmOptions)` | Use specific LLM configuration |
 | `withGenerateExamples(Boolean)` | Control example generation |
 | `withThinking(Thinking)` | Enable native reasoning mode |
-| `withStreaming(Boolean)` | Enable streaming responses |
 | `withToolNotFoundPolicy(ToolNotFoundPolicy)` | Control tool-name recovery strategy |
 
 #### Returning a Specific Type (Creating API)

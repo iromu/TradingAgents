@@ -217,8 +217,6 @@ val story = context.ai()
 | `withTool(Subagent.ofClass(...))` | Enable handoff to another agent |
 | `withToolObject(Object)` | Expose `@Tool` methods on a domain object |
 | `rendering(String)` | Use Jinja templates for the prompt |
-| `withThinking(Thinking)` | Enable native reasoning mode (e.g. GLM) |
-| `withStreaming(Boolean)` | Enable streaming responses |
 | `withToolNotFoundPolicy(ToolNotFoundPolicy)` | Control tool-name recovery strategy |
 
 ### Full Chain Example
@@ -226,20 +224,20 @@ val story = context.ai()
 ```java
 String answer = context.ai()
     .withLlm(LlmOptions.fromCriteria(
-            ModelSelectionCriteria.getAuto()))
+            ModelSelectionCriteria.getAuto())
+            .withThinking(Thinking.withTokenBudget(2048)))
     .withToolGroup(CoreToolGroups.WEB)
     .withId("research-topic")
-    .withThinking(Thinking.withTokenBudget(2048))
     .createObject("Research and summarize: " + topic, Answer.class);
 ```
 
 ```kotlin
 val answer = context.ai()
     .withLlm(LlmOptions.fromCriteria(
-        ModelSelectionCriteria.getAuto()))
+        ModelSelectionCriteria.getAuto())
+        .withThinking(Thinking.withTokenBudget(2048)))
     .withToolGroup(CoreToolGroups.WEB)
     .withId("research-topic")
-    .withThinking(Thinking.withTokenBudget(2048))
     .createObject("Research and summarize: $topic", Answer::class.java)
 ```
 
@@ -377,12 +375,14 @@ Native structured output enables the model provider to enforce a JSON Schema dir
 ### Usage
 
 ```java
-var options = LlmOptions.withModel(OpenAiModels.GPT_4O)
-    .withNativeStructuredOutput(NativeStructuredOutputMode.ENABLED);
+var options = withNativeStructuredOutput(
+    LlmOptions.fromModel(OpenAiModels.GPT_4O),
+    NativeStructuredOutputMode.ENABLED
+);
 ```
 
 ```kotlin
-val options = LlmOptions.withModel(OpenAiModels.GPT_4O)
+val options = LlmOptions.fromModel(OpenAiModels.GPT_4O)
     .withNativeStructuredOutput(NativeStructuredOutputMode.ENABLED)
 ```
 
@@ -434,6 +434,23 @@ embabel:
           max-retries: 3  # Default: 3
 ```
 
+### ToolNotFoundPolicy
+
+Control tool-name recovery strategy:
+
+| Policy | Behavior |
+|--------|----------|
+| `AutoCorrectionPolicy` (default) | Feeds back "did you mean X?" suggestion to the model |
+| `ImmediateThrowPolicy` | Throws immediately on unknown tool name — no retry |
+
+Set programmatically:
+
+```kotlin
+ai.withDefaultLlm()
+    .withToolNotFoundPolicy(ImmediateThrowPolicy())
+    .createObject("...", Result::class.java)
+```
+
 ### Iteration Headroom
 
 Recovery costs LLM calls. If you enable retry policies, raise `max-iterations` so a turn that needs an extra round trip doesn't run out of budget:
@@ -450,4 +467,32 @@ These settings are off-by-default so existing deployments using strong models be
 
 ---
 
-*Source: Embabel Agent v1.0.0 documentation — `reference/llms` and `reference/types`*
+## Custom Embedding Service
+
+Implement a custom embedding service independent of Spring AI for providers not supported by Spring AI, custom pre/post-processing, or proprietary embedding APIs.
+
+### The EmbeddingService Interface
+
+```java
+public interface EmbeddingService {
+    float[] embed(String text);
+    List<float[]> embed(List<String> texts);
+    int getDimensions();
+    String getName();
+    String getProvider();
+}
+```
+
+```kotlin
+interface EmbeddingService {
+    fun embed(text: String): FloatArray
+    fun embed(texts: List<String>): List<FloatArray>
+    val dimensions: Int
+}
+```
+
+Register as a Spring bean and it will be automatically discovered by the RAG subsystem.
+
+---
+
+*Source: Embabel Agent v1.5.0 documentation — `reference/llms` and `reference/types`*

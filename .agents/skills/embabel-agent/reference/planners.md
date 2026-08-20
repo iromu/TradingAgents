@@ -179,6 +179,16 @@ val process = agentPlatform.runAgentFrom(
 
 `HYBRID` is `UTILITY` with one extra check: if the real goal is already satisfied, return an empty plan regardless of what actions remain — enabling clean termination of the two-goal pattern.
 
+### Tuning Values
+
+For the hybrid pattern to work correctly:
+
+- **Research actions** (opportunistic context producers) should have **high net value** so they win the picker race while `canRerun=false` is still open
+- **The synthesizer** (final action producing terminal output) should have **positive but lower net value** — it wins after research is locked out
+- **Wrap-up actions** should have **value just above the synthesizer** so they fire immediately after
+
+Once the wrap-up writes the terminal artifact, the real goal's empty plan wins and the process exits.
+
 ---
 
 ## Supervisor
@@ -294,6 +304,46 @@ public class DataProcessor {
 <3> `costMethod` references the `@Cost` method by name.
 
 You can also compute dynamic **value** using `valueMethod` in the same way.
+
 ---
 
-*Source: Embabel Agent v1.0.0 documentation*
+## UtilityInvocation: Lightweight Utility Workflows
+
+For simple utility workflows, you don't need to create an `@Agent` class. `UtilityInvocation` provides a fluent API to run utility-based workflows directly from `@EmbabelComponent` actions.
+
+```java
+UtilityInvocation.on(agentPlatform)
+    .withScope(AgentScopeBuilder.fromInstances(issueActions, labelActions))
+    .run(new GHIssue(issueData));
+```
+
+```kotlin
+UtilityInvocation.on(agentPlatform)
+    .withScope(AgentScopeBuilder.fromInstance(myActions))
+    .withAgentName("issue-triage-agent")
+    .run(input)
+```
+
+### Configuration Options
+
+| Method | Description |
+|--------|-------------|
+| `.withScope(AgentScopeBuilder)` | Defines which actions are available |
+| `.withAgentName(String)` | Sets a custom agent name (defaults to platform name) |
+| `.withProcessOptions(ProcessOptions)` | Configures process-level options |
+| `.terminateWhenStuck()` | Adds early termination when no actions are available |
+
+### When to Use
+
+- Quick utility workflows without the overhead of defining a full `@Agent`
+- Ad-hoc action execution from `@EmbabelComponent` beans
+- Testing and prototyping utility-based planning
+
+### When NOT to Use
+
+- When you need goal-oriented planning (use `@Agent` with GOAP or Hybrid)
+- When you need MCP publishing via `@Export` (requires `@Agent`)
+- When you need a named, discoverable agent in the platform
+---
+
+*Source: Embabel Agent v1.5.0 documentation*

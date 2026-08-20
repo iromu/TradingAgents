@@ -1,10 +1,10 @@
 ---
 name: embabel-agent
 description: >-
-  Build agentic AI on the JVM with Embabel v1.0.0 — Rod Johnson's Spring-based framework for authoring agents that combine LLMs with non-LLM planning (GOAP, Utility AI, Hybrid, Supervisor). Use when creating agents with @Agent or @EmbabelComponent, annotating actions (@Action), goals (@AchievesGoal), conditions (@Condition), and tools (@LlmTool, @Tool); publishing agents as MCP servers with @Export(remote=true); managing agent state with @State and transitions; configuring LLM providers (OpenAI, Anthropic, Gemini, GenAI, DeepSeek, Ollama, LM Studio, Bedrock, OCI, Mistral, Z.ai, Docker Models, MiniMax); implementing RAG with ToolishRAG; writing tests with FakeOperationContext; adding interceptors, guardrails, cost tracking, streaming, thinking, and termination; building chatbots with triggers; using DSL builders, OneShotPerLoopTool, ToolCallContext; troubleshooting and migrating from CrewAI, Pydantic AI, or LangGraph.
+  Build agentic AI on the JVM with Embabel v1.5.0 — Rod Johnson's Spring-based framework for authoring agents that combine LLMs with non-LLM planning (GOAP, Utility AI, Hybrid, Supervisor). Use when creating agents with @Agent or @EmbabelComponent, annotating actions (@Action), goals (@AchievesGoal), conditions (@Condition), and tools (@LlmTool, @Tool); publishing agents as MCP servers with @Export(remote=true); managing agent state with @State and transitions; configuring LLM providers (OpenAI, Anthropic, Gemini, GenAI, DeepSeek, Ollama, LM Studio, Bedrock, OCI, Mistral, Z.ai native, DashScope, Docker Models, MiniMax, BYOK); implementing RAG with ToolishRAG; writing tests with FakeOperationContext; adding interceptors, guardrails, cost tracking, streaming, thinking, and termination; building chatbots with triggers; using DSL builders, UtilityInvocation, OneShotPerLoopTool, ToolCallContext, ConcurrentAgentProcess; custom LLM integration via LlmMessageSender and EmbeddingService; troubleshooting and migrating from CrewAI, Pydantic AI, or LangGraph.
 ---
 
-# Embabel Agent Framework (v1.0.0)
+# Embabel Agent Framework (v1.5.0)
 
 Build agentic AI on the JVM with **Embabel** — a Spring-based framework for authoring agentic flows that mix LLM-prompted interactions with code and domain models. Created by Rod Johnson (creator of Spring), it uses non-LLM AI planning (GOAP, Utility AI, Hybrid, Supervisor) to find intelligent paths toward goals.
 
@@ -48,7 +48,7 @@ Embabel release binaries are published to **Maven Central** — no snapshot repo
 | Provider | Starter | Key Env Var |
 |----------|---------|-------------|
 | OpenAI | `embabel-agent-starter-openai` | `OPENAI_API_KEY` |
-| OpenAI Custom (Groq, Z.AI, OpenRouter) | `embabel-agent-starter-openai-custom` | `OPENAI_CUSTOM_API_KEY` |
+| OpenAI Custom (Groq, OpenRouter) | `embabel-agent-starter-openai-custom` | `OPENAI_CUSTOM_API_KEY` |
 | Anthropic | `embabel-agent-starter-anthropic` | `ANTHROPIC_API_KEY` |
 | Google Gemini (OpenAI-compatible) | `embabel-agent-starter-gemini` | `GEMINI_API_KEY` |
 | Google GenAI (Native, Gemini 3.x) | `embabel-agent-starter-google-genai` | `GOOGLE_API_KEY` |
@@ -58,9 +58,15 @@ Embabel release binaries are published to **Maven Central** — no snapshot repo
 | LM Studio | `embabel-agent-starter-lmstudio` | _(none)_ |
 | Ollama | `embabel-agent-starter-ollama` | _(none)_ |
 | AWS Bedrock | `embabel-agent-starter-bedrock` | AWS credentials (standard Spring AI Bedrock) |
-| Z.ai (Zhipu GLM) | `embabel-agent-starter-zai` | `ZAI_API_KEY` |
+| Z.ai (Zhipu GLM, native client) | `embabel-agent-starter-zai` | `ZAI_API_KEY` |
+| DashScope (Alibaba Qwen) | `embabel-agent-starter-dashscope` | `DASHSCOPE_API_KEY` |
 | Docker Models | `embabel-agent-starter-dockermodels` | _(none)_ |
 | MiniMax | `embabel-agent-starter-minimax` | `MINIMAX_API_KEY` |
+| BYOK (user-supplied keys) | `embabel-agent-starter-byok` (Incubating) | _(runtime)_ |
+
+> **Z.ai:** Now uses native `spring-ai-zhipuai` client (not OpenAI-compatible). Supports GLM 5.2, native reasoning/thinking, temperature clamping `(0.0, 1.0]`. See `reference/zai.md`.
+>
+> **DashScope:** Alibaba Cloud Qwen 3.7 family (Max/Plus/Flash). OpenAI-compatible with parameter clamping. See `reference/dashscope.md`.
 
 See `reference/configuration.md` for full provider config details.
 
@@ -108,13 +114,18 @@ See `reference/domain.md` for DICE best practices.
 - **@Tool** — Expose JVM methods to LLMs (Spring AI)
 - **ToolCallContext** — Inject infrastructure metadata invisible to the LLM
 - **OneShotPerLoopTool** — Prevent repeated tool calls in a single planning loop
-- **@Cost / costMethod** — Compute action costs dynamically from blackboard state
+- **@Cost / costMethod / valueMethod** — Compute action costs and values dynamically from blackboard state
 - **SpEL Conditions** — Dynamic preconditions in `@Condition` and `@Action(pre = "...")`
 - **Subagent** — Let the LLM invoke other agents as tools (`Subagent.ofClass(...).consuming(...)`)
 - **Agentic Tools** — SimpleAgenticTool, PlaybookTool, StateMachineTool
 - **Tool Groups & Chaining** — Configure in YAML or `@Configuration`; use `withToolGroup()` and `withToolChainingFrom(Class)`
+- **UtilityInvocation** — Lightweight utility workflows without `@Agent` (see `reference/planners.md`)
 
 See `reference/tools.md` for full details.
+
+## IDE Tooling
+
+Install the **Embabel Agent IntelliJ IDEA plugin** (ID `31142`) to suppress false "never used" warnings on `@Action`, `@Condition`, and `@Cost` methods. Compatible with IDEA 2023.3+ (JVM 21+). See `reference/tooling.md`.
 
 ## Planning Algorithms
 
@@ -150,13 +161,24 @@ See `reference/dsl.md` for all builder types.
 ## Execution Modes
 
 - **SIMPLE** (default): Sequential, one action at a time
-- **CONCURRENT**: All achievable actions run in parallel
+- **CONCURRENT**: All achievable actions run in parallel via virtual threads
 
 Set: `embabel.agent.platform.process-type: CONCURRENT`
 
+**ConcurrentAgentProcess behavior:**
+- Uses virtual threads via Spring's task executor
+- `ReplanRequestedException`: Only the first request is honored; subsequent ones are dropped
+- Blacklisted actions are prevented from immediate re-execution
+- Actions must be concurrent-safe
+
+| Mode | When to use | Trade-offs |
+|------|-------------|------------|
+| `SIMPLE` | Sequential pipelines, ordered actions | Predictable, easy to debug |
+| `CONCURRENT` | Independent parallel sub-tasks | Higher throughput, concurrent-safe actions required |
+
 **Autonomy:** Closed (LLM picks one agent) vs Open (LLM picks goal, assembles from all actions).
 
-See `reference/invoking.md` for confidence thresholds and programmatic invocation.
+See `reference/invoking.md` for confidence thresholds, ProcessOptions, and programmatic invocation.
 
 ## Chatbots
 
@@ -282,14 +304,17 @@ For topics not covered in detail above, consult the reference files:
 
 | Topic | Reference |
 |-------|-----------|
-| LLM options, caching, native structured output | `reference/llm-integration.md` |
+| LLM options, caching, native structured output, custom LLM/EmbeddingService | `reference/llm-integration.md` |
 | AgentProcess lifecycle, blackboard, planning loop | `reference/flow.md` |
 | Core types (`LlmOptions`, `PromptRunner`, `AgentImage`) | `reference/types.md` |
-| Structured prompts (`Persona`, `RoleGoalBackstory`) | `reference/structured-prompts.md` |
+| Structured prompts (`Persona`, `RoleGoalBackstory`, LlmReference providers) | `reference/structured-prompts.md` |
 | Interceptors & transformers | `reference/interceptors.md` |
 | Thinking, guardrails, cost tracking, streaming | `reference/thinking.md`, `reference/guardrails.md`, `reference/cost-tracking.md`, `reference/streaming.md` |
 | Termination, error handling | `reference/termination.md`, `reference/error-handling.md` |
 | Agent skills, API vs SPI | `reference/agent-skills.md`, `reference/api-spi.md` |
+| DashScope provider (Alibaba Qwen) | `reference/dashscope.md` |
+| Z.ai provider (Zhipu GLM, native client) | `reference/zai.md` |
+| Tooling (IntelliJ IDEA plugin) | `reference/tooling.md` |
 
 > **Rule:** Application code uses only `com.embabel.agent.api.*`. SPI (`com.embabel.agent.spi.*`) is for framework extension only and is subject to change.
 

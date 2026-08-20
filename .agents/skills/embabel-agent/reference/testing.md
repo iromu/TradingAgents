@@ -117,7 +117,7 @@ For agents that make several LLM calls, call `expectResponse()` for each call in
 void testMultipleInteractions() {
     var input = new UserInput("Write about space exploration");
     var story = new Story("The astronaut gazed at Earth...");
-    var review = new ReviewedStory("Compelling narrative.", Personas.REVIEWER);
+    var review = new ReviewedStory("Compelling narrative with vivid imagery.");
 
     context.expectResponse(story);
     context.expectResponse(review);
@@ -346,7 +346,7 @@ class StoryWriterIntegrationTest extends EmbabelMockitoIntegrationTest {
         var input = new UserInput("Write about artificial intelligence");
 
         var story = new Story("AI will transform our world...");
-        var reviewedStory = new ReviewedStory(story, "Excellent.", Personas.REVIEWER);
+        var reviewedStory = new ReviewedStory(story, "Excellent exploration of AI themes.", Personas.REVIEWER);
 
         // Stub LLM calls with prompt matching
         whenCreateObject(contains("Craft a short story"), Story.class)
@@ -381,7 +381,7 @@ class StoryWriterIntegrationTest : EmbabelMockitoIntegrationTest() {
         val input = UserInput("Write about artificial intelligence")
 
         val story = Story("AI will transform our world...")
-        val reviewedStory = ReviewedStory(story, "Excellent.", Personas.REVIEWER)
+        val reviewedStory = ReviewedStory(story, "Excellent exploration of AI themes.", Personas.REVIEWER)
 
         whenCreateObject(contains("Craft a short story"), Story::class.java)
             .thenReturn(story)

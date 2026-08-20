@@ -108,22 +108,6 @@ context.ai()
 
 ---
 
-## @Cost / costMethod: Dynamic Tool Costs
-
-Specify a cost estimate so budget-aware agents can check remaining budget before invoking:
-
-```java
-@LlmTool(description = "Expensive web search", costMethod = "estimateSearchCost")
-public String search(String query) { ... }
-
-@Cost
-public int estimateSearchCost(String query) {
-    return query.length() > 50 ? 100 : 50;
-}
-```
-
----
-
 ## Tool Groups
 
 Tool groups provide indirection between user intent and tool selection — ask for "web" tools, not a specific search engine.
@@ -276,9 +260,8 @@ Embabel provides predefined tool groups:
 | Group | Description |
 |-------|-------------|
 | `CoreToolGroups.WEB` | Web search, browsing tools |
+| `CoreToolGroups.MATH` | Mathematical computation tools |
 | `CoreToolGroups.BROWSER_AUTOMATION` | Browser automation tools |
-| `CoreToolGroups.MAPS` | Maps and location tools |
-| `CoreToolGroups.GITHUB` | GitHub operations tools |
 
 ### Docker MCP Gateway Configuration
 
@@ -403,4 +386,4 @@ var tool = UnfoldingTool.fromInstance(new DatabaseTools());
 - **Lazy MCP init requires three properties** — both Spring AI flags and `embabel.agent.platform.tools.lazy-init=true`
 ---
 
-*Source: Embabel Agent v1.0.0 documentation*
+*Source: Embabel Agent v1.5.0 documentation*
