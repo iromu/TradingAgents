@@ -8,6 +8,9 @@ source: "https://arxiv.org/abs/2402.03620"
 tags: [reasoning, self-improvement, meta-learning, problem-solving, task-specific, optimization]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/self-discover-reasoning-structures.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Different reasoning tasks require different thinking strategies. While techniques like Chain-of-Thought (CoT) work well for some problems, they may be suboptimal for others. Current approaches typically use fixed reasoning patterns regardless of the specific problem at hand, leading to inefficient problem-solving and suboptimal performance on diverse tasks.

@@ -8,6 +8,9 @@ source: "https://cursor.com/blog/scaling-agents"
 tags: [multi-agent, coordination, long-running, hierarchical, parallelism]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/planner-worker-separation-for-long-running-agents.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Running multiple AI agents in parallel for complex, multi-week projects creates significant coordination challenges:

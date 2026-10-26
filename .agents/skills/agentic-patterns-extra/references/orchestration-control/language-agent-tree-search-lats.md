@@ -8,6 +8,9 @@ source: "https://arxiv.org/abs/2310.04406"
 tags: [search, monte-carlo, tree-search, reasoning, planning, reflection, evaluation]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/language-agent-tree-search-lats.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Current language agents often struggle with complex reasoning tasks that require exploration of multiple solution paths. Simple linear approaches like ReACT or basic reflection patterns can get stuck in local optima or fail to consider alternative strategies. This is particularly problematic for tasks requiring strategic planning, mathematical reasoning, or multi-step problem solving where early decisions significantly impact later outcomes.

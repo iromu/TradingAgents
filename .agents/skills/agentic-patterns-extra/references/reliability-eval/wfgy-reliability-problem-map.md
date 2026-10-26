@@ -8,6 +8,9 @@ source: "https://github.com/onestardao/WFGY/blob/main/ProblemMap/README.md"
 tags: [reliability, evaluation, rag, agents, debugging, failure-modes, checklist]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/wfgy-reliability-problem-map.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 RAG pipelines and agent systems often fail in ways that are hard to diagnose: missing context, unstable retrieval, brittle tool contracts, and flaky behavior after data updates.

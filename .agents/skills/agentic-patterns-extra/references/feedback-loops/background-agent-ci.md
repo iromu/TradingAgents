@@ -21,6 +21,9 @@ summary: >-
 updated_at: '2026-01-05'
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/background-agent-ci.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Long-running refactors and flaky-fix cycles force developers into synchronous supervision. When the agent must wait on tests, build jobs, and deployment checks, human attention gets wasted on polling instead of decision-making. This bottleneck is worse in distributed teams where CI feedback arrives minutes later and context-switch cost is high.

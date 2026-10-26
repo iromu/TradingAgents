@@ -24,6 +24,9 @@ summary: >-
 updated_at: '2026-01-13'
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/hybrid-llm-code-workflow-coordinator.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 LLM-driven workflows are **non-deterministic**—even well-crafted prompts can produce unpredictable results. For some tasks (e.g., adding emoji to Slack messages based on PR status), occasional errors are unacceptable. But LLM workflows are fast to prototype and work well for many cases. You need both: **flexibility when experimenting** and **determinism when it matters**.

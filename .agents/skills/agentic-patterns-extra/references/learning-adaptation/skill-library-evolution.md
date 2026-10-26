@@ -28,6 +28,9 @@ summary: >-
 updated_at: '2026-01-13'
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/skill-library-evolution.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Agents frequently solve similar problems across different sessions or workflows. Without a mechanism to preserve and reuse working code, agents must rediscover solutions each time, wasting tokens and time. Organizations want agents to build up capability over time rather than starting from scratch every session.

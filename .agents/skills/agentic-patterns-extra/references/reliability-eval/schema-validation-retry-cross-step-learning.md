@@ -8,6 +8,9 @@ source: "https://github.com/hyperbrowserai/HyperAgent"
 tags: [retry, validation, cross-step-learning, structured-output, zod, error-accumulation]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/schema-validation-retry-cross-step-learning.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 LLMs don't always produce valid structured output matching the expected schema. Single-attempt validation leads to task failures even when retry would succeed.

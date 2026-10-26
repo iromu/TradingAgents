@@ -8,6 +8,9 @@ source: "https://github.com/hyperbrowserai/HyperAgent"
 tags: [caching, replay, regression-testing, cost-reduction, deterministic, xpath]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/action-caching-replay.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 LLM-based agent execution is expensive (both in costs and latency) and non-deterministic. Running the same workflow multiple times yields different results and incurs repeated LLM costs.

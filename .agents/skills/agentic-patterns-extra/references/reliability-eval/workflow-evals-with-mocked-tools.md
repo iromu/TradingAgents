@@ -24,6 +24,9 @@ summary: >-
 updated_at: '2026-01-13'
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/workflow-evals-with-mocked-tools.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Unit tests, linters, and typecheckers validate individual components but don't test agent workflows end-to-end. It's easy to create prompts that don't work well despite all underlying pieces being correct.
@@ -256,7 +259,7 @@ The article notes evals are "not nearly as well as I had hoped" due to non-deter
 * Sierra platform: Simulations approach for agent testing
 * [LangSmith Evaluation Platform](https://smith.langchain.com/) - Tool tracking and custom evaluators
 * [Promptfoo](https://github.com/promptfoo/promptfoo) - Mock API responses and assertion-based testing
-* Related: [Stop Hook Auto-Continue Pattern](stop-hook-auto-continue-pattern.md) - Post-execution testing
-* Related: [Agent Reinforcement Fine-Tuning](agent-reinforcement-fine-tuning.md) - Training on agent workflows
+* Related: [Stop Hook Auto-Continue Pattern](../orchestration-control/stop-hook-auto-continue-pattern.md) - Post-execution testing
+* Related: [Agent Reinforcement Fine-Tuning](../learning-adaptation/agent-reinforcement-fine-tuning.md) - Training on agent workflows
 
 ---

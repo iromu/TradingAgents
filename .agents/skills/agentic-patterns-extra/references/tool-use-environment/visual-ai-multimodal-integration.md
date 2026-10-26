@@ -8,6 +8,9 @@ source: "https://openai.com/research/gpt-4v-system-card"
 tags: [multimodal, vision, video, image-processing, visual-understanding, agent-capabilities]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/visual-ai-multimodal-integration.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Many real-world tasks require understanding and processing visual information alongside text. Traditional text-only agents miss critical information present in images, videos, diagrams, and visual interfaces. This limitation prevents agents from helping with tasks like analyzing screenshots, debugging UI issues, understanding charts, processing security footage, or working with visual documentation.

@@ -24,6 +24,9 @@ summary: >-
 updated_at: '2026-01-05'
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/progressive-autonomy-with-model-evolution.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Agent scaffolding built for older models becomes unnecessary overhead as models improve:

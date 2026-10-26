@@ -8,6 +8,9 @@ source: "https://every.to/podcast/transcript-how-to-use-claude-code-like-the-peo
 tags: [hooks, automation, testing, determinism, success-criteria, continuous-execution]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/stop-hook-auto-continue-pattern.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Agents complete their turn and return control to the user even when the task isn't truly done. Common scenarios:

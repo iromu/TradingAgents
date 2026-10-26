@@ -8,6 +8,9 @@ source: "https://www.youtube.com/watch?v=Xkwok_XXQgw"
 tags: [model-merging, transfer-learning, coding-agent, multilingual]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/merged-code-language-skill-model.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Building a **unified model** that excels both at **natural language tasks** (e.g., summarization, documentation generation) and **code generation/reasoning** typically requires a massive centralized training run. This is:

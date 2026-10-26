@@ -8,6 +8,9 @@ source: "https://www.nibzard.com/claude-code"
 tags: [multi-agent, brainstorming, parallel processing, idea generation, sub-agents, collaborative ideation]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/iterative-multi-agent-brainstorming.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 For complex problems or creative ideation, a single AI agent instance might get stuck in a local optimum or fail to explore a diverse range of solutions. Generating a breadth of ideas can be challenging for a sequential, monolithic process.

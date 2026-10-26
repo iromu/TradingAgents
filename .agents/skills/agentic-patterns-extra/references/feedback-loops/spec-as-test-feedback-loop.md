@@ -8,6 +8,9 @@ source: "http://jorypestorious.com/blog/ai-engineer-spec/"
 tags: [validation, drift-detection, continuous-testing]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/spec-as-test-feedback-loop.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Even in spec-first projects, implementations can drift as code evolves and the spec changes (or vice-versa). Silent divergence erodes trust.

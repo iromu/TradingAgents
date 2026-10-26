@@ -1,0 +1,150 @@
+# Agent Process Persistence (v1.5.3)
+
+Agent process persistence is a checkpointing mechanism for recovering processes that are parked for external input (HITL), and for advancing durable state at terminal lifecycle boundaries.
+
+The framework keeps storage backend-neutral. Applications provide an `AgentProcessSnapshotStore`; framework support creates snapshots, serializes them, restores process instances, and decorates an `InMemoryAgentProcessRepository` or another runtime `AgentProcessRepository`.
+
+## Lifecycle Boundaries
+
+Two checkpoint boundaries:
+
+- **`WAITING`** — a process has called `waitFor` and can be restored by another runtime after local process state is lost
+- **Finished states** — a process has completed, failed, been killed, or been terminated, and durable state should reflect that final lifecycle state
+
+| Policy | Checkpoints | Use when |
+|--------|-------------|----------|
+| `WaitForCheckpointPolicy` | Only `WAITING` processes | The snapshot store is only a recovery cache |
+| `LifecycleCheckpointPolicy` (default) | `WAITING` and finished processes | The durable snapshot should also show that the resumed process reached a terminal state |
+
+## Storage
+
+`AgentProcessSnapshotStore` is the storage SPI. It stores serialized snapshots with process id, parent id, agent name, status, content type, payload, timestamps, and optimistic version metadata.
+
+The framework does not ship production relational database or cache configuration in the API module. Backends are configured through the provided starters:
+
+- `embabel-agent-starter-jdbc` — relational databases
+- `embabel-agent-starter-cache` — cache providers such as Redis or Hazelcast
+
+## JDBC Provider
+
+Add `embabel-agent-starter-jdbc` and configure a DataSource using standard Spring Boot properties. No Embabel-specific DataSource configuration is required:
+
+```xml
+<dependency>
+    <groupId>com.embabel.agent</groupId>
+    <artifactId>embabel-agent-starter-jdbc</artifactId>
+</dependency>
+```
+
+```properties
+# Standard Spring Boot DataSource — any JDBC-compatible database
+spring.datasource.url=jdbc:postgresql://localhost:5432/mydb
+spring.datasource.username=app
+spring.datasource.password=${DB_PASSWORD}
+
+# HikariCP connection pool (Spring Boot default, recommended for production)
+spring.datasource.hikari.maximum-pool-size=10
+
+# Activate the JDBC snapshot store
+embabel.agent.platform.persistence.provider=jdbc
+```
+
+Spring Boot creates a `JdbcTemplate` from the `DataSource` automatically; `JdbcSnapshotStoreAutoConfiguration` picks it up and registers the snapshot store. No additional beans are required.
+
+Apply the DDL schema to the database before starting the application:
+
+```sql
+create table if not exists agent_process_snapshots (
+    process_id   varchar(255)  not null,
+    parent_id    varchar(255),
+    agent_name   varchar(255)  not null,
+    status       varchar(64)   not null,
+    version      bigint        not null,
+    content_type varchar(255)  not null,
+    payload      bytea         not null,
+    created_at   timestamp     not null,
+    updated_at   timestamp     not null,
+    constraint pk_agent_process_snapshots primary key (process_id)
+);
+create index if not exists idx_agent_process_snapshots_parent_id
+    on agent_process_snapshots (parent_id);
+```
+
+> **Note:** The schema above uses PostgreSQL syntax (`bytea`). H2 in PostgreSQL compatibility mode (`MODE=PostgreSQL`) accepts the same DDL. For other databases replace `bytea` with the equivalent binary column type (`blob` for MySQL/MariaDB, `varbinary(max)` for SQL Server).
+
+If the application already has a `JdbcTemplate` bean from its own DataSource configuration, the auto-configuration uses it directly. If multiple DataSources are present, declare the `JdbcTemplate` to use with `@Primary` or supply a `JdbcAgentProcessSnapshotStore` bean directly to bypass auto-configuration.
+
+## Configuration
+
+Persistence activates when the application context contains an `AgentProcessSnapshotStore` bean. Adding a store is enough; no other configuration is required. Without one, the platform uses `InMemoryAgentProcessRepository`.
+
+```properties
+# Disable persistence in tests without removing the snapshot store from the classpath.
+embabel.agent.platform.persistence.enabled=false
+
+# WAITING or LIFECYCLE. Default LIFECYCLE.
+embabel.agent.platform.persistence.checkpoint-policy=LIFECYCLE
+```
+
+`BlackboardEntrySerializer` beans are discovered automatically and consulted in Spring `@Order` before the JSON fallback.
+
+Applications that assemble the platform themselves can build the same repository directly:
+
+```kotlin
+val repository = AgentProcessPersistence.persistentRepository(
+    runtimeRepository = InMemoryAgentProcessRepository(),
+    snapshotStore = mySnapshotStore,
+    objectMapper = objectMapper,
+    agents = agentPlatform::agents,
+    platformServices = { agentPlatform.platformServices },
+)
+```
+
+The snapshot, serialization and restore machinery stays internal, so the snapshot format remains free to change.
+
+## Blackboard Values
+
+Blackboard state is persisted through `BlackboardEntrySerializer`. Serializers use `supportsSerialization` for live blackboard values and `supportsDeserialization` for stored values.
+
+The default JSON serializer handles simple data classes automatically. Applications should provide more specific serializers for values that need stable identity or special treatment, such as:
+
+- awaitables whose ids must survive restore
+- JPA/Hibernate entities that should be stored as references
+- sensitive values that should be encrypted or redacted
+- runtime handles that must be replaced by a durable DTO
+
+Custom serializers are resolved before the fallback serializer.
+
+## Runtime Architecture
+
+`PersistentAgentProcessRepository` pairs an `InMemoryAgentProcessRepository` with a snapshot store. This is production-ready for HITL workloads: HITL processes spend the overwhelming majority of their lifetime in `WAITING` and are not held in memory between requests. The snapshot store is the source of truth; the in-memory repository is a request-scoped cache.
+
+`findByParentId` follows the same fallback pattern as `findById`: runtime repository first, then snapshot store for any children not found in memory. Kill and terminate operations cascade to child processes correctly across pod boundaries.
+
+### Current Limitations
+
+- The snapshot factory supports `InMemoryBlackboard` and assumes the predominant case of exactly one pending awaitable per `WAITING` process. Broader blackboard support should be added through a `BlackboardSnapshotter` SPI.
+- Snapshot and runtime-repository writes are not transactional. Concurrent conflicts are caught by optimistic locking on the snapshot version — the conflicting snapshot write is rejected and the exception propagates to the caller.
+- Agent class names are used as internal restore discriminators. Renaming or moving an agent class while snapshots from it are still in the store requires a migration step to update the stored class name.
+
+## Restore
+
+On lookup, `PersistentAgentProcessRepository` first checks the runtime repository. If the process is not found, it loads the serialized snapshot, rebuilds the blackboard, reconstructs the process, restores internal status and action history, then caches the restored process in the runtime repository.
+
+This allows a HITL flow to resume after pod-local memory has been lost:
+
+```
+POST /start
+  -> process WAITING
+  -> snapshot version 1 stored
+  -> runtime process lost (pod restart or scale-out)
+POST /continue
+  -> snapshot loaded from store
+  -> awaitable identity restored
+  -> process resumes
+  -> terminal snapshot version 2 stored
+```
+
+---
+
+*Source: Embabel Agent v1.5.3 documentation — `references/persistence`*

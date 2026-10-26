@@ -8,6 +8,9 @@ source: "https://www.nibzard.com/silent-revolution"
 tags: [computer operation, virtual machine, execution environment, agent capability]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/virtual-machine-operator-agent.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 AI agents need to perform complex tasks beyond simple code generation or text manipulation. They require the ability to interact with a full computer environment to execute code, manage system resources, install software, and operate various applications.

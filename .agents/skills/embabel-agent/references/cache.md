@@ -1,0 +1,72 @@
+# Cache Providers (v1.5.3)
+
+Agent state that must outlive a single node — process snapshots today, contexts and shared runtime state next — needs a backend. `embabel-agent-cache` is the integration point for one.
+
+A backend is integrated once, through `AgentCacheProvider`, and then serves every consumer. Without this, each consumer would grow its own Redis or Hazelcast integration, each with its own connection management, key naming, expiry handling and health checks.
+
+The module depends on `embabel-agent-api`, never the reverse. The API module declares the consumer contracts; this module adapts them onto a cache.
+
+## Providers and Regions
+
+`AgentCacheProvider` vends `AgentCacheRegion` instances by name. A region holds opaque versioned payloads and supports `get`, `put`, `replace`, `remove`, `clear` and an optional secondary `index`.
+
+Regions exist because the data has genuinely different retention needs. The names in `CacheRegions` are part of the configuration surface, since users reference them when declaring caches or expiry in a backend's own configuration:
+
+| Region | Holds | Retention |
+|--------|-------|-----------|
+| `agent-process-snapshots` | Durable process checkpoints | Compare-and-set required, normally no expiry |
+| `agent-contexts` | Long-lived state shared across processes | Time to live |
+| `agent-processes-runtime` | Runtime process state shared between nodes | Short time to live |
+
+## Capabilities
+
+Backends differ in what they can guarantee, and the SPI states this rather than settling for a lowest common denominator. A region declares its `capabilities`. A consumer that cannot function without one requests it through `CacheRegionConfig.requiredCapabilities`, and a provider unable to meet the request throws `CacheCapabilityException` when the region is created, rather than returning something that quietly degrades.
+
+`ATOMIC_COMPARE_AND_SET` is the one that matters most. Snapshot writes use `replace` with an expected version; without atomicity that becomes a read-modify-write, which is correct for a single writer but permits a lost update when two nodes checkpoint the same process concurrently.
+
+## Spring Cache Provider
+
+`SpringCacheAgentCacheProvider` adapts any Spring `CacheManager`, so JSR-107 and Spring-supported backends work with no additional code, configured through the standard `spring.cache` properties.
+
+Its limitations are deliberate and documented rather than hidden:
+
+- No atomic compare-and-set. `replace` is a read-modify-write guarded by an in-JVM lock, so it is correct on a single node only
+- Secondary indexes are emulated as companion entries under a reserved key prefix, and index updates are not atomic with the data write they accompany
+- Expiry is not settable through the SPI. Configure it in the backend, keyed by the region names above
+- Values are stored as `CachedValue` instances, so the cache manager must be able to serialize them. That is automatic for in-memory backends; Redis needs a JSON serializer configured
+
+Applications needing real compare-and-set or native indexing should use a provider written against the backend directly.
+
+## Process Snapshot Storage
+
+`CacheBackedAgentProcessSnapshotStore` implements the `AgentProcessSnapshotStore` described in `persistence.md` over any region, so a cache backend gives durable agent processes without further code.
+
+The region never sees agent types. The process payload is stored opaquely and the snapshot header travels in `CachedValue.metadata`, which backends with native query support may index. Parent-to-child lookup uses a secondary index, so the store fails at construction on a region that cannot index, rather than at the first `findByParentId`.
+
+## Configuration
+
+Cache-backed persistence is configured automatically. Declaring an `AgentCacheProvider` bean is enough: a `CacheBackedAgentProcessSnapshotStore` is registered over the `agent-process-snapshots` region, and platform persistence picks it up as described in `persistence.md`.
+
+An application that already has a Spring `CacheManager` can use it instead of writing a provider, but must opt in. Applications commonly have a `CacheManager` for unrelated caching, and treating it as durable agent state without being asked would be a trap:
+
+```properties
+embabel.agent.platform.cache.provider=spring-cache
+```
+
+The snapshot region requires `ATOMIC_COMPARE_AND_SET` by default, because concurrent checkpoints from several nodes are exactly the case durable processes exist for. The Spring cache adapter cannot provide it, so startup fails with a message naming the property below. Waive the requirement only when a single node ever writes each process:
+
+```properties
+embabel.agent.platform.cache.require-atomic-compare-and-set=false
+```
+
+An application-defined `AgentProcessSnapshotStore` or `AgentCacheProvider` always takes precedence over the automatic configuration, and setting `embabel.agent.platform.persistence.enabled=false` skips it entirely.
+
+## Writing a Provider
+
+Implement `AgentCacheProvider` and `AgentCacheRegion`, and `AgentCacheIndex` if the backend can index. Snapshot headers, versioning, index maintenance and restore are already written and shared.
+
+`SpringCacheAgentCacheProvider` is the reference implementation and the shortest path for most backends.
+
+---
+
+*Source: Embabel Agent v1.5.3 documentation — `references/cache`*

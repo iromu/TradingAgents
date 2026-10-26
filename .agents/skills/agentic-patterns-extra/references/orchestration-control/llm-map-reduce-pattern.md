@@ -8,6 +8,9 @@ source: "https://arxiv.org/abs/2506.08837"
 tags: [map-reduce, sub-agents, isolation, untrusted-data]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/llm-map-reduce-pattern.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 When many untrusted documents are processed in a single reasoning context, one malicious item can influence global conclusions. This creates cross-document contamination where a single poisoned input affects unrelated items and final decisions.

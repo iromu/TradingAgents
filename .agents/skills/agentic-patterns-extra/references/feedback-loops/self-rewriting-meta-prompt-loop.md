@@ -8,6 +8,9 @@ source: "https://noahgoodman.substack.com/p/meta-prompt-a-simple-self-improving"
 tags: [meta-prompting, self-improvement, system-prompt, reflection]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/self-rewriting-meta-prompt-loop.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Static system prompts become stale or overly brittle as an agent encounters new tasks and edge-cases. Manually editing them is slow and error-prone.

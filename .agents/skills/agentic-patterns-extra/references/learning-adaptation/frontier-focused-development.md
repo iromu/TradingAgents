@@ -10,6 +10,9 @@ source: "https://www.youtube.com/watch?v=2wjnV6F2arc"
 tags: [frontier, state-of-the-art, model-selection, product-strategy, learning, innovation, no-selector]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/frontier-focused-development.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 AI capabilities advance rapidly along predictable scaling laws—products optimized for today's models become obsolete in months. Many teams waste time solving problems that frontier models already solve, or build products tied to specific models that won't stay competitive.
@@ -139,6 +142,6 @@ When everything is in flux—the models, the software, how we write it—optimiz
 * Kaplan et al. (2020). [Scaling Laws for Neural Language Models](https://arxiv.org/abs/2001.08361). NeurIPS 2020.
 * Wei et al. (2022). [Emergent Abilities of Large Language Models](https://arxiv.org/abs/2206.07682). TMLR 2022.
 * Wang et al. (2023). [The Lifecycle of AI](https://arxiv.org/abs/2304.06425). CHI 2023.
-* Related: [Disposable Scaffolding Over Durable Features](disposable-scaffolding-over-durable-features.md), [Agent Modes by Model Personality](agent-modes-by-model-personality.md)
+* Related: [Disposable Scaffolding Over Durable Features](../orchestration-control/disposable-scaffolding-over-durable-features.md), [Agent Modes by Model Personality](../ux-collaboration/agent-modes-by-model-personality.md)
 
 ---

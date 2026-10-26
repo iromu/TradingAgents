@@ -8,6 +8,9 @@ source: "https://taskade.com/agents"
 tags: [multi-agent, orchestration, workflow-automation, workspace, mcp, knowledge-base, persistent-memory, integrations, collaboration]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/workspace-native-multi-agent-orchestration.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Many teams struggle to run agentic workflows because their agent tooling is separate from their day-to-day collaboration environment. The result is fragmented context, brittle integrations, and high setup overhead.

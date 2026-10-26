@@ -72,7 +72,7 @@ The model treats the file system as memory without prompting:
 - More pronounced when closer to context window limit
 - Sometimes spends more tokens writing summaries than solving the problem
 
-**See pattern**: [Proactive Agent State Externalization](/patterns/proactive-agent-state-externalization.md)
+**See pattern**: [Proactive Agent State Externalization](proactive-agent-state-externalization-report.md)
 
 ### 2. Parallel Tool Execution
 Sonnet 4.5 efficiently maximizes actions per context window:
@@ -86,7 +86,7 @@ Sonnet 4.5 efficiently maximizes actions per context window:
 - Model seems trained to burn through parallel tool calls faster early in context
 - Takes more cautious approach as it nears the limit
 
-**See pattern**: [Conditional Parallel Tool Execution](/patterns/parallel-tool-execution.md)
+**See pattern**: [Conditional Parallel Tool Execution](parallel-tool-execution-report.md)
 
 ### 3. Testing to Create Feedback Loops
 Sonnet 4.5 is more proactive about:
@@ -141,7 +141,7 @@ Result: Model thinks it has ample runway
 ## Industry Implementations
 
 See the comprehensive industry implementations report:
-**[Context Window Anxiety Management - Industry Implementations & Real-World Examples](/research/context-window-anxiety-management-industry-implementations-report.md)**
+**[Context Window Anxiety Management - Industry Implementations & Real-World Examples](context-window-anxiety-management-industry-implementations-report.md)**
 
 Key findings from industry research:
 - **Cognition AI (Devin)**: Context buffer strategy with aggressive counter-prompting
@@ -197,9 +197,9 @@ Key findings from industry research:
 2. [Cognition AI: Announcing Devin Agent Preview with Sonnet 4.5](https://cognition.ai/blog/devin-agent-preview-sonnet-4-5) - September 29, 2025
 
 ### Pattern Documentation
-- [Context Window Anxiety Management Pattern](/home/agent/awesome-agentic-patterns/patterns/context-window-anxiety-management.md)
-- [Proactive Agent State Externalization Pattern](/home/agent/awesome-agentic-patterns/patterns/proactive-agent-state-externalization.md)
-- [Conditional Parallel Tool Execution Pattern](/home/agent/awesome-agentic-patterns/patterns/parallel-tool-execution.md)
+- [Context Window Anxiety Management Pattern](context-window-anxiety-management-report.md)
+- [Proactive Agent State Externalization Pattern](proactive-agent-state-externalization-report.md)
+- [Conditional Parallel Tool Execution Pattern](parallel-tool-execution-report.md)
 
 ### Related
 - [Anthropic: Claude Sonnet 4.5 Announcement](https://www.anthropic.com/index/claude-sonnet-4-5)

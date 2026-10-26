@@ -8,6 +8,9 @@ source: "https://github.com/jagmarques/asqav-sdk"
 tags: [governance, audit-trail, compliance, cryptographic-signing, policy-enforcement, eu-ai-act, owasp]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/cryptographic-governance-audit-trail.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 When AI agents execute tool calls autonomously, there is no tamper-evident record of what happened. Traditional logging is mutable - logs can be altered after the fact. In regulated environments (finance, healthcare, EU AI Act), teams need to prove exactly what an agent did, when, and whether it operated within policy. Without cryptographic guarantees, audit trails have no legal or compliance weight.

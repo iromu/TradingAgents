@@ -8,6 +8,9 @@ source: "https://github.com/clawdbot/clawdbot/blob/main/src/agents/tool-policy.t
 tags: [authorization, policy, allowlist, deny-by-default, pattern-matching, subagent-security]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/sandboxed-tool-authorization.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Tool authorization needs flexibility but also security. Static allowlists don't scale across:

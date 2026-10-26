@@ -8,6 +8,9 @@ source: "https://www.youtube.com/watch?v=4rx36wc9ugw"
 tags: [feature-killing, forced-evolution, courage, focus, self-destruct, obsolescence, product-strategy]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/burn-the-boats.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 In fast-moving AI development, holding onto features or workflows that are "working fine" prevents teams from fully embracing new paradigms. The comfort of existing functionality becomes an anchor that holds back innovation—even when you know the old approach is obsolete.

@@ -21,6 +21,9 @@ summary: >-
 updated_at: '2026-01-05'
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/proactive-trigger-vocabulary.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Agents with many skills face a routing problem: given a user's natural language input, which skill should handle it? Solutions like embedding-based similarity or LLM classification work but are opaque—users don't know what phrases will activate which capabilities.

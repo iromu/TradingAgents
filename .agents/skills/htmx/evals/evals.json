@@ -3,64 +3,76 @@
   "evals": [
     {
       "id": 1,
+      "query": "I want to build a contact management page where clicking a contact shows its details, there's an edit button that swaps the view into a form, and a delete button that removes the row. No React — I want server-rendered HTML with AJAX. My backend is Flask.",
       "prompt": "I want to build a contact management page where clicking a contact shows its details, there's an edit button that swaps the view into a form, and a delete button that removes the row. No React — I want server-rendered HTML with AJAX. My backend is Flask.",
-      "expected_output": "HTML with htmx attributes: hx-get for loading details, hx-put for saving edits, hx-delete for removing rows, hx-target=\"this\" hx-swap=\"outerHTML\" for view swapping, hx-confirm for delete confirmation, hx-boost for navigation",
+      "should_trigger": true,
+      "expected_output": "HTML with htmx 4 attributes: hx-get for loading details, hx-put for saving edits, hx-delete for removing rows, hx-target=\"this\" with hx-swap=\"outerHTML\" for view swapping, hx-confirm for delete confirmation. Any attribute placed on a parent element for its descendants to pick up carries the :inherited modifier.",
       "files": [],
       "assertions": [
         "Output includes hx-get, hx-put, and hx-delete attributes",
         "Output uses hx-target=\"this\" with hx-swap=\"outerHTML\" for view transitions",
-        "Output includes hx-confirm for delete action",
-        "Output includes CDN script tag for htmx",
+        "Output includes hx-confirm for the delete action",
+        "Output includes a CDN script tag pinning an explicit htmx version rather than relying on npm dist-tag 'latest', which is the 2.x line",
+        "Any htmx attribute set on a parent element to apply to its descendants uses the :inherited modifier, since htmx 4 inheritance is explicit by default",
         "Output does not include React/Vue/Svelte imports"
       ]
     },
     {
       "id": 2,
+      "query": "I need a search box that debounces input, shows results as I type, and also triggers on Enter key press. Results go into a table. My backend is Django.",
       "prompt": "I need a search box that debounces input, shows results as I type, and also triggers on Enter key press. Results go into a table. My backend is Django.",
-      "expected_output": "HTML with hx-post to search endpoint, hx-trigger with input changed delay:500ms and keyup[key=='Enter'], hx-target on the results table body, htmx indicator for loading state",
+      "should_trigger": true,
+      "expected_output": "HTML with hx-get or hx-post to the search endpoint, hx-trigger combining 'input changed delay:500ms' with keyup[key=='Enter'], hx-target on the results container, and an indicator element for loading state.",
       "files": [],
       "assertions": [
-        "Output includes hx-trigger with 'input changed delay:' modifier",
-        "Output includes keyup[key=='Enter'] trigger",
+        "Output includes hx-trigger with an 'input changed delay:' modifier",
+        "Output includes a keyup[key=='Enter'] trigger",
         "Output includes hx-target pointing to a results container",
-        "Output includes hx-indicator or htmx-indicator class for loading state",
+        "Output includes hx-indicator or an element using the htmx-indicator class for loading state",
         "Output includes a results container element (table body or div)"
       ]
     },
     {
       "id": 3,
-      "prompt": "Help me add a file upload form with a progress bar to my Spring Boot application. I want to show upload progress as the file uploads.",
-      "expected_output": "HTML form with hx-encoding='multipart/form-data', hx-post for upload endpoint, progress element, and JavaScript listener for htmx:xhr:progress event to update the progress bar value",
+      "query": "Help me add a file upload form with a progress indicator to my Spring Boot application. I want to show upload progress as the file uploads.",
+      "prompt": "Help me add a file upload form with a progress indicator to my Spring Boot application. I want to show upload progress as the file uploads.",
+      "should_trigger": true,
+      "expected_output": "HTML form with hx-encoding='multipart/form-data' and hx-post for the upload endpoint, a file input, and htmx 4 in-request affordances (hx-pending and/or hx-indicator with the htmx-request class) for upload state. htmx 4 uses fetch() rather than XMLHttpRequest, so it exposes no htmx:xhr:* events and no loaded/total progress figures; the answer should say so instead of inventing them.",
       "files": [],
       "assertions": [
         "Output includes hx-encoding='multipart/form-data' or hx-encoding=\"multipart/form-data\"",
         "Output includes a file input element",
-        "Output includes a progress element",
-        "Output includes JavaScript listener for htmx:xhr:progress event",
-        "Output calculates progress percentage from loaded/total"
+        "Output includes an element presenting in-request state via hx-pending, hx-indicator, or the htmx-request class",
+        "Output does not register a listener for any htmx:xhr:* event, because XMLHttpRequest was removed in htmx 4",
+        "Output states the limitation honestly rather than fabricating a percentage-progress event API that htmx 4 does not provide"
       ]
     },
     {
       "id": 4,
+      "query": "I'm building a dashboard with a nav bar where all links load via AJAX instead of full page reloads. How do I do that with htmx?",
       "prompt": "I'm building a dashboard with a nav bar where all links load via AJAX instead of full page reloads. How do I do that with htmx?",
-      "expected_output": "HTML nav element with hx-boost=\"true\" wrapping anchor tags, explaining that boosting makes links use AJAX while still working without JS",
+      "should_trigger": true,
+      "expected_output": "A nav/container element carrying hx-boost with the :inherited modifier wrapping the anchor tags, explaining that boosting makes links issue AJAX requests while still working without JavaScript, and noting that a plain hx-boost on a container no longer reaches descendants in htmx 4 without :inherited.",
       "files": [],
       "assertions": [
-        "Output uses hx-boost=\"true\" on a nav or container element",
+        "Output puts hx-boost on a nav or container element wrapping the links",
+        "The container-level hx-boost uses the :inherited modifier (hx-boost:inherited), or the answer explicitly addresses why the un-inherited form does not reach the child links in htmx 4",
         "Output includes anchor tags inside the boosted container",
-        "Output explains progressive enhancement (works without JS)"
+        "Output explains progressive enhancement (links still work without JavaScript)"
       ]
     },
     {
       "id": 5,
+      "query": "I want to create a row deletion in a table with a fade-out animation. When the user clicks delete, the row should fade out smoothly before being removed.",
       "prompt": "I want to create a row deletion in a table with a fade-out animation. When the user clicks delete, the row should fade out smoothly before being removed.",
-      "expected_output": "HTML with hx-delete on delete button, CSS using htmx-swapping class with opacity transition, hx-target=\"closest tr\" hx-swap=\"outerHTML\" with swap delay for animation timing",
+      "should_trigger": true,
+      "expected_output": "HTML with hx-delete on the delete button, hx-target=\"closest tr\" with hx-swap=\"outerHTML\", and a swap/settle timing modifier for the animation window, with CSS keyed to htmx 4's real class hooks (htmx-request / htmx-indicator) or to the settle phase rather than to the htmx 2 swapping/settling class names.",
       "files": [],
       "assertions": [
-        "Output includes CSS with htmx-swapping class and opacity transition",
-        "Output includes hx-delete attribute on delete button",
-        "Output uses hx-target=\"closest tr\" or similar selector",
-        "Output includes swap timing modifier (swap:Ns)"
+        "Output includes an hx-delete attribute on the delete control",
+        "Output uses hx-target=\"closest tr\" or an equivalent relative selector",
+        "Output includes a swap timing modifier such as swap: or settle: to open an animation window",
+        "Output does not key its CSS to htmx-swapping, htmx-added, or htmx-settling, which are htmx 2 class names that htmx 4 does not apply"
       ]
     }
   ]

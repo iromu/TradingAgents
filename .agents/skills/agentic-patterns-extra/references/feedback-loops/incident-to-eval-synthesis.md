@@ -8,6 +8,9 @@ source: "https://sre.google/sre-book/postmortem-culture/"
 tags: [evals, incidents, reliability, feedback, continuous-improvement]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/incident-to-eval-synthesis.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Many teams run agent evaluations, but the eval suite drifts away from real failures seen in production. Incidents get resolved operationally, yet the exact failure mode is rarely converted into a durable regression test. This creates repeat incidents and false confidence from stale benchmark sets.

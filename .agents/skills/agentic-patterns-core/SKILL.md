@@ -13,6 +13,9 @@ description: >-
   trigger when the user describes an agent problem and needs pattern
   recommendations, wants to compare patterns, or needs implementation guidance
   for a specific pattern.
+metadata:
+  author: "Iván Rodríguez Murillo <wantez@gmail.com>"
+  version: 1.0.0
 ---
 
 # Agentic Patterns Core
@@ -72,7 +75,7 @@ cons, and real-world examples.
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-## How to Use This Skill
+## Instructions
 
 ### Step 1: Identify the Problem Domain
 
@@ -123,6 +126,14 @@ Patterns rarely work in isolation. Common effective combinations:
 | **Reasoning + Reflection** | Deep analysis with iterative refinement |
 | **HITL + Exception Handling** | Graceful degradation with human oversight |
 | **Goal Setting + Prioritization** | Objective-driven task management |
+
+## Examples
+
+**"We need a pipeline that reviews step 1's output before step 2 runs."** Step 1 -> Advanced/coordination domain -> Pipeline + Reflection from the quick reference; Implementation Checklist -> present the chosen pattern's trade-offs, not just its name.
+
+**"Supervisor or hierarchical team for this fleet of agents?"** Compare both in "Pattern Quick Reference" and answer with the decision axes (coordination overhead vs isolation) rather than picking silently.
+
+**"Add reliability to our multi-agent RAG app."** Route to System-domain patterns (HITL, exception handling, RAG) via the category overviews before inventing a custom orchestrator.
 
 ## Pattern Quick Reference
 

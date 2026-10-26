@@ -9,6 +9,9 @@ source: "https://www.youtube.com/watch?v=BGgsoIgbT_Y"
 tags: [background-agent, human-in-the-loop, task-handoff, interactive-refinement, agent-collaboration, developer-workflow]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/seamless-background-to-foreground-handoff.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 While background agents can handle long-running, complex tasks autonomously, they might not achieve 100% correctness or perfectly match the user's nuanced intent. If an agent completes 90% of a task in the background but the remaining 10% requires human finesse, a clunky handoff process can negate the benefits of automation.

@@ -8,6 +8,9 @@ source: "https://simonwillison.net/2025/Jun/16/lethal-trifecta/"
 tags: [capability-segregation, least-privilege, tool-permissions]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/tool-capability-compartmentalization.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Model Context Protocol (MCP) and agent frameworks often combine three capability classes in a single tool: private-data readers (email, filesystem), web fetchers (HTTP clients), and writers (API mutators). This creates the "lethal trifecta"—malicious input can trigger chains that read sensitive data, exfiltrate it, and modify systems in one operation.

@@ -22,6 +22,9 @@ summary: >-
 updated_at: '2026-01-05'
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/distributed-execution-cloud-workers.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Single-session AI agent execution cannot scale to meet enterprise team demands. Complex projects require multiple simultaneous code changes across different parts of the codebase, but coordinating multiple agents introduces challenges around communication, conflict resolution, merge coordination, and infrastructure management.
@@ -55,7 +58,7 @@ Implement a distributed execution framework that runs multiple Claude Code sessi
 
 **Human oversight integration:**
 
-- Approval gates for risky operations (see [Human-in-the-Loop Approval Framework](human-in-loop-approval-framework.md))
+- Approval gates for risky operations (see [Human-in-the-Loop Approval Framework](../ux-collaboration/human-in-loop-approval-framework.md))
 - Centralized monitoring dashboard
 - Team notification channels (Slack, email)
 
@@ -171,4 +174,4 @@ Extends [Sub-Agent Spawning](sub-agent-spawning.md) and [Swarm Migration Pattern
 - [HumanLayer Documentation](https://docs.humanlayer.dev/) - Framework for human-in-the-loop agent coordination
 - Stone, P., & Veloso, M. (2000). Multiagent systems: A survey from a machine learning perspective. *Autonomous Robots*, 8(3), 345-383. DOI: 10.1023/A:1008930228068
 - Weiss, G. (Ed.). (2013). *Multiagent systems: a modern approach to distributed artificial intelligence*. MIT Press.
-- Related patterns: [Sub-Agent Spawning](sub-agent-spawning.md), [Swarm Migration Pattern](swarm-migration-pattern.md), [Human-in-the-Loop Approval Framework](human-in-loop-approval-framework.md)
+- Related patterns: [Sub-Agent Spawning](sub-agent-spawning.md), [Swarm Migration Pattern](swarm-migration-pattern.md), [Human-in-the-Loop Approval Framework](../ux-collaboration/human-in-loop-approval-framework.md)

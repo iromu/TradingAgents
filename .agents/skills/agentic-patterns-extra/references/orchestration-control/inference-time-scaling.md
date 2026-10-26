@@ -8,6 +8,9 @@ source: "https://deepmind.google/research/"
 tags: [scaling, inference, compute, reasoning, performance, o1-model, test-time-compute, search, verification]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/inference-time-scaling.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Traditional language models are limited by their training-time capabilities. Once trained, their performance is essentially fixed, regardless of how much compute is available at inference time. This means that for particularly challenging problems, we cannot simply "think harder" by allocating more computational resources to find better solutions. This limitation becomes especially apparent in complex reasoning tasks where more deliberation could lead to better outcomes.

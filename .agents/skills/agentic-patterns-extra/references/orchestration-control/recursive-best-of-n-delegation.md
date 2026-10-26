@@ -8,6 +8,9 @@ source: "https://github.com/nibzard/labruno-agent"
 tags: [recursion, best-of-n, parallel-sandboxes, judge, delegation, rlms, selection, sub-agents]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/recursive-best-of-n-delegation.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Recursive delegation (parent agent → sub-agents → sub-sub-agents) decomposes big tasks, but has a failure mode:
@@ -92,4 +95,4 @@ Practical defaults:
 * [Tree-of-Thoughts (Yao et al. 2023): Tree-based reasoning with evaluation mechanisms](https://arxiv.org/abs/2305.10601)
 * [Labruno (GitHub): Parallel sandboxes + LLM judge selects best implementation](https://github.com/nibzard/labruno-agent)
 * [Daytona RLM Guide: Recursive delegation with sandboxed execution](https://www.daytona.io/docs/en/recursive-language-models/)
-* Related patterns: [Sub-Agent Spawning](sub-agent-spawning.md), [Swarm Migration Pattern](swarm-migration-pattern.md), [Self-Critique / Evaluator loops](self-critique-evaluator-loop.md)
+* Related patterns: [Sub-Agent Spawning](sub-agent-spawning.md), [Swarm Migration Pattern](swarm-migration-pattern.md), [Self-Critique / Evaluator loops](../feedback-loops/self-critique-evaluator-loop.md)

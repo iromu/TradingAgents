@@ -10,6 +10,9 @@ slug: "agent-first-tool-discovery"
 summary: "Build search indexes designed for agent consumers, returning structured tool metadata ranked by agent-relevant signals instead of human SEO metrics."
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/agent-first-tool-discovery.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Individual services can declare their agent-readiness via static manifests (`llms.txt`, `ai-plugin.json`, OpenAPI specs). But an agent that needs a new capability at runtime has no way to search *across* services to find, compare, and select the best match. Static manifests describe one service; they do not solve cross-service discovery.

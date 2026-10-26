@@ -25,6 +25,9 @@ summary: >-
 updated_at: '2026-01-13'
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/multi-platform-webhook-triggers.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 An internal agent only provides value when its workflows are initiated. Building out a library of workflow initialization mechanisms (triggers) is core to agent adoption. Without easy triggers, employees can't effectively automate their day-to-day workflows.
@@ -197,7 +200,7 @@ Custom implementation allows nuances like:
 ## References
 
 * [Building an internal agent: Triggers](https://lethain.com/agents-triggers/) - Will Larson (2025)
-* Related: [Proactive Trigger Vocabulary](proactive-trigger-vocabulary.md) - Natural language trigger phrases for skill routing
+* Related: [Proactive Trigger Vocabulary](../ux-collaboration/proactive-trigger-vocabulary.md) - Natural language trigger phrases for skill routing
 * [n8n](https://n8n.io) - Open-source workflow automation with 400+ integrations (45K+ GitHub stars)
 * Hohpe, G. "Enterprise Integration Patterns." 2003 - Foundational patterns for event-driven integration
 * Omicini et al. "Blending Event-Based and Multi-Agent Systems Around Coordination Abstractions." IFIP WG 6.1, 2015

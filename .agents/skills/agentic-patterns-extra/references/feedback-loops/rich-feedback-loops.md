@@ -8,6 +8,9 @@ source: "https://www.nibzard.com/ampcode"
 tags: [feedback, testing, reliability, user-feedback, positive-reinforcement, corrections]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/rich-feedback-loops.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Polishing a single prompt can't cover every edge-case; agents need ground truth to self-correct.

@@ -57,4 +57,4 @@ Implement structured approaches to leverage and enhance the model's natural tend
 ## References
 
 * [Cognition AI: Devin & Claude Sonnet 4.5 - Lessons and Challenges](https://cognition.ai/blog/devin-sonnet-4-5-lessons-and-challenges)
-* Related: [Episodic Memory Retrieval & Injection](episodic-memory-retrieval.md)
+* Related: [Episodic Memory Retrieval & Injection](episodic-memory-retrieval-injection.md)

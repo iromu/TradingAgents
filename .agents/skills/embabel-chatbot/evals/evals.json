@@ -1,0 +1,77 @@
+{
+  "skill_name": "embabel-chatbot",
+  "evals": [
+    {
+      "id": 1,
+      "query": "I need an Embabel chatbot that answers questions over my document corpus. Show me the action class and how I publish the Chatbot bean.",
+      "prompt": "I need an Embabel chatbot that answers questions over my document corpus. Show me the action class and how I publish the Chatbot bean.",
+      "should_trigger": true,
+      "expected_output": "Shows an @EmbabelComponent class with an @Action(canRerun = true, trigger = UserMessage.class) method taking (Conversation, ActionContext), grounding via ToolishRag attached with .withReference(...) and replying through context.sendMessage(conversation.addMessage(...)); publishes the bean as AgentProcessChatbot.utilityFromPlatform(agentPlatform).",
+      "files": [],
+      "assertions": ["uses @EmbabelComponent plus @Action with a trigger", "constructs the chatbot via AgentProcessChatbot.utilityFromPlatform rather than a builder", "never imports com.embabel.chatbot.* or com.embabel.rag.*"]
+    },
+    {
+      "id": 2,
+      "query": "How do I start a chatbot session that restores a user's earlier conversation and their saved working state?",
+      "prompt": "How do I start a chatbot session that restores a user's earlier conversation and their saved working state?",
+      "should_trigger": true,
+      "expected_output": "Uses chatbot.createSession(user, outputChannel, contextId, conversationId) — contextId restoring blackboard state and conversationId restoring message history — or chatbot.findSession(conversationId), then session.onUserMessage(new UserMessage(...)).",
+      "files": [],
+      "assertions": ["names both the contextId and conversationId arguments", "uses onUserMessage with UserMessage rather than a chatbot.chat(String) call"]
+    },
+    {
+      "id": 3,
+      "query": "My Embabel chatbot loses all conversation history on restart. What dependency and configuration make conversations persist?",
+      "prompt": "My Embabel chatbot loses all conversation history on restart. What dependency and configuration make conversations persist?",
+      "should_trigger": true,
+      "expected_output": "Names the com.embabel.chat:embabel-chat-store dependency, ConversationStoreType.STORED versus IN_MEMORY, wiring via ConversationFactoryProvider (StoredConversationFactory for the stored path, InMemoryConversationFactory otherwise) and the MessageEvent PERSISTED / PERSISTENCE_FAILED lifecycle, while stating there is no ChatHistoryStore, ChatHistory or ChatStore type.",
+      "files": [],
+      "assertions": ["never invents ChatHistoryStore or ChatStore", "cites ConversationStoreType and ConversationFactoryProvider"]
+    },
+    {
+      "id": 4,
+      "query": "Which package do the Embabel chatbot types come from? My import of com.embabel.chatbot.session.ChatSession does not resolve.",
+      "prompt": "Which package do the Embabel chatbot types come from? My import of com.embabel.chatbot.session.ChatSession does not resolve.",
+      "should_trigger": true,
+      "expected_output": "Corrects the package to com.embabel.chat for Chatbot, ChatSession, Conversation and the Message types, with com.embabel.chat.agent for AgentProcessChatbot and com.embabel.agent.rag.* for the RAG surface, and states that com.embabel.chatbot.* and com.embabel.rag.* do not exist at all.",
+      "files": [],
+      "assertions": ["states com.embabel.chatbot is not a real package", "gives com.embabel.chat and com.embabel.agent.rag as the real ones"]
+    },
+    {
+      "id": 5,
+      "query": "Add guardrails to my Embabel chatbot that block prompt-injection attempts.",
+      "prompt": "Add guardrails to my Embabel chatbot that block prompt-injection attempts.",
+      "should_trigger": true,
+      "expected_output": "Refuses to emit Guardrails.builder().addPromptInjectionGuard() or a guardrails: YAML block, saying plainly that no such type or configuration schema is attested, and points at the LLM-call path (ChatClientLlmOperations / streaming operations, whose guard-rail behaviour the shipped tests exercise) instead of inventing an API.",
+      "files": [],
+      "assertions": ["does not fabricate a Guardrails builder API", "declares the gap rather than guessing an annotation"]
+    },
+    {
+      "id": 6,
+      "query": "How do I expose a tool the Embabel chatbot can call, and what annotation goes on the parameters?",
+      "prompt": "How do I expose a tool the Embabel chatbot can call, and what annotation goes on the parameters?",
+      "should_trigger": true,
+      "expected_output": "Uses @Tool on the tool method and says the parameter-level annotation is @ToolParameter (@ParameterName is also in use), explicitly warning that @ToolParam does not exist; mentions ToolCall, ToolResultMessage and AssistantMessageWithToolCalls for the chat-side traffic.",
+      "files": [],
+      "assertions": ["does not emit @ToolParam", "names @Tool as attested"]
+    },
+    {
+      "id": 7,
+      "query": "Write me an Embabel agent with an @Agent class, an @Action method and a GOAP planner, and publish it as an MCP server.",
+      "prompt": "Write me an Embabel agent with an @Agent class, an @Action method and a GOAP planner, and publish it as an MCP server.",
+      "should_trigger": false,
+      "expected_output": "Should be handled by the embabel-agent skill: the core @Agent/@Action planner framework and MCP publishing are explicitly out of scope for the chatbot skill.",
+      "files": [],
+      "assertions": ["routes to the embabel-agent skill"]
+    },
+    {
+      "id": 8,
+      "query": "Extract confidence-weighted facts from these support tickets into a proposition store with entity resolution.",
+      "prompt": "Extract confidence-weighted facts from these support tickets into a proposition store with entity resolution.",
+      "should_trigger": false,
+      "expected_output": "Should be handled by the embabel-dice skill: propositions, confidence weighting and entity resolution are DICE concerns, not the chatbot/RAG skill.",
+      "files": [],
+      "assertions": ["routes to the embabel-dice skill"]
+    }
+  ]
+}

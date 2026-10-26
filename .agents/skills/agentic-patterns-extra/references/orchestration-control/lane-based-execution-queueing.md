@@ -8,6 +8,9 @@ source: "https://github.com/clawdbot/clawdbot/blob/main/src/process/command-queu
 tags: [queueing, concurrency, lanes, isolation, parallelism, deadlock-prevention]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/lane-based-execution-queueing.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Traditional agent systems serialize all operations through a single execution queue, creating bottlenecks that limit throughput. Concurrent execution is desirable but risky:

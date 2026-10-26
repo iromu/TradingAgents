@@ -8,6 +8,9 @@ source: "https://openai.com/research/criticgpt"
 tags: [evaluation, code-review, critique, quality-assurance, bug-detection, gpt-4]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/criticgpt-style-evaluation.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 As AI-generated code becomes more sophisticated, it becomes increasingly difficult for human reviewers to catch subtle bugs, security issues, or quality problems. Traditional code review processes may miss issues in AI-generated code because:

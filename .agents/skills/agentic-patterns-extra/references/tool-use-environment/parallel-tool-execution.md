@@ -8,6 +8,9 @@ source: "https://gerred.github.io/building-an-agentic-system/parallel-tool-execu
 tags: [parallel execution, tool orchestration, read-only tools, stateful tools, agent efficiency, agent safety, concurrency control, task scheduling]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/parallel-tool-execution.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 When an AI agent decides to use multiple tools in a single reasoning step, executing them strictly sequentially can lead to significant delays, especially if many tools are read-only and could be run concurrently. Conversely, executing all tools in parallel without consideration can cause race conditions, data corruption, or unpredictable behavior if some tools modify state (e.g., write to files, change system settings).
@@ -57,7 +60,7 @@ flowchart TD
 -   **Cons/Considerations:**
     -   If a batch of tools contains mostly read-only operations but includes a single state-modifying operation early in the sequence, the entire batch might still be executed sequentially, limiting potential parallelism.
     -   The effectiveness relies on the accurate classification of tools as read-only or state-modifying. An incorrectly classified tool could lead to safety issues or missed optimization opportunities.
-    -   **Context Consumption:** Parallel execution burns through context windows faster as multiple results return simultaneously, which may contribute to [context anxiety](context-window-anxiety-management.md) in context-aware models.
+    -   **Context Consumption:** Parallel execution burns through context windows faster as multiple results return simultaneously, which may contribute to [context anxiety](../context-memory/context-window-anxiety-management.md) in context-aware models.
 
 ## References
 

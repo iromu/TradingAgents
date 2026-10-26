@@ -8,6 +8,9 @@ source: "https://youtu.be/hAEmt-FMyHA?si=6iKcGnTavdQlQKUZ"
 tags: [multi-model, cost-optimization, strategic-reasoning, architecture]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/oracle-and-worker-multi-model.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Relying on a single AI model creates a trade-off between capability and cost. High-performance models are expensive for routine tasks, while cost-effective models may lack the reasoning power for complex problems.

@@ -8,6 +8,9 @@ source: "https://www.youtube.com/watch?v=Xkwok_XXQgw"
 tags: [asynchronous, pipeline, code-agent, parallelism]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/asynchronous-coding-agent-pipeline.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Synchronous execution of coding tasks—where the agent must wait for compilation, testing, linting, or static analysis—creates **compute bubbles** and **idle resources**. When a coding agent issues a tool call (e.g., `run_tests()`), it blocks further reasoning until that tool returns, leading to underutilized GPUs/TPUs and slower RL rollouts.

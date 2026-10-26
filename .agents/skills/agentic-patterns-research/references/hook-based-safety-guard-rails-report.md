@@ -199,10 +199,10 @@ When web search quota resets (March 23, 2026), use these terms to find additiona
 - [Safety Risk Evaluation Framework](https://arxiv.org/html/2507.09820v1) (July 2025)
 
 ### Related Research Reports (This Codebase)
-- [Chain-of-Thought Monitoring & Interruption](/home/agent/awesome-agentic-patterns/research/chain-of-thought-monitoring-interruption-report.md)
-- [Anti-Reward-Hacking Grader Design](/home/agent/awesome-agentic-patterns/research/anti-reward-hacking-grader-design-report.md)
-- [Deterministic Security Scanning Build Loop](/home/agent/awesome-agentic-patterns/research/deterministic-security-scanning-build-loop-report.md)
-- [Canary Rollout for Agent Policy Changes](/home/agent/awesome-agentic-patterns/research/canary-rollout-and-automatic-rollback-for-agent-policy-changes-report.md)
+- [Chain-of-Thought Monitoring & Interruption](chain-of-thought-monitoring-interruption-report.md)
+- [Anti-Reward-Hacking Grader Design](anti-reward-hacking-grader-design-report.md)
+- [Deterministic Security Scanning Build Loop](deterministic-security-scanning-build-loop-report.md)
+- [Canary Rollout for Agent Policy Changes](canary-rollout-and-automatic-rollback-for-agent-policy-changes-report.md)
 
 ### Industry Sources (For Comparison)
 - AWS AgentCore Policy (Late 2025) - Natural language policy with runtime enforcement

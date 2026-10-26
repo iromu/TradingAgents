@@ -8,6 +8,9 @@ source: "https://www.youtube.com/watch?v=BGgsoIgbT_Y"
 tags: [multi-model, code-generation, code-editing, retrieval, pipeline, complex-tasks]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/multi-model-orchestration-for-complex-edits.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 A single large language model, even if powerful, may not be optimally suited for all sub-tasks involved in a complex operation like multi-file code editing. Tasks such as understanding broad context, generating precise code, and applying edits might benefit from specialized model capabilities.

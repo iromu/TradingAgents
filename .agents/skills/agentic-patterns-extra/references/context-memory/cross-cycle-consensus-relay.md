@@ -8,6 +8,9 @@ source: "https://github.com/NikitaDmitrieff/auto-co-meta"
 tags: [multi-agent, state-management, persistence, long-running-tasks, orchestration, autonomous-loops]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/cross-cycle-consensus-relay.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Autonomous multi-agent loops that run across many cycles (minutes, hours, or days) need a way to reliably transfer context, decisions, and next actions between cycles. In-memory state is lost on crash or restart. Generic checkpoint files don't encode the *structured reasoning* — what was decided, why, and what comes next — that agents need to make good decisions in subsequent cycles.
@@ -180,4 +183,4 @@ mv memories/.consensus.tmp memories/consensus.md
 - [BabyAGI](https://github.com/yoheinakajima/babyagi) — early task-loop example with persistent task artifacts
 - Related: [Filesystem-Based Agent State](filesystem-based-agent-state.md) — for checkpointing within a single cycle
 - Related: [Proactive Agent State Externalization](proactive-agent-state-externalization.md) — for agents that self-initiate state writes
-- Related: [Initializer-Maintainer Dual Agent Architecture](initializer-maintainer-dual-agent.md) — for session handoff artifacts across repeated work cycles
+- Related: [Initializer-Maintainer Dual Agent Architecture](../orchestration-control/initializer-maintainer-dual-agent.md) — for session handoff artifacts across repeated work cycles

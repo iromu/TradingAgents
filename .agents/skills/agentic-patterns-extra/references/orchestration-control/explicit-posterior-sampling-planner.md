@@ -8,6 +8,9 @@ source: "https://arxiv.org/abs/2504.20997"
 tags: [RL, PSRL, exploration, planning, decision-making]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/explicit-posterior-sampling-planner.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Heuristic planning loops often over-exploit the first plausible strategy and under-explore alternatives. In uncertain environments, this drives repeated dead ends, unstable learning, and high token/API spend with little information gain.

@@ -11,6 +11,9 @@ evidence_snapshot: "Core mechanism validated by academic work on multi-agent ver
 last_updated: "2026-02-28"
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/subagent-compilation-checker.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Large coding tasks often involve multiple independent components (e.g., microservices, libraries). Having the **main agent** handle compilation and error checking for every component in-context:

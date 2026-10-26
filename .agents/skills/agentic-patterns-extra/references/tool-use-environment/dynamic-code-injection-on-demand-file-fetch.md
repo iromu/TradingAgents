@@ -8,6 +8,9 @@ source: "https://docs.anthropic.com/en/docs/claude-code/common-workflows"
 tags: [file-injection, at-mention, slash-commands, IDE-integration]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/dynamic-code-injection-on-demand-file-fetch.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 During an interactive coding session, a user or agent may need to inspect or modify files **not originally loaded** into the main context. Manually copying/pasting entire files into the prompt is:

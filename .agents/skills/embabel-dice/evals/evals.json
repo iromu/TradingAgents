@@ -1,0 +1,77 @@
+{
+  "skill_name": "embabel-dice",
+  "evals": [
+    {
+      "id": 1,
+      "query": "I'm adding Embabel DICE to a Spring Boot service so it can extract confidence-weighted facts from support tickets and store them as propositions. What are the Maven coordinates and which module do I actually depend on?",
+      "prompt": "I'm adding Embabel DICE to a Spring Boot service so it can extract confidence-weighted facts from support tickets and store them as propositions. What are the Maven coordinates and which module do I actually depend on?",
+      "should_trigger": true,
+      "expected_output": "groupId com.embabel.dice with the dice core module plus dice-storage for the Drivine-parameterised store; the version is 0.2.0-SNAPSHOT resolved from Embabel's Artifactory, with an explicit warning that no v0.2.0 tag or release exists and that README.md:2630-2632's com.embabel:dice:0.1.1-SNAPSHOT is stale on both groupId and version.",
+      "files": [],
+      "assertions": ["names the nine real module names and invents no embabel-dice-* artifactId", "flags the README coordinates as wrong and cites pom.xml instead"]
+    },
+    {
+      "id": 2,
+      "query": "My DICE pipeline keeps re-extracting the same proposition every time I re-ingest a document, and I want to process a chunk only if it has not been seen before. How do I do that?",
+      "prompt": "My DICE pipeline keeps re-extracting the same proposition every time I re-ingest a document, and I want to process a chunk only if it has not been seen before. How do I do that?",
+      "should_trigger": true,
+      "expected_output": "Uses PropositionPipeline.processOnce(text, sourceId, context, historyStore) with an InMemoryChunkHistoryStore, notes the return type is a nullable ChunkPropositionResult (null when already analysed) and that hash-based deduplication is the mechanism, while the batch process(chunks, context) returns PropositionResults.",
+      "files": [],
+      "assertions": ["uses processOnce with a history store rather than hand-rolling dedup", "does not invent a singular PropositionResult type"]
+    },
+    {
+      "id": 3,
+      "query": "How do I wire the DICE memory facade into an agent call so the relevant facts land in the system prompt and the model can also search for more?",
+      "prompt": "How do I wire the DICE memory facade into an agent call so the relevant facts land in the system prompt and the model can also search for more?",
+      "should_trigger": true,
+      "expected_output": "Builds Memory.forContext(contextId).withRepository(...).withProjector(DefaultMemoryProjector.DEFAULT).withEagerSearchAbout(recentContext, N) and passes it via ai.withReferences(memory).respond(...), explaining the eager contribution() tier plus the auto-added on-demand search tool and that narrowedBy constrains every query.",
+      "files": [],
+      "assertions": ["uses ai.withReferences(memory).respond(...)", "does not invent a KnowledgeAgent / @Action queryKnowledge facade"]
+    },
+    {
+      "id": 4,
+      "query": "I turned on the DICE MCP autoconfiguration but dice_store is not showing up while dice_recall and dice_list are. What is going on?",
+      "prompt": "I turned on the DICE MCP autoconfiguration but dice_store is not showing up while dice_recall and dice_list are. What is going on?",
+      "should_trigger": true,
+      "expected_output": "Explains that embabel.dice.mcp.enabled is the master gate and that writes-enabled (default false) is a second, separate switch gating only dice_store via the diceMcpToolExport filter on DiceMcpTools.STORE, plus the caveat that stored facts get empty mentions and no provenance so they are unreachable by entity expansion or graph projection.",
+      "files": [],
+      "assertions": ["names writes-enabled as the separate second gate with default false", "states contextId is a scope not a credential"]
+    },
+    {
+      "id": 5,
+      "query": "Which DICE configuration properties control proposition decay and the duplicate collector? I have embabel.dice.store.decay.k and a collector match-threshold in application.yml.",
+      "prompt": "Which DICE configuration properties control proposition decay and the duplicate collector? I have embabel.dice.store.decay.k and a collector match-threshold in application.yml.",
+      "should_trigger": true,
+      "expected_output": "Answers from DiceStoreProperties under embabel.dice.store (decay enabled/interval-ms/k/prune-stale) and CollectorProperties under embabel.dice.collector (enabled, match-threshold in [0.0, 1.0], the six built-in signal names, weights, trace), and notes dice.security.api-key deliberately uses the dice. prefix rather than embabel.dice.",
+      "files": [],
+      "assertions": ["uses the real prefixes only", "does not invent a dice.memory.* or dice.projections.* block"]
+    },
+    {
+      "id": 6,
+      "query": "Is there a DICE projection that writes a vector index I can query directly, and can I set the similarity threshold in config?",
+      "prompt": "Is there a DICE projection that writes a vector index I can query directly, and can I set the similarity threshold in config?",
+      "should_trigger": true,
+      "expected_output": "States there is no VectorProjector and no dice.projections.vector.enabled: vector search is a storage capability (VectorSearchCapable) gated by embabel.dice.store.vector-index.enabled, graph-backend only, and that the index label, property, name and similarity are fixed by the @VectorIndex annotation on PropositionNode.embedding as constants on DrivinePropositionRepository, so they are not configurable.",
+      "files": [],
+      "assertions": ["refutes the invented VectorProjector", "states the vector index parameters are not configurable"]
+    },
+    {
+      "id": 7,
+      "query": "Write me an Embabel agent with an @Agent class and an @Action method that calls an LLM and returns a typed answer.",
+      "prompt": "Write me an Embabel agent with an @Agent class and an @Action method that calls an LLM and returns a typed answer.",
+      "should_trigger": false,
+      "expected_output": "Should be handled by the embabel-agent skill, not this one: @Agent, @Action and the LLM/typed-response surface belong to embabel-agent, which DICE only consumes.",
+      "files": [],
+      "assertions": ["routes to embabel-agent rather than answering from the DICE skill"]
+    },
+    {
+      "id": 8,
+      "query": "Map my Kotlin Issue and Person classes onto Neo4j with @Node and @Relationship and give me a generated repository with derived finders.",
+      "prompt": "Map my Kotlin Issue and Person classes onto Neo4j with @Node and @Relationship and give me a generated repository with derived finders.",
+      "should_trigger": false,
+      "expected_output": "Should be handled by the embabel-drivine4j skill: annotation-driven object mapping, @Node/@Relationship entities and generated repositories are Drivine concerns, not DICE ones.",
+      "files": [],
+      "assertions": ["routes to embabel-drivine4j rather than answering from the DICE skill"]
+    }
+  ]
+}

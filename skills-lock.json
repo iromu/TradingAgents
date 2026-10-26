@@ -5,43 +5,43 @@
       "source": "iromu/awesome-qwen",
       "sourceType": "github",
       "skillPath": "skills/agentic-patterns-core/SKILL.md",
-      "computedHash": "19519c9ef7b5b51322f8da2172fb7f870ce298f47109b3752fd59a683691f933"
+      "computedHash": "0688464c1649f65ffac20f345cb94077d07b34950f1310006a9ca6b16ce666d2"
     },
     "agentic-patterns-extra": {
       "source": "iromu/awesome-qwen",
       "sourceType": "github",
       "skillPath": "skills/agentic-patterns-extra/SKILL.md",
-      "computedHash": "b0d4ae434662f89cc05fd5b196c41c1b513439c8cdd9ad294babfcd03af0e1aa"
+      "computedHash": "1579b463038e22bb5a02387a157baab082180db51b0c9fd5f3a9ba6222ac4112"
     },
     "agentic-patterns-research": {
       "source": "iromu/awesome-qwen",
       "sourceType": "github",
       "skillPath": "skills/agentic-patterns-research/SKILL.md",
-      "computedHash": "216ba5fe51bb308c9298205b16512278b5901d9fb1d049206b362e561df3fef1"
+      "computedHash": "97029ad99dc56fb265e1370785865b551145fd746c9bf1b74b9299505fea7a92"
     },
     "embabel-agent": {
       "source": "iromu/awesome-qwen",
       "sourceType": "github",
       "skillPath": "skills/embabel-agent/SKILL.md",
-      "computedHash": "030097f0a91af291b09b2440683ea992a9b0ea1ffe0d7c0ab6f2b2651d8b609e"
+      "computedHash": "c2a68d9994b4f9bfebb9f0ea0a029b25a9b669e00ef4728645298148ddcfbd59"
     },
     "embabel-chatbot": {
       "source": "iromu/awesome-qwen",
       "sourceType": "github",
       "skillPath": "skills/embabel-chatbot/SKILL.md",
-      "computedHash": "59f7ca66863440af3055ac0564fafc1327095623746a9502a811376b5c46fb10"
+      "computedHash": "0ee855ec4e49cfbf46749419f30645d60fec208aacff1c89ff82938fd25334b0"
     },
     "embabel-dice": {
       "source": "iromu/awesome-qwen",
       "sourceType": "github",
       "skillPath": "skills/embabel-dice/SKILL.md",
-      "computedHash": "67003f582964967e68711f4f0eb8891102fdc60a7d3f9e58cf034128e8d07bc2"
+      "computedHash": "fc5fcbc62a0c1042cd2023eb864de1be2ef0a6bf0162335249fcb950819cd37d"
     },
     "embabel-drivine4j": {
       "source": "iromu/awesome-qwen",
       "sourceType": "github",
       "skillPath": "skills/embabel-drivine4j/SKILL.md",
-      "computedHash": "a44c3aeb99662c71b471deb8fb32de5a655be83864af8412b9d1b9680ca6c9ef"
+      "computedHash": "2f76fe44fd83127c6c368858a9164c71844ebec4260f53bdc51c24c8ba9f38de"
     },
     "git-wiki": {
       "source": "yysun/awesome-agent-world",
@@ -53,7 +53,7 @@
       "source": "iromu/awesome-qwen",
       "sourceType": "github",
       "skillPath": "skills/htmx/SKILL.md",
-      "computedHash": "61414026609254a8f57c32bb08adaee16b2a40a43a6bd2c972403f28f3e8aac6"
+      "computedHash": "4850ee6f38992447d9c8d164d14afc2f6dddaa21f696373c0d6a363196ccb5cc"
     }
   }
 }

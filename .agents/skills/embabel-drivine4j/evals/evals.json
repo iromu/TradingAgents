@@ -1,0 +1,176 @@
+{
+  "skill_name": "embabel-drivine4j",
+  "evals": [
+    {
+      "id": 1,
+      "query": "Set up Drivine4j in a Kotlin service that talks to Neo4j. I need a DataSourceMap bean, a repository using manual Cypher, and the right dependency coordinates. What version do I pin?",
+      "prompt": "Set up Drivine4j in a Kotlin service that talks to Neo4j. I need a DataSourceMap bean, a repository using manual Cypher, and the right dependency coordinates. What version do I pin?",
+      "should_trigger": true,
+      "expected_output": "Gradle dependency pinned to org.drivine:drivine4j:0.0.81 with a note that the upstream README still shows 0.0.77 and that the repo has no git tags. A DataSourceMap bean whose ConnectionProperties passes the required type = DatabaseType.NEO4J plus userName/databaseName (not username/database). A PersistenceManager obtained through PersistenceManagerFactory.get(...) and used with QuerySpecification.withStatement(...).bind(...).transform(...) and a single-map or properties() RETURN.",
+      "files": [],
+      "assertions": [
+        "The dependency is pinned to 0.0.81 rather than the README's 0.0.77",
+        "It notes the README version coordinates are stale documentation lag",
+        "It states the repository publishes no git tags, so main is the only ref",
+        "ConnectionProperties passes type = DatabaseType.NEO4J",
+        "ConnectionProperties uses userName and databaseName rather than username/database",
+        "The PersistenceManager is obtained via PersistenceManagerFactory.get rather than a fabricated @Qualifier bean",
+        "The Cypher returns a single map or properties(p) rather than multiple columns"
+      ]
+    },
+    {
+      "id": 2,
+      "query": "Which Drivine4j API should I use for a stable domain model with annotation-driven CRUD and type-safe filtering, and what do I have to add to the build for it to work?",
+      "prompt": "Which Drivine4j API should I use for a stable domain model with annotation-driven CRUD and type-safe filtering, and what do I have to add to the build for it to work?",
+      "should_trigger": true,
+      "expected_output": "Recommends GraphObjectManager over PersistenceManager for this case, and explains the build requirements: Kotlin 2.2.0+ because the generated DSL uses context parameters, the -Xcontext-parameters compiler arg, and ksp(\"org.drivine:drivine4j-codegen:0.0.81\"). Notes PersistenceManager works on any Kotlin version.",
+      "files": [],
+      "assertions": [
+        "Recommends GraphObjectManager for annotation-driven CRUD and the type-safe DSL",
+        "Requires Kotlin 2.2.0+ specifically for GraphObjectManager, citing context parameters",
+        "Includes the -Xcontext-parameters compiler argument",
+        "Adds the drivine4j-codegen KSP dependency",
+        "States PersistenceManager does not need a particular Kotlin version"
+      ]
+    },
+    {
+      "id": 3,
+      "query": "I'm mapping a graph model in Drivine4j and I want deleting an Issue to also delete the target nodes of its relationships. I tried @GraphRelationship(cascade = CascadeType.DELETE_ALL) and the attribute doesn't exist. What am I doing wrong?",
+      "prompt": "I'm mapping a graph model in Drivine4j and I want deleting an Issue to also delete the target nodes of its relationships. I tried @GraphRelationship(cascade = CascadeType.DELETE_ALL) and the attribute doesn't exist. What am I doing wrong?",
+      "should_trigger": true,
+      "expected_output": "Explains that @GraphRelationship carries only type, direction and maxDepth -- cascade is a parameter on save/saveAll/delete/deleteAll, taking CascadeType. Lists NONE, DELETE_ORPHAN, DELETE_ALL and PRESERVE with their meanings, and shows graphObjectManager.delete(id, Issue::class.java, CascadeType.DELETE_ALL).",
+      "files": [],
+      "assertions": [
+        "States @GraphRelationship has no cascade attribute",
+        "Names the real @GraphRelationship attributes: type, direction, maxDepth",
+        "Moves cascade to the save/delete call parameter",
+        "Uses the CascadeType enum name",
+        "Covers DELETE_ALL and at least two other CascadeType values including PRESERVE"
+      ]
+    },
+    {
+      "id": 4,
+      "query": "I need vector similarity search over my Drivine4j graph, and a way to page through 100k sessions cheaply. What are the actual method names and what do I have to declare for each?",
+      "prompt": "I need vector similarity search over my Drivine4j graph, and a way to page through 100k sessions cheaply. What are the actual method names and what do I have to declare for each?",
+      "should_trigger": true,
+      "expected_output": "Names graphObjectManager.loadNearest(...) returning List<Scored<T>> and driven by @VectorIndex on the searched fragment, and keyset pagination through seek { } in the DSL with properties matching the root orderBy in order, ending on a unique key, backed by a mirroring @RangeIndex. Explicitly notes there is no vectorSearch / fullTextSearch API name.",
+      "files": [],
+      "assertions": [
+        "Uses loadNearest as the vector entry point, not vectorSearch",
+        "Returns Scored and mentions score normalisation to higher-is-more-similar",
+        "Ties the vector search to the @VectorIndex annotation",
+        "Uses seek for keyset pagination with orderBy-aligned cursor properties",
+        "Recommends a mirroring @RangeIndex over the orderBy properties in the same order",
+        "Warns that topK is the index k and can return fewer rows on a view, with searchK as the beam lever"
+      ]
+    },
+    {
+      "id": 5,
+      "query": "How do I create a unique constraint and a composite range index in Drivine4j at startup, idempontently? And what happens on an engine that can't do DDL at all?",
+      "prompt": "How do I create a unique constraint and a composite range index in Drivine4j at startup, idempontently? And what happens on an engine that can't do DDL at all?",
+      "should_trigger": true,
+      "expected_output": "Shows persistenceManager.constraints.ensure(UniquenessConstraintSpec(...)) and indexes.ensure(RangeIndexSpec(label, listOf(...))) returning EnsureResult (Created / AlreadyMatching / Drift / Recreated / Violation), or a SchemaCatalog.of(...) / fromFragments(...) bean for startup enforcement. Explains gating on PersistenceManager.supportsSchemaManagement rather than matching DatabaseType, since Neptune and generic openCypher resolve to UnsupportedSchemaGrammar which throws by design.",
+      "files": [],
+      "assertions": [
+        "Uses indexes.ensure and constraints.ensure with RangeIndexSpec / UniquenessConstraintSpec",
+        "Mentions EnsureResult outcomes including Drift and its recreate follow-up",
+        "Offers SchemaCatalog as the declarative startup route",
+        "Gates capability on supportsSchemaManagement rather than an engine-name allowlist",
+        "Notes DDL runs in auto-commit, never inside a data transaction"
+      ]
+    },
+    {
+      "id": 6,
+      "query": "I configured a Drivine4j datasource with type = DatabaseType.EMBABEL and host/port like the other engines and it blows up at startup. What is EMBABEL actually?",
+      "prompt": "I configured a Drivine4j datasource with type = DatabaseType.EMBABEL and host/port like the other engines and it blows up at startup. What is EMBABEL actually?",
+      "should_trigger": true,
+      "expected_output": "Explains EMBABEL is Embabel's in-process Cypher engine (compiler, evaluator, store inside the application process, no wire, no container), so DatabaseType.buildableFromProperties is false and connection properties cannot build a provider. The application supplies its own ConnectionProvider as a Spring bean or via DatabaseRegistry.register. Also warns POSTGRES is declared but unimplemented and would fail differently.",
+      "files": [],
+      "assertions": [
+        "Describes EMBABEL as an in-process engine with no wire or container",
+        "Cites buildableFromProperties = false as the reason properties cannot build it",
+        "Directs to a self-supplied ConnectionProvider via Spring bean or DatabaseRegistry.register",
+        "Distinguishes POSTGRES as declared but with no builder branch or provider"
+      ]
+    },
+    {
+      "id": 7,
+      "query": "My Drivine4j keyset page over 25k nodes takes 500k database accesses instead of 27. The cursor is (lastActivityAt, sessionId) and I do have a range index on lastActivityAt. Why is it still slow?",
+      "prompt": "My Drivine4j keyset page over 25k nodes takes 500k database accesses instead of 27. The cursor is (lastActivityAt, sessionId) and I do have a range index on lastActivityAt. Why is it still slow?",
+      "should_trigger": true,
+      "expected_output": "Explains the mirror rule: the range index must cover exactly the root orderBy properties in the same order, so a single-property index on the leading key is not enough -- it needs @RangeIndex(properties = [\"lastActivityAt\", \"sessionId\"]). Explains the IS NOT NULL conjunct that makes the composite index usable, that the plan should be NodeIndexSeek then Limit with no sort, that this applies to Neo4j only (Memgraph and FalkorDB always place a blocking sort), and how to turn the advisory into a build failure with drivine.query.index-advice: FAIL or indexAdvice = IndexAdvicePolicy.FAIL.",
+      "files": [],
+      "assertions": [
+        "Requires the index to mirror all cursor properties in the same order",
+        "Prescribes a composite @RangeIndex over both cursor keys",
+        "Explains the IS NOT NULL conjunct and why a partial index is much worse",
+        "Scopes the index-seek benefit to Neo4j, noting Memgraph/FalkorDB block-sort",
+        "Mentions the indexAdvice / drivine.query.index-advice FAIL setting"
+      ]
+    },
+    {
+      "id": 8,
+      "query": "Our CI spins a fresh graph database per build but local development wants to reuse a running Neo4j so I can inspect rows after a failure. How do I set that up with Drivine4j?",
+      "prompt": "Our CI spins a fresh graph database per build but local development wants to reuse a running Neo4j so I can inspect rows after a failure. How do I set that up with Drivine4j?",
+      "should_trigger": true,
+      "expected_output": "Presents @EnableDrivine plus @EnableDrivineTestConfig over datasources in application-test.yml, with USE_LOCAL_NEO4J=true selecting the local instance and the default (false) starting a Neo4j Testcontainer and overriding host/port/password. Mentions @Rollback(false) for inspecting a local database, and DrivineTestContainer / FalkorDbTestContainer / MemgraphTestContainer for manual control.",
+      "files": [],
+      "assertions": [
+        "Names @EnableDrivineTestConfig as the automated route",
+        "Uses USE_LOCAL_NEO4J to switch between local and Testcontainer modes",
+        "States Testcontainers are the default, suited to CI isolation",
+        "Mentions DrivineTestContainer for manual wiring"
+      ]
+    },
+    {
+      "id": 9,
+      "query": "I need to drop an index in Drivine4j on FalkorDB and immediately recreate it, but the recreate sees the index I just dropped. Is that a bug?",
+      "prompt": "I need to drop an index in Drivine4j on FalkorDB and immediately recreate it, but the recreate sees the index I just dropped. Is that a bug?",
+      "should_trigger": true,
+      "expected_output": "Explains this is expected and already handled: SchemaGrammar.indexOperationsAreAsync is true on FalkorDbSchemaGrammar, so IndexManager awaits the drop by polling find(spec) until the index is gone, bounded by an async drop timeout. Covers FalkorDB's related async/constraint flags and that synchronous engines skip the wait.",
+      "files": [],
+      "assertions": [
+        "Cites indexOperationsAreAsync on the FalkorDB schema grammar",
+        "Explains the manager polls until the drop is visible",
+        "Mentions the bounded timeout rather than an unbounded wait",
+        "Notes constraintCreationIsAsync and constraintsRequireBackingIndex for FalkorDB"
+      ]
+    },
+    {
+      "id": 10,
+      "query": "I need to talk to Neo4j from Java without writing raw Cypher by hand. Is there a Java-friendly query API in Drivine4j?",
+      "prompt": "I need to talk to Neo4j from Java without writing raw Cypher by hand. Is there a Java-friendly query API in Drivine4j?",
+      "should_trigger": true,
+      "expected_output": "Shows the Java route: JavaQueryBuilderKt.query(graphObjectManager, View.class).filterWith(ViewQueryDsl.class).where(...).limit(n).loadAll(), plus whereAll/whereAny/orderBy/seek/limit/skip/loadFirst/deleteAll/match. Explains the KSP processor only walks Kotlin sources, so @GraphView classes should be Kotlin (or use the drivine4j-codegen-java APT processor), while @NodeFragment classes work in either language.",
+      "files": [],
+      "assertions": [
+        "Uses JavaQueryBuilderKt with filterWith for type-safe filtering",
+        "Explains KSP processes Kotlin sources only",
+        "Names drivine4j-codegen-java as the APT route for Java views",
+        "Confirms @NodeFragment works in Java as well as Kotlin"
+      ]
+    },
+    {
+      "id": 11,
+      "query": "Write me an Embabel agent with an @Action method that answers user messages and picks the best response strategy with Utility AI.",
+      "prompt": "Write me an Embabel agent with an @Action method that answers user messages and picks the best response strategy with Utility AI.",
+      "should_trigger": false,
+      "expected_output": "This is agent authoring, not graph persistence -- it belongs to the embabel-agent skill, not the Drivine4j graph client skill.",
+      "files": [],
+      "assertions": [
+        "The Drivine4j skill does not trigger for agent/@Action authoring"
+      ]
+    },
+    {
+      "id": 12,
+      "query": "Add a Gremlin traversal to my Amazon Neptune graph that walks three hops of a social graph and counts the edges.",
+      "prompt": "Add a Gremlin traversal to my Amazon Neptune graph that walks three hops of a social graph and counts the edges.",
+      "should_trigger": false,
+      "expected_output": "Gremlin/TinkerPop is out of scope: Drivine4j speaks Cypher dialects only, so the graph-client skill should not fire.",
+      "files": [],
+      "assertions": [
+        "The Drivine4j skill does not trigger for a Gremlin traversal request"
+      ]
+    }
+  ]
+}

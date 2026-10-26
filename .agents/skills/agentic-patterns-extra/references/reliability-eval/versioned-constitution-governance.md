@@ -8,6 +8,9 @@ source: "https://substack.com/home/post/p-161422949?utm_campaign=post&utm_medium
 tags: [constitution, alignment, governance, signed-commits, policy, rlaif, critique-revise]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/versioned-constitution-governance.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 When agents can modify policy/constitution text, safety regressions can be introduced gradually and go unnoticed. Without versioning, signatures, and policy review gates, teams cannot prove who changed what, why it changed, or whether critical safeguards were weakened.

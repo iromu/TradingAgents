@@ -8,6 +8,9 @@ source: "https://github.com/clawdbot/clawdbot/blob/main/src/agents/bash-tools.ex
 tags: [bash, shell, pty, fallback, security, process-management, sandboxing]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/intelligent-bash-tool-execution.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Secure, reliable command execution from agents is complex and error-prone:

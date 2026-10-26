@@ -8,6 +8,9 @@ source: "https://github.com/ZiwayZhao/agent-coworker"
 tags: [privacy, skill-sharing, black-box, schema-only, prompt-protection, inter-agent, trust]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/black-box-skill-invocation.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 When agents collaborate by sharing skills, the typical approach exposes implementation details: source code, prompts, internal logic, and model configurations. This creates knowledge leakage — a collaborator's agent can learn and replicate proprietary workflows after a single interaction.

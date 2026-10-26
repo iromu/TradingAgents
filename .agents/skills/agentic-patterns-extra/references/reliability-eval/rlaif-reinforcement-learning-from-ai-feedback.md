@@ -8,6 +8,9 @@ source: "https://arxiv.org/abs/2212.08073"
 tags: [rlhf, rlaif, constitutional-ai, synthetic-data, feedback, alignment, evaluation]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/rlaif-reinforcement-learning-from-ai-feedback.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Traditional Reinforcement Learning from Human Feedback (RLHF) requires extensive human annotation for preference data, which is expensive (often $1+ per annotation), time-consuming, and difficult to scale. This creates a bottleneck in training aligned AI systems, especially when dealing with complex or specialized domains where human expertise is scarce or costly.

@@ -23,6 +23,9 @@ summary: >-
   immutable audit trail of all decisions.
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/policy-gated-tool-proxy.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 AI agents call external tools (databases, APIs, file systems) through protocols like MCP. Once an agent has access to a tool server, it can invoke any tool with any arguments. There is no enforcement layer between "the agent decided to call this tool" and "the tool executed." This creates three gaps:
@@ -134,5 +137,5 @@ rules:
 - [Design Patterns for Securing LLM Agents](https://arxiv.org/abs/2506.08837) (Beurer-Kellner et al., ETH Zurich, 2025) -- formalizes separation of proposal and execution in agent security
 - [Awesome MCP Gateways](https://github.com/e2b-dev/awesome-mcp-gateways) -- catalog of proxy/gateway implementations for MCP
 - [SidClaw](https://github.com/sidclawhq/platform) -- open-source implementation of this pattern for MCP servers with hash-chain audit trails
-- Related pattern: [Human-in-the-Loop Approval Framework](human-in-loop-approval-framework.md)
+- Related pattern: [Human-in-the-Loop Approval Framework](../ux-collaboration/human-in-loop-approval-framework.md)
 - Related pattern: [Sandboxed Tool Authorization](sandboxed-tool-authorization.md)

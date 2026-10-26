@@ -1,0 +1,104 @@
+{
+  "skill_name": "agentic-patterns-research",
+  "evals": [
+    {
+      "id": 1,
+      "query": "My agent is spending most of its context just ferrying API responses back and forth \u2014 one Cloudflare call alone blew past a million tokens. How do agents avoid paying for raw API payloads?",
+      "prompt": "My agent is spending most of its context just ferrying API responses back and forth \u2014 one Cloudflare call alone blew past a million tokens. How do agents avoid paying for raw API payloads?",
+      "should_trigger": true,
+      "expected_output": "Recommends Code-Over-API (references/code-over-api-pattern-report.md): the agent writes code that runs against the API in a sandboxed environment and returns only the summary, rather than pulling payloads through the context window. Should carry the documented scale (75-2,000x, with the Cloudflare case cited at 99.95%) and the path.",
+      "files": [],
+      "assertions": [
+        "names the reference path references/code-over-api-pattern-report.md",
+        "grounds the recommendation in the report's own figures rather than an invented number",
+        "does not tell the user to truncate raw API responses as a substitute"
+      ]
+    },
+    {
+      "id": 2,
+      "query": "Untrusted web content is sitting in my agent's context for the whole session and I am worried about a later instruction in it being obeyed. What is the pattern for this?",
+      "prompt": "Untrusted web content is sitting in my agent's context for the whole session and I am worried about a later instruction in it being obeyed. What is the pattern for this?",
+      "should_trigger": true,
+      "expected_output": "Recommends the Context-Minimization Pattern (references/context-minimization-pattern-report.md): treat context as a staged pipeline \u2014 ingest untrusted text, transform it, then discard it \u2014 which removes the delayed prompt-injection exposure and cuts token use (10-100x as documented), with the path and status.",
+      "files": [],
+      "assertions": [
+        "names the reference path references/context-minimization-pattern-report.md",
+        "connects minimisation to the delayed prompt-injection class specifically",
+        "does not propose leaving untrusted content resident and merely warning about it"
+      ]
+    },
+    {
+      "id": 3,
+      "query": "My agent keeps reasoning its way past the safety rules I put in its system prompt. What is the structural fix?",
+      "prompt": "My agent keeps reasoning its way past the safety rules I put in its system prompt. What is the structural fix?",
+      "should_trigger": true,
+      "expected_output": "Recommends Hook-Based Safety Guard Rails (references/hook-based-safety-guard-rails-report.md): run the safety check outside the agent's reasoning loop at PreToolUse/PostToolUse, so the agent cannot rationalise past it, since a constraint inside the prompt is just more text the model can argue with. Cites the path and status.",
+      "files": [],
+      "assertions": [
+        "names the reference path references/hook-based-safety-guard-rails-report.md",
+        "places enforcement outside the reasoning loop rather than in the prompt",
+        "does not recommend strengthening the system-prompt wording as the primary fix"
+      ]
+    },
+    {
+      "id": 4,
+      "query": "I am shipping an agent that can make outbound calls and I need to be sure it cannot be talked into posting secrets somewhere. What do I put in front of it?",
+      "prompt": "I am shipping an agent that can make outbound calls and I need to be sure it cannot be talked into posting secrets somewhere. What do I put in front of it?",
+      "should_trigger": true,
+      "expected_output": "Recommends Egress Lockdown (No-Exfiltration Channel) (references/egress-lockdown-no-exfiltration-channel-report.md) \u2014 an egress control with domain-level outbound restrictions so no exfiltration channel exists to be used \u2014 and pairs it with the hook-based guard rails and context minimisation for defence in depth, with paths and statuses.",
+      "files": [],
+      "assertions": [
+        "names the reference path references/egress-lockdown-no-exfiltration-channel-report.md",
+        "removes the channel at the network layer rather than relying on the model's judgement",
+        "pairs the control with the wider security stack rather than presenting it as sufficient alone"
+      ]
+    },
+    {
+      "id": 5,
+      "query": "An autonomous agent on our team has no notion of spend and keeps picking the most expensive model. How do I make cost a hard constraint instead of a suggestion?",
+      "prompt": "An autonomous agent on our team has no notion of spend and keeps picking the most expensive model. How do I make cost a hard constraint instead of a suggestion?",
+      "should_trigger": true,
+      "expected_output": "Recommends Budget-Aware Model Routing with Hard Cost Caps (references/budget-aware-model-routing-with-hard-cost-caps-report.md): an explicit budget contract with caps that bind, and SLA-aware routing across tiers (the report covers FrugalGST, RouteLLM and xRouter) selecting the cheapest model that still meets the quality bar. Cites the path and status.",
+      "files": [],
+      "assertions": [
+        "names the reference path references/budget-aware-model-routing-with-hard-cost-caps-report.md",
+        "makes the cap a binding constraint rather than a prompt-level preference",
+        "does not answer by simply hard-coding a cheaper model"
+      ]
+    },
+    {
+      "id": 6,
+      "query": "I am new to this codebase's agent work and want the lay of the land \u2014 every agent pattern you have, how they group, and which ones are meant to be used together.",
+      "prompt": "I am new to this codebase's agent work and want the lay of the land \u2014 every agent pattern you have, how they group, and which ones are meant to be used together.",
+      "should_trigger": true,
+      "expected_output": "Starts from the master taxonomy (references/01-pattern-taxonomy.md) to lay out the full pattern space, cross-category relationships and the composition guide, before recommending any individual report.",
+      "files": [],
+      "assertions": [
+        "names the reference path references/01-pattern-taxonomy.md",
+        "orients with the taxonomy rather than dumping every report at once"
+      ]
+    },
+    {
+      "id": 7,
+      "query": "Which agentic pattern should I reach for when I want a quick read on a couple of hundred patterns rather than a deep dive on one? I just want to browse the catalogue.",
+      "prompt": "Which agentic pattern should I reach for when I want a quick read on a couple of hundred patterns rather than a deep dive on one? I just want to browse the catalogue.",
+      "should_trigger": false,
+      "expected_output": "Should route to the agentic-patterns-extra skill, which catalogues 194 patterns with one-line summaries; this skill holds long-form research reports on 220 patterns.",
+      "files": [],
+      "assertions": [
+        "routes to agentic-patterns-extra"
+      ]
+    },
+    {
+      "id": 8,
+      "query": "Add a Postgres covering index on orders(customer_id, created_at) and tell me whether it will help p95 read latency.",
+      "prompt": "Add a Postgres covering index on orders(customer_id, created_at) and tell me whether it will help p95 read latency.",
+      "should_trigger": false,
+      "expected_output": "Should not trigger this skill at all: a database indexing question with no agent-architecture content.",
+      "files": [],
+      "assertions": [
+        "does not trigger agentic-patterns-research"
+      ]
+    }
+  ]
+}

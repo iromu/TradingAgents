@@ -8,6 +8,9 @@ source: "https://arxiv.org/abs/2408.02666"
 tags: [self-critique, evaluator, reward-model, synthetic-data, reflexion, rlaif]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/self-critique-evaluator-loop.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Human-labeled preference datasets are expensive to produce, slow to refresh, and quickly stale as base models and domains change. Teams need scalable evaluation signals that can keep pace with model evolution without waiting on large annotation cycles. Risk of evaluator collapse and bias amplification must be mitigated.

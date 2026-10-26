@@ -8,6 +8,9 @@ source: "https://github.com/nibzard/SKILLS-AGENTIC-LESSONS"
 tags: [subagents, delegation, traceability, naming, clarity, anti-pattern]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/subject-hygiene.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 When delegating work to subagents via the Task tool, empty or generic task subjects make conversations:
@@ -123,4 +126,4 @@ Clear subjects enabled the main agent to synthesize findings from each subagent 
 * [SKILLS-AGENTIC-LESSONS.md](https://github.com/nibzard/SKILLS-AGENTIC-LESSONS) - Skills based on lessons learned from analyzing 88 real-world Claude conversation sessions
 * FIPA. "FIPA ACL Communicative Act Library Specification." 2002 - Agent communication language with conversation-id for task traceability
 * Smith, R. G. "The contract net protocol." IEEE Transactions on Computers 1980 - Task identification in distributed delegation
-* Related patterns: [Sub-Agent Spawning](sub-agent-spawning.md), [Parallel Tool Call Learning](parallel-tool-call-learning.md)
+* Related patterns: [Sub-Agent Spawning](sub-agent-spawning.md), [Parallel Tool Call Learning](../tool-use-environment/parallel-tool-call-learning.md)

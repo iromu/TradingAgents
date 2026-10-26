@@ -1,0 +1,106 @@
+{
+  "skill_name": "agentic-patterns-extra",
+  "evals": [
+    {
+      "id": 1,
+      "query": "My agent keeps re-calling the same broken search tool and I am burning thousands of tokens on it every run. How do I stop that without just telling the model to stop trying?",
+      "prompt": "My agent keeps re-calling the same broken search tool and I am burning thousands of tokens on it every run. How do I stop that without just telling the model to stop trying?",
+      "should_trigger": true,
+      "expected_output": "Recommends the Agent Circuit Breaker pattern (references/reliability-eval/agent-circuit-breaker.md) \u2014 a circuit-breaker state machine keyed on repeated tool failures that opens after a threshold, short-circuits further calls, and half-opens to probe recovery \u2014 and cites the reference file path plus its status label.",
+      "files": [],
+      "assertions": [
+        "names the reference path references/reliability-eval/agent-circuit-breaker.md",
+        "presents the pattern's status label alongside the recommendation",
+        "does not answer with a bare retry-count hint that omits the open/half-open state machine"
+      ]
+    },
+    {
+      "id": 2,
+      "query": "Long agent sessions die when the context window fills up mid-task. What is the production-proven way to keep a multi-hour run going without losing the state needed to resume?",
+      "prompt": "Long agent sessions die when the context window fills up mid-task. What is the production-proven way to keep a multi-hour run going without losing the state needed to resume?",
+      "should_trigger": true,
+      "expected_output": "Recommends Context Window Auto-Compaction (references/context-memory/context-window-auto-compaction.md) \u2014 compaction triggered by the overflow error itself, with reserve tokens and lane-aware retry \u2014 paired with a durable-state pattern such as Filesystem-Based Agent State, quoting file paths and statuses.",
+      "files": [],
+      "assertions": [
+        "names the reference path references/context-memory/context-window-auto-compaction.md",
+        "includes the status label when presenting the pattern",
+        "reads the reference file rather than inventing the trigger mechanics"
+      ]
+    },
+    {
+      "id": 3,
+      "query": "I have to rename an API across roughly 400 files in a monorepo. Doing it in one agent session is too slow and too error-prone. What architecture fits this?",
+      "prompt": "I have to rename an API across roughly 400 files in a monorepo. Doing it in one agent session is too slow and too error-prone. What architecture fits this?",
+      "should_trigger": true,
+      "expected_output": "Recommends the Swarm Migration Pattern (references/orchestration-control/swarm-migration-pattern.md) \u2014 10+ parallel sub-agents over disjoint file sets for large mechanical changes \u2014 paired with Sub-Agent Spawning and an independent verification gate, with paths and statuses.",
+      "files": [],
+      "assertions": [
+        "names the reference path references/orchestration-control/swarm-migration-pattern.md",
+        "keeps write scopes disjoint across the parallel agents",
+        "does not propose a single long-running session for the whole migration"
+      ]
+    },
+    {
+      "id": 4,
+      "query": "I want proof that an agent run handling customer data could not have exfiltrated it, and I do not want to log the payload contents themselves to get it. Is there a pattern for that?",
+      "prompt": "I want proof that an agent run handling customer data could not have exfiltrated it, and I do not want to log the payload contents themselves to get it. Is there a pattern for that?",
+      "should_trigger": true,
+      "expected_output": "Recommends Zero-Knowledge Verified Agent Egress (references/security-safety/zero-knowledge-verified-agent-egress.md) for attesting egress without revealing payloads, paired with a destination-restriction control such as Egress Lockdown (No-Exfiltration Channel) and the Lethal Trifecta threat model for auditing the tool surface; cites paths and statuses.",
+      "files": [],
+      "assertions": [
+        "names the reference path references/security-safety/zero-knowledge-verified-agent-egress.md",
+        "does not claim the pattern removes the need to restrict outbound destinations",
+        "surfaces the status label so the user can judge how proven the pattern is"
+      ]
+    },
+    {
+      "id": 5,
+      "query": "A cron-scheduled agent silently kept running for two days after its objective became unreachable and racked up spend. How should a scheduled agent job fail safely?",
+      "prompt": "A cron-scheduled agent silently kept running for two days after its objective became unreachable and racked up spend. How should a scheduled agent job fail safely?",
+      "should_trigger": true,
+      "expected_output": "Recommends the Dead-Man's Switch for Scheduled Agent Jobs (references/reliability-eval/dead-mans-switch-for-scheduled-agent-jobs.md): invert the monitoring direction so you alert on *missing success* rather than on errors \u2014 each scheduled job writes an explicit success sentinel into its per-run log as its final act, and a freshness checker that knows each task's cadence and staleness window scans the latest log per task and files a finding when the log is absent, stale, or sentinel-less, sending findings to the agent's own task queue rather than a separate dashboard.",
+      "files": [],
+      "assertions": [
+        "names the reference path references/reliability-eval/dead-mans-switch-for-scheduled-agent-jobs.md",
+        "frames the pattern as alerting on missing success rather than on raised errors",
+        "includes the success-sentinel and staleness-window mechanics rather than a generic 'add monitoring' answer",
+        "does not claim it catches a job that runs and produces wrong output (that class needs synthetic canaries)"
+      ]
+    },
+    {
+      "id": 6,
+      "query": "Should I embed my codebase for the coding agent or just let it grep? I keep seeing the retrieval layer add cost without helping on code questions.",
+      "prompt": "Should I embed my codebase for the coding agent or just let it grep? I keep seeing the retrieval layer add cost without helping on code questions.",
+      "should_trigger": true,
+      "expected_output": "Recommends Agentic Search over Vector Embeddings (references/tool-use-environment/agentic-search-over-vector-embeddings.md) for codebases \u2014 grep/bash-style agentic retrieval over embedding search \u2014 states the trade-off honestly (a best-practice entry for code, not a blanket replacement for document retrieval), and cites the path and status.",
+      "files": [],
+      "assertions": [
+        "names the reference path references/tool-use-environment/agentic-search-over-vector-embeddings.md",
+        "presents trade-offs rather than an unconditional verdict",
+        "includes the status label"
+      ]
+    },
+    {
+      "id": 7,
+      "query": "Explain the difference between prompt chaining, routing, and parallelization as agent design patterns, and tell me which one I need for a simple two-step extraction task.",
+      "prompt": "Explain the difference between prompt chaining, routing, and parallelization as agent design patterns, and tell me which one I need for a simple two-step extraction task.",
+      "should_trigger": false,
+      "expected_output": "Should route to the agentic-patterns-core skill: prompt chaining, routing, and parallelization are the core pattern set, not the extra catalogue.",
+      "files": [],
+      "assertions": [
+        "routes to agentic-patterns-core"
+      ]
+    },
+    {
+      "id": 8,
+      "query": "Write me a Postgres query to add a covering index on orders(customer_id, created_at) and estimate whether it will help the p95 read latency.",
+      "prompt": "Write me a Postgres query to add a covering index on orders(customer_id, created_at) and estimate whether it will help the p95 read latency.",
+      "should_trigger": false,
+      "expected_output": "Should not trigger this skill at all: this is a database indexing question with no agentic-architecture content.",
+      "files": [],
+      "assertions": [
+        "does not trigger agentic-patterns-extra"
+      ]
+    }
+  ]
+}

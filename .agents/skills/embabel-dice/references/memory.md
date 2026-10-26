@@ -67,68 +67,96 @@ var memory = Memory.forContext(contextId)
 
 Always scope memory queries by `ContextId` to separate different users, sessions, or domains:
 
+```kotlin
+// Kotlin — ContextId is a value class, so construct it directly
+val memory = Memory.forContext(ContextId("user-123-session-456"))
+    .withRepository(propositionRepository)
+    .withProjector(memoryProjector)
+```
+
 ```java
-var contextId = ContextId.of("user-123-session-456");
-var memory = Memory.forContext(contextId)
+// Java — value classes are not directly constructible from Java; use the
+// strongly-typed builder pattern, which takes the raw string.
+var memory = Memory.forContext(contextId)   // obtained from your context
     .withRepository(propositionRepository)
     .withProjector(memoryProjector);
 ```
 
-**Without context scoping**, propositions from different users/sessions mix together, causing data leakage and incorrect recall.
+`ContextId` is a **Kotlin value class** living in `com.embabel.agent.core` — it is not a DICE type, and
+there is **no** `ContextId.of(...)` factory (that appeared in earlier revisions of this guide and has 0
+hits upstream). Typical scopes: `ContextId("user-alice-123")`, `ContextId("team-engineering")`,
+`ContextId("session-abc")`, `ContextId("batch-2025-01-09")`. From Java, access the value via
+`getContextIdValue()`.
 
-### Pre-populating Blackboard
+**Without context scoping**, propositions from different users/sessions mix together, causing data
+leakage and incorrect recall.
 
-Memory can pre-populate the agent's blackboard with relevant propositions:
+### Pre-populating the Agent's Context
 
-```java
-memory.withEagerSearchAbout(conversationHistory, 10)
-    .withEagerQuery(q -> q.mentioningEntity("alice-123").withLimit(5));
+Memory can preload the agent's context with relevant propositions — this is the `withEager*` family
+above, not a separate "blackboard" API (that term has 0 hits upstream):
+
+```kotlin
+Memory.forContext(contextId)
+    .withRepository(propositionRepository)
+    .withEagerSearchAbout(conversationText, 10)
+    .narrowedBy { it.withEntityId("alice-123") }
 ```
 
 ## Integration with LLM Calls
 
-Use the Memory facade in LLM calls via `Ai.withReferences()`:
+Use the Memory facade in LLM calls via `Ai.withReferences()` — verbatim from `README.md:1770-1793`:
 
 ```java
-ai.withReferences(memory).respond("What do you know about Alice?");
+// Java — eager search about recent conversation
+var recentContext = new WindowingConversationFormatter(
+        SimpleMessageFormatter.INSTANCE, 5, 0
+    ).format(conversation);
+
+var memory = Memory.forContext(contextId)
+        .withRepository(propositionRepository)
+        .withProjector(memoryProjector)
+        .withEagerSearchAbout(recentContext, 10);
+
+// Use as a reference — contribution() adds key memories to the prompt,
+// tools() provides the search tool
+ai.withReferences(memory).respond(...);
 ```
 
-The LLM receives relevant propositions as context in its prompt, enabling fact-grounded responses.
+`withReferences(memory)` puts the key memories into the system prompt and automatically adds the
+search tool, so the model can ask for more. `withEagerSearchAbout` is the recommended eager mode for
+chat agents — it uses the actual conversation content as the search query, so the preloaded memories
+are relevant to what the user is talking about right now.
 
-### Agent Integration Example
-
-```java
-@Agent
-public class KnowledgeAgent {
-
-    @Action
-    public Answer queryKnowledge(UserQuestion question, OperationContext context) {
-        var memory = Memory.forContext(question.contextId())
-            .withRepository(propositionRepository)
-            .withProjector(memoryProjector)
-            .withEagerSearchAbout(question.text(), 5);
-
-        return context.ai()
-            .withReferences(memory)
-            .creating(Answer.class)
-            .fromPrompt("Answer based on known facts: " + question.text());
-    }
-}
-```
+> Earlier revisions of this guide showed an `@Agent`-annotated `KnowledgeAgent` with an `@Action
+> queryKnowledge(UserQuestion, OperationContext)` method returning `context.ai()…creating(Answer.class)
+> .fromPrompt(...)`. None of those names occur anywhere in the DICE corpus (`KnowledgeAgent`,
+> `UserQuestion`, `queryKnowledge`, `fromPrompt`, `creating(` all return 0 hits) — that was an invented
+> agent-framework facade. The attested integration point is `ai.withReferences(memory).respond(...)`.
+> Agent-side constructs belong to embabel-agent, not DICE.
 
 ## Configuration
 
-Key memory-related properties in `application.yml`:
+**There is no `dice.memory.*` configuration block.** The settings that look "memory-shaped" are the
+MCP recall defaults, bound by `DiceMcpProperties` under the **`embabel.dice.mcp`** prefix:
 
 ```yaml
-dice:
-  memory:
-    min-confidence: 0.5
-    default-limit: 10
-    eager-search:
-      enabled: true
-      max-results: 20
+embabel:
+  dice:
+    mcp:
+      enabled: false        # default
+      min-confidence: 0.5   # minimum effective confidence for recall/list
+      default-limit: 10    # max results per recall/list call
 ```
+
+The `0.5` / `10` values are `DiceMcpProperties.minConfidence` / `.defaultLimit` — they are *not* keys
+under a `dice.memory` tree (that prefix matches nothing documented). For everything else, the prefixes
+DICE actually binds are `embabel.dice.store.*`, `embabel.dice.collector.*`,
+`embabel.dice.source-analyzer` and `dice.security.api-key.*`.
+
+The per-`Memory` knobs are **code-side withers**, not config keys: `withMinConfidence(double)`
+(default `0.5`), `withDefaultLimit(int)` (default `10`), `withTopic(String)`, `withEagerSearchAbout`,
+`withEagerTopicSearch`, `withEagerQuery`, `narrowedBy`.
 
 ## Common Pitfalls
 

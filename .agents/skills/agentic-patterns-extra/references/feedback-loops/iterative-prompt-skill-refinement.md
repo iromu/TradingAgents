@@ -8,6 +8,9 @@ source: "https://lethain.com/agents-iterative-refinement/"
 tags: [refinement, iteration, prompts, skills, feedback, multi-mechanism, continuous-improvement, dashboards]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/iterative-prompt-skill-refinement.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Agent usage reveals gaps in prompts, skills, and tools—but how do you systematically improve them? When a workflow fails or behaves sub-optimally, you need multiple mechanisms to capture feedback and iterate. Single approaches aren't enough; you need a **multi-pronged refinement strategy**.

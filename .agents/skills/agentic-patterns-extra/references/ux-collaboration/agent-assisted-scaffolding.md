@@ -8,6 +8,9 @@ source: "https://www.youtube.com/watch?v=BGgsoIgbT_Y"
 tags: [code-generation, bootstrapping, scaffolding, feature-development, ide, initial-setup]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/agent-assisted-scaffolding.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Starting a new feature, module, or codebase often involves writing a significant amount of boilerplate or foundational code. This can be time-consuming and repetitive for developers.

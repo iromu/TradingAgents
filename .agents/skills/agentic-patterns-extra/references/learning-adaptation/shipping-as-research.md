@@ -8,6 +8,9 @@ source: "https://www.youtube.com/watch?v=4rx36wc9ugw"
 tags: [research, experimentation, rapid-iteration, learning, dogfooding, shipping, uncertainty]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/shipping-as-research.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 In the rapidly evolving AI landscape, waiting for certainty before building means you're always behind. Traditional product development emphasizes validation and certainty before release, but when the market changes every 3-6 weeks, you can't afford to wait.
@@ -176,6 +179,6 @@ If you wait to see what happens before acting, you'll miss the window. The front
 
 * [Raising an Agent Episode 10: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=4rx36wc9ugw) - AMP (Thorsten Ball, Quinn Slack, 2025)
 * [Controlled Experiments on the Web: Survey and Practical Guide](https://doi.org/10.1007/s10618-007-0061-3) - Kohavi, Henne, Sommerfield (2007)
-* Related: [Burn the Boats](burn-the-boats.md), [Disposable Scaffolding Over Durable Features](disposable-scaffolding-over-durable-features.md), [Dogfooding with Rapid Iteration for Agent Improvement](dogfooding-with-rapid-iteration-for-agent-improvement.md)
+* Related: [Burn the Boats](../orchestration-control/burn-the-boats.md), [Disposable Scaffolding Over Durable Features](../orchestration-control/disposable-scaffolding-over-durable-features.md), [Dogfooding with Rapid Iteration for Agent Improvement](../feedback-loops/dogfooding-with-rapid-iteration-for-agent-improvement.md)
 
 ---

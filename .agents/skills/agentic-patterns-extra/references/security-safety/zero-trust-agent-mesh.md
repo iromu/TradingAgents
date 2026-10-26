@@ -8,6 +8,9 @@ source: "https://www.nist.gov/publications/zero-trust-architecture"
 tags: [zero-trust, identity, delegation, multi-agent, cryptography, ed25519, governance]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/zero-trust-agent-mesh.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 In multi-agent systems, trust boundaries are often implicit: agents communicate by convention without verifiable identity, and delegation chains are hard to audit. This enables impersonation, privilege confusion, and unverifiable task delegation.

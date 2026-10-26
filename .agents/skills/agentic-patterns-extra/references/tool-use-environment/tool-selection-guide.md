@@ -8,6 +8,9 @@ source: "https://github.com/nibzard/SKILLS-AGENTIC-LESSONS"
 tags: [tools, workflow, best-practices, efficiency, patterns, exploration, modification]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/tool-selection-guide.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 AI agents often struggle to select the optimal tool for a given task, leading to inefficient workflows. Common anti-patterns include:
@@ -126,6 +129,6 @@ flowchart TD
 ## References
 
 * [SKILLS-AGENTIC-LESSONS.md](https://github.com/nibzard/SKILLS-AGENTIC-LESSONS) - Skills based on lessons learned from analyzing 88 real-world Claude conversation sessions
-* Related patterns: [Sub-Agent Spawning](sub-agent-spawning.md), [Discrete Phase Separation](discrete-phase-separation.md), [Subject Hygiene](subject-hygiene.md)
+* Related patterns: [Sub-Agent Spawning](../orchestration-control/sub-agent-spawning.md), [Discrete Phase Separation](../orchestration-control/discrete-phase-separation.md), [Subject Hygiene](../orchestration-control/subject-hygiene.md)
 * ToolFormer: [Language Models Can Teach Themselves to Use Tools](https://arxiv.org/abs/2302.04761) (Schick et al., 2023)
 * ReAct: [Synergizing Reasoning and Acting in Language Models](https://arxiv.org/abs/2210.03629) (Yao et al., 2022)

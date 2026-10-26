@@ -15,6 +15,9 @@ summary: >-
 updated_at: '2026-01-05'
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/dual-llm-pattern.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 When the same model both reads untrusted content and controls high-privilege tools, a single prompt-injection path can convert benign context into privileged actions. This coupling collapses trust boundaries and makes it hard to reason about where dangerous behavior originated.

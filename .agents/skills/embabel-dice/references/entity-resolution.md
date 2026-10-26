@@ -23,31 +23,49 @@ Entity resolution maps mentions to canonical entities in the knowledge graph, pr
 
 Recommended resolver — uses heuristics first, falls back to LLM bakeoff for ambiguous cases.
 
+`EscalatingEntityResolver` climbs a ladder and stops at the cheapest rung that works; the rung it
+stopped at comes back as a `ResolutionLevel`:
+
+| Level | How it matches | LLM call |
+|---|---|---|
+| `EXACT_MATCH` | Exact name match against the repository | No |
+| `HEURISTIC_MATCH` | Normalised name, then fuzzy and partial name matching | No |
+| `EMBEDDING_MATCH` | High-confidence embedding similarity | No |
+| `LLM_VERIFICATION` | One candidate, verified yes/no by an LLM | Yes |
+| `LLM_BAKEOFF` | Several candidates, an LLM picks the best | Yes |
+| `NO_MATCH` | Nothing matched at any level | — |
+
+Each attempt returns a `LevelResult` carrying the level, the resolution, a confidence, and how many
+candidates were considered — that is what you look at when tuning.
+
+Construction is a static factory, **not** a builder chain (verbatim from
+`concepts/entity-resolution.adoc`):
+
 ```java
-@Bean
-EntityResolver entityResolver(
-        EntityRepository entityRepository,
-        Ai ai,
-        LlmOptions llmOptions) {
+// Full chain, including the vector searcher.
+var resolver = EscalatingEntityResolver.create(entityRepository, candidateBakeoff);
 
-    var candidateBakeoff = LlmCandidateBakeoff.builder()
-        .withAi(ai)
-        .withLlm(llmOptions)
-        .withPromptMode(PromptMode.COMPACT)
-        .build();
-
-    return EscalatingEntityResolver.builder()
-        .withRepository(entityRepository)
-        .withCandidateBakeoff(candidateBakeoff)
-        .build();
-}
+// Same, minus the vector searcher — for stores with no vector index.
+var resolver = EscalatingEntityResolver.withoutVector(entityRepository, candidateBakeoff);
 ```
 
+Passing `null` for the bake-off means ambiguous cases mint a new entity rather than asking an LLM.
+To stop unresolved mentions being invented at all, use `context.withMintNewEntities(false)` — they are
+then vetoed rather than minted.
+
+> Earlier revisions of this guide showed `EscalatingEntityResolver.builder()…build()`, a
+> `withCandidateSearchers(List.of(...))` wither, and an `EntityRepository` parameter **type**. None of
+> those are attested: there is no builder form and no `withCandidateSearchers` wither, and
+> `entityRepository` is upstream's *variable name*, not a verified type — so take the parameter type
+> from the shipped factory rather than assuming one. `withPromptMode` is likewise unattested, though
+> `PromptMode.COMPACT` itself appears in the corpus.
+
 **Resolution flow:**
-1. **Exact match** — Check by entity ID
-2. **Normalized name match** — Check by normalized name (lowercase, trimmed)
-3. **Fuzzy match** — Check by Levenshtein distance
-4. **LLM bakeoff** — If no heuristic match, ask LLM to select best candidate
+1. **Exact match** — check by entity ID / exact name
+2. **Normalized name match** — check by normalized name (lowercase, trimmed)
+3. **Fuzzy match** — check by Levenshtein distance
+4. **Embedding match** — vector similarity, no LLM
+5. **LLM verification / bakeoff** — only if no cheaper rung matched
 
 ## Candidate Searchers
 
@@ -66,18 +84,17 @@ DICE provides multiple candidate searchers for entity resolution:
 ### Configuring Candidate Searchers
 
 ```java
-var resolver = EscalatingEntityResolver.builder()
-    .withRepository(entityRepository)
-    .withCandidateSearchers(List.of(
-        new ByIdCandidateSearcher(entityRepository),
-        new ByExactNameCandidateSearcher(entityRepository),
-        new NormalizedNameCandidateSearcher(entityRepository),
-        new FuzzyNameCandidateSearcher(entityRepository, 0.2, 4, 4),
-        new VectorCandidateSearcher(entityRepository),
-        new AgenticCandidateSearcher(ai, llmOptions)
-    ))
-    .build();
+// The chain above is what `create(...)` assembles for you; there is no public
+// wither to hand it a list yourself.
+var resolver = EscalatingEntityResolver.create(entityRepository, candidateBakeoff);
 ```
+
+The searcher class names in the table are attested, but the assembly shown in earlier revisions —
+`EscalatingEntityResolver.builder().withRepository(...).withCandidateSearchers(List.of(...))…build()` —
+is **not**: there is no builder form and no `withCandidateSearchers` wither, and the individual
+searcher constructors (including the `FuzzyNameCandidateSearcher(entityRepository, 0.2, 4, 4)` arity
+shown previously) are not documented in this corpus. Use `create(...)` / `withoutVector(...)`, and read
+the `com.embabel.dice.resolution` package before constructing a searcher directly.
 
 ## Resolution Outcomes
 

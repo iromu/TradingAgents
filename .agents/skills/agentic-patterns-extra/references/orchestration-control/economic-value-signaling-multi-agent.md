@@ -8,6 +8,9 @@ source: "https://github.com/Scottcjn/beacon-skill"
 tags: [multi-agent, coordination, incentives, economic-signaling, peer-discovery, value-transfer]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/economic-value-signaling-multi-agent.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 In multi-agent systems with many autonomous agents running concurrently, task prioritization becomes difficult. Agents have no natural mechanism to signal urgency, quality, or importance of work requests. Standard message queues treat all inter-agent messages as equal, leading to:

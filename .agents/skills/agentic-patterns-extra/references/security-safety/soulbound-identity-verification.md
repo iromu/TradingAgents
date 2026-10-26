@@ -8,6 +8,9 @@ source: "https://eips.ethereum.org/EIPS/eip-5192"
 tags: [identity, verification, trust, soulbound-token, blockchain, agent-identity]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/soulbound-identity-verification.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 As autonomous agents interact across networks, verifying identity and detecting prompt/operator drift becomes difficult. Without durable identity and an immutable change history, agents can impersonate others or silently diverge from authorized configurations.

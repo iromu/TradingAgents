@@ -8,6 +8,9 @@ source: "https://docs.anthropic.com/en/docs/claude-code/hooks"
 tags: [hooks, guard-rails, safety, autonomous-operation, destructive-command-blocking, context-monitoring, pre-tool-use, post-tool-use]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/hook-based-safety-guard-rails.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Autonomous code agents running unattended can execute destructive commands (`rm -rf`, `git reset --hard`), exhaust their context window without saving state, leak secrets via `git push`, or silently produce syntax errors that cascade into later failures.

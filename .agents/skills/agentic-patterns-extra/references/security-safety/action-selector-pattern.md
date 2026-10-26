@@ -8,6 +8,9 @@ source: "https://arxiv.org/abs/2506.08837"
 tags: [prompt-injection, control-flow, safety, tool-use]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/action-selector-pattern.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 In tool-enabled agents, untrusted data from emails, web pages, and API responses is often fed back into the model between steps. That creates a control-flow vulnerability: injected text can influence which action the agent chooses next, enabling control-flow hijacking. Even if individual tools are safe, a compromised action-selection loop can trigger harmful sequences at the orchestration layer and enable cascading prompt injection attacks.

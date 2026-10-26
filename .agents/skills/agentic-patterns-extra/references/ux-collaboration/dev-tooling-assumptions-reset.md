@@ -8,6 +8,9 @@ source: "https://www.youtube.com/watch?v=2wjnV6F2arc"
 tags: [dev-tools, assumptions, github, tickets, code-review, tooling, agent-workflows, paradigm-shift]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/dev-tooling-assumptions-reset.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Traditional development tools are built on assumptions that no longer hold: that humans write code with effort and expertise, that changes are scarce and valuable, that linear workflows make sense. When agents write most code, these tools create bottlenecks and friction. Academic research confirms this is a paradigm shift requiring ecosystem-level rethinking, not incremental adjustments.
@@ -163,4 +166,4 @@ This requires new mental models and new interfaces:
 * [Raising an Agent Episode 9: The Assistant is Dead, Long Live the Factory](https://www.youtube.com/watch?v=2wjnV6F2arc) - AMP (Thorsten Ball, Quinn Slack, 2025)
 * [Toward an Agentic Infused Software Ecosystem](https://arxiv.org/abs/2602.20979) - Mark Marron, 2026
 * [EditFlow: Benchmarking Code Edit Recommendation Systems](https://arxiv.org/abs/2602.21697) - Chenyan Liu et al., 2026
-* Related: [Factory over Assistant](factory-over-assistant.md), [Codebase Optimization for Agents](codebase-optimization-for-agents.md), [Agent-First Tooling and Logging](agent-first-tooling-and-logging.md)
+* Related: [Factory over Assistant](../orchestration-control/factory-over-assistant.md), [Codebase Optimization for Agents](codebase-optimization-for-agents.md), [Agent-First Tooling and Logging](../tool-use-environment/agent-first-tooling-and-logging.md)

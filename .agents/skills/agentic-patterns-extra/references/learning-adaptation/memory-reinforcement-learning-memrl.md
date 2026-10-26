@@ -54,4 +54,4 @@ This filters out "distractor" memories that look relevant but historically lead 
 * [Self-Evolving Agents via Runtime RL on Episodic Memory](https://arxiv.org/html/2601.03192v1) - Zhang et al. (2025)
 * [Neural Episodic Control](https://arxiv.org/abs/1703.01988) - Pritzel et al. (2017)
 * [Reflexion: Language Agents with Verbal RL](https://arxiv.org/abs/2303.11366) - Shinn et al. (2023)
-* Related: [Episodic Memory Retrieval & Injection](../context-memory/episodic-memory-retrieval.md), [Agent Reinforcement Fine-Tuning](agent-reinforcement-fine-tuning.md)
+* Related: [Episodic Memory Retrieval & Injection](../context-memory/episodic-memory-retrieval-injection.md), [Agent Reinforcement Fine-Tuning](agent-reinforcement-fine-tuning.md)

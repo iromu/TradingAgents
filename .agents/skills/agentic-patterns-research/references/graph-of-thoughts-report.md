@@ -894,11 +894,11 @@ def prune_graph(self, percentile_threshold=0.5):
 
 ### Related Patterns in This Repository
 
-1. [Tree-of-Thought Reasoning](/home/agent/awesome-agentic-patterns/patterns/tree-of-thought-reasoning.md)
-2. [Self-Discover Reasoning Structures](/home/agent/awesome-agentic-patterns/patterns/self-discover-reasoning-structures.md)
-3. [Reflection Loop](/home/agent/awesome-agentic-patterns/patterns/reflection-loop.md)
-4. [Language Agent Tree Search (LATS)](/home/agent/awesome-agentic-patterns/patterns/language-agent-tree-search-lats.md)
-5. [Agent-Driven Research](/home/agent/awesome-agentic-patterns/research/agent-driven-research-report.md)
+1. [Tree-of-Thought Reasoning](tree-of-thought-reasoning-report.md)
+2. [Self-Discover Reasoning Structures](self-discover-reasoning-structures-report.md)
+3. Reflection Loop
+4. [Language Agent Tree Search (LATS)](language-agent-tree-search-lats-report.md)
+5. [Agent-Driven Research](agent-driven-research-report.md)
 
 ---
 

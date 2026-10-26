@@ -10,6 +10,9 @@ evidence_grade: low
 last_updated: "2026-03-08"
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/transitive-vouch-chain-trust.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 When autonomous agents interact without a central authority, trust decisions are binary: either you trust an agent completely or you do not trust it at all. There is no mechanism to derive partial, evidence-based trust from indirect relationships.

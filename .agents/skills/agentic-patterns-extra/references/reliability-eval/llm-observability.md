@@ -26,6 +26,9 @@ summary: >-
 updated_at: '2026-01-13'
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/llm-observability.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Agents introduce **non-determinism**—the same input can produce different outputs. When agents do something sub-optimal, users flag it as a "bug" even if it's just prompt ambiguity. Debugging these issues requires tracing through complex multi-step workflows, but standard logging (CloudWatch, Lambda logs) is painful to navigate. Engineers need easy access to workflow execution details to debug quickly, or agents won't get adopted.

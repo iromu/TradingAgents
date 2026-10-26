@@ -8,6 +8,9 @@ source: "https://policylayer.com"
 tags: [wallet-controls, spend-limits, policy-enforcement, non-custodial, AI-agents, safety]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/non-custodial-spending-controls.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 AI agents that can initiate wallet actions may issue unsafe transactions under prompt drift, buggy loops, or compromised prompts. If spending approvals are handled directly inside agent prompts or application logic, safety constraints are easy to bypass. This is a specific instance of the "lethal trifecta" threat model: combining wallet access with untrusted inputs and external communication creates exploitation paths.

@@ -23,6 +23,9 @@ summary: >-
 updated_at: '2026-01-05'
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/progressive-complexity-escalation.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Organizations deploy AI agents with overly ambitious capabilities from day one, leading to:
@@ -252,4 +255,4 @@ class AgentCapabilities {
 - Bengio et al. ["Curriculum Learning"](https://www.icml.cc/2009/papers/54.pdf) (ICML 2009) - Easy-to-hard training improves generalization
 - Vygotsky, L. S. ["Mind in Society"](https://books.google.com/books?id=c3lAAAAAIAAJ) (1978) - Zone of Proximal Development: optimal learning at 70-90% success rate
 - Wood, Bruner, Ross ["The role of tutoring in problem solving"](https://doi.org/10.1111/j.1469-7610.1976.tb00381.x) (1976) - Scaffolding theory: temporary support that fades with competence
-- Related patterns: [Progressive Autonomy with Model Evolution](progressive-autonomy-with-model-evolution.md), [Human-in-the-Loop Approval Framework](human-in-loop-approval-framework.md), [Spectrum of Control / Blended Initiative](spectrum-of-control-blended-initiative.md)
+- Related patterns: [Progressive Autonomy with Model Evolution](progressive-autonomy-with-model-evolution.md), [Human-in-the-Loop Approval Framework](../ux-collaboration/human-in-loop-approval-framework.md), [Spectrum of Control / Blended Initiative](../ux-collaboration/spectrum-of-control-blended-initiative.md)

@@ -8,6 +8,9 @@ source: "https://simonwillison.net/2025/Jun/16/lethal-trifecta/"
 tags: [network-sandbox, exfiltration, outbound-controls, security]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/egress-lockdown-no-exfiltration-channel.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Even with private-data access and untrusted inputs, attacks fail if the agent has **no way to transmit stolen data**. This pattern implements the Bell-LaPadula model's "no write down" property: high-privilege subjects cannot write to low-trust destinations. Many real-world fixes simply removed or filtered outbound channels.

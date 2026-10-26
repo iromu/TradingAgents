@@ -8,6 +8,9 @@ source: "https://gist.github.com/nibzard/a97ef0a1919328bcbc6a224a5d2cfc78"
 tags: [autonomous-execution, task-loop, rate-limiting, git-automation, cli-driven, stream-processing]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/continuous-autonomous-task-loop-pattern.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Traditional development workflows require constant human intervention for task management:

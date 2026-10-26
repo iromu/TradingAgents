@@ -8,6 +8,9 @@ source: "https://www.youtube.com/watch?v=BGgsoIgbT_Y"
 tags: [api-design, llm-interaction, tool-use, system-design, code-structure, agent-compatibility]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/llm-friendly-api-design.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 For AI agents to reliably and effectively use tools, especially APIs or internal libraries, the design of these interfaces matters. APIs designed solely for human consumption might be ambiguous or overly complex for an LLM to use correctly without extensive fine-tuning or elaborate prompting.

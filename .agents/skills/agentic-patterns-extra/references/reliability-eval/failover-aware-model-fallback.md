@@ -8,6 +8,9 @@ source: "https://github.com/clawdbot/clawdbot/blob/main/src/agents/model-fallbac
 tags: [fallback, reliability, error-classification, multi-model, failover, resilience]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/failover-aware-model-fallback.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 AI model requests fail for varied and often opaque reasons. Simple retry logic fails to distinguish between:

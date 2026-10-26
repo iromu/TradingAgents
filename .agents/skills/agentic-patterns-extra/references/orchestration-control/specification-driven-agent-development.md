@@ -8,6 +8,9 @@ source: "http://jorypestorious.com/blog/ai-engineer-spec/"
 tags: [spec-first, scaffolding, contract, requirements]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/specification-driven-agent-development.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Hand-crafted prompts or loose user stories leave room for ambiguity; agents can wander, over-interpret, or produce code that conflicts with stakeholder intent.

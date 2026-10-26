@@ -1,6 +1,6 @@
 # Structured Output Reference
 
-Source: [embabel/embabel-agent-docs/chatbots.md](https://github.com/embabel/embabel/blob/main/embabel-agent-docs/chatbots.md)
+Source: [embabel/embabel-agent-docs/chatbots.md](https://github.com/embabel/embabel-agent/blob/main/embabel-agent-docs/src/main/asciidoc/reference/chatbots/page.adoc)
 
 ## JSON Response Mode
 

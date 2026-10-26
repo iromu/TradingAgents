@@ -8,6 +8,9 @@ source: "https://www.youtube.com/watch?v=BGgsoIgbT_Y"
 tags: [developer-productivity, learning, skill-acquisition, iteration, feedback, taste-development, education, junior-developer]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/ai-accelerated-learning-and-skill-development.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Developing strong software engineering skills, including "taste" for clean and effective code, traditionally requires extensive experience, trial-and-error, and mentorship, which can be a slow process, especially for junior developers.

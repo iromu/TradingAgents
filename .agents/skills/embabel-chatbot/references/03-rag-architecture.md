@@ -1,6 +1,6 @@
 # RAG Architecture Reference
 
-Source: [embabel/embabel-agent-docs/rag.md](https://github.com/embabel/embabel/blob/main/embabel-agent-docs/rag.md)
+Source: [embabel/embabel-agent-docs/rag.md](https://github.com/embabel/embabel-agent/blob/main/embabel-agent-docs/src/main/asciidoc/reference/rag/page.adoc)
 
 ## RAGBuilder
 

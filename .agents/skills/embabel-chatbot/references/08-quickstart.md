@@ -1,262 +1,228 @@
-# Chatbot Quickstart — Complete Code Examples
+# Chatbot Quickstart — the documented build path
 
-Source: [embabel/embabel-agent-docs/chatbots.md](https://github.com/embabel/embabel/blob/main/embabel-agent-docs/chatbots.md)
+> **Verified against** `embabel/embabel-agent` @ `main` (source tarball, 1,733 source files) and the
+> `v1.5.1` tag. Primary sources: `embabel-agent-docs/src/main/asciidoc/reference/chatbots/page.adoc`
+> (1,087 lines) and `.../reference/rag/page.adoc`. The chatbot lives in the **`com.embabel.chat`**
+> package family of the `embabel-agent` repository — there is no standalone `embabel/embabel-chatbot`
+> repository to link to.
 
-This file contains complete, copy-pasteable code examples for building a chatbot step by step. For the high-level workflow, see the [main SKILL.md](../SKILL.md).
+## Table of Contents
 
-## Step 1: Build a Basic Chatbot
+- [The package names, before anything else](#the-package-names-before-anything-else)
+- [Step 1 — declare the action class](#step-1--declare-the-action-class)
+- [Step 2 — publish a `Chatbot` bean](#step-2--publish-a-chatbot-bean)
+- [Step 3 — drive a session](#step-3--drive-a-session)
+- [Persisting conversations](#persisting-conversations)
+- [Grounding a chatbot with RAG](#grounding-a-chatbot-with-rag)
+- [Common Pitfalls](#common-pitfalls)
 
-Start with the simplest possible chatbot:
+## The package names, before anything else
 
-```java
-import com.embabel.chatbot.builder.ChatbotBuilder;
-import com.embabel.chatbot.session.ChatSession;
-import com.embabel.chatbot.memory.InMemoryChatMemory;
-import com.embabel.chatbot.options.ChatOptions;
+Every import in a chatbot example comes from one of these, each attested by a `package` declaration
+under `src/main`:
 
-// Build the chat memory
-var chatMemory = InMemoryChatMemory.builder().build();
+| Package | Attested members |
+|---|---|
+| `com.embabel.chat` | `Chatbot`, `ChatSession`, `ChatTrigger`, `Conversation`, `Message`, `BaseMessage`, `UserMessage`, `AssistantMessage`, `SystemMessage`, `UserMessageBuilder`, `MessageRole`, `ContentPart` (+ `TextPart`, `MediaPart`, `ImagePart`, `DocumentPart`), `ToolCall`, `ToolResultMessage`, `AssistantMessageWithToolCalls`, `Asset`, `AssetTracker`, `AssetView`, `MergedAssetView`, `ConversationFactory`, `ConversationFactoryProvider`, `ConversationStoreType`, `MapConversationFactoryProvider`, `SimpleMessageFormatter`, `WindowingConversationFormatter`, `TokenBudgetConversationFormatter`, `EmptyLlmResponseException` |
+| `com.embabel.chat.agent` | `AgentProcessChatbot`, `AgentProcessChatSession`, `DefaultChatAgentBuilder`, `BlackboardFormatter`, `DefaultBlackboardFormatter`, `BlackboardEntryFormatter`, `DefaultBlackboardEntryFormatter`, `ConversationStatus`, `ConversationContinues`, `ConversationOver` |
+| `com.embabel.chat.event` | `MessageEvent`, `MessageStatus` |
+| `com.embabel.chat.support` | `InMemoryConversation`, `InMemoryConversationFactory`, `InMemoryAssetTracker`, `EventPublishingConversation`, `AssetAddingTool` |
+| `com.embabel.chat.support.console` | `ChatConsole`, `ConsoleOutputChannel` |
+| `com.embabel.agent.rag.tools` | `ToolishRag` (`rag/tools/ToolishRag.kt`), `RagOptions`, `RagServiceReference` |
+| `com.embabel.agent.rag.service` | `RagService`, `RagRequest`, `RagResponse`, `RagHint`, `RagResponseEnhancer`, `FacetedRagService`, `NavigableRagService` |
+| `com.embabel.agent.rag.filter` | the RAG filter surface |
 
-// Build the chat session
-var chatSession = ChatSession.builder()
-    .chatMemory(chatMemory)
-    .build();
+**These names appeared in earlier revisions of this guide and do not exist.** Each was checked against
+`src/main` of `embabel/embabel-agent` and has no declaration and no import anywhere in it:
+`ChatbotBuilder`, `ChatOptions`, `ChatMessage`, `ChatHistoryStore`, `InMemoryChatMemory`,
+`ChatExtension`, `Guardrails`, `RagBuilder`, `FileRagSource`, `FilterBuilder`, `PromptTemplate`. The
+packages they were shown under — `com.embabel.chatbot.*`, `com.embabel.agent.chatbot.*`,
+`com.embabel.agent.knowledge.*`, `com.embabel.rag.*` — likewise occur zero times, and so does the
+`chatbot.yaml` configuration tree those examples implied. The builder idiom they used
+(`ChatbotBuilder.builder().chatMemory(…).chatSession(…).chatOptions(…).build()`) belongs to a
+*different library* and has never been Embabel's; do not reconstruct it. Note too that there is **no
+`ChatStore` type** — the persistence artifact is `embabel-chat-store` and the enum is
+`ConversationStoreType`.
 
-// Configure options
-var chatOptions = ChatOptions.builder()
-    .model("qwen-plus")
-    .maxTokens(2048)
-    .temperature(0.7)
-    .build();
+## Step 1 — declare the action class
 
-// Build the chatbot
-var chatbot = ChatbotBuilder.builder()
-    .chatMemory(chatMemory)
-    .chatSession(chatSession)
-    .chatOptions(chatOptions)
-    .build();
-
-// Chat!
-String response = chatbot.chat("What is RAG?");
-System.out.println(response);
-```
-
-## Step 2: Add RAG (Retrieval-Augmented Generation)
-
-Give your chatbot access to external knowledge:
-
-```java
-import com.embabel.rag.builder.RagBuilder;
-import com.embabel.rag.source.FileRagSource;
-import com.embabel.rag.filter.FilterBuilder;
-import com.embabel.rag.template.PromptTemplate;
-
-// Define document sources
-var fileSource = FileRagSource.builder()
-    .directory(Paths.get("/path/to/documents"))
-    .fileExtensions(List.of(".pdf", ".txt", ".md"))
-    .build();
-
-// Build RAG system
-var rag = RagBuilder.builder()
-    .ragSources(List.of(fileSource))
-    .filterBuilder(FilterBuilder.builder().build())
-    .build();
-
-// Add RAG to the chatbot
-var chatbot = ChatbotBuilder.builder()
-    .chatMemory(chatMemory)
-    .chatSession(chatSession)
-    .chatOptions(chatOptions)
-    .rag(rag)
-    .build();
-```
-
-Now when users ask questions, the chatbot retrieves relevant documents and answers based on them.
-
-## Step 3: Add Guardrails
-
-Protect against prompt injection, jailbreaks, and harmful content:
+A chatbot is an `@EmbabelComponent` whose `@Action` methods the platform discovers. This is the
+documented example, verbatim from `reference/chatbots/page.adoc:432-468`:
 
 ```java
-import com.embabel.chatbot.guardrails.Guardrails;
+@EmbabelComponent
+public class ChatActions {
 
-var guardrails = Guardrails.builder()
-    .addPromptInjectionGuard()
-    .addJailbreakGuard()
-    .addContentModerationGuard()
-    .build();
+    private final ToolishRag toolishRag;
+    private final RagbotProperties properties;
 
-var chatbot = ChatbotBuilder.builder()
-    .chatMemory(chatMemory)
-    .chatSession(chatSession)
-    .chatOptions(chatOptions)
-    .guardrails(guardrails)
-    .build();
-```
+    public ChatActions(
+            SearchOperations searchOperations,
+            RagbotProperties properties) {
+        this.toolishRag = new ToolishRag(
+                "sources",
+                "Sources for answering user questions",
+                searchOperations
+        );
+        this.properties = properties;
+    }
 
-## Step 4: Enable Reasoning (Thinking Mode)
-
-For complex reasoning tasks, enable the model's thinking capability:
-
-```java
-var chatOptions = ChatOptions.builder()
-    .model("qwen-plus")
-    .thinking(true)
-    .thinkingBudget(2048)
-    .build();
-```
-
-## Step 5: Structured Output
-
-Force JSON responses for programmatic consumption:
-
-```java
-var chatOptions = ChatOptions.builder()
-    .responseFormat("json")
-    .build();
-
-String jsonResponse = chatClient.chat(chatSession, "List the top 3 features as JSON", chatOptions);
-// Parse the JSON response with your preferred library
-```
-
-## Step 6: Custom Chat Extension
-
-Add pre-processing logic that runs before every LLM call:
-
-```java
-import com.embabel.chatbot.extension.ChatExtension;
-import com.embabel.chatbot.message.ChatMessage;
-
-public class MyChatExtension implements ChatExtension {
-    @Override
-    public List<ChatMessage> apply(List<ChatMessage> messages, ChatOptions options) {
-        // Add system context, rewrite messages, inject metadata
-        return messages;
+    @Action(canRerun = true, trigger = UserMessage.class)   // <1> <2>
+    void respond(
+            Conversation conversation,                        // <3>
+            ActionContext context) {
+        var assistantMessage = context.ai()
+                .withLlm(properties.chatLlm())
+                .withReference(toolishRag)
+                .rendering("ragbot")
+                .respondWithSystemPrompt(conversation, Map.of(
+                        "properties", properties
+                ));
+        context.sendMessage(conversation.addMessage(assistantMessage));   // <4>
     }
 }
-
-var chatbot = ChatbotBuilder.builder()
-    .chatMemory(chatMemory)
-    .chatSession(chatSession)
-    .chatOptions(chatOptions)
-    .chatExtension(new MyChatExtension())
-    .build();
 ```
 
-## Step 7: Chat Actions (Tool Calling)
+`ChatActions` here is the **documentation's own example class name**, not a library type — you write
+this class yourself; there is no `ChatActions` to import. `<1>` `canRerun` lets the action run again for
+the same input; `<2>` `trigger = UserMessage.class` is what makes it fire on a user message (see *How
+Message Triggering Works*, `page.adoc:792`). `<3>` the `Conversation` is injected. `<4>` replies go out
+through `context.sendMessage(...)` and reach the session's `OutputChannel`.
 
-Let the chatbot call external tools and functions:
+## Step 2 — publish a `Chatbot` bean
+
+`Chatbot` is an interface (`page.adoc:60-69`):
 
 ```java
-import com.embabel.chatbot.actions.ChatActions;
-
-var chatActions = ChatActions.builder()
-    .register("search", (session, args) -> {
-        String query = (String) args.get("query");
-        return searchService.search(query);
-    })
-    .register("calculate", (session, args) -> {
-        String expression = (String) args.get("expression");
-        return calculator.eval(expression);
-    })
-    .build();
-
-var chatbot = ChatbotBuilder.builder()
-    .chatMemory(chatMemory)
-    .chatSession(chatSession)
-    .chatOptions(chatOptions)
-    .chatActions(chatActions)
-    .build();
+public interface Chatbot {
+    ChatSession createSession(User user, OutputChannel outputChannel,
+                               String contextId, String conversationId);
+    ChatSession findSession(String conversationId);
+}
 ```
 
-## Step 8: Persist Chat History
-
-Store conversations in a database for continuity across restarts:
+Publish the shipped implementation from `com.embabel.chat.agent`, verbatim from `page.adoc:512-536`:
 
 ```java
-import com.embabel.chatbot.store.ChatHistoryStore;
-
-// Use a custom store
-var chatHistoryStore = new PostgresChatHistoryStore(jdbcTemplate);
-
-var chatMemory = InMemoryChatMemory.builder()
-    .chatHistoryStore(chatHistoryStore)
-    .build();
+@Configuration
+class ChatConfiguration {
+    @Bean
+    Chatbot chatbot(AgentPlatform agentPlatform) {
+        return AgentProcessChatbot.utilityFromPlatform(agentPlatform);   // <1> <2>
+    }
+}
 ```
 
-See [02-chat-history-store.md](./02-chat-history-store.md) for the full store API and a PostgreSQL example.
-
-## Step 9: Configure with YAML (Optional)
-
-For configuration-driven chatbots, use `chatbot.yaml`:
-
-```yaml
-chatbot:
-  model: qwen-plus
-  maxTokens: 2048
-  temperature: 0.7
-  rag:
-    sources:
-      - type: file
-        directory: ./documents
-        fileExtensions: [".pdf", ".txt", ".md"]
-  guardrails:
-    - type: promptInjection
-    - type: jailbreak
-  thinking:
-    enabled: true
-    budget: 1024
-  memory:
-    type: inMemory
-    maxMessages: 50
-```
-
-## Step 10: Advanced RAG — Filters and Prompt Templates
-
-### Filtered RAG
-
-Retrieve only relevant documents:
+`<1>` uses Utility AI planning to select the action; `<2>` action discovery scans
+`@EmbabelComponent` classes on the platform. For debugging there is a documented overload taking a
+conversation factory and a verbosity config (`page.adoc:552-558`):
 
 ```java
-import com.embabel.rag.filter.Filter;
-
-Filter filter = FilterBuilder.builder()
-    .addFilter("source", "products.pdf")
-    .addSimilarityFilter("pricing", 0.7)
-    .build();
-
-var rag = RagBuilder.builder()
-    .ragSources(List.of(fileSource))
-    .filterBuilder(FilterBuilder.builder().build())
-    .build();
+@Bean
+Chatbot chatbot(AgentPlatform agentPlatform) {
+    return AgentProcessChatbot.utilityFromPlatform(
+            agentPlatform,
+            new InMemoryConversationFactory(),      // <1>
+            new Verbosity().showPrompts()           // <2>
+    );
+}
 ```
 
-### Custom Prompt Templates
+There is **no `ChatbotBuilder`** — the `utilityFromPlatform(...)` overloads are the construction path.
+`DefaultChatAgentBuilder` (`com.embabel.chat.agent`) is the agent-process builder the chatbot delegates
+to internally, not an entry point to call from your configuration.
 
-Control exactly how the RAG prompt is constructed:
+## Step 3 — drive a session
+
+Verbatim from `page.adoc:741-780`; the four `createSession` shapes and the message trigger:
 
 ```java
-import com.embabel.rag.template.PromptTemplate;
+// New session (fresh state, generated conversation ID)
+ChatSession session = chatbot.createSession(user, outputChannel, null, null);                     // <1>
 
-var promptTemplate = PromptTemplate.builder()
-    .template("""
-        Context:
-        {% for source in sources %}
-        [Source: {{ source.metadata.source }}]
-        {{ source.content }}
-        {% endfor %}
+// Session with context (restores blackboard state)
+ChatSession withContext = chatbot.createSession(user, outputChannel, "user-workspace-123", null);  // <2>
 
-        Question: {{ question }}
+// Restore existing conversation by ID
+ChatSession restored = chatbot.createSession(user, outputChannel, null, savedConversationId);      // <3>
 
-        Answer based on the context above:
-        """)
-    .build();
+// Both context and conversation restoration
+ChatSession full = chatbot.createSession(user, outputChannel, "user-workspace-123", savedConversationId); // <4>
 
-var rag = RagBuilder.builder()
-    .ragSources(List.of(fileSource))
-    .promptTemplate(promptTemplate)
-    .build();
+session.onUserMessage(new UserMessage("What does this document say about taxes?"));                // <5>
+// Response is automatically sent to the outputChannel
 ```
 
-See [03-rag-architecture.md](./03-rag-architecture.md) for the full RAG API.
+In Kotlin the same call uses named optional arguments:
+`chatbot.createSession(user, outputChannel, contextId = "project-alpha")`.
+
+The `contextId` is the state-resumption handle (`page.adoc:89-153`): the platform looks up saved objects
+for that context, seeds them into the new session's **blackboard**, and changes can be persisted back so
+the next session with the same `contextId` restores them. Blackboard rendering is
+`BlackboardFormatter` / `DefaultBlackboardFormatter` and `BlackboardEntryFormatter` /
+`DefaultBlackboardEntryFormatter` in `com.embabel.chat.agent`.
+
+## Persisting conversations
+
+Two storage modes, selected through `ConversationStoreType` (`page.adoc:594-606`):
+
+| Value | Meaning |
+|---|---|
+| `IN_MEMORY` | stored in memory only — fast, for tests and ephemeral sessions |
+| `STORED` | persisted to a backing store (e.g. Neo4j); requires the `embabel-chat-store` dependency |
+
+Add the dependency (`groupId` is `com.embabel.chat`, `page.adoc:673-679`):
+
+```xml
+<dependency>
+    <groupId>com.embabel.chat</groupId>
+    <artifactId>embabel-chat-store</artifactId>
+</dependency>
+```
+
+It provides `StoredConversationFactory` (conversations that persist to Neo4j), `StoredConversation`
+(with async persistence), title generation, and the persistence lifecycle events — a `MessageEvent`
+(`com.embabel.chat.event`) carrying a `MessageStatus` of `PERSISTED` or `PERSISTENCE_FAILED`. Wire it by
+injecting `ConversationFactoryProvider` and passing the matching factory when building the chatbot;
+`MapConversationFactoryProvider` is the shipped in-memory provider and
+`InMemoryConversationFactory` (`com.embabel.chat.support`) is the in-memory factory. There is **no
+`ChatHistoryStore` type**, no `PostgresChatHistoryStore`, and no `ChatExtension` hook — for
+pre-processing around an LLM call use an `@Action` on the chatbot or an `AssetAddingTool`.
+
+For the store API in depth see [02-conversation-store.md](./02-conversation-store.md).
+
+## Grounding a chatbot with RAG
+
+The attested grounding collaborator is `ToolishRag` (`com.embabel.agent.rag.tools`, file
+`rag/tools/ToolishRag.kt`), constructed as `new ToolishRag(name, description, searchOperations)` and
+attached with `.withReference(toolishRag)` on the `Ai` chain, exactly as in Step 1. Passing a reference
+through `withReferences(...)` puts the relevant content into the prompt and contributes the search tool
+so the model can ask for more.
+
+There is **no `RagBuilder`, no `FileRagSource`, no `FilterBuilder` and no `PromptTemplate`.** Ingestion
+goes through `com.embabel.agent.rag.ingestion` (with `.ingestion.policy` and `.ingestion.transform`),
+filtering through `com.embabel.agent.rag.filter`, and the service contracts are `RagService` /
+`RagRequest` / `RagResponse` / `RagHint` in `com.embabel.agent.rag.service`. Prompt rendering inside a
+chatbot action is `.rendering("ragbot")` on the `Ai` chain together with
+`respondWithSystemPrompt(conversation, modelMap)` — templates are resolved from the template resources
+the platform is configured with, not from a `PromptTemplate` object you build. See
+[03-rag-architecture.md](./03-rag-architecture.md) for the RAG surface.
+
+## Common Pitfalls
+
+1. **Importing from `com.embabel.chatbot.*` or `com.embabel.rag.*`.** Neither package exists. The
+   chatbot is `com.embabel.chat*`; the RAG surface is `com.embabel.agent.rag.*`.
+2. **Looking for a `ChatbotBuilder`.** Use the `AgentProcessChatbot.utilityFromPlatform(...)` overloads.
+3. **Hand-rolling the reply path.** `context.sendMessage(conversation.addMessage(msg))` is the
+   documented shape; the response reaches the `OutputChannel` you passed to `createSession`.
+4. **Omitting `trigger` on `@Action`.** Without a trigger such as `UserMessage.class` the action will
+   not fire on user input the way the guide's example does.
+5. **Expecting durable conversations without `embabel-chat-store`.** `ConversationStoreType.STORED`
+   requires that dependency; the in-memory path is `InMemoryConversationFactory`.
+6. **Using `ChatMessage`.** It does not exist. The types are `Message` and its subtypes `UserMessage`,
+   `AssistantMessage`, `SystemMessage`, `ToolResultMessage`.
+7. **Confusing the blackboard with a store.** The blackboard is per-session state seeded via
+   `contextId`; conversation persistence is the `ConversationFactory` concern.
+8. **Copying the `@Agent`/`@State` surface from the agent skill.** Those annotations belong to
+   embabel-agent; the chatbot side is `@EmbabelComponent` + `@Action` (see
+   [06-chatbot-patterns.md](./06-chatbot-patterns.md)).

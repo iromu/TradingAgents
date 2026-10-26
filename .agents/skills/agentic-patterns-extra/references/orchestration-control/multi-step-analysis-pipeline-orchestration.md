@@ -8,6 +8,9 @@ source: "https://github.com/shmlkv/dna-claude-analysis"
 tags: [pipeline, multi-step, orchestration, report-generation, data-analysis, claude-code]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/multi-step-analysis-pipeline-orchestration.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Complex data analysis tasks often require running many sequential or parallel processing steps, each producing intermediate artifacts that feed into subsequent stages. Manually coordinating these steps — ensuring correct ordering, aggregating outputs, and producing a final unified result — is tedious and error-prone. Traditional scripting approaches hardcode the pipeline, making it inflexible when steps need to be added, reordered, or debugged.

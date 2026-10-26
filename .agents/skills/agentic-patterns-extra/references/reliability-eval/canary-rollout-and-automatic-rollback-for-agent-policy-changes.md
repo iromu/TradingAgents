@@ -8,6 +8,9 @@ source: "https://martinfowler.com/bliki/CanaryRelease.html"
 tags: [canary, rollback, reliability, policy, evaluation]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/canary-rollout-and-automatic-rollback-for-agent-policy-changes.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Agent behavior changes frequently through prompt updates, tool policies, routing rules, and evaluator thresholds. Even small policy edits can produce broad regressions in cost, latency, safety, or task quality. Full rollouts without staged exposure make rollback slow and user impact large.

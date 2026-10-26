@@ -1,5 +1,16 @@
 # Proposition Pipeline Reference
 
+## Table of Contents
+
+- [Pipeline Architecture](#pipeline-architecture)
+- [Core Components](#core-components) — `PropositionExtractor` / `LlmPropositionExtractor`,
+  `PropositionReviser` / `LlmPropositionReviser`, the `MentionFilter` implementations
+- [Building the Pipeline](#building-the-pipeline) — the immutable `with*` construction, minimal and full
+- [Processing Sources](#processing-sources) — `process()` vs `processOnce()`, incremental processing
+- [Source Analysis Context](#source-analysis-context) — the `with*` data class, `ContextId`
+- [Event-Driven Integration](#event-driven-integration) — `ConversationAnalysisRequestEvent`
+- [Common Pitfalls](#common-pitfalls)
+
 ## Pipeline Architecture
 
 ```
@@ -14,32 +25,42 @@ The pipeline is the core of DICE. It processes text sources, extracts propositio
 
 Extracts typed propositions from text using an LLM.
 
-```java
-public interface PropositionExtractor {
-    PropositionResult extract(String text, SourceAnalysisContext context);
-}
+The pipeline type is `PropositionPipeline`, whose attested entry points are:
+
 ```
++process(chunks, context)                       PropositionResults
++processOnce(text, sourceId, context, historyStore)  ChunkPropositionResult?
+```
+
+Note the plural/singular split: the batch call yields `PropositionResults`, the deduplicated single
+call yields a nullable `ChunkPropositionResult`. **There is no singular `PropositionResult` type.**
+`process(...)` runs in two stages and calls `processChunk()` per chunk, isolating a failing chunk into
+a typed failure rather than failing the whole run. `PropositionPipeline.process(...)` wraps your
+resolver with an `InMemoryEntityResolver`. See `how-to/extract-from-documents.adoc`.
 
 #### LlmPropositionExtractor
 
 ```java
 @Bean
-PropositionExtractor propositionExtractor(Ai ai, LlmOptions llmOptions) {
-    return LlmPropositionExtractor.builder()
-        .withLlm(llmOptions)
-        .withAi(ai)
-        .withPropositionRepository(propositionRepository)
-        .withSchemaAdherence(SchemaAdherence.STRICT)
-        .withTemplate("dice/extract_user_propositions")
-        .build();
+LlmPropositionExtractor llmPropositionExtractor(AiBuilder aiBuilder, ...) {
+    return LlmPropositionExtractor
+            .withLlm(llmOptions)
+            .withAi(ai)
+            .withPropositionRepository(propositionRepository)
+            .withSchemaAdherence(SchemaAdherence.DEFAULT)
+            .withTemplate("dice/extract_impromptu_user_propositions");
 }
 ```
+
+Verbatim from `README.md:143-150`. Note there is no `.builder()` and no terminal `.build()` — the
+static `withX(...)` chain *is* the constructor.
 
 Key configuration:
 - **withLlm** — LLM options (model, temperature, etc.)
 - **withAi** — Ai instance for LLM interaction
 - **withPropositionRepository** — Repository for context-aware extraction
-- **withSchemaAdherence** — STRICT (enforce schema) or LOOSE (flexible)
+- **withSchemaAdherence** — the attested `SchemaAdherence` members are `STRICT`, `DEFAULT` and
+  `RELAXED`. There is **no** `LOOSE` member; `RELAXED` is the permissive one.
 - **withTemplate** — Resource path to extraction prompt template
 
 ### PropositionReviser
@@ -66,13 +87,14 @@ Revision outcomes:
 ```java
 @Bean
 PropositionReviser propositionReviser(Ai ai, LlmOptions llmOptions) {
-    return LlmPropositionReviser.builder()
+    return LlmPropositionReviser
         .withLlm(llmOptions)
         .withAi(ai)
-        .withPropositionRepository(propositionRepository)
-        .build();
+        .withPropositionRepository(propositionRepository);
 }
 ```
+
+Same shape as the extractor: a static `withX(...)` chain, no builder, no `.build()`.
 
 ### MentionFilter
 
@@ -115,11 +137,16 @@ Combines multiple filters.
 MentionFilter mentionFilter(DataDictionary schema, PropositionRepository repository) {
     return new CompositeMentionFilter(List.of(
         new SchemaValidatedMentionFilter(schema),
-        new PropositionDuplicateFilter(repository),
-        new ObservableMentionFilter(new LoggingMentionFilterObserver())
+        new PropositionDuplicateFilter(repository)
     ));
 }
 ```
+
+`ObservableMentionFilter` exists, but the `LoggingMentionFilterObserver` type shown in earlier
+revisions of this guide is **not attested** anywhere in the upstream corpus, so no observer name is
+given here — supply your own observer implementation. For reacting to analysis, the attested route is
+the Spring events: `SourceAnalysisRequestEvent`, `ConversationAnalysisRequestEvent` and `DiceEvent`
+(see `how-to/observe-and-react.adoc`).
 
 ## Building the Pipeline
 
@@ -128,11 +155,14 @@ MentionFilter mentionFilter(DataDictionary schema, PropositionRepository reposit
 ```java
 @Bean
 PropositionPipeline propositionPipeline(PropositionExtractor extractor) {
-    return PropositionPipeline.builder()
-        .withExtractor(extractor)
-        .build();
+    return PropositionPipeline.withExtractor(extractor);
 }
 ```
+
+The pipeline is an immutable `with*` data class: each wither returns a **new** instance, so reassign
+the result. There is **no** `PropositionPipeline.builder() … .build()` form and **no**
+`LlmPropositionExtractor.builder()` / `LlmPropositionReviser.builder()` either (all 0 hits in the
+corpus) — every one of these types is built by a static `withX(...)` chain with no terminal `.build()`.
 
 ### Full Pipeline (Recommended)
 
@@ -144,11 +174,10 @@ PropositionPipeline propositionPipeline(
         PropositionRepository propositionRepository,
         MentionFilter mentionFilter) {
 
-    return PropositionPipeline.builder()
+    return PropositionPipeline
         .withExtractor(propositionExtractor)
         .withRevision(propositionReviser, propositionRepository)
-        .withMentionFilter(mentionFilter)
-        .build();
+        .withMentionFilter(mentionFilter);
 }
 ```
 
@@ -157,18 +186,19 @@ PropositionPipeline propositionPipeline(
 ### process() — Process All Content
 
 ```java
-PropositionResult result = pipeline.process(fullText, context);
-result.persist(propositionRepository, entityRepository);
+PropositionResults results = pipeline.process(chunks, context);
 ```
 
-Processes all content in the source. May extract many propositions.
+Processes all content in the source and may extract many propositions. The batch call returns
+`PropositionResults` (plural). `process()` isolates a failing chunk into a typed failure, so one bad
+chunk does not sink the run.
 
 ### processOnce() — Deduplicated Processing
 
 ```java
 InMemoryChunkHistoryStore historyStore = new InMemoryChunkHistoryStore();
 
-PropositionResult result = pipeline.processOnce(
+ChunkPropositionResult result = pipeline.processOnce(
     text,
     "source-123",
     context,
@@ -176,73 +206,108 @@ PropositionResult result = pipeline.processOnce(
 );
 ```
 
-Uses hash-based deduplication to prevent reprocessing identical content. The `historyStore` tracks which content has been processed.
+Returns a **nullable** `ChunkPropositionResult` — null when the chunk was already analysed. Uses
+hash-based deduplication to prevent reprocessing identical content; `ChunkHistoryStore` records which
+chunks have been analysed, and `dice-storage-autoconfigure` provides a bean for whichever backend you
+selected.
 
 ### Incremental Processing
 
-For streaming or windowed analysis:
+For a corpus that grows, use incremental analysis rather than reprocessing everything. The attested
+types are `IncrementalAnalyzer<T,R>` (interface), `AbstractIncrementalAnalyzer` (the base with
+windowing), `PropositionIncrementalAnalyzer`, `EntityIncrementalAnalyzer`, `IncrementalSource<T>`,
+`IncrementalSourceFormatter<T>`, `ConversationSource`, `MessageFormatter`, `ChunkHistoryStore`,
+`WindowConfig` and `ContentHasher` (package `com.embabel.dice.incremental`).
 
-```java
-@Bean
-IncrementalAnalyzer<String, PropositionResult> incrementalAnalyzer(
-        PropositionExtractor extractor,
-        PropositionReviser reviser,
-        PropositionRepository repository) {
+Construction is a plain **constructor with named arguments** — there is no `.builder()` on any of
+these (0 hits). Verbatim from `README.md:326-331`:
 
-    return AbstractIncrementalAnalyzer.builder(String.class, PropositionResult.class)
-        .withExtractor(extractor)
-        .withReviser(reviser, repository)
-        .withWindowConfig(WindowConfig.builder()
-            .withWindowSize(20)
-            .withOverlapSize(5)
-            .build())
-        .build();
-}
+```kotlin
+val analyzer = PropositionIncrementalAnalyzer(
+    pipeline = pipeline,
+    historyStore = historyStore,
+    formatter = MessageFormatter.INSTANCE,
+    config = WindowConfig(windowSize = 20, overlapSize = 2, triggerInterval = 4),
+    contentHasher = Sha256ContentHasher,  // pluggable
+)
+
+// Returns null if window content was already processed
+val result = analyzer.analyze(source, context)
 ```
+
+`AbstractIncrementalAnalyzer` applies dedup automatically inside its windowed processing: each
+window's formatted text is hashed and checked against the `ChunkHistoryStore` before processing, and
+`analyze(...)` returns **null** when the window content was already seen. An earlier revision of this
+guide showed `AbstractIncrementalAnalyzer.builder(String.class, PropositionResults.class)…build()` and
+withers named `withWindowConfig` / `withWindowSize` / `withOverlapSize` / `withReviser` — none of those
+exist; windowing is configured by passing a `WindowConfig` to the constructor as above.
 
 ## Source Analysis Context
 
+`SourceAnalysisContext` is an immutable `with*` data class. There is **no** `builder()…build()` form
+and **no** `ContextId.of(...)` factory — `ContextId` is a Kotlin value class in
+`com.embabel.agent.core`, constructed from its string (see `memory.md`). Attested form, verbatim from
+`how-to/analyze-conversations.adoc`:
+
 ```java
-SourceAnalysisContext context = SourceAnalysisContext.builder()
-    .withContextId(ContextId.of("user-123-session-456"))
-    .withEntityResolver(entityResolver)
-    .withSchema(dataDictionary)
-    .withRelations(relations)
-    .withKnownEntities(KnownEntity.asCurrentUser(currentUser))
-    .build();
+var context = SourceAnalysisContext
+        .withContextId(event.user.currentContext())
+        .withEntityResolver(entityResolverForUser(event.user))
+        .withSchema(dataDictionary)
+        .withRelations(relations)
+        .withKnownEntities(KnownEntity.asCurrentUser(event.user));
 ```
+
+Each `withX` returns a new instance, so either start from `SourceAnalysisContext.withX(...)` or from
+`new SourceAnalysisContext(dataDictionary, resolver, contextId)` and chain the withers. There is no
+terminal `.build()` call.
 
 Key context properties:
 - **contextId** — Scopes propositions to a user/session
 - **entityResolver** — Resolves entity mentions to canonical entities
-- **schema** — DataDictionary for type validation
+- **schema** — DataDictionary for type validation (a `com.embabel.agent.core` type, not a DICE one)
 - **relations** — Known relationships between entities
 - **knownEntities** — Pre-defined entities (e.g., current user)
 
 ## Event-Driven Integration
 
-Process propositions from Spring events:
+Conversation analysis costs an LLM call, so it should not sit in the request path —
+`ConversationAnalysisRequestEvent` exists for exactly this. Attested form, verbatim from
+`how-to/analyze-conversations.adoc`:
 
 ```java
 @Async
 @Transactional
 @EventListener
-public void onDocumentProcessed(DocumentProcessedEvent event) {
-    var context = SourceAnalysisContext.builder()
-        .withContextId(ContextId.of(event.userId()))
-        .withEntityResolver(entityResolver)
-        .withSchema(dataDictionary)
-        .build();
+public void onConversationExchange(ConversationAnalysisRequestEvent event) {
+    var context = SourceAnalysisContext
+            .withContextId(event.user.currentContext())
+            .withEntityResolver(entityResolverForUser(event.user))
+            .withSchema(dataDictionary)
+            .withRelations(relations)
+            .withKnownEntities(KnownEntity.asCurrentUser(event.user));
 
-    var result = pipeline.process(event.getContent(), context);
-    result.persist(propositionRepository, entityRepository);
+    var source = new ConversationSource(event.conversation);
+    var result = analyzer.analyze(source, context);
 }
 ```
 
+Two corrections against earlier revisions of this guide:
+
+- The listener shown previously, `onDocumentProcessed(DocumentProcessedEvent)`, named a type that does
+  **not** exist. The attested events are `SourceAnalysisRequestEvent`,
+  `ConversationAnalysisRequestEvent` and `DiceEvent`.
+- `SourceAnalysisContext` is a `with*` data class: either `SourceAnalysisContext.withX(...)` or
+  `new SourceAnalysisContext(dataDictionary, resolver, contextId).withX(...)`. There is **no**
+  `SourceAnalysisContext.builder() … .build()` form, and **no** `ContextId.of(...)` factory.
+
 ## Common Pitfalls
 
-1. **Not calling persist()** — process() returns results but doesn't auto-persist. Call `result.persist(repository, entityRepository)`.
+1. **Not persisting the results** — `process()` returns `PropositionResults` but does not auto-persist;
+   persistence goes through the repository (`persist(...)` is attested as an operation).
 2. **Not providing an entity resolver** — Without one, entity mentions create new entities every time.
+   `PropositionPipeline.process(...)` wraps your resolver with an `InMemoryEntityResolver`.
 3. **Not scoping by contextId** — Without context scoping, propositions from different users mix together.
-4. **Using LOOSE schema adherence** — Allows arbitrary proposition structures. Use STRICT for production.
+4. **Using `SchemaAdherence.RELAXED` in production** — It admits arbitrary proposition structures. Use
+   `STRICT` (or `DEFAULT`) for production. There is no `LOOSE` member.
 5. **Not using deduplication** — processOnce with a historyStore prevents reprocessing identical content.

@@ -9,6 +9,9 @@ source: "https://github.com/RioTheGreat-ai/agentfund-skill"
 tags: [resource-funding, escrow, milestones, agent-governance, budget-controls]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/agentfund-crowdfunding.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Autonomous agent teams can need ongoing resources (compute, API spend, tools) over many steps. Without a funding model that enforces guardrails, they either require heavy human intervention or risk budget runaway.

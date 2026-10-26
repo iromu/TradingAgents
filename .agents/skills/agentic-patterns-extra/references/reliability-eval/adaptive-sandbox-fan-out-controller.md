@@ -94,4 +94,4 @@ Concrete heuristics (example):
 * [Labruno: Scaling number of parallel sandboxes + judging winners (video)](https://www.youtube.com/watch?v=zuhHQ9aMHV0) — **Note: Uses static `MAX_SANDBOXES` rather than true signal-driven adaptation**
 * [Labruno (GitHub)](https://github.com/nibzard/labruno-agent) — Parallel execution with post-hoc judging, not adaptive fanout
 * [OpenClaw Orchestrator](https://github.com/zeynepyorulmaz/openclaw-orchestrator) — Closest verified implementation; LLM decides next steps based on accumulated results
-* Related patterns: [Swarm Migration Pattern](swarm-migration-pattern.md) (batch tuning, resource caps), [Sub-Agent Spawning](sub-agent-spawning.md) (switch to decomposition when needed)
+* Related patterns: [Swarm Migration Pattern](../orchestration-control/swarm-migration-pattern.md) (batch tuning, resource caps), [Sub-Agent Spawning](../orchestration-control/sub-agent-spawning.md) (switch to decomposition when needed)

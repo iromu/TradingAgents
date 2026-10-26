@@ -8,6 +8,9 @@ source: "https://github.com/chernistry/bernstein"
 tags: [orchestration, multi-agent, parallel-execution, deterministic, test-driven, zero-llm-overhead]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/deterministic-zero-llm-orchestration.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Multi-agent coding systems typically spend LLM tokens on coordination — deciding which agent works on what, routing tasks, merging results. This coordination overhead adds cost, latency, and non-determinism where none is needed.

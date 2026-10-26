@@ -14,6 +14,9 @@ summary: >-
 updated_at: '2026-01-05'
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/context-minimization-pattern.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 In long agent sessions, raw user text and tool outputs often remain in-context long after they are needed. If those tokens include adversarial instructions, they can silently bias later reasoning steps, even when the current step is unrelated. This creates delayed prompt-injection risk and unnecessary context bloat.

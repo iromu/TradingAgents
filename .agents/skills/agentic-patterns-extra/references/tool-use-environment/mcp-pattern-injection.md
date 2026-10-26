@@ -8,6 +8,9 @@ source: "https://github.com/Rajathbharadwaj/langgraph-patterns-mcp"
 tags: [mcp, code-patterns, tool-injection, context-enhancement, langgraph]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/mcp-pattern-injection.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 AI coding assistants lack domain-specific knowledge about framework best practices. When building LangGraph agents, developers must repeatedly explain patterns, copy-paste from docs, or watch the AI reinvent suboptimal solutions. The assistant's training data is often outdated relative to fast-moving frameworks.

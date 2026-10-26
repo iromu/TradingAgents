@@ -22,6 +22,9 @@ summary: >-
 updated_at: '2026-01-05'
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/autonomous-workflow-agent-architecture.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Complex, long-running engineering workflows traditionally require extensive human oversight and intervention. Tasks like model training pipelines, infrastructure configuration, and multi-step deployment processes involve:

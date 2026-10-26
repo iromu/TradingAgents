@@ -22,6 +22,9 @@ summary: >-
 updated_at: '2026-01-05'
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/feature-list-as-immutable-contract.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Long-running agents exhibit several failure modes when tasked with building complete applications:
@@ -183,5 +186,5 @@ CRITICAL RULES:
 * [Anthropic Engineering: Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents)
 * [Action-Selector Pattern (Beurer-Kellner et al., 2025)](https://arxiv.org/abs/2506.08837)
 * Related: [Initializer-Maintainer Dual Agent Architecture](initializer-maintainer-dual-agent.md) — extends this pattern with two-agent lifecycle
-* Related: [Action-Selector Pattern](action-selector-pattern.md) — alternative approach using allowlists
-* Related: [Sandboxed Tool Authorization](sandboxed-tool-authorization.md) — complementary pattern for capability restriction
+* Related: [Action-Selector Pattern](../security-safety/action-selector-pattern.md) — alternative approach using allowlists
+* Related: [Sandboxed Tool Authorization](../security-safety/sandboxed-tool-authorization.md) — complementary pattern for capability restriction

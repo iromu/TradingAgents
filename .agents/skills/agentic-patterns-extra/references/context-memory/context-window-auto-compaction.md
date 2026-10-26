@@ -15,6 +15,9 @@ summary: >-
 updated_at: '2026-01-05'
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/context-window-auto-compaction.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Context overflow is a silent killer of agent reliability. When accumulated conversation history exceeds the model's context window:

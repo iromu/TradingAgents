@@ -10,6 +10,9 @@ summary: "Aggregate agent metadata across fragmented registries and protocols in
 updated_at: "2026-05-07"
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/cross-protocol-agent-discovery.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 The AI agent ecosystem is fragmented across multiple incompatible discovery protocols:
@@ -66,4 +69,4 @@ graph TD
 - [Model Context Protocol Specification](https://modelcontextprotocol.io) — Anthropic's protocol for LLM-tool integration
 - [agents.txt Specification](https://agentsprotocol.ai) — Convention for advertising agent capabilities
 - [Google A2A Protocol](https://github.com/google/A2A) — Agent-to-Agent communication protocol
-- Related catalogue patterns: [Tool Search Lazy Loading](tool-search-lazy-loading.md), [Progressive Tool Discovery](progressive-tool-discovery.md), [Static Service Manifest for Agents](static-service-manifest-for-agents.md)
+- Related catalogue patterns: [Tool Search Lazy Loading](../context-memory/tool-search-lazy-loading.md), [Progressive Tool Discovery](progressive-tool-discovery.md), [Static Service Manifest for Agents](static-service-manifest-for-agents.md)

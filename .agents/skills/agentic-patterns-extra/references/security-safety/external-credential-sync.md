@@ -9,6 +9,9 @@ source: "https://github.com/clawdbot/clawdbot/blob/main/src/agents/auth-profiles
 tags: [credentials, oauth, token-sync, keychain, cli-integration, auth-reuse]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/external-credential-sync.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Users manage AI API credentials across multiple tools—CLIs (Claude Code, Codex CLI), web portals, and local development environments. Manually re-entering credentials for each tool is friction-prone and leads to:

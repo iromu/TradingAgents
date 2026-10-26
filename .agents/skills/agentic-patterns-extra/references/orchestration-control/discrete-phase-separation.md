@@ -21,6 +21,9 @@ summary: >-
 updated_at: '2026-01-05'
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/discrete-phase-separation.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 When AI agents attempt to simultaneously research, plan, and implement solutions, context contamination occurs. Competing priorities within a single conversation degrade output quality as the agent struggles to balance exploration, strategic thinking, and execution. This results in incomplete research, unclear plans, and suboptimal implementations.

@@ -8,6 +8,9 @@ source: "https://youtu.be/1s_7RMG4O4U"
 tags: [reinforcement-learning, sample-efficiency, variance, data-quality, agent-rft]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/variance-based-rl-sample-selection.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Not all training samples are equally valuable for reinforcement learning. This pattern builds on **Prioritized Experience Replay** (Schaul et al., 2016), which introduced TD-error-based sample prioritization for value learning.

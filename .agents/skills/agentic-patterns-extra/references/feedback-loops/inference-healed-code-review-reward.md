@@ -8,6 +8,9 @@ source: "https://www.youtube.com/watch?v=Xkwok_XXQgw"
 tags: [reward-modeling, code-review, inference-healing, quality-assessment]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/inference-healed-code-review-reward.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Simple reward functions that only check for "all tests passed" fail to capture nuanced code quality issues (e.g., performance regressions, style violations, missing edge-case handling). A single binary signal at the end cannot guide the agent to produce maintainable, high-quality code.

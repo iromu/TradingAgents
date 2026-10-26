@@ -8,6 +8,9 @@ source: "https://www.youtube.com/watch?v=Xkwok_XXQgw"
 tags: [CI, coding-agent, asynchronous, test-driven, feedback]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/coding-agent-ci-feedback-loop.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 When a coding agent tackles multi-file refactors or feature additions, running tests and waiting for test feedback **synchronously** ties up compute and prevents the agent from working on parallel tasks. The agent cannot easily improve code if it must halt until the entire suite finishes.

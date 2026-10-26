@@ -8,6 +8,9 @@ source: "https://simonwillison.net/2025/Jun/16/lethal-trifecta/"
 tags: [security, prompt-injection, threat-model, data-exfiltration]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/lethal-trifecta-threat-model.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Combining three agent capabilities—

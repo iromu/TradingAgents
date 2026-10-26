@@ -8,6 +8,9 @@ source: "https://llmstxt.org"
 tags: [service-discovery, agent-infrastructure, llms-txt, machine-readable, api-design, well-known, tool-discovery]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/static-service-manifest-for-agents.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Before an agent can use an API, it needs to know what the API offers. Today, agents typically learn about available services through hardcoded tool lists in their system prompt, runtime exploration of tool catalogs, or human-written documentation that must be parsed and interpreted. None of these scale well when agents need to interact with unfamiliar platforms that expose many services. The agent either wastes context window on a full catalog it may not need, or has no way to learn about the platform at all without human intervention.

@@ -8,6 +8,9 @@ source: "https://www.youtube.com/watch?v=Xkwok_XXQgw"
 tags: [patching, prompt-steering, tool-selection, coding-agent]
 ---
 
+<!-- Derived from: https://github.com/nibzard/awesome-agentic-patterns/tree/main/patterns/patch-steering-via-prompted-tool-selection.md (Apache-2.0). The text below is reproduced from that
+     source and is not original to this repository; keep this notice with any copy. -->
+
 ## Problem
 
 Coding agents with access to multiple patching or refactoring tools (e.g., text-based `apply_patch`, AST-based refactoring, semantic migration) may choose suboptimal tools if not explicitly guided. This leads to:

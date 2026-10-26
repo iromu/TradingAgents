@@ -1,316 +1,336 @@
-# GraphObjectManager — High-Level Annotated Model API Reference
+# GraphObjectManager -- High-Level Annotated Model API
 
 ## Table of Contents
 
 1. [Overview](#overview)
 2. [Annotations](#annotations)
-   - [@NodeFragment](#nodefragment)
-   - [@GraphView](#graphview)
-   - [@Root](#root)
-   - [@GraphRelationship](#graphrelationship)
-   - [@RelationshipFragment](#relationshipfragment)
-   - [@GraphPath](#graphpath)
-   - [@Count / @Aggregate](#count--aggregate)
-   - [@Default / @EmptyWhenAbsent](#default--emptywhenabsent)
 3. [Type-Safe DSL](#type-safe-dsl)
-4. [Loading and Saving](#loading-and-saving)
-5. [Polymorphic Relationships](#polymorphic-relationships)
-6. [Recursive Relationships](#recursive-relationships)
+4. [Loading, Saving, Deleting](#loading-saving-deleting)
+5. [Null Handling](#null-handling)
+6. [Polymorphic Relationships](#polymorphic-relationships)
+7. [Recursive Relationships & Paths](#recursive-relationships--paths)
+8. [Java Interoperability](#java-interoperability)
 
 ## Overview
 
-`GraphObjectManager` provides a high-level API for working with graph-mapped objects using annotated models. It generates efficient Cypher queries automatically and provides a type-safe DSL for filtering and ordering.
+`GraphObjectManager` maps annotated models to graph queries. It generates Cypher for you and
+exposes a type-safe DSL built on Kotlin context parameters (hence Kotlin 2.2.0+). It is created by
+`GraphObjectManagerFactory.get(database, type)`, which wraps a `PersistenceManager` and a
+`SessionManager`.
 
 ## Annotations
 
 ### @NodeFragment
 
-Maps a data class to a graph node.
-
 ```kotlin
 @NodeFragment(labels = ["Person"])
 data class Person(
-    @NodeId val uuid: String,    // Required: unique identifier
+    @NodeId val uuid: String,
     val name: String,
-    val bio: String?
+    val bio: String?,
 )
 ```
 
-| Attribute | Default | Description |
-|-----------|---------|-------------|
-| `labels` | `["ClassName"]` | Neo4j labels for the node |
+Single attribute: `labels: Array<String>`. It is deliberately **not** a 1-to-1 class-to-node
+mapping -- several fragments may describe overlapping slices of the same node.
 
-**Required properties on `@NodeId`:**
-- Must be a `String` or `UUID`
-- Used to identify nodes for updates and deletions
-- Drivine uses this to generate `MATCH (n {uuid: $uuid})` clauses
+`@NodeId` marks the identity property used for MERGE keys and load `WHERE` clauses. A
+`@GraphProperty("...")` on it overrides the on-disk name for both.
 
 ### @GraphView
-
-Composes a graph view from multiple fragments and relationships.
 
 ```kotlin
 @GraphView
 data class PersonCareer(
-    @Root val person: Person,  // Exactly one @Root required
+    @Root val person: Person,
     @GraphRelationship(type = "WORKS_FOR")
-    val employmentHistory: List<WorkHistory>
+    val employmentHistory: List<WorkHistory>,
 )
 ```
 
-| Attribute | Default | Description |
-|-----------|---------|-------------|
-| `name` | class name | View name (used for DSL generation) |
-
-**Rules:**
-- Exactly one field must be annotated with `@Root`
-- Other fields use `@GraphRelationship` to define edges
-- Collections are supported for multi-edge relationships
-
-### @Root
-
-Marks the root node of a `@GraphView`. Exactly one per view.
+`@GraphView` takes **no attributes** -- there is no `name` parameter. Exactly one field carries
+`@Root`; the rest describe edges.
 
 ### @GraphRelationship
 
-Defines a relationship edge in a `@GraphView`.
-
 ```kotlin
-@GraphRelationship(
-    type = "WORKS_FOR",
-    direction = Direction.OUTGOING,
-    cascade = CascadeType.NONE
-)
+@GraphRelationship(type = "WORKS_FOR", direction = Direction.OUTGOING, maxDepth = 1)
 val employmentHistory: List<WorkHistory>
 ```
 
-| Attribute | Default | Description |
-|-----------|---------|-------------|
-| `type` | required | Cypher relationship type |
-| `direction` | `Direction.OUTGOING` | `INCOMING` or `OUTGOING` |
-| `cascade` | `NONE` | Delete cascade policy |
-| `maxDepth` | 1 | For recursive relationships |
+| Attribute | Default | Notes |
+|-----------|---------|-------|
+| `type` | required | relationship type |
+| `direction` | `Direction.OUTGOING` | `OUTGOING` / `INCOMING` / `UNDIRECTED` |
+| `maxDepth` | `1` | expansion depth for recursive relationships |
+
+**There is no `cascade` attribute.** Cascade is a parameter on the call, not on the mapping --
+see [Loading, Saving, Deleting](#loading-saving-deleting).
+
+Field cardinality is the optionality signal: `List<T>` is a to-many edge, `T?` an optional
+single, `T` a required single (roots without it are filtered out of the view, and out of `count`).
 
 ### @RelationshipFragment
 
-Captures properties on relationship edges (not just target nodes):
+Captures properties carried by the edge itself, with the target as a field:
 
 ```kotlin
 @RelationshipFragment
 data class WorkHistory(
-    val startDate: LocalDate,  // Edge property
-    val role: String,           // Edge property
-    val target: Organization    // Target node
+    val startDate: LocalDate,   // edge property
+    val role: String,           // edge property
+    @JsonPacked val tags: List<String>? = null,
+    val target: Organization,
 )
 ```
 
-### @GraphPath
+`@JsonPacked` stores a collection as one JSON string -- the portable answer for engines without
+list property values (Neptune).
 
-Traverses multiple hops, mapping only the final node:
+### @GraphPath / @Hop
 
-```kotlin
-@GraphPath([
-    Hop("ACTED_IN",    Direction.OUTGOING, label = "Movie"),  // through Movie
-    Hop("DIRECTED_BY", Direction.OUTGOING),                   // to Director
-])
-val directors: List<Director>
-```
-
-### @Count
-
-Adds a count aggregate per root node:
+Multi-hop traversal that projects only the final node, skipping intermediaries:
 
 ```kotlin
-@Count("ACTED_IN")  // Count outgoing ACTED_IN relationships
-val movieCount: Long
+@GraphView
+data class ActorDirectors(
+    @Root val actor: Actor,
+    @GraphPath(hops = [
+        Hop("ACTED_IN",    Direction.OUTGOING, label = "Movie"),   // not mapped
+        Hop("DIRECTED_BY", Direction.OUTGOING),                    // projected
+    ])
+    val directors: List<Director>,
+)
 ```
 
-### @Aggregate
+Targets are de-duplicated. `Hop(type, direction, label)` -- `label` constrains intermediate hops;
+on the final hop the element type supplies the labels. A path is a fixed heterogeneous hop list,
+so `maxDepth` does not apply.
 
-Adds a computed aggregate per root node:
+### @Count / @Aggregate
+
+Per-root scalars computed in the load query, without materializing the collection:
 
 ```kotlin
-@Aggregate(AggregateFunction.AVG, type = "RATED", property = "score")
-val avgRating: Double
+@GraphView
+data class ActorStats(
+    @Root val actor: Actor,
+    @Count("ACTED_IN") val movieCount: Long,
+    @Aggregate(AggregateFunction.AVG, type = "RATED", property = "score") val avgRating: Double,
+)
 ```
 
-| AggregateFunction | Description |
-|-------------------|-------------|
-| `AVG` | Average |
-| `SUM` | Sum |
-| `MIN` | Minimum |
-| `MAX` | Maximum |
-| `COUNT` | Count (alias for `@Count`) |
+`AggregateFunction`: `COUNT`, `SUM`, `AVG`, `MIN`, `MAX`. `property` is required for
+SUM/AVG/MIN/MAX and ignored for COUNT. Both are single-hop only; for multi-hop use `@GraphPath`
+and aggregate in the application. `@Count(type, direction)` is shorthand for
+`@Aggregate(COUNT, type, direction)`.
 
-### @Default
+### @Default / @EmptyWhenAbsent
 
-Provides a fallback value when a property is missing or null:
+Both rescue a non-nullable field whose graph value is absent or null:
 
-```kotlin
-@Default val status: String = "active"  // missing → "active"
-```
+- `@Default` falls back to the property's declared Kotlin constructor default (or Java field
+  initializer), so it works for any type: `@Default val status: String = "active"`.
+- `@EmptyWhenAbsent` needs no declared default and always yields an empty collection/map -- which
+  makes it the tool for **Java records**, whose state is defined solely by components:
+  `@EmptyWhenAbsent List<String> roles`. Collections and maps only.
 
-### @EmptyWhenAbsent
+A provided non-null value always wins.
 
-Maps absent or null collections/maps to empty:
+### @SortedBy
 
-```kotlin
-@EmptyWhenAbsent val tags: List<String>  // missing → []
-```
+Client-side sort of a projected collection: `@SortedBy("person.name")` (dot paths supported;
+`ascending = true` by default). For database-side sorting of a nested collection, use `orderBy`
+in the DSL and let the engine's sort emitter handle it.
+
+### @GraphProperty / @PropertyBag
+
+- `@GraphProperty("container_section_id")` overrides the **on-disk** property name while the
+  Kotlin field name stays the identity in code, the DSL, mapping and dirty tracking. Not
+  combinable with `@PropertyBag` on the same field; two fields mapping to one on-disk name fail
+  at model build.
+- `@PropertyBag(prefix = "", delimiter = ".")` maps a `Map<String, Any?>` to real, indexable,
+  filterable node properties named `"<prefix or field><delimiter><key>"`. Values must be storable
+  primitives or homogeneous arrays -- no nested maps. Declare a concrete value type
+  (`Map<String, Int>`) when width must round-trip; an untyped `Map<String, Any?>` reads back
+  driver-mapped types (an `Int` written comes back `Long`), which is inherent to the engines'
+  single 64-bit integer type. `@CompositeProperty` is a recognised alias.
 
 ## Type-Safe DSL
 
-The KSP code generator creates a DSL for each `@GraphView`. Available operators:
+Codegen emits an INSTANCE-injecting extension per DSL-spec method for each `@GraphView` --
+`loadAll<T> { }`, `deleteAll<T> { }`, `count<T> { }`, and `loadNearest<T>(...) { }` for
+`@VectorIndex`-bearing views. Inside the block, `query` (or the root field name) resolves property
+references. The block receiver is `GraphQuerySpec<T>`, whose builders are `WhereBuilder`,
+`OrderBuilder` and `SeekBuilder`; operators are the ones declared on `PropertyReference` and
+`StringPropertyReference`, and the predicates compile to `ComparisonOperator` / `OrderSpec` /
+`SeekValueSpec` values.
 
-### Comparison
+### Comparison and string
 
-| Operator | Generated Cypher |
-|----------|------------------|
-| `eq` | `= $value` |
-| `ne` | `<> $value` |
-| `gt`, `gte` | `> / >= $value` |
-| `lt`, `lte` | `< / <= $value` |
-| `contains` | `=~ $regex` |
-| `in` | `IN $values` |
-| `isNotNull` | `IS NOT NULL` |
-| `isNull` | `IS NULL` |
+| Operator | Cypher |
+|----------|--------|
+| `eq` / `neq` | `=` / `<>` |
+| `gt` / `gte` / `lt` / `lte` | `>` `>=` `<` `<=` |
+| `in` / `inList` | `prop IN $list` |
+| `notIn` | `NOT prop IN $list` |
+| `hasItem` | `$value IN prop` -- membership in a **list-valued property** |
+| `contains` / `startsWith` / `endsWith` | `CONTAINS` / `STARTS WITH` / `ENDS WITH` |
+| `matches` | `=~` regex -- **not supported on FalkorDB** |
+| `containsIgnoreCase` / `eqIgnoreCase` | `toLower(...) CONTAINS/= $lowered` |
+| `isNull()` / `isNotNull()` | `IS NULL` / `IS NOT NULL` |
 
-### Boolean
+`hasItem` is named that way on purpose: Kotlin reserves `contains` for the `in` operator.
+The comparison it mirrors is `ComparisonOperator.HAS_ELEMENT`.
 
-| Operator | Generated Cypher |
-|----------|------------------|
-| `anyOf { ... }` | `(condition1) OR (condition2)` |
-| implicit AND | `(condition1) AND (condition2)` |
+### Structure
+
+- `anyOf { }` -- OR of the enclosed conditions
+- `not { }` -- `NOT ( ... )` over the sub-expression
+- `any { }` / `none { }` on a node reference -- quantifiers over a projected to-many relationship
+- `instanceOf<T>()` / `instanceOf(clazz)` -- node carries **all** labels of that `@NodeFragment`
+- `hasAnyLabel("A", "B")` -- node carries **any** of the given labels
+- `depth(relationshipName, maxDepth)` -- override recursive expansion per query
+- `limit(n)` / `skip(n)` -- pushed after `ORDER BY`, bound as `$_limit` / `$_skip`
+- `seek { ... }` -- keyset continuation, see `references/schema-and-search.md`
+
+### Runtime-key predicates
+
+When the key is not known at compile time (`@PropertyBag` keys, caller-supplied filters), the
+untyped hatches still bind values as parameters and backtick-quote dotted paths:
+
+```kotlin
+where {
+    query.property("metadata.source") eq "wiki"                       // stored path
+    query.field("source") eq "wiki"                                    // resolves via @GraphProperty/@PropertyBag
+    query.predicate("metadata.tags", ComparisonOperator.HAS_ELEMENT, "kotlin")
+    query.predicateOn("sectionId", ComparisonOperator.EQUALS, "s1")    // resolving form
+}
+```
+
+`property`/`predicate` take the **stored** name; `field`/`predicateOn` take a **logical** key and
+resolve it, throwing if it is unresolvable.
 
 ### Ordering
 
-| Operator | Generated Cypher |
-|----------|------------------|
-| `.asc()` | `ORDER BY field ASC` |
-| `.desc()` | `ORDER BY field DESC` |
+`asc()` / `desc()` on a property reference produce the `OrderSpec` for `orderBy { }`. On a
+`@GraphView`, `limit(n)` bounds **root entities** -- each returned view keeps its relationships
+fully populated, because relationships are pattern comprehensions and one root is one row. Pair
+`limit` with `orderBy` for a deterministic top-N. `count(...)` ignores `limit`/`skip`.
 
-### DSL Usage
-
-```kotlin
-// Single condition
-graphObjectManager.loadAll<PersonCareer> {
-    where { person.name eq "Alice" }
-}
-
-// AND (implicit)
-graphObjectManager.loadAll<PersonCareer> {
-    where {
-        person.name eq "Alice"
-        person.bio.isNotNull()
-    }
-}
-
-// OR
-graphObjectManager.loadAll<PersonCareer> {
-    where {
-        anyOf {
-            person.name eq "Alice"
-            person.name eq "Bob"
-        }
-    }
-}
-
-// Ordering
-graphObjectManager.loadAll<PersonCareer> {
-    where { person.name startsWith "A" }
-    orderBy { person.name.asc() }
-}
-```
-
-## Loading and Saving
-
-### Loading
+## Loading, Saving, Deleting
 
 ```kotlin
-// Load all matching
-graphObjectManager.loadAll<PersonCareer>()
-graphObjectManager.loadAll<PersonCareer> { where { ... } }
-
-// Load by ID
-graphObjectManager.load<PersonCareer>(uuid)
-graphObjectManager.load<PersonCareer>(uuid) { where { ... } }
-
-// Load or throw
-graphObjectManager.loadOrThrow<PersonCareer>(uuid)
-
-// Count
-graphObjectManager.count(Issue::class.java)
+graphObjectManager.loadAll<View>()                    // or loadAll(View::class.java, "n.state = 'open'")
+graphObjectManager.load<View>(uuid)
+graphObjectManager.loadOrThrow<View>(uuid)
+graphObjectManager.count(View::class.java)             // + (class, whereClause) + DSL overload
+graphObjectManager.save(obj, cascade = CascadeType.NONE, nullPolicy = NullPolicy.IGNORE)
+graphObjectManager.saveAll(objs, cascade = CascadeType.DELETE_ORPHAN)
+graphObjectManager.delete(id, View::class.java, cascade)
+graphObjectManager.deleteAll(View::class.java)         // + whereClause + DSL overload
 ```
 
-### Saving (Dirty Tracking)
+`count` is **consistent with `loadAll`**, not a naive node count: a `@GraphView` counts only roots
+that satisfy the view's *required* relationships (non-nullable, non-collection
+`@GraphRelationship`s), while a plain `@NodeFragment` is a straight label count. Optional and
+collection edges constrain nothing.
 
-```kotlin
-val person = graphObjectManager.loadOrThrow<PersonCareer>(uuid)
-val updated = person.copy(person = person.person.copy(bio = "Updated bio"))
-graphObjectManager.save(updated)  // Only dirty fields written
-```
+Three Java-friendly overloads exist alongside the DSL ones (`loadAll(class, whereClause)`,
+`count(class, whereClause)`, `deleteAll(class, whereClause)`), using the same aliases: `n` for
+fragments, the root field name for views.
 
-**Important:** Dirty tracking only works on objects loaded within the same manager context. Detached objects will not be tracked.
+Dirty tracking is session-scoped: only objects loaded through the same manager are tracked, and
+it merely skips re-writes of unchanged non-null fields -- it never decides whether a null clears.
 
-### Deleting
+### CascadeType
 
-```kotlin
-graphObjectManager.delete(personCareer)
-```
+Passed to `save` / `saveAll` / `delete` / `deleteAll`:
 
-Delete behavior follows the `cascade` policy on `@GraphRelationship`:
+| Value | Effect |
+|-------|--------|
+| `NONE` | default; touch only the edge, leave targets intact |
+| `DELETE_ORPHAN` | drop target only when it ends up with no other relationships |
+| `DELETE_ALL` | drop target and its relationships (recursive for nested views) -- destructive |
+| `PRESERVE` | append-only: add new edges, silently skip snapshot-detected removals |
 
-| Cascade Policy | Behavior |
-|----------------|----------|
-| `NONE` (default) | Only deletes the relationship, leaves target nodes intact |
-| `DELETE_ORPHAN` | Deletes relationship and target only if no other relationships exist to the target |
-| `DELETE_ALL` | Always deletes both the relationship and target nodes |
+`DELETE_ORPHAN` needs a FalkorDB build with the orphan-delete fix; `DELETE_ALL` on FalkorDB is
+tracked via `FalkorDB#1890`.
+
+## Null Handling
+
+`NullPolicy` is the single declared contract, identical across single/batch and every engine:
+
+- `IGNORE` (the default on `save`/`saveAll`) -- merge-patch: write non-null fields, leave the rest
+  untouched. A partial object can never destroy anything.
+- `CLEAR` -- the object is authoritative; a null clears the stored property. Use only with a
+  complete object.
+
+No field is special: a null `@VectorIndex` embedding is preserved under `IGNORE` and cleared
+under `CLEAR`, exactly like any other property. This is separate from low-level binding, where
+`bindObject` includes nulls by default (suppress per property with
+`@JsonInclude(JsonInclude.Include.NON_NULL)`).
 
 ## Polymorphic Relationships
 
-Drivine supports sealed classes with label-based type discrimination:
+Label-based discrimination over sealed classes or interfaces:
 
 ```kotlin
 @NodeFragment(labels = ["WebUser"])
-sealed class WebUser {
-    abstract val uuid: UUID
-    abstract val displayName: String
-}
+sealed class WebUser { abstract val uuid: UUID; abstract val displayName: String }
 
 @NodeFragment(labels = ["WebUser", "Anonymous"])
 data class AnonymousWebUser(
     override val uuid: UUID,
     override val displayName: String,
-    val anonymousToken: String
-)
-
-@NodeFragment(labels = ["WebUser", "Authenticated"])
-data class AuthenticatedWebUser(
-    override val uuid: UUID,
-    override val displayName: String,
-    val email: String
-)
+    val anonymousToken: String,
+) : WebUser()
 ```
 
-Drivine uses the label set to discriminate between subtypes when loading.
+The label set selects the subtype on load. For DSL filtering use `instanceOf<AnonymousWebUser>()`.
+Outside the graph API -- i.e. for `transform()` on hand-written Cypher -- register the mapping
+explicitly with `manager.registerSubtype(baseClass, labels, subClass)`.
 
-## Recursive Relationships
-
-Self-referential `@GraphView` classes expand to a configurable depth:
+## Recursive Relationships & Paths
 
 ```kotlin
 @GraphView
 data class LocationHierarchy(
     val location: Location,
     @GraphRelationship(type = "HAS_LOCATION", direction = Direction.OUTGOING, maxDepth = 3)
-    val subLocations: List<LocationHierarchy>
+    val subLocations: List<LocationHierarchy>,
 )
 ```
 
-`maxDepth = 3` means 3 levels of expansion. Cycle detection prevents infinite loops.
+`maxDepth = 3` expands to a variable-length match (`*1..3`); cycle detection prevents infinite
+loops. Override per query with `depth("subLocations", 2)`.
+
+## Java Interoperability
+
+| Feature | Java | Note |
+|---------|------|------|
+| `@NodeFragment` / `@RelationshipFragment` | full | identical semantics to Kotlin |
+| `@GraphView` runtime | full | load, save, polymorphism |
+| Type-safe filtering | full | `filterWith(...)` + `where`/`whereAll`/`whereAny` |
+| `instanceOf()` | full | pass the `Class`, or reified in Kotlin |
+| DSL generation | Kotlin sources | KSP processor; use `drivine4j-codegen-java` (APT) for Java views |
+
+```java
+List<PersonContext> results = JavaQueryBuilderKt
+    .query(graphObjectManager, PersonContext.class)
+    .filterWith(PersonContextQueryDsl.class)
+    .where(dsl -> dsl.getPerson().getName().contains("Alice"))
+    .limit(20)
+    .loadAll();
+```
+
+Also available on the Java builder: `orderBy`, `seek` (with `PropertyReference.after(value)`),
+`skip`, `loadFirst`, `deleteAll`, `match`. For Java records, prefer `@EmptyWhenAbsent` over
+`@Default` for collections.
 
 ## See Also
 
-- [SKILL.md](../SKILL.md) — Core Drivine4j concepts, setup, and quick examples
-- [PersistenceManager reference](persistence-manager.md) — low-level Cypher API
-- [Multi-database configuration](multi-db.md) — dialects and connection setup
+- [SKILL.md](../SKILL.md) -- setup, version pinning, API choice
+- [PersistenceManager reference](persistence-manager.md) -- manual Cypher
+- [Schema and search reference](schema-and-search.md) -- indexes, `loadNearest`, `loadMatching`, `seek`
+- [Multi-database reference](multi-db.md) -- engines and dialects
