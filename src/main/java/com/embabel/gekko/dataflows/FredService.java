@@ -50,7 +50,7 @@ public class FredService extends BaseExternalDataService {
 
     private String fetchSeries(String seriesId, int limit) {
         try {
-            String url = UriComponentsBuilder.fromHttpUrl(BASE_URL + "series/observations")
+            String url = UriComponentsBuilder.fromUriString(BASE_URL + "series/observations")
                     .queryParam("series_id", seriesId)
                     .queryParam("api_key", apiKey)
                     .queryParam("file_type", "json")

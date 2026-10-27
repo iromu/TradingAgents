@@ -37,7 +37,7 @@ public class PolymarketService extends BaseExternalDataService {
 
     private String fetchSearch(String query) {
         try {
-            String url = UriComponentsBuilder.fromHttpUrl(BASE_URL + "markets")
+            String url = UriComponentsBuilder.fromUriString(BASE_URL + "markets")
                     .queryParam("search", query)
                     .queryParam("limit", 20)
                     .toUriString();
@@ -71,7 +71,7 @@ public class PolymarketService extends BaseExternalDataService {
 
     private String fetchMarket(String slug) {
         try {
-            String url = UriComponentsBuilder.fromHttpUrl(BASE_URL + "market")
+            String url = UriComponentsBuilder.fromUriString(BASE_URL + "market")
                     .queryParam("slug", slug)
                     .toUriString();
 

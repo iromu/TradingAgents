@@ -1,6 +1,6 @@
 package com.embabel.gekko.agent.checkpoint;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.embabel.agent.test.unit.FakeOperationContext;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

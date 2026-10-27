@@ -8,7 +8,7 @@ source_paths:
   - "pom.xml"
   - "src/main/java/com/embabel/gekko/GekkoApplication.java"
   - "native.sh"
-updated_at: "2026-08-16"
+updated_at: "2026-10-26"
 ---
 
 # Project Overview
@@ -21,8 +21,8 @@ Gekko is a **multi-agent trading research platform** built on the Embabel agent 
 
 | Layer | Technology |
 |-------|-----------|
-| Framework | Spring Boot 3.5.13 |
-| Agent Framework | Embabel 0.5.0-SNAPSHOT |
+| Framework | Spring Boot 4.1.1 |
+| Agent Framework | Embabel 1.5.3 |
 | LLM Integration | OpenAI-compatible (LiteLLM at `http://spark.local:4000`) |
 | Data Sources | Alpha Vantage API, Yahoo Finance |
 | Technical Analysis | TA4J library |

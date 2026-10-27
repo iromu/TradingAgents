@@ -4,14 +4,14 @@ type: "concept"
 status: "active"
 language: "default"
 source_paths: ["docs/embabel-agent-docs/overview.md", "docs/embabel-agent-docs/architecture.md", "docs/embabel-agent-docs/core-types.md", "docs/embabel-agent-docs/goals-actions-conditions.md", "docs/embabel-agent-docs/agent-platform.md", "docs/embabel-agent-docs/agentprocess.md"]
-updated_at: "2026-06-14"
+updated_at: "2026-10-26"
 ---
 
 # Embabel Agent Framework
 
 ## What is it?
 
-Embabel is a JVM-based agent orchestration framework built on Spring Boot. The TradingAgents project uses Embabel 0.5.0-SNAPSHOT as its agent layer.
+Embabel is a JVM-based agent orchestration framework built on Spring Boot. The TradingAgents project uses Embabel 1.5.3 as its agent layer.
 
 ## Core Concepts
 

@@ -6,7 +6,7 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>3.5.13</version>
+        <version>4.1.1</version>
         <relativePath/> <!-- Lookup parent from repository -->
     </parent>
     <groupId>com.embabel.template</groupId>
@@ -15,7 +15,7 @@
     <name>Gekko</name>
     <properties>
         <java.version>25</java.version>
-        <embabel-agent.version>1.0.0</embabel-agent.version>
+        <embabel-agent.version>1.5.3</embabel-agent.version>
         <ta4j-core.version>0.18</ta4j-core.version>
         <YahooFinanceAPI.version>3.17.0</YahooFinanceAPI.version>
     </properties>
@@ -211,16 +211,6 @@
             </releases>
             <snapshots>
                 <enabled>false</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>embabel-snapshots</id>
-            <url>https://repo.embabel.com/artifactory/libs-snapshot</url>
-            <releases>
-                <enabled>false</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
             </snapshots>
         </repository>
         <repository>

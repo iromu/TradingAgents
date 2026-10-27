@@ -36,7 +36,7 @@ public class FakeActionContext {
         var platformServicesMock = Mockito.mock(PlatformServices.class);
         Mockito.when(platformServicesMock.getLlmOperations()).thenReturn(llmOperationsMock);
         Mockito.when(platformServicesMock.getAgentPlatform()).thenReturn(delegate.agentPlatform());
-        Mockito.when(platformServicesMock.getObjectMapper()).thenReturn(new com.fasterxml.jackson.databind.ObjectMapper());
+        Mockito.when(platformServicesMock.getObjectMapper()).thenReturn(new tools.jackson.databind.ObjectMapper());
         Mockito.when(platformServicesMock.getTemplateRenderer()).thenReturn(new com.embabel.common.textio.template.JinjavaTemplateRenderer());
         processContext = processContext.copy(
                 processContext.getProcessOptions(),

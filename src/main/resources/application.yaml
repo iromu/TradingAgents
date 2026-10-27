@@ -4,10 +4,10 @@ spring:
 
 embabel:
   models:
-    default-llm: ${OPENAI_MODEL:Qwen3.6-35B-A3B}
+    default-llm: ${OPENAI_MODEL:Qwen-instruct}
     llms:
-      cheapest: ${OPENAI_MODEL:Qwen3.6-35B-A3B}
-      best: ${OPENAI_MODEL:Qwen3.6-35B-A3B}
+      cheapest: ${OPENAI_MODEL:Qwen-instruct}
+      best: ${OPENAI_MODEL:Qwen-instruct}
   agent:
     platform:
       models:
@@ -15,7 +15,7 @@ embabel:
           custom:
             api-key: ${OPENAI_API_KEY:}
             base-url: ${OPENAI_BASE_URL:http://spark.local:4000}
-            models: ${OPENAI_MODEL:Qwen3.6-35B-A3B}
+            models: ${OPENAI_MODEL:Qwen-instruct}
       scanning:
         annotation: true
         bean: true
@@ -42,8 +42,8 @@ app:
     enabled: true
   llm-options:
     provider: openai-compat
-    best-model: ${OPENAI_MODEL:Qwen3.6-35B-A3B}
-    cheapest-model: ${OPENAI_MODEL:Qwen3.6-35B-A3B}
+    best-model: ${OPENAI_MODEL:Qwen-instruct}
+    cheapest-model: ${OPENAI_MODEL:Qwen-instruct}
     anthropic:
       effort: high
     google:

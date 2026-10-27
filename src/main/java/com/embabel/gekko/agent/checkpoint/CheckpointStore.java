@@ -1,7 +1,7 @@
 package com.embabel.gekko.agent.checkpoint;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.JacksonException;
+import tools.jackson.databind.ObjectMapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -99,7 +99,7 @@ public class CheckpointStore {
             }
 
             atomicWrite(path, content);
-        } catch (JsonProcessingException e) {
+        } catch (JacksonException e) {
             log.error("Failed to serialize checkpoint for {}: {}", ticker, e.getMessage());
         } catch (IOException e) {
             log.error("Failed to save checkpoint for {}: {}", ticker, e.getMessage());
