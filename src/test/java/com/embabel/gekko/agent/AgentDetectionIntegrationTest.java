@@ -5,6 +5,7 @@ import com.embabel.agent.core.AgentPlatform;
 import com.embabel.gekko.config.TraderAgentConfig;
 import com.embabel.gekko.web.TradingApiController;
 import com.embabel.gekko.web.TradingHtmxController;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -20,6 +21,7 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 @SpringBootTest
 @ActiveProfiles({"base", "app", "observability", "local"})
+@Tag("llm")
 class AgentDetectionIntegrationTest {
 
     @Autowired

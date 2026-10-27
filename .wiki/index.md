@@ -3,7 +3,7 @@ title: "Gekko Project Wiki"
 type: "index"
 status: "active"
 language: "default"
-last_commit: "bcd73055c19ca2f25734589f81f4bf1f1d364321"
+last_commit: "2c8e8bde3af20a4e15bcf5e8f09bfcc372cdcb04"
 updated_at: "2026-10-26"
 ---
 

@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * - VendorRouter is a Spring bean
  * - Services have expected methods
  */
-@Tag("integration")
+@Tag("llm")
 @SpringBootTest
 @ActiveProfiles({"base", "app", "observability", "local"})
 class ExtendedDataSourcesIntegrationTest {

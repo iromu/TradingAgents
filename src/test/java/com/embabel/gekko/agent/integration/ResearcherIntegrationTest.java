@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Extends EmbabelMockitoIntegrationTest for Spring context access.
  * Uses FakeActionContext (the framework test helper) for ActionContext-taking methods.
  */
-@Tag("integration")
+@Tag("llm")
 class ResearcherIntegrationTest extends EmbabelMockitoIntegrationTest {
 
     @Autowired

@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Integration tests for checkpoint/resume functionality.
  * Tests the full pipeline: save checkpoint → simulate crash → resume from checkpoint.
  */
-@Tag("integration")
+@Tag("llm")
 class CheckpointResumeIntegrationTest {
 
     @TempDir

@@ -5,12 +5,17 @@ status: "active"
 language: "default"
 source_paths:
   - "src/test/java/com/embabel/gekko/"
-updated_at: "2026-08-13"
+updated_at: "2026-10-26"
 ---
 
 # Test Coverage
 
 The project has **62 test classes** across agent, data, tool, utility, and integration layers.
+
+## Running tests
+
+- **CI** (`mvn verify`): unit tests only. Tests tagged `@Tag("llm")` (15 classes that load the full Spring context and need an LLM API key) are excluded by surefire and skipped by failsafe (`skipITs=true` default).
+- **Local** (`mvn verify -DskipITs=false`): runs everything — surefire unit tests plus the `llm`-tagged tests via failsafe. Requires `OPENAI_API_KEY` (Embabel 1.5.3 fails context startup without an OpenAI custom API key).
 
 ## Agent Tests
 

@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *
  * Uses Embabel's FakeOperationContext with scripted LLM responses for deterministic testing.
  */
-@Tag("integration")
+@Tag("llm")
 class FullPipelineIntegrationTest extends EmbabelMockitoIntegrationTest {
 
     private FakeOperationContext ctx;

@@ -21,7 +21,7 @@ import static org.mockito.Mockito.*;
  * Integration tests for DebateAgent sub-process actions:
  * runDebate, runTrader, runRiskDebate, runPortfolioManager.
  */
-@Tag("integration")
+@Tag("llm")
 class DebateAgentSubProcessIntegrationTest extends EmbabelMockitoIntegrationTest {
 
     private Path tempCacheDir;

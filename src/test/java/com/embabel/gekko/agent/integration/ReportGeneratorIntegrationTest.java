@@ -28,7 +28,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Uses @Autowired to inject DebateAgent from the Spring context.
  * Uses FakeOperationContext (the framework test helper) instead of custom FakeActionContext.
  */
-@Tag("integration")
+@Tag("llm")
 class ReportGeneratorIntegrationTest extends EmbabelMockitoIntegrationTest {
 
     @Autowired

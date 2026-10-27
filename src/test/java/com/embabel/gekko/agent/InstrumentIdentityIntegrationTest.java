@@ -17,7 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * - Invalid tickers return null gracefully
  * - InstrumentContext is injected into prompts via PromptContributor
  */
-@Tag("integration")
+@Tag("llm")
 class InstrumentIdentityIntegrationTest extends EmbabelMockitoIntegrationTest {
 
     @Test

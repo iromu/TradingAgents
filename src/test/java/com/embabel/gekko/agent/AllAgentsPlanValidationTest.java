@@ -30,7 +30,7 @@ import static org.junit.jupiter.api.Assertions.*;
  *       entry-point goal (executeDebate → full research workflow)</li>
  * </ol>
  */
-@Tag("integration")
+@Tag("llm")
 class AllAgentsPlanValidationTest extends EmbabelMockitoIntegrationTest {
 
     private FakeOperationContext ctx;

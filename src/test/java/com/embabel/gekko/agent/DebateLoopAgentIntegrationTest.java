@@ -24,7 +24,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Integration tests for DebateLoopAgent.debate() with LLM calls.
  * Verifies the full debate loop with BullResearcher and BearResearcher.
  */
-@Tag("integration")
+@Tag("llm")
 class DebateLoopAgentIntegrationTest extends EmbabelMockitoIntegrationTest {
 
     private Path tempCacheDir;

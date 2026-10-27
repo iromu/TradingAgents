@@ -19,7 +19,7 @@ import static org.mockito.Mockito.*;
 /**
  * Integration tests for OrchestratorAgent.executeDebate() — sub-process delegation to DebateAgent.
  */
-@Tag("integration")
+@Tag("llm")
 class OrchestratorExecuteDebateIntegrationTest extends EmbabelMockitoIntegrationTest {
 
     private Path tempCacheDir;

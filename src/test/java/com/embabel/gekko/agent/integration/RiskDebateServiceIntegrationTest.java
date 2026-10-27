@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * Extends EmbabelMockitoIntegrationTest for Spring context access.
  * Uses real debator beans from Spring (not Mockito mocks) — LLM calls go through FakeActionContext.
  */
-@Tag("integration")
+@Tag("llm")
 class RiskDebateServiceIntegrationTest extends EmbabelMockitoIntegrationTest {
 
     @Autowired

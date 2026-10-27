@@ -22,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * - File format matches Python project
  * - Atomic writes with corruption recovery
  */
-@Tag("integration")
+@Tag("llm")
 class DecisionMemoryIntegrationTest {
 
     @TempDir

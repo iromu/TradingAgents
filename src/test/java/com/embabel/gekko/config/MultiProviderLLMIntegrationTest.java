@@ -18,7 +18,7 @@ import static org.junit.jupiter.api.Assertions.*;
  * - Maven dependencies for multiple providers are declared
  * - Configuration properties are bound correctly
  */
-@Tag("integration")
+@Tag("llm")
 @SpringBootTest
 class MultiProviderLLMIntegrationTest {
 

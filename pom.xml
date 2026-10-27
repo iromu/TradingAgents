@@ -18,6 +18,8 @@
         <embabel-agent.version>1.5.3</embabel-agent.version>
         <ta4j-core.version>0.18</ta4j-core.version>
         <YahooFinanceAPI.version>3.17.0</YahooFinanceAPI.version>
+        <!-- LLM integration tests (tagged "llm") require an API key; skipped by default, run locally with: mvn verify -DskipITs=false -->
+        <skipITs>true</skipITs>
     </properties>
 
     <dependencies>
@@ -154,11 +156,22 @@
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <!-- LLM tests (tag "llm") run via failsafe: mvn verify -DskipITs=false -->
+                    <excludedGroups>llm</excludedGroups>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-failsafe-plugin</artifactId>
                 <configuration>
-                    <!-- Skip integration tests by default; run with: mvn verify -DskipITs=false -->
+                    <!-- Skip LLM tests by default; run with: mvn verify -DskipITs=false -->
                     <skipTests>${skipITs}</skipTests>
-                    <excludedGroups>integration</excludedGroups>
+                    <includes>
+                        <include>**/*Test.java</include>
+                    </includes>
+                    <groups>llm</groups>
                 </configuration>
                 <executions>
                     <execution>
